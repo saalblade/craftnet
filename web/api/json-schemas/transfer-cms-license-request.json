@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "licenseKey": {
+      "type": "string",
+      "minLength": 250,
+      "maxLength": 250
+    },
+    "newHostname": {
+      "type": "string",
+      "format": "hostname"
+    }
+  },
+  "required": ["licenseKey", "newHostname"]
+}

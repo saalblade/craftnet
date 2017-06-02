@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "cms": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["eligible", "frozen", "invalid_key"]
+        },
+        "updates": { "$ref": "#/definitions/updates" }
+      },
+      "required": ["status"]
+    },
+    "plugins": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["eligible", "frozen", "invalid_key"]
+            },
+            "updates": { "$ref": "#/definitions/updates" }
+          },
+          "required": ["status"]
+        }
+      }
+    }
+  },
+  "required": ["cms", "plugins"],
+  "definitions": {
+    "updates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "critical": {
+            "type": "boolean"
+          }
+        },
+        "required": ["version", "date", "notes"]
+      }
+    }
+  }
+}

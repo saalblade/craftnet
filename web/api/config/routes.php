@@ -19,5 +19,5 @@
  */
 
 return [
-
+    'POST v1/updates' => 'api/v1/updates',
 ];

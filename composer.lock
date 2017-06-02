@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ab3b3af558cca65fa5ea17daacbd6f45",
-    "content-hash": "0ca806b7d83e2f62c10892951daa39d0",
+    "hash": "fe1e2598a193090b7546841f873f20d0",
+    "content-hash": "cbbe77d01c8857b4df798b398b3bf882",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -401,16 +401,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0-beta.18",
+            "version": "3.0.0-beta.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "7848c9e848bcd88a2841e885ff6d3c5fc2c3bef9"
+                "reference": "9b033728f5ee4db441acf5d79043b727bab9e625"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/7848c9e848bcd88a2841e885ff6d3c5fc2c3bef9",
-                "reference": "7848c9e848bcd88a2841e885ff6d3c5fc2c3bef9",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/9b033728f5ee4db441acf5d79043b727bab9e625",
+                "reference": "9b033728f5ee4db441acf5d79043b727bab9e625",
                 "shasum": ""
             },
             "require": {
@@ -466,7 +466,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-05-19 18:48:20"
+            "time": "2017-05-31 23:35:53"
         },
         {
             "name": "craftcms/plugin-installer",
@@ -863,6 +863,73 @@
                 "url"
             ],
             "time": "2017-03-20 17:10:46"
+        },
+        {
+            "name": "justinrainbow/json-schema",
+            "version": "5.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/justinrainbow/json-schema.git",
+                "reference": "429be236f296ca249d61c65649cdf2652f4a5e80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/429be236f296ca249d61c65649cdf2652f4a5e80",
+                "reference": "429be236f296ca249d61c65649cdf2652f4a5e80",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.1",
+                "json-schema/json-schema-test-suite": "1.2.0",
+                "phpdocumentor/phpdocumentor": "^2.7",
+                "phpunit/phpunit": "^4.8.22"
+            },
+            "bin": [
+                "bin/validate-json"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JsonSchema\\": "src/JsonSchema/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bruno Prieto Reis",
+                    "email": "bruno.p.reis@gmail.com"
+                },
+                {
+                    "name": "Justin Rainbow",
+                    "email": "justin.rainbow@gmail.com"
+                },
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch"
+                },
+                {
+                    "name": "Robert Schönthal",
+                    "email": "seroscho@googlemail.com"
+                }
+            ],
+            "description": "A library to validate a json schema.",
+            "homepage": "https://github.com/justinrainbow/json-schema",
+            "keywords": [
+                "json",
+                "schema"
+            ],
+            "time": "2017-05-16 21:06:09"
         },
         {
             "name": "league/flysystem",

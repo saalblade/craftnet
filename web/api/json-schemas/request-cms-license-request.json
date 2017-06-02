@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "hostname": {
+      "type": "string",
+      "format": "hostname"
+    }
+  },
+  "required": ["email", "hostname"]
+}

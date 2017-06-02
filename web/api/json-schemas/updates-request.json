@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string",
+          "oneOf": [
+            {"format": "ipv4"},
+            {"format": "ipv6"}
+          ]
+        },
+        "hostname": {
+          "type": "string",
+          "format": "hostname"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65536
+        }
+      },
+      "required": ["ip", "hostname", "port"]
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      },
+      "required": ["email"]
+    },
+    "server": {
+      "type": "object",
+      "properties": {
+        "php": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "extensions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["version", "extensions"]
+        },
+        "db": {
+          "type": "object",
+          "properties": {
+            "driver": {
+              "type": "string",
+              "enum": ["mysql", "pgsql"]
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["driver", "version"]
+        }
+      },
+      "required": ["php", "db"]
+    },
+    "cms": {
+      "type": "object",
+      "properties": {
+        "licenseKey": {
+          "type": "string",
+          "minLength": 250,
+          "maxLength": 250
+        },
+        "edition": {
+          "type": "string",
+          "enum": ["personal", "client", "pro"]
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": ["licenseKey", "edition", "version"]
+    },
+    "plugins": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "licenseKey": {
+              "type": "string",
+              "minLength": 24,
+              "maxLength": 24
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["licenseKey", "version"]
+        }
+      }
+    }
+  },
+  "required": ["request", "user", "server", "cms", "plugins"]
+}
