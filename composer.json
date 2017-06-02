@@ -1,23 +1,4 @@
 {
-  "name": "craftcms/craft",
-  "description": "Craft CMS",
-  "keywords": [
-    "craft",
-    "cms",
-    "craftcms",
-    "project"
-  ],
-  "license": "MIT",
-  "homepage": "https://craftcms.com/",
-  "type": "project",
-  "support": {
-    "email": "support@craftcms.com",
-    "issues": "https://github.com/craftcms/cms/issues",
-    "forum": "https://craftcms.stackexchange.com/",
-    "source": "https://github.com/craftcms/cms",
-    "docs": "https://craftcms.com/docs",
-    "rss": "https://craftcms.com/changelog.rss"
-  },
   "minimum-stability": "beta",
   "require": {
     "php": ">=7.0.0",
@@ -28,11 +9,6 @@
   },
   "config": {
     "optimize-autoloader": true
-  },
-  "scripts": {
-    "post-root-package-install": [
-      "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-    ]
   },
   "repositories": [
     {
