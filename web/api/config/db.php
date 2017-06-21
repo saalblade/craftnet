@@ -7,11 +7,11 @@
  */
 
 return [
-    'driver' => getenv('DB_DRIVER'),
-    'server' => getenv('DB_SERVER'),
-    'user' => getenv('DB_USER'),
-    'password' => getenv('DB_PASSWORD'),
-    'database' => getenv('DB_DATABASE'),
-    'schema' => getenv('DB_SCHEMA'),
-    'tablePrefix' => getenv('DB_TABLE_PREFIX'),
+    'driver' => craft\config\DbConfig::DRIVER_PGSQL,
+    'server' => getenv('DB_SERVER') ?: $_SERVER['RDS_HOSTNAME'],
+    'user' => getenv('DB_USER') ?: $_SERVER['RDS_USERNAME'],
+    'password' => getenv('DB_PASSWORD') ?: $_SERVER['RDS_PASSWORD '],
+    'database' => getenv('DB_DATABASE') ?: $_SERVER['RDS_DB_NAME '],
+    'schema' => getenv('DB_SCHEMA') ?: 'public',
+    'tablePrefix' => getenv('DB_TABLE_PREFIX') ?: ''
 ];
