@@ -7,15 +7,12 @@
  */
 
 return [
-    // Base site URL
     'siteUrl' => null,
-
-    // Whether "index.php" should be visible in URLs (true, false, "auto")
     'omitScriptNameInUrls' => true,
-
-    // Control Panel trigger word
     'cpTrigger' => 'ramos',
-
-    // Dev Mode (see https://craftcms.com/support/dev-mode)
     'devMode' => true,
+    'allowAutoUpdates' => false,
+    'imageDriver' => 'imagick',
+    'preventUserEnumeration' => true,
+    'siteName' => 'id.craftcms.com'
 ];
