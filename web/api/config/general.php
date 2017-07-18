@@ -16,5 +16,5 @@ return [
     'preventUserEnumeration' => true,
     'siteName' => 'api.craftcms.com',
     'validationKey' => 'y56B>Ck7"<7k?BbVE>mY=b#cwBq]$JEp',
-    'defaultCookieDomain' => '.domain.com',
+    //'defaultCookieDomain' => '.craftcms.com',
 ];
