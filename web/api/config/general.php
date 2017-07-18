@@ -14,5 +14,7 @@ return [
     'allowAutoUpdates' => false,
     'imageDriver' => 'imagick',
     'preventUserEnumeration' => true,
-    'siteName' => 'api.craftcms.com'
+    'siteName' => 'api.craftcms.com',
+    'validationKey' => 'y56B>Ck7"<7k?BbVE>mY=b#cwBq]$JEp',
+    'defaultCookieDomain' => '.domain.com',
 ];
