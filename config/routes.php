@@ -19,6 +19,11 @@
  */
 
 return [
-
-
+    'api' => [
+        'POST v1/updates' => 'api/v1/updates',
+    ],
+    'composer' => [
+    ],
+    'craftId' => [
+    ],
 ];
