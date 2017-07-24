@@ -91,16 +91,16 @@
         },
         {
             "name": "bower-asset/fabric",
-            "version": "v1.7.16",
+            "version": "v1.7.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kangax/fabric.js.git",
-                "reference": "3d022bc4a009ae076458b628f15023c30afda6f0"
+                "reference": "7cc16fb080fceb8efc5125bbb982a0263fae9a57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kangax/fabric.js/zipball/3d022bc4a009ae076458b628f15023c30afda6f0",
-                "reference": "3d022bc4a009ae076458b628f15023c30afda6f0",
+                "url": "https://api.github.com/repos/kangax/fabric.js/zipball/7cc16fb080fceb8efc5125bbb982a0263fae9a57",
+                "reference": "7cc16fb080fceb8efc5125bbb982a0263fae9a57",
                 "shasum": null
             },
             "type": "bower-asset",
@@ -110,16 +110,16 @@
         },
         {
             "name": "bower-asset/garnishjs",
-            "version": "0.1.18",
+            "version": "0.1.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixelandtonic/garnishjs.git",
-                "reference": "ce4973fa4c9e001194a79bc1108b3082bfa010a0"
+                "reference": "c358df35c9776de347ee8fd5399146c2356cd859"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixelandtonic/garnishjs/zipball/ce4973fa4c9e001194a79bc1108b3082bfa010a0",
-                "reference": "ce4973fa4c9e001194a79bc1108b3082bfa010a0",
+                "url": "https://api.github.com/repos/pixelandtonic/garnishjs/zipball/c358df35c9776de347ee8fd5399146c2356cd859",
+                "reference": "c358df35c9776de347ee8fd5399146c2356cd859",
                 "shasum": null
             },
             "require": {
@@ -127,7 +127,10 @@
                 "bower-asset/jquery-touch-events": ">=1.0.5,<2.0.0",
                 "bower-asset/velocity": ">=1.2.3,<2.0.0"
             },
-            "type": "bower-asset"
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "bower-asset/jquery",
