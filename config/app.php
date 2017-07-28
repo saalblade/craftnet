@@ -1,5 +1,7 @@
 <?php
 
+use yii\redis\Session;
+
 return [
     'modules' => [
         'api' => \craftcom\api\Module::class
@@ -19,8 +21,20 @@ return [
                 'database' => 0,
             ],
         ],
-        'session' => [
-            'class' => 'yii\redis\Session',
-        ],
+        'session' => function() {
+            $stateKeyPrefix = md5('Craft.'.craft\web\Session::class.'.'.Craft::$app->id);
+
+            /** @var Session $session */
+            $session = Craft::createObject([
+                'class' => Session::class,
+                'flashParam' => $stateKeyPrefix.'__flash',
+                'authAccessParam' => $stateKeyPrefix.'__auth_access',
+                'name' => Craft::$app->getConfig()->getGeneral()->phpSessionName,
+                'cookieParams' => Craft::cookieConfig(),
+            ]);
+
+            $session->attachBehaviors([craft\behaviors\SessionBehavior::class]);
+            return $session;
+        },
     ]
 ];
