@@ -2,7 +2,7 @@
   "minimum-stability": "beta",
   "require": {
     "php": ">=7.0.0",
-    "craftcms/cms": "^3.0.0-beta.20",
+    "craftcms/cms": "dev-develop",
     "roave/security-advisories": "dev-master",
     "justinrainbow/json-schema": "^5.2",
     "yiisoft/yii2-redis": "^2.0.6"

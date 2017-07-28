@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "37be1883d9b873e963e90ba75db9152f",
+    "content-hash": "5e8b3faa7e852eff325aad1edd9a8d51",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -419,16 +419,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0-beta.23",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "0e00a88c752ad0a88628c7a8a05b2ecc624cf4e8"
+                "reference": "dd865e94ecc85e0e6d69ebf73d82db646314adee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/0e00a88c752ad0a88628c7a8a05b2ecc624cf4e8",
-                "reference": "0e00a88c752ad0a88628c7a8a05b2ecc624cf4e8",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/dd865e94ecc85e0e6d69ebf73d82db646314adee",
+                "reference": "dd865e94ecc85e0e6d69ebf73d82db646314adee",
                 "shasum": ""
             },
             "require": {
@@ -483,7 +483,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-07-28T19:28:32+00:00"
+            "time": "2017-07-28 19:28:33"
         },
         {
             "name": "craftcms/plugin-installer",
@@ -2536,7 +2536,7 @@
     "aliases": [],
     "minimum-stability": "beta",
     "stability-flags": {
-        "craftcms/cms": 10,
+        "craftcms/cms": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,
