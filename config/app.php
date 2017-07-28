@@ -28,12 +28,12 @@ return [
             $session = Craft::createObject([
                 'class' => Session::class,
                 'flashParam' => $stateKeyPrefix.'__flash',
-                'authAccessParam' => $stateKeyPrefix.'__auth_access',
                 'name' => Craft::$app->getConfig()->getGeneral()->phpSessionName,
                 'cookieParams' => Craft::cookieConfig(),
             ]);
 
             $session->attachBehaviors([craft\behaviors\SessionBehavior::class]);
+            $session->authAccessParam = $stateKeyPrefix.'__auth_access';
             return $session;
         },
     ]
