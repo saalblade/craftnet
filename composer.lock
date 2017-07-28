@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c748814d55c98fe52302d5fc6dbcd9ca",
+    "content-hash": "37be1883d9b873e963e90ba75db9152f",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -26,113 +26,6 @@
             "type": "bower-asset"
         },
         {
-            "name": "bower-asset/d3",
-            "version": "v4.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mbostock-bower/d3-bower.git",
-                "reference": "dc79bab7a4ae7b4d034dc463778cf742ab30d976"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mbostock-bower/d3-bower/zipball/dc79bab7a4ae7b4d034dc463778cf742ab30d976",
-                "reference": "dc79bab7a4ae7b4d034dc463778cf742ab30d976",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/d3-format",
-            "version": "v1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/d3/d3-format.git",
-                "reference": "b1e967616b6a9cdd3111d13cd34528a17fa4a0a3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/d3/d3-format/zipball/b1e967616b6a9cdd3111d13cd34528a17fa4a0a3",
-                "reference": "b1e967616b6a9cdd3111d13cd34528a17fa4a0a3",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/d3-time-format",
-            "version": "v2.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/d3/d3-time-format.git",
-                "reference": "13b91bef3f7474921c9970c5dc0faff3e8bccde7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/d3/d3-time-format/zipball/13b91bef3f7474921c9970c5dc0faff3e8bccde7",
-                "reference": "13b91bef3f7474921c9970c5dc0faff3e8bccde7",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/element-resize-detector",
-            "version": "1.1.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wnr/element-resize-detector.git",
-                "reference": "ed7827e182bdfe6a0549fdd0694fc7071d64ae6e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wnr/element-resize-detector/zipball/ed7827e182bdfe6a0549fdd0694fc7071d64ae6e",
-                "reference": "ed7827e182bdfe6a0549fdd0694fc7071d64ae6e",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/fabric",
-            "version": "v1.7.17",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kangax/fabric.js.git",
-                "reference": "7cc16fb080fceb8efc5125bbb982a0263fae9a57"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kangax/fabric.js/zipball/7cc16fb080fceb8efc5125bbb982a0263fae9a57",
-                "reference": "7cc16fb080fceb8efc5125bbb982a0263fae9a57",
-                "shasum": null
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "bower-asset/garnishjs",
-            "version": "0.1.19",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pixelandtonic/garnishjs.git",
-                "reference": "c358df35c9776de347ee8fd5399146c2356cd859"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pixelandtonic/garnishjs/zipball/c358df35c9776de347ee8fd5399146c2356cd859",
-                "reference": "c358df35c9776de347ee8fd5399146c2356cd859",
-                "shasum": null
-            },
-            "require": {
-                "bower-asset/element-resize-detector": ">=1.1.7,<2.0.0",
-                "bower-asset/jquery-touch-events": ">=1.0.5,<2.0.0",
-                "bower-asset/velocity": ">=1.2.3,<2.0.0"
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
             "name": "bower-asset/jquery",
             "version": "2.2.4",
             "source": {
@@ -145,25 +38,6 @@
                 "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/c0185ab7c75aab88762c5aae780b9d83b80eda72",
                 "reference": "c0185ab7c75aab88762c5aae780b9d83b80eda72",
                 "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/jquery-touch-events",
-            "version": "1.0.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/benmajor/jQuery-Touch-Events.git",
-                "reference": "1f5ad5910c4f9d35c80f5a950356d55512795ab3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/benmajor/jQuery-Touch-Events/zipball/1f5ad5910c4f9d35c80f5a950356d55512795ab3",
-                "reference": "1f5ad5910c4f9d35c80f5a950356d55512795ab3",
-                "shasum": null
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.7.0"
             },
             "type": "bower-asset"
         },
@@ -190,57 +64,6 @@
             ]
         },
         {
-            "name": "bower-asset/jquery.payment",
-            "version": "v3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/stripe/jquery.payment.git",
-                "reference": "f0e303b3769e9bbbc22ca2eb4a3e97f64745ab33"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stripe/jquery.payment/zipball/f0e303b3769e9bbbc22ca2eb4a3e97f64745ab33",
-                "reference": "f0e303b3769e9bbbc22ca2eb4a3e97f64745ab33",
-                "shasum": null
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.5"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/microplugin",
-            "version": "v0.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brianreavis/microplugin.js.git",
-                "reference": "d8671e6cc769938648f8735610534427cdeeaf67"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/brianreavis/microplugin.js/zipball/d8671e6cc769938648f8735610534427cdeeaf67",
-                "reference": "d8671e6cc769938648f8735610534427cdeeaf67",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/picturefill",
-            "version": "3.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/scottjehl/picturefill.git",
-                "reference": "ba62a7dfc0530d9d4e9c0287facf5edb77e96193"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/scottjehl/picturefill/zipball/ba62a7dfc0530d9d4e9c0287facf5edb77e96193",
-                "reference": "ba62a7dfc0530d9d4e9c0287facf5edb77e96193",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
             "name": "bower-asset/punycode",
             "version": "v1.3.2",
             "source": {
@@ -252,78 +75,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/selectize",
-            "version": "v0.12.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/selectize/selectize.js.git",
-                "reference": "47e048662d865c4f1ea3b2337de5e06e92fd9530"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/selectize/selectize.js/zipball/47e048662d865c4f1ea3b2337de5e06e92fd9530",
-                "reference": "47e048662d865c4f1ea3b2337de5e06e92fd9530",
-                "shasum": null
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.7.0",
-                "bower-asset/microplugin": "dev-0.0.x|0.0.x",
-                "bower-asset/sifter": "dev-0.5.x|0.5.x"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/sifter",
-            "version": "v0.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brianreavis/sifter.js.git",
-                "reference": "4ba7422542bf188c1fdb4bbc341fc4fcc1ff0680"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/brianreavis/sifter.js/zipball/4ba7422542bf188c1fdb4bbc341fc4fcc1ff0680",
-                "reference": "4ba7422542bf188c1fdb4bbc341fc4fcc1ff0680",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/timepicker",
-            "version": "1.11.11",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jonthornton/jquery-timepicker.git",
-                "reference": "3f26316a6f417c77737488d763e9a9055c20d8ae"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jonthornton/jquery-timepicker/zipball/3f26316a6f417c77737488d763e9a9055c20d8ae",
-                "reference": "3f26316a6f417c77737488d763e9a9055c20d8ae",
-                "shasum": null
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.7"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/velocity",
-            "version": "1.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/julianshapiro/velocity.git",
-                "reference": "9f4aacdacd9eff5a4abbd5154b8d367dcda2f047"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/julianshapiro/velocity/zipball/9f4aacdacd9eff5a4abbd5154b8d367dcda2f047",
-                "reference": "9f4aacdacd9eff5a4abbd5154b8d367dcda2f047",
                 "shasum": null
             },
             "type": "bower-asset"
@@ -668,30 +419,19 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0-beta.22",
+            "version": "3.0.0-beta.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "762c9121063518d85755f2f04c56548a67dcba35"
+                "reference": "0e00a88c752ad0a88628c7a8a05b2ecc624cf4e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/762c9121063518d85755f2f04c56548a67dcba35",
-                "reference": "762c9121063518d85755f2f04c56548a67dcba35",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/0e00a88c752ad0a88628c7a8a05b2ecc624cf4e8",
+                "reference": "0e00a88c752ad0a88628c7a8a05b2ecc624cf4e8",
                 "shasum": ""
             },
             "require": {
-                "bower-asset/d3": "~4.8.0",
-                "bower-asset/d3-format": "~1.2.0",
-                "bower-asset/d3-time-format": "~2.0.3",
-                "bower-asset/element-resize-detector": "~1.1.11",
-                "bower-asset/fabric": "~1.7.6",
-                "bower-asset/garnishjs": "~0.1.17",
-                "bower-asset/jquery.payment": "~3.0.0",
-                "bower-asset/picturefill": "~3.0.2",
-                "bower-asset/selectize": "~0.12.4",
-                "bower-asset/timepicker": "~1.11.11",
-                "bower-asset/velocity": "~1.5.0",
                 "composer/composer": "~1.4.2",
                 "craftcms/plugin-installer": "~1.5.0",
                 "craftcms/server-check": "~1.0.17",
@@ -707,6 +447,13 @@
                 "yiisoft/yii2-debug": "2.0.8",
                 "yiisoft/yii2-swiftmailer": "~2.0.6",
                 "zendframework/zend-feed": "~2.8.0"
+            },
+            "provide": {
+                "bower-asset/bootstrap": "3.3.* | 3.2.* | 3.1.*",
+                "bower-asset/jquery": "2.2.*@stable | 2.1.*@stable | 1.11.*@stable | 1.12.*@stable",
+                "bower-asset/jquery.inputmask": "~3.2.2 | ~3.3.5",
+                "bower-asset/punycode": "1.3.*",
+                "bower-asset/yii2-pjax": "~2.0.1"
             },
             "require-dev": {
                 "codeception/codeception": "~2.3.3",
@@ -736,20 +483,20 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-07-14T21:15:25+00:00"
+            "time": "2017-07-28T19:28:32+00:00"
         },
         {
             "name": "craftcms/plugin-installer",
-            "version": "1.5.1",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/plugin-installer.git",
-                "reference": "74937b6049740cd99a6f56fcbf2a519a2a285478"
+                "reference": "2b75646ce7091d24ef053e8d0b45f89cab04b16f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/plugin-installer/zipball/74937b6049740cd99a6f56fcbf2a519a2a285478",
-                "reference": "74937b6049740cd99a6f56fcbf2a519a2a285478",
+                "url": "https://api.github.com/repos/craftcms/plugin-installer/zipball/2b75646ce7091d24ef053e8d0b45f89cab04b16f",
+                "reference": "2b75646ce7091d24ef053e8d0b45f89cab04b16f",
                 "shasum": ""
             },
             "require": {
@@ -777,7 +524,7 @@
                 "installer",
                 "plugin"
             ],
-            "time": "2017-07-12T13:56:16+00:00"
+            "time": "2017-07-25T13:26:24+00:00"
         },
         {
             "name": "craftcms/server-check",
@@ -1518,12 +1265,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "fa53c38b02d1ec883f4ea2b2c05492da0c7611cf"
+                "reference": "626c97bd5b45a08db902a0fb0b13f58f3785b439"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/fa53c38b02d1ec883f4ea2b2c05492da0c7611cf",
-                "reference": "fa53c38b02d1ec883f4ea2b2c05492da0c7611cf",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/626c97bd5b45a08db902a0fb0b13f58f3785b439",
+                "reference": "626c97bd5b45a08db902a0fb0b13f58f3785b439",
                 "shasum": ""
             },
             "conflict": {
@@ -1569,7 +1316,7 @@
                 "onelogin/php-saml": "<2.10.4",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
-                "phpmailer/phpmailer": ">=5,<5.2.22",
+                "phpmailer/phpmailer": ">=5,<5.2.24",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "shopware/shopware": "<4.4|>=5,<5.2.16",
@@ -1647,7 +1394,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-07-18T08:09:10+00:00"
+            "time": "2017-07-28T07:54:11+00:00"
         },
         {
             "name": "seld/cli-prompt",
@@ -2484,6 +2231,54 @@
                 "yii2"
             ],
             "time": "2017-02-19T16:48:01+00:00"
+        },
+        {
+            "name": "yiisoft/yii2-redis",
+            "version": "2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-redis.git",
+                "reference": "5dc55d5187923219e9db86d149d56acf1f5a6ee8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-redis/zipball/5dc55d5187923219e9db86d149d56acf1f5a6ee8",
+                "reference": "5dc55d5187923219e9db86d149d56acf1f5a6ee8",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.11"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\redis\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc"
+                }
+            ],
+            "description": "Redis Cache, Session and ActiveRecord for the Yii framework",
+            "keywords": [
+                "active-record",
+                "cache",
+                "redis",
+                "session",
+                "yii2"
+            ],
+            "time": "2017-04-05T13:42:11+00:00"
         },
         {
             "name": "yiisoft/yii2-swiftmailer",
