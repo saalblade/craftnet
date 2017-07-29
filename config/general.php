@@ -15,5 +15,5 @@ return [
     'imageDriver' => 'imagick',
     'preventUserEnumeration' => true,
     'validationKey' => 'y56B>Ck7"<7k?BbVE>mY=b#cwBq]$JEp',
-    //'defaultCookieDomain' => '.craftcms.com',
+    'defaultCookieDomain' => '.craftcms.com',
 ];
