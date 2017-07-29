@@ -7,13 +7,21 @@
  */
 
 return [
-    'siteUrl' => null,
-    'omitScriptNameInUrls' => true,
-    'cpTrigger' => 'ramos',
-    'devMode' => true,
-    'allowAutoUpdates' => false,
-    'imageDriver' => 'imagick',
-    'preventUserEnumeration' => true,
-    'validationKey' => 'y56B>Ck7"<7k?BbVE>mY=b#cwBq]$JEp',
-    'defaultCookieDomain' => '.craftcms.com',
+    '*' => [
+        'siteUrl' => null,
+        'omitScriptNameInUrls' => true,
+        'cpTrigger' => 'ramos',
+        'imageDriver' => 'imagick',
+        'preventUserEnumeration' => true,
+        'validationKey' => 'y56B>Ck7"<7k?BbVE>mY=b#cwBq]$JEp',
+    ],
+    '.com' => [
+        'allowAutoUpdates' => false,
+        'defaultCookieDomain' => '.craftcms.com',
+    ],
+    '.dev' => [
+        'devMode' => true,
+        'allowAutoUpdates' => true,
+        'defaultCookieDomain' => '.craftcms.dev',
+    ]
 ];
