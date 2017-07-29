@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e8b3faa7e852eff325aad1edd9a8d51",
+    "content-hash": "67fda6ebde7e6c52dd0d35bff2c885eb",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -423,12 +423,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "d93bdca4cf54d66f7b75ad96a42351b487d85a0e"
+                "reference": "2e359aff609b668a3c1919035c70eebb694a3f50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/d93bdca4cf54d66f7b75ad96a42351b487d85a0e",
-                "reference": "d93bdca4cf54d66f7b75ad96a42351b487d85a0e",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/2e359aff609b668a3c1919035c70eebb694a3f50",
+                "reference": "2e359aff609b668a3c1919035c70eebb694a3f50",
                 "shasum": ""
             },
             "require": {
@@ -483,7 +483,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-07-29 00:03:30"
+            "time": "2017-07-29 20:51:00"
         },
         {
             "name": "craftcms/plugin-installer",
@@ -739,6 +739,51 @@
                 "html"
             ],
             "time": "2017-06-03T02:28:16+00:00"
+        },
+        {
+            "name": "flipboxdigital/postmark",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/flipbox/postmark.git",
+                "reference": "0e72d4aba4aea697e515351a77aabac8315f167a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/flipbox/postmark/zipball/0e72d4aba4aea697e515351a77aabac8315f167a",
+                "reference": "0e72d4aba4aea697e515351a77aabac8315f167a",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "~3.0.0-beta",
+                "wildbit/swiftmailer-postmark": "^2.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.0",
+                "squizlabs/php_codesniffer": "^2.0"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Postmark",
+                "handle": "postmark",
+                "developer": "Flipbox Digital",
+                "developerUrl": "https://www.flipboxdigital.com",
+                "changelogUrl": "https://raw.githubusercontent.com/flipbox/postmark/master/CHANGELOG.md",
+                "downloadUrl": "https://github.com/flipbox/postmark/archive/master.zip",
+                "class": "flipbox\\postmark\\Postmark",
+                "schemaVersion": "1.0.0",
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "flipbox\\postmark\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Postmark adapter",
+            "time": "2017-06-14T13:47:52+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1986,6 +2031,49 @@
             "time": "2017-04-21T00:13:02+00:00"
         },
         {
+            "name": "wildbit/swiftmailer-postmark",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wildbit/swiftmailer-postmark.git",
+                "reference": "fb49114bc8033b125f9d19473dc0741385131d84"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wildbit/swiftmailer-postmark/zipball/fb49114bc8033b125f9d19473dc0741385131d84",
+                "reference": "fb49114bc8033b125f9d19473dc0741385131d84",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.0",
+                "swiftmailer/swiftmailer": ">=4.1.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5"
+            },
+            "suggest": {
+                "wildbit/laravel-postmark-provider": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Postmark\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Postmark",
+                    "email": "support@postmarkapp.com"
+                }
+            ],
+            "description": "A Swiftmailer Transport for Postmark.",
+            "time": "2017-04-18T14:24:10+00:00"
+        },
+        {
             "name": "yiisoft/yii2",
             "version": "2.0.12",
             "source": {
@@ -2533,7 +2621,14 @@
             "time": "2016-09-01T10:05:43+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "3.0.0-beta.99",
+            "alias_normalized": "3.0.0.0-beta99",
+            "version": "dev-develop",
+            "package": "craftcms/cms"
+        }
+    ],
     "minimum-stability": "beta",
     "stability-flags": {
         "craftcms/cms": 20,
