@@ -17,11 +17,9 @@ return [
     ],
     '.com' => [
         'allowAutoUpdates' => false,
-        'defaultCookieDomain' => '.craftcms.com',
     ],
     '.dev' => [
         'devMode' => true,
         'allowAutoUpdates' => true,
-        'defaultCookieDomain' => '.craftcms.dev',
     ]
 ];
