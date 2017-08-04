@@ -17,6 +17,7 @@ return [
     ],
     '.com' => [
         'allowAutoUpdates' => false,
+        'devMode' => true,
     ],
     '.dev' => [
         'devMode' => true,
