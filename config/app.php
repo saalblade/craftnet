@@ -3,7 +3,8 @@
 return [
     '*' => [
         'modules' => [
-            'api' => \craftcom\api\Module::class
+            'api' => \craftcom\api\Module::class,
+            'id' => \craftcom\id\Module::class,
         ],
     ],
     '.com' => [
