@@ -25,5 +25,6 @@ return [
     'composer' => [
     ],
     'craftId' => [
+        'GET v1/id' => 'id/v1/id',
     ],
 ];
