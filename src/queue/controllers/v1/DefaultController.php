@@ -15,11 +15,11 @@ use yii\web\Response;
 class DefaultController extends BaseApiController
 {
     /**
-     * Handles /v1/createJobs requests.
+     * Handles /v1/create requests.
      *
      * @return Response
      */
-    public function actionCreateJobs(): Response
+    public function actionCreate(): Response
     {
         //$body = $this->getRequestBody('updates-request');
         $numJobs = Craft::$app->getRequest()->getParam('numJobs');

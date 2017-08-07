@@ -30,6 +30,6 @@ return [
         'GET validate' => 'id/connect/validate',
     ],
     'queue' => [
-        'POST v1'
+        'POST v1/create' => 'queue/create'
     ],
 ];
