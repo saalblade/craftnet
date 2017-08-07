@@ -21,6 +21,9 @@ class IdController extends BaseApiController
     {
         //$body = $this->getRequestBody('updates-request');
 
+        //$client = new \Github\Client();
+        //$token = $client->api('apps')->createInstallationToken(567313);
+
         return $this->asJson([
             'cms' => [
                 'status' => 'eligible',
