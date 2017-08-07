@@ -1,6 +1,7 @@
 <h2>Create Jobs</h2>
 
 <form action="v1/q/create" method="post">
+    {{ getCsrfInput() }}
     <input type="number" name="numJobs" id="numJobs">
     <input type="submit">
 </form>
