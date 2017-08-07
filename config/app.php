@@ -5,18 +5,22 @@ return [
         'modules' => [
             'api' => \craftcom\api\Module::class,
             'id' => \craftcom\id\Module::class,
+            'queue' => \craftcom\queue\Module::class,
         ],
     ],
     '.com' => [
+        'bootstrap' => [
+            'queue',
+        ],
         'components' => [
             'redis' => [
-                'class' => 'yii\redis\Connection',
+                'class' => yii\redis\Connection::class,
                 'hostname' => 'craft.4qveoj.ng.0001.usw2.cache.amazonaws.com',
                 'port' => 6379,
                 'database' => 0,
             ],
             'cache' => [
-                'class' => 'yii\redis\Cache',
+                'class' => yii\redis\Cache::class,
                 'redis' => [
                     'hostname' => 'craft.4qveoj.ng.0001.usw2.cache.amazonaws.com',
                     'port' => 6379,
@@ -38,6 +42,11 @@ return [
                 $session->authAccessParam = $stateKeyPrefix.'__auth_access';
                 return $session;
             },
+            'queue' => [
+                'class' => \yii\queue\redis\Queue::class,
+                'redis' => 'redis',
+                'channel' => 'queue',
+            ],
         ],
     ]
 ];
