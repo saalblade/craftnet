@@ -8,11 +8,11 @@ use craftcom\queue\jobs\TestJob;
 use yii\web\Response;
 
 /**
- * Class DefaultController
+ * Class QController
  *
  * @package craftcom\queue\controllers\v1
  */
-class DefaultController extends BaseApiController
+class QController extends BaseApiController
 {
     /**
      * Handles /v1/create requests.
