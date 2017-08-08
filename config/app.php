@@ -10,6 +10,13 @@ return [
         'bootstrap' => [
             'queue',
         ],
+        'components' => [
+            'queue' => [
+                'class' => \yii\queue\redis\Queue::class,
+                'redis' => 'redis',
+                'channel' => 'queue',
+            ],
+        ]
     ],
     '.com' => [
         'components' => [
@@ -42,11 +49,6 @@ return [
                 $session->authAccessParam = $stateKeyPrefix.'__auth_access';
                 return $session;
             },
-            'queue' => [
-                'class' => \yii\queue\redis\Queue::class,
-                'redis' => 'redis',
-                'channel' => 'queue',
-            ],
         ],
     ]
 ];
