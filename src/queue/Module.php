@@ -1,6 +1,8 @@
 <?php
 namespace craftcom\queue;
 
+use Craft;
+
 class Module extends \yii\base\Module
 {
     /**
@@ -8,6 +10,7 @@ class Module extends \yii\base\Module
      */
     public function init()
     {
+        Craft::setAlias('@craftcom/queue/controllers', __DIR__.'/controllers');
         parent::init();
     }
 }
