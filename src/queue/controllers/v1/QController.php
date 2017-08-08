@@ -27,7 +27,7 @@ class QController extends BaseApiController
         for ($counter = 0; $counter < $numJobs; $counter++)
         {
             $job = new TestJob();
-            Craft::$app->getQueue()->push($job);
+            Craft::$app->queue->push($job);
         }
 
         return $this->asRaw('Added '.$numJobs.' jobs.');
