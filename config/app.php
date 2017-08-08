@@ -7,11 +7,11 @@ return [
             'id' => \craftcom\id\Module::class,
             'queue' => \craftcom\queue\Module::class,
         ],
-    ],
-    '.com' => [
         'bootstrap' => [
             'queue',
         ],
+    ],
+    '.com' => [
         'components' => [
             'redis' => [
                 'class' => yii\redis\Connection::class,
