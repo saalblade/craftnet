@@ -7,18 +7,12 @@ return [
             'id' => \craftcom\id\Module::class,
             'queue' => \craftcom\queue\Module::class,
         ],
+
+    ],
+    'prod' => [
         'bootstrap' => [
             'queue',
         ],
-        'components' => [
-            'queue' => [
-                'class' => \yii\queue\redis\Queue::class,
-                'redis' => 'redis',
-                'channel' => 'queue',
-            ],
-        ]
-    ],
-    'prod' => [
         'components' => [
             'redis' => [
                 'class' => yii\redis\Connection::class,
@@ -49,6 +43,11 @@ return [
                 $session->authAccessParam = $stateKeyPrefix.'__auth_access';
                 return $session;
             },
+            'queue' => [
+                'class' => \yii\queue\redis\Queue::class,
+                'redis' => 'redis',
+                'channel' => 'queue',
+            ],
         ],
     ]
 ];
