@@ -15,11 +15,11 @@ return [
         'preventUserEnumeration' => true,
         'validationKey' => 'y56B>Ck7"<7k?BbVE>mY=b#cwBq]$JEp',
     ],
-    '.com' => [
+    'prod' => [
         'allowAutoUpdates' => false,
         'devMode' => true,
     ],
-    '.dev' => [
+    'dev' => [
         'devMode' => true,
         'allowAutoUpdates' => true,
     ]

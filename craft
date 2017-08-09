@@ -16,6 +16,8 @@ if (file_exists($root.'/.env')) {
     $dotenv->load();
 }
 
+define('CRAFT_ENVIRONMENT', getenv('CRAFT_ENV') ?: 'prod');
+
 // Craft
 define('CRAFT_BASE_PATH', $root);
 $app = require $root.'/vendor/craftcms/cms/bootstrap/console.php';

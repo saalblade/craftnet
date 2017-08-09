@@ -34,5 +34,7 @@ if (!isset($_SERVER['RDS_HOSTNAME'])) {
     $dotenv->load();
 }
 
+define('CRAFT_ENVIRONMENT', getenv('CRAFT_ENV') ?: 'prod');
+
 $app = require CRAFT_VENDOR_PATH.'/craftcms/cms/bootstrap/web.php';
 $app->run();

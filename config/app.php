@@ -18,7 +18,7 @@ return [
             ],
         ]
     ],
-    '.com' => [
+    'prod' => [
         'components' => [
             'redis' => [
                 'class' => yii\redis\Connection::class,
