@@ -7,7 +7,6 @@ return [
             'id' => \craftcom\id\Module::class,
             'queue' => \craftcom\queue\Module::class,
         ],
-
     ],
     'prod' => [
         'bootstrap' => [
