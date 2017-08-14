@@ -8,8 +8,7 @@
     "yiisoft/yii2-redis": "^2.0.6",
     "flipboxdigital/postmark": "^1.0.3",
     "knplabs/github-api": "^2.5.0",
-    "php-http/guzzle6-adapter": "^1.1.1",
-    "yiisoft/yii2-queue": "^2.0.0"
+    "php-http/guzzle6-adapter": "^1.1.1"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
