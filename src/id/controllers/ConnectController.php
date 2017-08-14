@@ -53,7 +53,7 @@ class ConnectController extends BaseApiController
         $authUrl = $provider->getAuthorizationUrl($options);
         Craft::$app->getSession()->set('oauth2state', $provider->getState());
 
-        return $this->renderTemplate('developer/_connect', ['url' => $this->_authorizeUrl.'?'.urldecode(http_build_query($params))]);
+        return $this->renderTemplate('developer/_connect', ['url' => $authUrl]);
     }
 
     public function actionValidate(): Response
