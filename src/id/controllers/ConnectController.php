@@ -80,15 +80,6 @@ class ConnectController extends BaseApiController
         $user = $provider->getResourceOwner($token);
 
 
-
-        $response = $provider->getAuthenticatedRequest(
-            'GET',
-            $provider->apiDomain.'/repos/takobell/Stringy/hooks',
-            $token
-        );
-
-        $body = $response->getBody();
-
 //        $params = [
   //          'client_id' => $this->_clientId,
     //        'client_secret' => $this->_clientSecret,
@@ -121,12 +112,25 @@ class ConnectController extends BaseApiController
     //        $client->authenticate($accessToken, null, \Github\Client::AUTH_HTTP_TOKEN);
       //      $test = $client->me()->show();
 
-            return $this->renderTemplate('developer/_validate', ['user' => $user->getNickname(), 'body' => $body]);
+            return $this->renderTemplate('developer/_validate', ['user' => $user->getNickname(), 'token' => $token->getToken()]);
         //}
 
         //$client = new \Github\Client();
         //$test = $client->authenticate($code, null, \Github\Client::AUTH_HTTP_TOKEN);
         //$test2 = $client->me();
+    }
+
+    public function actionListHooks(): Response
+    {
+        $provider = $this->_getProvider();
+
+        $response = $provider->getAuthenticatedRequest(
+            'GET',
+            $provider->apiDomain.'/repos/takobell/Stringy/hooks',
+            $token
+        );
+
+        $body = $response->getBody();
     }
 
     private function _getProvider()
