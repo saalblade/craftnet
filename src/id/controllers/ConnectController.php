@@ -121,7 +121,7 @@ class ConnectController extends BaseApiController
     //        $client->authenticate($accessToken, null, \Github\Client::AUTH_HTTP_TOKEN);
       //      $test = $client->me()->show();
 
-            return $this->renderTemplate('developer/_validate', ['body' => $body]);
+            return $this->renderTemplate('developer/_validate', ['user' => $user->getNickname(), 'body' => $body]);
         //}
 
         //$client = new \Github\Client();
