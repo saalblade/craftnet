@@ -28,7 +28,7 @@ class ConnectController extends BaseApiController
     /**
      * @var string
      */
-    private $_scope = 'user:email,write:repo_hook';
+    private $_scope = ['user:email', 'write:repo_hook'];
 
     /**
      * @var string
@@ -47,7 +47,7 @@ class ConnectController extends BaseApiController
         $provider = $this->_getProvider();
 
         $options = [
-            'state' => $this->_scope,
+            'scope' => $this->_scope,
         ];
 
         $authUrl = $provider->getAuthorizationUrl($options);
@@ -120,17 +120,25 @@ class ConnectController extends BaseApiController
         //$test2 = $client->me();
     }
 
-    public function actionListHooks(): Response
+    public function actionListhooks(): Response
     {
+        $token = '0bd5f50c59283bd063d52a338dd4ffc30f202a0d';
+
         $provider = $this->_getProvider();
 
-        $response = $provider->getAuthenticatedRequest(
+        //$provider->getParsedResponse()
+
+        $request = $provider->getAuthenticatedRequest(
             'GET',
             $provider->apiDomain.'/repos/takobell/Stringy/hooks',
             $token
         );
 
-        $body = $response->getBody();
+        $response = $provider->getParsedResponse($request);
+
+
+
+        $body = (string)$response->getBody();
     }
 
     private function _getProvider()

@@ -29,7 +29,7 @@ return [
         'GET connect' => 'id/connect',
         'GET validate' => 'id/connect/validate',
     ],
-    'queue' => [
-        'POST v1/create' => 'queue/v1/q/create',
-    ],
+   // 'queue' => [
+     //   'POST v1/create' => 'queue/v1/q/create',
+    //],
 ];
