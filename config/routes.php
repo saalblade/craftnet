@@ -31,6 +31,6 @@ return [
 //    ],
   //  'queue' => [
     //    'POST v1/create' => 'queue/v1/q/create',
-        'v1/process' => 'queue/v1/q/process'
+        'POST v1/process' => 'queue/v1/q/process'
     //],
 ];
