@@ -36,7 +36,7 @@ class QController extends BaseApiController
     {
         $this->requirePostRequest();
         Craft::error('here');
-        $test = Craft::$app->getRequest()->getBodyParams();
+        $test = Craft::$app->getRequest()->getRawBody();
         ob_start();
         var_dump($test);
         $contents = ob_get_contents();
