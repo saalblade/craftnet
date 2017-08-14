@@ -4,7 +4,6 @@ namespace craftcom\queue\controllers\v1;
 
 use Craft;
 use craftcom\queue\controllers\BaseApiController;
-use craftcom\queue\jobs\TestJob;
 use yii\web\Response;
 
 /**
@@ -26,7 +25,7 @@ class QController extends BaseApiController
 
         for ($counter = 0; $counter < $numJobs; $counter++)
         {
-            $job = new TestJob();
+            //$job = new TestJob();
             //Craft::$app->queue->push($job);
         }
 
