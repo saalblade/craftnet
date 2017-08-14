@@ -5,6 +5,7 @@ namespace craftcom\id\controllers;
 use Craft;
 use craftcom\id\controllers\BaseApiController;
 use craft\helpers\Json;
+use League\OAuth2\Client\Provider\Github;
 use yii\web\Response;
 
 /**
@@ -43,14 +44,14 @@ class ConnectController extends BaseApiController
      */
     public function actionIndex(): Response
     {
-        $state = hash('sha256', microtime(true).Craft::$app->getSecurity()->generateRandomString().Craft::$app->getRequest()->getUserIp());
-        Craft::$app->getSession()->set('state', $state);
+        $provider = $this->_getProvider();
 
-        $params = [
-            'client_id' => $this->_clientId,
-            'scope' => $this->_scope,
-            'state' => $state,
+        $options = [
+            'state' => $this->_scope,
         ];
+
+        $authUrl = $provider->getAuthorizationUrl($options);
+        Craft::$app->getSession()->set('oauth2state', $provider->getState());
 
         return $this->renderTemplate('developer/_connect', ['url' => $this->_authorizeUrl.'?'.urldecode(http_build_query($params))]);
     }
@@ -58,55 +59,74 @@ class ConnectController extends BaseApiController
     public function actionValidate(): Response
     {
         $code = Craft::$app->getRequest()->getParam('code');
-        $state = Craft::$app->getRequest()->getParam('state');
+        $state = Craft::$app->getRequest()->getParam('oauth2state');
 
         if (!$code || !$state) {
             // Exception?
         }
 
-        if ($state !== Craft::$app->getSession()->get('state')) {
+        if ($state !== Craft::$app->getSession()->get('oauth2state')) {
             // Exception?
         }
 
-        $params = [
-            'client_id' => $this->_clientId,
-            'client_secret' => $this->_clientSecret,
-            'state' => Craft::$app->getSession()->get('state'),
-            'code' => $code,
-        ];
+        $provider = $this->_getProvider();
 
-        // try/catch
-        $httpClient = Craft::createGuzzleClient(['headers' => ['Accept' => 'application/json']]);
-        $response = $httpClient->request('post', $this->_tokenUrl, [
-            'json' => $params,
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $code,
         ]);
 
-        if ($response->getStatusCode() === 200) {
-            $responseBody = (string)$response->getBody();
-            $responseBody = Json::decodeIfJson($responseBody);
+        // try/catch
+
+        $user = $provider->getResourceOwner($token);
+
+//        $params = [
+  //          'client_id' => $this->_clientId,
+    //        'client_secret' => $this->_clientSecret,
+      //      'state' => Craft::$app->getSession()->get('oauth2state'),
+        //    'code' => $code,
+//        ];
+
+        // try/catch
+  //      $httpClient = Craft::createGuzzleClient(['headers' => ['Accept' => 'application/json']]);
+    //    $response = $httpClient->request('post', $this->_tokenUrl, [
+      //      'json' => $params,
+//        ]);
+
+//        if ($response->getStatusCode() === 200) {
+  //          $responseBody = (string)$response->getBody();
+    //        $responseBody = Json::decodeIfJson($responseBody);
 
             // Something went wrong.
-            if (!is_array($responseBody)) {
+      //      if (!is_array($responseBody)) {
                 // something fucked up.
-            }
+        //    }
 
-            if (isset($responseBody['error'])) {
+//            if (isset($responseBody['error'])) {
                 // something gracefully fucked up.
-            }
+  //          }
 
-            $accessToken = $responseBody['access_token'];
+    //        $accessToken = $responseBody['access_token'];
+//
+  //          $client = new \Github\Client();
+    //        $client->authenticate($accessToken, null, \Github\Client::AUTH_HTTP_TOKEN);
+      //      $test = $client->me()->show();
 
-            $client = new \Github\Client();
-            $client->authenticate($accessToken, null, \Github\Client::AUTH_HTTP_TOKEN);
-            $test = $client->me()->show();
-
-
-
-            return $this->renderTemplate('developer/_validate', ['url' => $this->_authorizeUrl.'?'.urldecode(http_build_query($params))]);
-        }
+            return $this->renderTemplate('developer/_validate', ['user' => $user->getNickname(), 'token' => $token]);
+        //}
 
         //$client = new \Github\Client();
         //$test = $client->authenticate($code, null, \Github\Client::AUTH_HTTP_TOKEN);
         //$test2 = $client->me();
+    }
+
+    private function _getProvider()
+    {
+        $provider = new Github([
+            'clientId'          => $this->_clientId,
+            'clientSecret'      => $this->_clientSecret,
+            'redirectUri'       => 'https://id.craftcms.com/validate',
+        ]);
+
+        return $provider;
     }
 }

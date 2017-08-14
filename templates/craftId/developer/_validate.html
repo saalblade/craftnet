@@ -3,10 +3,19 @@
     </head>
 
     <body>
-        <p>Well, hello there!</p>
+        <p>Connect to Github as {{ user }}</p>
+        <p>Token Info:</p>
         <p>
-            Let's connect to the Github API.
-            <a href="{{ url }}">Click here</a> to begin!
+            <table border="1" cellpadding="1" cellspacing="1">
+                <tr>
+                    <td>Expires:</td>
+                    <td>{{ token.getExpires() }}</td>
+                </tr>
+                <tr>
+                    <td>Token:</td>
+                    <td>{{ token.getToken() }}</td>
+                </tr>
+            </table>
         </p>
     </body>
 </html>
