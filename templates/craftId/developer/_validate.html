@@ -3,19 +3,12 @@
     </head>
 
     <body>
-        <p>Connect to Github as {{ user }}</p>
-        <p>Token Info:</p>
+        <p>Connected to Github as {{ user }}</p>
+        <p>Response:</p>
         <p>
-            <table border="1" cellpadding="1" cellspacing="1">
-                <tr>
-                    <td>Expires:</td>
-                    <td>{{ token.getExpires() }}</td>
-                </tr>
-                <tr>
-                    <td>Token:</td>
-                    <td>{{ token.getToken() }}</td>
-                </tr>
-            </table>
+            <code>
+                {{ body }}
+            </code>
         </p>
     </body>
 </html>
