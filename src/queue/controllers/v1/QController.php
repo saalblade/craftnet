@@ -35,7 +35,7 @@ class QController extends BaseApiController
     public function actionProcess(): Response
     {
         //$this->requirePostRequest();
-Craft::error('here');
+//Craft::error('here');
         //$test = Craft::$app->getRequest()->getBodyParams();
         //ob_start();
         //var_dump($test);
