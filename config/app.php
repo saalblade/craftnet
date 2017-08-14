@@ -9,9 +9,6 @@ return [
         ],
     ],
     'prod' => [
-        'bootstrap' => [
-            'queue',
-        ],
         'components' => [
             'redis' => [
                 'class' => yii\redis\Connection::class,
@@ -42,11 +39,6 @@ return [
                 $session->authAccessParam = $stateKeyPrefix.'__auth_access';
                 return $session;
             },
-            'queue' => [
-                'class' => \yii\queue\redis\Queue::class,
-                'redis' => 'redis',
-                'channel' => 'queue',
-            ],
         ],
     ]
 ];
