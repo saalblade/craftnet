@@ -19,18 +19,17 @@
  */
 
 return [
- //   'api' => [
-   //     'POST v1/updates' => 'api/v1/updates',
-//    ],
-  //  'composer' => [
-    //],
-//    'craftId' => [
-  //      'GET v1/id' => 'id/v1/id',
-    //    'GET connect' => 'id/connect',
-      //  'GET validate' => 'id/connect/validate',
-//    ],
-  //  'queue' => [
-    //    'POST v1/create' => 'queue/v1/q/create',
-        'POST v1/process' => 'queue/v1/q/process'
-    //],
+    'api' => [
+        'POST v1/updates' => 'api/v1/updates',
+    ],
+    'composer' => [
+    ],
+    'craftId' => [
+        'GET v1/id' => 'id/v1/id',
+        'GET connect' => 'id/connect',
+        'GET validate' => 'id/connect/validate',
+    ],
+    'queue' => [
+        'POST v1/create' => 'queue/v1/q/create',
+    ],
 ];
