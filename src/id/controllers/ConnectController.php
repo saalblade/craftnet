@@ -5,6 +5,7 @@ namespace craftcom\id\controllers;
 use Craft;
 use craftcom\id\controllers\BaseApiController;
 use craft\helpers\Json;
+use function GuzzleHttp\Psr7\stream_for;
 use League\OAuth2\Client\Provider\Github;
 use yii\web\Response;
 
@@ -122,17 +123,40 @@ class ConnectController extends BaseApiController
 
     public function actionListhooks(): Response
     {
-        $token = '0bd5f50c59283bd063d52a338dd4ffc30f202a0d';
+        $token = 'd209d28b505b489828e36b47023400f100e59897';
 
         $provider = $this->_getProvider();
 
         //$provider->getParsedResponse()
 
         $request = $provider->getAuthenticatedRequest(
-            'GET',
+            'POST',
             $provider->apiDomain.'/repos/takobell/Stringy/hooks',
             $token
         );
+
+        $params = [
+            'name' => 'web',
+            'events' => ['push'],
+            'active' => true,
+            'config' => [
+                'url' => 'https://id.craftcms.com',
+                'content_type' => 'json',
+            ],
+        ];
+
+        $body = \GuzzleHttp\Psr7\stream_for(\GuzzleHttp\json_encode($params));
+        $request = $request->withBody($body);
+        $request = $request->withHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+
+
+//        $request = $provider->getAuthenticatedRequest(
+  //          'GET',
+    //        $provider->apiDomain.'/repos/takobell/Stringy/hooks',
+      //      $token
+        //);
+
 
         $response = $provider->getParsedResponse($request);
 
