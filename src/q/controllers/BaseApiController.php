@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\queue\controllers;
+namespace craftcom\q\controllers;
 
 use Craft;
 use craft\web\Controller;
@@ -8,7 +8,7 @@ use craft\web\Controller;
 /**
  * Class BaseController
  *
- * @package craftcom\queue\controllers
+ * @package craftcom\q\controllers
  */
 abstract class BaseApiController extends Controller
 {

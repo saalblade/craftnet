@@ -1,15 +1,15 @@
 <?php
 
-namespace craftcom\queue\controllers\v1;
+namespace craftcom\q\controllers\v1;
 
 use Craft;
-use craftcom\queue\controllers\BaseApiController;
+use craftcom\q\controllers\BaseApiController;
 use yii\web\Response;
 
 /**
  * Class QController
  *
- * @package craftcom\queue\controllers\v1
+ * @package craftcom\q\controllers\v1
  */
 class QController extends BaseApiController
 {

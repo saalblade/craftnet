@@ -5,7 +5,7 @@ return [
         'modules' => [
             'api' => \craftcom\api\Module::class,
             'id' => \craftcom\id\Module::class,
-            'queue' => \craftcom\queue\Module::class,
+            'q' => \craftcom\q\Module::class,
         ],
     ],
     'prod' => [
