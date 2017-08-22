@@ -4,23 +4,27 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0312d1760cc01c5b79ac419faa537a1a",
+    "content-hash": "596acf25c7ff67f9b942492e07301e01",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.33.4",
+            "version": "3.34.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "586a9c0e52664cfc4d2d91f9dcdf3ea48d143162"
+                "reference": "df7ddca6872048cc91315c2b4fdb9a57d5fceb84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/586a9c0e52664cfc4d2d91f9dcdf3ea48d143162",
-                "reference": "586a9c0e52664cfc4d2d91f9dcdf3ea48d143162",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/df7ddca6872048cc91315c2b4fdb9a57d5fceb84",
+                "reference": "df7ddca6872048cc91315c2b4fdb9a57d5fceb84",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "ext-simplexml": "*",
+                "ext-spl": "*",
                 "guzzlehttp/guzzle": "^5.3.1|^6.2.1",
                 "guzzlehttp/promises": "~1.0",
                 "guzzlehttp/psr7": "^1.4.1",
@@ -33,11 +37,7 @@
                 "behat/behat": "~3.0",
                 "doctrine/cache": "~1.4",
                 "ext-dom": "*",
-                "ext-json": "*",
                 "ext-openssl": "*",
-                "ext-pcre": "*",
-                "ext-simplexml": "*",
-                "ext-spl": "*",
                 "nette/neon": "^2.3",
                 "phpunit/phpunit": "^4.8.35|^5.4.0",
                 "psr/cache": "^1.0"
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-08-21T20:34:30+00:00"
+            "time": "2017-08-22T18:32:28+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -606,12 +606,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "5de1add17cad265f659368214a70e14a2b1c2be6"
+                "reference": "2f1409b8d23f98b5710274a0a439fcf8119fa9ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/5de1add17cad265f659368214a70e14a2b1c2be6",
-                "reference": "5de1add17cad265f659368214a70e14a2b1c2be6",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/2f1409b8d23f98b5710274a0a439fcf8119fa9ce",
+                "reference": "2f1409b8d23f98b5710274a0a439fcf8119fa9ce",
                 "shasum": ""
             },
             "require": {
@@ -626,6 +626,7 @@
                 "league/oauth2-client": "~2.2.1",
                 "mikehaertl/php-shellcommand": "~1.2.5",
                 "pixelandtonic/imagine": "0.7.1.1",
+                "seld/cli-prompt": "^1.0",
                 "twig/twig": "~2.3.0",
                 "yiisoft/yii2": "~2.0.12.0",
                 "yiisoft/yii2-debug": "2.0.8",
@@ -668,7 +669,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-08-21 23:10:45"
+            "time": "2017-08-22 22:29:18"
         },
         {
             "name": "craftcms/plugin-installer",
