@@ -170,7 +170,6 @@ class ConnectController extends BaseApiController
         $provider = new Github([
             'clientId'          => $this->_clientId,
             'clientSecret'      => $this->_clientSecret,
-            'redirectUri'       => 'https://id.craftcms.com/account/developer/validate',
         ]);
 
         return $provider;

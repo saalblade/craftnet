@@ -27,7 +27,7 @@ return [
     'craftId' => [
         'GET v1/id' => 'id/v1/id',
         'GET account/developer' => 'id/connect',
-        'GET validate' => 'id/connect/validate',
+        'GET account/developer/validate' => 'id/connect/validate',
     ],
    // 'queue' => [
      //   'POST v1/create' => 'queue/v1/q/create',
