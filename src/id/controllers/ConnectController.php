@@ -54,7 +54,7 @@ class ConnectController extends BaseApiController
         $authUrl = $provider->getAuthorizationUrl($options);
         Craft::$app->getSession()->set('oauth2state', $provider->getState());
 
-        return $this->renderTemplate('developer/_connect', ['url' => $authUrl]);
+        return $this->renderTemplate('account/developer/_connect', ['url' => $authUrl]);
     }
 
     public function actionValidate(): Response
@@ -113,7 +113,7 @@ class ConnectController extends BaseApiController
     //        $client->authenticate($accessToken, null, \Github\Client::AUTH_HTTP_TOKEN);
       //      $test = $client->me()->show();
 
-            return $this->renderTemplate('developer/_validate', ['user' => $user->getNickname(), 'token' => $token->getToken()]);
+            return $this->renderTemplate('account/developer/_validate', ['user' => $user->getNickname(), 'token' => $token->getToken()]);
         //}
 
         //$client = new \Github\Client();
@@ -170,7 +170,7 @@ class ConnectController extends BaseApiController
         $provider = new Github([
             'clientId'          => $this->_clientId,
             'clientSecret'      => $this->_clientSecret,
-            'redirectUri'       => 'https://id.craftcms.com/validate',
+            'redirectUri'       => 'https://id.craftcms.com/account/developer/validate',
         ]);
 
         return $provider;

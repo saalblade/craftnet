@@ -1,0 +1,7 @@
+This is your account.
+
+{% if not currentUser.isInGroup('developer') %}
+    Want to become a <a href="{{ url('developer') }}">developer</a>?
+{% else %}
+    You are a developer.
+{% endif %}
