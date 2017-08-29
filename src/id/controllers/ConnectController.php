@@ -123,7 +123,7 @@ class ConnectController extends BaseApiController
 
     public function actionListhooks(): Response
     {
-        $token = 'd209d28b505b489828e36b47023400f100e59897';
+        $token = '95dfe1eafed29ba00e3aa54fca2e7d362374ba9d';
 
         $provider = $this->_getProvider();
 
