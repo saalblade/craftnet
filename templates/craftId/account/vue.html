@@ -16,7 +16,7 @@
     window.csrfTokenName = "{{ craft.config.csrfTokenName|e('js') }}";
     window.csrfTokenValue = "{{ craft.request.csrfToken|e('js') }}";
     window.craftActionUrl = "{{ actionUrl() }}";
-    window.craftApiUrl = "https://api.craftcms.dev/v1";
+    window.craftApiUrl = "{{ craft.app.config.general.craftApiUrl }}";
     window.currentUserId = "{{ currentUser.id }}";
 </script>
 <script src="/vue/dist/js/main.js"></script>

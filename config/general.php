@@ -18,9 +18,11 @@ return [
     'prod' => [
         'allowAutoUpdates' => false,
         'devMode' => true,
+        'craftApiUrl' => 'https://api.craftcms.com/v1',
     ],
     'dev' => [
         'devMode' => true,
         'allowAutoUpdates' => true,
+        'craftApiUrl' => 'https://api.craftcms.dev/v1',
     ]
 ];
