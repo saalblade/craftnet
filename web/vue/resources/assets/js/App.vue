@@ -1,0 +1,85 @@
+<template>
+	<div>
+		<template v-if="notification">
+
+			<div id="notifications-wrapper" :class="{'hide': !notification }">
+				<div id="notifications">
+					<div class="notification bg-success" :class="'bg-'+notification.type">{{ notification.message }}</div>
+				</div>
+			</div>
+
+		</template>
+
+		<nav class="navbar navbar-expand">
+			<div class="container">
+				<a class="navbar-brand" href="#">Craft ID</a>
+
+				<div class="collapse navbar-collapse">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="/logout">Logout</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+
+			<div class="row">
+				<div class="col-md-3">
+					<h5 class="mt-3">Account</h5>
+					<ul class="nav nav-pills flex-column">
+						<li class="nav-item"><router-link class="nav-link" to="/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
+						<li class="nav-item"><router-link class="nav-link" to="/billing"><i class="fa fa-file-text-o"></i> Billing</router-link></li>
+						<li class="nav-item"><router-link class="nav-link" to="/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
+					</ul>
+
+					<template v-if="currentUser.enablePluginDeveloperFeatures">
+						<h5 class="mt-3">Developer</h5>
+						<ul class="nav nav-pills flex-column">
+							<li class="nav-item"><router-link class="nav-link" to="/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
+							<li class="nav-item"><router-link class="nav-link" to="/customers"><i class="fa fa-group"></i> Customers</router-link></li>
+							<li class="nav-item"><router-link class="nav-link" to="/payments"><i class="fa fa-credit-card"></i> Payments</router-link></li>
+							<li class="nav-item"><router-link class="nav-link" to="/payouts"><i class="fa fa-dollar"></i> Payouts</router-link></li>
+						</ul>
+					</template>
+					<template v-if="currentUser.enableShowcaseFeatures">
+						<h5 class="mt-3">Showcase</h5>
+						<ul class="nav nav-pills flex-column">
+							<li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-heart"></i> Activity</a></li>
+							<li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-image"></i> Projects</a></li>
+							<li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-industry"></i> Agency Profile</a></li>
+						</ul>
+					</template>
+				</div>
+
+				<div class="col-md-9">
+					<div class="content">
+						<router-view></router-view>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</template>
+
+
+<script>
+    import router from './router';
+    import { mapGetters } from 'vuex'
+
+	export default {
+		router,
+
+		props: ['notification'],
+
+
+        computed: {
+            ...mapGetters({
+                currentUser: 'currentUser',
+            }),
+        }
+	}
+</script>

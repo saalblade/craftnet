@@ -21,6 +21,7 @@
 return [
     'api' => [
         'POST v1/updates' => 'api/v1/updates',
+        'POST v1/craft-id' => 'api/v1/craft-id',
     ],
     'composer' => [
     ],
