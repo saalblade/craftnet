@@ -121,9 +121,9 @@ class ConnectController extends BaseApiController
         //$test2 = $client->me();
     }
 
-    public function actionListhooks(): Response
+    public function actionHooks(): Response
     {
-        $token = 'd209d28b505b489828e36b47023400f100e59897';
+        $token = '95dfe1eafed29ba00e3aa54fca2e7d362374ba9d';
 
         $provider = $this->_getProvider();
 
@@ -163,6 +163,8 @@ class ConnectController extends BaseApiController
 
 
         $body = (string)$response->getBody();
+
+        return $this->renderTemplate('account/developer/listhooks', ['hooks' => $body]);
     }
 
     private function _getProvider()
