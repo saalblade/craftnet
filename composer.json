@@ -10,7 +10,9 @@
     "knplabs/github-api": "^2.5.0",
     "php-http/guzzle6-adapter": "^1.1.1",
     "league/oauth2-github": "^2.0.0",
-    "craftcms/aws-s3": "^1.0.6"
+    "craftcms/aws-s3": "^1.0.6",
+    "craftcms/oauth-server": "dev-master",
+    "craftcms/oauth2-craftid": "dev-master"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
@@ -22,5 +24,15 @@
   },
   "config": {
     "optimize-autoloader": true
-  }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixelandtonic/oauth-server.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixelandtonic/oauth2-craftid.git"
+    }
+  ]
 }
