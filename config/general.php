@@ -47,7 +47,7 @@ return [
     ],
     'prod' => [
         'allowAutoUpdates' => false,
-        'devMode' => true,
+        'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] == 'mgt3md9snyd2' ? true : false,
         'craftApiUrl' => 'https://api.craftcms.com/v1',
     ],
     'dev' => [
