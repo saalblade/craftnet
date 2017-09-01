@@ -1,3 +1,7 @@
+{% if not currentUser %}
+	{% redirect 'login' %}
+{% endif %}
+
 <html>
 <head>
 	<title>Craft ID</title>
