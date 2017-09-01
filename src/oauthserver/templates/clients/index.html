@@ -1,0 +1,59 @@
+{% extends "oauth-server/_layouts/cp" %}
+
+
+{% set extraPageHeaderHtml %}
+	<div id="newclientcontainer" class="buttons right">
+		<a href="{{ url('oauth-server/clients/new') }}" class="btn submit add icon">{{ "New client"|t('app') }}</a>
+	</div>
+{% endset %}
+
+{% set content %}
+
+	<div id="noclients"{% if clients %} class="hidden"{% endif %}>
+		<p>{{ "No clients exist yet."|t('app') }}</p>
+	</div>
+
+	{% if clients|length %}
+		<table id="clients" class="data fullwidth">
+			<thead>
+			<tr>
+				<th>{{ 'Name'|t('oauthServer') }}</th>
+				<th>{{ 'Identifier'|t('oauthServer') }}</th>
+				<th>{{ 'Secret'|t('oauthServer') }}</th>
+				<th>{{ 'Redirect URI'|t('oauthServer') }}</th>
+				<th>{{ 'Redirect URI Locking'|t('oauthServer') }}</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for client in clients %}
+				<tr data-id="{{ client.id }}" data-name="{{ client.name }}">
+					<td><a href="{{ url('oauth-server/clients/'~client.id) }}">{{ client.name }}</a></td>
+					<td>{{ client.identifier }}</td>
+					<td>{{ client.secret }}</td>
+					<td>{{ client.redirectUri }}</td>
+					<td>
+						{% if client.redirectUriLocked %}
+							{{ 'Enabled'|t('oauthServer') }}
+						{% else %}
+							{{ 'Disabled'|t('oauthServer') }}
+						{% endif %}
+					</td>
+					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+
+{% endset %}
+
+
+{% js %}
+	var adminTable = new Craft.AdminTable({
+		tableSelector: '#clients',
+		noItemsSelector: '#noclients',
+		newItemBtnSelector: '#newclientcontainer',
+		deleteAction: 'oauth-server/clients/delete-client',
+		confirmDeleteMessage: '{{ "Are you sure you want to delete “{name}”?"|t('app') }}'
+	});
+{% endjs %}

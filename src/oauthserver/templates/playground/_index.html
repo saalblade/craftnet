@@ -1,0 +1,135 @@
+{% extends "oauth-server/_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set content %}
+
+	{% if not token %}
+
+		<form method="GET">
+			{{ csrfInput() }}
+			<input type="hidden" name="action" value="oauth-server/playground/generate-access-token" />
+
+			{% set clientOptions = [] %}
+			{% for client in clients %}
+				{% set clientOptions = clientOptions|merge([{label: client.name, value: client.id }]) %}
+			{% endfor %}
+			{{ forms.selectField({
+				label: 'Client',
+				name: 'clientId',
+				first: true,
+				options: clientOptions
+			}) }}
+
+
+			{% set grantOptions = [] %}
+			{% for grant in grants %}
+				{% if grant.handle in ['ClientCredentialsGrant', 'PasswordGrant', 'AuthCodeGrant', 'ImplicitGrant'] %}
+					{% set grantOptions = grantOptions|merge([{label: grant.description, value: grant.handle }]) %}
+				{% endif %}
+			{% endfor %}
+			{{ forms.selectField({
+				label: 'Grant',
+				name: 'grantHandle',
+				id: 'grant',
+				options: grantOptions,
+				value: grantHandle
+			}) }}
+
+
+			<div id="scopes" class="hidden">
+				<h3>Scopes</h3>
+				{% set scopeOptions = [] %}
+				{% for scope, label in scopes %}
+					{% set scopeOptions = scopeOptions|merge([{label: label, value: scope }]) %}
+				{% endfor %}
+
+				{{ forms.checkboxGroup({
+					options: scopeOptions,
+					name: 'scope'
+				}) }}
+			</div>
+
+			<div class="buttons">
+				<input class="btn submit" type="submit" value="{{ 'Generate Access Token'|t('oauthServer')}}" />
+			</div>
+		</form>
+
+	{% else %}
+
+		{{ forms.textField({
+			label: "Access Token"|t('oauthServer'),
+			value: (token.token is defined ? token.token : null)
+		}) }}
+
+		{% if token.refreshToken is defined and token.refreshToken %}
+			{{ forms.textField({
+				label: "Refresh Token"|t('oauthServer'),
+				value: (token.refreshToken is defined ? token.refreshToken : null)
+			}) }}
+		{% endif %}
+
+		<h3>Values</h3>
+
+		{% if token.values is defined and token.values is iterable %}
+			<table class="data fullwidth">
+				{% for key, value in token.values %}
+					<tr>
+						<th>{{ key }}</th>
+						<td>
+							{% if value is iterable %}
+								{{ dump(value) }}
+							{% else %}
+								{{ value }}
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+
+		{% if token.expires is defined %}
+			<h3>Expires</h3>
+			<p>{{ token.expires|datetime }}</p>
+		{% endif %}
+
+		{% if token.refreshToken is defined and token.refreshToken %}
+			<div class="buttons">
+				<a href="{{ actionUrl('oauth-server/playground/refresh-test-token', { refreshTokenIdentifier: token.refreshToken }) }}" class="btn">Refresh Access Token</a>
+			</div>
+		{% endif %}
+
+		<div class="buttons">
+			<a href="{{ actionUrl('oauth-server/playground/reset-test-token') }}" class="btn">Reset</a>
+		</div>
+
+	{% endif %}
+
+{% endset %}
+
+{% js %}
+
+var $grantSelect = $('#grant');
+var $scopes = $('#scopes');
+
+function switchGrant(grant) {
+	switch(grant) {
+		case 'AuthCodeGrant':
+		case 'ImplicitGrant':
+			$scopes.removeClass('hidden');
+			break;
+
+		default:
+			$scopes.addClass('hidden');
+	}
+}
+
+$grantSelect.on('change', function(ev) {
+	var grant = $(ev.currentTarget).val();
+	console.log('grant', grant);
+	switchGrant(grant);
+});
+
+var grant = $grantSelect.val();
+switchGrant(grant);
+
+{% endjs %}

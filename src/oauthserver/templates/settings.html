@@ -1,0 +1,105 @@
+{% extends "oauth-server/_layouts/cp" %}
+
+{% set content %}
+
+	{% if not isSecure %}
+		<p class="warning">Please make sure to enable SSL for production.</p>
+	{% endif %}
+
+	<hr>
+
+	<h2 id="endpoints">{{ 'Endpoints'|t('oauthserver') }}</h2>
+
+	<p>{{ 'The OAuth endpoints for interacting with the authorization server.'|t('oauthserver') }}</p>
+
+	<table class="data fullwidth">
+		<tr>
+			<th>{{ 'Authorization'|t('oauthserver') }}</th>
+			<td>{{ siteUrl('oauth/authorize') }}</td>
+		</tr>
+		<tr>
+			<th>{{ 'Access token'|t('oauthserver') }}</th>
+			<td>{{ siteUrl('oauth/access_token') }}</td>
+		</tr>
+	</table>
+
+	<hr>
+
+	<h2 id="scopes">{{ 'Scopes'|t('oauthserver') }}</h2>
+	<p>{{ 'The scopes are defined by the {configKey} config.'|t('oauthserver', {configKey: '<code>scopes</code>' })|raw }}</p>
+
+	{% if scopes|length > 0 %}
+		<table class="data fullwidth">
+			<thead>
+			<tr>
+				<th>{{ 'Scope'|t('oauthserver') }}</th>
+				<th>{{ 'Description'|t('oauthserver') }}</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for scope, description in scopes %}
+				<tr>
+					<td><code>{{ scope }}</code></td>
+					<td class="light">{{ description }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		<p>{{ 'No scopes.'|t('oauthserver') }}</p>
+	{% endif %}
+
+	<hr>
+
+	<h2 id="grants">{{ 'Grants'|t('oauthserver') }}</h2>
+	<p>{{ 'The grants are defined by the {configKey} config.'|t('oauthserver', {configKey: '<code>grants</code>' })|raw }}</p>
+
+	{% if grants|length > 0 %}
+		<table class="data fullwidth">
+			<thead>
+				<tr>
+					<th>{{ 'Grant'|t('oauthserver') }}</th>
+					<th>{{ 'Description'|t('oauthserver') }}</th>
+					<th>{{ 'Status'|t('oauthserver') }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for grant in grants %}
+					<tr>
+						<td><code>{{ grant.handle }}</code></td>
+						<td class="light">{{ grant.description }}</td>
+						<td>
+							<div class="status {{ grant.enabled ? 'on' : '' }}"></div>
+							{{ grant.enabled ? 'Enabled'|t('oauthserver') : 'Disabled'|t('oauthserver') }}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		<p>{{ 'No grants.'|t('oauthserver') }}</p>
+	{% endif  %}
+
+	<hr>
+
+	<h2>{{ 'Expiries'|t('oauthserver') }}</h2>
+
+	<table class="data fullwidth">
+		<thead>
+		<tr>
+			<th>{{ 'Type'|t('oauthserver') }}</th>
+			<th>{{ 'Expiry'|t('oauthserver') }}</th>
+		</tr>
+		</thead>
+		<tbody>
+
+		{% for type, expiry in expiries %}
+			<tr>
+				<td><code>{{ type }}</code></td>
+				<td>{{ expiry }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+{% endset %}

@@ -1,0 +1,38 @@
+{% macro tokensTableRow(token) -%}
+	{% set isRevoked = false %}
+	{% if token.isRevoked is defined and token.isRevoked %}
+		{% set isRevoked = true %}
+	{% endif %}
+
+	<tr>
+		<td>
+			<a href="{{ url('oauth-server/access-tokens/'~token.id) }}" title="{{ token.identifier }}">{{ token.identifier }}</a>
+		</td>
+
+		<td>
+			{% if token.userIdentifier %}
+				{% set user = craft.users.id(token.userIdentifier)|first %}
+
+				<a href="{{ user.cpEditUrl }}">{{ user.username }}</a>
+			{% endif %}
+		</td>
+
+		<td>
+			{% if token.scopes %}
+				{% for scope in token.scopes %}
+					{% if scope.identifier is defined %}
+						{{ scope.identifier }}
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</td>
+
+		<td>
+			{% if token.clientId is defined %}
+				<a href="{{ url('oauth-server/clients/'~token.clientId) }}">{{ token.getClient().name }}</a>
+			{% endif %}
+		</td>
+
+		<td>{{ token.expiryDate }}</td>
+	</tr>
+{%- endmacro %}

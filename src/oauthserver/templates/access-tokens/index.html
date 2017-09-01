@@ -1,0 +1,100 @@
+{% extends "oauth-server/_layouts/cp" %}
+
+{% import "oauth-server/_includes/macros" as macros %}
+
+
+{% set extraPageHeaderHtml %}
+	<div class="buttons right">
+		<a href="{{ actionUrl('oauth-server/access-tokens/clear-revoked-tokens') }}" class="btn">{{ 'Clear Revoked Tokens'|t('oauthServer') }}</a>
+		<a href="{{ actionUrl('oauth-server/access-tokens/clear-access-tokens') }}" class="btn">{{ 'Clear Access Tokens'|t('oauthServer') }}</a>
+	</div>
+{% endset %}
+
+
+{% set content %}
+
+	<div id="noaccesstokens"{% if accessTokens %} class="hidden"{% endif %}>
+		<p>{{ "No access tokens exist yet."|t('app') }}</p>
+	</div>
+
+	{% if accessTokens|length %}
+
+		<table id="accesstokens" class="data fullwidth">
+			<thead>
+				<tr>
+					<th>{{ 'ID'|t('oauthServer') }}</th>
+					<th>{{ 'Identifier'|t('oauthServer') }}</th>
+					<th>{{ 'Client'|t('oauthServer') }}</th>
+					<th>{{ 'User'|t('oauthServer') }}</th>
+					<th>{{ 'Expiry Date'|t('oauthServer') }}</th>
+					<th>{{ 'Is Revoked?'|t('oauthServer') }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for accessToken in accessTokens %}
+					<tr data-id="{{ accessToken.id }}" data-name="{{ accessToken.identifier }}"{% if accessToken.isRevoked %} class="light"{% endif %}>
+						<td>
+							<a href="{{ url('oauth-server/access-tokens/'~accessToken.id) }}" title="{{ accessToken.id }}">{{ accessToken.id }}</a>
+						</td>
+						<td>
+							{{ accessToken.identifier }}
+
+							<div class="light">
+								<strong>Scopes:</strong>
+								{% if accessToken.scopes %}
+									{{ accessToken.scopes|join(', ') }}
+								{% else %}
+									No scope
+								{% endif %}
+							</div>
+						</td>
+
+
+						<td>
+							{% if accessToken.clientId is defined %}
+								<a{% if accessToken.isRevoked %} class="light"{% endif %} href="{{ url('oauth-server/clients/'~accessToken.clientId) }}">{{ accessToken.getClient().name }}</a>
+							{% endif %}
+						</td>
+
+						<td>
+							{% if accessToken.userId %}
+								{% set user = craft.users.id(accessToken.userId)|first %}
+
+								<a{% if accessToken.isRevoked %} class="light"{% endif %} href="{{ user.cpEditUrl }}">{{ user.username }}</a>
+							{% endif %}
+						</td>
+
+						<td>
+							{{ accessToken.expiryDate|datetime }}
+
+							{% if accessToken.hasExpired %}
+								<span class="light">— {{ 'Expired'|t('oauthServer') }}</span>
+							{% endif %}
+						</td>
+
+						<td>
+							{% if accessToken.isRevoked %}
+								{{ 'Yes'|t('oauthServer') }}
+							{% else %}
+								{{ 'No'|t('oauthServer') }}
+							{% endif %}
+						</td>
+						<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	{% endif %}
+
+{% endset %}
+
+
+{% js %}
+	var adminTable = new Craft.AdminTable({
+		tableSelector: '#accesstokens',
+		noItemsSelector: '#noaccesstokens',
+		deleteAction: 'oauth-server/access-tokens/delete-access-token',
+		confirmDeleteMessage: '{{ "Are you sure you want to delete “{name}”?"|t('app') }}'
+	});
+{% endjs %}

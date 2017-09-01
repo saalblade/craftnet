@@ -1,0 +1,57 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set fullPageForm = true %}
+
+{% set crumbs = [
+	{ label: "OAuth Server"|t('oauthServer'), url: url('oauth-server') },
+	{ label: "Clients"|t('oauthServer'), url: url('oauth-server/clients') },
+] %}
+
+{% set content %}
+
+
+	{{ csrfInput() }}
+
+	<input type="hidden" name="action" value="oauth-server/clients/save-client" />
+	{% if client.id %}<input type="hidden" name="id" value="{{ client.id }}">{% endif %}
+	<input type="hidden" name="redirect" value="{{ 'oauth-server/clients'|hash }}" />
+
+	{{ forms.textField({
+		first: true,
+		name: 'name',
+		label: 'Name'|t('oauthServer'),
+		value: client.name,
+		errors: client.getErrors('name'),
+	}) }}
+
+	{{ forms.textField({
+		name: 'identifier',
+		label: 'Identifier'|t('oauthServer'),
+		value: client.identifier,
+		errors: client.getErrors('identifier'),
+	}) }}
+
+	{{ forms.textField({
+		name: 'secret',
+		label: 'Secret'|t('oauthServer'),
+		value: client.secret,
+		errors: client.getErrors('secret'),
+	}) }}
+
+	{{ forms.textField({
+		name: 'redirectUri',
+		label: 'Redirect URI'|t('oauthServer'),
+		value: client.redirectUri,
+		errors: client.getErrors('redirectUri'),
+	}) }}
+
+	{{ forms.lightswitchField({
+		name: 'redirectUriLocked',
+		label: 'Enable Redirect URI Locking'|t('oauthServer'),
+		on: client.redirectUriLocked,
+		errors: client.getErrors('redirectUriLocked'),
+	}) }}
+
+
+{% endset %}

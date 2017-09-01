@@ -1,0 +1,82 @@
+<?php
+namespace craftcom\oauthserver;
+
+use craft\events\RegisterCpNavItemsEvent;
+use craft\helpers\UrlHelper;
+use craft\web\twig\variables\Cp;
+use craftcom\oauthserver\models\Settings;
+use yii\base\Event;
+use craft\events\RegisterTemplateRootsEvent;
+use craft\web\View;
+use craft\events\RegisterUrlRulesEvent;
+use craft\web\UrlManager;
+use Craft;
+use craftcom\oauthserver\base\ModuleTrait;
+
+class Module extends \yii\base\Module
+{
+    use ModuleTrait;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        Craft::setAlias('@craftcom/oauthserver/controllers', __DIR__.'/controllers');
+
+        $this->setComponents([
+            'accessTokens' => \craftcom\oauthserver\services\AccessTokens::class,
+            'authCodes' => \craftcom\oauthserver\services\AuthCodes::class,
+            'clients' => \craftcom\oauthserver\services\Clients::class,
+            'oauth' => \craftcom\oauthserver\services\Oauth::class,
+            'refreshTokens' => \craftcom\oauthserver\services\RefreshTokens::class,
+            'tokens' => \craftcom\oauthserver\services\Tokens::class,
+        ]);
+
+        Event::on(Cp::class, Cp::EVENT_REGISTER_CP_NAV_ITEMS, function(RegisterCpNavItemsEvent $event) {
+            $event->navItems['oauthServer'] = [
+                'label' => "OAuth Server",
+                'url' => UrlHelper::cpUrl('oauth-server'),
+            ];
+        });
+
+        Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
+            $e->roots[$this->id] = __DIR__.'/templates';
+        });
+
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
+            $rules = [
+                'oauth-server' => 'oauth-server/cp',
+                'oauth-server/clients' => 'oauth-server/clients/index',
+                'oauth-server/clients/<clientId:\d+>' => 'oauth-server/clients/edit',
+                'oauth-server/clients/new' => 'oauth-server/clients/edit',
+                'oauth-server/access-tokens' => 'oauth-server/access-tokens/index',
+                'oauth-server/access-tokens/<accessTokenId:\d+>' => 'oauth-server/access-tokens/edit',
+                'oauth-server/refresh-tokens' => 'oauth-server/refresh-tokens/index',
+                'oauth-server/auth-codes' => 'oauth-server/auth-codes/index',
+                'oauth-server/settings' => 'oauth-server/settings/index',
+                'oauth-server/playground' => 'oauth-server/playground/index',
+            ];
+
+            $event->rules = array_merge($event->rules, $rules);
+        });
+
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function (RegisterUrlRulesEvent $event) {
+            $rules = [
+                'oauth/login' => 'oauth-server/oauth/login',
+                'oauth/authorize' => 'oauth-server/oauth/authorize',
+                'oauth/access-token' => 'oauth-server/oauth/access-token',
+                'oauth/revoke' => 'oauth-server/oauth/revoke',
+            ];
+
+            $event->rules = array_merge($event->rules, $rules);
+        });
+
+        parent::init();
+    }
+
+    public static function getSettings()
+    {
+        return new Settings(Craft::$app->getConfig()->getGeneral()->oauthServer);
+    }
+}

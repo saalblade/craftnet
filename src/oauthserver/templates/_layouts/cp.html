@@ -1,0 +1,62 @@
+{% extends '_layouts/cp' %}
+
+{% set title = 'OAuth Server'|t('oauthServer') %}
+
+{% set selectedTab = 'clients' %}
+{% set selectedItem = craft.app.request.getSegment(2) %}
+
+{% set navItems = {
+	'clients': { title: "Clients"|t('oauthServer') },
+	'access-tokens': { title: "Access Tokens"|t('oauthServer') },
+	'refresh-tokens': { title: "Refresh Tokens"|t('oauthServer') },
+	'auth-codes': { title: "Auth Codes"|t('oauthServer') },
+	'settings': { title: "Settings"|t('oauthServer') },
+	'playground': { title: "Playground"|t('oauthServer') },
+} %}
+
+{% block sidebar %}
+	<nav>
+		<ul>
+			{% for id, item in navItems %}
+				<li><a href="{{ url('oauth-server/' ~ id) }}"{% if id == selectedItem %} class="sel"{% endif %}>{{ item.title }}</a></li>
+			{% endfor %}
+		</ul>
+	</nav>
+{% endblock %}
+
+
+{% macro tokensTableRow(token, isLight) -%}
+	{% set isRevoked = false %}
+	{% if token.isRevoked is defined and token.isRevoked %}
+		{% set isRevoked = true %}
+	{% endif %}
+
+	<tr{% if isLight %} class="light"{% endif %}>
+		<td>
+			{{ token.identifier }}
+		</td>
+		<td>{{ token.expiryDate }}</td>
+		<td>
+			{% if token.userIdentifier is defined %}
+				{{ token.userIdentifier }}
+			{% endif %}
+		</td>
+		<td>
+			{% if token.scopes is defined %}
+				{% for scope in token.scopes %}
+					{{ scope.identifier }}
+				{% endfor %}
+			{% endif %}
+		</td>
+		<td>
+			{% if token.clientIdentifier is defined %}
+				{{ token.clientIdentifier }}
+			{% endif %}
+		</td>
+
+		{% if not isRevoked %}
+			<td><a href="{{ actionUrl('oauth-server/cp/refresh-token', {accessTokenIdentifier: token.identifier}) }}">Refresh Token</a></td>
+			<td><a href="{{ actionUrl('oauth-server/cp/revoke-by-identifier', {accessTokenIdentifier: token.identifier}) }}">Revoke Token</a></td>
+		{% endif %}
+	</tr>
+{%- endmacro %}

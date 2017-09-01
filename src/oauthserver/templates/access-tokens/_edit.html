@@ -1,0 +1,85 @@
+{% extends "_layouts/cp" %}
+
+{% set crumbs = [
+{ label: "OAuth Server" | t, url: url('oauth-server') },
+{ label: "Access Tokens" | t, url: url('oauth-server/access-tokens') },
+] %}
+
+{% set title = "Access Token {identifier}"|t({ identifier: "#"~accessToken.id }) %}
+
+{% set content %}
+
+	<table class="data fullwidth">
+		<tr>
+			<th>{{ 'Identifier'|t('oauthServer') }}</th>
+			<td>{{ accessToken.identifier }}</td>
+		</tr>
+		<tr>
+			<th>{{ 'Is Revoked?'|t('oauthServer') }}</th>
+			<td>{{ accessToken.isRevoked ? 'Yes'|t('oauthServer') : 'No'|t('oauthServer') }}</td>
+		</tr>
+		<tr>
+			<th>{{ 'Expiry Date'|t('oauthServer') }}</th>
+			<td>{{ accessToken.expiryDate|datetime }}</td>
+		</tr>
+		<tr>
+			<th>{{ 'User Identifier'|t('oauthServer') }}</th>
+			<td>
+				{% if accessToken.userIdentifier is defined %}
+					{{ accessToken.userIdentifier }}
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th>{{ 'Client Identifier'|t('oauthServer') }}</th>
+			<td>{{ accessToken.clientId }}</td>
+		</tr>
+		<tr>
+			<th>{{ 'Scopes'|t('oauthServer') }}</th>
+			<td>
+				{% if accessToken.scopes is defined %}
+					<ul>
+						{% for scope in accessToken.scopes %}
+							<li>
+								{{ scope }}
+
+								{#
+								<span class="light"><code>{{ scope.identifier }}</code> —</span>
+
+								{% if scopes[scope.identifier] is defined %}
+									{{ scopes[scope.identifier] }}
+								{% else %}
+									<em>No description.</em>
+								{% endif %}
+								#}
+							</li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th>{{ 'User'|t('oauthServer') }}</th>
+			<td>
+				{% if accessToken.userIdentifier is defined and accessToken.userIdentifier %}
+					{% set user = craft.users.id(accessToken.userIdentifier)|first %}
+					<a href="{{ user.cpEditUrl }}">{{ user.username }}</a>
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th>{{ 'Client'|t('oauthServer') }}</th>
+			<td><a href="{{ url('oauth-server/clients/'~accessToken.clientId) }}">{{ accessToken.getClient().name }}</a></td>
+		</tr>
+	</table>
+
+	<div class="buttons">
+		{% if accessToken.isRevoked %}
+			<div class="btn disabled">{{ 'Revoke'|t('oauthServer') }}</div>
+		{% else %}
+			<a href="{{ actionUrl('oauth-server/access-tokens/revoke-by-identifier', { accessTokenIdentifier: accessToken.identifier }) }}" class="btn">{{ 'Revoke'|t('oauthServer') }}</a>
+		{% endif %}
+
+	</div>
+
+{% endset %}

@@ -1,0 +1,51 @@
+{% extends "oauth-server/_layouts/cp" %}
+
+{% set extraPageHeaderHtml %}
+	<div class="buttons right">
+		<a href="{{ actionUrl('oauth-server/auth-codes/clear-auth-codes') }}" class="btn">{{ 'Clear Auth Codes'|t('oauthServer') }}</a>
+	</div>
+{% endset %}
+
+{% set content %}
+
+	<div id="noauthcodes"{% if authCodes %} class="hidden"{% endif %}>
+		<p>{{ "No auth codes exist yet."|t('app') }}</p>
+	</div>
+
+	{% if authCodes|length %}
+		<table id="authcodes" class="data fullwidth">
+			<thead>
+			<tr>
+				<th>{{ 'ID'|t('oauthServer') }}</th>
+				<th>{{ 'Identifier'|t('oauthServer') }}</th>
+				<th>{{ 'User'|t('oauthServer') }}</th>
+				<th>{{ 'Client'|t('oauthServer') }}</th>
+				<th>{{ 'Expiry Date'|t('oauthServer') }}</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for authCode in authCodes %}
+				<tr data-id="{{ authCode.id }}" data-name="{{ authCode.identifier }}">
+					<td>{{ authCode.id }}</td>
+					<td>{{ authCode.identifier }}</td>
+					<td><a href="{{ authCode.user.cpEditUrl }}">{{ authCode.user.username }}</a></td>
+					<td><a href="{{ url('oauth-server/clients/' ~ authCode.client.id ) }}">{{ authCode.client.name }}</a></td>
+					<td>{{ authCode.expiryDate|datetime }}</td>
+					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+
+{% endset %}
+
+
+{% js %}
+	var adminTable = new Craft.AdminTable({
+		tableSelector: '#authcodes',
+		noItemsSelector: '#noauthcodes',
+		deleteAction: 'oauth-server/auth-codes/delete-auth-code',
+		confirmDeleteMessage: '{{ "Are you sure you want to delete “{name}”?"|t('app') }}'
+	});
+{% endjs %}

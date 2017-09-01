@@ -1,0 +1,37 @@
+{% extends "oauth-server/_layouts/cp" %}
+
+
+{% set extraPageHeaderHtml %}
+	<div class="buttons right">
+		<a href="{{ actionUrl('oauth-server/refresh-tokens/clear-refresh-tokens') }}" class="btn">{{ 'Clear Refresh Tokens'|t('oauthServer') }}</a>
+	</div>
+{% endset %}
+
+{% set content %}
+
+	{% if refreshTokens|length %}
+		<table class="data fullwidth">
+			<thead>
+			<tr>
+				<th>{{ 'ID'|t('oauthServer') }}</th>
+				<th>{{ 'Identifier'|t('oauthServer') }}</th>
+				<th>{{ 'Access Token'|t('oauthServer') }}</th>
+				<th>{{ 'Expiry Date'|t('oauthServer') }}</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for refreshToken in refreshTokens %}
+				<tr>
+					<td><span title="{{ refreshToken.id }}">{{ refreshToken.id }}</span></td>
+					<td><span title="{{ refreshToken.identifier }}">{{ refreshToken.identifier }}</span></td>
+					<td><a href="{{ url('oauth-server/access-tokens/'~refreshToken.accessTokenId) }}" title="{{ refreshToken.accessTokenId }}">{{ refreshToken.accessTokenId }}</a></td>
+					<td>{{ refreshToken.expiryDate|datetime }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		<p>{{ 'No refresh tokens.'|t('oauthServer') }}</p>
+	{% endif %}
+
+{% endset %}
