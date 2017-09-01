@@ -3,6 +3,7 @@
 namespace craftcom\id\controllers;
 
 use Craft;
+use craft\records\OAuthToken;
 use craftcom\id\controllers\BaseApiController;
 use craft\helpers\Json;
 use function GuzzleHttp\Psr7\stream_for;
@@ -72,13 +73,13 @@ class ConnectController extends BaseApiController
 
         $provider = $this->_getProvider();
 
-        $token = $provider->getAccessToken('authorization_code', [
+        $accessToken = $provider->getAccessToken('authorization_code', [
             'code' => $code,
         ]);
 
         // try/catch
 
-        $user = $provider->getResourceOwner($token);
+        $user = $provider->getResourceOwner($accessToken);
 
 
 //        $params = [
@@ -113,7 +114,19 @@ class ConnectController extends BaseApiController
     //        $client->authenticate($accessToken, null, \Github\Client::AUTH_HTTP_TOKEN);
       //      $test = $client->me()->show();
 
-            return $this->renderTemplate('account/developer/_validate', ['user' => $user->getNickname(), 'token' => $token->getToken()]);
+
+        $tokenRecord = new OAuthToken();
+        $tokenRecord->userId = Craft::$app->getUser()->getIdentity()->id;
+        $tokenRecord->provider = 'Github';
+        $tokenRecord->accessToken = $accessToken->getToken();
+        $tokenRecord->expiresIn = $accessToken->getExpires();
+        $tokenRecord->refreshToken = $accessToken->getRefreshToken();
+        $tokenRecord->save();
+
+
+
+
+        return $this->renderTemplate('account/developer/_validate', ['user' => $user->getNickname(), 'token' => $accessToken->getToken()]);
         //}
 
         //$client = new \Github\Client();
@@ -121,9 +134,14 @@ class ConnectController extends BaseApiController
         //$test2 = $client->me();
     }
 
+    public function actionListRepos(): Response
+    {
+
+    }
+
     public function actionHooks(): Response
     {
-        $token = '95dfe1eafed29ba00e3aa54fca2e7d362374ba9d';
+        $token = '40f0e01a5100efd3107e276075d8de0e81ba4585';
 
         $provider = $this->_getProvider();
 
