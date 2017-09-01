@@ -3,27 +3,42 @@
 		<div class="card mb-3">
 			<div class="card-header"><i class="fa fa-institution"></i> Bank Account</div>
 			<div class="card-body">
-				<template v-if="!editingBank">
-					<button @click="editBank()" type="button" class="btn btn-secondary btn-sm float-right" data-facebox="#billing-contact-info-modal">
-						<i class="fa fa-pencil"></i>
-						Edit
-					</button>
 
-					<dl>
-						<dt>Bank Name</dt>
-						<dd>{{ bank.name }}</dd>
-						<dt>Account Number</dt>
-						<dd>{{ bank.accountNumber }}</dd>
-					</dl>
+
+				<template v-if="stripeConnected">
+
+					<table class="table" v-if="stripeBankAccounts.length > 0">
+						<tr v-for="stripeBankAccount,key in stripeBankAccounts">
+							<td><input type="radio" :value="key" v-model="stripeSelectedAccount"></td>
+							<td>{{ stripeBankAccount.name }}</td>
+							<td>{{ stripeBankAccount.accountNumber }}</td>
+							<td><a href="#" @click.prevent="editStripeBankAccount(key)">Edit</a></td>
+							<td><a href="#" @click.prevent="removeStripeBankAccount(key)">Remove</a></td>
+						</tr>
+					</table>
+
+					<form v-if="editingStripeBankAccount" @submit.prevent="saveBank()">
+						<text-field id="name" label="Bank Name" v-model="bankDraft.name" ref="bankname" />
+						<text-field id="accountNumber" label="Account Number" v-model="bankDraft.accountNumber" />
+						<input type="submit" class="btn btn-primary" value="Save">
+						<input type="button" class="btn btn-secondary" value="Cancel" @click="editingStripeBankAccount = false">
+					</form>
+
+					<template v-else>
+						<input type="button" class="btn btn-secondary btn-sm" value="Add Bank Account" @click="newBankAccount()">
+					</template>
+
+					<div class="float-right">
+						<input type="button" class="btn btn-light btn-sm" value="Disconnect from Stripe" @click="stripeConnected = false">
+					</div>
 
 				</template>
 
-				<form v-if="editingBank" @submit.prevent="saveBank()">
-					<text-field id="name" label="Bank Name" v-model="bankDraft.name" ref="bankname" />
-					<text-field id="accountNumber" label="Account Number" v-model="bankDraft.accountNumber" />
-					<input type="submit" class="btn btn-primary" value="Save">
-					<input type="button" class="btn btn-secondary" value="Cancel" @click="editingBank = false">
-				</form>
+
+				<template v-else>
+					<input type="button" class="btn btn-primary" value="Connect to Stripe" @click="stripeConnected = true">
+				</template>
+
 
 			</div>
 		</div>
@@ -87,11 +102,24 @@
 
         data() {
             return {
-                editingBank: false,
-                bank: {
+				stripeConnected: false,
+                editingStripeBankAccount: false,
+                editedStripeBankAccountId: null,
+                stripeSelectedAccount: 0,
+				stripeBankAccounts: [
+                    {
+                        name: 'BNP Parisbas',
+                        accountNumber: '1111111111111111111'
+                    },
+                    {
+                        name: 'Societe Generale',
+                        accountNumber: '2222222222222222222'
+                    },
+				],
+                /*bank: {
 					name: 'BNP Parisbas',
 					accountNumber: '2345678923456783456'
-				},
+				},*/
 				bankDraft: {
 				},
             }
@@ -103,21 +131,62 @@
                 payouts: 'payouts',
                 payoutsScheduled: 'payoutsScheduled',
             }),
+
+			bank() {
+                return this.stripeBankAccounts[this.stripeSelectedAccount];
+			}
         },
 
 		methods: {
-            editBank() {
+            newBankAccount() {
+                this.editingStripeBankAccount = true;
+                this.editedStripeBankAccountId = null;
+                this.bankDraft = {};
+			},
+
+            editStripeBankAccount(key) {
+                this.editingStripeBankAccount = true;
+                this.editedStripeBankAccountId = key;
+                this.bankDraft = JSON.parse(JSON.stringify(this.stripeBankAccounts[key]));
+			},
+
+            removeStripeBankAccount(key) {
+                this.stripeBankAccounts.splice(key, 1);
+
+                if(key === this.stripeSelectedAccount) {
+                    this.stripeSelectedAccount = 0;
+				}
+
+                this.$root.displayNotice('Bank account removed.');
+			},
+
+/*            editBank() {
 				this.editingBank = true;
-				this.bankDraft = JSON.parse(JSON.stringify(this.bank));
+				// this.bankDraft = JSON.parse(JSON.stringify(this.bank));
 
                 this.$nextTick(function() {
                     this.$refs.bankname.$emit('focus');
                 });
-			},
+			},*/
+
 			saveBank() {
-                this.editingBank = false;
-                this.bank = JSON.parse(JSON.stringify(this.bankDraft));
+                this.editingStripeBankAccount = false;
+                let bankAccount = JSON.parse(JSON.stringify(this.bankDraft));
+
+                if(this.editedStripeBankAccountId) {
+                    this.stripeBankAccounts[this.editedStripeBankAccountId] = bankAccount;
+                } else {
+                    this.stripeBankAccounts.push(bankAccount);
+				}
+
+                this.$root.displayNotice('Bank account saved.');
 			}
 		},
+
+		watch: {
+            stripeSelectedAccount() {
+                this.$root.displayNotice('Bank account saved.');
+			}
+		}
     }
 </script>
