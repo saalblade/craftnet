@@ -1,7 +1,7 @@
 <template>
 
 	<div class="card mb-3">
-		<div class="card-header"><i class="fa fa-institution"></i> Stripe Account</div>
+		<div class="card-header">Stripe Account</div>
 		<div class="card-body">
 
 			<p v-if="loading">Loading…</p>
