@@ -49,10 +49,12 @@ return [
         'allowAutoUpdates' => false,
         'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] == 'mgt3md9snyd2' ? true : false,
         'craftApiUrl' => 'https://api.craftcms.com/v1',
+        'craftIdUrl' => 'https://id.craftcms.com',
     ],
     'dev' => [
         'devMode' => true,
         'allowAutoUpdates' => true,
         'craftApiUrl' => 'https://api.craftcms.dev/v1',
+        'craftIdUrl' => 'https://id.craftcms.dev',
     ]
 ];
