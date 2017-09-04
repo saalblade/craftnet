@@ -7,10 +7,14 @@ export default new Vuex.Store({
     strict: true,
     state: {
         craftId: null,
+        stripeAccount: null,
     },
     getters: {
         craftId: state => {
             return state.craftId;
+        },
+        stripeAccount: state => {
+            return state.stripeAccount;
         },
         craftLicenses: state => {
             if(state.craftId) {
@@ -61,8 +65,12 @@ export default new Vuex.Store({
     actions: {
         getCraftIdData ({ commit }) {
             return new Promise((resolve, reject) => {
-                Vue.http.post(window.craftApiUrl+'/craft-id', {userId: window.currentUserId}, { emulateJSON: true}).then(function(response) {
-                    let data = response.body;
+                let params = new URLSearchParams();
+                params.append('userId', window.currentUserId);
+
+                Vue.axios.post(window.craftApiUrl+'/craft-id', params).then(function(response) {
+
+                    let data = response.data;
 
                     data['payouts'] = [
                         {
@@ -174,7 +182,7 @@ export default new Vuex.Store({
             body[csrfTokenName] = csrfTokenValue;
 
             return new Promise((resolve, reject) => {
-            Vue.http.post(window.craftActionUrl+'/users/save-user', body, { emulateJSON: true})
+            Vue.axios.post(window.craftActionUrl+'/users/save-user', body, { emulateJSON: true})
                 .then(response => {
                     let data = response.body;
 
@@ -188,6 +196,28 @@ export default new Vuex.Store({
                     }
                 })
                 .catch(response => reject(response));
+            })
+        },
+
+        getStripeAccount({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.get(window.craftIdUrl+'/stripe/account').then(function(response) {
+                    let data = response.data;
+
+                    commit('RECEIVE_STRIPE_ACCOUNT', { data })
+                    resolve(data);
+                });
+            })
+        },
+
+        disconnectStripeAccount({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post(window.craftIdUrl+'/stripe/disconnect').then(function(response) {
+                    let data = response.body;
+
+                    commit('DISCONNECT_STRIPE_ACCOUNT', { data })
+                    resolve(data);
+                });
             })
         },
 
@@ -217,7 +247,7 @@ export default new Vuex.Store({
             body[csrfTokenName] = csrfTokenValue;
 
             return new Promise((resolve, reject) => {
-                Vue.http.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true})
+                Vue.axios.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true})
                     .then(response => {
                         let data = response.body;
 
@@ -260,7 +290,7 @@ export default new Vuex.Store({
             body[csrfTokenName] = csrfTokenValue;
 
             return new Promise((resolve, reject) => {
-                Vue.http.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true})
+                Vue.axios.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true})
                     .then(response => {
                         let data = response.body;
 
@@ -278,6 +308,21 @@ export default new Vuex.Store({
     },
 
     mutations: {
+
+        ['RECEIVE_STRIPE_ACCOUNT'] (state, { data }) {
+            state.stripeAccount = data
+        },
+
+
+        ['DISCONNECT_STRIPE_ACCOUNT'] (state, { data }) {
+            state.stripeAccount = null
+        },
+
+
+        ['RECEIVE_CRAFT_ID_DATA'] (state, { data }) {
+            state.craftId = data
+        },
+
         ['SAVE_USER'] (state, {user, response}) {
             for (let attribute in user) {
                 if(attribute == 'id') {
@@ -334,10 +379,6 @@ export default new Vuex.Store({
         },
 
         ['SAVE_CRAFT_ID_DATA'] (state) {
-        },
-
-        ['RECEIVE_CRAFT_ID_DATA'] (state, { data }) {
-            state.craftId = data
         },
     },
 })

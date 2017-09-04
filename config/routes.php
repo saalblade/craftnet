@@ -29,8 +29,12 @@ return [
     ],
     'craftId' => [
         'GET v1/id' => 'id/v1/id',
+        'GET account' => 'id/account',
         'GET account/developer' => 'id/connect',
         'GET account/developer/validate' => 'id/connect/validate',
+        'GET stripe/connect' => 'id/stripe/connect',
+        'GET stripe/account' => 'id/stripe/account',
+        'POST stripe/disconnect' => 'id/stripe/disconnect',
     ],
    // 'queue' => [
      //   'POST v1/create' => 'queue/v1/q/create',
