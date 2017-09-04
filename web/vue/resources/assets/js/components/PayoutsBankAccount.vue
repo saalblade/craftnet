@@ -11,10 +11,10 @@
 
 					<div class="row">
 						<dl class="col-md-6">
-							<dt>Account name</dt>
+							<dt>Stripe Account</dt>
 							<dd><template v-if="stripeAccount.display_name">{{ stripeAccount.display_name }}</template><em v-else class="text-secondary">Not provided</em></dd>
-							<dt>Business name</dt>
-							<dd><template v-if="stripeAccount.business_name">{{ stripeAccount.business_name }}</template><em v-else class="text-secondary">Not provided</em></dd>
+							<dt>ID</dt>
+							<dd>{{ stripeAccount.id }}</dd>
 							<dt>Payouts enabled</dt>
 							<dd v-if="stripeAccount.payouts_enabled" class="text-success">Yes</dd>
 							<dd v-else class="text-success">No</dd>
@@ -25,8 +25,8 @@
 						<dl class="col-md-6">
 							<dt>Email</dt>
 							<dd>{{ stripeAccount.email }}</dd>
-							<dt>ID</dt>
-							<dd>{{ stripeAccount.id }}</dd>
+							<dt>Business name</dt>
+							<dd><template v-if="stripeAccount.business_name">{{ stripeAccount.business_name }}</template><em v-else class="text-secondary">Not provided</em></dd>
 							<dt>Country</dt>
 							<dd>{{ stripeAccount.country }}</dd>
 							<dt>Statement descriptor</dt>
@@ -34,12 +34,12 @@
 						</dl>
 					</div>
 
-					<button type="button" class="btn btn-secondary btn-sm" @click="disconnect()">Remove Account</button> <div v-if="disconnectLoading" class="spinner"></div>
+					<button type="button" class="btn btn-secondary btn-sm" @click="disconnect()">Remove Stripe account</button> <div v-if="disconnectLoading" class="spinner"></div>
 
 				</template>
 
 				<template v-else>
-					<a class="btn btn-primary" href="https://id.craftcms.dev/index.php/stripe/connect">Connect your Stripe account</a>
+					<a class="btn btn-primary" href="https://id.craftcms.dev/index.php/stripe/connect">Connect a Stripe account</a>
 				</template>
 			</template>
 
@@ -69,7 +69,7 @@
             }),
 
 			loading() {
-                return this.$root.stripeLoading;
+                return this.$root.stripeAccountLoading;
 			}
 		},
 
@@ -79,6 +79,7 @@
 
                 this.$store.dispatch('disconnectStripeAccount').then(() => {
 					this.disconnectLoading = false;
+                    this.$root.displayNotice('Stripe account removed.');
                 });
 			}
 		},

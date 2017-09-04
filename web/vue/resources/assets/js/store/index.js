@@ -8,6 +8,8 @@ export default new Vuex.Store({
     state: {
         craftId: null,
         stripeAccount: null,
+        stripeCustomer: null,
+        stripeCard: null,
     },
     getters: {
         craftId: state => {
@@ -15,6 +17,12 @@ export default new Vuex.Store({
         },
         stripeAccount: state => {
             return state.stripeAccount;
+        },
+        stripeCard: state => {
+            return state.stripeCard;
+        },
+        stripeCustomer: state => {
+            return state.stripeCustomer;
         },
         craftLicenses: state => {
             if(state.craftId) {
@@ -183,20 +191,20 @@ export default new Vuex.Store({
             body[csrfTokenName] = csrfTokenValue;
 
             return new Promise((resolve, reject) => {
-            Vue.http.post(window.craftActionUrl+'/users/save-user', body, { emulateJSON: true })
-                .then(response => {
-                    let data = response.body;
+                Vue.http.post(window.craftActionUrl+'/users/save-user', body, { emulateJSON: true })
+                    .then(response => {
+                        let data = response.body;
 
-                    if(!data.errors) {
-                        console.log('response', response.body);
-                        commit('SAVE_USER', { user, response });
-                        resolve(response);
-                    } else {
-                        console.log('error');
-                        reject(data);
-                    }
-                })
-                .catch(response => reject(response));
+                        if(!data.errors) {
+                            console.log('response', response.body);
+                            commit('SAVE_USER', { user, response });
+                            resolve(response);
+                        } else {
+                            console.log('error');
+                            reject(data);
+                        }
+                    })
+                    .catch(response => reject(response));
             })
         },
 
@@ -213,6 +221,20 @@ export default new Vuex.Store({
             })
         },
 
+        getStripeCustomer({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.http.get(window.craftIdUrl+'/stripe/customer').then(function(response) {
+                    let data = response.body;
+
+                    commit('RECEIVE_STRIPE_CUSTOMER', { data })
+                    commit('RECEIVE_STRIPE_CARD', { data })
+                    resolve(data);
+                }, error => {
+                    reject(error);
+                });
+            })
+        },
+
         disconnectStripeAccount({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.http.post(window.craftIdUrl+'/stripe/disconnect', { emulateJSON: true }).then(function(response) {
@@ -221,6 +243,24 @@ export default new Vuex.Store({
                     commit('DISCONNECT_STRIPE_ACCOUNT', { data })
                     resolve(data);
                 });
+            })
+        },
+
+        saveCreditCard({commit}, token) {
+            return new Promise((resolve, reject) => {
+                let body = {
+                    token: token.id
+                };
+
+                Vue.http.post(window.craftIdUrl+'/stripe/save-credit-card', body, { emulateJSON: true })
+                    .then(response => {
+                        let data = response.body;
+                        commit('SAVE_CARD', { data })
+                        resolve(data);
+                    })
+                    .catch(response => {
+                        reject(response)
+                    });
             })
         },
 
@@ -311,6 +351,18 @@ export default new Vuex.Store({
     },
 
     mutations: {
+
+        ['SAVE_CARD'] (state, { data }) {
+            state.stripeCard = data.card
+        },
+
+        ['RECEIVE_STRIPE_CUSTOMER'] (state, { data }) {
+            state.stripeCustomer = data.customer
+        },
+
+        ['RECEIVE_STRIPE_CARD'] (state, { data }) {
+            state.stripeCard = data.card
+        },
 
         ['RECEIVE_STRIPE_ACCOUNT'] (state, { data }) {
             state.stripeAccount = data

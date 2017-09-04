@@ -25,6 +25,7 @@
     window.currentUserId = "{{ currentUser.id }}";
     window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken.attributes|json_encode|raw : 'false' }};
 </script>
+<script src="https://js.stripe.com/v3/"></script>
 <script src="/vue/dist/js/main.js"></script>
 
 </body>

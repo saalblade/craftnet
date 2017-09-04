@@ -35,6 +35,8 @@ return [
         'GET stripe/connect' => 'id/stripe/connect',
         'GET stripe/account' => 'id/stripe/account',
         'POST stripe/disconnect' => 'id/stripe/disconnect',
+        'GET stripe/customer' => 'id/stripe/customer',
+        'POST stripe/save-credit-card' => 'id/stripe/save-credit-card',
     ],
    // 'queue' => [
      //   'POST v1/create' => 'queue/v1/q/create',

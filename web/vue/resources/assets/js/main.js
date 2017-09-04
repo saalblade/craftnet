@@ -18,7 +18,8 @@ window.pluginStoreApp = new Vue({
 
     data() {
         return {
-            stripeLoading: true,
+            stripeCustomerLoading: true,
+            stripeAccountLoading: true,
             loading: true,
             notification: null,
         }
@@ -47,12 +48,20 @@ window.pluginStoreApp = new Vue({
             this.loading = false;
         });
 
+        this.$store.dispatch('getStripeCustomer').then(response => {
+            this.stripeCustomerLoading = false;
+        }, error => {
+            this.stripeCustomerLoading = false;
+        });
+
         if(window.stripeAccessToken) {
             this.$store.dispatch('getStripeAccount').then(response => {
-                this.stripeLoading = false;
+                this.stripeAccountLoading = false;
             }, error => {
-                this.stripeLoading = false;
+                this.stripeAccountLoading = false;
             });
+        } else {
+            this.stripeAccountLoading = false;
         }
     }
 });
