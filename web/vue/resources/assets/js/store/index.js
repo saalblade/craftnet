@@ -65,12 +65,13 @@ export default new Vuex.Store({
     actions: {
         getCraftIdData ({ commit }) {
             return new Promise((resolve, reject) => {
-                let params = new URLSearchParams();
-                params.append('userId', window.currentUserId);
+                let params = {
+                    userId: window.currentUserId
+                };
 
-                Vue.axios.post(window.craftApiUrl+'/craft-id', params).then(function(response) {
+                Vue.http.post(window.craftApiUrl+'/craft-id', params, {emulateJSON: true}).then(function(response) {
 
-                    let data = response.data;
+                    let data = response.body;
 
                     data['payouts'] = [
                         {
@@ -182,7 +183,7 @@ export default new Vuex.Store({
             body[csrfTokenName] = csrfTokenValue;
 
             return new Promise((resolve, reject) => {
-            Vue.axios.post(window.craftActionUrl+'/users/save-user', body, { emulateJSON: true})
+            Vue.http.post(window.craftActionUrl+'/users/save-user', body, { emulateJSON: true })
                 .then(response => {
                     let data = response.body;
 
@@ -201,18 +202,20 @@ export default new Vuex.Store({
 
         getStripeAccount({commit}) {
             return new Promise((resolve, reject) => {
-                Vue.axios.get(window.craftIdUrl+'/stripe/account').then(function(response) {
-                    let data = response.data;
+                Vue.http.get(window.craftIdUrl+'/stripe/account').then(function(response) {
+                    let data = response.body;
 
                     commit('RECEIVE_STRIPE_ACCOUNT', { data })
                     resolve(data);
+                }, error => {
+                    reject(error);
                 });
             })
         },
 
         disconnectStripeAccount({commit}) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post(window.craftIdUrl+'/stripe/disconnect').then(function(response) {
+                Vue.http.post(window.craftIdUrl+'/stripe/disconnect', { emulateJSON: true }).then(function(response) {
                     let data = response.body;
 
                     commit('DISCONNECT_STRIPE_ACCOUNT', { data })
@@ -247,7 +250,7 @@ export default new Vuex.Store({
             body[csrfTokenName] = csrfTokenValue;
 
             return new Promise((resolve, reject) => {
-                Vue.axios.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true})
+                Vue.http.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true })
                     .then(response => {
                         let data = response.body;
 
@@ -290,7 +293,7 @@ export default new Vuex.Store({
             body[csrfTokenName] = csrfTokenValue;
 
             return new Promise((resolve, reject) => {
-                Vue.axios.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true})
+                Vue.http.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true })
                     .then(response => {
                         let data = response.body;
 

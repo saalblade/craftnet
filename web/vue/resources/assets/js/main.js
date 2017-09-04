@@ -1,13 +1,12 @@
 import Vue from 'vue';
-import axios from 'axios';
-import VueAxios from 'vue-axios';
+import VueResource from 'vue-resource';
 import store from './store'
 import { currency } from './filters/currency';
 
 import App from './App';
 
 Vue.filter('currency', currency)
-Vue.use(VueAxios, axios)
+Vue.use(VueResource)
 
 window.pluginStoreApp = new Vue({
     el: '#app',
@@ -49,7 +48,9 @@ window.pluginStoreApp = new Vue({
         });
 
         if(window.stripeAccessToken) {
-            this.$store.dispatch('getStripeAccount').then(() => {
+            this.$store.dispatch('getStripeAccount').then(response => {
+                this.stripeLoading = false;
+            }, error => {
                 this.stripeLoading = false;
             });
         }
