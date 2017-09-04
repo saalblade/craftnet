@@ -1,12 +1,13 @@
 import Vue from 'vue';
-import VueResource from 'vue-resource';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 import store from './store'
 import { currency } from './filters/currency';
 
 import App from './App';
 
 Vue.filter('currency', currency)
-Vue.use(VueResource);
+Vue.use(VueAxios, axios)
 
 window.pluginStoreApp = new Vue({
     el: '#app',
