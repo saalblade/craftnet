@@ -4,10 +4,10 @@
 		<div class="card-header">Stripe Account</div>
 		<div class="card-body">
 
-			<p v-if="loading">Loading…</p>
+			<div class="spinner" v-if="loading"></div>
 
 			<template v-else>
-				<template v-if="connected">
+				<template v-if="stripeAccount">
 
 					<div class="row">
 						<dl class="col-md-6">
@@ -59,8 +59,6 @@
 
         data() {
             return {
-                connected: false,
-                loading: true,
 				disconnectLoading: false,
             }
         },
@@ -69,6 +67,10 @@
             ...mapGetters({
                 stripeAccount: 'stripeAccount',
             }),
+
+			loading() {
+                return this.$root.stripeLoading;
+			}
 		},
 
 		methods: {
@@ -76,24 +78,9 @@
                 this.disconnectLoading = true;
 
                 this.$store.dispatch('disconnectStripeAccount').then(() => {
-                    this.connected = false;
 					this.disconnectLoading = false;
                 });
 			}
 		},
-
-        mounted() {
-            this.connected = false;
-
-            if(window.stripeAccessToken) {
-                this.connected = true;
-
-                this.$store.dispatch('getStripeAccount').then(() => {
-                    this.loading = false;
-                });
-            } else {
-                this.loading = false;
-			}
-        }
     }
 </script>

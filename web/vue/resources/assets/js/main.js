@@ -19,6 +19,7 @@ window.pluginStoreApp = new Vue({
 
     data() {
         return {
+            stripeLoading: true,
             loading: true,
             notification: null,
         }
@@ -46,5 +47,11 @@ window.pluginStoreApp = new Vue({
         this.$store.dispatch('getCraftIdData').then(() => {
             this.loading = false;
         });
+
+        if(window.stripeAccessToken) {
+            this.$store.dispatch('getStripeAccount').then(() => {
+                this.stripeLoading = false;
+            });
+        }
     }
 });
