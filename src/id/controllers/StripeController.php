@@ -84,23 +84,6 @@ class StripeController extends BaseApiController
     }
 
     /**
-     * Handles /v1/stripe/accounts requests.
-     *
-     * @return Response
-     */
-    public function actionAccount(): Response
-    {
-        $userId = Craft::$app->getUser()->getIdentity()->id;
-        $token = $this->getOauthToken($userId);
-
-        Stripe::setApiKey($token->accessToken);
-
-        $account = Account::retrieve();
-
-        return $this->asJson($account);
-    }
-
-    /**
      * Handles /v1/stripe/disconnect requests.
      *
      * @return Response
@@ -115,6 +98,23 @@ class StripeController extends BaseApiController
         }
 
         return $this->asJson(['success' => true]);
+    }
+
+    /**
+     * Handles /v1/stripe/account requests.
+     *
+     * @return Response
+     */
+    public function actionAccount(): Response
+    {
+        $userId = Craft::$app->getUser()->getIdentity()->id;
+        $token = $this->getOauthToken($userId);
+
+        Stripe::setApiKey($token->accessToken);
+
+        $account = Account::retrieve();
+
+        return $this->asJson($account);
     }
 
     // Private Methods

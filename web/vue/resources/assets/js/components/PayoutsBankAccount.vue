@@ -1,7 +1,7 @@
 <template>
 
 	<div class="card mb-3">
-		<div class="card-header">Stripe Account</div>
+		<div class="card-header">Bank Account</div>
 		<div class="card-body">
 
 			<div class="spinner" v-if="loading"></div>
@@ -34,7 +34,7 @@
 						</dl>
 					</div>
 
-					<button type="button" class="btn btn-secondary btn-sm" @click="disconnect()">Disconnect Account</button> <div v-if="disconnectLoading" class="spinner"></div>
+					<button type="button" class="btn btn-secondary btn-sm" @click="disconnect()">Remove Account</button> <div v-if="disconnectLoading" class="spinner"></div>
 
 				</template>
 
