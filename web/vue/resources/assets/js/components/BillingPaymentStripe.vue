@@ -22,7 +22,9 @@
 
 			<div :class="{'d-none': !editing}">
 
-				<card ref="card" class="border rounded mb-3 p-2" stripe="pk_test_B2opWU3D3nmA2QXyHKlIx6so"></card>
+				<!--<card ref="card" class="border rounded mb-3 p-2" stripe="pk_test_B2opWU3D3nmA2QXyHKlIx6so"></card>-->
+
+				<credit-card @beforeCreateToken="loading = true" @stripeTokenHandle="handleStripeToken"></credit-card>
 
 				<button class="btn btn-primary" @click="save()">Save</button>
 				<button class="btn btn-secondary" @click="cancel()">Cancel</button>
@@ -35,11 +37,11 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { Card, createToken, instance } from 'vue-stripe-elements'
+	import CreditCard from './CreditCard'
 
     export default {
         components: {
-			Card
+			CreditCard
         },
 
 		data() {
@@ -61,22 +63,20 @@
         },
 
 		methods: {
+            handleStripeToken(token) {
+                this.loading = true;
+                this.$store.dispatch('saveCreditCard', token).then(response => {
+					this.loading = false;
+                    this.editing = false;
+                    this.$root.displayNotice('Credit card saved.');
+				});
+			},
             cancel() {
 				this.editing = false;
-                this.$refs.card.$children[0]._element.clear();
 			},
             save() {
-                let vm = this;
-                this.loading = true;
-                createToken().then(data => {
-                    console.log(data.token)
-                    this.$store.dispatch('saveCreditCard', data.token).then(response => {
-                        console.log('credit card saved')
-                        this.$refs.card.$children[0]._element.clear();
-						this.editing = false;
-						this.loading = false;
-					});
-				})
+                // this.loading = true;
+                this.$children[0].submit();
 			}
 		}
     }
