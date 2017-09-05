@@ -1,55 +1,54 @@
 <template>
-	<div>
-		<h4>Payment Method</h4>
+    <div>
+        <h4>Payment Method</h4>
 
-		<div v-if="stripeCustomerLoading" class="spinner"></div>
+        <div v-if="stripeCustomerLoading" class="spinner"></div>
 
-		<div v-if="stripeCustomer && !stripeCustomerLoading">
-
-
-			<div v-if="!editing">
-
-				<button @click="editing = true" type="button" class="float-right btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
-					<i class="fa fa-credit-card"></i>
-					Change Card
-				</button>
-
-				<div v-if="stripeCard">
-					{{ stripeCard.brand }} •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
-				</div>
-			</div>
+        <div v-if="stripeCustomer && !stripeCustomerLoading">
 
 
-			<div :class="{'d-none': !editing}">
+            <div v-if="!editing">
 
-				<!--<card ref="card" class="border rounded mb-3 p-2" stripe="pk_test_B2opWU3D3nmA2QXyHKlIx6so"></card>-->
+                <button @click="editing = true" type="button" class="float-right btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
+                    <i class="fa fa-credit-card"></i>
+                    Change Card
+                </button>
 
-				<credit-card @beforeCreateToken="loading = true" @stripeTokenHandle="handleStripeToken"></credit-card>
+                <div v-if="stripeCard">
+                    {{ stripeCard.brand }} •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
+                </div>
+            </div>
 
-				<button class="btn btn-primary" @click="save()">Save</button>
-				<button class="btn btn-secondary" @click="cancel()">Cancel</button>
-				<div class="spinner" v-if="loading"></div>
-			</div>
-		</div>
-	</div>
+
+            <div :class="{'d-none': !editing}">
+
+                <credit-card-form :loading="loading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></credit-card-form>
+
+            </div>
+        </div>
+    </div>
 </template>
 
 
 <script>
     import { mapGetters } from 'vuex'
-	import CreditCard from './CreditCard'
+    import CreditCardForm from './CreditCardForm'
 
     export default {
         components: {
-			CreditCard
+            CreditCardForm
         },
 
-		data() {
+        data() {
             return {
                 editing: false,
-				loading: false,
-			}
-		},
+                loading: false,
+
+                stripe: null,
+                elements: null,
+                card: null,
+            }
+        },
 
         computed: {
             ...mapGetters({
@@ -62,22 +61,27 @@
             }
         },
 
-		methods: {
-            handleStripeToken(token) {
+        methods: {
+            error() {
+                this.loading = false;
+            },
+
+            beforeSave() {
                 this.loading = true;
+            },
+
+            save(card, token) {
                 this.$store.dispatch('saveCreditCard', token).then(response => {
-					this.loading = false;
+                    card.clear();
+                    this.loading = false;
                     this.editing = false;
                     this.$root.displayNotice('Credit card saved.');
-				});
-			},
+                });
+            },
+
             cancel() {
-				this.editing = false;
-			},
-            save() {
-                // this.loading = true;
-                this.$children[0].submit();
-			}
-		}
+                this.editing = false;
+            },
+        },
     }
 </script>
