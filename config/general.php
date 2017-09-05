@@ -34,8 +34,8 @@ return [
                 'ImplicitGrant' => 'Implicit Grant',
                 'RefreshTokenGrant' => 'Refresh Token Grant',
             ],
-            'privateKey' => __DIR__. '/keys/private.key',
-            'publicKey' => __DIR__. '/keys/public.key',
+            'privateKey' => __DIR__.'/keys/oauth-server',
+            'publicKey' => __DIR__.'/keys/oauth-server.pub',
             'encryptionKey' => 'j3wsUhGQtKCTnAiYdMHz2oCqyv3pYron',
             'scopes' => [
                 'purchasePlugins' => "Purchase plugins",
