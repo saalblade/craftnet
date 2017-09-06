@@ -260,19 +260,17 @@ class OauthController extends Controller
                 $privateKey = Module::getInstance()->getSettings()->privateKey;
                 $publicKey = Module::getInstance()->getSettings()->publicKey;
 
+                // Encryption key
+                $encryptionKey = Module::getInstance()->getSettings()->encryptionKey;
+
                 // Setup the authorization server
                 $server = new AuthorizationServer(
                     $clientRepository,
                     $accessTokenRepository,
                     $scopeRepository,
                     $privateKey,
-                    $publicKey
+                    $encryptionKey
                 );
-
-                // Encryption key
-                $encryptionKey = Module::getInstance()->getSettings()->encryptionKey;
-                $server->setEncryptionKey($encryptionKey);
-
 
                 // Grant expiry
 
