@@ -143,7 +143,7 @@ class StripeController extends BaseApiController
 
         return $this->asJson([
             'customer' => $customer,
-            'card' => $customer->sources->retrieve($customer->default_source)
+            'card' => ($customer->default_source ? $customer->sources->retrieve($customer->default_source) : null)
         ]);
     }
 
