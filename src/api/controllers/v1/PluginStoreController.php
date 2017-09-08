@@ -24,8 +24,6 @@ class PluginStoreController extends BaseApiController
      */
     public function actionIndex(): Response
     {
-        header("Access-Control-Allow-Origin: *");
-
         $pluginStoreData = Craft::$app->getCache()->get('pluginStoreData');
 
         if(!$pluginStoreData) {

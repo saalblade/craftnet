@@ -24,9 +24,6 @@ class CraftIdController extends BaseApiController
      */
     public function actionIndex(): Response
     {
-        header("Access-Control-Allow-Origin: *");
-
-
         // Current user
 
         $currentUserId = Craft::$app->getRequest()->getParam('userId');
