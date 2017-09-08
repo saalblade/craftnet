@@ -98,11 +98,9 @@ class OauthController extends Controller
                 }
             }
 
-            $clientApprovalTemplate = Module::getInstance()->getSettings()->clientApprovalTemplate;
-
             Craft::$app->getView()->registerAssetBundle(ClientApprovalAsset::class);
 
-            return $this->renderTemplate($clientApprovalTemplate, [
+            return $this->renderTemplate('oauth/clientApproval', [
                 'scopes' => $scopes,
             ]);
         }
