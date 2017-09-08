@@ -6,6 +6,7 @@ use Craft;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\api\Module;
+use GuzzleHttp\Client;
 use JsonSchema\Validator;
 use stdClass;
 use yii\web\BadRequestHttpException;
@@ -92,6 +93,17 @@ abstract class BaseApiController extends Controller
         }
 
 
+        // Package
+
+        try {
+            $client = new Client();
+            $response = $client->get('https://packagist.org/packages/'.$entry->getAuthor()->vendor.'/'.$entry->slug.'.json');
+            $data = Json::decode($response->getBody()->getContents());
+            $package = $data['package'];
+        } catch(\Exception $e) {
+            $package = null;
+        }
+
         return [
             'id' => $entry->id,
             'slug' => $entry->slug,
@@ -110,6 +122,7 @@ abstract class BaseApiController extends Controller
             'githubRepoUrl' => $entry->githubRepoUrl,
             'screenshots' => $screenshots,
             'categories' => $categories,
+            'package' => $package,
         ];
     }
 }

@@ -17,8 +17,12 @@
 					</div>
 				</td>
 				<td>
-					<strong><router-link :to="'/plugins/' + plugin.id">{{ plugin.title }}</router-link></strong>
-					<div>{{ plugin.shortDescription }}</div>
+					<h6><strong><router-link :to="'/plugins/' + plugin.id">{{ plugin.title }}</router-link></strong></h6>
+					<p>{{ plugin.shortDescription }}</p>
+					<p class="text-secondary">
+						{{ plugin.package ? plugin.package.downloads.total : 0 }} Downloads &nbsp;
+						{{ plugin.package ? plugin.package.github_stars : 0 }} Stars
+					</p>
 				</td>
 				<td>
 
