@@ -74,8 +74,9 @@ class m170909_000001_stripe_customers extends Migration
             '{{%stripe_customers}}',
             [
                 'id' => $this->primaryKey(),
-                'userId' => $this->integer(),
-                'stripeCustomerId' => $this->string(255)->notNull(),
+                'userId' => $this->integer()->notNull(),
+                'oauthTokenId' => $this->integer(),
+                'stripeCustomerId' => $this->string(255),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
                 'uid' => $this->uid(),
@@ -101,6 +102,7 @@ class m170909_000001_stripe_customers extends Migration
     protected function addForeignKeys()
     {
         $this->addForeignKey($this->db->getForeignKeyName('{{%stripe_customers}}', 'userId'), '{{%stripe_customers}}', 'userId', '{{%users}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName('{{%stripe_customers}}', 'oauthTokenId'), '{{%stripe_customers}}', 'oauthTokenId', '{{%oauthtokens}}', 'id', 'CASCADE', null);
     }
 
     /**
