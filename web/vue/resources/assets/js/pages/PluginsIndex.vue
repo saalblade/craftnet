@@ -21,7 +21,8 @@
 					<p>{{ plugin.shortDescription }}</p>
 					<p class="text-secondary">
 						{{ plugin.package ? plugin.package.downloads.total : 0 }} Downloads &nbsp;
-						{{ plugin.package ? plugin.package.github_stars : 0 }} Stars
+						{{ plugin.package ? plugin.package.github_stars : 0 }} Stars &nbsp;
+						{{ plugin.package ? plugin.package.github_open_issues : 0 }} Issues
 					</p>
 				</td>
 				<td>
