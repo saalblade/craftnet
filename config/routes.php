@@ -24,6 +24,7 @@ return [
         'POST v1/craft-id' => 'api/v1/craft-id',
         'GET v1/plugin-store' => 'api/v1/plugin-store',
         'GET v1/account' => 'api/v1/account',
+        'GET v1/developer/<userId:\d+>' => 'api/v1/developer',
     ],
     'composer' => [
     ],
@@ -36,8 +37,8 @@ return [
         'GET stripe/account' => 'id/stripe/account',
         'POST stripe/disconnect' => 'id/stripe/disconnect',
         'GET stripe/customer' => 'id/stripe/customer',
-        'POST stripe/save-credit-card' => 'id/stripe/save-credit-card',
-        'POST stripe/remove-credit-card' => 'id/stripe/remove-credit-card',
+        'POST stripe/save-card' => 'id/stripe/save-card',
+        'POST stripe/remove-card' => 'id/stripe/remove-card',
     ],
    // 'queue' => [
      //   'POST v1/create' => 'queue/v1/q/create',
