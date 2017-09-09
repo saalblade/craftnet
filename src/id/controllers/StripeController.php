@@ -104,7 +104,10 @@ class StripeController extends BaseApiController
         $tokenRecord->refreshToken = $accessToken->getRefreshToken();
         $tokenRecord->save();
 
+        $resourceOwner = $provider->getResourceOwner($accessToken);
+
         $customerRecord->oauthTokenId = $tokenRecord->id;
+        $customerRecord->stripeAccountId = $resourceOwner->getId();
         $customerRecord->save();
 
         $referrer = Craft::$app->getSession()->get('stripe.referrer');
