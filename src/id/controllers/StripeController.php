@@ -174,7 +174,7 @@ class StripeController extends BaseApiController
 
         $customer = null;
 
-        if($customerRecord) {
+        if($customerRecord && $customerRecord->stripeCustomerId) {
             Stripe::setApiKey($this->_clientSecret);
             $customer = Customer::retrieve($customerRecord->stripeCustomerId);
         }
