@@ -218,16 +218,19 @@ class StripeController extends BaseApiController
             ->one();
 
         if(!$customerRecord) {
+            $customerRecord = new StripeCustomerRecord();
+            $customerRecord->userId = $user->id;
+        }
+
+        if(!$customerRecord->stripeCustomerId) {
             $customer = Customer::create(array(
                 "email" => $user->email,
                 "description" => "Customer for ".$user->email,
             ));
-
-            $customerRecord = new StripeCustomerRecord();
-            $customerRecord->userId = $user->id;
             $customerRecord->stripeCustomerId = $customer->id;
-            $customerRecord->save();
         }
+
+        $customerRecord->save();
 
         if($customerRecord->stripeCustomerId) {
             $token = Craft::$app->getRequest()->getParam('token');
@@ -243,6 +246,8 @@ class StripeController extends BaseApiController
 
             return $this->asJson(['card' => $card]);
         }
+
+        return $this->asErrorJson('Couldn’t save credit card.');
     }
 
     // Private Methods
