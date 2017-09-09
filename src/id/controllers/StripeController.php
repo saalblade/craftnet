@@ -5,6 +5,7 @@ use Craft;
 use craft\helpers\Db;
 use craft\records\OAuthToken;
 use craftcom\id\records\StripeCustomer as StripeCustomerRecord;
+use League\OAuth2\Client\Token\AccessToken;
 use yii\web\Response;
 use AdamPaterson\OAuth2\Client\Provider\Stripe as StripeOauthProvider;
 use craft\helpers\UrlHelper;
@@ -120,10 +121,34 @@ class StripeController extends BaseApiController
     public function actionDisconnect(): Response
     {
         $userId = Craft::$app->getUser()->getIdentity()->id;
-        $token = $this->getOauthToken($userId);
 
-        if($token) {
-            $token->delete();
+        $customerRecord = StripeCustomerRecord::find()
+            ->where(Db::parseParam('userId', $userId))
+            ->one();
+
+        $tokenRecord = OAuthToken::find()
+            ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
+            ->one();
+
+        $provider = $this->_getProvider();
+        $accessToken = new AccessToken(['access_token' => $tokenRecord->accessToken]);
+        $resourceOwner = $provider->getResourceOwner($accessToken);
+        $accountId = $resourceOwner->getId();
+
+        Stripe::setClientId($this->_clientId);
+        Stripe::setApiKey($this->_clientSecret);
+
+        $account = Account::retrieve($accountId);
+        $account->deauthorize();
+
+        if($tokenRecord) {
+            $tokenRecord->delete();
+        }
+
+
+        if($customerRecord) {
+            $customerRecord->stripeAccountId = null;
+            $customerRecord->save();
         }
 
         return $this->asJson(['success' => true]);
