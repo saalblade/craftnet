@@ -4,7 +4,7 @@
 
         <div v-if="stripeCustomerLoading" class="spinner"></div>
 
-        <div v-if="stripeCustomer && !stripeCustomerLoading">
+        <div v-if="!stripeCustomerLoading">
 
 
             <div v-if="!editing">
@@ -24,6 +24,11 @@
 
                 <credit-card-form :loading="loading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></credit-card-form>
 
+            </div>
+
+
+            <div class="mt-3">
+                <img src="/vue/dist/images/powered_by_stripe.svg" height="18" />
             </div>
         </div>
     </div>

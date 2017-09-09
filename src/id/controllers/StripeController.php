@@ -4,6 +4,8 @@ namespace craftcom\id\controllers;
 use Craft;
 use craft\helpers\Db;
 use craft\records\OAuthToken;
+use craftcom\id\Module;
+use craftcom\id\records\StripeCustomer as StripeCustomerRecord;
 use yii\web\Response;
 use Exception;
 use AdamPaterson\OAuth2\Client\Provider\Stripe as StripeOauthProvider;
@@ -124,37 +126,54 @@ class StripeController extends BaseApiController
      */
     public function actionCustomer(): Response
     {
-        $customerId = Craft::$app->getSession()->get('stripe.customerId');
+        $user = Craft::$app->getUser()->getIdentity();
+        $customerRecord = StripeCustomerRecord::find()
+            ->where(Db::parseParam('userId', $user->id))
+            ->one();
 
-        Stripe::setApiKey($this->_clientSecret);
+        $customer = null;
 
-        if($customerId) {
-            $customer = Customer::retrieve($customerId);
-        } else {
-            $user = Craft::$app->getUser()->getIdentity();
-
-            $customer = Customer::create(array(
-                "email" => $user->email,
-                "description" => "Customer for ".$user->email,
-            ));
-
-            Craft::$app->getSession()->set('stripe.customerId', $customer->id);
+        if($customerRecord) {
+            Stripe::setApiKey($this->_clientSecret);
+            $customer = Customer::retrieve($customerRecord->stripeCustomerId);
         }
 
         return $this->asJson([
             'customer' => $customer,
-            'card' => ($customer->default_source ? $customer->sources->retrieve($customer->default_source) : null)
+            'card' => ($customer && $customer->default_source ? $customer->sources->retrieve($customer->default_source) : null)
         ]);
     }
 
     public function actionSaveCreditCard()
     {
-        $customerId = Craft::$app->getSession()->get('stripe.customerId');
+        Stripe::setApiKey($this->_clientSecret);
 
-        if($customerId) {
+        $user = Craft::$app->getUser()->getIdentity();
+
+        $customerRecord = StripeCustomerRecord::find()
+            ->where(Db::parseParam('userId', $user->id))
+            ->one();
+
+        if(!$customerRecord) {
+            $customer = Customer::create(array(
+                "email" => $user->email,
+                "description" => "Customer for ".$user->email,
+            ));
+
+            $customerRecord = new StripeCustomerRecord();
+            $customerRecord->userId = $user->id;
+            $customerRecord->stripeCustomerId = $customer->id;
+            $customerRecord->save();
+        }
+
+        if($customerRecord->stripeCustomerId) {
             $token = Craft::$app->getRequest()->getParam('token');
-            Stripe::setApiKey($this->_clientSecret);
-            $customer = Customer::retrieve($customerId);
+            $customer = Customer::retrieve($customerRecord->stripeCustomerId);
+
+            if($customer->default_source) {
+                $customer->sources->retrieve($customer->default_source)->delete();
+            }
+
             $card = $customer->sources->create(array('source' => $token));
             $customer->default_source = $card->id;
             $customer->save();
