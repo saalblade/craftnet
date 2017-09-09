@@ -264,6 +264,22 @@ export default new Vuex.Store({
             })
         },
 
+        removeCreditCard({commit}) {
+            return new Promise((resolve, reject) => {
+                let body = {};
+
+                Vue.http.post(window.craftIdUrl+'/stripe/remove-credit-card', body, { emulateJSON: true })
+                    .then(response => {
+                        let data = response.body;
+                        commit('REMOVE_CARD', { data })
+                        resolve(data);
+                    })
+                    .catch(response => {
+                        reject(response)
+                    });
+            })
+        },
+
         saveLicense({ commit, state }, license) {
             let body = {
                 entryId: license.id,
@@ -354,6 +370,9 @@ export default new Vuex.Store({
 
         ['SAVE_CARD'] (state, { data }) {
             state.stripeCard = data.card
+        },
+        ['REMOVE_CARD'] (state, { data }) {
+            state.stripeCard = null
         },
 
         ['RECEIVE_STRIPE_CUSTOMER'] (state, { data }) {

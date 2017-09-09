@@ -250,6 +250,28 @@ class StripeController extends BaseApiController
         return $this->asErrorJson('Couldn’t save credit card.');
     }
 
+    public function actionRemoveCreditCard()
+    {
+        Stripe::setApiKey($this->_clientSecret);
+
+        $user = Craft::$app->getUser()->getIdentity();
+
+        $customerRecord = StripeCustomerRecord::find()
+            ->where(Db::parseParam('userId', $user->id))
+            ->one();
+
+        if($customerRecord && $customerRecord->stripeCustomerId) {
+            $customer = Customer::retrieve($customerRecord->stripeCustomerId);
+
+            if($customer->default_source) {
+                $customer->sources->retrieve($customer->default_source)->delete();
+                return $this->asJson(['success' => true]);
+            }
+        }
+
+        return $this->asErrorJson('Couldn’t save credit card.');
+    }
+
     // Private Methods
     // =========================================================================
 
