@@ -39,7 +39,7 @@
 
             <div :class="{'d-none': !editing}">
 
-                <credit-card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></credit-card-form>
+                <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></card-form>
 
             </div>
 
@@ -54,11 +54,11 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import CreditCardForm from './CreditCardForm'
+    import CardForm from './CardForm'
 
     export default {
         components: {
-            CreditCardForm
+            CardForm
         },
 
         data() {
@@ -94,11 +94,11 @@
             },
 
             save(card, token) {
-                this.$store.dispatch('saveCreditCard', token).then(response => {
+                this.$store.dispatch('saveCard', token).then(response => {
                     card.clear();
                     this.cardFormloading = false;
                     this.editing = false;
-                    this.$root.displayNotice('Credit card saved.');
+                    this.$root.displayNotice('Card saved.');
                 });
             },
 
@@ -108,9 +108,9 @@
 
             removeCard() {
                 this.removeCardLoading = true;
-                this.$store.dispatch('removeCreditCard').then(response => {
+                this.$store.dispatch('removeCard').then(response => {
                     this.removeCardLoading = false;
-                    this.$root.displayNotice('Credit card removed.')
+                    this.$root.displayNotice('Card removed.')
                 })
             }
         },

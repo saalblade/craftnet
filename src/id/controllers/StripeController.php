@@ -207,7 +207,7 @@ class StripeController extends BaseApiController
         ]);
     }
 
-    public function actionSaveCreditCard()
+    public function actionSaveCard()
     {
         Stripe::setApiKey($this->_clientSecret);
 
@@ -250,7 +250,7 @@ class StripeController extends BaseApiController
         return $this->asErrorJson('Couldn’t save credit card.');
     }
 
-    public function actionRemoveCreditCard()
+    public function actionRemoveCard()
     {
         Stripe::setApiKey($this->_clientSecret);
 

@@ -246,13 +246,13 @@ export default new Vuex.Store({
             })
         },
 
-        saveCreditCard({commit}, token) {
+        saveCard({commit}, token) {
             return new Promise((resolve, reject) => {
                 let body = {
                     token: token.id
                 };
 
-                Vue.http.post(window.craftIdUrl+'/stripe/save-credit-card', body, { emulateJSON: true })
+                Vue.http.post(window.craftIdUrl+'/stripe/save-card', body, { emulateJSON: true })
                     .then(response => {
                         let data = response.body;
                         commit('SAVE_CARD', { data })
@@ -264,11 +264,11 @@ export default new Vuex.Store({
             })
         },
 
-        removeCreditCard({commit}) {
+        removeCard({commit}) {
             return new Promise((resolve, reject) => {
                 let body = {};
 
-                Vue.http.post(window.craftIdUrl+'/stripe/remove-credit-card', body, { emulateJSON: true })
+                Vue.http.post(window.craftIdUrl+'/stripe/remove-card', body, { emulateJSON: true })
                     .then(response => {
                         let data = response.body;
                         commit('REMOVE_CARD', { data })
