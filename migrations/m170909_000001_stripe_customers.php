@@ -103,7 +103,7 @@ class m170909_000001_stripe_customers extends Migration
     protected function addForeignKeys()
     {
         $this->addForeignKey($this->db->getForeignKeyName('{{%stripe_customers}}', 'userId'), '{{%stripe_customers}}', 'userId', '{{%users}}', 'id', 'CASCADE', null);
-        $this->addForeignKey($this->db->getForeignKeyName('{{%stripe_customers}}', 'oauthTokenId'), '{{%stripe_customers}}', 'oauthTokenId', '{{%oauthtokens}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName('{{%stripe_customers}}', 'oauthTokenId'), '{{%stripe_customers}}', 'oauthTokenId', '{{%oauthtokens}}', 'id', 'SET NULL', null);
     }
 
     /**
