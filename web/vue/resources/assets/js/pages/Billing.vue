@@ -3,11 +3,6 @@
 
         <div class="card mb-3">
             <div class="card-body">
-                <billing-payment-stripe></billing-payment-stripe>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-body">
                 <billing-payment></billing-payment>
             </div>
         </div>
@@ -52,14 +47,12 @@
 </template>
 
 <script>
-    import BillingPaymentStripe from '../components/BillingPaymentStripe'
     import BillingPayment from '../components/BillingPayment'
     import BillingCoupon from '../components/BillingCoupon'
     import BillingInfos from '../components/BillingInfos'
 
     export default {
         components: {
-            BillingPaymentStripe,
             BillingPayment,
             BillingCoupon,
             BillingInfos,

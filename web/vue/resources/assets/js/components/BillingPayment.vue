@@ -1,98 +1,92 @@
 <template>
-	<div>
-		<h4>Payment Method</h4>
+    <div>
+        <h4>Payment Method</h4>
 
-		<div v-if="!showForm" class="row">
-			<div class="col-sm-8">
-				<p>
-					<i class="fa fa-credit-card"></i>
-					<strong>Visa</strong>
-					<strong>{{ creditCard.cardNumber }}</strong>
-					Expiration: <strong>{{ creditCard.cardExpiry }}</strong>
-					<br>
+        <div v-if="stripeCustomerLoading" class="spinner"></div>
 
-					Next payment due: <strong>2017-05-24</strong>
-					<br>
-					Total Amount: <strong>$7.00</strong>
-				</p>
-			</div>
-			<div class="col-sm-4 text-right">
-				<button @click="editInfos()" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
-					<i class="fa fa-credit-card"></i>
-					Update payment method
-				</button>
-			</div>
-		</div>
+        <div v-if="!stripeCustomerLoading">
 
 
-		<form v-if="showForm" @submit.prevent="save()">
-			<text-field id="cardNumber" label="Card Number" v-model="creditCardDraft.cardNumber" :errors="errors.cardNumber" />
-			<text-field id="cardExpiry" label="Card Expiry" v-model="creditCardDraft.cardExpiry" :errors="errors.cardExpiry" />
-			<text-field id="cardCvc" label="Card CVC" v-model="creditCardDraft.cardCvc" :errors="errors.cardCvc" />
+            <div v-if="!editing">
 
-			<input type="submit" class="btn btn-primary" value="Save" />
-			<input type="button" class="btn btn-secondary" value="Cancel" @click="cancel()" />
-		</form>
+                <button @click="editing = true" type="button" class="float-right btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
+                    <i class="fa fa-credit-card"></i>
+                    Change Card
+                </button>
 
-	</div>
+                <div v-if="stripeCard">
+                    {{ stripeCard.brand }} •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
+                </div>
+            </div>
+
+
+            <div :class="{'d-none': !editing}">
+
+                <credit-card-form :loading="loading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></credit-card-form>
+
+            </div>
+
+
+            <div class="mt-3">
+                <img src="/vue/dist/images/powered_by_stripe.svg" height="18" />
+            </div>
+        </div>
+    </div>
 </template>
+
 
 <script>
     import { mapGetters } from 'vuex'
-    import TextField from './fields/TextField'
+    import CreditCardForm from './CreditCardForm'
 
     export default {
         components: {
-            TextField,
-		},
+            CreditCardForm
+        },
 
-        data () {
+        data() {
             return {
-                errors: {},
-                userId: 1,
-                showForm: false,
-                creditCardDraft: {},
+                editing: false,
+                loading: false,
+
+                stripe: null,
+                elements: null,
+                card: null,
             }
         },
 
         computed: {
             ...mapGetters({
-                currentUser: 'currentUser',
+                stripeCustomer: 'stripeCustomer',
+                stripeCard: 'stripeCard',
             }),
 
-			creditCard() {
-				return {
-					cardNumber: this.currentUser.cardNumber,
-					cardExpiry: this.currentUser.cardExpiry,
-					cardCvc: this.currentUser.cardCvc,
-				};
-			}
+            stripeCustomerLoading() {
+                return this.$root.stripeCustomerLoading;
+            }
         },
 
         methods: {
-            editInfos: function() {
-                this.showForm = true;
-                this.creditCardDraft = JSON.parse(JSON.stringify(this.creditCard));
+            error() {
+                this.loading = false;
             },
-            save: function() {
-                this.$store.dispatch('saveUser', {
-                    id: this.currentUser.id,
-					cardNumber: this.creditCardDraft.cardNumber,
-					cardExpiry: this.creditCardDraft.cardExpiry,
-					cardCvc: this.creditCardDraft.cardCvc,
-                }).then((data) => {
-                    this.$root.displayNotice('Payment method saved.');
-                    this.showForm = false;
-                    this.errors = {};
-                }).catch((data) => {
-                    this.$root.displayError('Couldn’t save payment method.');
-                    this.errors = data.errors;
+
+            beforeSave() {
+                this.loading = true;
+            },
+
+            save(card, token) {
+                this.$store.dispatch('saveCreditCard', token).then(response => {
+                    card.clear();
+                    this.loading = false;
+                    this.editing = false;
+                    this.$root.displayNotice('Credit card saved.');
                 });
             },
-			cancel() {
-                this.showForm = false;
-                this.errors = {};
-			}
+
+            cancel() {
+                this.editing = false;
+            },
         },
     }
 </script>
