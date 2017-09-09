@@ -77,6 +77,7 @@ class m170909_000001_stripe_customers extends Migration
                 'userId' => $this->integer()->notNull(),
                 'oauthTokenId' => $this->integer(),
                 'stripeCustomerId' => $this->string(255),
+                'stripeAccountId' => $this->string(255),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
                 'uid' => $this->uid(),
