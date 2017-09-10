@@ -472,7 +472,7 @@ class PackageManager extends Component
                 $data['autoload'] = Json::decode($version['autoload']);
             }
             if ($version['extra'] !== null) {
-                $data['extra'] = Json::encode($version['extra']);
+                $data['extra'] = Json::decode($version['extra']);
             }
             if ($version['targetDir'] !== null) {
                 $data['target-dir'] = $version['targetDir'];
@@ -481,7 +481,7 @@ class PackageManager extends Component
                 $data['include-path'] = $version['includePaths'];
             }
             if ($version['binaries'] !== null) {
-                $data['bin'] = $version['binaries'];
+                $data['bin'] = Json::decode($version['binaries']);
             }
             if ($require !== null) {
                 $data['require'] = $require;
@@ -524,7 +524,7 @@ class PackageManager extends Component
             'provider-includes' => [
                 $indexPath => ['sha256' => $indexHash],
             ],
-            'providers-url' => '/p/%package%$%hash%.json',
+            'providers-url' => '/p/%package%/%hash%.json',
         ];
 
         FileHelper::writeToFile("{$web}/packages.json", Json::encode($rootData));
