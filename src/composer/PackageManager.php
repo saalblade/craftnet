@@ -19,10 +19,6 @@ use yii\helpers\Console;
 
 class PackageManager extends Component
 {
-    public $jsonOptions = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT;
-
-    //public $jsonOptions = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
-
     public function packageExists(string $name): bool
     {
         return (new Query())
@@ -533,7 +529,7 @@ class PackageManager extends Component
             'providers-url' => '/p/%package%$%hash%.json',
         ];
 
-        FileHelper::writeToFile("{$web}/packages.json", Json::encode($rootData, $this->jsonOptions));
+        FileHelper::writeToFile("{$web}/packages.json", Json::encode($rootData));
 
         if (!empty($oldPaths)) {
             Craft::$app->getQueue()->delay(60 * 5)->push(new DeletePaths([
@@ -553,7 +549,7 @@ class PackageManager extends Component
      */
     private function _writeJsonFile(array $data, string $path, &$oldPaths): string
     {
-        $content = Json::encode($data, $this->jsonOptions);
+        $content = Json::encode($data);
         $hash = hash('sha256', $content);
         $path = str_replace('%hash%', $hash, $path);
 
