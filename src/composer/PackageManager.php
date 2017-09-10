@@ -338,8 +338,6 @@ class PackageManager extends Component
                 foreach ($depsToUpdate as $depName) {
                     $queue->push(new UpdatePackage([
                         'name' => $depName,
-                        'force' => $force,
-                        'skipIfRecentlyUpdated' => !$force,
                     ]));
                     if ($isConsole) {
                         Console::output("{$depName} is queued to be updated");
