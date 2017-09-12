@@ -2,13 +2,18 @@
 
 namespace craftcom\api\controllers\v1;
 
+use Craft;
+use craft\helpers\Db;
 use craftcom\oauthserver\Module as OauthServer;
 use craftcom\api\controllers\BaseApiController;
 use craft\elements\User;
 use yii\web\Response;
+use craftcom\id\records\StripeCustomer as StripeCustomerRecord;
+use Stripe\Customer;
+use Stripe\Stripe;
 
 /**
- * Class CraftIdController
+ * Class AccountController
  *
  * @package craftcom\api\controllers\v1
  */
@@ -18,7 +23,7 @@ class AccountController extends BaseApiController
     // =========================================================================
 
     /**
-     * Handles /v1/craft-id requests.
+     * Handles /v1/account requests.
      *
      * @return Response
      */
@@ -46,7 +51,6 @@ class AccountController extends BaseApiController
                     if ($hasSufficientPermissions) {
                         // User has sufficient permissions to access the resource
 
-
                         $user = User::find()->id($accessToken->userId)->one();
 
                         if($user) {
@@ -59,6 +63,28 @@ class AccountController extends BaseApiController
                                     'developerName' => $purchasedPlugin->getAuthor()->developerName,
                                     'developerUrl' => $purchasedPlugin->getAuthor()->developerUrl,
                                 ];
+                            }
+
+                            $card = null;
+                            $stripeCustomer = null;
+
+                            $stripeCustomerRecord = StripeCustomerRecord::find()
+                                ->where(Db::parseParam('userId', $accessToken->userId))
+                                ->one();
+
+                            if($stripeCustomerRecord) {
+                                $stripeCustomer = $stripeCustomerRecord->getAttributes();
+
+                                if($stripeCustomerRecord->stripeCustomerId) {
+                                    Stripe::setApiKey(Craft::$app->getConfig()->getGeneral()->stripeClientSecret);
+                                    $customer = Customer::retrieve($stripeCustomerRecord->stripeCustomerId);
+
+
+                                    if($customer && $customer->default_source) {
+                                        $card = $customer->sources->retrieve($customer->default_source);
+                                    }
+                                }
+
                             }
 
                             return $this->asJson([
@@ -78,6 +104,8 @@ class AccountController extends BaseApiController
                                 'businessState' => $user->businessState,
                                 'businessZipCode' => $user->businessZipCode,
                                 'businessCountry' => $user->businessCountry,
+                                'stripeCustomer' => $stripeCustomer,
+                                'card' => $card,
                             ]);
                         }
 
