@@ -43,7 +43,10 @@ return [
                 'transferPluginLicense' => "Transfer plugin license",
                 'deassociatePluginLicense' => "Deassociate plugin license",
             ]
-        ]
+        ],
+
+        'stripeClientId' => 'ca_2b3yXOngHtKxb4cDEGHeCMhrNwXyWvu5',
+        'stripeClientSecret' => 'sk_test_FgnfF68q9L8Hp3RRDETaJefc'
     ],
     'prod' => [
         'allowAutoUpdates' => false,
