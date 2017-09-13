@@ -25,6 +25,7 @@ return [
         'GET v1/plugin-store' => 'api/v1/plugin-store',
         'GET v1/account' => 'api/v1/account',
         'GET v1/developer/<userId:\d+>' => 'api/v1/developer',
+        'POST v1/checkout' => 'api/v1/checkout',
     ],
     'composer' => [
     ],
