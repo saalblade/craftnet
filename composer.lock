@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "12115dbacbe42b5b9d88ab30c92a17c4",
+    "content-hash": "44d747e5b8cb84d99c5b4356fcb097ee",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.36.2",
+            "version": "3.36.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "98bff6b24863bb0da970449d18f6745b9270add9"
+                "reference": "421088947540b1c7956cd693b032124e2c74eb76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/98bff6b24863bb0da970449d18f6745b9270add9",
-                "reference": "98bff6b24863bb0da970449d18f6745b9270add9",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/421088947540b1c7956cd693b032124e2c74eb76",
+                "reference": "421088947540b1c7956cd693b032124e2c74eb76",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-09-06T16:44:34+00:00"
+            "time": "2017-09-13T18:56:17+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -347,16 +347,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.0.7",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12"
+                "reference": "9dd73a03951357922d8aee6cc084500de93e2343"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
-                "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/9dd73a03951357922d8aee6cc084500de93e2343",
+                "reference": "9dd73a03951357922d8aee6cc084500de93e2343",
                 "shasum": ""
             },
             "require": {
@@ -402,7 +402,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2017-03-06T11:59:08+00:00"
+            "time": "2017-09-11T07:24:36+00:00"
         },
         {
             "name": "composer/composer",
@@ -661,12 +661,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "ee035a9e973f120931ae6235eb98b98f9726b0b9"
+                "reference": "5033ffe038412ac5d75e48c51c16e9eceedd7376"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/ee035a9e973f120931ae6235eb98b98f9726b0b9",
-                "reference": "ee035a9e973f120931ae6235eb98b98f9726b0b9",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/5033ffe038412ac5d75e48c51c16e9eceedd7376",
+                "reference": "5033ffe038412ac5d75e48c51c16e9eceedd7376",
                 "shasum": ""
             },
             "require": {
@@ -724,7 +724,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-08-29 23:23:42"
+            "time": "2017-09-14 20:36:13"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -2772,12 +2772,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "3c88e062f6b3a510770efc654ce9e14d633bd8a8"
+                "reference": "140175d0d4a71950b045fb87cc7d979340b9f16e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3c88e062f6b3a510770efc654ce9e14d633bd8a8",
-                "reference": "3c88e062f6b3a510770efc654ce9e14d633bd8a8",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/140175d0d4a71950b045fb87cc7d979340b9f16e",
+                "reference": "140175d0d4a71950b045fb87cc7d979340b9f16e",
                 "shasum": ""
             },
             "conflict": {
@@ -2805,7 +2805,7 @@
                 "dompdf/dompdf": ">=0.6,<0.6.2",
                 "drupal/core": ">=8,<8.3.7",
                 "drupal/drupal": ">=8,<8.3.7",
-                "ezsystems/ezpublish-legacy": ">=5.4,<5.4.10|>=5.3,<5.3.12.1",
+                "ezsystems/ezpublish-legacy": ">=2017.8,<2017.8.1.1|>=5.4,<5.4.10.1|>=5.3,<5.3.12.2",
                 "firebase/php-jwt": "<2",
                 "friendsofsymfony/rest-bundle": ">=1.2,<1.2.2",
                 "friendsofsymfony/user-bundle": ">=1.2,<1.3.5",
@@ -2902,7 +2902,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-09-06T14:29:44+00:00"
+            "time": "2017-09-11T12:05:25+00:00"
         },
         {
             "name": "seld/cli-prompt",
@@ -3047,16 +3047,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v5.2.0",
+            "version": "v5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "7b4a4c18a36c460291399c6a34920b7dabc11c57"
+                "reference": "8de523434a271db522b06187625c01e5e813b08b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/7b4a4c18a36c460291399c6a34920b7dabc11c57",
-                "reference": "7b4a4c18a36c460291399c6a34920b7dabc11c57",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/8de523434a271db522b06187625c01e5e813b08b",
+                "reference": "8de523434a271db522b06187625c01e5e813b08b",
                 "shasum": ""
             },
             "require": {
@@ -3098,7 +3098,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2017-08-29T12:47:40+00:00"
+            "time": "2017-09-14T19:39:00+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3156,16 +3156,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.3.8",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d6596cb5022b6a0bd940eae54a1de78646a5fda6"
+                "reference": "a1e1b01293a090cb9ae2ddd221a3251a4a7e4abf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/d6596cb5022b6a0bd940eae54a1de78646a5fda6",
-                "reference": "d6596cb5022b6a0bd940eae54a1de78646a5fda6",
+                "url": "https://api.github.com/repos/symfony/console/zipball/a1e1b01293a090cb9ae2ddd221a3251a4a7e4abf",
+                "reference": "a1e1b01293a090cb9ae2ddd221a3251a4a7e4abf",
                 "shasum": ""
             },
             "require": {
@@ -3220,20 +3220,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-08-27T14:52:21+00:00"
+            "time": "2017-09-06T16:40:18+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.3.8",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "084d804fe35808eb2ef596ec83d85d9768aa6c9d"
+                "reference": "8beb24eec70b345c313640962df933499373a944"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/084d804fe35808eb2ef596ec83d85d9768aa6c9d",
-                "reference": "084d804fe35808eb2ef596ec83d85d9768aa6c9d",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/8beb24eec70b345c313640962df933499373a944",
+                "reference": "8beb24eec70b345c313640962df933499373a944",
                 "shasum": ""
             },
             "require": {
@@ -3276,11 +3276,11 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-08-27T14:52:21+00:00"
+            "time": "2017-09-01T13:23:39+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.3.8",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -3329,7 +3329,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v3.3.8",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -3378,7 +3378,7 @@
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v3.3.8",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
@@ -3491,7 +3491,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v3.3.8",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
