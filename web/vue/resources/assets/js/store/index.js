@@ -1,10 +1,11 @@
+import api from '../api'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex);
-
 export default new Vuex.Store({
     strict: true,
+
     state: {
         craftId: null,
         stripeAccount: null,
@@ -73,295 +74,115 @@ export default new Vuex.Store({
     actions: {
         getCraftIdData ({ commit }) {
             return new Promise((resolve, reject) => {
-                let params = {
-                    userId: window.currentUserId
-                };
+                let userId = window.currentUserId;
 
-                Vue.http.post(window.craftApiUrl+'/craft-id', params, {emulateJSON: true}).then(function(response) {
-
-                    let data = response.body;
-
-                    data['payouts'] = [
-                        {
-                            id: 1,
-                            amount: 99.00,
-                            date: '1 year ago',
-                            bank: {
-                                name: 'BNP Parisbas',
-                                accountNumber: '2345678923456783456',
-                            }
-                        },
-                        {
-                            id: 2,
-                            amount: 99.00,
-                            date: '1 year ago',
-                            bank: {
-                                name: 'BNP Parisbas',
-                                accountNumber: '2345678923456783456',
-                            }
-                        },
-                        {
-                            id: 3,
-                            amount: 298.00,
-                            date: '1 year ago',
-                            bank: {
-                                name: 'BNP Parisbas',
-                                accountNumber: '2345678923456783456',
-                            }
-                        },
-                    ];
-                    data['payoutsScheduled'] = [
-                        {
-                            id: 8,
-                            amount: 116.00,
-                            date: 'Tomorrow',
-                        },
-                    ];
-
-                    data['payments'] = [
-                        {
-                            items: [{id: 6, name: 'Analytics'}],
-                            amount: 99.00,
-                            customer: {
-                                id: 1,
-                                name: 'Benjamin David',
-                                email: 'ben@pixelandtonic.com',
-                            },
-                            date: '3 days ago',
-                        },
-                        {
-                            items: [{id: 6, name: 'Analytics'}],
-                            amount: 99.00,
-                            customer: {
-                                id: 15,
-                                name: 'Andrew Welsh',
-                                email: 'andrew@nystudio107.com',
-                            },
-                            date: '1 year ago',
-                        },
-                        {
-                            items: [{id: 7, name: 'Videos'}],
-                            amount: 99.00,
-                            customer: {
-                                id: 15,
-                                name: 'Andrew Welsh',
-                                email: 'andrew@nystudio107.com',
-                            },
-                            date: '1 year ago',
-                        },
-                        {
-                            items: [{id: 6, name: 'Analytics'}, {id: 7, name: 'Videos'}],
-                            amount: 298.00,
-                            customer: {
-                                id: 15,
-                                name: 'Andrew Welsh',
-                                email: 'andrew@nystudio107.com',
-                            },
-                            date: '1 year ago',
-                        },
-                    ];
-
+                api.getCraftIdData(userId, data => {
                     commit('RECEIVE_CRAFT_ID_DATA', { data })
                     resolve(data);
-                });
+                }, response => {
+                    reject(response);
+                })
             })
         },
 
         saveUser({ commit, state }, user) {
-            let body = {
-                userId: user.id,
-                fields: {},
-            };
-
-            for (let attribute in user) {
-                switch (attribute) {
-                    case 'userId':
-                        // ignore
-                        break;
-                    case 'firstName':
-                    case 'lastName':
-                        body[attribute] = user[attribute];
-                        break;
-                    default:
-                        body['fields'][attribute] = user[attribute];
-                }
-            }
-
-            body['action'] = 'users/save-user';
-            body[csrfTokenName] = csrfTokenValue;
-
             return new Promise((resolve, reject) => {
-                Vue.http.post(window.craftActionUrl+'/users/save-user', body, { emulateJSON: true })
-                    .then(response => {
-                        let data = response.body;
-
-                        if(!data.errors) {
-                            console.log('response', response.body);
-                            commit('SAVE_USER', { user, response });
-                            resolve(response);
-                        } else {
-                            console.log('error');
-                            reject(data);
-                        }
-                    })
-                    .catch(response => reject(response));
+                api.saveUser(user, data => {
+                    if(!data.errors) {
+                        commit('SAVE_USER', { user, data });
+                        resolve(data);
+                    } else {
+                        reject(data);
+                    }
+                }, response => {
+                    reject(response);
+                })
             })
         },
 
         getStripeAccount({commit}) {
             return new Promise((resolve, reject) => {
-                Vue.http.get(window.craftIdUrl+'/stripe/account').then(function(response) {
-                    let data = response.body;
-
+                api.getStripeAccount(data => {
                     commit('RECEIVE_STRIPE_ACCOUNT', { data })
                     resolve(data);
-                }, error => {
-                    reject(error);
-                });
+                }, response => {
+                    reject(response);
+                })
             })
         },
 
         getStripeCustomer({commit}) {
             return new Promise((resolve, reject) => {
-                Vue.http.get(window.craftIdUrl+'/stripe/customer').then(function(response) {
-                    let data = response.body;
-
+                api.getStripeCustomer(data => {
                     commit('RECEIVE_STRIPE_CUSTOMER', { data })
                     commit('RECEIVE_STRIPE_CARD', { data })
                     resolve(data);
-                }, error => {
-                    reject(error);
-                });
+                }, response => {
+                    reject(response);
+                })
             })
         },
 
         disconnectStripeAccount({commit}) {
             return new Promise((resolve, reject) => {
-                Vue.http.post(window.craftIdUrl+'/stripe/disconnect', { emulateJSON: true }).then(function(response) {
-                    let data = response.body;
-
+                api.disconnectStripeAccount(data => {
                     commit('DISCONNECT_STRIPE_ACCOUNT', { data })
                     resolve(data);
-                });
+                }, response => {
+                    reject(response);
+                })
             })
         },
 
         saveCard({commit}, token) {
             return new Promise((resolve, reject) => {
-                let body = {
-                    token: token.id
-                };
-
-                Vue.http.post(window.craftIdUrl+'/stripe/save-card', body, { emulateJSON: true })
-                    .then(response => {
-                        let data = response.body;
-                        commit('SAVE_CARD', { data })
-                        resolve(data);
-                    })
-                    .catch(response => {
-                        reject(response)
-                    });
+                api.saveCard(token, data => {
+                    commit('SAVE_CARD', { data })
+                    resolve(data);
+                }, response => {
+                    reject(response);
+                })
             })
         },
 
         removeCard({commit}) {
             return new Promise((resolve, reject) => {
-                let body = {};
-
-                Vue.http.post(window.craftIdUrl+'/stripe/remove-card', body, { emulateJSON: true })
-                    .then(response => {
-                        let data = response.body;
-                        commit('REMOVE_CARD', { data })
-                        resolve(data);
-                    })
-                    .catch(response => {
-                        reject(response)
-                    });
+                api.removeCard(data => {
+                    commit('REMOVE_CARD', { data })
+                    resolve(data);
+                }, response => {
+                    reject(response);
+                })
             })
         },
 
         saveLicense({ commit, state }, license) {
-            let body = {
-                entryId: license.id,
-                siteId: 1,
-                sectionId: 2,
-                enabled: 1,
-                fields: {}
-            };
-
-            for (let attribute in license) {
-                switch (attribute) {
-                    case 'entryId':
-                        // ignore
-                        break;
-                    case 'title':
-                        body[attribute] = license[attribute];
-                        break;
-                    default:
-                        body['fields'][attribute] = license[attribute];
-                }
-            }
-
-            body['action'] = 'entries/save-entry';
-            body[csrfTokenName] = csrfTokenValue;
-
             return new Promise((resolve, reject) => {
-                Vue.http.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true })
-                    .then(response => {
-                        let data = response.body;
-
-                        if(!data.errors) {
-                            commit('SAVE_LICENSE', { license, response });
-                            resolve(response);
-                        } else {
-                            console.log('error', data);
-                            reject(data);
-                        }
-                    })
-                    .catch(response => reject(response));
+                api.saveLicense(license, data => {
+                    if(!data.errors) {
+                        commit('SAVE_LICENSE', { license, data });
+                        resolve(data);
+                    } else {
+                        reject(data);
+                    }
+                }, response => {
+                    reject(response);
+                })
             })
         },
 
         savePlugin({ commit, state }, plugin) {
-            let body = {
-                entryId: null,
-                siteId: 1,
-                sectionId: 1,
-                enabled: 1,
-                fields: {}
-            };
-
-            for (let attribute in plugin) {
-                switch (attribute) {
-                    case 'id':
-                        body['entryId'] = plugin[attribute];
-                        break;
-                    case 'title':
-                        body[attribute] = plugin[attribute];
-                        break;
-                    default:
-                        body['fields'][attribute] = plugin[attribute];
-                }
-            }
-
-            console.log('body', body);
-            body['action'] = 'entries/save-entry';
-            body[csrfTokenName] = csrfTokenValue;
-
             return new Promise((resolve, reject) => {
-                Vue.http.post(window.craftActionUrl+'/entries/save-entry', body, { emulateJSON: true })
-                    .then(response => {
-                        let data = response.body;
-
-                        if(!data.errors) {
-                            commit('SAVE_PLUGIN', { plugin, response });
-                            resolve(response);
-                        } else {
-                            console.log('error');
-                            reject(data);
-                        }
-                    })
-                    .catch(response => reject(response));
+                api.savePlugin(license, data => {
+                    if(!data.errors) {
+                        commit('SAVE_PLUGIN', { plugin, response });
+                        resolve(data);
+                    } else {
+                        reject(data);
+                    }
+                }, response => {
+                    reject(response);
+                })
             })
         },
     },
