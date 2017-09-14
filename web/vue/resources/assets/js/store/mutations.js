@@ -1,30 +1,30 @@
 import * as types from './mutation-types'
 
-export const SAVE_CARD = (state, { data }) => {
+export const SAVE_CARD = (state, {data}) => {
     state.stripeCard = data.card
 };
 
-export const REMOVE_CARD = (state, { data }) => {
+export const REMOVE_CARD = (state, {data}) => {
     state.stripeCard = null
 };
 
-export const RECEIVE_STRIPE_CUSTOMER = (state, { data }) => {
+export const RECEIVE_STRIPE_CUSTOMER = (state, {data}) => {
     state.stripeCustomer = data.customer
 };
 
-export const RECEIVE_STRIPE_CARD = (state, { data }) => {
+export const RECEIVE_STRIPE_CARD = (state, {data}) => {
     state.stripeCard = data.card
 };
 
-export const RECEIVE_STRIPE_ACCOUNT = (state, { data }) => {
+export const RECEIVE_STRIPE_ACCOUNT = (state, {data}) => {
     state.stripeAccount = data
 };
 
-export const DISCONNECT_STRIPE_ACCOUNT = (state, { data }) => {
+export const DISCONNECT_STRIPE_ACCOUNT = (state, {data}) => {
     state.stripeAccount = null
 };
 
-export const RECEIVE_CRAFT_ID_DATA = (state, { data }) => {
+export const RECEIVE_CRAFT_ID_DATA = (state, {data}) => {
     state.craftId = data
 };
 
