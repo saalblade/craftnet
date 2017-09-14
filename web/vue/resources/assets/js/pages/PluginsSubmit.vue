@@ -1,28 +1,28 @@
 <template>
-	<div v-if="plugin" class="mb-3">
-		<form @submit.prevent="save()">
-			<text-field id="title" label="Name" v-model="plugin.title" :errors="errors.title" />
-			<text-field id="slug" label="Handle" v-model="plugin.slug" :errors="errors.slug" />
-			<text-field id="shortDescription" label="Short Description" v-model="plugin.shortDescription" :errors="errors.shortDescription" />
-			<textarea-field id="description" label="Description" v-model="plugin.description" :errors="errors.description" rows="10" />
-			<text-field id="githubRepoUrl" label="GitHub Repository URL" v-model="plugin.githubRepoUrl" :errors="errors.githubRepoUrl" />
-			<text-field id="licensePrice" label="License Price" v-model="plugin.licensePrice" :errors="errors.licensePrice" />
-			<text-field id="updatePrice" label="Update Price" v-model="plugin.updatePrice" :errors="errors.updatePrice" />
+    <div v-if="plugin" class="mb-3">
+        <form @submit.prevent="save()">
+            <text-field id="title" label="Name" v-model="plugin.title" :errors="errors.title" />
+            <text-field id="slug" label="Handle" v-model="plugin.slug" :errors="errors.slug" />
+            <text-field id="shortDescription" label="Short Description" v-model="plugin.shortDescription" :errors="errors.shortDescription" />
+            <textarea-field id="description" label="Description" v-model="plugin.description" :errors="errors.description" rows="10" />
+            <text-field id="githubRepoUrl" label="GitHub Repository URL" v-model="plugin.githubRepoUrl" :errors="errors.githubRepoUrl" />
+            <text-field id="licensePrice" label="License Price" v-model="plugin.licensePrice" :errors="errors.licensePrice" />
+            <text-field id="updatePrice" label="Update Price" v-model="plugin.updatePrice" :errors="errors.updatePrice" />
 
-			<input type="submit" class="btn btn-primary" value="Save">
-		</form>
-	</div>
+            <input type="submit" class="btn btn-primary" value="Save">
+        </form>
+    </div>
 </template>
 
 <script>
-	import TextField from '../components/fields/TextField'
-	import TextareaField from '../components/fields/TextareaField'
+    import TextField from '../components/fields/TextField'
+    import TextareaField from '../components/fields/TextareaField'
 
     export default {
         components: {
             TextField,
             TextareaField,
-		},
+        },
         data() {
             return {
                 errors: {},
@@ -34,22 +34,22 @@
                     githubRepoUrl: '',
                     licensePrice: '',
                     updatePrice: '',
-				}
-			}
-		},
+                }
+            }
+        },
 
         methods: {
             save() {
                 this.$store.dispatch('savePlugin', {
                     title: this.plugin.title,
-					shortDescription: this.plugin.shortDescription,
-					description: this.plugin.description,
-					githubRepoUrl: this.plugin.githubRepoUrl,
-					licensePrice: this.plugin.licensePrice,
-					updatePrice: this.plugin.updatePrice,
+                    shortDescription: this.plugin.shortDescription,
+                    description: this.plugin.description,
+                    githubRepoUrl: this.plugin.githubRepoUrl,
+                    licensePrice: this.plugin.licensePrice,
+                    updatePrice: this.plugin.updatePrice,
                 }).then((data) => {
                     this.$root.displayNotice('Plugin saved.');
-					this.$router.push({path: '/plugins'})
+                    this.$router.push({path: '/plugins'})
                 }).catch((data) => {
                     this.$root.displayError('Couldn’t save plugin.');
                     this.errors = data.errors;

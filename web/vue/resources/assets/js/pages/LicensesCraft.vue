@@ -1,9 +1,9 @@
 <template>
-	<div>
-		<license-renew-alert></license-renew-alert>
+    <div>
+        <license-renew-alert></license-renew-alert>
 
-		<license-table type="craft" :licenses="craftLicenses"></license-table>
-	</div>
+        <license-table type="craft" :licenses="craftLicenses"></license-table>
+    </div>
 </template>
 
 <script>
