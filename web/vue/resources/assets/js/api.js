@@ -11,58 +11,6 @@ export default {
         Vue.http.post(window.craftApiUrl+'/craft-id', body, options)
             .then(response => {
                 let data = response.body;
-
-                data['payoutsScheduled'] = [
-                    {
-                        id: 8,
-                        amount: 116.00,
-                        date: 'Tomorrow',
-                    },
-                ];
-
-                data['payments'] = [
-                    {
-                        items: [{id: 6, name: 'Analytics'}],
-                        amount: 99.00,
-                        customer: {
-                            id: 1,
-                            name: 'Benjamin David',
-                            email: 'ben@pixelandtonic.com',
-                        },
-                        date: '3 days ago',
-                    },
-                    {
-                        items: [{id: 6, name: 'Analytics'}],
-                        amount: 99.00,
-                        customer: {
-                            id: 15,
-                            name: 'Andrew Welsh',
-                            email: 'andrew@nystudio107.com',
-                        },
-                        date: '1 year ago',
-                    },
-                    {
-                        items: [{id: 7, name: 'Videos'}],
-                        amount: 99.00,
-                        customer: {
-                            id: 15,
-                            name: 'Andrew Welsh',
-                            email: 'andrew@nystudio107.com',
-                        },
-                        date: '1 year ago',
-                    },
-                    {
-                        items: [{id: 6, name: 'Analytics'}, {id: 7, name: 'Videos'}],
-                        amount: 298.00,
-                        customer: {
-                            id: 15,
-                            name: 'Andrew Welsh',
-                            email: 'andrew@nystudio107.com',
-                        },
-                        date: '1 year ago',
-                    },
-                ];
-
                 return cb(data);
             })
             .catch(response => cbError(response));
