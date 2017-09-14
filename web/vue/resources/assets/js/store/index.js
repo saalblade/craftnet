@@ -1,6 +1,7 @@
 import api from '../api'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import * as types from './mutation-types'
 
 Vue.use(Vuex);
 
@@ -92,7 +93,7 @@ export default new Vuex.Store({
                 let userId = window.currentUserId;
 
                 api.getCraftIdData(userId, data => {
-                    commit('RECEIVE_CRAFT_ID_DATA', { data })
+                    commit(types.RECEIVE_CRAFT_ID_DATA, { data })
                     resolve(data);
                 }, response => {
                     reject(response);
@@ -104,7 +105,7 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 api.saveUser(user, data => {
                     if(!data.errors) {
-                        commit('SAVE_USER', { user, data });
+                        commit(types.SAVE_USER, { user, data });
                         resolve(data);
                     } else {
                         reject(data);
@@ -118,7 +119,7 @@ export default new Vuex.Store({
         getStripeAccount({commit}) {
             return new Promise((resolve, reject) => {
                 api.getStripeAccount(data => {
-                    commit('RECEIVE_STRIPE_ACCOUNT', { data })
+                    commit(types.RECEIVE_STRIPE_ACCOUNT, { data })
                     resolve(data);
                 }, response => {
                     reject(response);
@@ -129,8 +130,8 @@ export default new Vuex.Store({
         getStripeCustomer({commit}) {
             return new Promise((resolve, reject) => {
                 api.getStripeCustomer(data => {
-                    commit('RECEIVE_STRIPE_CUSTOMER', { data })
-                    commit('RECEIVE_STRIPE_CARD', { data })
+                    commit(types.RECEIVE_STRIPE_CUSTOMER, { data })
+                    commit(types.RECEIVE_STRIPE_CARD, { data })
                     resolve(data);
                 }, response => {
                     reject(response);
@@ -141,7 +142,7 @@ export default new Vuex.Store({
         disconnectStripeAccount({commit}) {
             return new Promise((resolve, reject) => {
                 api.disconnectStripeAccount(data => {
-                    commit('DISCONNECT_STRIPE_ACCOUNT', { data })
+                    commit(types.DISCONNECT_STRIPE_ACCOUNT, { data })
                     resolve(data);
                 }, response => {
                     reject(response);
@@ -152,7 +153,7 @@ export default new Vuex.Store({
         saveCard({commit}, token) {
             return new Promise((resolve, reject) => {
                 api.saveCard(token, data => {
-                    commit('SAVE_CARD', { data })
+                    commit(types.SAVE_CARD, { data })
                     resolve(data);
                 }, response => {
                     reject(response);
@@ -163,7 +164,7 @@ export default new Vuex.Store({
         removeCard({commit}) {
             return new Promise((resolve, reject) => {
                 api.removeCard(data => {
-                    commit('REMOVE_CARD', { data })
+                    commit(types.REMOVE_CARD, { data })
                     resolve(data);
                 }, response => {
                     reject(response);
@@ -175,7 +176,7 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 api.saveLicense(license, data => {
                     if(!data.errors) {
-                        commit('SAVE_LICENSE', { license, data });
+                        commit(types.SAVE_LICENSE, { license, data });
                         resolve(data);
                     } else {
                         reject(data);
@@ -190,7 +191,7 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 api.savePlugin(license, data => {
                     if(!data.errors) {
-                        commit('SAVE_PLUGIN', { plugin, response });
+                        commit(types.SAVE_PLUGIN, { plugin, response });
                         resolve(data);
                     } else {
                         reject(data);
@@ -203,37 +204,36 @@ export default new Vuex.Store({
     },
 
     mutations: {
-
-        ['SAVE_CARD'] (state, { data }) {
+        [types.SAVE_CARD] (state, { data }) {
             state.stripeCard = data.card
         },
-        ['REMOVE_CARD'] (state, { data }) {
+        [types.REMOVE_CARD] (state, { data }) {
             state.stripeCard = null
         },
 
-        ['RECEIVE_STRIPE_CUSTOMER'] (state, { data }) {
+        [types.RECEIVE_STRIPE_CUSTOMER] (state, { data }) {
             state.stripeCustomer = data.customer
         },
 
-        ['RECEIVE_STRIPE_CARD'] (state, { data }) {
+        [types.RECEIVE_STRIPE_CARD] (state, { data }) {
             state.stripeCard = data.card
         },
 
-        ['RECEIVE_STRIPE_ACCOUNT'] (state, { data }) {
+        [types.RECEIVE_STRIPE_ACCOUNT] (state, { data }) {
             state.stripeAccount = data
         },
 
 
-        ['DISCONNECT_STRIPE_ACCOUNT'] (state, { data }) {
+        [types.DISCONNECT_STRIPE_ACCOUNT] (state, { data }) {
             state.stripeAccount = null
         },
 
 
-        ['RECEIVE_CRAFT_ID_DATA'] (state, { data }) {
+        [types.RECEIVE_CRAFT_ID_DATA] (state, { data }) {
             state.craftId = data
         },
 
-        ['SAVE_USER'] (state, {user, response}) {
+        [types.SAVE_USER] (state, {user, response}) {
             for (let attribute in user) {
                 if(attribute == 'id') {
                     continue;
@@ -245,7 +245,7 @@ export default new Vuex.Store({
             }
         },
 
-        ['SAVE_LICENSE'] (state, {license, response}) {
+        [types.SAVE_LICENSE] (state, {license, response}) {
             let stateLicense = null;
             if(license.type === 'craftLicense') {
                 stateLicense = state.craftId.craftLicenses.find(l => l.id == license.id);
@@ -268,7 +268,7 @@ export default new Vuex.Store({
             }
         },
 
-        ['SAVE_PLUGIN'] (state, {plugin, response}) {
+        [types.SAVE_PLUGIN] (state, {plugin, response}) {
             let newPlugin = false;
             let statePlugin = state.craftId.plugins.find(p => p.id == plugin.id);
 
@@ -288,7 +288,7 @@ export default new Vuex.Store({
             }
         },
 
-        ['SAVE_CRAFT_ID_DATA'] (state) {
+        [types.SAVE_CRAFT_ID_DATA] (state) {
         },
     },
 })
