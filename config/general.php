@@ -58,8 +58,8 @@ return [
     'dev' => [
         'devMode' => true,
         'allowAutoUpdates' => true,
-        'craftApiUrl' => 'https://api.craftcms.dev/v1',
-        'craftIdUrl' => 'https://id.craftcms.dev',
+        'craftApiUrl' => 'http://api.craftcms.dev/v1',
+        'craftIdUrl' => 'http://id.craftcms.dev',
         'defaultCookieDomain' => '.craftcms.dev'
     ]
 ];
