@@ -28,13 +28,13 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/licenses',
+            redirect: '/account',
         },
         {
-            path: '/licenses',
+            path: '/account/licenses',
             name: 'Licenses',
             component: Licenses,
-            redirect: '/licenses/craft',
+            redirect: '/account/licenses/craft',
             children: [
                 {
                     path: 'craft',
@@ -63,27 +63,27 @@ export default new Router({
             ],
         },
         {
-            path: '/billing',
+            path: '/account/billing',
             name: 'Billing',
             component: Billing
         },
         {
-            path: '/settings',
+            path: '/account/settings',
             name: 'Settings',
             component: Settings
         },
         {
-            path: '/customers',
+            path: '/developer/customers',
             name: 'Customers',
             component: Customers
         },
         {
-            path: '/customers/:id',
+            path: '/developer/customers/:id',
             name: 'CustomersDetails',
             component: CustomersDetails
         },
         {
-            path: '/plugins',
+            path: '/developer/plugins',
             name: 'Plugins',
             component: Plugins,
             children: [
@@ -104,22 +104,22 @@ export default new Router({
             ]
         },
         {
-            path: '/payments',
+            path: '/developer/payments',
             name: 'Payments',
             component: Payments
         },
         {
-            path: '/payments/:id',
+            path: '/developer/payments/:id',
             name: 'PaymentsDetails',
             component: PaymentsDetails,
         },
         {
-            path: '/payouts',
+            path: '/developer/payouts',
             name: 'Payouts',
             component: Payouts,
         },
         {
-            path: '/payouts/:id',
+            path: '/developer/payouts/:id',
             name: 'PayoutsDetails',
             component: PayoutsDetails,
         }

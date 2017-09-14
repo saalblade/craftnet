@@ -23,7 +23,7 @@
             <tbody>
             <template>
                 <tr v-for="license in licenses">
-                    <td><router-link :to="'/licenses/'+type+'/'+license.id">000000{{ license.id }}</router-link></td>
+                    <td><router-link :to="'/account/licenses/'+type+'/'+license.id">000000{{ license.id }}</router-link></td>
 
                     <template v-if="type == 'plugins'">
                         <td>{{ license.plugin.title }}</td>

@@ -14,7 +14,7 @@
                     <dt>Payment ID</dt>
                     <dd>#{{paymentId}}</dd>
                     <dt>Customer</dt>
-                    <dd><router-link :to="'/customers/'+payment.customer.id">{{payment.customer.email}}</router-link></dd>
+                    <dd><router-link :to="'/developer/customers/'+payment.customer.id">{{payment.customer.email}}</router-link></dd>
                     <dt>Items</dt>
                     <dd>{{payment.items.length}}</dd>
                     <dt>Date</dt>
@@ -35,7 +35,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="plugin in payment.items">
-                        <td><router-link :to="'/plugins/'+plugin.id">{{ plugin.name }}</router-link></td>
+                        <td><router-link :to="'/developer/plugins/'+plugin.id">{{ plugin.name }}</router-link></td>
                     </tr>
                     </tbody>
                 </table>

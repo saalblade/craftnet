@@ -36,9 +36,9 @@
                     </thead>
                     <tbody>
                     <tr v-for="(payment, key) in customerPayments">
-                        <td><router-link :to="'/payments/'+key">{{payment.amount|currency}}</router-link></td>
+                        <td><router-link :to="'/developer/payments/'+key">{{payment.amount|currency}}</router-link></td>
                         <td>{{ payment.items.length }}</td>
-                        <td><router-link :to="'/customers/'+payment.customer.id">{{payment.customer.email}}</router-link></td>
+                        <td><router-link :to="'/developer/customers/'+payment.customer.id">{{payment.customer.email}}</router-link></td>
                         <td>{{ payment.date }}</td>
                     </tr>
                     </tbody>

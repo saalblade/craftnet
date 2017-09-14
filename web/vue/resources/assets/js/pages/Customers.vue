@@ -15,7 +15,7 @@
             </thead>
             <tbody>
             <tr v-for="customer in customersToRender">
-                <td><router-link :to="/customers/+customer.id">{{ customer.username }}</router-link></td>
+                <td><router-link :to="/developer/customers/+customer.id">{{ customer.username }}</router-link></td>
                 <td>{{ customer.fullName }}</td>
                 <td>{{ customer.email }}</td>
             </tr>

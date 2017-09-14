@@ -16,7 +16,7 @@
 
                 <h4>Account</h4>
 
-                <p>
+                <p v-if="!this.currentUser.enablePluginDeveloperFeatures">
                     <input id="enablePluginDeveloperFeatures" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
                     <label for="enablePluginDeveloperFeatures">Enable plugin developer features</label>
                 </p>

@@ -30,18 +30,18 @@
                 <div class="col-md-3">
                     <h5 class="mt-3">Account</h5>
                     <ul class="nav nav-pills flex-column">
-                        <li class="nav-item"><router-link class="nav-link" to="/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/billing"><i class="fa fa-file-text-o"></i> Billing</router-link></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
+                        <li class="nav-item"><router-link class="nav-link" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
+                        <li class="nav-item"><router-link class="nav-link" to="/account/billing"><i class="fa fa-file-text-o"></i> Billing</router-link></li>
+                        <li class="nav-item"><router-link class="nav-link" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
                     </ul>
 
                     <template v-if="currentUser.enablePluginDeveloperFeatures">
                         <h5 class="mt-3">Developer</h5>
                         <ul class="nav nav-pills flex-column">
-                            <li class="nav-item"><router-link class="nav-link" to="/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
-                            <li class="nav-item"><router-link class="nav-link" to="/customers"><i class="fa fa-group"></i> Customers</router-link></li>
-                            <li class="nav-item"><router-link class="nav-link" to="/payments"><i class="fa fa-credit-card"></i> Payments</router-link></li>
-                            <li class="nav-item"><router-link class="nav-link" to="/payouts"><i class="fa fa-dollar"></i> Payouts</router-link></li>
+                            <li class="nav-item"><router-link class="nav-link" to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
+                            <li class="nav-item"><router-link class="nav-link" to="/developer/customers"><i class="fa fa-group"></i> Customers</router-link></li>
+                            <li class="nav-item"><router-link class="nav-link" to="/developer/payments"><i class="fa fa-credit-card"></i> Payments</router-link></li>
+                            <li class="nav-item"><router-link class="nav-link" to="/developer/payouts"><i class="fa fa-dollar"></i> Payouts</router-link></li>
                         </ul>
                     </template>
                     <template v-if="currentUser.enableShowcaseFeatures">

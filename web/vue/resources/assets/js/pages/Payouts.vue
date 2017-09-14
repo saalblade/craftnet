@@ -33,7 +33,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="payout in payouts">
-                        <td><router-link :to="'/payouts/'+payout.id">{{ payout.amount|currency }}</router-link></td>
+                        <td><router-link :to="'/developer/payouts/'+payout.id">{{ payout.amount|currency }}</router-link></td>
                         <td>{{ payout.date }}</td>
                     </tr>
                     </tbody>
