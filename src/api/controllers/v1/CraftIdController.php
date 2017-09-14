@@ -139,8 +139,101 @@ class CraftIdController extends BaseApiController
             'craftLicenses' => $craftLicenses,
             'pluginLicenses' => $pluginLicenses,
             'customers' => $customers,
+            'payouts' => $this->_getPayouts(),
+            'payoutsScheduled' => $this->_getScheduledPayouts(),
+            'payments' => $this->_getPayments(),
         ];
 
         return $this->asJson($data);
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    private function _getPayouts() {
+        return [
+            [
+                'id' => 1,
+                'amount' => 99.00,
+                'date' => '1 year ago',
+                'bank' => [
+                    'name' => 'BNP Parisbas',
+                    'accountNumber' => '2345678923456783456',
+                ]
+            ],
+            [
+                'id' => 2,
+                'amount' => 99.00,
+                'date' => '1 year ago',
+                'bank' => [
+                    'name' => 'BNP Parisbas',
+                    'accountNumber' => '2345678923456783456',
+                ]
+            ],
+            [
+                'id' => 3,
+                'amount' => 298.00,
+                'date' => '1 year ago',
+                'bank' => [
+                    'name' => 'BNP Parisbas',
+                    'accountNumber' => '2345678923456783456',
+                ]
+            ],
+        ];
+    }
+
+    private function _getScheduledPayouts() {
+        return [
+            [
+                'id' => 8,
+                'amount' => 116.00,
+                'date' => 'Tomorrow',
+            ],
+        ];
+    }
+
+    private function _getPayments() {
+        return [
+            [
+                'items' => [['id' => 6, 'name' => 'Analytics']],
+                'amount' => 99.00,
+                'customer' => [
+                'id' => 1,
+                    'name' => 'Benjamin David',
+                    'email' => 'ben@pixelandtonic.com',
+                ],
+                'date' => '3 days ago',
+            ],
+            [
+                'items' => [['id' => 6, 'name' => 'Analytics']],
+                'amount' => 99.00,
+                'customer' => [
+                'id' => 15,
+                    'name' => 'Andrew Welsh',
+                    'email' => 'andrew@nystudio107.com',
+                ],
+                'date' => '1 year ago',
+            ],
+            [
+                'items' => [['id' => 7, 'name' => 'Videos']],
+                'amount' => 99.00,
+                'customer' => [
+                'id' => 15,
+                    'name' => 'Andrew Welsh',
+                    'email' => 'andrew@nystudio107.com',
+                ],
+                'date' => '1 year ago',
+            ],
+            [
+                'items' => [['id' => 6, 'name' => 'Analytics'], ['id' => 7, 'name' => 'Videos']],
+                'amount' => 298.00,
+                'customer' => [
+                'id' => 15,
+                    'name' => 'Andrew Welsh',
+                    'email' => 'andrew@nystudio107.com',
+                ],
+                'date' => '1 year ago',
+            ],
+        ];
     }
 }

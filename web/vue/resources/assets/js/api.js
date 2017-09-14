@@ -12,35 +12,6 @@ export default {
             .then(response => {
                 let data = response.body;
 
-                data['payouts'] = [
-                    {
-                        id: 1,
-                        amount: 99.00,
-                        date: '1 year ago',
-                        bank: {
-                            name: 'BNP Parisbas',
-                            accountNumber: '2345678923456783456',
-                        }
-                    },
-                    {
-                        id: 2,
-                        amount: 99.00,
-                        date: '1 year ago',
-                        bank: {
-                            name: 'BNP Parisbas',
-                            accountNumber: '2345678923456783456',
-                        }
-                    },
-                    {
-                        id: 3,
-                        amount: 298.00,
-                        date: '1 year ago',
-                        bank: {
-                            name: 'BNP Parisbas',
-                            accountNumber: '2345678923456783456',
-                        }
-                    },
-                ];
                 data['payoutsScheduled'] = [
                     {
                         id: 8,
