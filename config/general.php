@@ -13,8 +13,7 @@ return [
         'cpTrigger' => 'ramos',
         'imageDriver' => 'imagick',
         'preventUserEnumeration' => true,
-        'validationKey' => 'y56B>Ck7"<7k?BbVE>mY=b#cwBq]$JEp',
-
+        'securityKey' => getenv('CRAFT_SECURITY_KEY') ?: $_SERVER['CRAFT_SECURITY_KEY'],
         'oauthServer' => [
             'accessTokenExpiry' => 'PT1H',
             'refreshTokenExpiry' => 'P1M',
