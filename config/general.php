@@ -14,6 +14,8 @@ return [
         'imageDriver' => 'imagick',
         'preventUserEnumeration' => true,
         'securityKey' => getenv('CRAFT_SECURITY_KEY') ?: $_SERVER['CRAFT_SECURITY_KEY'],
+        'csrfTokenName' => 'CRAFTCOM_CSRF_TOKEN',
+        'phpSessionName' => 'CraftComSessionId',
         'oauthServer' => [
             'accessTokenExpiry' => 'PT1H',
             'refreshTokenExpiry' => 'P1M',
