@@ -84,11 +84,11 @@ export default new Router({
         },
         {
             path: '/developer/plugins',
-            name: 'Plugins',
             component: Plugins,
             children: [
                 {
                     path: '',
+                    name: 'Plugins',
                     component: PluginsIndex
                 },
                 {
