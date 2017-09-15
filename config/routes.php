@@ -30,6 +30,8 @@ return [
     'composer' => [
     ],
     'craftId' => [
+        // Catch-all route for Vue when people reload the page.
+        '<url:(.*)>'=> 'id/account',
         'GET v1/id' => 'id/v1/id',
         'GET account' => 'id/account',
         'GET account/developer' => 'id/connect',
