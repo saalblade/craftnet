@@ -1,8 +1,7 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  RewriteCond %{REQUEST_URI} ^(account|developer|showcase)(.*)
-  RewriteRule ^(.*)$ account
+  RewriteRule ^(account|developer|showcase)(.*)$ account [L]
 
   # Send would-be 404 requests to Craft
   RewriteCond %{REQUEST_FILENAME} !-f
