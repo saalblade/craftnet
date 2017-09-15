@@ -36,7 +36,7 @@ class PluginStoreController extends BaseApiController
             foreach($featuredPluginEntries as $featuredPluginEntry) {
                 $plugins = [];
 
-                foreach($featuredPluginEntry->plugins as $plugin) {
+                foreach($featuredPluginEntry->plugins->all() as $plugin) {
                     $plugins[] = $plugin->id;
                 }
 

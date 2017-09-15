@@ -17,8 +17,8 @@
 </div>
 
 <script type="text/javascript">
-    window.csrfTokenName = "{{ craft.config.csrfTokenName|e('js') }}";
-    window.csrfTokenValue = "{{ craft.request.csrfToken|e('js') }}";
+    window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
+    window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
     window.craftActionUrl = "{{ actionUrl() }}";
     window.craftIdUrl = "{{ craft.app.config.general.craftIdUrl }}";
     window.craftApiUrl = "{{ craft.app.config.general.craftApiUrl }}";

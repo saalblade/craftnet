@@ -79,7 +79,7 @@ abstract class BaseApiController extends Controller
 
         $screenshots = [];
 
-        foreach($entry->screenshots as $screenshot) {
+        foreach($entry->screenshots->all() as $screenshot) {
             $screenshots[] = $screenshot->getUrl();
         }
 
@@ -88,7 +88,7 @@ abstract class BaseApiController extends Controller
 
         $categories = [];
 
-        foreach($entry->categories as $category) {
+        foreach($entry->categories->all() as $category) {
             $categories[] = $category->id;
         }
 
