@@ -6,6 +6,7 @@ use craft\base\Model;
 use craftcom\composer\vcs\GitHub;
 use craftcom\composer\vcs\Packagist;
 use craftcom\composer\vcs\VcsInterface;
+use craftcom\Module;
 
 /**
  * @property VcsInterface $vcs

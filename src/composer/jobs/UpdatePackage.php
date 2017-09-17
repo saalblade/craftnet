@@ -2,9 +2,8 @@
 
 namespace craftcom\composer\jobs;
 
-use Craft;
 use craft\queue\BaseJob;
-use craftcom\composer\Module;
+use craftcom\Module;
 
 class UpdatePackage extends BaseJob
 {
@@ -14,9 +13,7 @@ class UpdatePackage extends BaseJob
 
     public function execute($queue)
     {
-        /** @var Module $module */
-        $module = Craft::$app->getModule('composer');
-        $packageManager = $module->getPackageManager();
+        $packageManager = Module::getInstance()->getPackageManager();
 
         if ($this->skipIfRecentlyUpdated && $packageManager->packageUpdatedWithin($this->name, 60 * 5)) {
             return;
