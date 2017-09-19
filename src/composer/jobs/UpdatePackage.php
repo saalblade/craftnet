@@ -21,4 +21,9 @@ class UpdatePackage extends BaseJob
 
         $packageManager->updatePackage($this->name, $this->force);
     }
+
+    protected function defaultDescription()
+    {
+        return 'Update '.$this->name;
+    }
 }
