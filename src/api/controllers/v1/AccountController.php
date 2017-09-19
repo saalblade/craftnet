@@ -57,7 +57,7 @@ class AccountController extends BaseApiController
 
                             $purchasedPlugins = [];
 
-                            foreach ($user->purchasedPlugins as $purchasedPlugin) {
+                            foreach ($user->purchasedPlugins->all() as $purchasedPlugin) {
                                 $purchasedPlugins[] = [
                                     'name' => $purchasedPlugin->title,
                                     'developerName' => $purchasedPlugin->getAuthor()->developerName,
