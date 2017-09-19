@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "97270b33b0a2537bdb9edb00afe2c3eb",
+    "content-hash": "8fc7bd1c2a82ba12f24ad48ce915f740",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.36.10",
+            "version": "3.36.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f133e6583f67c2ffe490527dc741ec9ad32c4325"
+                "reference": "fd0aacadab2f5ae4a43b91bccc164299c5cef7f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f133e6583f67c2ffe490527dc741ec9ad32c4325",
-                "reference": "f133e6583f67c2ffe490527dc741ec9ad32c4325",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/fd0aacadab2f5ae4a43b91bccc164299c5cef7f0",
+                "reference": "fd0aacadab2f5ae4a43b91bccc164299c5cef7f0",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-09-18T22:37:10+00:00"
+            "time": "2017-09-19T22:09:23+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -661,12 +661,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "1e2d33e1fb0703939bbde34f0786ca6595ae7780"
+                "reference": "4a15bd1a7fcf3d3ac45fac78dd5817296e9a32c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/1e2d33e1fb0703939bbde34f0786ca6595ae7780",
-                "reference": "1e2d33e1fb0703939bbde34f0786ca6595ae7780",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/4a15bd1a7fcf3d3ac45fac78dd5817296e9a32c6",
+                "reference": "4a15bd1a7fcf3d3ac45fac78dd5817296e9a32c6",
                 "shasum": ""
             },
             "require": {
@@ -724,7 +724,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-09-19T13:32:21+00:00"
+            "time": "2017-09-19T23:17:12+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
