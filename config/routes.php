@@ -31,7 +31,6 @@ return [
     ],
     'craftId' => [
         // Catch-all route for Vue when people reload the page.
-        '<url:(.*)>'=> 'id/account',
         'GET v1/id' => 'id/v1/id',
         'GET test' => 'id/account',
         'GET test/developer' => 'id/connect',
@@ -42,6 +41,7 @@ return [
         'GET stripe/customer' => 'id/stripe/customer',
         'POST stripe/save-card' => 'id/stripe/save-card',
         'POST stripe/remove-card' => 'id/stripe/remove-card',
+        '<url:(.*)>'=> 'id/account',
     ],
    // 'queue' => [
      //   'POST v1/create' => 'queue/v1/q/create',
