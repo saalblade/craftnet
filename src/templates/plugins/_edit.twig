@@ -59,6 +59,7 @@
                     id: 'icon-id',
                     name: 'iconId',
                     elementType: 'craft\\elements\\Asset',
+                    criteria: {kind: 'image'},
                     limit: 1,
                     elements: plugin.iconId ? [plugin.getIcon()] : null,
                 }) }}
@@ -76,6 +77,7 @@
                     id: 'screenshot-ids',
                     name: 'screenshotIds',
                     elementType: 'craft\\elements\\Asset',
+                    criteria: {kind: 'image'},
                     elements: plugin.getScreenshots(),
                 }) }}
 
