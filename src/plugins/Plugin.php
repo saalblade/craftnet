@@ -269,7 +269,7 @@ class Plugin extends Element
         if ($this->developerId === null) {
             throw new InvalidConfigException('Plugin is missing its developer ID');
         }
-        if (($user = User::find()->id($this->developerId)->one()) === false) {
+        if (($user = User::find()->id($this->developerId)->status(null)->one()) === false) {
             throw new InvalidConfigException('Invalid developer ID: '.$this->developerId);
         }
         return $this->_developer = $user;
