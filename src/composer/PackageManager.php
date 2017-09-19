@@ -141,7 +141,7 @@ class PackageManager extends Component
     private function _createPackageQuery(): Query
     {
         return (new Query())
-            ->select(['id', 'pluginId', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage'])
+            ->select(['id', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage'])
             ->from(['craftcom_packages']);
     }
 
