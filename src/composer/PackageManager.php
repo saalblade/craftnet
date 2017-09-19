@@ -299,9 +299,9 @@ class PackageManager extends Component
             ->update('craftcom_packages', ['latestVersion' => $latestVersion], ['id' => $package->id])
             ->execute();
 
-        if ($package->pluginId) {
+        if ($package->type === 'craft-plugin') {
             $db->createCommand()
-                ->update('craftcom_plugins', ['latestVersion' => $latestVersion], ['id' => $package->pluginId])
+                ->update('craftcom_plugins', ['latestVersion' => $latestVersion], ['packageId' => $package->id])
                 ->execute();
         }
 

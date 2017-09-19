@@ -14,7 +14,6 @@ use craftcom\Module;
 class Package extends Model
 {
     public $id;
-    public $pluginId;
     public $name;
     public $type;
     public $repository;

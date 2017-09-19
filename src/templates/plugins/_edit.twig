@@ -1,0 +1,200 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set crumbs = [
+    {label: 'Plugins', url: url('plugins')}
+] %}
+
+{% set fullPageForm = true %}
+
+{% block main %}
+    <input type="hidden" name="action" value="craftcom/plugins/save">
+    <input type="hidden" name="redirect" value="{{ 'plugins/{id}'|hash }}">
+    {% if plugin.id %}<input type="hidden" name="pluginId" value="{{ plugin.id }}">{% endif %}
+
+    <div class="grid first" data-max-cols="3">
+        <div class="item" data-position="left" data-colspan="2">
+            <div id="fields" class="pane">
+                {{ forms.textField({
+                    label: 'Plugin Name',
+                    required: true,
+                    id: 'name',
+                    name: 'name',
+                    value: plugin.name,
+                    errors: plugin.getErrors('name'),
+                }) }}
+
+                {{ forms.textField({
+                    label: 'Package Name',
+                    required: true,
+                    id: 'package-name',
+                    name: 'packageName',
+                    value: plugin.packageName,
+                    errors: plugin.getErrors('packageName'),
+                }) }}
+
+                {{ forms.textField({
+                    label: 'Plugin Handle',
+                    required: true,
+                    id: 'handle',
+                    name: 'handle',
+                    value: plugin.handle,
+                    errors: plugin.getErrors('handle'),
+                    class: 'code',
+                }) }}
+
+                {{ forms.textField({
+                    label: 'Repository URL',
+                    required: true,
+                    id: 'repository',
+                    name: 'repository',
+                    value: plugin.repository,
+                    errors: plugin.getErrors('repository'),
+                    placeholder: 'http://github.com/...',
+                    type: 'url',
+                }) }}
+
+                {{ forms.elementSelectField({
+                    label: 'Icon',
+                    id: 'icon-id',
+                    name: 'iconId',
+                    elementType: 'craft\\elements\\Asset',
+                    limit: 1,
+                    elements: plugin.iconId ? [plugin.getIcon()] : null,
+                }) }}
+
+                {{ forms.elementSelectField({
+                    label: 'Categories',
+                    id: 'category-ids',
+                    name: 'categoryIds',
+                    elementType: 'craft\\elements\\Category',
+                    elements: plugin.getCategories(),
+                }) }}
+
+                {{ forms.elementSelectField({
+                    label: 'Screenshots',
+                    id: 'screenshot-ids',
+                    name: 'screenshotIds',
+                    elementType: 'craft\\elements\\Asset',
+                    elements: plugin.getScreenshots(),
+                }) }}
+
+                {{ forms.textareaField({
+                    label: 'Short Description',
+                    id: 'short-description',
+                    name: 'shortDescription',
+                    value: plugin.shortDescription,
+                    errors: plugin.getErrors('shortDescription'),
+                }) }}
+
+                {{ forms.textareaField({
+                    label: 'Long Description',
+                    id: 'long-description',
+                    name: 'longDescription',
+                    value: plugin.longDescription,
+                    errors: plugin.getErrors('longDescription'),
+                }) }}
+
+                {{ forms.textField({
+                    label: 'Documentation URL',
+                    id: 'documentation-url',
+                    name: 'documentationUrl',
+                    value: plugin.documentationUrl,
+                    errors: plugin.getErrors('documentationUrl'),
+                    type: 'url',
+                }) }}
+
+                {{ forms.textField({
+                    label: 'Changelog URL',
+                    id: 'changelog-url',
+                    name: 'changelogUrl',
+                    value: plugin.changelogUrl,
+                    errors: plugin.getErrors('changelogUrl'),
+                    type: 'url',
+                }) }}
+            </div>
+        </div><!--/item-->
+        <div class="item" data-position="right">
+            <div id="settings" class="pane meta">
+                {{ forms.elementSelectField({
+                    first: true,
+                    label: 'Developer',
+                    required: true,
+                    id: 'developer-id',
+                    name: 'developerId',
+                    elementType: 'craft\\elements\\User',
+                    sources: ['group:'~(craft.app.userGroups.getGroupByHandle('developers').id)],
+                    limit: 1,
+                    elements: plugin.developerId ? [plugin.getDeveloper()] : null,
+                    errors: plugin.getErrors('developerId'),
+                }) }}
+
+                {{ forms.selectField({
+                    label: 'License',
+                    id: 'license',
+                    name: 'license',
+                    options: [
+                    {label: 'Craft', value: 'craft'},
+                    {label: 'MIT', value: 'mit'},
+                    ],
+                    value: plugin.license,
+                    errors: plugin.getErrors('license'),
+                }) }}
+
+                {{ forms.textField({
+                    label: 'Price',
+                    id: 'price',
+                    name: 'price',
+                    value: (plugin.price/100)|number_format(2, '.', ''),
+                    errors: plugin.getErrors('price'),
+                }) }}
+
+                {{ forms.textField({
+                    label: 'Renewal Price',
+                    id: 'renewal-price',
+                    name: 'renewalPrice',
+                    value: (plugin.renewalPrice/100)|number_format(2, '.', ''),
+                    errors: plugin.getErrors('renewalPrice'),
+                }) }}
+
+                {% set statusInput %}
+                    <div class="left">
+                        {{ forms.lightswitch({
+                            id: 'enabled',
+                            name: 'enabled',
+                            on: plugin.enabled
+                        }) }}
+                    </div>
+                    <div class="right">
+                        <input type="button" class="btn small formsubmit" value="Delete" data-action="craftcom/plugins/delete"
+                               data-confirm="Are you sure you want to delete this plugin?"
+                               data-redirect="{{ 'plugins'|hash }}">
+                    </div>
+                {% endset %}
+
+                {{ forms.field({
+                    label: 'Enabled',
+                    id: 'enabled'
+                }, statusInput) }}
+            </div>
+        </div><!--/item-->
+    </div><!--/grid-->
+{% endblock %}
+
+{% js %}
+    {% if not plugin.handle %}
+        new Craft.DynamicGenerator('#package-name', '#handle', function(sourceVal) {
+            return sourceVal.replace(/^[^\/]*\/?/, '');
+        });
+    {% endif %}
+    {% if not plugin.repository %}
+        new Craft.DynamicGenerator('#package-name', '#repository', function(sourceVal) {
+            return 'http://github.com/'+sourceVal;
+        });
+    {% endif %}
+    {% if not plugin.renewalPrice %}
+        new Craft.DynamicGenerator('#price', '#renewal-price', function(sourceVal) {
+            return !isNaN(sourceVal) ? sourceVal*0.2 : '';
+        });
+    {% endif %}
+{% endjs %}

@@ -1,0 +1,7 @@
+{% extends "_layouts/elementindex" %}
+{% set title = "Plugins"|t('app') %}
+{% set elementType = 'craftcom\\plugins\\Plugin' %}
+
+{% set extraPageHeaderHtml %}
+    <a href="{{ url('plugins/new') }}" class="btn submit">{{ 'New plugin'|t('app') }}</a>
+{% endset %}
