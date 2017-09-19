@@ -1,15 +1,14 @@
 <template>
 	<div>
-		<h4>Business informations</h4>
+		<h4>Invoice details</h4>
 
 		<div v-if="!showForm" class="row">
 			<div class="col-sm-8">
 
 				<div class="flex-auto">
-					<div class="billing-heres-what-appears">Here’s what currently appears on your receipts:</div>
-
-					<div class="billing-businessName">
-                        <pre>{{ companyInfos.businessName }}
+					<p>Here’s what currently appears on your receipts:</p>
+					
+					<pre>{{ companyInfos.businessName }}
 {{ companyInfos.businessVatId }}
 {{ companyInfos.businessAddressLine1 }}
 {{ companyInfos.businessAddressLine2 }}
@@ -17,7 +16,7 @@
 {{ companyInfos.businessState }}
 {{ companyInfos.businessZipCode }}
 {{ companyInfos.businessCountry }}</pre>
-					</div>
+
 				</div>
 			</div>
 			<div class="col-sm-4 text-right">
