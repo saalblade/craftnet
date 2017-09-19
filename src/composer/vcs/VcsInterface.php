@@ -14,5 +14,5 @@ interface VcsInterface
     /**
      * @param PackageVersion $version
      */
-    public function populateVersion(PackageVersion $version): void;
+    public function populateVersion(PackageVersion $version);
 }

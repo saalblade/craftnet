@@ -42,7 +42,7 @@ class PackageVersion extends Model
         }
     }
 
-    public function nullify(): void
+    public function nullify()
     {
         $this->description = null;
         $this->type = null;

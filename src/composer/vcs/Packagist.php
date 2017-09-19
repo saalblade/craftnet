@@ -93,7 +93,7 @@ class Packagist extends BaseVcs
         return $versions;
     }
 
-    public function populateVersion(PackageVersion $version): void
+    public function populateVersion(PackageVersion $version)
     {
         $packageInfo = self::packageInfo($this->package->name);
 

@@ -60,7 +60,7 @@ class GitHub extends BaseVcs
         return $versions;
     }
 
-    public function populateVersion(PackageVersion $version): void
+    public function populateVersion(PackageVersion $version)
     {
         // Get the composer.json contents
         $client = new Client();

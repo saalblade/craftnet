@@ -84,7 +84,7 @@ class PackageManager extends Component
         return false;
     }
 
-    public function savePackage(Package $package): void
+    public function savePackage(Package $package)
     {
         $data = [
             'name' => $package->name,
@@ -109,7 +109,7 @@ class PackageManager extends Component
         }
     }
 
-    public function removePackage(string $name): void
+    public function removePackage(string $name)
     {
         Craft::$app->getDb()->createCommand()
             ->delete('craftcom_packages', ['name' => $name])
@@ -145,7 +145,7 @@ class PackageManager extends Component
             ->from(['craftcom_packages']);
     }
 
-    public function updatePackage(string $name, bool $force = false): void
+    public function updatePackage(string $name, bool $force = false)
     {
         $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
         if ($isConsole) {
@@ -349,7 +349,7 @@ class PackageManager extends Component
         }
     }
 
-    public function savePackageVersion(Package $package, PackageVersion $version): void
+    public function savePackageVersion(Package $package, PackageVersion $version)
     {
         $db = Craft::$app->getDb();
         $db->createCommand()
