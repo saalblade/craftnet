@@ -33,9 +33,9 @@ return [
         // Catch-all route for Vue when people reload the page.
         '<url:(.*)>'=> 'id/account',
         'GET v1/id' => 'id/v1/id',
-        'GET account' => 'id/account',
-        'GET account/developer' => 'id/connect',
-        'GET account/developer/validate' => 'id/connect/validate',
+        'GET test' => 'id/account',
+        'GET test/developer' => 'id/connect',
+        'GET test/developer/validate' => 'id/connect/validate',
         'GET stripe/connect' => 'id/stripe/connect',
         'GET stripe/account' => 'id/stripe/account',
         'POST stripe/disconnect' => 'id/stripe/disconnect',
