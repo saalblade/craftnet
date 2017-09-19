@@ -305,8 +305,6 @@ class PackageManager extends Component
                 ->execute();
         }
 
-        // todo: updated JSON stuff
-
         // For each dependency, see if we already have a version that satisfies the conditions
         if (!empty($packageDeps)) {
             $depsToUpdate = [];
