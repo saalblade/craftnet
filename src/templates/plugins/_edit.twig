@@ -24,7 +24,7 @@
                     type: 'url',
                     autofocus: true,
                 }) %}
-                {% if not plugin.repository %}
+                {% if not plugin.id %}
                     {% set repositoryInput %}
                         <div class="flex" style="position: relative;">
                             {{ repositoryInput }}
@@ -206,6 +206,8 @@
         new Craft.DynamicGenerator('#package-name', '#repository', function(sourceVal) {
             return 'http://github.com/'+sourceVal;
         });
+    {% endif %}
+    {% if not plugin.id %}
         $('#load-details').on('click', function() {
             var url = $('#repository').val();
             if (!url) {
