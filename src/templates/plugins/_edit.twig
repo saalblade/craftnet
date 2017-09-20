@@ -229,7 +229,7 @@
                                 elementSelect.appendElement($element);
                                 elementSelect.addElements($element);
                             } else {
-                                $('#'+id).val(response[id]);
+                                $('#'+id).val(response[id]).trigger('change');
                             }
                         }
                     }
