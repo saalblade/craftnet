@@ -32,6 +32,9 @@ require_once CRAFT_VENDOR_PATH.'/autoload.php';
 if (file_exists(CRAFT_BASE_PATH.'/.env')) {
     $dotenv = new Dotenv\Dotenv(CRAFT_BASE_PATH);
     $dotenv->load();
+} else {
+    // Only define this on AWS
+    define('CRAFT_STORAGE_PATH', '/efs/storage');
 }
 
 define('CRAFT_ENVIRONMENT', getenv('CRAFT_ENV') ?: 'prod');
