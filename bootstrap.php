@@ -29,8 +29,8 @@ define('CRAFT_VENDOR_PATH', CRAFT_BASE_PATH.'/vendor');
 require_once CRAFT_VENDOR_PATH.'/autoload.php';
 
 // dotenv
-if (!isset($_SERVER['DB_SERVER']) && !getenv('DB_SERVER')) {
-    $dotenv = new Dotenv\Dotenv(dirname(CRAFT_VENDOR_PATH));
+if (file_exists(CRAFT_BASE_PATH.'/.env')) {
+    $dotenv = new Dotenv\Dotenv(CRAFT_BASE_PATH);
     $dotenv->load();
 }
 
