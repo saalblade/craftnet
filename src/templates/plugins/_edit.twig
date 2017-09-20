@@ -15,6 +15,30 @@
     <div class="grid first" data-max-cols="3">
         <div class="item" data-position="left" data-colspan="2">
             <div id="fields" class="pane">
+                {% set repositoryInput = forms.text({
+                    id: 'repository',
+                    name: 'repository',
+                    value: plugin.repository,
+                    errors: plugin.getErrors('repository'),
+                    placeholder: 'http://github.com/...',
+                    type: 'url',
+                }) %}
+                {% if not plugin.repository %}
+                    {% set repositoryInput %}
+                        <div class="flex" style="position: relative;">
+                            {{ repositoryInput }}
+                            <input id="load-details" class="btn" type="button" value="Load Details">
+                            <div id="load-details-spinner" class="spinner hidden" style="position: absolute; top: 0; right: -24px;"></div>
+                        </div>
+                    {% endset %}
+                {% endif %}
+
+                {{ forms.field({
+                    label: 'Repository URL',
+                    required: true,
+                    id: 'repository',
+                }, repositoryInput) }}
+
                 {{ forms.textField({
                     label: 'Plugin Name',
                     required: true,
@@ -27,7 +51,7 @@
                 {{ forms.textField({
                     label: 'Package Name',
                     required: true,
-                    id: 'package-name',
+                    id: 'packageName',
                     name: 'packageName',
                     value: plugin.packageName,
                     errors: plugin.getErrors('packageName'),
@@ -43,20 +67,9 @@
                     class: 'code',
                 }) }}
 
-                {{ forms.textField({
-                    label: 'Repository URL',
-                    required: true,
-                    id: 'repository',
-                    name: 'repository',
-                    value: plugin.repository,
-                    errors: plugin.getErrors('repository'),
-                    placeholder: 'http://github.com/...',
-                    type: 'url',
-                }) }}
-
                 {{ forms.elementSelectField({
                     label: 'Icon',
-                    id: 'icon-id',
+                    id: 'iconId',
                     name: 'iconId',
                     elementType: 'craft\\elements\\Asset',
                     criteria: {kind: 'image'},
@@ -66,7 +79,7 @@
 
                 {{ forms.elementSelectField({
                     label: 'Categories',
-                    id: 'category-ids',
+                    id: 'categoryIds',
                     name: 'categoryIds',
                     elementType: 'craft\\elements\\Category',
                     elements: plugin.getCategories(),
@@ -74,7 +87,7 @@
 
                 {{ forms.elementSelectField({
                     label: 'Screenshots',
-                    id: 'screenshot-ids',
+                    id: 'screenshotIds',
                     name: 'screenshotIds',
                     elementType: 'craft\\elements\\Asset',
                     criteria: {kind: 'image'},
@@ -83,23 +96,27 @@
 
                 {{ forms.textareaField({
                     label: 'Short Description',
-                    id: 'short-description',
+                    id: 'shortDescription',
                     name: 'shortDescription',
                     value: plugin.shortDescription,
                     errors: plugin.getErrors('shortDescription'),
+                    class: 'nicetext',
+                    rows: 2,
                 }) }}
 
                 {{ forms.textareaField({
                     label: 'Long Description',
-                    id: 'long-description',
+                    id: 'longDescription',
                     name: 'longDescription',
                     value: plugin.longDescription,
                     errors: plugin.getErrors('longDescription'),
+                    class: 'nicetext',
+                    rows: 4,
                 }) }}
 
                 {{ forms.textField({
                     label: 'Documentation URL',
-                    id: 'documentation-url',
+                    id: 'documentationUrl',
                     name: 'documentationUrl',
                     value: plugin.documentationUrl,
                     errors: plugin.getErrors('documentationUrl'),
@@ -108,7 +125,7 @@
 
                 {{ forms.textField({
                     label: 'Changelog URL',
-                    id: 'changelog-url',
+                    id: 'changelogUrl',
                     name: 'changelogUrl',
                     value: plugin.changelogUrl,
                     errors: plugin.getErrors('changelogUrl'),
@@ -122,7 +139,7 @@
                     first: true,
                     label: 'Developer',
                     required: true,
-                    id: 'developer-id',
+                    id: 'developerId',
                     name: 'developerId',
                     elementType: 'craft\\elements\\User',
                     sources: ['group:'~(craft.app.userGroups.getGroupByHandle('developers').id)],
@@ -153,7 +170,7 @@
 
                 {{ forms.textField({
                     label: 'Renewal Price',
-                    id: 'renewal-price',
+                    id: 'renewalPrice',
                     name: 'renewalPrice',
                     value: (plugin.renewalPrice/100)|number_format(2, '.', ''),
                     errors: plugin.getErrors('renewalPrice'),
@@ -184,14 +201,44 @@
 {% endblock %}
 
 {% js %}
-    {% if not plugin.handle %}
-        new Craft.DynamicGenerator('#package-name', '#handle', function(sourceVal) {
-            return sourceVal.replace(/^[^\/]*\/?/, '');
-        });
-    {% endif %}
     {% if not plugin.repository %}
         new Craft.DynamicGenerator('#package-name', '#repository', function(sourceVal) {
             return 'http://github.com/'+sourceVal;
+        });
+        $('#load-details').on('click', function() {
+            var url = $('#repository').val();
+            if (!url) {
+                return;
+            }
+            $('#load-details-spinner').removeClass('hidden');
+            Craft.postActionRequest('craftcom/plugins/load-details?repository='+encodeURIComponent(url), function(response, textStatus) {
+                $('#load-details-spinner').addClass('hidden');
+                if (textStatus === 'success') {
+                    if (response.error) {
+                        alert(response.error);
+                        return;
+                    }
+                    for (var id in response) {
+                        if (response[id] !== null) {
+                            if (id === 'icon') {
+                                var elementInfo = Craft.getElementInfo(response[id]);
+                                var elementSelect = $('#iconId').data('elementSelect');
+                                var $element = elementSelect.createNewElement(elementInfo);
+                                elementSelect.resetElements();
+                                elementSelect.appendElement($element);
+                                elementSelect.addElements($element);
+                            } else {
+                                $('#'+id).val(response[id]);
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    {% endif %}
+    {% if not plugin.handle %}
+        new Craft.DynamicGenerator('#package-name', '#handle', function(sourceVal) {
+            return sourceVal.replace(/^[^\/]*\/?/, '');
         });
     {% endif %}
     {% if not plugin.renewalPrice %}
