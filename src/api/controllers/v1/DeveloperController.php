@@ -25,13 +25,19 @@ class DeveloperController extends BaseApiController
      */
     public function actionIndex($userId): Response
     {
+        $enableCraftId = (Craft::$app->getRequest()->getParam('enableCraftId') === '1' ? true : false);
+
         $user = User::find()->id($userId)->one();
 
         if($user) {
             $plugins = [];
-            $entries = Entry::find()->section('plugins')->authorId($user->id)->orderBy('title asc')->all();
+            $query = Entry::find()->section('plugins')->authorId($user->id)->orderBy('title asc');
 
-            foreach($entries as $entry) {
+            if(!$enableCraftId) {
+                $query->price('00.00');
+            }
+
+            foreach($query->all() as $entry) {
                 $plugins[] = $this->pluginTransformer($entry);
             }
 

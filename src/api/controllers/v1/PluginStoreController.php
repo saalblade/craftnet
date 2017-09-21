@@ -24,7 +24,15 @@ class PluginStoreController extends BaseApiController
      */
     public function actionIndex(): Response
     {
-        $pluginStoreData = Craft::$app->getCache()->get('pluginStoreData');
+        $enableCraftId = (Craft::$app->getRequest()->getParam('enableCraftId') === '1' ? true : false);
+
+        $cacheKey = 'pluginStoreData';
+
+        if($enableCraftId) {
+            $cacheKey = 'pluginStoreDataCraftId';
+        }
+
+        $pluginStoreData = Craft::$app->getCache()->get($cacheKey);
 
         if(!$pluginStoreData) {
             // Featured Plugins
@@ -36,7 +44,13 @@ class PluginStoreController extends BaseApiController
             foreach($featuredPluginEntries as $featuredPluginEntry) {
                 $plugins = [];
 
-                foreach($featuredPluginEntry->plugins->all() as $plugin) {
+                $query = $featuredPluginEntry->plugins;
+
+                if(!$enableCraftId) {
+                    $query->price('00.00');
+                }
+
+                foreach($query->all() as $plugin) {
                     $plugins[] = $plugin->id;
                 }
 
@@ -75,9 +89,13 @@ class PluginStoreController extends BaseApiController
 
             $plugins = [];
 
-            $pluginEntries = Entry::find()->section('plugins')->all();
+            $query = Entry::find()->section('plugins');
 
-            foreach($pluginEntries as $pluginEntry) {
+            if(!$enableCraftId) {
+                $query->price('00.00');
+            }
+
+            foreach($query->all() as $pluginEntry) {
                 $plugins[] = $this->pluginTransformer($pluginEntry);
             }
 
@@ -87,7 +105,7 @@ class PluginStoreController extends BaseApiController
                 'plugins' => $plugins,
             ];
 
-            Craft::$app->getCache()->set('pluginStoreData', $pluginStoreData, ( 10 * 60 ));
+            Craft::$app->getCache()->set($cacheKey, $pluginStoreData, ( 10 * 60 ));
         }
 
         return $this->asJson($pluginStoreData);
