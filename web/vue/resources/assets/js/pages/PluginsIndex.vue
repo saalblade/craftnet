@@ -35,9 +35,9 @@
 
                         {{ plugin.price|currency }}
 
-                        <template v-if="plugin.updatePrice && plugin.updatePrice != '0.00'">
+                        <template v-if="plugin.renewalPrice && plugin.renewalPrice != '0.00'">
                             <br />
-                            <em class="text-secondary text-nowrap">{{ plugin.updatePrice|currency }} per year</em>
+                            <em class="text-secondary text-nowrap">{{ plugin.renewalPrice|currency }} per year</em>
                         </template>
 
                     </template>
@@ -64,9 +64,9 @@
                 let plugins = JSON.parse(JSON.stringify(this.$store.getters.plugins));
 
                 plugins.sort((a,b) => {
-                    if (a['title'].toLowerCase() < b['title'].toLowerCase())
+                    if (a['name'].toLowerCase() < b['name'].toLowerCase())
                         return -1;
-                    if (a['title'].toLowerCase() > b['title'].toLowerCase())
+                    if (a['name'].toLowerCase() > b['name'].toLowerCase())
                         return 1;
                     return 0;
                 });

@@ -7,7 +7,7 @@
             <textarea-field id="description" label="Description" v-model="plugin.description" :errors="errors.description" rows="10" />
             <text-field id="githubRepoUrl" label="GitHub Repository URL" v-model="plugin.githubRepoUrl" :errors="errors.githubRepoUrl" />
             <text-field id="licensePrice" label="License Price" v-model="plugin.licensePrice" :errors="errors.licensePrice" />
-            <text-field id="updatePrice" label="Update Price" v-model="plugin.updatePrice" :errors="errors.updatePrice" />
+            <text-field id="renewalPrice" label="Update Price" v-model="plugin.renewalPrice" :errors="errors.renewalPrice" />
 
             <input type="submit" class="btn btn-primary" value="Save">
         </form>
@@ -33,7 +33,7 @@
                     description: '',
                     githubRepoUrl: '',
                     licensePrice: '',
-                    updatePrice: '',
+                    renewalPrice: '',
                 }
             }
         },
@@ -46,7 +46,7 @@
                     description: this.plugin.description,
                     githubRepoUrl: this.plugin.githubRepoUrl,
                     licensePrice: this.plugin.licensePrice,
-                    updatePrice: this.plugin.updatePrice,
+                    renewalPrice: this.plugin.renewalPrice,
                 }).then((data) => {
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/plugins'})
