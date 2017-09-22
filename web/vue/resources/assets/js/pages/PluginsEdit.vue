@@ -73,7 +73,7 @@
                 this.$store.dispatch('savePlugin', {
                     id: this.pluginDraft.id,
                     iconId: [parseInt(this.pluginDraft.iconId)],
-                    developerId: this.pluginDraft.developerId,
+                    developerId: [parseInt(this.pluginDraft.developerId)],
                     handle: this.pluginDraft.handle,
                     packageName: this.pluginDraft.packageName,
                     name: this.pluginDraft.name,
