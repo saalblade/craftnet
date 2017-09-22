@@ -28,28 +28,39 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    <h5 class="mt-3">Account</h5>
-                    <ul class="nav nav-pills flex-column">
-                        <li class="nav-item"><router-link class="nav-link" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/account/billing"><i class="fa fa-file-text-o"></i> Billing</router-link></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
-                    </ul>
+                    <template v-if="userIsInGroup('staff')">
+                        <h5 class="mt-3">Account</h5>
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item"><router-link class="nav-link" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
+                            <li class="nav-item"><router-link class="nav-link" to="/account/billing"><i class="fa fa-file-text-o"></i> Billing</router-link></li>
+                            <li class="nav-item"><router-link class="nav-link" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
+                        </ul>
 
-                    <template v-if="currentUser.enablePluginDeveloperFeatures">
-                        <h5 class="mt-3">Developer</h5>
+
+                        <template v-if="currentUser.enablePluginDeveloperFeatures">
+                            <h5 class="mt-3">Developer</h5>
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item"><router-link class="nav-link" to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/developer/customers"><i class="fa fa-group"></i> Customers</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/developer/payments"><i class="fa fa-credit-card"></i> Payments</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/developer/payouts"><i class="fa fa-dollar"></i> Payouts</router-link></li>
+                            </ul>
+                        </template>
+                        <template v-if="currentUser.enableShowcaseFeatures">
+                            <h5 class="mt-3">Showcase</h5>
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-heart"></i> Activity</a></li>
+                                <li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-image"></i> Projects</a></li>
+                                <li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-industry"></i> Agency Profile</a></li>
+                            </ul>
+                        </template>
+                    </template>
+
+                    <template v-else>
+                        <h5 class="mt-3">Account</h5>
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item"><router-link class="nav-link" to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
-                            <li class="nav-item"><router-link class="nav-link" to="/developer/customers"><i class="fa fa-group"></i> Customers</router-link></li>
-                            <li class="nav-item"><router-link class="nav-link" to="/developer/payments"><i class="fa fa-credit-card"></i> Payments</router-link></li>
-                            <li class="nav-item"><router-link class="nav-link" to="/developer/payouts"><i class="fa fa-dollar"></i> Payouts</router-link></li>
-                        </ul>
-                    </template>
-                    <template v-if="currentUser.enableShowcaseFeatures">
-                        <h5 class="mt-3">Showcase</h5>
-                        <ul class="nav nav-pills flex-column">
-                            <li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-heart"></i> Activity</a></li>
-                            <li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-image"></i> Projects</a></li>
-                            <li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-industry"></i> Agency Profile</a></li>
+                            <li class="nav-item"><router-link class="nav-link" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
                         </ul>
                     </template>
                 </div>
@@ -75,6 +86,7 @@
         computed: {
             ...mapGetters({
                 currentUser: 'currentUser',
+                userIsInGroup: 'userIsInGroup',
             }),
         }
     }

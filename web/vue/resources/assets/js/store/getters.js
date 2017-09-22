@@ -67,3 +67,9 @@ export const plugins = state => {
         return state.craftId.plugins;
     }
 };
+
+export const userIsInGroup = state => {
+    return handle => {
+        return state.craftId.currentUser.groups.find(g => g.handle === handle)
+    }
+};

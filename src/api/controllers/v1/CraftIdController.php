@@ -140,6 +140,7 @@ class CraftIdController extends BaseApiController
                 'businessZipCode' => $currentUser->businessZipCode,
                 'businessCountry' => $currentUser->businessCountry,
                 'vendor' => $currentUser->vendor,
+                'groups' => $currentUser->getGroups(),
             ],
             'plugins' => $plugins,
             'craftLicenses' => $craftLicenses,
