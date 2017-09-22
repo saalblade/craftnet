@@ -26,6 +26,8 @@ class Module extends \yii\base\Module
             $this->_initConsoleRequest();
         } else if ($request->getIsCpRequest()) {
             $this->_initCpRequest();
+        } else {
+            $this->_initWebRequest();
         }
 
         parent::init();
@@ -67,5 +69,10 @@ class Module extends \yii\base\Module
         Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
             $e->roots['craftcom'] = __DIR__.'/templates';
         });
+    }
+
+    private function _initWebRequest()
+    {
+        $this->controllerNamespace = 'craftcom\\cp\\controllers';
     }
 }
