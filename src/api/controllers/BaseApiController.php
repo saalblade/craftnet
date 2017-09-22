@@ -6,6 +6,7 @@ use Craft;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\api\Module;
+use craftcom\plugins\Plugin;
 use GuzzleHttp\Client;
 use JsonSchema\Validator;
 use stdClass;
@@ -54,21 +55,21 @@ abstract class BaseApiController extends Controller
         return $body;
     }
 
-    protected function pluginTransformer(Entry $entry)
+    protected function pluginTransformer(Plugin $plugin)
     {
         // Developer name
 
-        $developerName = $entry->getAuthor()->developerName;
+        $developerName = $plugin->getDeveloper()->developerName;
 
         if (empty($developerName)) {
-            $developerName = $entry->getAuthor()->getFullName();
+            $developerName = $plugin->getDeveloper()->getFullName();
         }
 
 
         // Icon url
 
         $iconUrl = null;
-        $icon = $entry->icon->one();
+        $icon = $plugin->icon;
 
         if($icon) {
             $iconUrl = $icon->getUrl();
@@ -79,7 +80,7 @@ abstract class BaseApiController extends Controller
 
         $screenshots = [];
 
-        foreach($entry->screenshots->all() as $screenshot) {
+        foreach($plugin->screenshots as $screenshot) {
             $screenshots[] = $screenshot->getUrl();
         }
 
@@ -88,7 +89,7 @@ abstract class BaseApiController extends Controller
 
         $categories = [];
 
-        foreach($entry->categories->all() as $category) {
+        foreach($plugin->categories as $category) {
             $categories[] = $category->id;
         }
 
@@ -97,7 +98,7 @@ abstract class BaseApiController extends Controller
 
         try {
             $client = new Client();
-            $response = $client->get('https://packagist.org/packages/'.$entry->getAuthor()->vendor.'/'.$entry->slug.'.json');
+            $response = $client->get('https://packagist.org/packages/'.$plugin->getDeveloper()->vendor.'/'.$plugin->slug.'.json');
             $data = Json::decode($response->getBody()->getContents());
             $package = $data['package'];
         } catch(\Exception $e) {
@@ -105,21 +106,27 @@ abstract class BaseApiController extends Controller
         }
 
         return [
-            'id' => $entry->id,
-            'slug' => $entry->slug,
-            'title' => $entry->title,
-            'name' => $entry->title,
-            'shortDescription' => $entry->shortDescription,
-            'description' => $entry->description,
-            'iconUrl' => $iconUrl,
-            'price' => $entry->price,
-            'licensePrice' => $entry->price,
-            'updatePrice' => $entry->updatePrice,
-            'developerId' => $entry->getAuthor()->id,
+            'id' => $plugin->id,
+            'iconId' => $plugin->iconId,
+            'iconUrl' => $plugin->icon->getUrl(),
+            'packageName' => $plugin->packageName,
+            'handle' => $plugin->handle,
+            'name' => $plugin->name,
+            'shortDescription' => $plugin->shortDescription,
+            'longDescription' => $plugin->longDescription,
+            'documentationUrl' => $plugin->documentationUrl,
+            'changelogUrl' => $plugin->changelogUrl,
+            'repository' => $plugin->repository,
+            'license' => $plugin->license,
+            'price' => $plugin->price,
+            'renewalPrice' => $plugin->renewalPrice,
+
+            // 'iconUrl' => $iconUrl,
+            'developerId' => $plugin->getDeveloper()->id,
             'developerName' => $developerName,
-            'developerUrl' => $entry->getAuthor()->developerUrl,
-            'developerVendor' => $entry->getAuthor()->vendor,
-            'githubRepoUrl' => $entry->githubRepoUrl,
+            'developerUrl' => $plugin->getDeveloper()->developerUrl,
+            'developerVendor' => $plugin->getDeveloper()->vendor,
+
             'screenshots' => $screenshots,
             'categories' => $categories,
             'package' => $package,

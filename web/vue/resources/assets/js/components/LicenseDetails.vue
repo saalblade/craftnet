@@ -11,7 +11,7 @@
                             <dt>License ID</dt>
                             <dd>000000{{ license.id }}</dd>
 
-                            <template v-if="license.type == 'craftLicenses'">
+                            <template v-if="license.type == 'craftLicense'">
                                 <dt>Edition</dt>
                                 <dd>Craft {{ license.craftEdition.label }}</dd>
 
@@ -19,9 +19,9 @@
                                 <dd>{{ license.domain }}</dd>
                             </template>
 
-                            <template v-if="license.type == 'pluginLicenses'">
+                            <template v-if="license.type == 'pluginLicense'">
                                 <dt>Plugin</dt>
-                                <dd>{{ license.plugin.title }}</dd>
+                                <dd>{{ license.plugin.name }}</dd>
                             </template>
 
                             <dt>Email</dt>

@@ -5,6 +5,7 @@ namespace craftcom\api\controllers\v1;
 use Craft;
 use craft\elements\Entry;
 use craftcom\api\controllers\BaseApiController;
+use craftcom\plugins\Plugin;
 use yii\web\Response;
 
 /**
@@ -34,10 +35,10 @@ class CraftIdController extends BaseApiController
 
         $plugins = [];
 
-        $pluginEntries = Entry::find()->section('plugins')->authorId($currentUser->id)->all();
+        $pluginElements = Plugin::find()->developerId($currentUser->id)->all();
 
-        foreach($pluginEntries as $pluginEntry) {
-            $plugins[] = $this->pluginTransformer($pluginEntry);
+        foreach($pluginElements as $pluginElement) {
+            $plugins[] = $this->pluginTransformer($pluginElement);
         }
 
 
@@ -64,7 +65,12 @@ class CraftIdController extends BaseApiController
 
         foreach($pluginLicenseEntries as $pluginLicenseEntry) {
             $pluginLicense = $pluginLicenseEntry->toArray();
-            $pluginLicense['plugin'] = $pluginLicenseEntry->plugin->one()->toArray();
+
+            $pluginId = $pluginLicenseEntry->pluginId;
+            $plugin = Plugin::find()->id($pluginId)->one();
+
+            // $pluginLicense['plugin'] = $pluginLicenseEntry->plugin->one()->toArray();
+            $pluginLicense['plugin'] = $plugin->toArray();
             $craftLicense = $pluginLicenseEntry->craftLicense->one();
 
             if($craftLicense) {
@@ -83,8 +89,8 @@ class CraftIdController extends BaseApiController
 
         $customers = [];
 
-        foreach($pluginEntries as $pluginEntry) {
-            $entries = Entry::find()->section('licenses')->relatedTo($pluginEntry)->all();
+        foreach($pluginElements as $pluginElement) {
+            $entries = Entry::find()->section('licenses')->relatedTo($pluginElement)->all();
 
             foreach($entries as $entry) {
 

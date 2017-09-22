@@ -1,7 +1,7 @@
 <template>
     <div v-if="plugin" class="mb-3">
         <form @submit.prevent="save()">
-            <text-field id="title" label="Name" v-model="plugin.title" :errors="errors.title" />
+            <text-field id="name" label="Name" v-model="plugin.name" :errors="errors.name" />
             <text-field id="slug" label="Handle" v-model="plugin.slug" :errors="errors.slug" />
             <text-field id="shortDescription" label="Short Description" v-model="plugin.shortDescription" :errors="errors.shortDescription" />
             <textarea-field id="description" label="Description" v-model="plugin.description" :errors="errors.description" rows="10" />
@@ -41,7 +41,7 @@
         methods: {
             save() {
                 this.$store.dispatch('savePlugin', {
-                    title: this.plugin.title,
+                    name: this.plugin.name,
                     shortDescription: this.plugin.shortDescription,
                     description: this.plugin.description,
                     githubRepoUrl: this.plugin.githubRepoUrl,

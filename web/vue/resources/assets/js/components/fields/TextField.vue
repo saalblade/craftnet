@@ -17,7 +17,6 @@
 
         created() {
             this.$on('focus', function (msg) {
-                console.log('focused')
                 this.$refs.input.$emit('focus');
             })
         }

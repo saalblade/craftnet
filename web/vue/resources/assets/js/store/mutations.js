@@ -63,13 +63,13 @@ export const SAVE_LICENSE = (state, {license, response}) => {
     }
 };
 
-export const SAVE_PLUGIN = (state, {plugin, response}) => {
+export const SAVE_PLUGIN = (state, {plugin, data}) => {
     let newPlugin = false;
     let statePlugin = state.craftId.plugins.find(p => p.id == plugin.id);
 
     if(!statePlugin) {
         statePlugin = {
-            id: response.body.id,
+            id: data.id,
         };
         newPlugin = true;
     }

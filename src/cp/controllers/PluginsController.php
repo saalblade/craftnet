@@ -145,6 +145,12 @@ class PluginsController extends Controller
         $plugin->screenshots = Asset::find()->id($request->getBodyParam('screenshotIds'))->all();
 
         if (!Craft::$app->getElements()->saveElement($plugin)) {
+            if ($request->getAcceptsJson()) {
+                return $this->asJson([
+                    'errors' => $plugin->getErrors(),
+                ]);
+            }
+
             Craft::$app->getSession()->setError('Couldn’t save plugin.');
             Craft::$app->getUrlManager()->setRouteParams([
                 'plugin' => $plugin
@@ -152,7 +158,18 @@ class PluginsController extends Controller
             return null;
         }
 
+        if ($request->getAcceptsJson()) {
+            $return = [];
+
+            $return['success'] = true;
+            $return['id'] = $plugin->id;
+            $return['name'] = $plugin->name;
+
+            return $this->asJson($return);
+        }
+
         Craft::$app->getSession()->setNotice('Plugin saved.');
+
         return $this->redirectToPostedUrl($plugin);
     }
 

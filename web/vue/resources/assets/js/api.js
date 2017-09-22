@@ -116,9 +116,8 @@ export default {
 
     savePlugin(plugin, cb, cbError) {
         let body = {
-            entryId: null,
+            pluginId: null,
             siteId: 1,
-            sectionId: 1,
             enabled: 1,
             fields: {}
         };
@@ -126,23 +125,20 @@ export default {
         for (let attribute in plugin) {
             switch (attribute) {
                 case 'id':
-                    body['entryId'] = plugin[attribute];
-                    break;
-                case 'title':
-                    body[attribute] = plugin[attribute];
+                    body['pluginId'] = plugin[attribute];
                     break;
                 default:
-                    body['fields'][attribute] = plugin[attribute];
+                    body[attribute] = plugin[attribute];
             }
         }
 
-        body['action'] = 'entries/save-entry';
+        body['action'] = 'craftcom/plugins/save';
         body[csrfTokenName] = csrfTokenValue;
 
         let options = { emulateJSON: true };
 
-        Vue.http.post(window.craftActionUrl+'/entries/save-entry', body, options)
-            .then(response => cb(response.body))
-            .catch(response => cbError(response));
+        Vue.http.post(window.craftActionUrl+'/craftcom/plugins/save', body, options)
+            .then(responsex => cb(responsex.body))
+            .catch(responsey => cbError(responsey));
     }
 }

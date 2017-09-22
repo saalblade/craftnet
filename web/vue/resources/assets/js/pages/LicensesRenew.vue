@@ -28,7 +28,7 @@
 
                             <template v-if="license.type == 'pluginLicense'">
                                 <td><router-link :to="'/licenses/plugins/'+license.id">000000{{ license.id }}</router-link></td>
-                                <td>{{ license.plugin.title }}</td>
+                                <td>{{ license.plugin.name }}</td>
                             </template>
 
                             <template v-if="license.type == 'craftLicense'">
@@ -42,7 +42,7 @@
 
                             <td>
                                 <template v-if="license.plugin">
-                                        {{ license.plugin.updatePrice|currency }} for 1 year
+                                    {{ license.plugin.renewalPrice|currency }} for 1 year
                                 </template>
                             </td>
                         </tr>
@@ -111,7 +111,7 @@
             subtotal() {
                 return this.licenses.reduce((a, b) => {
                     if(b.plugin && this.selectedLicenses.find(lId => lId == b.id)) {
-                        return a + parseFloat(b.plugin.updatePrice);
+                        return a + parseFloat(b.plugin.renewalPrice);
                     }
 
                     return a;
