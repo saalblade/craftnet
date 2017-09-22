@@ -6,6 +6,7 @@ use Craft;
 use craft\elements\Entry;
 use craft\elements\User;
 use craftcom\api\controllers\BaseApiController;
+use craftcom\plugins\Plugin;
 use yii\web\Response;
 
 /**
@@ -27,18 +28,18 @@ class DeveloperController extends BaseApiController
     {
         $enableCraftId = (Craft::$app->getRequest()->getParam('enableCraftId') === '1' ? true : false);
 
-        $user = User::find()->id($userId)->one();
+        $user = User::find()->id($userId)->status(null)->one();
 
         if($user) {
             $plugins = [];
-            $query = Entry::find()->section('plugins')->authorId($user->id)->orderBy('title asc');
+            $query = Plugin::find()->developerId($user->id)->orderBy('name asc');
 
             if(!$enableCraftId) {
                 $query->price('00.00');
             }
 
-            foreach($query->all() as $entry) {
-                $plugins[] = $this->pluginTransformer($entry);
+            foreach($query->all() as $element) {
+                $plugins[] = $this->pluginTransformer($element);
             }
 
             return $this->asJson([
