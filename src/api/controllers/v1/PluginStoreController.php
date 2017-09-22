@@ -5,6 +5,7 @@ namespace craftcom\api\controllers\v1;
 use Craft;
 use craft\elements\Entry;
 use craftcom\api\controllers\BaseApiController;
+use craftcom\plugins\Plugin;
 use yii\web\Response;
 
 /**
@@ -44,14 +45,16 @@ class PluginStoreController extends BaseApiController
             foreach($featuredPluginEntries as $featuredPluginEntry) {
                 $plugins = [];
 
-                $query = $featuredPluginEntry->plugins;
+                $pluginMatrix = $featuredPluginEntry->pluginMatrix;
 
-                if(!$enableCraftId) {
-                    $query->price('00.00');
-                }
+                foreach($pluginMatrix as $pluginRow) {
+                    $plugin = Plugin::find()->id($pluginRow->pluginId)->one();
 
-                foreach($query->all() as $plugin) {
-                    $plugins[] = $plugin->id;
+                    if($plugin) {
+                        if($enableCraftId || (!$enableCraftId && !$plugin->price)) {
+                            $plugins[] = $plugin->id;
+                        }
+                    }
                 }
 
                 $featuredPlugins[] = [
@@ -89,14 +92,14 @@ class PluginStoreController extends BaseApiController
 
             $plugins = [];
 
-            $query = Entry::find()->section('plugins');
+            $query = Plugin::find();
 
             if(!$enableCraftId) {
                 $query->price('00.00');
             }
 
-            foreach($query->all() as $pluginEntry) {
-                $plugins[] = $this->pluginTransformer($pluginEntry);
+            foreach($query->all() as $pluginElement) {
+                $plugins[] = $this->pluginTransformer($pluginElement);
             }
 
             $pluginStoreData = [
