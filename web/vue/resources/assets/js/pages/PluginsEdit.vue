@@ -85,6 +85,8 @@
                     license: this.pluginDraft.license,
                     price: this.pluginDraft.price,
                     renewalPrice: this.pluginDraft.renewalPrice,
+                    categoryIds: '',
+                    screenshotIds: '',
                 }).then((data) => {
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/developer/plugins'})
