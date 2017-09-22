@@ -12,6 +12,11 @@ class PluginQuery extends ElementQuery
      */
     public $handle;
 
+    /**
+     * @var int|int[]|null The user ID(s) that the resulting plugins’ developers must have.
+     */
+    public $developerId;
+
     public function __construct($elementType, array $config = [])
     {
         // Default orderBy
@@ -32,6 +37,20 @@ class PluginQuery extends ElementQuery
     public function handle($value)
     {
         $this->handle = $value;
+        return $this;
+    }
+
+    /**
+     * Sets the [[developerId]] property.
+     *
+     * @param int|int[]|null $value The property value
+     *
+     * @return static self reference
+     */
+    public function developerId($value)
+    {
+        $this->developerId = $value;
+
         return $this;
     }
 
@@ -59,6 +78,10 @@ class PluginQuery extends ElementQuery
 
         if ($this->handle) {
             $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.handle', $this->handle));
+        }
+
+        if ($this->developerId) {
+            $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.developerId', $this->developerId));
         }
 
         return parent::beforePrepare();
