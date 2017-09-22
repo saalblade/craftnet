@@ -16,6 +16,7 @@ use Github\Client;
 use Github\Exception\RuntimeException;
 use yii\base\Exception;
 use yii\helpers\Inflector;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -29,7 +30,7 @@ class PluginsController extends Controller
         if (!parent::beforeAction($action)) {
             return false;
         }
-        $this->requireAdmin();
+        
         return true;
     }
 
@@ -100,6 +101,11 @@ class PluginsController extends Controller
                 if ($plugin === false) {
                     throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
                 }
+
+                if(!Craft::$app->getUser()->getIsAdmin() && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+                    throw new ForbiddenHttpException('User is not permitted to perform this action');
+                }
+
             } else {
                 $plugin = new Plugin([
                     'categories' => [],
@@ -122,12 +128,24 @@ class PluginsController extends Controller
             if ($plugin === false) {
                 throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
             }
+
+            if(!Craft::$app->getUser()->getIsAdmin() && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+                throw new ForbiddenHttpException('User is not permitted to perform this action');
+            }
         } else {
             $plugin = new Plugin();
+
+            if(!Craft::$app->getUser()->getIsAdmin()) {
+                $plugin->developerId = Craft::$app->getUser()->getId();
+            }
         }
 
         $plugin->enabled = (bool)$request->getBodyParam('enabled');
-        $plugin->developerId = $request->getBodyParam('developerId')[0] ?? null;
+
+        if(Craft::$app->getUser()->getIsAdmin()) {
+            $plugin->developerId = $request->getBodyParam('developerId')[0] ?? null;
+        }
+
         $plugin->iconId = $request->getBodyParam('iconId')[0] ?? null;
         $plugin->packageName = $request->getBodyParam('packageName');
         $plugin->repository = $request->getBodyParam('repository');
