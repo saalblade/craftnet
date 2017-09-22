@@ -14,17 +14,20 @@
                 <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
                 <text-field id="vendor" label="Vendor" v-model="userDraft.vendor" :errors="errors.vendor" />
 
-                <h4>Account</h4>
+                <template v-if="userIsInGroup('staff')">
 
-                <p v-if="!this.currentUser.enablePluginDeveloperFeatures">
-                    <input id="enablePluginDeveloperFeatures" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
-                    <label for="enablePluginDeveloperFeatures">Enable plugin developer features</label>
-                </p>
+                    <h4>Account</h4>
 
-                <p>
-                    <input id="enableShowcaseFeatures" type="checkbox" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures">
-                    <label for="enableShowcaseFeatures">Enable showcase features</label>
-                </p>
+                    <p v-if="!this.currentUser.enablePluginDeveloperFeatures">
+                        <input id="enablePluginDeveloperFeatures" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
+                        <label for="enablePluginDeveloperFeatures">Enable plugin developer features</label>
+                    </p>
+
+                    <p>
+                        <input id="enableShowcaseFeatures" type="checkbox" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures">
+                        <label for="enableShowcaseFeatures">Enable showcase features</label>
+                    </p>
+                </template>
 
                 <input type="submit" class="btn btn-primary" value="Save">
             </div>
@@ -51,6 +54,7 @@
         computed: {
             ...mapGetters({
                 currentUser: 'currentUser',
+                userIsInGroup: 'userIsInGroup',
             }),
         },
 
