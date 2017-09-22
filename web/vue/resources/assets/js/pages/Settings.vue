@@ -12,7 +12,6 @@
                 <text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
                 <text-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
                 <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
-                <text-field id="vendor" label="Vendor" v-model="userDraft.vendor" :errors="errors.vendor" />
 
                 <template v-if="userIsInGroup('staff')">
 
