@@ -37,3 +37,7 @@
   .spinner { background-image: url(../images/spinner_2x.gif); background-size: 20px; }
   .spinner.big { background-image: url(../images/spinner_big_2x.gif); background-size: 48px; }
 }
+
+.flex-grow  {
+  flex-grow: 1;
+}

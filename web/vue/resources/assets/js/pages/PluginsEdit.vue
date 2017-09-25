@@ -2,10 +2,20 @@
     <div class="mb-3">
 
         <form @submit.prevent="save()">
+            <div class="d-flex flex-row">
+                <div class="flex-grow">
+                    <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" />
+                </div>
+                <div class="form-group ml-2">
+                    <label>&nbsp;</label>
+                    <input type="button" class="btn btn-primary form-control" :disabled="!pluginDraft.repository" @click="loadDetails()" value="Load details">
+                </div>
+                <div class="spinner" :class="{'d-none': !loading}"></div>
+            </div>
+
             <text-field id="iconId" label="Icon ID" v-model="pluginDraft.iconId" :errors="errors.iconId" />
             <text-field id="developerId" label="Developer ID" v-model="pluginDraft.developerId" :errors="errors.developerId" />
 
-            <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" />
             <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" />
             <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" />
             <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" />
@@ -51,6 +61,7 @@
 
         data() {
             return {
+                loading: false,
                 pluginDraft: {
                     id: null,
                     iconId: null,
@@ -84,6 +95,34 @@
         },
 
         methods: {
+            loadDetails() {
+                this.loading = true;
+
+                let body = {
+                    repository: encodeURIComponent(url)
+                };
+                body['action'] = 'craftcom/plugins/load-details';
+                body[csrfTokenName] = csrfTokenValue;
+
+                let options = { emulateJSON: true };
+
+                let url = this.pluginDraft.repository;
+
+                this.$http.post(window.craftActionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), body, options)
+                    .then(response => {
+                        this.pluginDraft.changelogUrl = response.body.changelogUrl;
+                        this.pluginDraft.documentationUrl = response.body.documentationUrl;
+                        this.pluginDraft.name = response.body.name;
+                        this.pluginDraft.handle = response.body.handle;
+                        this.pluginDraft.shortDescription = response.body.shortDescription;
+                        this.pluginDraft.longDescription = response.body.longDescription;
+                        this.pluginDraft.packageName = response.body.packageName;
+                        this.loading = false;
+                    })
+                    .catch(response => {
+                        this.loading = false;
+                    });
+            },
             save() {
                 this.$store.dispatch('savePlugin', {
                     id: this.pluginDraft.id,
@@ -119,3 +158,14 @@
         },
     }
 </script>
+
+<style scoped>
+    .d-flex {
+        position: relative;
+    }
+.spinner {
+    position: absolute;
+    top: 36px;
+    right: -24px;
+}
+</style>

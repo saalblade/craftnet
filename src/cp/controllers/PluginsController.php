@@ -72,10 +72,14 @@ class PluginsController extends Controller
         $name = $config['extra']['name'] ?? null;
 
         // Get the icon, if we have one
-        if ($icon = $this->_getIcon($api, $owner, $repo, $ref, $config, $handle, $name)) {
-            $iconHtml = Craft::$app->getView()->renderTemplate('_elements/element', [
-                'element' => $icon
-            ]);
+        if(Craft::$app->getRequest()->getIsCpRequest()) {
+            if ($icon = $this->_getIcon($api, $owner, $repo, $ref, $config, $handle, $name)) {
+                $iconHtml = Craft::$app->getView()->renderTemplate('_elements/element', [
+                    'element' => $icon
+                ]);
+            } else {
+                $iconHtml = null;
+            }
         } else {
             $iconHtml = null;
         }

@@ -52,4 +52,9 @@
   }
 }
 
+.flex-grow {
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+}
+
 /*# sourceMappingURL=main.css.map */
