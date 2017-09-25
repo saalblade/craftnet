@@ -30,6 +30,10 @@ export default new Router({
             redirect: '/account',
         },
         {
+            path: '/account',
+            redirect: '/developer/plugins',
+        },
+        {
             path: '/account/licenses',
             name: 'Licenses',
             component: Licenses,
