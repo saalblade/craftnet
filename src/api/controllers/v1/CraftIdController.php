@@ -35,7 +35,7 @@ class CraftIdController extends BaseApiController
 
         $plugins = [];
 
-        $pluginElements = Plugin::find()->developerId($currentUser->id)->all();
+        $pluginElements = Plugin::find()->developerId($currentUser->id)->status(null)->all();
 
         foreach($pluginElements as $pluginElement) {
             $plugins[] = $this->pluginTransformer($pluginElement);

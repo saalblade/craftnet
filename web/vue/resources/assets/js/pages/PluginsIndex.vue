@@ -17,12 +17,20 @@
                     </div>
                 </td>
                 <td>
-                    <h6><strong><router-link :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link></strong></h6>
+                    <h6>
+                        <strong>
+                            <router-link v-if="plugin.status == 'enabled'" :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>
+                            <span v-else>{{plugin.name}}</span>
+                        </strong>
+                    </h6>
                     <p>{{ plugin.shortDescription }}</p>
-                    <p class="text-secondary">
+                    <p v-if="plugin.status == 'enabled'" class="text-secondary">
                         {{ plugin.package ? plugin.package.downloads.total : 0 }} Downloads &nbsp;
                         {{ plugin.package ? plugin.package.github_stars : 0 }} Stars &nbsp;
                         {{ plugin.package ? plugin.package.github_open_issues : 0 }} Issues
+                    </p>
+                    <p v-if="plugin.status == 'disabled'" class="text-warning">
+                        Your plugin is being reviewed by the staff for activation.
                     </p>
                 </td>
                 <td>

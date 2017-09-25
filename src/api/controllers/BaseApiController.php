@@ -107,6 +107,7 @@ abstract class BaseApiController extends Controller
 
         return [
             'id' => $plugin->id,
+            'status' => $plugin->status,
             'iconId' => $plugin->iconId,
             'iconUrl' => $plugin->icon->getUrl(),
             'packageName' => $plugin->packageName,
