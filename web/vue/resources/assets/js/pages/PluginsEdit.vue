@@ -85,8 +85,6 @@
 
         methods: {
             save() {
-                console.log('pluginDraft', this.pluginDraft);
-
                 this.$store.dispatch('savePlugin', {
                     id: this.pluginDraft.id,
                     iconId: [parseInt(this.pluginDraft.iconId)],
@@ -115,14 +113,9 @@
         },
 
         mounted() {
-            console.log('mounted', this.plugin);
-
             if(this.plugin) {
                 this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
             }
         },
-        activated() {
-            console.log('active');
-        }
     }
 </script>
