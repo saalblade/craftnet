@@ -17,7 +17,6 @@ import PayoutsDetails from '../pages/PayoutsDetails'
 import Plugins from '../pages/Plugins'
 import PluginsEdit from '../pages/PluginsEdit'
 import PluginsIndex from '../pages/PluginsIndex'
-import PluginsSubmit from '../pages/PluginsSubmit'
 import Settings from '../pages/Settings'
 
 Vue.use(Router)
@@ -93,7 +92,7 @@ export default new Router({
                 },
                 {
                     path: 'submit',
-                    component: PluginsSubmit
+                    component: PluginsEdit,
                 },
                 {
                     path: ':id',

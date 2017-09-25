@@ -1,5 +1,5 @@
 <template>
-    <div v-if="plugin" class="mb-3">
+    <div class="mb-3">
 
         <form @submit.prevent="save()">
             <text-field id="iconId" label="Icon ID" v-model="pluginDraft.iconId" :errors="errors.iconId" />
@@ -51,7 +51,22 @@
 
         data() {
             return {
-                pluginDraft: {},
+                pluginDraft: {
+                    id: null,
+                    iconId: null,
+                    developerId: null,
+                    handle: null,
+                    packageName: null,
+                    name: null,
+                    shortDescription: null,
+                    longDescription: null,
+                    documentationUrl: null,
+                    changelogUrl: null,
+                    repository: null,
+                    license: 'craft',
+                    price: null,
+                    renewalPrice: null,
+                },
                 errors: {},
             }
         },
@@ -70,6 +85,8 @@
 
         methods: {
             save() {
+                console.log('pluginDraft', this.pluginDraft);
+
                 this.$store.dispatch('savePlugin', {
                     id: this.pluginDraft.id,
                     iconId: [parseInt(this.pluginDraft.iconId)],
@@ -98,7 +115,14 @@
         },
 
         mounted() {
-            this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
+            console.log('mounted', this.plugin);
+
+            if(this.plugin) {
+                this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
+            }
+        },
+        activated() {
+            console.log('active');
         }
     }
 </script>

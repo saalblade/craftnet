@@ -6,8 +6,7 @@
             <li class="nav-item"><router-link class="nav-link" to="/developer/plugins/submit">Submit</router-link></li>
         </ul>
 
-        <router-view></router-view>
-
+        <router-view :key="$route.fullPath"></router-view>
 
     </div>
 </template>
