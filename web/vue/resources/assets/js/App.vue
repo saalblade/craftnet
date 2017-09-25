@@ -12,7 +12,7 @@
 
         <nav class="navbar navbar-expand">
             <div class="container">
-                <a class="navbar-brand" href="#">Craft ID</a>
+                <router-link class="navbar-brand" to="/">Craft ID</router-link>
 
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ml-auto">
