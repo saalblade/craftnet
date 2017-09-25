@@ -13,9 +13,6 @@
                 <div class="spinner" :class="{'d-none': !loading}"></div>
             </div>
 
-            <text-field id="iconId" label="Icon ID" v-model="pluginDraft.iconId" :errors="errors.iconId" />
-            <text-field id="developerId" label="Developer ID" v-model="pluginDraft.developerId" :errors="errors.developerId" />
-
             <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" />
             <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" />
             <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" />
@@ -25,6 +22,9 @@
                 <label>Icon</label><br />
                 <img :src="pluginDraft.iconUrl" height="32" />
             </div>
+
+            <text-field id="iconId" label="Icon ID" v-model="pluginDraft.iconId" :errors="errors.iconId" />
+            <text-field id="developerId" label="Developer ID" v-model="pluginDraft.developerId" :errors="errors.developerId" />
 
             <text-field id="shortDescription" label="Short Description" v-model="pluginDraft.shortDescription" :errors="errors.shortDescription" />
             <textarea-field id="longDescription" label="Long Description" v-model="pluginDraft.longDescription" :errors="errors.longDescription" rows="10" />
