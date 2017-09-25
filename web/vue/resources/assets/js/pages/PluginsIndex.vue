@@ -29,8 +29,8 @@
                         {{ plugin.package ? plugin.package.github_stars : 0 }} Stars &nbsp;
                         {{ plugin.package ? plugin.package.github_open_issues : 0 }} Issues
                     </p>
-                    <p v-if="plugin.status == 'disabled'" class="text-warning">
-                        Your plugin is being reviewed by the staff for activation.
+                    <p v-if="plugin.status == 'disabled'" class="text-secondary">
+                        <em>Your plugin is being reviewed by the staff for activation.</em>
                     </p>
                 </td>
                 <td>
