@@ -220,7 +220,10 @@
                 let formData = new FormData();
                 formData.append('siteId', 1);
                 formData.append('enabled', 1);
-                formData.append('pluginId', this.pluginDraft.id);
+
+                if(this.pluginDraft.id) {
+                    formData.append('pluginId', this.pluginDraft.id);
+                }
                 formData.append('iconId[]', parseInt(this.pluginDraft.iconId));
                 formData.append('icon', this.$refs.iconFile.files[0]);
                 formData.append('developerId', [parseInt(this.pluginDraft.developerId)]);
