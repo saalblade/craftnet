@@ -1,11 +1,11 @@
 <?php
+
 namespace craftcom\id\controllers;
 
 use Craft;
+use craft\helpers\Db;
 use craft\records\OAuthToken;
 use craft\web\Controller;
-use craft\helpers\Db;
-use League\OAuth2\Client\Token\AccessToken;
 
 /**
  * Class AccountController
@@ -22,7 +22,7 @@ class AccountController extends Controller
         $stripeAccessToken = null;
         $userId = Craft::$app->getUser()->id;
 
-        if($userId) {
+        if ($userId) {
             $stripeAccessToken = OAuthToken::find()
                 ->where(Db::parseParam('userId', $userId))
                 ->andWhere(Db::parseParam('provider', 'Stripe'))

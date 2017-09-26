@@ -3,9 +3,9 @@
 namespace craftcom\oauthserver\controllers;
 
 use Craft;
-use craftcom\oauthserver\Module as OauthServer;
-use craftcom\oauthserver\Module;
 use craft\web\Controller;
+use craftcom\oauthserver\Module;
+use craftcom\oauthserver\Module as OauthServer;
 use craftcom\oauthserver\server\Repositories\AccessTokenRepository;
 use yii\web\Response;
 

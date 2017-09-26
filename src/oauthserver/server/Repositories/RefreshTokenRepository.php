@@ -2,9 +2,8 @@
 
 namespace craftcom\oauthserver\server\Repositories;
 
-use Craft;
-use craftcom\oauthserver\Module as OauthServer;
 use craftcom\oauthserver\models\RefreshToken;
+use craftcom\oauthserver\Module as OauthServer;
 use craftcom\oauthserver\server\Entities\RefreshTokenEntity;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
@@ -59,7 +58,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     {
         $refreshToken = OauthServer::getInstance()->getRefreshTokens()->getRefreshTokenByIdentifier($tokenId);
 
-        if(!$refreshToken) {
+        if (!$refreshToken) {
             return false;
         }
 
@@ -77,7 +76,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     {
         $refreshToken = OauthServer::getInstance()->getRefreshTokens()->getRefreshTokenByIdentifier($tokenId);
 
-        if($refreshToken) {
+        if ($refreshToken) {
             return false;
         }
 

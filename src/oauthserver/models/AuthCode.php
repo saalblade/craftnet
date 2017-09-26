@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\oauthserver\models;
 
 use Craft;

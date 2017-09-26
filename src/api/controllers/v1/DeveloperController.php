@@ -3,7 +3,6 @@
 namespace craftcom\api\controllers\v1;
 
 use Craft;
-use craft\elements\Entry;
 use craft\elements\User;
 use craftcom\api\controllers\BaseApiController;
 use craftcom\plugins\Plugin;
@@ -30,15 +29,15 @@ class DeveloperController extends BaseApiController
 
         $user = User::find()->id($userId)->status(null)->one();
 
-        if($user) {
+        if ($user) {
             $plugins = [];
             $query = Plugin::find()->developerId($user->id)->orderBy('name asc');
 
-            if(!$enableCraftId) {
+            if (!$enableCraftId) {
                 $query->price('00.00');
             }
 
-            foreach($query->all() as $element) {
+            foreach ($query->all() as $element) {
                 $plugins[] = $this->pluginTransformer($element);
             }
 

@@ -4,14 +4,13 @@ namespace craftcom\api\controllers\v1;
 
 use Craft;
 use craft\elements\Entry;
-use craft\elements\User;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craftcom\api\controllers\BaseApiController;
-use yii\web\Response;
 use craftcom\id\records\StripeCustomer as StripeCustomerRecord;
 use Stripe\Customer;
 use Stripe\Stripe;
+use yii\web\Response;
 
 /**
  * Class CheckoutController
@@ -41,52 +40,52 @@ class CheckoutController extends BaseApiController
         $entry->typeId = 6;
         $entry->authorId = 3;
 
-        if($userId) {
+        if ($userId) {
             $entry->customer = [$userId];
 
-            if($replaceCard && $cardToken) {
+            if ($replaceCard && $cardToken) {
                 $stripeCustomerRecord = StripeCustomerRecord::find()
                     ->where(Db::parseParam('userId', $userId))
                     ->one();
 
-                if($stripeCustomerRecord) {
-                    if($stripeCustomerRecord->stripeCustomerId) {
+                if ($stripeCustomerRecord) {
+                    if ($stripeCustomerRecord->stripeCustomerId) {
                         Stripe::setApiKey(Craft::$app->getConfig()->getGeneral()->stripeClientSecret);
                         $customer = Customer::retrieve($stripeCustomerRecord->stripeCustomerId);
 
-                        if($customer->default_source) {
+                        if ($customer->default_source) {
                             $customer->sources->retrieve($customer->default_source)->delete();
                         }
 
-                        $card = $customer->sources->create(array('source' => $cardToken));
+                        $card = $customer->sources->create(['source' => $cardToken]);
                         $customer->default_source = $card->id;
                         $customer->save();
                     }
                 }
             }
         } else {
-            if(isset($identity['fullName'])) {
+            if (isset($identity['fullName'])) {
                 $entry->customerName = $identity['fullName'];
             }
 
-            if(isset($identity['email'])) {
+            if (isset($identity['email'])) {
                 $entry->customerEmail = $identity['email'];
             }
         }
 
-        if($cardToken) {
+        if ($cardToken) {
             $entry->cardToken = $cardToken;
         }
 
-        if($cartItems) {
+        if ($cartItems) {
             $items = [];
-            foreach($cartItems as $item) {
+            foreach ($cartItems as $item) {
                 $items[] = $item['id'];
             }
             $entry->items = $items;
         }
 
-        if(Craft::$app->getElements()->saveElement($entry)) {
+        if (Craft::$app->getElements()->saveElement($entry)) {
             return $this->asJson($entry);
         }
 

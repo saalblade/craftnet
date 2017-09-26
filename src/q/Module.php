@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\q;
 
 use Craft;

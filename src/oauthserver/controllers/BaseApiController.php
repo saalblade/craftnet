@@ -2,7 +2,6 @@
 
 namespace craftcom\oauthserver\controllers;
 
-use Craft;
 use craft\web\Controller;
 
 /**

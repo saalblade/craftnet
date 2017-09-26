@@ -59,7 +59,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
     {
         $authCode = OauthServer::getInstance()->getAuthCodes()->getAuthCodeByIdentifier($codeId);
 
-        if(!$authCode) {
+        if (!$authCode) {
             return false;
         }
 
@@ -77,7 +77,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
     {
         $authCode = OauthServer::getInstance()->getAuthCodes()->getAuthCodeByIdentifier($codeId);
 
-        if($authCode) {
+        if ($authCode) {
             return false;
         }
 

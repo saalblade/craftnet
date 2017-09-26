@@ -58,14 +58,11 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     {
         $accessToken = OauthServer::getInstance()->getAccessTokens()->getAccessTokenByIdentifier($identifier);
 
-        if($accessToken)
-        {
+        if ($accessToken) {
             $accessToken->isRevoked = true;
 
             OauthServer::getInstance()->getAccessTokens()->saveAccessToken($accessToken);
-        }
-        else
-        {
+        } else {
             throw new \Exception("Access Token not found.");
         }
     }
@@ -81,7 +78,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     {
         $accessToken = OauthServer::getInstance()->getAccessTokens()->getAccessTokenByIdentifier($identifier);
 
-        if($accessToken) {
+        if ($accessToken) {
             if ($accessToken->isRevoked) {
                 return true;
             }

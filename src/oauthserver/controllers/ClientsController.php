@@ -3,9 +3,9 @@
 namespace craftcom\oauthserver\controllers;
 
 use Craft;
+use craft\web\Controller;
 use craftcom\oauthserver\models\Client;
 use craftcom\oauthserver\Module as OauthServer;
-use craft\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -45,7 +45,7 @@ class ClientsController extends Controller
             'brandNewClient' => false,
         ];
 
-        if($clientId !== null) {
+        if ($clientId !== null) {
             if ($client === null) {
                 $client = OauthServer::getInstance()->getClients()->getClientById($clientId);
 
@@ -56,7 +56,7 @@ class ClientsController extends Controller
 
             $variables['title'] = $client->name;
         } else {
-            if($client === null) {
+            if ($client === null) {
                 $client = new Client();
                 $variables['brandNewClient'] = true;
             }
@@ -86,8 +86,7 @@ class ClientsController extends Controller
 
 
         // Save it
-        if (!OauthServer::getInstance()->getClients()->saveClient($client))
-        {
+        if (!OauthServer::getInstance()->getClients()->saveClient($client)) {
             Craft::$app->getSession()->setError(Craft::t('app', "Couldn't save client."));
 
             // Send the site back to the template

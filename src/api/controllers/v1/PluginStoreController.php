@@ -29,32 +29,32 @@ class PluginStoreController extends BaseApiController
 
         $cacheKey = 'pluginStoreData';
 
-        if($enableCraftId) {
+        if ($enableCraftId) {
             $cacheKey = 'pluginStoreDataCraftId';
         }
 
         $pluginStoreData = null;
         $enablePluginStoreCache = Craft::$app->getConfig()->getGeneral()->enablePluginStoreCache;
 
-        if($enablePluginStoreCache) {
+        if ($enablePluginStoreCache) {
             $pluginStoreData = Craft::$app->getCache()->get($cacheKey);
         }
 
-        if(!$pluginStoreData) {
+        if (!$pluginStoreData) {
             // Featured Plugins
 
             $featuredPluginEntries = Entry::find()->section('featuredPlugins')->all();
 
             $featuredPlugins = [];
 
-            foreach($featuredPluginEntries as $featuredPluginEntry) {
+            foreach ($featuredPluginEntries as $featuredPluginEntry) {
                 $plugins = [];
 
                 $pluginElements = $featuredPluginEntry->plugins;
 
-                foreach($pluginElements as $plugin) {
-                    if($plugin) {
-                        if($enableCraftId || (!$enableCraftId && !$plugin->price)) {
+                foreach ($pluginElements as $plugin) {
+                    if ($plugin) {
+                        if ($enableCraftId || (!$enableCraftId && !$plugin->price)) {
                             $plugins[] = $plugin->id;
                         }
                     }
@@ -74,11 +74,11 @@ class PluginStoreController extends BaseApiController
             $_categories = \craft\elements\Category::find()->all();
             $categories = [];
 
-            foreach($_categories as $category) {
+            foreach ($_categories as $category) {
                 $iconUrl = null;
                 $icon = $category->icon->one();
 
-                if($icon) {
+                if ($icon) {
                     $iconUrl = $icon->getUrl();
                 }
 
@@ -97,11 +97,11 @@ class PluginStoreController extends BaseApiController
 
             $query = Plugin::find();
 
-            if(!$enableCraftId) {
+            if (!$enableCraftId) {
                 $query->price('00.00');
             }
 
-            foreach($query->all() as $pluginElement) {
+            foreach ($query->all() as $pluginElement) {
                 $plugins[] = $this->pluginTransformer($pluginElement);
             }
 
@@ -111,8 +111,8 @@ class PluginStoreController extends BaseApiController
                 'plugins' => $plugins,
             ];
 
-            if($enablePluginStoreCache) {
-                Craft::$app->getCache()->set($cacheKey, $pluginStoreData, ( 10 * 60 ));
+            if ($enablePluginStoreCache) {
+                Craft::$app->getCache()->set($cacheKey, $pluginStoreData, (10 * 60));
             }
         }
 

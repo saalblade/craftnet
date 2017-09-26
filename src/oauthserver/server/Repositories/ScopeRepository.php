@@ -24,10 +24,8 @@ class ScopeRepository implements ScopeRepositoryInterface
     {
         $scopes = Module::getInstance()->getOauth()->getScopes();
 
-        foreach($scopes as $scope => $description)
-        {
-            if($scope == $identifier)
-            {
+        foreach ($scopes as $scope => $description) {
+            if ($scope == $identifier) {
                 $scopeEntity = new ScopeEntity();
                 $scopeEntity->setIdentifier($identifier);
 

@@ -2,7 +2,6 @@
 
 namespace craftcom\oauthserver\controllers;
 
-use craftcom\oauthserver\controllers\BaseApiController;
 use yii\web\Response;
 
 /**

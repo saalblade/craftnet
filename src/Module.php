@@ -3,17 +3,17 @@
 namespace craftcom;
 
 use Craft;
+use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\services\Fields;
 use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
 use craftcom\composer\PackageManager;
 use craftcom\cp\fields\Plugins;
 use yii\base\Event;
-use craft\events\RegisterComponentTypesEvent;
-use craft\services\Fields;
 
 /**
  * @property PackageManager $packageManager

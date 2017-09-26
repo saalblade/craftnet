@@ -38,7 +38,7 @@ class CraftIdController extends BaseApiController
 
         $pluginElements = Plugin::find()->developerId($currentUser->id)->status(null)->all();
 
-        foreach($pluginElements as $pluginElement) {
+        foreach ($pluginElements as $pluginElement) {
             $plugins[] = $this->pluginTransformer($pluginElement);
         }
 
@@ -49,13 +49,13 @@ class CraftIdController extends BaseApiController
 
         $craftLicenseEntries = Entry::find()->section('licenses')->type('craftLicense')->authorId($currentUser->id)->all();
 
-        foreach($craftLicenseEntries as $craftLicenseEntry) {
+        foreach ($craftLicenseEntries as $craftLicenseEntry) {
             $craftLicense = $craftLicenseEntry->toArray();
 
             $plugin = null;
 
-            if($craftLicenseEntry->plugin) {
-                 $plugin = $craftLicenseEntry->plugin->toArray();
+            if ($craftLicenseEntry->plugin) {
+                $plugin = $craftLicenseEntry->plugin->toArray();
             }
 
             $craftLicense['plugin'] = $plugin;
@@ -71,13 +71,13 @@ class CraftIdController extends BaseApiController
 
         $pluginLicenseEntries = Entry::find()->section('licenses')->type('pluginLicense')->authorId($currentUser->id)->all();
 
-        foreach($pluginLicenseEntries as $pluginLicenseEntry) {
+        foreach ($pluginLicenseEntries as $pluginLicenseEntry) {
             $pluginLicense = $pluginLicenseEntry->toArray();
             $plugin = $pluginLicenseEntry->plugin;
             $pluginLicense['plugin'] = $plugin->toArray();
             $craftLicense = $pluginLicenseEntry->craftLicense->one();
 
-            if($craftLicense) {
+            if ($craftLicense) {
                 $pluginLicense['craftLicense'] = $craftLicense->toArray();
             } else {
                 $pluginLicense['craftLicense'] = null;
@@ -93,20 +93,20 @@ class CraftIdController extends BaseApiController
 
         $customers = [];
 
-        foreach($pluginElements as $pluginElement) {
+        foreach ($pluginElements as $pluginElement) {
             $entries = Entry::find()->section('licenses')->relatedTo($pluginElement)->all();
 
-            foreach($entries as $entry) {
+            foreach ($entries as $entry) {
 
                 $found = false;
 
-                foreach($customers as $c) {
-                    if($c['id'] == $entry->getAuthor()->id) {
+                foreach ($customers as $c) {
+                    if ($c['id'] == $entry->getAuthor()->id) {
                         $found = true;
                     }
                 }
 
-                if(!$found) {
+                if (!$found) {
                     $customer = [
                         'id' => $entry->getAuthor()->id,
                         'email' => $entry->getAuthor()->email,
@@ -124,13 +124,12 @@ class CraftIdController extends BaseApiController
 
         $categories = [];
         $categoryElements = Category::find()->group('pluginCategories')->all();
-        foreach($categoryElements as $categoryElement) {
+        foreach ($categoryElements as $categoryElement) {
             $categories[] = [
                 'id' => $categoryElement->id,
                 'title' => $categoryElement->title,
             ];
         }
-
 
 
         // Data
@@ -175,7 +174,8 @@ class CraftIdController extends BaseApiController
     // Private Methods
     // =========================================================================
 
-    private function _getPayouts() {
+    private function _getPayouts()
+    {
         return [
             [
                 'id' => 1,
@@ -207,7 +207,8 @@ class CraftIdController extends BaseApiController
         ];
     }
 
-    private function _getScheduledPayouts() {
+    private function _getScheduledPayouts()
+    {
         return [
             [
                 'id' => 8,
@@ -217,13 +218,14 @@ class CraftIdController extends BaseApiController
         ];
     }
 
-    private function _getPayments() {
+    private function _getPayments()
+    {
         return [
             [
                 'items' => [['id' => 6, 'name' => 'Analytics']],
                 'amount' => 99.00,
                 'customer' => [
-                'id' => 1,
+                    'id' => 1,
                     'name' => 'Benjamin David',
                     'email' => 'ben@pixelandtonic.com',
                 ],
@@ -233,7 +235,7 @@ class CraftIdController extends BaseApiController
                 'items' => [['id' => 6, 'name' => 'Analytics']],
                 'amount' => 99.00,
                 'customer' => [
-                'id' => 15,
+                    'id' => 15,
                     'name' => 'Andrew Welsh',
                     'email' => 'andrew@nystudio107.com',
                 ],
@@ -243,7 +245,7 @@ class CraftIdController extends BaseApiController
                 'items' => [['id' => 7, 'name' => 'Videos']],
                 'amount' => 99.00,
                 'customer' => [
-                'id' => 15,
+                    'id' => 15,
                     'name' => 'Andrew Welsh',
                     'email' => 'andrew@nystudio107.com',
                 ],
@@ -253,7 +255,7 @@ class CraftIdController extends BaseApiController
                 'items' => [['id' => 6, 'name' => 'Analytics'], ['id' => 7, 'name' => 'Videos']],
                 'amount' => 298.00,
                 'customer' => [
-                'id' => 15,
+                    'id' => 15,
                     'name' => 'Andrew Welsh',
                     'email' => 'andrew@nystudio107.com',
                 ],

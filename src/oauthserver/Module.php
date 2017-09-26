@@ -1,17 +1,18 @@
 <?php
+
 namespace craftcom\oauthserver;
 
+use Craft;
 use craft\events\RegisterCpNavItemsEvent;
+use craft\events\RegisterTemplateRootsEvent;
+use craft\events\RegisterUrlRulesEvent;
 use craft\helpers\UrlHelper;
 use craft\web\twig\variables\Cp;
+use craft\web\UrlManager;
+use craft\web\View;
+use craftcom\oauthserver\base\ModuleTrait;
 use craftcom\oauthserver\models\Settings;
 use yii\base\Event;
-use craft\events\RegisterTemplateRootsEvent;
-use craft\web\View;
-use craft\events\RegisterUrlRulesEvent;
-use craft\web\UrlManager;
-use Craft;
-use craftcom\oauthserver\base\ModuleTrait;
 
 class Module extends \yii\base\Module
 {
@@ -61,7 +62,7 @@ class Module extends \yii\base\Module
             $event->rules = array_merge($event->rules, $rules);
         });
 
-        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function (RegisterUrlRulesEvent $event) {
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $rules = [
                 'oauth/login' => 'oauth-server/oauth/login',
                 'oauth/authorize' => 'oauth-server/oauth/authorize',

@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\oauthserver\models;
 
 use craft\base\Model;
@@ -80,8 +81,7 @@ class AccessToken extends Model
     {
         parent::init();
 
-        if(is_string($this->scopes))
-        {
+        if (is_string($this->scopes)) {
             $this->scopes = Json::decode($this->scopes);
         }
     }
@@ -91,7 +91,7 @@ class AccessToken extends Model
      */
     public function getClient()
     {
-        if($this->clientId) {
+        if ($this->clientId) {
             return OauthServer::getInstance()->getClients()->getClientById($this->clientId);
         }
     }
@@ -112,7 +112,7 @@ class AccessToken extends Model
         $now = new \DateTime();
         $expiryDate = new \DateTime($this->expiryDate);
 
-        if($now->getTimestamp() > $expiryDate->getTimestamp()) {
+        if ($now->getTimestamp() > $expiryDate->getTimestamp()) {
             return true;
         }
 

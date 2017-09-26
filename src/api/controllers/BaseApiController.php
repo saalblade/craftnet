@@ -11,7 +11,6 @@ use GuzzleHttp\Client;
 use JsonSchema\Validator;
 use stdClass;
 use yii\web\BadRequestHttpException;
-use craft\elements\Entry;
 
 /**
  * Class BaseController
@@ -71,7 +70,7 @@ abstract class BaseApiController extends Controller
         $iconUrl = null;
         $icon = $plugin->icon;
 
-        if($icon) {
+        if ($icon) {
             $iconUrl = $icon->getUrl();
         }
 
@@ -80,7 +79,7 @@ abstract class BaseApiController extends Controller
 
         $screenshots = [];
 
-        foreach($plugin->screenshots as $screenshot) {
+        foreach ($plugin->screenshots as $screenshot) {
             $screenshots[] = $screenshot->getUrl();
         }
 
@@ -89,7 +88,7 @@ abstract class BaseApiController extends Controller
 
         $categoryIds = [];
 
-        foreach($plugin->categories as $category) {
+        foreach ($plugin->categories as $category) {
             $categoryIds[] = $category->id;
         }
 
@@ -101,7 +100,7 @@ abstract class BaseApiController extends Controller
             $response = $client->get('https://packagist.org/packages/'.$plugin->getDeveloper()->vendor.'/'.$plugin->slug.'.json');
             $data = Json::decode($response->getBody()->getContents());
             $package = $data['package'];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $package = null;
         }
 

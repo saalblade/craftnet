@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\oauthserver\records;
 
 use craft\db\ActiveRecord;

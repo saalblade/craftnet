@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\oauthserver\services;
 
 use Craft;
@@ -33,17 +34,14 @@ class Oauth extends Component
         $headers = Craft::$app->getRequest()->getHeaders();
         $jwt = substr($headers['Authorization'], 7);
 
-        if($jwt)
-        {
+        if ($jwt) {
             $token = $this->parseJwt($jwt);
             $claims = $token->getClaims();
 
             $accessToken = Module::getInstance()->getAccessTokens()->getAccessTokenByIdentifier($claims['jti']);
 
-            if($accessToken)
-            {
-                if(!empty($accessToken->userId))
-                {
+            if ($accessToken) {
+                if (!empty($accessToken->userId)) {
                     return Craft::$app->users->getUserById($accessToken->userId);
                 }
             }
@@ -57,8 +55,7 @@ class Oauth extends Component
     {
         $authCodes = Craft::$app->cache->get('oauthServer.authCodes');
 
-        if(!$authCodes)
-        {
+        if (!$authCodes) {
             $authCodes = [];
         }
 
@@ -72,8 +69,8 @@ class Oauth extends Component
     {
         return [
             'accessTokenExpiry' => Module::getInstance()->getSettings()->accessTokenExpiry,
-			'refreshTokenExpiry' => Module::getInstance()->getSettings()->refreshTokenExpiry,
-			'authCodeExpiry' => Module::getInstance()->getSettings()->authCodeExpiry,
+            'refreshTokenExpiry' => Module::getInstance()->getSettings()->refreshTokenExpiry,
+            'authCodeExpiry' => Module::getInstance()->getSettings()->authCodeExpiry,
         ];
     }
 
@@ -100,10 +97,8 @@ class Oauth extends Component
      */
     public function getClientById($id)
     {
-        foreach($this->getClients() as $client)
-        {
-            if($client['clientId'] == $id)
-            {
+        foreach ($this->getClients() as $client) {
+            if ($client['clientId'] == $id) {
                 return $client;
             }
         }
@@ -124,7 +119,7 @@ class Oauth extends Component
 
             $enabled = false;
 
-            if(in_array($grantHandle, $enabledGrants)) {
+            if (in_array($grantHandle, $enabledGrants)) {
                 $enabled = true;
             }
 
@@ -157,8 +152,8 @@ class Oauth extends Component
      */
     public function getGrant($grantClass, $enabledOnly = true)
     {
-        foreach($this->getGrants($enabledOnly) as $grant) {
-            if($grant['handle'] === $grantClass) {
+        foreach ($this->getGrants($enabledOnly) as $grant) {
+            if ($grant['handle'] === $grantClass) {
                 return $grant;
             }
         }
@@ -177,7 +172,7 @@ class Oauth extends Component
             'code' => 'AuthCodeGrant',
         ];
 
-        if(isset($responseTypes[$responseType])) {
+        if (isset($responseTypes[$responseType])) {
             return $this->getGrant($responseTypes[$responseType]);
         }
     }
@@ -196,7 +191,7 @@ class Oauth extends Component
             'authorization_code' => 'AuthCodeGrant',
         ];
 
-        if(isset($grantTypes[$grantType])) {
+        if (isset($grantTypes[$grantType])) {
             return $this->getGrant($grantTypes[$grantType]);
         }
     }

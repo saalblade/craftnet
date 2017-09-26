@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\oauthserver\services;
 
 use Craft;
@@ -23,19 +24,17 @@ class AccessTokens extends Component
      */
     public function getAccessTokenFromRequest($request = null)
     {
-        if(!$request) {
+        if (!$request) {
             $request = Craft::$app->getRequest();
         }
 
         $headers = $request->getHeaders();
         $jwt = substr($headers['Authorization'], 7);
 
-        if($jwt)
-        {
+        if ($jwt) {
             $token = Module::getInstance()->getOauth()->parseJwt($jwt);
 
-            if($token->isExpired())
-            {
+            if ($token->isExpired()) {
                 throw new \Exception("Token has expired.");
             }
 
@@ -53,10 +52,8 @@ class AccessTokens extends Component
         $records = AccessTokenRecord::find()->orderBy('isRevoked asc')->all();
         $accessTokens = [];
 
-        if(count($records) > 0)
-        {
-            foreach($records as $record)
-            {
+        if (count($records) > 0) {
+            foreach ($records as $record) {
                 $accessTokens[] = new AccessToken($record->getAttributes());
             }
         }
@@ -89,8 +86,7 @@ class AccessTokens extends Component
     {
         $record = AccessTokenRecord::findOne(['identifier' => $identifier, 'isRevoked' => $isRevoked]);
 
-        if($record)
-        {
+        if ($record) {
             return new AccessToken($record->getAttributes());
         }
     }
@@ -104,8 +100,7 @@ class AccessTokens extends Component
 
         $tokens = [];
 
-        foreach($records as $record)
-        {
+        foreach ($records as $record) {
             $tokens[] = new AccessToken($record->getAttributes());
         }
 
@@ -132,17 +127,13 @@ class AccessTokens extends Component
         $record->isRevoked = $model->isRevoked;
 
         // save record
-        if($record->save(false))
-        {
+        if ($record->save(false)) {
             // populate id
-            if($isNewAccessToken)
-            {
+            if ($isNewAccessToken) {
                 $model->id = $record->id;
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -173,7 +164,8 @@ class AccessTokens extends Component
     /**
      * @return bool
      */
-    public function clearAccessTokens() {
+    public function clearAccessTokens()
+    {
         Craft::$app->getDb()->createCommand()
             ->delete('{{%oauthserver_access_tokens}}')
             ->execute();
@@ -192,16 +184,12 @@ class AccessTokens extends Component
      */
     private function _getAccessTokenRecordById($id = null)
     {
-        if ($id)
-        {
+        if ($id) {
             $record = AccessTokenRecord::findOne($id);
-            if (!$record)
-            {
-                throw new \Exception(Craft::t('app', 'No access token exists with the ID “{id}”', array('id' => $id)));
+            if (!$record) {
+                throw new \Exception(Craft::t('app', 'No access token exists with the ID “{id}”', ['id' => $id]));
             }
-        }
-        else
-        {
+        } else {
             $record = new AccessTokenRecord();
         }
         return $record;

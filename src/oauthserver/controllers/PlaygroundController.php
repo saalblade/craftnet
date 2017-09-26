@@ -4,9 +4,9 @@ namespace craftcom\oauthserver\controllers;
 
 use Craft;
 use craft\helpers\UrlHelper;
-use craftcom\oauthserver\Module as OauthServer;
 use craft\web\Controller;
 use craftcms\oauth2\client\provider\CraftId;
+use craftcom\oauthserver\Module as OauthServer;
 use League\OAuth2\Client\Token\AccessToken;
 
 /**
@@ -47,8 +47,7 @@ class PlaygroundController extends Controller
 
         Craft::$app->getSession()->set('oauthServer.playground.grantHandle', $grantHandle);
 
-        switch($grantHandle)
-        {
+        switch ($grantHandle) {
             case 'ImplicitGrant':
                 return $this->connectImplicit();
 
@@ -76,7 +75,7 @@ class PlaygroundController extends Controller
         $expires_in = Craft::$app->getRequest()->getParam('expires_in');
         $state = Craft::$app->getRequest()->getParam('state');
 
-        if(!$access_token) {
+        if (!$access_token) {
             return $this->renderTemplate('oauth-server/playground/_implicit-callback');
         } else {
             $token = new AccessToken([
@@ -105,7 +104,7 @@ class PlaygroundController extends Controller
             $code = Craft::$app->getRequest()->getParam('code');
             $provider = $this->getAuthCodeProvider($client);
 
-            if($code) {
+            if ($code) {
                 $token = $provider->getAccessToken('authorization_code', [
                     'code' => $code
                 ]);
@@ -177,7 +176,7 @@ class PlaygroundController extends Controller
         return new CraftId([
             'clientId' => $client->identifier,
             'clientSecret' => $client->secret,
-            'redirectUri'  => UrlHelper::actionUrl('oauth-server/playground/auth-code-callback'),
+            'redirectUri' => UrlHelper::actionUrl('oauth-server/playground/auth-code-callback'),
         ]);
     }
 
@@ -191,8 +190,8 @@ class PlaygroundController extends Controller
         $scope = Craft::$app->getRequest()->getParam('scope');
 
         $provider = new CraftId([
-            'clientId'     => $client->identifier,
-            'redirectUri'  => UrlHelper::actionUrl('oauth-server/playground/implicit-callback'),
+            'clientId' => $client->identifier,
+            'redirectUri' => UrlHelper::actionUrl('oauth-server/playground/implicit-callback'),
         ]);
 
         $authorizationUrl = $provider->getAuthorizationUrl([
@@ -263,7 +262,7 @@ class PlaygroundController extends Controller
             ]);
 
             Craft::$app->getSession()->set('oauthServer.playground.token', $token);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage();
         }
 

@@ -2,7 +2,6 @@
 
 namespace craftcom\id\controllers;
 
-use Craft;
 use craft\web\Controller;
 
 /**

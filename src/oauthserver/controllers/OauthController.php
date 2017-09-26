@@ -3,6 +3,7 @@
 namespace craftcom\oauthserver\controllers;
 
 use Craft;
+use craft\web\Controller;
 use craftcom\oauthserver\Module;
 use craftcom\oauthserver\server\Entities\UserEntity;
 use craftcom\oauthserver\server\Repositories\AccessTokenRepository;
@@ -13,7 +14,6 @@ use craftcom\oauthserver\server\Repositories\ScopeRepository;
 use craftcom\oauthserver\server\Repositories\UserRepository;
 use craftcom\oauthserver\server\Response;
 use craftcom\oauthserver\web\assets\clientapproval\ClientApprovalAsset;
-use craft\web\Controller;
 use DateInterval;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -69,7 +69,7 @@ class OauthController extends Controller
             $data = json_decode($resultJson, true);
 
             return $this->asJson($data);
-        } catch(OAuthServerException $e) {
+        } catch (OAuthServerException $e) {
             return $this->asErrorJson($e->getHint());
         } catch (\Exception $e) {
             return $this->asErrorJson($e->getMessage());
@@ -84,14 +84,13 @@ class OauthController extends Controller
         $this->requireLogin();
 
         // Redirect the user to an authorization page and ask the user to approve the client and the scopes
-        if(!Craft::$app->getRequest()->getBodyParam('approve') && !Craft::$app->getRequest()->getBodyParam('deny'))
-        {
+        if (!Craft::$app->getRequest()->getBodyParam('approve') && !Craft::$app->getRequest()->getBodyParam('deny')) {
             $requestedScopes = explode(" ", Craft::$app->getRequest()->getParam('scope'));
 
             $scopes = [];
 
-            foreach($requestedScopes as $requestedScope) {
-                foreach(Module::getInstance()->getOauth()->getScopes() as $scope => $description) {
+            foreach ($requestedScopes as $requestedScope) {
+                foreach (Module::getInstance()->getOauth()->getScopes() as $scope => $description) {
                     if ($scope == $requestedScope) {
                         $scopes[$scope] = $description;
                     }
@@ -103,14 +102,12 @@ class OauthController extends Controller
             return $this->renderTemplate('oauth/clientApproval', [
                 'scopes' => $scopes,
             ]);
-        }
-        else
-        {
+        } else {
             $rememberMe = Craft::$app->getRequest()->getBodyParam('rememberMe');
 
             $customAccessTokenExpiry = null;
 
-            if($rememberMe) {
+            if ($rememberMe) {
                 $customAccessTokenExpiry = 'P30D';
             }
 
@@ -136,8 +133,7 @@ class OauthController extends Controller
             // (true = approved, false = denied)
             $approved = false;
 
-            if(Craft::$app->getRequest()->getBodyParam('approve'))
-            {
+            if (Craft::$app->getRequest()->getBodyParam('approve')) {
                 $approved = true;
             }
 
@@ -166,8 +162,7 @@ class OauthController extends Controller
 
         $accessToken = Module::getInstance()->getAccessTokens()->getAccessTokenByIdentifier($claims['jti']);
 
-        if($accessToken)
-        {
+        if ($accessToken) {
             $accessToken->isRevoked = true;
 
             Module::getInstance()->getAccessTokens()->saveAccessToken($accessToken);
@@ -232,20 +227,20 @@ class OauthController extends Controller
         $grantTypeParam = Craft::$app->getRequest()->getBodyParam('grant_type');
         $responseTypeParam = Craft::$app->getRequest()->getParam('response_type');
 
-        if($grantTypeParam) {
-            if(isset($grantTypes[$grantTypeParam])) {
+        if ($grantTypeParam) {
+            if (isset($grantTypes[$grantTypeParam])) {
                 $grantClass = $grantTypes[$grantTypeParam];
             }
-        } elseif($responseTypeParam) {
-            if(isset($responseTypes[$responseTypeParam])) {
+        } elseif ($responseTypeParam) {
+            if (isset($responseTypes[$responseTypeParam])) {
                 $grantClass = $responseTypes[$responseTypeParam];
             }
         }
 
-        if(isset($grantClass)) {
+        if (isset($grantClass)) {
             $grant = Module::getInstance()->getOauth()->getGrant($grantClass);
 
-            if($grant) {
+            if ($grant) {
                 // Initialize server repositories
                 $clientRepository = new ClientRepository();
                 $scopeRepository = new ScopeRepository();
@@ -274,14 +269,14 @@ class OauthController extends Controller
 
                 $accessTokenExpiry = new DateInterval(Module::getInstance()->getSettings()->accessTokenExpiry);
 
-                if($customAccessTokenExpiry) {
+                if ($customAccessTokenExpiry) {
                     $accessTokenExpiry = new DateInterval($customAccessTokenExpiry);
                 }
 
                 $refreshTokenExpiry = new DateInterval(Module::getInstance()->getSettings()->refreshTokenExpiry);
 
                 // Instantiate grant
-                switch($grantClass) {
+                switch ($grantClass) {
                     case 'ClientCredentialsGrant':
                         $grantType = new ClientCredentialsGrant();
                         break;

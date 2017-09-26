@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\oauthserver\services;
 
 use Craft;
@@ -24,10 +25,8 @@ class RefreshTokens extends Component
         $records = RefreshTokenRecord::find()->all();
         $refreshTokens = [];
 
-        if(count($records) > 0)
-        {
-            foreach($records as $record)
-            {
+        if (count($records) > 0) {
+            foreach ($records as $record) {
                 $refreshTokens[] = new RefreshToken($record->getAttributes());
             }
         }
@@ -59,8 +58,7 @@ class RefreshTokens extends Component
     {
         $record = RefreshTokenRecord::findOne(['identifier' => $identifier]);
 
-        if($record)
-        {
+        if ($record) {
             return new RefreshToken($record->getAttributes());
         }
     }
@@ -74,8 +72,7 @@ class RefreshTokens extends Component
     {
         $record = RefreshTokenRecord::findOne(['accessTokenId' => $id]);
 
-        if($record)
-        {
+        if ($record) {
             return new RefreshToken($record->getAttributes());
         }
     }
@@ -103,7 +100,8 @@ class RefreshTokens extends Component
     /**
      * @return bool
      */
-    public function clearRefreshTokens() {
+    public function clearRefreshTokens()
+    {
         Craft::$app->getDb()->createCommand()
             ->delete('{{%oauthserver_refresh_tokens}}')
             ->execute();
@@ -128,17 +126,13 @@ class RefreshTokens extends Component
         $record->expiryDate = $model->expiryDate;
 
         // save record
-        if($record->save(false))
-        {
+        if ($record->save(false)) {
             // populate id
-            if($isNewRefreshToken)
-            {
+            if ($isNewRefreshToken) {
                 $model->id = $record->id;
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -154,16 +148,12 @@ class RefreshTokens extends Component
      */
     private function _getRefreshTokenRecordById($id = null)
     {
-        if ($id)
-        {
+        if ($id) {
             $record = RefreshTokenRecord::findOne($id);
-            if (!$record)
-            {
-                throw new \Exception(Craft::t('app', 'No refresh token exists with the ID “{id}”', array('id' => $id)));
+            if (!$record) {
+                throw new \Exception(Craft::t('app', 'No refresh token exists with the ID “{id}”', ['id' => $id]));
             }
-        }
-        else
-        {
+        } else {
             $record = new RefreshTokenRecord();
         }
 

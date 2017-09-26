@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\oauthserver\services;
 
 use Craft;
@@ -24,10 +25,8 @@ class AuthCodes extends Component
         $records = AuthCodeRecord::find()->all();
         $authCodes = [];
 
-        if(count($records) > 0)
-        {
-            foreach($records as $record)
-            {
+        if (count($records) > 0) {
+            foreach ($records as $record) {
                 $authCodes[] = new AuthCode($record->getAttributes());
             }
         }
@@ -59,8 +58,7 @@ class AuthCodes extends Component
     {
         $record = AuthCodeRecord::findOne(['identifier' => $identifier]);
 
-        if($record)
-        {
+        if ($record) {
             return new AuthCode($record->getAttributes());
         }
     }
@@ -85,17 +83,13 @@ class AuthCodes extends Component
         $record->scopes = $model->scopes;
 
         // save record
-        if($record->save(false))
-        {
+        if ($record->save(false)) {
             // populate id
-            if($isNewAuthCode)
-            {
+            if ($isNewAuthCode) {
                 $model->id = $record->id;
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -121,7 +115,8 @@ class AuthCodes extends Component
     /**
      * @return bool
      */
-    public function clearAuthCodes() {
+    public function clearAuthCodes()
+    {
         Craft::$app->getDb()->createCommand()
             ->delete('{{%oauthserver_auth_codes}}')
             ->execute();
@@ -140,16 +135,12 @@ class AuthCodes extends Component
      */
     private function _getAuthCodeRecordById($id = null)
     {
-        if ($id)
-        {
+        if ($id) {
             $record = AuthCodeRecord::findOne($id);
-            if (!$record)
-            {
-                throw new \Exception(Craft::t('app', 'No auth code exists with the ID “{id}”', array('id' => $id)));
+            if (!$record) {
+                throw new \Exception(Craft::t('app', 'No auth code exists with the ID “{id}”', ['id' => $id]));
             }
-        }
-        else
-        {
+        } else {
             $record = new AuthCodeRecord();
         }
 

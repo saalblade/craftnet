@@ -4,9 +4,6 @@ namespace craftcom\id\controllers;
 
 use Craft;
 use craft\records\OAuthToken;
-use craftcom\id\controllers\BaseApiController;
-use craft\helpers\Json;
-use function GuzzleHttp\Psr7\stream_for;
 use League\OAuth2\Client\Provider\Github;
 use yii\web\Response;
 
@@ -83,36 +80,36 @@ class ConnectController extends BaseApiController
 
 
 //        $params = [
-  //          'client_id' => $this->_clientId,
-    //        'client_secret' => $this->_clientSecret,
-      //      'state' => Craft::$app->getSession()->get('oauth2state'),
+        //          'client_id' => $this->_clientId,
+        //        'client_secret' => $this->_clientSecret,
+        //      'state' => Craft::$app->getSession()->get('oauth2state'),
         //    'code' => $code,
 //        ];
 
         // try/catch
-  //      $httpClient = Craft::createGuzzleClient(['headers' => ['Accept' => 'application/json']]);
-    //    $response = $httpClient->request('post', $this->_tokenUrl, [
-      //      'json' => $params,
+        //      $httpClient = Craft::createGuzzleClient(['headers' => ['Accept' => 'application/json']]);
+        //    $response = $httpClient->request('post', $this->_tokenUrl, [
+        //      'json' => $params,
 //        ]);
 
 //        if ($response->getStatusCode() === 200) {
-  //          $responseBody = (string)$response->getBody();
-    //        $responseBody = Json::decodeIfJson($responseBody);
+        //          $responseBody = (string)$response->getBody();
+        //        $responseBody = Json::decodeIfJson($responseBody);
 
-            // Something went wrong.
-      //      if (!is_array($responseBody)) {
-                // something fucked up.
+        // Something went wrong.
+        //      if (!is_array($responseBody)) {
+        // something fucked up.
         //    }
 
 //            if (isset($responseBody['error'])) {
-                // something gracefully fucked up.
-  //          }
+        // something gracefully fucked up.
+        //          }
 
-    //        $accessToken = $responseBody['access_token'];
+        //        $accessToken = $responseBody['access_token'];
 //
-  //          $client = new \Github\Client();
-    //        $client->authenticate($accessToken, null, \Github\Client::AUTH_HTTP_TOKEN);
-      //      $test = $client->me()->show();
+        //          $client = new \Github\Client();
+        //        $client->authenticate($accessToken, null, \Github\Client::AUTH_HTTP_TOKEN);
+        //      $test = $client->me()->show();
 
 
         $tokenRecord = new OAuthToken();
@@ -122,8 +119,6 @@ class ConnectController extends BaseApiController
         $tokenRecord->expiresIn = $accessToken->getExpires();
         $tokenRecord->refreshToken = $accessToken->getRefreshToken();
         $tokenRecord->save();
-
-
 
 
         return $this->renderTemplate('account/developer/_validate', ['user' => $user->getNickname(), 'token' => $accessToken->getToken()]);
@@ -168,16 +163,14 @@ class ConnectController extends BaseApiController
         $request = $request->withHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 
-
 //        $request = $provider->getAuthenticatedRequest(
-  //          'GET',
-    //        $provider->apiDomain.'/repos/takobell/Stringy/hooks',
-      //      $token
+        //          'GET',
+        //        $provider->apiDomain.'/repos/takobell/Stringy/hooks',
+        //      $token
         //);
 
 
         $response = $provider->getParsedResponse($request);
-
 
 
         $body = (string)$response->getBody();
@@ -188,8 +181,8 @@ class ConnectController extends BaseApiController
     private function _getProvider()
     {
         $provider = new Github([
-            'clientId'          => $this->_clientId,
-            'clientSecret'      => $this->_clientSecret,
+            'clientId' => $this->_clientId,
+            'clientSecret' => $this->_clientSecret,
         ]);
 
         return $provider;

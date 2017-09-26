@@ -1,17 +1,18 @@
 <?php
+
 namespace craftcom\id\controllers;
 
+use AdamPaterson\OAuth2\Client\Provider\Stripe as StripeOauthProvider;
 use Craft;
 use craft\helpers\Db;
+use craft\helpers\UrlHelper;
 use craft\records\OAuthToken;
 use craftcom\id\records\StripeCustomer as StripeCustomerRecord;
 use League\OAuth2\Client\Token\AccessToken;
-use yii\web\Response;
-use AdamPaterson\OAuth2\Client\Provider\Stripe as StripeOauthProvider;
-use craft\helpers\UrlHelper;
 use Stripe\Account;
 use Stripe\Customer;
 use Stripe\Stripe;
+use yii\web\Response;
 
 /**
  * Class StripeController
@@ -53,7 +54,7 @@ class StripeController extends BaseApiController
             ->where(Db::parseParam('userId', $user->id))
             ->one();
 
-        if(!$customerRecord) {
+        if (!$customerRecord) {
             $customerRecord = new StripeCustomerRecord();
             $customerRecord->userId = $user->id;
         }
@@ -61,12 +62,12 @@ class StripeController extends BaseApiController
 
         // Remove existing token
 
-        if($customerRecord->oauthTokenId) {
+        if ($customerRecord->oauthTokenId) {
             $tokenRecord = OAuthToken::find()
                 ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
                 ->one();
 
-            if($tokenRecord) {
+            if ($tokenRecord) {
                 $tokenRecord->delete();
             }
         }
@@ -128,12 +129,12 @@ class StripeController extends BaseApiController
         $account = Account::retrieve($accountId);
         $account->deauthorize();
 
-        if($tokenRecord) {
+        if ($tokenRecord) {
             $tokenRecord->delete();
         }
 
 
-        if($customerRecord) {
+        if ($customerRecord) {
             $customerRecord->stripeAccountId = null;
             $customerRecord->save();
         }
@@ -153,7 +154,7 @@ class StripeController extends BaseApiController
             ->where(Db::parseParam('userId', $userId))
             ->one();
 
-        if($customerRecord && $customerRecord->oauthTokenId) {
+        if ($customerRecord && $customerRecord->oauthTokenId) {
             $tokenRecord = OAuthToken::find()
                 ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
                 ->one();
@@ -164,11 +165,11 @@ class StripeController extends BaseApiController
             $account = Account::retrieve();
 
             return $this->asJson($account);
-
         }
 
         return $this->asJson(null);
     }
+
     /**
      * Handles /stripe/customer requests.
      *
@@ -183,7 +184,7 @@ class StripeController extends BaseApiController
 
         $customer = null;
 
-        if($customerRecord && $customerRecord->stripeCustomerId) {
+        if ($customerRecord && $customerRecord->stripeCustomerId) {
             Stripe::setApiKey(Craft::$app->getConfig()->getGeneral()->stripeClientSecret);
             $customer = Customer::retrieve($customerRecord->stripeCustomerId);
         }
@@ -204,30 +205,30 @@ class StripeController extends BaseApiController
             ->where(Db::parseParam('userId', $user->id))
             ->one();
 
-        if(!$customerRecord) {
+        if (!$customerRecord) {
             $customerRecord = new StripeCustomerRecord();
             $customerRecord->userId = $user->id;
         }
 
-        if(!$customerRecord->stripeCustomerId) {
-            $customer = Customer::create(array(
+        if (!$customerRecord->stripeCustomerId) {
+            $customer = Customer::create([
                 "email" => $user->email,
                 "description" => "Customer for ".$user->email,
-            ));
+            ]);
             $customerRecord->stripeCustomerId = $customer->id;
         }
 
         $customerRecord->save();
 
-        if($customerRecord->stripeCustomerId) {
+        if ($customerRecord->stripeCustomerId) {
             $token = Craft::$app->getRequest()->getParam('token');
             $customer = Customer::retrieve($customerRecord->stripeCustomerId);
 
-            if($customer->default_source) {
+            if ($customer->default_source) {
                 $customer->sources->retrieve($customer->default_source)->delete();
             }
 
-            $card = $customer->sources->create(array('source' => $token));
+            $card = $customer->sources->create(['source' => $token]);
             $customer->default_source = $card->id;
             $customer->save();
 
@@ -247,10 +248,10 @@ class StripeController extends BaseApiController
             ->where(Db::parseParam('userId', $user->id))
             ->one();
 
-        if($customerRecord && $customerRecord->stripeCustomerId) {
+        if ($customerRecord && $customerRecord->stripeCustomerId) {
             $customer = Customer::retrieve($customerRecord->stripeCustomerId);
 
-            if($customer->default_source) {
+            if ($customer->default_source) {
                 $customer->sources->retrieve($customer->default_source)->delete();
                 return $this->asJson(['success' => true]);
             }

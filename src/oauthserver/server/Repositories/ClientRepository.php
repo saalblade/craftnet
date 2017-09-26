@@ -2,11 +2,10 @@
 
 namespace craftcom\oauthserver\server\Repositories;
 
-use Craft;
 use craftcom\oauthserver\Module;
+use craftcom\oauthserver\server\Entities\ClientEntity;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use craftcom\oauthserver\server\Entities\ClientEntity;
 
 class ClientRepository implements ClientRepositoryInterface
 {
@@ -28,12 +27,12 @@ class ClientRepository implements ClientRepositoryInterface
     {
         $client = Module::getInstance()->getClients()->getClientByIdentifier($clientIdentifier);
 
-        if($client) {
+        if ($client) {
             $clientEntity = new ClientEntity;
             $clientEntity->setIdentifier($client->identifier);
             $clientEntity->setName($client->name);
 
-            if($client->redirectUriLocked) {
+            if ($client->redirectUriLocked) {
                 $clientEntity->setRedirectUri($client->redirectUri);
             }
 

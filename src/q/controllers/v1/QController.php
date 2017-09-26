@@ -23,8 +23,7 @@ class QController extends BaseApiController
         //$body = $this->getRequestBody('updates-request');
         $numJobs = Craft::$app->getRequest()->getParam('numJobs');
 
-        for ($counter = 0; $counter < $numJobs; $counter++)
-        {
+        for ($counter = 0; $counter < $numJobs; $counter++) {
             //$job = new TestJob();
             //Craft::$app->queue->push($job);
         }

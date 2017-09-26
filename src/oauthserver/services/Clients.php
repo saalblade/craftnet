@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\oauthserver\services;
 
 use Craft;
@@ -24,10 +25,8 @@ class Clients extends Component
         $records = ClientRecord::find()->all();
         $clients = [];
 
-        if(count($records) > 0)
-        {
-            foreach($records as $record)
-            {
+        if (count($records) > 0) {
+            foreach ($records as $record) {
                 $clients[] = new Client($record->getAttributes());
             }
         }
@@ -59,8 +58,7 @@ class Clients extends Component
     {
         $record = ClientRecord::findOne(['identifier' => $identifier]);
 
-        if($record)
-        {
+        if ($record) {
             return new Client($record->getAttributes());
         }
     }
@@ -91,17 +89,13 @@ class Clients extends Component
         $record->redirectUriLocked = $client->redirectUriLocked;
 
         // save record
-        if($record->save(false))
-        {
+        if ($record->save(false)) {
             // populate id
-            if($isNewClient)
-            {
+            if ($isNewClient) {
                 $client->id = $record->id;
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -140,16 +134,12 @@ class Clients extends Component
      */
     private function _getClientRecordById($id = null)
     {
-        if ($id)
-        {
+        if ($id) {
             $record = ClientRecord::findOne($id);
-            if (!$record)
-            {
-                throw new \Exception(Craft::t('app', 'No client exists with the ID “{id}”', array('id' => $id)));
+            if (!$record) {
+                throw new \Exception(Craft::t('app', 'No client exists with the ID “{id}”', ['id' => $id]));
             }
-        }
-        else
-        {
+        } else {
             $record = new ClientRecord();
         }
         return $record;

@@ -3,8 +3,8 @@
 namespace craftcom\oauthserver\controllers;
 
 use Craft;
-use craftcom\oauthserver\Module as OauthServer;
 use craft\web\Controller;
+use craftcom\oauthserver\Module as OauthServer;
 use yii\web\Response;
 
 /**

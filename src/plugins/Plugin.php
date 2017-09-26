@@ -440,12 +440,12 @@ class Plugin extends Element
 
         $categoryData = [];
         foreach ($this->getCategories() as $i => $category) {
-            $categoryData[] = [$this->id, $category->id, $i+1];
+            $categoryData[] = [$this->id, $category->id, $i + 1];
         }
 
         $screenshotData = [];
         foreach ($this->getScreenshots() as $i => $screenshot) {
-            $screenshotData[] = [$this->id, $screenshot->id, $i+1];
+            $screenshotData[] = [$this->id, $screenshot->id, $i + 1];
         }
 
         $db = Craft::$app->getDb();

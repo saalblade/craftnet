@@ -32,7 +32,7 @@ class PluginsController extends Controller
         if (!parent::beforeAction($action)) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -76,7 +76,7 @@ class PluginsController extends Controller
         // Get the icon, if we have one
 
         if ($icon = $this->_getIcon($api, $owner, $repo, $ref, $config, $handle, $name)) {
-            if(Craft::$app->getRequest()->getIsCpRequest()) {
+            if (Craft::$app->getRequest()->getIsCpRequest()) {
                 $iconHtml = Craft::$app->getView()->renderTemplate('_elements/element', [
                     'element' => $icon
                 ]);
@@ -113,10 +113,9 @@ class PluginsController extends Controller
                     throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
                 }
 
-                if(!Craft::$app->getUser()->getIsAdmin() && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+                if (!Craft::$app->getUser()->getIsAdmin() && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                     throw new ForbiddenHttpException('User is not permitted to perform this action');
                 }
-
             } else {
                 $plugin = new Plugin([
                     'categories' => [],
@@ -140,7 +139,7 @@ class PluginsController extends Controller
                 throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
             }
 
-            if(!Craft::$app->getUser()->getIsAdmin() && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+            if (!Craft::$app->getUser()->getIsAdmin() && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                 throw new ForbiddenHttpException('User is not permitted to perform this action');
             }
         } else {
@@ -149,12 +148,12 @@ class PluginsController extends Controller
 
         $plugin->enabled = (bool)$request->getBodyParam('enabled');
 
-        if(!$plugin->developerId) {
+        if (!$plugin->developerId) {
             $plugin->developerId = Craft::$app->getUser()->getId();
         }
-        
+
         // Only admins are able to change developer for a plugin
-        if(Craft::$app->getUser()->getIsAdmin() && isset($request->getBodyParam('developerId')[0])) {
+        if (Craft::$app->getUser()->getIsAdmin() && isset($request->getBodyParam('developerId')[0])) {
             $plugin->developerId = $request->getBodyParam('developerId')[0];
         }
 
@@ -178,7 +177,7 @@ class PluginsController extends Controller
 
         // Front-end icon upload
 
-        if(!Craft::$app->getRequest()->getIsCpRequest()) {
+        if (!Craft::$app->getRequest()->getIsCpRequest()) {
 
             $iconFile = UploadedFile::getInstanceByName('icon');
 
