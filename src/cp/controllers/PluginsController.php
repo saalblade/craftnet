@@ -171,8 +171,8 @@ class PluginsController extends Controller
         $plugin->documentationUrl = $request->getBodyParam('documentationUrl');
         $plugin->changelogUrl = $request->getBodyParam('changelogUrl');
 
-        $plugin->categories = Category::find()->id($request->getBodyParam('categoryIds'))->all();
-        $plugin->screenshots = Asset::find()->id($request->getBodyParam('screenshotIds'))->all();
+        $plugin->setCategories(Category::find()->id($request->getBodyParam('categoryIds'))->all());
+        $plugin->setScreenshots(Asset::find()->id($request->getBodyParam('screenshotIds'))->all());
 
 
         // Front-end icon upload
