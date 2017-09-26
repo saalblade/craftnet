@@ -151,12 +151,13 @@ class PluginsController extends Controller
 
         if(!$plugin->developerId) {
             $plugin->developerId = Craft::$app->getUser()->getId();
-
-            // Only admins are able to change developer for a plugin
-            if(Craft::$app->getUser()->getIsAdmin() && isset($request->getBodyParam('developerId')[0])) {
-                $plugin->developerId = $request->getBodyParam('developerId')[0];
-            }
         }
+        
+        // Only admins are able to change developer for a plugin
+        if(Craft::$app->getUser()->getIsAdmin() && isset($request->getBodyParam('developerId')[0])) {
+            $plugin->developerId = $request->getBodyParam('developerId')[0];
+        }
+
 
         $plugin->iconId = $request->getBodyParam('iconId')[0] ?? null;
         $plugin->packageName = $request->getBodyParam('packageName');
