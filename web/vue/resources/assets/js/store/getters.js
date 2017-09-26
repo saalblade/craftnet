@@ -68,6 +68,12 @@ export const plugins = state => {
     }
 };
 
+export const categories = state => {
+    if(state.craftId) {
+        return state.craftId.categories;
+    }
+};
+
 export const userIsInGroup = state => {
     return handle => {
         return state.craftId.currentUser.groups.find(g => g.handle === handle)

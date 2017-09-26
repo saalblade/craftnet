@@ -87,10 +87,10 @@ abstract class BaseApiController extends Controller
 
         // Categories
 
-        $categories = [];
+        $categoryIds = [];
 
         foreach($plugin->categories as $category) {
-            $categories[] = $category->id;
+            $categoryIds[] = $category->id;
         }
 
 
@@ -129,7 +129,7 @@ abstract class BaseApiController extends Controller
             'developerVendor' => $plugin->getDeveloper()->vendor,
 
             'screenshots' => $screenshots,
-            'categories' => $categories,
+            'categoryIds' => $categoryIds,
             'package' => $package,
         ];
     }

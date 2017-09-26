@@ -3,6 +3,7 @@
 namespace craftcom\api\controllers\v1;
 
 use Craft;
+use craft\elements\Category;
 use craft\elements\Entry;
 use craftcom\api\controllers\BaseApiController;
 use craftcom\plugins\Plugin;
@@ -116,6 +117,18 @@ class CraftIdController extends BaseApiController
         }
 
 
+        // Categories
+
+        $categories = [];
+        $categoryElements = Category::find()->group('pluginCategories')->all();
+        foreach($categoryElements as $categoryElement) {
+            $categories[] = [
+                'id' => $categoryElement->id,
+                'title' => $categoryElement->title,
+            ];
+        }
+
+
         // Data
 
         $data = [
@@ -149,6 +162,7 @@ class CraftIdController extends BaseApiController
             'payouts' => $this->_getPayouts(),
             'payoutsScheduled' => $this->_getScheduledPayouts(),
             'payments' => $this->_getPayments(),
+            'categories' => $categories,
         ];
 
         return $this->asJson($data);

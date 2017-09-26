@@ -92,7 +92,7 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     statePlugin.license = formData.get('license');
     statePlugin.price = (formData.get('price') ? formData.get('price') : '');
     statePlugin.renewalPrice = (formData.get('renewalPrice') ? formData.get('renewalPrice') : '');
-    statePlugin.categoryIds = formData.get('categoryIds');
+    statePlugin.categoryIds = formData.getAll('categoryIds[]');
     statePlugin.screenshotIds = formData.get('screenshotIds');
 
     if(newPlugin) {
