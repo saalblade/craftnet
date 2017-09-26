@@ -76,7 +76,7 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
 
     statePlugin.siteId = formData.get('siteId');
     statePlugin.enabled = formData.get('enabled');
-    statePlugin.pluginId = formData.get('pluginId');
+    statePlugin.pluginId = data.id;
     statePlugin.icon = formData.get('icon');
     statePlugin.iconUrl = data.iconUrl+'?'+ Math.floor(Math.random() * 1000000);
     statePlugin.iconId = data.iconId;
