@@ -10,9 +10,9 @@
 
         </template>
 
-        <nav class="navbar navbar-expand">
+        <nav class="navbar navbar-expand navbar-light bg-light mb-5">
             <div class="container">
-                <router-link class="navbar-brand" to="/">Craft ID</router-link>
+                <router-link class="navbar-brand ml-3" to="/">Craft ID</router-link>
 
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ml-auto">
@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <template v-if="userIsInGroup('staff')">
-                        <h5 class="mt-3">Account</h5>
+                        <h5>Account</h5>
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item"><router-link class="nav-link" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
                             <li class="nav-item"><router-link class="nav-link" to="/account/billing"><i class="fa fa-file-text-o"></i> Billing</router-link></li>
@@ -57,7 +57,7 @@
                     </template>
 
                     <template v-else>
-                        <h5 class="mt-3">Account</h5>
+                        <h5>Account</h5>
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item"><router-link class="nav-link" to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
                             <li class="nav-item"><router-link class="nav-link" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>

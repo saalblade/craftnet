@@ -102,11 +102,11 @@ export const saveLicense = ({commit, state}, license) => {
     })
 };
 
-export const savePlugin = ({commit, state}, plugin) => {
+export const savePlugin = ({commit, state}, formData) => {
     return new Promise((resolve, reject) => {
-        api.savePlugin(plugin, data => {
+        api.savePlugin(formData, data => {
             if (data.success) {
-                commit(types.SAVE_PLUGIN, {plugin, data});
+                commit(types.SAVE_PLUGIN, {formData, data});
                 resolve(data);
             } else {
                 reject(data);

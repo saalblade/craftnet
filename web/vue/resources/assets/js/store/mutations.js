@@ -63,9 +63,9 @@ export const SAVE_LICENSE = (state, {license, response}) => {
     }
 };
 
-export const SAVE_PLUGIN = (state, {plugin, data}) => {
+export const SAVE_PLUGIN = (state, {formData, data}) => {
     let newPlugin = false;
-    let statePlugin = state.craftId.plugins.find(p => p.id == plugin.id);
+    let statePlugin = state.craftId.plugins.find(p => p.id == formData.get('pluginId'));
 
     if(!statePlugin) {
         statePlugin = {
@@ -74,9 +74,26 @@ export const SAVE_PLUGIN = (state, {plugin, data}) => {
         newPlugin = true;
     }
 
-    for (let attribute in plugin) {
-        statePlugin[attribute] = plugin[attribute];
-    }
+    statePlugin.siteId = formData.get('siteId');
+    statePlugin.enabled = formData.get('enabled');
+    statePlugin.pluginId = formData.get('pluginId');
+    statePlugin.icon = formData.get('icon');
+    statePlugin.iconUrl = data.iconUrl+'?'+ Math.floor(Math.random() * 1000000);
+    statePlugin.iconId = data.iconId;
+    statePlugin.developerId = formData.get('developerId');
+    statePlugin.handle = formData.get('handle');
+    statePlugin.packageName = formData.get('packageName');
+    statePlugin.name = formData.get('name');
+    statePlugin.shortDescription = formData.get('shortDescription');
+    statePlugin.longDescription = formData.get('longDescription');
+    statePlugin.documentationUrl = formData.get('documentationUrl');
+    statePlugin.changelogUrl = formData.get('changelogUrl');
+    // statePlugin.repository = formData.get('repository');
+    statePlugin.license = formData.get('license');
+    statePlugin.price = (formData.get('price') ? formData.get('price') : '');
+    statePlugin.renewalPrice = (formData.get('renewalPrice') ? formData.get('renewalPrice') : '');
+    statePlugin.categoryIds = formData.get('categoryIds');
+    statePlugin.screenshotIds = formData.get('screenshotIds');
 
     if(newPlugin) {
         state.craftId.plugins.push(statePlugin);

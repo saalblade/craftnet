@@ -2,48 +2,111 @@
     <div class="mb-3">
 
         <form @submit.prevent="save()">
-            <div class="d-flex flex-row">
-                <div class="flex-grow">
-                    <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" />
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    GitHub Repository
                 </div>
-                <div class="form-group ml-2">
-                    <label>&nbsp;</label>
-                    <input type="button" class="btn btn-primary form-control" :disabled="!pluginDraft.repository" @click="loadDetails()" value="Load details">
+                <div class="card-body">
+
+                    <div class="d-flex flex-row">
+                        <div class="flex-grow">
+                            <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" />
+                        </div>
+                        <div class="form-group ml-2">
+                            <label>&nbsp;</label>
+                            <input type="button" class="btn btn-secondary form-control" :disabled="!pluginDraft.repository" @click="loadDetails()" value="Load details">
+                        </div>
+                        <div class="spinner" :class="{'d-none': !loading}"></div>
+                    </div>
+
                 </div>
-                <div class="spinner" :class="{'d-none': !loading}"></div>
             </div>
 
-            <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" />
-            <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" />
-            <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" />
+            <div class="card mb-3">
+                <div class="card-header">
+                    Plugin Icon
+                </div>
+                <div class="card-body">
 
+                    <div class="row">
+                        <div class="col-sm-2">
 
-            <div class="form-group">
-                <label>Icon</label><br />
-                <img :src="pluginDraft.iconUrl" height="32" />
+                            <div class="form-group">
+                                <img :src="pluginDraft.iconUrl" height="80" />
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <input type="file" ref="iconFile" class="form-control" @change="changeIcon">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
-            <text-field id="iconId" label="Icon ID" v-model="pluginDraft.iconId" :errors="errors.iconId" />
-            <text-field id="developerId" label="Developer ID" v-model="pluginDraft.developerId" :errors="errors.developerId" />
+            <div class="card mb-3">
+                <div class="card-header">
+                    Plugin Details
+                </div>
+                <div class="card-body">
 
-            <text-field id="shortDescription" label="Short Description" v-model="pluginDraft.shortDescription" :errors="errors.shortDescription" />
-            <textarea-field id="longDescription" label="Long Description" v-model="pluginDraft.longDescription" :errors="errors.longDescription" rows="10" />
-            <text-field id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
-            <text-field id="changelogUrl" label="Changelog URL" v-model="pluginDraft.changelogUrl" :errors="errors.changelogUrl" />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" />
+                        </div>
+                        <div class="col-sm-6">
+                            <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" />
+                        </div>
+                        <div class="col-sm-6">
+                            <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" />
+                        </div>
+                        <div class="col-sm-6">
+                            <text-field id="developerId" label="Developer ID" v-model="pluginDraft.developerId" :errors="errors.developerId" />
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <label for="license">License</label>
+                    <text-field id="shortDescription" label="Short Description" v-model="pluginDraft.shortDescription" :errors="errors.shortDescription" />
+                    <textarea-field id="longDescription" label="Long Description" v-model="pluginDraft.longDescription" :errors="errors.longDescription" rows="16" />
+                    <text-field id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
+                    <text-field id="changelogUrl" label="Changelog URL" v-model="pluginDraft.changelogUrl" :errors="errors.changelogUrl" />
 
-                <select id="license" class="form-control" v-model="pluginDraft.license">
-                    <option value="craft">Craft</option>
-                    <option value="mit">MIT</option>
-                </select>
+                    <div class="form-group">
+                        <label for="license">License</label>
+
+                        <select id="license" class="form-control" v-model="pluginDraft.license">
+                            <option value="craft">Craft</option>
+                            <option value="mit">MIT</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />
-            <text-field id="renewalPrice" label="Renewal Price" v-model="pluginDraft.renewalPrice" :errors="errors.renewalPrice" />
+            <div class="card mb-3">
+                <div class="card-header">
+                    Pricing
+                </div>
+                <div class="card-body">
+
+                    <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />
+                    <text-field id="renewalPrice" label="Renewal Price" v-model="pluginDraft.renewalPrice" :errors="errors.renewalPrice" />
+
+                </div>
+            </div>
 
             <input type="submit" class="btn btn-primary" value="Save">
+
+            <div class="card border-danger mt-5 mb-3">
+                <div class="card-header text-white bg-danger">Danger Zone</div>
+                <div class="card-body">
+                    <h5>Delete plugin</h5>
+                    <p>Deleting a plugin is permanent and cannot be undone.</p>
+                    <div><a href="#" class="btn btn-outline-danger">Delete Plugin</a></div>
+                </div>
+            </div>
+
+
         </form>
     </div>
 </template>
@@ -64,6 +127,7 @@
                 loading: false,
                 pluginDraft: {
                     id: null,
+                    icon: null,
                     iconId: null,
                     developerId: null,
                     handle: null,
@@ -75,8 +139,9 @@
                     changelogUrl: null,
                     repository: null,
                     license: 'craft',
-                    price: null,
-                    renewalPrice: null,
+                    price: 0,
+                    renewalPrice: 0,
+                    iconUrl: null,
                 },
                 errors: {},
             }
@@ -95,6 +160,17 @@
         },
 
         methods: {
+            changeIcon(ev) {
+                this.pluginDraft.icon = ev.target.value;
+
+                let reader = new FileReader();
+
+                reader.onload = function (e) {
+                    this.pluginDraft.iconUrl = e.target.result
+                }.bind(this);
+
+                reader.readAsDataURL(this.$refs.iconFile.files[0]);
+            },
             loadDetails() {
                 this.loading = true;
 
@@ -117,6 +193,8 @@
                         this.pluginDraft.shortDescription = response.body.shortDescription;
                         this.pluginDraft.longDescription = response.body.longDescription;
                         this.pluginDraft.packageName = response.body.packageName;
+                        this.pluginDraft.iconId = response.body.iconId;
+                        this.pluginDraft.iconUrl = response.body.iconUrl;
                         this.loading = false;
                     })
                     .catch(response => {
@@ -124,24 +202,28 @@
                     });
             },
             save() {
-                this.$store.dispatch('savePlugin', {
-                    id: this.pluginDraft.id,
-                    iconId: [parseInt(this.pluginDraft.iconId)],
-                    developerId: [parseInt(this.pluginDraft.developerId)],
-                    handle: this.pluginDraft.handle,
-                    packageName: this.pluginDraft.packageName,
-                    name: this.pluginDraft.name,
-                    shortDescription: this.pluginDraft.shortDescription,
-                    longDescription: this.pluginDraft.longDescription,
-                    documentationUrl: this.pluginDraft.documentationUrl,
-                    changelogUrl: this.pluginDraft.changelogUrl,
-                    repository: this.pluginDraft.repository,
-                    license: this.pluginDraft.license,
-                    price: this.pluginDraft.price,
-                    renewalPrice: this.pluginDraft.renewalPrice,
-                    categoryIds: '',
-                    screenshotIds: '',
-                }).then((data) => {
+                let formData = new FormData();
+                formData.append('siteId', 1);
+                formData.append('enabled', 1);
+                formData.append('pluginId', this.pluginDraft.id);
+                formData.append('iconId[]', parseInt(this.pluginDraft.iconId));
+                formData.append('icon', this.$refs.iconFile.files[0]);
+                formData.append('developerId', [parseInt(this.pluginDraft.developerId)]);
+                formData.append('handle', this.pluginDraft.handle);
+                formData.append('packageName', this.pluginDraft.packageName);
+                formData.append('name', this.pluginDraft.name);
+                formData.append('shortDescription', this.pluginDraft.shortDescription);
+                formData.append('longDescription', this.pluginDraft.longDescription);
+                formData.append('documentationUrl', this.pluginDraft.documentationUrl);
+                formData.append('changelogUrl', this.pluginDraft.changelogUrl);
+                formData.append('repository', this.pluginDraft.repository);
+                formData.append('license', this.pluginDraft.license);
+                formData.append('price', this.pluginDraft.price);
+                formData.append('renewalPrice', this.pluginDraft.renewalPrice);
+                formData.append('categoryIds', '');
+                formData.append('screenshotIds', '');
+
+                this.$store.dispatch('savePlugin', formData).then((data) => {
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/developer/plugins'})
                 }).catch((data) => {

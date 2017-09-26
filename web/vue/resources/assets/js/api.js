@@ -114,30 +114,13 @@ export default {
             .catch(response => cbError(response));
     },
 
-    savePlugin(plugin, cb, cbError) {
-        let body = {
-            pluginId: null,
-            siteId: 1,
-            enabled: 1,
-            fields: {}
-        };
-
-        for (let attribute in plugin) {
-            switch (attribute) {
-                case 'id':
-                    body['pluginId'] = plugin[attribute];
-                    break;
-                default:
-                    body[attribute] = plugin[attribute];
-            }
-        }
-
-        body['action'] = 'craftcom/plugins/save';
-        body[csrfTokenName] = csrfTokenValue;
+    savePlugin(formData, cb, cbError) {
+        formData.append('action', 'craftcom/plugins/save');
+        formData.append(csrfTokenName, csrfTokenValue);
 
         let options = { emulateJSON: true };
 
-        Vue.http.post(window.craftActionUrl+'/craftcom/plugins/save', body, options)
+        Vue.http.post(window.craftActionUrl+'/craftcom/plugins/save', formData, options)
             .then(responsex => cb(responsex.body))
             .catch(responsey => cbError(responsey));
     }
