@@ -47,7 +47,8 @@ return [
         ],
 
         'stripeClientId' => 'ca_2b3yXOngHtKxb4cDEGHeCMhrNwXyWvu5',
-        'stripeClientSecret' => 'sk_test_FgnfF68q9L8Hp3RRDETaJefc'
+        'stripeClientSecret' => 'sk_test_FgnfF68q9L8Hp3RRDETaJefc',
+        'enablePluginStoreCache' => true,
     ],
     'prod' => [
         'allowAutoUpdates' => false,
@@ -61,6 +62,7 @@ return [
         'allowAutoUpdates' => true,
         'craftApiUrl' => 'http://api.craftcms.dev/v1',
         'craftIdUrl' => 'http://id.craftcms.dev',
-        'defaultCookieDomain' => '.craftcms.dev'
+        'defaultCookieDomain' => '.craftcms.dev',
+        'enablePluginStoreCache' => false,
     ]
 ];

@@ -33,7 +33,12 @@ class PluginStoreController extends BaseApiController
             $cacheKey = 'pluginStoreDataCraftId';
         }
 
-        $pluginStoreData = Craft::$app->getCache()->get($cacheKey);
+        $pluginStoreData = null;
+        $enablePluginStoreCache = Craft::$app->getConfig()->getGeneral()->enablePluginStoreCache;
+
+        if($enablePluginStoreCache) {
+            $pluginStoreData = Craft::$app->getCache()->get($cacheKey);
+        }
 
         if(!$pluginStoreData) {
             // Featured Plugins
@@ -108,7 +113,9 @@ class PluginStoreController extends BaseApiController
                 'plugins' => $plugins,
             ];
 
-            Craft::$app->getCache()->set($cacheKey, $pluginStoreData, ( 10 * 60 ));
+            if($enablePluginStoreCache) {
+                Craft::$app->getCache()->set($cacheKey, $pluginStoreData, ( 10 * 60 ));
+            }
         }
 
         return $this->asJson($pluginStoreData);
