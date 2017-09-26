@@ -52,7 +52,7 @@ class PluginStoreController extends BaseApiController
 
                 $pluginElements = $featuredPluginEntry->plugins;
 
-                foreach ($pluginElements as $plugin) {
+                foreach ($pluginElements->all() as $plugin) {
                     if ($plugin) {
                         if ($enableCraftId || (!$enableCraftId && !$plugin->price)) {
                             $plugins[] = $plugin->id;
