@@ -10,7 +10,10 @@ use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
 use craftcom\composer\PackageManager;
+use craftcom\cp\fields\Plugins;
 use yii\base\Event;
+use craft\events\RegisterComponentTypesEvent;
+use craft\services\Fields;
 
 /**
  * @property PackageManager $packageManager
@@ -68,6 +71,10 @@ class Module extends \yii\base\Module
 
         Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
             $e->roots['craftcom'] = __DIR__.'/templates';
+        });
+
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = Plugins::class;
         });
     }
 

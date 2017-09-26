@@ -50,11 +50,9 @@ class PluginStoreController extends BaseApiController
             foreach($featuredPluginEntries as $featuredPluginEntry) {
                 $plugins = [];
 
-                $pluginMatrix = $featuredPluginEntry->pluginMatrix;
+                $pluginElements = $featuredPluginEntry->plugins;
 
-                foreach($pluginMatrix as $pluginRow) {
-                    $plugin = Plugin::find()->id($pluginRow->pluginId)->one();
-
+                foreach($pluginElements as $plugin) {
                     if($plugin) {
                         if($enableCraftId || (!$enableCraftId && !$plugin->price)) {
                             $plugins[] = $plugin->id;
