@@ -5,10 +5,12 @@ namespace craftcom\cp\controllers;
 use Craft;
 use craft\elements\Asset;
 use craft\elements\Category;
+use craft\helpers\Db;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\web\Controller;
+use craft\web\UploadedFile;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
 use Github\Api\Repo;
@@ -72,13 +74,16 @@ class PluginsController extends Controller
         $name = $config['extra']['name'] ?? null;
 
         // Get the icon, if we have one
-        if(Craft::$app->getRequest()->getIsCpRequest()) {
-            if ($icon = $this->_getIcon($api, $owner, $repo, $ref, $config, $handle, $name)) {
+
+        if ($icon = $this->_getIcon($api, $owner, $repo, $ref, $config, $handle, $name)) {
+            if(Craft::$app->getRequest()->getIsCpRequest()) {
                 $iconHtml = Craft::$app->getView()->renderTemplate('_elements/element', [
                     'element' => $icon
                 ]);
             } else {
                 $iconHtml = null;
+                $iconId = $icon->id;
+                $iconUrl = $icon->getUrl();
             }
         } else {
             $iconHtml = null;
@@ -94,6 +99,8 @@ class PluginsController extends Controller
             'documentationUrl' => $config['extra']['documentationUrl'] ?? $config['support']['docs'] ?? null,
             'changelogUrl' => $config['extra']['changelogUrl'] ?? null,
             'icon' => $iconHtml,
+            'iconId' => (isset($iconId) ? $iconId : null),
+            'iconUrl' => (isset($iconUrl) ? $iconUrl : null),
         ]);
     }
 
@@ -138,16 +145,17 @@ class PluginsController extends Controller
             }
         } else {
             $plugin = new Plugin();
-
-            if(!Craft::$app->getUser()->getIsAdmin()) {
-                $plugin->developerId = Craft::$app->getUser()->getId();
-            }
         }
 
         $plugin->enabled = (bool)$request->getBodyParam('enabled');
 
-        if(Craft::$app->getUser()->getIsAdmin()) {
-            $plugin->developerId = $request->getBodyParam('developerId')[0] ?? null;
+        if(!$plugin->developerId) {
+            $plugin->developerId = Craft::$app->getUser()->getId();
+
+            // Only admins are able to change developer for a plugin
+            if(Craft::$app->getUser()->getIsAdmin() && $request->getBodyParam('developerId')[0]) {
+                $plugin->developerId = $request->getBodyParam('developerId')[0];
+            }
         }
 
         $plugin->iconId = $request->getBodyParam('iconId')[0] ?? null;
@@ -165,6 +173,51 @@ class PluginsController extends Controller
 
         $plugin->categories = Category::find()->id($request->getBodyParam('categoryIds'))->all();
         $plugin->screenshots = Asset::find()->id($request->getBodyParam('screenshotIds'))->all();
+
+
+        // Front-end icon upload
+
+        if(!Craft::$app->getRequest()->getIsCpRequest()) {
+
+            $iconFile = UploadedFile::getInstanceByName('icon');
+
+            if ($iconFile) {
+                $name = $plugin->name;
+                $handle = $plugin->handle;
+                $tempPath = Craft::$app->getPath()->getTempPath()."/icon-{$handle}-".StringHelper::randomString().'.svg';
+                move_uploaded_file($iconFile->tempName, $tempPath);
+
+
+                // Save as an asset
+                $volumesService = Craft::$app->getVolumes();
+                $volume = $volumesService->getVolumeByHandle('icons');
+                $folderId = $volumesService->ensureTopFolder($volume);
+
+                $targetFilename = "{$handle}.svg";
+
+                $assetToReplace = Asset::find()
+                    ->folderId($folderId)
+                    ->filename(Db::escapeParam($targetFilename))
+                    ->one();
+
+                if ($assetToReplace) {
+                    Craft::$app->getAssets()->replaceAssetFile($assetToReplace, $tempPath, $assetToReplace->filename);
+                    $plugin->iconId = $assetToReplace->id;
+                } else {
+                    $icon = new Asset([
+                        'title' => $name,
+                        'tempFilePath' => $tempPath,
+                        'newLocation' => "{folder:{$folderId}}{$handle}.svg",
+                    ]);
+
+                    if (!Craft::$app->getElements()->saveElement($icon, false)) {
+                        throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+                    }
+
+                    $plugin->iconId = $icon->id;
+                }
+            }
+        }
 
         if (!Craft::$app->getElements()->saveElement($plugin)) {
             if ($request->getAcceptsJson()) {
@@ -185,6 +238,8 @@ class PluginsController extends Controller
 
             $return['success'] = true;
             $return['id'] = $plugin->id;
+            $return['iconId'] = $plugin->icon->id;
+            $return['iconUrl'] = $plugin->icon->getUrl();
             $return['name'] = $plugin->name;
 
             return $this->asJson($return);
