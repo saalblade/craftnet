@@ -317,8 +317,11 @@ class Plugin extends Element
             return $this->_categories;
         }
         return $this->_categories = Category::find()
-            ->innerJoin(['craftcom_plugincategories pc'], '[[pc.categoryId]] = [[categories.id]]')
-            ->where(['pc.pluginId' => $this->id])
+            ->innerJoin(['craftcom_plugincategories pc'], [
+                'and',
+                '[[pc.categoryId]] = [[categories.id]]',
+                ['pc.pluginId' => $this->id]
+            ])
             ->orderBy(['pc.sortOrder' => SORT_ASC])
             ->all();
     }
@@ -340,8 +343,11 @@ class Plugin extends Element
             return $this->_screenshots;
         }
         return $this->_screenshots = Asset::find()
-            ->innerJoin(['craftcom_pluginscreenshots ps'], '[[ps.assetId]] = [[assets.id]]')
-            ->where(['ps.pluginId' => $this->id])
+            ->innerJoin(['craftcom_pluginscreenshots ps'], [
+                'and',
+                '[[ps.assetId]] = [[assets.id]]',
+                ['ps.pluginId' => $this->id]
+            ])
             ->orderBy(['ps.sortOrder' => SORT_ASC])
             ->all();
     }
