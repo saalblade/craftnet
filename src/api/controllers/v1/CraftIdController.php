@@ -66,11 +66,7 @@ class CraftIdController extends BaseApiController
 
         foreach($pluginLicenseEntries as $pluginLicenseEntry) {
             $pluginLicense = $pluginLicenseEntry->toArray();
-
-            $pluginId = $pluginLicenseEntry->pluginId;
-            $plugin = Plugin::find()->id($pluginId)->one();
-
-            // $pluginLicense['plugin'] = $pluginLicenseEntry->plugin->one()->toArray();
+            $plugin = $pluginLicenseEntry->plugin;
             $pluginLicense['plugin'] = $plugin->toArray();
             $craftLicense = $pluginLicenseEntry->craftLicense->one();
 
@@ -127,6 +123,7 @@ class CraftIdController extends BaseApiController
                 'title' => $categoryElement->title,
             ];
         }
+
 
 
         // Data
