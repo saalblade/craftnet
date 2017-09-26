@@ -51,7 +51,14 @@ class CraftIdController extends BaseApiController
 
         foreach($craftLicenseEntries as $craftLicenseEntry) {
             $craftLicense = $craftLicenseEntry->toArray();
-            $craftLicense['plugin'] = $craftLicenseEntry->plugin->one()->toArray();
+
+            $plugin = null;
+
+            if($craftLicenseEntry->plugin) {
+                 $plugin = $craftLicenseEntry->plugin->toArray();
+            }
+
+            $craftLicense['plugin'] = $plugin;
             $craftLicense['author'] = $craftLicenseEntry->getAuthor()->toArray();
             $craftLicense['type'] = $craftLicenseEntry->getType()->handle;
             $craftLicenses[] = $craftLicense;
