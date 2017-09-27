@@ -145,7 +145,7 @@ class CraftIdController extends BaseApiController
                 'cardNumber' => $currentUser->cardNumber,
                 'cardExpiry' => $currentUser->cardExpiry,
                 'cardCvc' => $currentUser->cardCvc,
-                'enablePluginDeveloperFeatures' => ($currentUser->enablePluginDeveloperFeatures == 1 ? true : false),
+                'enablePluginDeveloperFeatures' => ($currentUser->isInGroup('developers') ? true : false),
                 'enableShowcaseFeatures' => ($currentUser->enableShowcaseFeatures == 1 ? true : false),
                 'businessName' => $currentUser->businessName,
                 'businessVatId' => $currentUser->businessVatId,
