@@ -13,20 +13,17 @@
                 <text-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
                 <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
 
-                <template v-if="userIsInGroup('staff')">
+                <h4>Account</h4>
 
-                    <h4>Account</h4>
+                <p v-if="!userIsInGroup('developers')">
+                    <input id="enablePluginDeveloperFeatures" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
+                    <label for="enablePluginDeveloperFeatures">Enable plugin developer features</label>
+                </p>
 
-                    <p>
-                        <input id="enablePluginDeveloperFeatures" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
-                        <label for="enablePluginDeveloperFeatures">Enable plugin developer features</label>
-                    </p>
-
-                    <p>
-                        <input id="enableShowcaseFeatures" type="checkbox" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures">
-                        <label for="enableShowcaseFeatures">Enable showcase features</label>
-                    </p>
-                </template>
+                <p>
+                    <input id="enableShowcaseFeatures" type="checkbox" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures">
+                    <label for="enableShowcaseFeatures">Enable showcase features</label>
+                </p>
 
                 <input type="submit" class="btn btn-primary" value="Save">
             </div>

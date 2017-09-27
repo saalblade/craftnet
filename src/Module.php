@@ -3,6 +3,8 @@
 namespace craftcom;
 
 use Craft;
+use craft\elements\User;
+use craft\events\ModelEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterTemplateRootsEvent;
@@ -32,6 +34,29 @@ class Module extends \yii\base\Module
         } else {
             $this->_initWebRequest();
         }
+
+        Event::on(User::class, User::EVENT_AFTER_SAVE, function(ModelEvent $e) {
+            $request = Craft::$app->getRequest();
+            $currentUser = Craft::$app->getUser()->getIdentity();
+            $userGroups = Craft::$app->getUserGroups();
+
+            // If it's a front-end site POST request and they're not currently a developer, check to see if they've opted into developer features.
+            if ($request->getIsSiteRequest() && $request->getIsPost() && !$currentUser->isInGroup('developers') && $request->getBodyParam('fields.enablePluginDeveloperFeatures')) {
+
+                // Get any existing group IDs.
+                $existingGroups = $userGroups->getGroupsByUserId($currentUser->id);
+                $groupIds = [];
+
+                foreach ($existingGroups as $existingGroup) {
+                    $groupIds[] = $existingGroup->id;
+                }
+
+                // Add the developer group.
+                $groupIds[] = $userGroups->getGroupByHandle('developers')->id;
+
+                Craft::$app->getUsers()->assignUserToGroups($currentUser->id, $groupIds);
+            }
+        });
 
         parent::init();
     }
