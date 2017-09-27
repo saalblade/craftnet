@@ -13,11 +13,14 @@
                         <div class="flex-grow">
                             <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" />
                         </div>
-                        <div class="form-group ml-2">
-                            <label>&nbsp;</label>
-                            <input type="button" class="btn btn-secondary form-control" :disabled="!pluginDraft.repository" @click="loadDetails()" value="Load details">
-                        </div>
-                        <div class="spinner" :class="{'d-none': !loading}"></div>
+
+                        <template v-if="!pluginId">
+                            <div class="form-group ml-2">
+                                <label>&nbsp;</label>
+                                <input type="button" class="btn btn-secondary form-control" :disabled="!pluginDraft.repository" @click="loadDetails()" value="Load details">
+                            </div>
+                            <div class="spinner" :class="{'d-none': !loading}"></div>
+                        </template>
                     </div>
 
                 </div>
