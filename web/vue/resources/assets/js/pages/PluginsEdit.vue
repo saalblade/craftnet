@@ -105,7 +105,7 @@
                 </div>
             </div>
 
-            <div class="card mb-3">
+            <div v-if="userIsInGroup('staff')" class="card mb-3">
                 <div class="card-header">
                     Pricing
                 </div>
@@ -182,6 +182,7 @@
             ...mapGetters({
                 plugins: 'plugins',
                 categories: 'categories',
+                userIsInGroup: 'userIsInGroup',
             }),
             pluginId() {
                 return this.$route.params.id;
