@@ -71,7 +71,7 @@ class PluginStoreController extends BaseApiController
 
             // Categories
 
-            $_categories = \craft\elements\Category::find()->all();
+            $_categories = \craft\elements\Category::find()->orderBy('title asc')->all();
             $categories = [];
 
             foreach ($_categories as $category) {
