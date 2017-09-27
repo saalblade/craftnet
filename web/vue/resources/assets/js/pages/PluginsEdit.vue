@@ -25,6 +25,21 @@
 
             <div class="card mb-3">
                 <div class="card-header">
+                    Screenshots
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <input type="file" ref="screenshotFiles" class="form-control" @change="changeScreenshots" multiple="">
+                    </div>
+
+                    <img v-for="screenshot in pluginDraft.screenshots" :src="screenshot" style="height: 150px;" class="img-thumbnail mr-3 mb-3" />
+
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
                     Plugin Icon
                 </div>
                 <div class="card-body">
@@ -156,6 +171,8 @@
                     renewalPrice: 0,
                     iconUrl: null,
                     categoryIds: [],
+                    screenshotIds: [],
+                    screenshots: [],
                 },
                 errors: {},
             }
@@ -175,6 +192,23 @@
         },
 
         methods: {
+            changeScreenshots(ev) {
+                this.pluginDraft.screenshots = [];
+
+                let files = this.$refs.screenshotFiles.files;
+
+                for(let i = 0; i < files.length; i++) {
+                    let reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        let screenshotUrl = e.target.result;
+                        this.pluginDraft.screenshots.push(screenshotUrl)
+                    }.bind(this);
+
+                    reader.readAsDataURL(files[i]);
+                }
+            },
+
             changeIcon(ev) {
                 this.pluginDraft.icon = ev.target.value;
 
@@ -243,7 +277,9 @@
                     formData.append('categoryIds[]', categoryId);
                 });
 
+                formData.append('screenshots', this.$refs.screenshotFiles.files);
                 formData.append('screenshotIds', '');
+
 
                 this.$store.dispatch('savePlugin', formData).then((data) => {
                     this.$root.displayNotice('Plugin saved.');
