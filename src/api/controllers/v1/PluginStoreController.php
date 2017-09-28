@@ -98,7 +98,7 @@ class PluginStoreController extends BaseApiController
             $query = Plugin::find();
 
             if (!$enableCraftId) {
-                $query->price('00.00');
+                $query->andWhere(['price' => null]);
             }
 
             foreach ($query->all() as $pluginElement) {
