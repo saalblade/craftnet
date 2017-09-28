@@ -112,7 +112,7 @@ class PluginStoreController extends BaseApiController
             ];
 
             if ($enablePluginStoreCache) {
-                Craft::$app->getCache()->set($cacheKey, $pluginStoreData, (10 * 60));
+                Craft::$app->getCache()->set($cacheKey, $pluginStoreData, (60 * 60 * 3));
             }
         }
 
