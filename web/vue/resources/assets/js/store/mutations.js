@@ -37,6 +37,18 @@ export const SAVE_USER = (state, {user, response}) => {
         for (let attribute in user) {
             state.craftId.currentUser[attribute] = user[attribute];
         }
+
+        if(user.enablePluginDeveloperFeatures) {
+            let groupExists = state.craftId.currentUser.groups.find(g => g.handle === 'developers');
+
+            if(!groupExists) {
+                state.craftId.currentUser.groups.push({
+                    id: 1,
+                    name: 'Developers',
+                    handle: 'developers',
+                })
+            }
+        }
     }
 };
 
