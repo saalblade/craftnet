@@ -122,7 +122,7 @@
 
             <input type="submit" class="btn btn-primary" value="Save">
 
-            <div class="card border-danger mt-5 mb-3">
+            <div v-if="pluginId" class="card border-danger mt-5 mb-3">
                 <div class="card-header text-white bg-danger">Danger Zone</div>
                 <div class="card-body">
                     <div class="row">
