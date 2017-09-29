@@ -14,31 +14,32 @@ export default {
     },
 
     saveUser(user, cb, cbError) {
-        let body = {
-            userId: user.id,
-            fields: {},
-        };
+        let formData = new FormData();
 
         for (let attribute in user) {
             switch (attribute) {
-                case 'userId':
-                    // ignore
+                case 'id':
+                    formData.append('userId', user[attribute]);
                     break;
+                case 'email':
                 case 'firstName':
                 case 'lastName':
-                    body[attribute] = user[attribute];
+                case 'currentPassword':
+                case 'newPassword':
+                case 'photo':
+                    formData.append(attribute, user[attribute]);
                     break;
                 default:
-                    body['fields'][attribute] = user[attribute];
+                    formData.append('fields['+attribute+']', user[attribute]);
             }
         }
 
-        body['action'] = 'users/save-user';
-        body[csrfTokenName] = csrfTokenValue;
+        formData.append('action', 'users/save-user');
+        formData.append(csrfTokenName, csrfTokenValue);
 
         let options = { emulateJSON: true };
 
-        Vue.http.post(window.craftActionUrl+'/users/save-user', body, options)
+        Vue.http.post(window.craftActionUrl+'/users/save-user', formData, options)
             .then(response => cb(response.body))
             .catch(response => cbError(response));
     },
