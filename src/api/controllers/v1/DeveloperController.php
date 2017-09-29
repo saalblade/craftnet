@@ -49,6 +49,8 @@ class DeveloperController extends BaseApiController
                 'fullName' => $user->getFullName(),
                 'email' => $user->email,
                 'plugins' => $plugins,
+                // 'photoUrl' => ($user->getPhoto() ? $user->getPhoto()->getThumb(200) : null),
+                'photoUrl' => ($user->getPhoto() ? $user->getPhoto()->getUrl() : null),
             ]);
         }
 
