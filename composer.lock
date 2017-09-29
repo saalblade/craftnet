@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "918a59d656fae94683872f010f0ded89",
+    "content-hash": "69ced8ca9af3aa5e221c436eee16a0dd",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -661,12 +661,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "b07477908e2e4519e6fd1bd8e221d1fa1e66acbb"
+                "reference": "392b57bf366f2d4a498dde280bfd41a5f2efd9dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/b07477908e2e4519e6fd1bd8e221d1fa1e66acbb",
-                "reference": "b07477908e2e4519e6fd1bd8e221d1fa1e66acbb",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/392b57bf366f2d4a498dde280bfd41a5f2efd9dc",
+                "reference": "392b57bf366f2d4a498dde280bfd41a5f2efd9dc",
                 "shasum": ""
             },
             "require": {
@@ -676,10 +676,19 @@
                 "creocoder/yii2-nested-sets": "~0.9.0",
                 "danielstjules/stringy": "~3.0.0",
                 "enshrined/svg-sanitize": "~0.6.0",
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "ext-pcre": "*",
+                "ext-pdo": "*",
+                "ext-zip": "*",
                 "guzzlehttp/guzzle": "~6.2.2",
                 "league/flysystem": "~1.0.35",
                 "league/oauth2-client": "~2.2.1",
                 "mikehaertl/php-shellcommand": "~1.2.5",
+                "php": ">=7.0.0",
                 "pixelandtonic/imagine": "0.7.1.1",
                 "seld/cli-prompt": "^1.0",
                 "twig/twig": "~2.3.0",
@@ -724,7 +733,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-09-27 23:17:04"
+            "time": "2017-09-29T11:11:52+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -783,7 +792,7 @@
                 "source": "https://github.com/pixelandtonic/oauth2-craftid/tree/develop",
                 "issues": "https://github.com/pixelandtonic/oauth2-craftid/issues"
             },
-            "time": "2017-08-29 22:02:55"
+            "time": "2017-08-29T22:02:55+00:00"
         },
         {
             "name": "craftcms/plugin-installer",
