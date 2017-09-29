@@ -106,5 +106,7 @@ class Module extends \yii\base\Module
     private function _initWebRequest()
     {
         $this->controllerNamespace = 'craftcom\\cp\\controllers';
+
+        Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
     }
 }
