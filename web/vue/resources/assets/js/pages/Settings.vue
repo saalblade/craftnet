@@ -1,17 +1,54 @@
 <template>
     <form v-if="userDraft" @submit.prevent="save()">
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-body">
                 <h4>Personal details</h4>
 
                 <text-field id="firstName" label="First Name" v-model="userDraft.firstName" :errors="errors.firstName" />
                 <text-field id="lastName" label="Last Name" v-model="userDraft.lastName" :errors="errors.lastName" />
 
+            </div>
+        </div>
+
+        <div v-if="userIsInGroup('developers')" class="card mb-3">
+            <div class="card-body">
+
                 <h4>Developer profile</h4>
 
                 <text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
                 <text-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
                 <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
+
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+
+                <h4>Photo</h4>
+
+                <input type="file" ref="photoFile" class="form-control" @change="changePhoto" />
+
+                <img :src="userDraft.photoUrl" style="height: 150px;" class="img-thumbnail mr-3 mt-3" />
+
+            </div>
+        </div>
+
+
+        <div class="card mb-3">
+            <div class="card-body">
+
+                <h4>Email &amp; password</h4>
+
+                <password-field id="currentPassword" label="Current Password" v-model="currentPassword" :errors="errors.currentPassword" />
+                <text-field id="email" label="Email" v-model="userDraft.email" :errors="errors.email" />
+                <password-field id="newPassword" label="New Password" v-model="newPassword" :errors="errors.newPassword" />
+
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
 
                 <h4>Account</h4>
 
@@ -24,26 +61,30 @@
                     <input id="enableShowcaseFeatures" type="checkbox" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures">
                     <label for="enableShowcaseFeatures">Enable showcase features</label>
                 </p>
-
-                <input type="submit" class="btn btn-primary" value="Save">
             </div>
         </div>
+
+        <input type="submit" class="btn btn-primary" value="Save">
     </form>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
     import TextField from '../components/fields/TextField'
+    import PasswordField from '../components/fields/PasswordField'
 
     export default {
         components: {
             TextField,
+            PasswordField,
         },
 
         data() {
             return {
-                errors: {},
                 userDraft: {},
+                currentPassword: null,
+                newPassword: null,
+                errors: {},
             }
         },
 
@@ -55,9 +96,20 @@
         },
 
         methods: {
+            changePhoto(ev) {
+                let reader = new FileReader();
+
+                reader.onload = function (e) {
+                    this.userDraft.photoUrl = [e.target.result]
+                }.bind(this);
+
+                reader.readAsDataURL(this.$refs.photoFile.files[0]);
+            },
+
             save() {
                 this.$store.dispatch('saveUser', {
                     id: this.userDraft.id,
+                    // email: this.userDraft.email,
                     firstName: this.userDraft.firstName,
                     lastName: this.userDraft.lastName,
                     developerName: this.userDraft.developerName,
@@ -65,6 +117,10 @@
                     location: this.userDraft.location,
                     enablePluginDeveloperFeatures: (this.userDraft.enablePluginDeveloperFeatures ? 1 : 0),
                     enableShowcaseFeatures: (this.userDraft.enableShowcaseFeatures ? 1 : 0),
+                    // currentPassword: this.currentPassword,
+                    // newPassword: this.newPassword,
+                    photo: this.$refs.photoFile.files[0],
+                    photoUrl: this.userDraft.photoUrl,
                 }).then((data) => {
                     this.$root.displayNotice('Settings saved.');
                     this.showForm = false;
