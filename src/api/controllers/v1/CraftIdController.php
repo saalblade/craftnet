@@ -137,6 +137,7 @@ class CraftIdController extends BaseApiController
         $data = [
             'currentUser' => [
                 'id' => $currentUser->id,
+                'email' => $currentUser->email,
                 'firstName' => $currentUser->firstName,
                 'lastName' => $currentUser->lastName,
                 'developerName' => $currentUser->developerName,
