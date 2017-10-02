@@ -10,35 +10,25 @@
             </div>
         </div>
 
-
         <div class="card mb-3">
             <div class="card-body">
-
-                <h4>Photo</h4>
-
-                <input type="file" ref="photoFile" class="form-control" @change="changePhoto" />
-
-                <img :src="userDraft.photoUrl" style="height: 150px;" class="img-thumbnail mr-3 mt-3" />
-
-            </div>
-        </div>
-
-
-        <div class="card mb-3">
-            <div class="card-body">
-
                 <h4>Email &amp; password</h4>
-
                 <password-field id="currentPassword" label="Current Password" v-model="currentPassword" :errors="errors.currentPassword" />
                 <text-field id="email" label="Email" v-model="userDraft.email" :errors="errors.email" />
                 <password-field id="newPassword" label="New Password" v-model="newPassword" :errors="errors.newPassword" />
-
             </div>
         </div>
 
         <div class="card mb-3">
             <div class="card-body">
+                <h4>Photo</h4>
+                <input type="file" ref="photoFile" class="form-control" @change="changePhoto" />
+                <img :src="userDraft.photoUrl" style="height: 150px;" class="img-thumbnail mr-3 mt-3" />
+            </div>
+        </div>
 
+        <div class="card mb-3">
+            <div class="card-body">
                 <h4>Account</h4>
 
                 <p v-if="!userIsInGroup('developers')">
