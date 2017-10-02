@@ -4,11 +4,8 @@
         <form @submit.prevent="save()">
 
             <div class="card mb-3">
-                <div class="card-header">
-                    GitHub Repository
-                </div>
+                <div class="card-header">GitHub Repository</div>
                 <div class="card-body">
-
                     <div class="d-flex flex-row">
                         <div class="flex-grow">
                             <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" />
@@ -22,31 +19,23 @@
                             <div class="spinner" :class="{'d-none': !loading}"></div>
                         </template>
                     </div>
-
                 </div>
             </div>
 
             <div class="card mb-3">
-                <div class="card-header">
-                    Screenshots
-                </div>
+                <div class="card-header">Screenshots</div>
                 <div class="card-body">
-
                     <div class="form-group">
                         <input type="file" ref="screenshotFiles" class="form-control" @change="changeScreenshots" multiple="">
                     </div>
 
                     <img v-for="screenshot in pluginDraft.screenshots" :src="screenshot" style="height: 150px;" class="img-thumbnail mr-3 mb-3" />
-
                 </div>
             </div>
 
             <div class="card mb-3">
-                <div class="card-header">
-                    Plugin Icon
-                </div>
+                <div class="card-header">Plugin Icon</div>
                 <div class="card-body">
-
                     <div class="row">
                         <div class="col-sm-2">
 
@@ -60,14 +49,11 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <div class="card mb-3">
-                <div class="card-header">
-                    Plugin Details
-                </div>
+                <div class="card-header">Plugin Details</div>
                 <div class="card-body">
 
                     <div class="row">
@@ -113,15 +99,12 @@
                     Pricing
                 </div>
                 <div class="card-body">
-
                     <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />
                     <text-field id="renewalPrice" label="Renewal Price" v-model="pluginDraft.renewalPrice" :errors="errors.renewalPrice" />
-
                 </div>
             </div>
 
             <input type="submit" class="btn btn-primary" value="Save" />
-
         </form>
     </div>
 </template>
