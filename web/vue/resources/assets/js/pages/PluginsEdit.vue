@@ -71,13 +71,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <h6>Categories</h6>
-                        <div v-for="category in categories">
-                            <input type="checkbox" :id="'category-'+category.id" :value="category.id" v-model="pluginDraft.categoryIds" /> <label :for="'category-'+category.id">{{ category.title }}</label>
-                        </div>
-                    </div>
-
                     <text-field id="shortDescription" label="Short Description" v-model="pluginDraft.shortDescription" :errors="errors.shortDescription" />
                     <textarea-field id="longDescription" label="Long Description" v-model="pluginDraft.longDescription" :errors="errors.longDescription" rows="16" />
                     <text-field id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
@@ -140,7 +133,6 @@
                     price: 0,
                     renewalPrice: 0,
                     iconUrl: null,
-                    categoryIds: [],
                     screenshotIds: [],
                     screenshots: [],
                 },
@@ -151,7 +143,6 @@
         computed: {
             ...mapGetters({
                 plugins: 'plugins',
-                categories: 'categories',
                 userIsInGroup: 'userIsInGroup',
             }),
             pluginId() {
@@ -244,9 +235,13 @@
                 formData.append('price', this.pluginDraft.price);
                 formData.append('renewalPrice', this.pluginDraft.renewalPrice);
 
-                this.pluginDraft.categoryIds.forEach(categoryId => {
-                    formData.append('categoryIds[]', categoryId);
-                });
+                if(this.pluginDraft.categoryIds.length > 0) {
+                    this.pluginDraft.categoryIds.forEach(categoryId => {
+                        formData.append('categoryIds[]', categoryId);
+                    });
+                } else {
+                    formData.append('categoryIds', '');
+                }
 
                 formData.append('screenshots', this.$refs.screenshotFiles.files);
                 formData.append('screenshotIds', '');

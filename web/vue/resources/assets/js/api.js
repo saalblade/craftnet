@@ -24,7 +24,7 @@ export default {
                 case 'email':
                 case 'firstName':
                 case 'lastName':
-                case 'password':
+                case 'currentPassword':
                 case 'newPassword':
                 case 'photo':
                     formData.append(attribute, user[attribute]);
