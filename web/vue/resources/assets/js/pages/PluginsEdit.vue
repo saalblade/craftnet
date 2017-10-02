@@ -120,23 +120,7 @@
                 </div>
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Save">
-
-            <div v-if="pluginId" class="card border-danger mt-5 mb-3">
-                <div class="card-header text-white bg-danger">Danger Zone</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <h5>Delete plugin</h5>
-                            <p>Deleting a plugin is permanent and cannot be undone.</p>
-                        </div>
-                        <div class="col-sm-4 text-right">
-                            <a href="#" class="btn btn-outline-danger">Delete Plugin</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <input type="submit" class="btn btn-primary" value="Save" />
 
         </form>
     </div>
