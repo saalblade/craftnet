@@ -13,7 +13,7 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h4>Email &amp; password</h4>
-                <password-field id="currentPassword" label="Current Password" v-model="currentPassword" :errors="errors.currentPassword" />
+                <password-field id="password" label="Current Password" v-model="password" :errors="errors.password" />
                 <text-field id="email" label="Email" v-model="userDraft.email" :errors="errors.email" />
                 <password-field id="newPassword" label="New Password" v-model="newPassword" :errors="errors.newPassword" />
             </div>
@@ -61,7 +61,7 @@
         data() {
             return {
                 userDraft: {},
-                currentPassword: null,
+                password: null,
                 newPassword: null,
                 errors: {},
             }
@@ -94,8 +94,8 @@
                     location: this.userDraft.location,
                     enablePluginDeveloperFeatures: (this.userDraft.enablePluginDeveloperFeatures ? 1 : 0),
                     enableShowcaseFeatures: (this.userDraft.enableShowcaseFeatures ? 1 : 0),
-                    // currentPassword: this.currentPassword,
-                    // newPassword: this.newPassword,
+                    password: this.password,
+                    newPassword: this.newPassword,
                     photo: this.$refs.photoFile.files[0],
                     photoUrl: this.userDraft.photoUrl,
                 }).then((data) => {
