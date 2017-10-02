@@ -2,25 +2,14 @@
     <form v-if="userDraft" @submit.prevent="save()">
         <div class="card mb-3">
             <div class="card-body">
-                <h4>Personal details</h4>
-
-                <text-field id="firstName" label="First Name" v-model="userDraft.firstName" :errors="errors.firstName" />
-                <text-field id="lastName" label="Last Name" v-model="userDraft.lastName" :errors="errors.lastName" />
-
-            </div>
-        </div>
-
-        <div v-if="userIsInGroup('developers')" class="card mb-3">
-            <div class="card-body">
-
-                <h4>Developer profile</h4>
+                <h4>Informations</h4>
 
                 <text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
                 <text-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
                 <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
-
             </div>
         </div>
+
 
         <div class="card mb-3">
             <div class="card-body">
@@ -110,8 +99,6 @@
                 this.$store.dispatch('saveUser', {
                     id: this.userDraft.id,
                     // email: this.userDraft.email,
-                    firstName: this.userDraft.firstName,
-                    lastName: this.userDraft.lastName,
                     developerName: this.userDraft.developerName,
                     developerUrl: this.userDraft.developerUrl,
                     location: this.userDraft.location,
