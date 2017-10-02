@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "69ced8ca9af3aa5e221c436eee16a0dd",
+    "content-hash": "dfd894ce74dad90fbc18450fd6e5226e",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.36.16",
+            "version": "3.36.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f8bb15a002e709cba85de3981b0ffac7968fffb5"
+                "reference": "4bf27e8808e5e08a71b7fbdb951f51918c57a1c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f8bb15a002e709cba85de3981b0ffac7968fffb5",
-                "reference": "f8bb15a002e709cba85de3981b0ffac7968fffb5",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4bf27e8808e5e08a71b7fbdb951f51918c57a1c6",
+                "reference": "4bf27e8808e5e08a71b7fbdb951f51918c57a1c6",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-09-27T22:02:13+00:00"
+            "time": "2017-09-29T19:46:41+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -661,12 +661,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "392b57bf366f2d4a498dde280bfd41a5f2efd9dc"
+                "reference": "7b3a42b40d7f9d51e378230cab23e756ecf6ae95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/392b57bf366f2d4a498dde280bfd41a5f2efd9dc",
-                "reference": "392b57bf366f2d4a498dde280bfd41a5f2efd9dc",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/7b3a42b40d7f9d51e378230cab23e756ecf6ae95",
+                "reference": "7b3a42b40d7f9d51e378230cab23e756ecf6ae95",
                 "shasum": ""
             },
             "require": {
@@ -733,7 +733,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-09-29T11:11:52+00:00"
+            "time": "2017-10-02T17:46:07+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -1474,16 +1474,16 @@
         },
         {
             "name": "knplabs/github-api",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "05b24ed592a61ea947b45d8d14cde25f9795fb2f"
+                "reference": "cacf6f38bf9e6c5242e2b6dc26a67c4791bc7751"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/05b24ed592a61ea947b45d8d14cde25f9795fb2f",
-                "reference": "05b24ed592a61ea947b45d8d14cde25f9795fb2f",
+                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/cacf6f38bf9e6c5242e2b6dc26a67c4791bc7751",
+                "reference": "cacf6f38bf9e6c5242e2b6dc26a67c4791bc7751",
                 "shasum": ""
             },
             "require": {
@@ -1507,7 +1507,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5.x-dev"
+                    "dev-master": "2.6.x-dev"
                 }
             },
             "autoload": {
@@ -1538,7 +1538,7 @@
                 "gist",
                 "github"
             ],
-            "time": "2017-06-26T07:29:00+00:00"
+            "time": "2017-09-30T20:00:06+00:00"
         },
         {
             "name": "lcobucci/jwt",
