@@ -31,6 +31,28 @@ export const saveUser = ({commit, state}, user) => {
     })
 };
 
+export const uploadUserPhoto = ({commit, state}, formData) => {
+    return new Promise((resolve, reject) => {
+        api.uploadUserPhoto(formData, data => {
+            commit(types.UPLOAD_USER_PHOTO, {formData, data});
+            resolve(data);
+        }, data => {
+            reject(data);
+        })
+    })
+};
+export const deleteUserPhoto = ({commit, state}, formData) => {
+    return new Promise((resolve, reject) => {
+        api.deleteUserPhoto(formData, data => {
+            commit(types.DELETE_USER_PHOTO, {formData, data});
+            resolve(data);
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
+
 export const getStripeAccount = ({commit}) => {
     return new Promise((resolve, reject) => {
         api.getStripeAccount(data => {

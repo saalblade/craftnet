@@ -52,6 +52,17 @@ export const SAVE_USER = (state, {user, response}) => {
     }
 };
 
+export const UPLOAD_USER_PHOTO = (state, {formData, data}) => {
+
+    state.craftId.currentUser.photoId = data.photoId;
+    state.craftId.currentUser.photoUrl = data.photoUrl;
+};
+
+export const DELETE_USER_PHOTO = (state, {formData, data}) => {
+    state.craftId.currentUser.photoId = data.photoId;
+    state.craftId.currentUser.photoUrl = data.photoUrl;
+};
+
 export const SAVE_LICENSE = (state, {license, response}) => {
     let stateLicense = null;
     if(license.type === 'craftLicense') {
@@ -93,6 +104,7 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     statePlugin.iconUrl = data.iconUrl+'?'+ Math.floor(Math.random() * 1000000);
     statePlugin.iconId = data.iconId;
     statePlugin.developerId = formData.get('developerId');
+    statePlugin.developerName = formData.get('developerName');
     statePlugin.handle = formData.get('handle');
     statePlugin.packageName = formData.get('packageName');
     statePlugin.name = formData.get('name');

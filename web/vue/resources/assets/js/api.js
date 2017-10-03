@@ -24,7 +24,7 @@ export default {
                 case 'email':
                 case 'firstName':
                 case 'lastName':
-                case 'currentPassword':
+                case 'password':
                 case 'newPassword':
                 case 'photo':
                     formData.append(attribute, user[attribute]);
@@ -40,6 +40,28 @@ export default {
         let options = { emulateJSON: true };
 
         Vue.http.post(window.craftActionUrl+'/users/save-user', formData, options)
+            .then(response => cb(response.body))
+            .catch(response => cbError(response.body));
+    },
+
+    uploadUserPhoto(formData, cb, cbError) {
+        formData.append('action', 'id/account/upload-user-photo');
+        formData.append(csrfTokenName, csrfTokenValue);
+
+        let options = { emulateJSON: true };
+
+        Vue.http.post(window.craftActionUrl+'/id/account/upload-user-photo', formData, options)
+            .then(response => cb(response.body))
+            .catch(response => cbError(response));
+    },
+
+    deleteUserPhoto(formData, cb, cbError) {
+        formData.append('action', 'id/account/delete-user-photo');
+        formData.append(csrfTokenName, csrfTokenValue);
+
+        let options = { emulateJSON: true };
+
+        Vue.http.post(window.craftActionUrl+'/id/account/delete-user-photo', formData, options)
             .then(response => cb(response.body))
             .catch(response => cbError(response));
     },
