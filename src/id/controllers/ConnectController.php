@@ -50,28 +50,16 @@ class ConnectController extends BaseApiController
             stripos(Craft::$app->getRequest()->getFullPath(), 'test/developer/connect') !== false &&
             stripos(Craft::$app->getRequest()->getFullPath(), 'test/developer/validate') !== false)
         {
-            $token = (new Query())
-                ->select(['accessToken'])
-                ->from(['oauthtokens'])
-                ->where(['userId' => Craft::$app->getUser()->getIdentity()->id])
-                ->scalar();
+            $token = $this->_getAuthTokenByUserId(Craft::$app->getUser()->getIdentity()-id);
 
             if (!$token) {
-                $this->redirect('test/connect');
+                return $this->redirect($this->_connectUri);
             }
 
             $this->_accessToken = $token;
         }
 
         parent::init();
-    }
-
-    /**
-     * Handles /connect requests.
-     */
-    public function actionIndex()
-    {
-        return null;
     }
 
     public function actionConnect(): Response
@@ -112,7 +100,7 @@ class ConnectController extends BaseApiController
             ]);
         } catch (\Exception $e) {
             Craft::error('There was a problem getting an authorization token.', __METHOD__);
-            return $this->redirect('test/connect');
+            return $this->redirect($this->_connectUri);
         }
 
         $currentUser = Craft::$app->getUser()->getIdentity();
@@ -133,7 +121,14 @@ class ConnectController extends BaseApiController
         $tokenRecord->refreshToken = $accessToken->getRefreshToken();
         $tokenRecord->save();
 
-        return $this->renderTemplate('account/developer/_validate', ['user' => $currentUser->getFriendlyName(), 'token' => $accessToken->getToken()]);
+        return $this->redirect('test/developer/gettoken');
+    }
+
+    public function actionGetCurrentUserToken()
+    {
+        $currentUser = Craft::$app->getUser()->getIdentity();
+        $token = $this->_getAuthTokenByUserId($currentUser->id);
+        return $this->renderTemplate('account/developer/_gettoken', ['user' => $currentUser->getFriendlyName(), 'token' => $accessToken->getToken()]);
     }
 
     public function actionHooks(): Response
@@ -177,6 +172,15 @@ class ConnectController extends BaseApiController
         return $this->renderTemplate('account/developer/listhooks', ['hooks' => $body]);
     }
 
+    private function _getAuthTokenByUserId(int $userId)
+    {
+        return (new Query())
+            ->select(['accessToken'])
+            ->from(['oauthtokens'])
+            ->where(['userId' => $userId])
+            ->scalar();
+    }
+
     private function _getProvider()
     {
         return new Github([
@@ -200,7 +204,7 @@ class ConnectController extends BaseApiController
 
         } catch(GithubIdentityProviderException $e) {
             // The token is no longer valid, let's reconnect.
-            return $this->redirect('test/developer/connect');
+            return $this->redirect($this->_connectUri);
         }
     }
 }
