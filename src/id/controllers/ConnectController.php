@@ -33,20 +33,23 @@ class ConnectController extends BaseApiController
     private $_scope = ['user:email', 'write:repo_hook'];
 
     /**
-     * @var string
+     * @var
      */
-    private $_clientId = 'b69e4b894ebf1c020d30';
-
-    private $_clientSecret = 'e2085a11212f4259c2243f50bf286b3dfd767d73';
-
     private $_accessToken;
 
+    /**
+     * @var string
+     */
     private $_connectUri = 'test/developer/connect';
 
+    /**
+     * @return Response
+     */
     public function init()
     {
         $this->requireLogin();
 
+        // For every action besides connect and validate, you need a valid token, so force it.
         if (
             stripos(Craft::$app->getRequest()->getFullPath(), 'test/developer/connect') !== false &&
             stripos(Craft::$app->getRequest()->getFullPath(), 'test/developer/validate') !== false)
@@ -63,6 +66,9 @@ class ConnectController extends BaseApiController
         parent::init();
     }
 
+    /**
+     * @return Response
+     */
     public function actionConnect(): Response
     {
         $provider = $this->_getProvider();
@@ -77,7 +83,10 @@ class ConnectController extends BaseApiController
         return $this->renderTemplate('account/developer/_connect', ['url' => $authUrl]);
     }
 
-
+    /**
+     * @return Response
+     * @throws GithubIdentityProviderException
+     */
     public function actionValidate(): Response
     {
         $code = Craft::$app->getRequest()->getParam('code');
@@ -128,6 +137,11 @@ class ConnectController extends BaseApiController
         return $this->redirect('test/developer/gettoken');
     }
 
+    /**
+     * Displays the currently logged in user's auth token, if it exists.
+     *
+     * @return Response
+     */
     public function actionGetToken(): Response
     {
         $currentUser = Craft::$app->getUser()->getIdentity();
@@ -181,6 +195,11 @@ class ConnectController extends BaseApiController
         return $this->renderTemplate('account/developer/listhooks', ['hooks' => $body]);
     }
 
+    /**
+     * @param int $userId
+     *
+     * @return false|null|string
+     */
     private function _getAuthTokenByUserId(int $userId)
     {
         return (new Query())
@@ -190,14 +209,22 @@ class ConnectController extends BaseApiController
             ->scalar();
     }
 
+    /**
+     * @return Github
+     */
     private function _getProvider()
     {
         return new Github([
-            'clientId' => $this->_clientId,
-            'clientSecret' => $this->_clientSecret,
+            'clientId' => isset($_SERVER['GITHUB_APP_CLIENT_ID']) ? $_SERVER['GITHUB_APP_CLIENT_ID'] : getenv('GITHUB_APP_CLIENT_ID'),
+            'clientSecret' => isset($_SERVER['GITHUB_APP_CLIENT_SECRET']) ? $_SERVER['GITHUB_APP_CLIENT_SECRET'] : getenv('GITHUB_APP_CLIENT_SECRET'),
         ]);
     }
 
+    /**
+     * @param $url
+     *
+     * @return mixed|Response
+     */
     private function _callGithub($url)
     {
         try {
