@@ -90,15 +90,15 @@ class ConnectController extends BaseApiController
     public function actionValidate(): Response
     {
         $code = Craft::$app->getRequest()->getParam('code');
-        $state = Craft::$app->getRequest()->getParam('oauth2state');
+        $state = Craft::$app->getRequest()->getParam('state');
 
         if (!$code || !$state) {
-            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.');
+            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.', __METHOD);
             Craft::error('Either the code or the oauth2state param was missing in the Github callback.', __METHOD__);
         }
 
         if ($state !== Craft::$app->getSession()->get('oauth2state')) {
-            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.');
+            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.', __METHOD__);
             Craft::error('oauth2state was missing in session from the Github callback.', __METHOD__);
         }
 
