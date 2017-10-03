@@ -160,7 +160,7 @@ class CraftIdController extends BaseApiController
                 'groups' => $currentUser->getGroups(),
                 'photoId' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null),
                 // 'photoUrl' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getUrl() : null),
-                'photoUrl' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getThumbUrl(200) : null),
+                'photoUrl' => $currentUser->getThumbUrl(200),
             ],
             'plugins' => $plugins,
             'craftLicenses' => $craftLicenses,
