@@ -7,6 +7,7 @@ use craft\records\OAuthToken;
 use League\OAuth2\Client\Provider\Exception\GithubIdentityProviderException;
 use League\OAuth2\Client\Provider\Github;
 use yii\web\Response;
+use craft\helpers\Db;
 use craft\db\Query;
 
 /**
