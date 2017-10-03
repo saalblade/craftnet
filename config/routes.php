@@ -33,6 +33,7 @@ return [
         'GET  v1/id' => 'id/v1/id',
         'GET  test' => 'id/account',
         'GET  test/developer' => 'id/connect',
+        'GET  test/developer/connect' => 'id/connect/connect',
         'GET  test/developer/validate' => 'id/connect/validate',
         'GET  stripe/connect' => 'id/stripe/connect',
         'GET  stripe/account' => 'id/stripe/account',
