@@ -110,7 +110,7 @@ class ConnectController extends BaseApiController
             ]);
         } catch (\Exception $e) {
             Craft::error('There was a problem getting an authorization token.', __METHOD__);
-            $this->redirect('test/connect');
+            return $this->redirect('test/connect');
         }
 
         $currentUser = Craft::$app->getUser()->getIdentity();
@@ -198,7 +198,7 @@ class ConnectController extends BaseApiController
 
         } catch(GithubIdentityProviderException $e) {
             // The token is no longer valid, let's reconnect.
-            $this->redirect('test/connect');
+            return $this->redirect('test/connect');
         }
     }
 }
