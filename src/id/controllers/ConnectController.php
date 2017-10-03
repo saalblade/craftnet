@@ -83,13 +83,13 @@ class ConnectController extends BaseApiController
         $state = Craft::$app->getRequest()->getParam('state');
 
         if (!$code || !$state) {
-            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.', __METHOD);
             Craft::error('Either the code or the oauth2state param was missing in the Github callback.', __METHOD__);
+            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.', __METHOD);
         }
 
         if ($state !== Craft::$app->getSession()->get('oauth2state')) {
-            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.', __METHOD__);
             Craft::error('oauth2state was missing in session from the Github callback.', __METHOD__);
+            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.', __METHOD__);
         }
 
         $provider = $this->_getProvider();
@@ -121,13 +121,17 @@ class ConnectController extends BaseApiController
         $tokenRecord->refreshToken = $accessToken->getRefreshToken();
         $tokenRecord->save();
 
-        return $this->redirect('test/developer/gettoken');
+        return $this->redirect('test/developer/get-token');
     }
 
     public function actionGetToken(): Response
     {
         $currentUser = Craft::$app->getUser()->getIdentity();
         $token = $this->_getAuthTokenByUserId($currentUser->id);
+
+        if (!$token) {
+            return $this->redirect($this->_connectUri);
+        }
 
         return $this->renderTemplate('account/developer/_gettoken', ['user' => $currentUser->getFriendlyName(), 'token' => $token]);
     }
