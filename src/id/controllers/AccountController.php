@@ -3,9 +3,16 @@
 namespace craftcom\id\controllers;
 
 use Craft;
+use craft\elements\Asset;
 use craft\helpers\Db;
 use craft\records\OAuthToken;
 use craft\web\Controller;
+use yii\web\Response;
+use craft\errors\UploadFailedException;
+use craft\helpers\Assets;
+use craft\helpers\FileHelper;
+use craft\web\UploadedFile;
+use yii\web\BadRequestHttpException;
 
 /**
  * Class AccountController
@@ -85,4 +92,33 @@ class AccountController extends Controller
         }
     }
 
+    /**
+     * Delete all the photos for current user.
+     *
+     * @return Response
+     */
+    public function actionDeleteUserPhoto(): Response
+    {
+        $this->requireAcceptsJson();
+        $this->requireLogin();
+        $userId = Craft::$app->getRequest()->getRequiredBodyParam('userId');
+
+        if ($userId != Craft::$app->getUser()->getIdentity()->id) {
+            $this->requirePermission('editUsers');
+        }
+
+        $user = Craft::$app->getUsers()->getUserById($userId);
+
+        if ($user->photoId) {
+            Craft::$app->getElements()->deleteElementById($user->photoId, Asset::class);
+        }
+
+        $user->photoId = null;
+        Craft::$app->getElements()->saveElement($user, false);
+
+        return $this->asJson([
+            'photoId' => $user->photoId,
+            'photoUrl' => $user->getThumbUrl(200),
+        ]);
+    }
 }
