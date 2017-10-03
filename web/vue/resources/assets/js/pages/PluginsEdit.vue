@@ -67,7 +67,14 @@
                             <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" />
                         </div>
                         <div class="col-sm-6">
-                            <text-field id="developerId" label="Developer ID" v-model="pluginDraft.developerId" :errors="errors.developerId" />
+                            <div class="form-group">
+                                <label for="license">License</label>
+
+                                <select id="license" class="form-control" v-model="pluginDraft.license">
+                                    <option value="craft">Craft</option>
+                                    <option value="mit">MIT</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -75,15 +82,6 @@
                     <textarea-field id="longDescription" label="Long Description" v-model="pluginDraft.longDescription" :errors="errors.longDescription" rows="16" />
                     <text-field id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
                     <text-field id="changelogUrl" label="Changelog URL" v-model="pluginDraft.changelogUrl" :errors="errors.changelogUrl" />
-
-                    <div class="form-group">
-                        <label for="license">License</label>
-
-                        <select id="license" class="form-control" v-model="pluginDraft.license">
-                            <option value="craft">Craft</option>
-                            <option value="mit">MIT</option>
-                        </select>
-                    </div>
                 </div>
             </div>
 
@@ -222,7 +220,6 @@
                 }
                 formData.append('iconId[]', parseInt(this.pluginDraft.iconId));
                 formData.append('icon', this.$refs.iconFile.files[0]);
-                formData.append('developerId', [parseInt(this.pluginDraft.developerId)]);
                 formData.append('handle', this.pluginDraft.handle);
                 formData.append('packageName', this.pluginDraft.packageName);
                 formData.append('name', this.pluginDraft.name);
