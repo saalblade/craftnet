@@ -124,11 +124,12 @@ class ConnectController extends BaseApiController
         return $this->redirect('test/developer/gettoken');
     }
 
-    public function actionGetToken()
+    public function actionGetToken(): Response
     {
         $currentUser = Craft::$app->getUser()->getIdentity();
         $token = $this->_getAuthTokenByUserId($currentUser->id);
-        return $this->renderTemplate('account/developer/_gettoken', ['user' => $currentUser->getFriendlyName(), 'token' => $accessToken->getToken()]);
+
+        return $this->renderTemplate('account/developer/_gettoken', ['user' => $currentUser->getFriendlyName(), 'token' => $token]);
     }
 
     public function actionHooks(): Response

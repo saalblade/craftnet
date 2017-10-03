@@ -31,11 +31,13 @@ return [
     ],
     'craftId' => [
         'GET  v1/id' => 'id/v1/id',
+
         'GET  test' => 'id/account',
         'GET  test/developer/connect' => 'id/connect/connect',
         'GET  test/developer/validate' => 'id/connect/validate',
-        'GET  test/developer/gettoken' => 'id/connect/gettoken',
+        'GET  test/developer/gettoken' => 'id/connect/get-token',
         'GET  test/developer/hooks' => 'id/connect/hooks',
+
         'GET  stripe/connect' => 'id/stripe/connect',
         'GET  stripe/account' => 'id/stripe/account',
         'POST stripe/disconnect' => 'id/stripe/disconnect',
