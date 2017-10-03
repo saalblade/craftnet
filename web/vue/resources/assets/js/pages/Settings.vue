@@ -45,8 +45,6 @@
                         <input type="file" ref="photoFile" class="d-none" @change="onChangePhoto" />
                     </div>
                 </div>
-
-
             </div>
         </div>
 
@@ -66,7 +64,8 @@
             </div>
         </div>
 
-        <input type="submit" class="btn btn-primary" value="Save">
+        <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
+        <div v-if="loading" class="spinner"></div>
     </form>
 </template>
 
@@ -83,6 +82,7 @@
 
         data() {
             return {
+                loading: false,
                 photoLoading: false,
                 userDraft: {},
                 password: '',
@@ -155,6 +155,8 @@
             },
 
             save() {
+                this.loading = true;
+
                 this.$store.dispatch('saveUser', {
                     id: this.userDraft.id,
                     email: this.userDraft.email,
@@ -172,12 +174,14 @@
                     this.password = '';
                     this.newPassword = '';
                     this.errors = {};
+                    this.loading = false;
                 }).catch(data => {
                     this.$root.displayError('Couldn’t save settings.');
                     this.errors = {};
                     if(data.errors) {
                         this.errors = data.errors;
                     }
+                    this.loading = false;
                 });
             }
         },
