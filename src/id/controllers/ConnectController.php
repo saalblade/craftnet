@@ -40,13 +40,15 @@ class ConnectController extends BaseApiController
 
     private $_accessToken;
 
+    private $_connectUri = 'test/developer/connect';
+
     public function init()
     {
         $this->requireLogin();
 
         if (
-            stripos(Craft::$app->getRequest()->getFullPath(), 'test/develop') !== false &&
-            stripos(Craft::$app->getRequest()->getFullPath(), 'test/validate') !== false)
+            stripos(Craft::$app->getRequest()->getFullPath(), 'test/developer/connect') !== false &&
+            stripos(Craft::$app->getRequest()->getFullPath(), 'test/developer/validate') !== false)
         {
             $token = (new Query())
                 ->select(['accessToken'])
@@ -198,7 +200,7 @@ class ConnectController extends BaseApiController
 
         } catch(GithubIdentityProviderException $e) {
             // The token is no longer valid, let's reconnect.
-            return $this->redirect('test/connect');
+            return $this->redirect('test/developer/connect');
         }
     }
 }

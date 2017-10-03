@@ -32,7 +32,6 @@ return [
     'craftId' => [
         'GET  v1/id' => 'id/v1/id',
         'GET  test' => 'id/account',
-        'GET  test/developer' => 'id/connect',
         'GET  test/developer/connect' => 'id/connect/connect',
         'GET  test/developer/validate' => 'id/connect/validate',
         'GET  test/developer/hooks' => 'id/connect/hooks',
