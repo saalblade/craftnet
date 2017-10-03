@@ -23,24 +23,24 @@ return [
         'POST v1/updates' => 'api/v1/updates',
         'POST v1/craft-id' => 'api/v1/craft-id',
         'POST v1/plugin-store' => 'api/v1/plugin-store',
-        'GET v1/account' => 'api/v1/account',
+        'GET  v1/account' => 'api/v1/account',
         'POST v1/developer/<userId:\d+>' => 'api/v1/developer',
         'POST v1/checkout' => 'api/v1/checkout',
     ],
     'composer' => [
     ],
     'craftId' => [
-        // Catch-all route for Vue when people reload the page.
-        'GET v1/id' => 'id/v1/id',
-        'GET test' => 'id/account',
-        'GET test/developer' => 'id/connect',
-        'GET test/developer/validate' => 'id/connect/validate',
-        'GET stripe/connect' => 'id/stripe/connect',
-        'GET stripe/account' => 'id/stripe/account',
+        'GET  v1/id' => 'id/v1/id',
+        'GET  test' => 'id/account',
+        'GET  test/developer' => 'id/connect',
+        'GET  test/developer/validate' => 'id/connect/validate',
+        'GET  stripe/connect' => 'id/stripe/connect',
+        'GET  stripe/account' => 'id/stripe/account',
         'POST stripe/disconnect' => 'id/stripe/disconnect',
-        'GET stripe/customer' => 'id/stripe/customer',
+        'GET  stripe/customer' => 'id/stripe/customer',
         'POST stripe/save-card' => 'id/stripe/save-card',
         'POST stripe/remove-card' => 'id/stripe/remove-card',
+        // Catch-all route for Vue when people reload the page.
         '<url:(.*)>'=> 'id/account',
     ],
    // 'queue' => [
