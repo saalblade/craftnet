@@ -16,7 +16,7 @@
                                 <label>&nbsp;</label>
                                 <input type="button" class="btn btn-secondary form-control" :disabled="!pluginDraft.repository" @click="loadDetails()" value="Load details">
                             </div>
-                            <div class="spinner" :class="{'d-none': !loading}"></div>
+                            <div class="spinner repository-spinner" :class="{'d-none': !repositoryLoading}"></div>
                         </template>
                     </div>
                 </div>
@@ -95,7 +95,11 @@
                 </div>
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Save" />
+            <div>
+                <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
+                <div v-if="loading" class="spinner"></div>
+            </div>
+
         </form>
     </div>
 </template>
@@ -114,6 +118,7 @@
         data() {
             return {
                 loading: false,
+                repositoryLoading: false,
                 pluginDraft: {
                     id: null,
                     icon: null,
@@ -180,8 +185,9 @@
 
                 reader.readAsDataURL(this.$refs.iconFile.files[0]);
             },
+
             loadDetails() {
-                this.loading = true;
+                this.repositoryLoading = true;
 
                 let body = {
                     repository: encodeURIComponent(url)
@@ -204,13 +210,15 @@
                         this.pluginDraft.packageName = response.body.packageName;
                         this.pluginDraft.iconId = response.body.iconId;
                         this.pluginDraft.iconUrl = response.body.iconUrl;
-                        this.loading = false;
+                        this.repositoryLoading = false;
                     })
                     .catch(response => {
-                        this.loading = false;
+                        this.repositoryLoading = false;
                     });
             },
             save() {
+                this.loading = true;
+
                 let formData = new FormData();
                 formData.append('siteId', 1);
                 formData.append('enabled', 1);
@@ -218,6 +226,7 @@
                 if(this.pluginDraft.id) {
                     formData.append('pluginId', this.pluginDraft.id);
                 }
+
                 formData.append('iconId[]', parseInt(this.pluginDraft.iconId));
                 formData.append('icon', this.$refs.iconFile.files[0]);
                 formData.append('handle', this.pluginDraft.handle);
@@ -245,9 +254,11 @@
 
 
                 this.$store.dispatch('savePlugin', formData).then((data) => {
+                    this.loading = false;
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/developer/plugins'})
                 }).catch((data) => {
+                    this.loading = false;
                     this.$root.displayError('Couldn’t save plugin.');
                     this.errors = data.errors;
                 });
@@ -266,7 +277,7 @@
     .d-flex {
         position: relative;
     }
-.spinner {
+.repository-spinner {
     position: absolute;
     top: 36px;
     right: -24px;
