@@ -104,9 +104,10 @@ class ConnectController extends BaseApiController
         }
 
         $currentUser = Craft::$app->getUser()->getIdentity();
+        $existingToken = $this->_getAuthTokenByUserId($currentUser->id);
 
         // No previous acces token, create a new one.
-        if (!$this->_accessToken) {
+        if (!$existingToken) {
             $tokenRecord = new OAuthToken();
             $tokenRecord->userId = $currentUser->id;
             $tokenRecord->provider = 'Github';
