@@ -124,7 +124,7 @@ class ConnectController extends BaseApiController
         return $this->redirect('test/developer/gettoken');
     }
 
-    public function actionGetCurrentUserToken()
+    public function actionGetToken()
     {
         $currentUser = Craft::$app->getUser()->getIdentity();
         $token = $this->_getAuthTokenByUserId($currentUser->id);
