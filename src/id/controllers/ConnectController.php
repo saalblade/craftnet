@@ -114,7 +114,9 @@ class ConnectController extends BaseApiController
 
         } else {
             // A previous one, let's update it.
-            $tokenRecord = OAuthToken::find()->accessToken($this->_accessToken)->one();
+            $tokenRecord = OAuthToken::find()
+                ->where(Db::parseParam('accessToken', $existingToken))
+                ->one();
         }
 
         $tokenRecord->accessToken = $accessToken->getToken();
