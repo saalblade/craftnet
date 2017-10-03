@@ -121,7 +121,7 @@ class ConnectController extends BaseApiController
         $tokenRecord->refreshToken = $accessToken->getRefreshToken();
         $tokenRecord->save();
 
-        return $this->redirect('test/developer/get-token');
+        return $this->redirect('test/developer/gettoken');
     }
 
     public function actionGetToken(): Response
