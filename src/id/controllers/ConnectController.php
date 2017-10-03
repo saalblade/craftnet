@@ -110,7 +110,7 @@ class ConnectController extends BaseApiController
             ]);
         } catch (\Exception $e) {
             Craft::error('There was a problem getting an authorization token.', __METHOD__);
-            throw $e;
+            $this->redirect('test/connect');
         }
 
         $currentUser = Craft::$app->getUser()->getIdentity();
