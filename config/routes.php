@@ -35,6 +35,7 @@ return [
         'GET  test/developer' => 'id/connect',
         'GET  test/developer/connect' => 'id/connect/connect',
         'GET  test/developer/validate' => 'id/connect/validate',
+        'GET  test/developer/hooks' => 'id/connect/hooks',
         'GET  stripe/connect' => 'id/stripe/connect',
         'GET  stripe/account' => 'id/stripe/account',
         'POST stripe/disconnect' => 'id/stripe/disconnect',

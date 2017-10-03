@@ -113,10 +113,12 @@ class ConnectController extends BaseApiController
             throw $e;
         }
 
+        $currentUser = Craft::$app->getUser()->getIdentity();
+
         // No previous acces token, create a new one.
         if (!$this->_accessToken) {
             $tokenRecord = new OAuthToken();
-            $tokenRecord->userId = Craft::$app->getUser()->getIdentity()->id;
+            $tokenRecord->userId = $currentUser->id;
             $tokenRecord->provider = 'Github';
 
         } else {
@@ -129,7 +131,7 @@ class ConnectController extends BaseApiController
         $tokenRecord->refreshToken = $accessToken->getRefreshToken();
         $tokenRecord->save();
 
-        return $this->renderTemplate('account/developer/_validate', ['user' => $user->getNickname(), 'token' => $accessToken->getToken()]);
+        return $this->renderTemplate('account/developer/_validate', ['user' => $currentUser->getFriendlyName(), 'token' => $accessToken->getToken()]);
     }
 
     public function actionHooks(): Response
