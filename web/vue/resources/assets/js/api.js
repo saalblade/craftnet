@@ -144,7 +144,7 @@ export default {
         let options = { emulateJSON: true };
 
         Vue.http.post(window.craftActionUrl+'/craftcom/plugins/save', formData, options)
-            .then(responsex => cb(responsex.body))
-            .catch(responsey => cbError(responsey));
+            .then(response => cb(response.body))
+            .catch(response => cbError(response));
     }
 }
