@@ -4,8 +4,11 @@ namespace craftcom\id\controllers;
 
 use Craft;
 use craft\records\OAuthToken;
+use League\OAuth2\Client\Provider\Exception\GithubIdentityProviderException;
 use League\OAuth2\Client\Provider\Github;
 use yii\web\Response;
+use craft\helpers\Db;
+use craft\db\Query;
 
 /**
  * Class ConnectController
@@ -30,18 +33,43 @@ class ConnectController extends BaseApiController
     private $_scope = ['user:email', 'write:repo_hook'];
 
     /**
-     * @var string
+     * @var
      */
-    private $_clientId = 'b69e4b894ebf1c020d30';
-
-    private $_clientSecret = 'e2085a11212f4259c2243f50bf286b3dfd767d73';
+    private $_accessToken;
 
     /**
-     * Handles /connect requests.
-     *
+     * @var string
+     */
+    private $_connectUri = 'test/developer/connect';
+
+    /**
      * @return Response
      */
-    public function actionIndex(): Response
+    public function init()
+    {
+        $this->requireLogin();
+
+        // For every action besides connect and validate, you need a valid token, so force it.
+        if (
+            stripos(Craft::$app->getRequest()->getFullPath(), 'test/developer/connect') !== false &&
+            stripos(Craft::$app->getRequest()->getFullPath(), 'test/developer/validate') !== false)
+        {
+            $token = $this->_getAuthTokenByUserId(Craft::$app->getUser()->getIdentity()-id);
+
+            if (!$token) {
+                return $this->redirect($this->_connectUri);
+            }
+
+            $this->_accessToken = $token;
+        }
+
+        parent::init();
+    }
+
+    /**
+     * @return Response
+     */
+    public function actionConnect(): Response
     {
         $provider = $this->_getProvider();
 
@@ -55,112 +83,102 @@ class ConnectController extends BaseApiController
         return $this->renderTemplate('account/developer/_connect', ['url' => $authUrl]);
     }
 
+    /**
+     * @return Response
+     * @throws GithubIdentityProviderException
+     */
     public function actionValidate(): Response
     {
         $code = Craft::$app->getRequest()->getParam('code');
-        $state = Craft::$app->getRequest()->getParam('oauth2state');
+        $state = Craft::$app->getRequest()->getParam('state');
 
         if (!$code || !$state) {
-            // Exception?
+            Craft::error('Either the code or the oauth2state param was missing in the Github callback.', __METHOD__);
+            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.', __METHOD);
         }
 
         if ($state !== Craft::$app->getSession()->get('oauth2state')) {
-            // Exception?
+            Craft::error('oauth2state was missing in session from the Github callback.', __METHOD__);
+            throw new GithubIdentityProviderException('There was a problem getting an authorzation token.', __METHOD__);
         }
 
         $provider = $this->_getProvider();
 
-        $accessToken = $provider->getAccessToken('authorization_code', [
-            'code' => $code,
-        ]);
+        try {
+            $accessToken = $provider->getAccessToken('authorization_code', [
+                'code' => $code,
+            ]);
+        } catch (\Exception $e) {
+            Craft::error('There was a problem getting an authorization token.', __METHOD__);
+            return $this->redirect($this->_connectUri);
+        }
 
-        // try/catch
+        $currentUser = Craft::$app->getUser()->getIdentity();
+        $existingToken = $this->_getAuthTokenByUserId($currentUser->id);
 
-        $user = $provider->getResourceOwner($accessToken);
+        // No previous acces token, create a new one.
+        if (!$existingToken) {
+            $tokenRecord = new OAuthToken();
+            $tokenRecord->userId = $currentUser->id;
+            $tokenRecord->provider = 'Github';
 
+        } else {
+            // A previous one, let's update it.
+            $tokenRecord = OAuthToken::find()
+                ->where(Db::parseParam('accessToken', $existingToken))
+                ->andWhere(Db::parseParam('provider', 'Github'))
+                ->one();
+        }
 
-//        $params = [
-        //          'client_id' => $this->_clientId,
-        //        'client_secret' => $this->_clientSecret,
-        //      'state' => Craft::$app->getSession()->get('oauth2state'),
-        //    'code' => $code,
-//        ];
-
-        // try/catch
-        //      $httpClient = Craft::createGuzzleClient(['headers' => ['Accept' => 'application/json']]);
-        //    $response = $httpClient->request('post', $this->_tokenUrl, [
-        //      'json' => $params,
-//        ]);
-
-//        if ($response->getStatusCode() === 200) {
-        //          $responseBody = (string)$response->getBody();
-        //        $responseBody = Json::decodeIfJson($responseBody);
-
-        // Something went wrong.
-        //      if (!is_array($responseBody)) {
-        // something fucked up.
-        //    }
-
-//            if (isset($responseBody['error'])) {
-        // something gracefully fucked up.
-        //          }
-
-        //        $accessToken = $responseBody['access_token'];
-//
-        //          $client = new \Github\Client();
-        //        $client->authenticate($accessToken, null, \Github\Client::AUTH_HTTP_TOKEN);
-        //      $test = $client->me()->show();
-
-
-        $tokenRecord = new OAuthToken();
-        $tokenRecord->userId = Craft::$app->getUser()->getIdentity()->id;
-        $tokenRecord->provider = 'Github';
         $tokenRecord->accessToken = $accessToken->getToken();
         $tokenRecord->expiresIn = $accessToken->getExpires();
         $tokenRecord->refreshToken = $accessToken->getRefreshToken();
         $tokenRecord->save();
 
-
-        return $this->renderTemplate('account/developer/_validate', ['user' => $user->getNickname(), 'token' => $accessToken->getToken()]);
-        //}
-
-        //$client = new \Github\Client();
-        //$test = $client->authenticate($code, null, \Github\Client::AUTH_HTTP_TOKEN);
-        //$test2 = $client->me();
+        return $this->redirect('test/developer/gettoken');
     }
 
-    public function actionListRepos(): Response
+    /**
+     * Displays the currently logged in user's auth token, if it exists.
+     *
+     * @return Response
+     */
+    public function actionGetToken(): Response
     {
+        $currentUser = Craft::$app->getUser()->getIdentity();
+        $token = $this->_getAuthTokenByUserId($currentUser->id);
 
+        if (!$token) {
+            return $this->redirect($this->_connectUri);
+        }
+
+        return $this->renderTemplate('account/developer/_gettoken', ['user' => $currentUser->getFriendlyName(), 'token' => $token]);
     }
 
     public function actionHooks(): Response
     {
-        $token = '40f0e01a5100efd3107e276075d8de0e81ba4585';
+        $response = $this->_callGithub('/repos/takobell/Stringy/hooks');
 
-        $provider = $this->_getProvider();
 
-        //$provider->getParsedResponse()
+//        $request = $provider->getAuthenticatedRequest(
+        //          'POST',
+        //        $provider->apiDomain.'/repos/takobell/Stringy/hooks',
+        //      $token
+        //);
 
-        $request = $provider->getAuthenticatedRequest(
-            'POST',
-            $provider->apiDomain.'/repos/takobell/Stringy/hooks',
-            $token
-        );
+//        $params = [
+        //          'name' => 'web',
+        //        'events' => ['push'],
+        //      'active' => true,
+        //    'config' => [
+        //      'url' => 'https://id.craftcms.com',
+        //    'content_type' => 'json',
+//            ],
+        //      ];
 
-        $params = [
-            'name' => 'web',
-            'events' => ['push'],
-            'active' => true,
-            'config' => [
-                'url' => 'https://id.craftcms.com',
-                'content_type' => 'json',
-            ],
-        ];
-
-        $body = \GuzzleHttp\Psr7\stream_for(\GuzzleHttp\json_encode($params));
-        $request = $request->withBody($body);
-        $request = $request->withHeader('Content-Type', 'application/x-www-form-urlencoded');
+//        $body = \GuzzleHttp\Psr7\stream_for(\GuzzleHttp\json_encode($params));
+        //      $request = $request->withBody($body);
+        //    $request = $request->withHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 
 //        $request = $provider->getAuthenticatedRequest(
@@ -170,21 +188,61 @@ class ConnectController extends BaseApiController
         //);
 
 
-        $response = $provider->getParsedResponse($request);
+//        $response = $provider->getParsedResponse($request);
 
 
-        $body = (string)$response->getBody();
+        //      $body = (string)$response->getBody();
 
         return $this->renderTemplate('account/developer/listhooks', ['hooks' => $body]);
     }
 
+    /**
+     * @param int $userId
+     *
+     * @return false|null|string
+     */
+    private function _getAuthTokenByUserId(int $userId)
+    {
+        return (new Query())
+            ->select(['accessToken'])
+            ->from(['oauthtokens'])
+            ->where(['userId' => $userId, 'provider' => 'Github'])
+            ->scalar();
+    }
+
+    /**
+     * @return Github
+     */
     private function _getProvider()
     {
-        $provider = new Github([
-            'clientId' => $this->_clientId,
-            'clientSecret' => $this->_clientSecret,
+        return new Github([
+            'clientId' => isset($_SERVER['GITHUB_APP_CLIENT_ID']) ? $_SERVER['GITHUB_APP_CLIENT_ID'] : getenv('GITHUB_APP_CLIENT_ID'),
+            'clientSecret' => isset($_SERVER['GITHUB_APP_CLIENT_SECRET']) ? $_SERVER['GITHUB_APP_CLIENT_SECRET'] : getenv('GITHUB_APP_CLIENT_SECRET'),
         ]);
+    }
 
-        return $provider;
+    /**
+     * @param $url
+     *
+     * @return mixed|Response
+     */
+    private function _callGithub($url)
+    {
+        try {
+            $provider = $this->_getProvider();
+
+            $request = $provider->getAuthenticatedRequest(
+                'GET',
+                $provider->apiDomain.$url,
+                $this->_accessToken
+            );
+
+            return $provider->getParsedResponse($request);
+
+        } catch(GithubIdentityProviderException $e) {
+            Craft::error('Tried to make an authenticated call to Github, but ran into an error: '.$e->getMessage(), __METHOD__);
+            // The token is no longer valid, let's reconnect.
+            return $this->redirect($this->_connectUri);
+        }
     }
 }
