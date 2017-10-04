@@ -126,6 +126,7 @@ class ConnectController extends BaseApiController
             // A previous one, let's update it.
             $tokenRecord = OAuthToken::find()
                 ->where(Db::parseParam('accessToken', $existingToken))
+                ->andWhere(Db::parseParam('provider', 'Github'))
                 ->one();
         }
 
@@ -205,7 +206,7 @@ class ConnectController extends BaseApiController
         return (new Query())
             ->select(['accessToken'])
             ->from(['oauthtokens'])
-            ->where(['userId' => $userId])
+            ->where(['userId' => $userId, 'provider' => 'Github'])
             ->scalar();
     }
 
