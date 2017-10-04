@@ -117,7 +117,8 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     statePlugin.price = (formData.get('price') ? formData.get('price') : '');
     statePlugin.renewalPrice = (formData.get('renewalPrice') ? formData.get('renewalPrice') : '');
     statePlugin.categoryIds = formData.getAll('categoryIds[]');
-    statePlugin.screenshotIds = formData.get('screenshotIds');
+    statePlugin.screenshotIds = formData.getAll('screenshotIds[]');
+    statePlugin.screenshotUrls = formData.getAll('screenshotUrls[]');
 
     if(newPlugin) {
         state.craftId.plugins.push(statePlugin);

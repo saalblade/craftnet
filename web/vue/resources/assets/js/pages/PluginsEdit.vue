@@ -23,17 +23,6 @@
             </div>
 
             <div class="card mb-3">
-                <div class="card-header">Screenshots</div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <input type="file" ref="screenshotFiles" class="form-control" @change="changeScreenshots" multiple="">
-                    </div>
-
-                    <img v-for="screenshot in pluginDraft.screenshots" :src="screenshot" style="height: 150px;" class="img-thumbnail mr-3 mb-3" />
-                </div>
-            </div>
-
-            <div class="card mb-3">
                 <div class="card-header">Plugin Icon</div>
                 <div class="card-body">
                     <div class="row">
@@ -82,6 +71,24 @@
                     <textarea-field id="longDescription" label="Long Description" v-model="pluginDraft.longDescription" :errors="errors.longDescription" rows="16" />
                     <text-field id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
                     <text-field id="changelogUrl" label="Changelog URL" v-model="pluginDraft.changelogUrl" :errors="errors.changelogUrl" />
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">Screenshots</div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <input type="file" ref="screenshotFiles" class="form-control" multiple="">
+                    </div>
+
+                    <div ref="screenshots" class="d-inline">
+                        <div v-for="(screenshotUrl, key) in pluginDraft.screenshotUrls" class="screenshot">
+                            <img :src="screenshotUrl" class="img-thumbnail mr-3 mb-3" />
+                            <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(key);">
+                                <i class="fa fa-remove"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -157,8 +164,20 @@
         },
 
         methods: {
+
+            removeScreenshot(key) {
+                this.pluginDraft.screenshotUrls.splice(key, 1);
+                this.pluginDraft.screenshotIds.splice(key, 1);
+
+                let removeBtns = this.$refs.screenshots.getElementsByClassName('btn');
+
+                for (let i = 0; i < removeBtns.length; i++) {
+                    removeBtns[i].blur();
+                }
+            },
+
             changeScreenshots(ev) {
-                this.pluginDraft.screenshots = [];
+                this.pluginDraft.screenshotUrls = [];
 
                 let files = this.$refs.screenshotFiles.files;
 
@@ -167,7 +186,7 @@
 
                     reader.onload = function (e) {
                         let screenshotUrl = e.target.result;
-                        this.pluginDraft.screenshots.push(screenshotUrl)
+                        this.pluginDraft.screenshotUrls.push(screenshotUrl)
                     }.bind(this);
 
                     reader.readAsDataURL(files[i]);
@@ -216,6 +235,7 @@
                         this.repositoryLoading = false;
                     });
             },
+
             save() {
                 this.loading = true;
 
@@ -249,14 +269,30 @@
                     formData.append('categoryIds', '');
                 }
 
-                formData.append('screenshots', this.$refs.screenshotFiles.files);
-                formData.append('screenshotIds', '');
+                if(this.$refs.screenshotFiles.files.length > 0) {
+                    for (let i = 0; i < this.$refs.screenshotFiles.files.length; i++) {
+                        formData.append('screenshots[]', this.$refs.screenshotFiles.files[i]);
+                    }
+                }
 
+                if(this.pluginDraft.screenshotUrls.length > 0) {
+                    this.pluginDraft.screenshotUrls.forEach(screenshotUrl => {
+                        formData.append('screenshotUrls[]', screenshotUrl);
+                    });
+                }
+
+                if(this.pluginDraft.screenshotIds.length > 0) {
+                    this.pluginDraft.screenshotIds.forEach(screenshotId => {
+                        formData.append('screenshotIds[]', screenshotId);
+                    });
+                } else {
+                    formData.append('screenshotIds', '');
+                }
 
                 this.$store.dispatch('savePlugin', formData).then((data) => {
                     this.loading = false;
                     this.$root.displayNotice('Plugin saved.');
-                    this.$router.push({path: '/developer/plugins'})
+                    this.$router.push({path: '/developer/plugins'});
                 }).catch((data) => {
                     this.loading = false;
                     this.$root.displayError('Couldn’t save plugin.');
@@ -274,12 +310,11 @@
 </script>
 
 <style scoped>
-    .d-flex {
-        position: relative;
-    }
-.repository-spinner {
-    position: absolute;
-    top: 36px;
-    right: -24px;
-}
+    .d-flex { position: relative; }
+
+    .repository-spinner { position: absolute; top: 36px; right: -24px; }
+
+    .screenshot { position: relative; display: inline-block; width: 230px; margin-right:24px; margin-top: 14px; }
+    .screenshot .remove { position: absolute; top: -10px; right: -10px; }
+    .screenshot img {  }
 </style>

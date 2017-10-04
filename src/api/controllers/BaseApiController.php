@@ -77,10 +77,12 @@ abstract class BaseApiController extends Controller
 
         // Screenshots
 
-        $screenshots = [];
+        $screenshotUrls = [];
+        $screenshotIds = [];
 
         foreach ($plugin->screenshots as $screenshot) {
-            $screenshots[] = $screenshot->getUrl();
+            $screenshotUrls[] = $screenshot->getUrl();
+            $screenshotIds[] = $screenshot->getId();
         }
 
 
@@ -127,7 +129,8 @@ abstract class BaseApiController extends Controller
             'developerUrl' => $plugin->getDeveloper()->developerUrl,
             'developerVendor' => $plugin->getDeveloper()->vendor,
 
-            'screenshots' => $screenshots,
+            'screenshotUrls' => $screenshotUrls,
+            'screenshotIds' => $screenshotIds,
             'categoryIds' => $categoryIds,
             'package' => $package,
         ];

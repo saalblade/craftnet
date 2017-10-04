@@ -157,7 +157,6 @@ class PluginsController extends Controller
             $plugin->developerId = $request->getBodyParam('developerId')[0];
         }
 
-
         $plugin->iconId = $request->getBodyParam('iconId')[0] ?? null;
         $plugin->packageName = $request->getBodyParam('packageName');
         $plugin->repository = $request->getBodyParam('repository');
@@ -172,12 +171,13 @@ class PluginsController extends Controller
         $plugin->changelogUrl = $request->getBodyParam('changelogUrl');
 
         $plugin->setCategories(Category::find()->id($request->getBodyParam('categoryIds'))->fixedOrder()->all());
-        $plugin->setScreenshots(Asset::find()->id($request->getBodyParam('screenshotIds'))->fixedOrder()->all());
 
 
         // Front-end icon upload
 
         if (!Craft::$app->getRequest()->getIsCpRequest()) {
+
+            // Icon
 
             $iconFile = UploadedFile::getInstanceByName('icon');
 
@@ -217,7 +217,47 @@ class PluginsController extends Controller
                     $plugin->iconId = $icon->id;
                 }
             }
+
+
+            // Screenshots
+
+            $screenshotIds = $request->getBodyParam('screenshotIds');
+            $screenshotFiles = UploadedFile::getInstancesByName('screenshots');
+
+            if(count($screenshotFiles) > 0) {
+                foreach($screenshotFiles as $screenshotFile) {
+                    $name = $plugin->name;
+                    $handle = $plugin->handle;
+                    $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$screenshotFile->getExtension();
+                    move_uploaded_file($screenshotFile->tempName, $tempPath);
+
+
+                    // Save as an asset
+                    $volumesService = Craft::$app->getVolumes();
+                    $volume = $volumesService->getVolumeByHandle('screenshots');
+                    $folderId = $volumesService->ensureTopFolder($volume);
+
+                    $targetFilename = $handle.StringHelper::randomString().'.'.$screenshotFile->getExtension();
+
+                    $screenshot = new Asset([
+                        'title' => $name,
+                        'tempFilePath' => $tempPath,
+                        'newLocation' => "{folder:{$folderId}}".$targetFilename,
+                    ]);
+
+                    if (!Craft::$app->getElements()->saveElement($screenshot, false)) {
+                        throw new Exception('Unable to save icon asset: '.implode(',', $screenshot->getFirstErrors()));
+                    }
+
+                    $screenshotIds[] = $screenshot->id;
+                }
+            }
         }
+
+        $plugin->setScreenshots(Asset::find()->id($screenshotIds)->fixedOrder()->all());
+
+
+        // Save plugin
 
         if (!Craft::$app->getElements()->saveElement($plugin)) {
             if ($request->getAcceptsJson()) {
