@@ -239,6 +239,7 @@ class ConnectController extends BaseApiController
             return $provider->getParsedResponse($request);
 
         } catch(GithubIdentityProviderException $e) {
+            Craft::error('Tried to make an authenticated call to Github, but ran into an error: '.$e->getMessage(), __METHOD__);
             // The token is no longer valid, let's reconnect.
             return $this->redirect($this->_connectUri);
         }
