@@ -52,9 +52,9 @@
             <div class="card-body">
                 <h4>Account</h4>
 
-                <p v-if="!userIsInGroup('developers')">
-                    <input id="enablePluginDeveloperFeatures" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
-                    <label for="enablePluginDeveloperFeatures">Enable plugin developer features</label>
+                <p>
+                    <input id="enablePluginDeveloperFeatures" :disabled="userIsInGroup('developers')" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
+                    <label for="enablePluginDeveloperFeatures" :class="userIsInGroup('developers') ? 'disabled' : ''">Enable plugin developer features</label>
                 </p>
 
                 <p>
