@@ -173,7 +173,9 @@ class PluginsController extends Controller
         $plugin->setCategories(Category::find()->id($request->getBodyParam('categoryIds'))->fixedOrder()->all());
 
 
-        // Front-end icon upload
+        // Uploads
+
+        $screenshotIds = (!empty($request->getBodyParam('screenshotIds')) ? $request->getBodyParam('screenshotIds') : []);
 
         if (!Craft::$app->getRequest()->getIsCpRequest()) {
 
@@ -221,12 +223,31 @@ class PluginsController extends Controller
 
             // Screenshots
 
-            $screenshotIds = $request->getBodyParam('screenshotIds');
+            // Remove old screenshots
+
+            $existingScreenshots = $plugin->getScreenshots();
+
+            foreach($existingScreenshots as $existingScreenshot) {
+                $remove = true;
+                foreach($screenshotIds as $screenshotId) {
+                    if($existingScreenshot->id == $screenshotId) {
+                        $remove = false;
+                    }
+                }
+
+                if($remove) {
+                    Craft::$app->getElements()->deleteElementById($existingScreenshot->id, Asset::class);
+                }
+            }
+
+
+            // Upload new screenshots
+
             $screenshotFiles = UploadedFile::getInstancesByName('screenshots');
 
             if(count($screenshotFiles) > 0) {
                 foreach($screenshotFiles as $screenshotFile) {
-                    $name = $plugin->name;
+                    $name = $plugin->name." Screenshot";
                     $handle = $plugin->handle;
                     $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$screenshotFile->getExtension();
                     move_uploaded_file($screenshotFile->tempName, $tempPath);
@@ -237,7 +258,7 @@ class PluginsController extends Controller
                     $volume = $volumesService->getVolumeByHandle('screenshots');
                     $folderId = $volumesService->ensureTopFolder($volume);
 
-                    $targetFilename = $handle.StringHelper::randomString().'.'.$screenshotFile->getExtension();
+                    $targetFilename = $handle.'-'.StringHelper::randomString().'.'.$screenshotFile->getExtension();
 
                     $screenshot = new Asset([
                         'title' => $name,
@@ -281,6 +302,15 @@ class PluginsController extends Controller
             $return['iconId'] = $plugin->icon->id;
             $return['iconUrl'] = $plugin->icon->getUrl();
             $return['name'] = $plugin->name;
+
+            $return['screenshots'] = [];
+
+            foreach($plugin->getScreenshots() as $screenshot) {
+                $return['screenshots'][] = [
+                    'id' => $screenshot->id,
+                    'url' => $screenshot->getUrl(),
+                ];
+            }
 
             return $this->asJson($return);
         }

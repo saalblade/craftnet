@@ -117,8 +117,22 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     statePlugin.price = (formData.get('price') ? formData.get('price') : '');
     statePlugin.renewalPrice = (formData.get('renewalPrice') ? formData.get('renewalPrice') : '');
     statePlugin.categoryIds = formData.getAll('categoryIds[]');
-    statePlugin.screenshotIds = formData.getAll('screenshotIds[]');
-    statePlugin.screenshotUrls = formData.getAll('screenshotUrls[]');
+
+    let screenshotIds = [];
+    let screenshotUrls = [];
+
+    if(data.screenshots.length > 0) {
+        for(let i = 0; i < data.screenshots.length; i++) {
+            screenshotIds.push(data.screenshots[i].id);
+            screenshotUrls.push(data.screenshots[i].url);
+        }
+    }
+
+    statePlugin.screenshotIds = screenshotIds;
+    statePlugin.screenshotUrls = screenshotUrls;
+
+    /*statePlugin.screenshotIds = formData.getAll('screenshotIds[]');
+    statePlugin.screenshotUrls = formData.getAll('screenshotUrls[]');*/
 
     if(newPlugin) {
         state.craftId.plugins.push(statePlugin);

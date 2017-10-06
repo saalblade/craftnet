@@ -34,7 +34,8 @@
                         </div>
                         <div class="col-sm-10">
                             <div class="form-group">
-                                <input type="file" ref="iconFile" class="form-control" @change="changeIcon">
+                                <input type="file" ref="iconFile" class="form-control" @change="changeIcon" :class="{'is-invalid': errors.iconId }" />
+                                <div class="invalid-feedback" v-for="error in errors.iconId">{{ error }}</div>
                             </div>
                         </div>
                     </div>
@@ -131,20 +132,22 @@
                     icon: null,
                     iconId: null,
                     developerId: null,
-                    handle: null,
-                    packageName: null,
-                    name: null,
-                    shortDescription: null,
-                    longDescription: null,
-                    documentationUrl: null,
-                    changelogUrl: null,
-                    repository: null,
+                    handle: '',
+                    packageName: '',
+                    name: '',
+                    shortDescription: '',
+                    longDescription: '',
+                    documentationUrl: '',
+                    changelogUrl: '',
+                    repository: '',
                     license: 'craft',
                     price: 0,
                     renewalPrice: 0,
                     iconUrl: null,
-                    screenshotIds: [],
+                    categoryIds: [],
                     screenshots: [],
+                    screenshotIds: [],
+                    screenshotUrls: [],
                 },
                 errors: {},
             }
@@ -294,9 +297,10 @@
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/developer/plugins'});
                 }).catch((data) => {
+                    console.log('error!');
                     this.loading = false;
                     this.$root.displayError('Couldn’t save plugin.');
-                    this.errors = data.errors;
+                    this.errors = (data.errors ? data.errors : []);
                 });
             }
         },
