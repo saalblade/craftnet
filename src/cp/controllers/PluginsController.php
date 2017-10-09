@@ -377,6 +377,23 @@ class PluginsController extends Controller
             throw new NotFoundHttpException('Plugin not found');
         }
 
+
+        // Delete icon
+
+        if($plugin->icon) {
+            Craft::$app->getElements()->deleteElement($plugin->icon);
+        }
+
+
+        // Delete screenshots
+
+        foreach($plugin->screenshots as $screenshot) {
+            Craft::$app->getElements()->deleteElement($screenshot);
+        }
+
+
+        // Delete plugin
+
         if (!Craft::$app->getElements()->deleteElement($plugin)) {
             Craft::$app->getSession()->setError('Couldn’t delete plugin.');
             return null;
