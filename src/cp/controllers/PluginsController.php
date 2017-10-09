@@ -326,6 +326,20 @@ class PluginsController extends Controller
                     throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
                 }
             }
+
+           foreach ($plugin->screenshots as $screenshot) {
+               if ($newName) {
+                   $screenshot->title = $plugin->name." Screenshot";
+               }
+
+               if ($newHandle) {
+                   $screenshot->newFilename = $plugin->handle.'-'.StringHelper::randomString().'.'.$screenshot->getExtension();
+               }
+
+               if (!Craft::$app->getElements()->saveElement($screenshot, false)) {
+                   throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+               }
+           }
         }
 
         if ($request->getAcceptsJson()) {
