@@ -114,8 +114,13 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     statePlugin.changelogUrl = formData.get('changelogUrl');
     // statePlugin.repository = formData.get('repository');
     statePlugin.license = formData.get('license');
-    statePlugin.price = (formData.get('price') ? formData.get('price') : '');
-    statePlugin.renewalPrice = (formData.get('renewalPrice') ? formData.get('renewalPrice') : '');
+
+    let price = parseFloat(formData.get('price'));
+    statePlugin.price = (price ? price : null);
+
+    let renewalPrice = parseFloat(formData.get('renewalPrice'));
+    statePlugin.renewalPrice = (renewalPrice ? renewalPrice : null);
+
     statePlugin.categoryIds = formData.getAll('categoryIds[]');
 
     let screenshotIds = [];

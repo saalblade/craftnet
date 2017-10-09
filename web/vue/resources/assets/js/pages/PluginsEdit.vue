@@ -261,7 +261,17 @@
                 formData.append('changelogUrl', this.pluginDraft.changelogUrl);
                 formData.append('repository', this.pluginDraft.repository);
                 formData.append('license', this.pluginDraft.license);
+
+                if(!this.pluginDraft.price) {
+                    this.pluginDraft.price = 0;
+                }
+
                 formData.append('price', this.pluginDraft.price);
+
+                if(!this.pluginDraft.renewalPrice) {
+                    this.pluginDraft.renewalPrice = 0;
+                }
+
                 formData.append('renewalPrice', this.pluginDraft.renewalPrice);
 
                 if(this.pluginDraft.categoryIds.length > 0) {
