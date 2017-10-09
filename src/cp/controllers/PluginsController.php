@@ -95,7 +95,6 @@ class PluginsController extends Controller
             'packageName' => $config['name'] ?? null,
             'handle' => $handle,
             'shortDescription' => $config['extra']['description'] ?? $config['description'] ?? null,
-            'longDescription' => $this->_getReadme($api, $owner, $repo),
             'documentationUrl' => $config['extra']['documentationUrl'] ?? $config['support']['docs'] ?? null,
             'changelogUrl' => $config['extra']['changelogUrl'] ?? null,
             'icon' => $iconHtml,
