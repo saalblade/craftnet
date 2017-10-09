@@ -25,9 +25,7 @@
                     </h6>
                     <p>{{ plugin.shortDescription }}</p>
                     <p v-if="plugin.status == 'enabled'" class="text-secondary">
-                        {{ plugin.package ? plugin.package.downloads.total : 0 }} Downloads &nbsp;
-                        {{ plugin.package ? plugin.package.github_stars : 0 }} Stars &nbsp;
-                        {{ plugin.package ? plugin.package.github_open_issues : 0 }} Issues
+                        {{ plugin.package ? plugin.package.downloads.total : 0 }} Downloads
                     </p>
                     <p v-if="plugin.status == 'disabled'" class="text-secondary">
                         <em>Your plugin is being reviewed by the staff for activation.</em>
