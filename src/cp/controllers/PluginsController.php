@@ -157,11 +157,24 @@ class PluginsController extends Controller
             $plugin->developerId = $request->getBodyParam('developerId')[0];
         }
 
+        $newName = false;
+        $newHandle = false;
+
+        if($plugin->name != $request->getBodyParam('name')) {
+            $newName = true;
+        }
+
+        $plugin->name = $request->getBodyParam('name');
+
+        if($plugin->handle != $request->getBodyParam('handle')) {
+            $newHandle = true;
+        }
+
+        $plugin->handle = $request->getBodyParam('handle');
+
         $plugin->iconId = $request->getBodyParam('iconId')[0] ?? null;
         $plugin->packageName = $request->getBodyParam('packageName');
         $plugin->repository = $request->getBodyParam('repository');
-        $plugin->name = $request->getBodyParam('name');
-        $plugin->handle = $request->getBodyParam('handle');
         $plugin->price = (float)$request->getBodyParam('price');
         $plugin->renewalPrice = (float)$request->getBodyParam('renewalPrice');
         $plugin->license = $request->getBodyParam('license');
@@ -292,6 +305,27 @@ class PluginsController extends Controller
                 'plugin' => $plugin
             ]);
             return null;
+        }
+
+
+        // Rename icon with new name and filename
+
+        if ($newName || $newHandle) {
+            if ($plugin->icon) {
+                $icon = $plugin->icon;
+
+                if ($newName) {
+                    $icon->title = $plugin->name;
+                }
+
+                if ($newHandle) {
+                    $icon->newFilename = $plugin->handle.'.'.$icon->getExtension();
+                }
+
+                if (!Craft::$app->getElements()->saveElement($icon, false)) {
+                    throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+                }
+            }
         }
 
         if ($request->getAcceptsJson()) {
