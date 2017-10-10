@@ -20,6 +20,12 @@ export const craftLicenses = state => {
     }
 };
 
+export const apps = state => {
+    if(state.craftId) {
+        return state.craftId.apps;
+    }
+};
+
 export const currentUser = state => {
     if(state.craftId) {
         return state.craftId.currentUser;

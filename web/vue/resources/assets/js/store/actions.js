@@ -15,6 +15,22 @@ export const getCraftIdData = ({commit}) => {
     })
 };
 
+export const updateApps = ({commit, state}, apps) => {
+    commit(types.UPDATE_APPS, { apps })
+};
+
+export const disconnectApp = ({commit, state}, appHandle) => {
+    return new Promise((resolve, reject) => {
+        api.disconnectApp(appHandle, data => {
+            commit(types.DISCONNECT_APP, {appHandle, data});
+            resolve(data);
+        },
+        response => {
+            reject(response);
+        })
+    })
+};
+
 export const saveUser = ({commit, state}, user) => {
     return new Promise((resolve, reject) => {
         api.saveUser(user, data => {

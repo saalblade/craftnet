@@ -1,4 +1,5 @@
 import * as types from './mutation-types'
+import Vue from 'vue';
 
 export const SAVE_CARD = (state, {data}) => {
     state.stripeCard = data.card
@@ -26,6 +27,14 @@ export const DISCONNECT_STRIPE_ACCOUNT = (state, {data}) => {
 
 export const RECEIVE_CRAFT_ID_DATA = (state, {data}) => {
     state.craftId = data
+};
+
+export const UPDATE_APPS = (state, {apps}) => {
+    state.craftId.apps = apps;
+};
+
+export const DISCONNECT_APP = (state, {appHandle, data}) => {
+    Vue.delete(state.craftId.apps, appHandle);
 };
 
 export const SAVE_USER = (state, {user, response}) => {

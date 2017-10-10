@@ -7,7 +7,11 @@ use craft\elements\Category;
 use craft\elements\Entry;
 use craftcom\api\controllers\BaseApiController;
 use craftcom\plugins\Plugin;
+use League\OAuth2\Client\Token\AccessToken;
 use yii\web\Response;
+use craft\db\Query;
+use League\OAuth2\Client\Provider\Github;
+
 
 /**
  * Class CraftIdController
@@ -30,6 +34,31 @@ class CraftIdController extends BaseApiController
 
         $currentUserId = Craft::$app->getRequest()->getParam('userId');
         $currentUser = Craft::$app->getUsers()->getUserById($currentUserId);
+
+
+        // Apps
+
+        $apps = [];
+
+        $githubAccessToken = $this->_getAuthTokenByUserId($currentUserId);
+
+        if($githubAccessToken) {
+
+            $githubToken = new AccessToken([
+                'access_token' => $githubAccessToken
+            ]);
+
+            $provider = $this->_getProvider();
+            $githubAccount = $provider->getResourceOwner($githubToken);
+
+            if ($githubAccount) {
+                $apps['github'] = [
+                    'token' => $this->_getAuthTokenByUserId($currentUserId),
+                    'account' => $githubAccount->toArray(),
+                ];
+            }
+        }
+
 
 
         // Plugins
@@ -162,6 +191,7 @@ class CraftIdController extends BaseApiController
                 // 'photoUrl' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getUrl() : null),
                 'photoUrl' => $currentUser->getThumbUrl(200),
             ],
+            'apps' => $apps,
             'plugins' => $plugins,
             'craftLicenses' => $craftLicenses,
             'pluginLicenses' => $pluginLicenses,
@@ -177,6 +207,31 @@ class CraftIdController extends BaseApiController
 
     // Private Methods
     // =========================================================================
+
+    /**
+     * @return Github
+     */
+    private function _getProvider()
+    {
+        return new Github([
+            'clientId' => isset($_SERVER['GITHUB_APP_CLIENT_ID']) ? $_SERVER['GITHUB_APP_CLIENT_ID'] : getenv('GITHUB_APP_CLIENT_ID'),
+            'clientSecret' => isset($_SERVER['GITHUB_APP_CLIENT_SECRET']) ? $_SERVER['GITHUB_APP_CLIENT_SECRET'] : getenv('GITHUB_APP_CLIENT_SECRET'),
+        ]);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return false|null|string
+     */
+    private function _getAuthTokenByUserId(int $userId)
+    {
+        return (new Query())
+            ->select(['accessToken'])
+            ->from(['oauthtokens'])
+            ->where(['userId' => $userId, 'provider' => 'Github'])
+            ->scalar();
+    }
 
     private function _getPayouts()
     {

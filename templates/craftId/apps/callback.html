@@ -1,0 +1,10 @@
+<html>
+	<body>
+	</body>
+</html>
+
+{% js %}
+let apps = {{ apps|json_encode|raw }};
+window.opener.craftIdApp.updateApps(apps);
+window.close();
+{% endjs %}

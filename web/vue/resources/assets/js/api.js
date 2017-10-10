@@ -13,6 +13,17 @@ export default {
             .catch(response => cbError(response));
     },
 
+    disconnectApp(appHandle, cb, cbError) {
+        let options = { emulateJSON: true };
+
+        let formData = new FormData();
+        formData.append(csrfTokenName, csrfTokenValue);
+
+        Vue.http.post(window.craftActionUrl+'/id/apps/disconnect', formData, options)
+            .then(response => cb(response.body))
+            .catch(response => cbError(response));
+    },
+
     saveUser(user, cb, cbError) {
         let formData = new FormData();
 
@@ -102,7 +113,6 @@ export default {
         Vue.http.post(window.craftIdUrl+'/stripe/remove-card', body, options)
             .then(response => cb(response.body))
             .catch(response => cbError(response));
-
     },
 
     saveLicense(license, cb, cbError) {

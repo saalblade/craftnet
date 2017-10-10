@@ -8,7 +8,7 @@ import App from './App';
 Vue.filter('currency', currency)
 Vue.use(VueResource)
 
-window.pluginStoreApp = new Vue({
+window.craftIdApp = new Vue({
     el: '#app',
     store,
 
@@ -26,6 +26,11 @@ window.pluginStoreApp = new Vue({
     },
 
     methods: {
+
+        updateApps(apps) {
+            this.$store.dispatch('updateApps', apps);
+        },
+
         displayNotification(type, message) {
             this.notification = {
                 type: type,
@@ -43,6 +48,7 @@ window.pluginStoreApp = new Vue({
             this.displayNotification('danger', message);
         },
     },
+
     created() {
         this.$store.dispatch('getCraftIdData').then(() => {
             this.loading = false;
