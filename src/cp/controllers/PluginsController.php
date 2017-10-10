@@ -530,7 +530,7 @@ class PluginsController extends Controller
         $icon = new Asset([
             'title' => $name,
             'tempFilePath' => $tempPath,
-            'newLocation' => "{folder:{$folderId}}{$handle}.svg",
+            'newLocation' => "{folder:{$folderId}}{$handle}".StringHelper::randomString().".svg",
         ]);
 
         if (!Craft::$app->getElements()->saveElement($icon, false)) {
