@@ -112,7 +112,7 @@ class PluginsController extends Controller
                     throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
                 }
 
-                if (!Craft::$app->getUser()->getIsAdmin() && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+                if (!Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                     throw new ForbiddenHttpException('User is not permitted to perform this action');
                 }
             } else {
@@ -138,7 +138,7 @@ class PluginsController extends Controller
                 throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
             }
 
-            if (!Craft::$app->getUser()->getIsAdmin() && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+            if (!Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                 throw new ForbiddenHttpException('User is not permitted to perform this action');
             }
         } else {
@@ -151,8 +151,8 @@ class PluginsController extends Controller
             $plugin->developerId = Craft::$app->getUser()->getId();
         }
 
-        // Only admins are able to change developer for a plugin
-        if (Craft::$app->getUser()->getIsAdmin() && isset($request->getBodyParam('developerId')[0])) {
+        // Only plugin managers are able to change developer for a plugin
+        if (Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && isset($request->getBodyParam('developerId')[0])) {
             $plugin->developerId = $request->getBodyParam('developerId')[0];
         }
 
