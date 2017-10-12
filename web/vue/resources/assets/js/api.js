@@ -8,7 +8,7 @@ export default {
         let body = { userId: userId };
         let options = { emulateJSON: true };
 
-        Vue.http.post(window.craftApiUrl+'/craft-id', body, options)
+        Vue.http.post(window.craftActionUrl+'/id/craft-id', body, options)
             .then(response => cb(response.body))
             .catch(response => cbError(response));
     },

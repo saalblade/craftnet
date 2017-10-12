@@ -21,7 +21,6 @@
 return [
     'api' => [
         'POST v1/updates' => 'api/v1/updates',
-        'POST v1/craft-id' => 'api/v1/craft-id',
         'POST v1/plugin-store' => 'api/v1/plugin-store',
         'GET  v1/account' => 'api/v1/account',
         'POST v1/developer/<userId:\d+>' => 'api/v1/developer',
@@ -31,6 +30,7 @@ return [
     ],
     'craftId' => [
         'GET  v1/id' => 'id/v1/id',
+        'GET  craft-id' => 'id/craft-id',
         'GET  apps/connect/<providerHandle:{handle}>' => 'id/apps/connect',
         'GET  apps/callback' => 'id/apps/callback',
         'GET  apps/disconnect/<providerHandle:{handle}>' => 'id/apps/disconnect',

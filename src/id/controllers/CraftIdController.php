@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\api\controllers\v1;
+namespace craftcom\id\controllers;
 
 use Craft;
 use craft\elements\Category;
@@ -17,7 +17,7 @@ use League\OAuth2\Client\Provider\Github;
 /**
  * Class CraftIdController
  *
- * @package craftcom\api\controllers\v1
+ * @package craftcom\id\controllers
  */
 class CraftIdController extends BaseApiController
 {
