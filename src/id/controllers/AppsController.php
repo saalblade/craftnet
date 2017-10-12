@@ -19,34 +19,9 @@ class AppsController extends BaseController
     // =========================================================================
 
     /**
-     * @inheritdoc
-     */
-    public $enableCsrfValidation = false;
-
-    /**
      * @var string
      */
     private $_connectUri = 'apps/connect';
-
-    /**
-     * @var array
-     */
-    private $providers = [
-        'github' => [
-            'class' => 'Github',
-            'nsClass' => 'League\OAuth2\Client\Provider\Github',
-            'clientIdKey' => 'GITHUB_APP_CLIENT_ID',
-            'clientSecretKey' => 'GITHUB_APP_CLIENT_SECRET',
-            'scope' => ['user:email', 'write:repo_hook', 'repo'],
-        ],
-        'bitbucket' => [
-            'class' => 'Bitbucket',
-            'nsClass' => 'Stevenmaguire\OAuth2\Client\Provider\Bitbucket',
-            'clientIdKey' => 'BITBUCKET_APP_CLIENT_ID',
-            'clientSecretKey' => 'BITBUCKET_APP_CLIENT_SECRET',
-            'scope' => 'account',
-        ],
-    ];
 
     // Public Methods
     // =========================================================================
