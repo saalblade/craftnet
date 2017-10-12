@@ -5,6 +5,7 @@ namespace craftcom\api\controllers\v1;
 use Craft;
 use craft\elements\Category;
 use craft\elements\Entry;
+use craft\helpers\Json;
 use craftcom\api\controllers\BaseApiController;
 use craftcom\plugins\Plugin;
 use League\OAuth2\Client\Token\AccessToken;
@@ -73,11 +74,30 @@ class CraftIdController extends BaseApiController
 
                 $accessToken = new AccessToken($options);
 
-                $account = $appProvider->getResourceOwner($accessToken);
+                $resourceOwner = $appProvider->getResourceOwner($accessToken);
+                $account = $resourceOwner->toArray();
+
+                $repositories = [];
+
+                if($handle == 'github') {
+                    $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
+                        'headers' => [
+                            'Accept' => 'application/vnd.github.v3+json',
+                            'Authorization' => 'token '.$accessToken->getToken(),
+                        ],
+                        'query' => [
+                            'per_page' => 100
+                        ]
+                    ]);
+                    $body = $response->getBody();
+                    $contents = $body->getContents();
+                    $repositories = Json::decode($contents);
+                }
 
                 $apps[$handle] = [
                     'token' => $token,
-                    'account' => $account->toArray()
+                    'account' => $account,
+                    'repositories' => $repositories,
                 ];
             }
         }

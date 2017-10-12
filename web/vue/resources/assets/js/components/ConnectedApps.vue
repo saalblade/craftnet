@@ -2,9 +2,11 @@
 	<div>
 		<div class="card mb-3">
 			<div class="card-body">
-				<h4>Connected Apps</h4>
 
-				<hr>
+				<template v-if="title">
+					<h4>{{ title }}</h4>
+					<hr>
+				</template>
 
 				<div v-for="appType, index in appTypes">
 					<div class="d-flex align-items-start">
@@ -43,6 +45,8 @@
     import { mapGetters } from 'vuex'
 
     export default {
+
+        props: ['title'],
 
         data() {
           	return {

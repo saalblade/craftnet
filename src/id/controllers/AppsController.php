@@ -11,6 +11,7 @@ use craft\helpers\Db;
 use craft\db\Query;
 use League\OAuth2\Client\Token\AccessToken;
 use craft\web\Controller;
+use craft\helpers\Json;
 
 /**
  * Class AppsController
@@ -41,7 +42,7 @@ class AppsController extends Controller
             'nsClass' => 'League\OAuth2\Client\Provider\Github',
             'clientIdKey' => 'GITHUB_APP_CLIENT_ID',
             'clientSecretKey' => 'GITHUB_APP_CLIENT_SECRET',
-            'scope' => ['user:email', 'write:repo_hook'],
+            'scope' => ['user:email', 'write:repo_hook', 'repo'],
         ],
         'bitbucket' => [
             'class' => 'Bitbucket',
@@ -156,11 +157,30 @@ class AppsController extends Controller
 
                 $accessToken = new AccessToken($options);
 
-                $account = $appProvider->getResourceOwner($accessToken);
+                $resourceOwner = $appProvider->getResourceOwner($accessToken);
+                $account = $resourceOwner->toArray();
+
+                $repositories = [];
+
+                if($handle == 'github') {
+                    $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
+                        'headers' => [
+                            'Accept' => 'application/vnd.github.v3+json',
+                            'Authorization' => 'token '.$accessToken->getToken(),
+                        ],
+                        'query' => [
+                            'per_page' => 100
+                        ]
+                    ]);
+                    $body = $response->getBody();
+                    $contents = $body->getContents();
+                    $repositories = Json::decode($contents);
+                }
 
                 $apps[$handle] = [
                     'token' => $token,
-                    'account' => $account->toArray()
+                    'account' => $account,
+                    'repositories' => $repositories,
                 ];
             }
         }

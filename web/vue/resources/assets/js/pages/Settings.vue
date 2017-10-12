@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <connected-apps></connected-apps>
+        <connected-apps title="Connected Apps"></connected-apps>
 
         <div class="card mb-3">
             <div class="card-body">
