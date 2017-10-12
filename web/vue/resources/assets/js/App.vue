@@ -40,7 +40,7 @@
                             <ul class="nav nav-pills flex-column">
                                 <li class="nav-item"><router-link class="nav-link" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
                                 <li class="nav-item"><router-link class="nav-link" to="/account/billing"><i class="fa fa-file-text-o"></i> Billing</router-link></li>
-                                <li class="nav-item"><router-link class="nav-link" to="/account/apps"><i class="fa fa-link"></i> Connected Apps</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/account/profile"><i class="fa fa-link"></i> Profile</router-link></li>
                                 <li class="nav-item"><router-link class="nav-link" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
                             </ul>
 

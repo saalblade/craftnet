@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Apps from '../pages/Apps'
+import Profile from '../pages/Profile'
 import Billing from '../pages/Billing'
 import Customers from '../pages/Customers'
 import CustomersDetails from '../pages/CustomersDetails'
@@ -72,9 +72,9 @@ export default new Router({
             component: Billing
         },
         {
-            path: '/account/apps',
-            name: 'Apps',
-            component: Apps
+            path: '/account/profile',
+            name: 'Profile',
+            component: Profile
         },
         {
             path: '/account/settings',

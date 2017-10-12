@@ -91,7 +91,14 @@
 			},
             connect(provider) {
                 let width = 800;
-                let height = 770;
+                let height = 830;
+
+                switch(provider) {
+					case 'bitbucket':
+                        width = 1024;
+                        height = 570;
+					    break;
+				}
 
                 let winWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
                 let winHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
