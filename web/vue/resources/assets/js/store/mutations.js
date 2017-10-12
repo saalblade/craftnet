@@ -29,7 +29,7 @@ export const RECEIVE_CRAFT_ID_DATA = (state, {data}) => {
     state.craftId = data
 };
 
-export const UPDATE_APPS = (state, {apps}) => {
+export const CONNECT_APP_CALLBACK = (state, {apps}) => {
     state.craftId.apps = apps;
 };
 

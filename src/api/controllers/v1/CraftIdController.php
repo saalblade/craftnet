@@ -20,6 +20,26 @@ use League\OAuth2\Client\Provider\Github;
  */
 class CraftIdController extends BaseApiController
 {
+    /**
+     * @var array
+     */
+    private $providers = [
+        'github' => [
+            'class' => 'Github',
+            'nsClass' => 'League\OAuth2\Client\Provider\Github',
+            'clientIdKey' => 'GITHUB_APP_CLIENT_ID',
+            'clientSecretKey' => 'GITHUB_APP_CLIENT_SECRET',
+            'scope' => ['user:email', 'write:repo_hook'],
+        ],
+        'bitbucket' => [
+            'class' => 'Bitbucket',
+            'nsClass' => 'Stevenmaguire\OAuth2\Client\Provider\Bitbucket',
+            'clientIdKey' => 'BITBUCKET_APP_CLIENT_ID',
+            'clientSecretKey' => 'BITBUCKET_APP_CLIENT_SECRET',
+            'scope' => 'account',
+        ],
+    ];
+
     // Public Methods
     // =========================================================================
 
@@ -35,26 +55,29 @@ class CraftIdController extends BaseApiController
         $currentUserId = Craft::$app->getRequest()->getParam('userId');
         $currentUser = Craft::$app->getUsers()->getUserById($currentUserId);
 
-
         // Apps
 
         $apps = [];
 
-        $githubAccessToken = $this->_getAuthTokenByUserId($currentUserId);
+        foreach($this->providers as $handle => $config) {
+            $appProvider = $this->_getProvider($handle);
+            $token = $this->_getOauthTokenByUserId($config['class'], $currentUser->id);
+            if ($token) {
+                $options = [
+                    'access_token' => $token['accessToken'],
+                ];
 
-        if($githubAccessToken) {
+                if(isset($token['expiresIn'])) {
+                    $options['expires_in'] = $token['expiresIn'];
+                }
 
-            $githubToken = new AccessToken([
-                'access_token' => $githubAccessToken
-            ]);
+                $accessToken = new AccessToken($options);
 
-            $provider = $this->_getProvider();
-            $githubAccount = $provider->getResourceOwner($githubToken);
+                $account = $appProvider->getResourceOwner($accessToken);
 
-            if ($githubAccount) {
-                $apps['github'] = [
-                    'token' => $this->_getAuthTokenByUserId($currentUserId),
-                    'account' => $githubAccount->toArray(),
+                $apps[$handle] = [
+                    'token' => $token,
+                    'account' => $account->toArray()
                 ];
             }
         }
@@ -209,28 +232,52 @@ class CraftIdController extends BaseApiController
     // =========================================================================
 
     /**
-     * @return Github
-     */
-    private function _getProvider()
-    {
-        return new Github([
-            'clientId' => isset($_SERVER['GITHUB_APP_CLIENT_ID']) ? $_SERVER['GITHUB_APP_CLIENT_ID'] : getenv('GITHUB_APP_CLIENT_ID'),
-            'clientSecret' => isset($_SERVER['GITHUB_APP_CLIENT_SECRET']) ? $_SERVER['GITHUB_APP_CLIENT_SECRET'] : getenv('GITHUB_APP_CLIENT_SECRET'),
-        ]);
-    }
-
-    /**
      * @param int $userId
      *
      * @return false|null|string
      */
-    private function _getAuthTokenByUserId(int $userId)
+    private function _getOauthTokenByUserId($providerClass, int $userId)
     {
         return (new Query())
-            ->select(['accessToken'])
+            ->select([
+                'id',
+                'userId',
+                'provider',
+                'accessToken',
+                'tokenType',
+                'expiresIn',
+                'expiryDate',
+                'refreshToken',
+            ])
             ->from(['oauthtokens'])
-            ->where(['userId' => $userId, 'provider' => 'Github'])
-            ->scalar();
+            ->where(['userId' => $userId, 'provider' => $providerClass])
+            ->one();
+    }
+
+    /**
+     * @return Github
+     */
+    private function _getProvider($providerHandle)
+    {
+        $config = $this->_getProviderConfig($providerHandle);
+
+        if($config) {
+            return new $config['nsClass']([
+                'clientId' => isset($_SERVER[$config['clientIdKey']]) ? $_SERVER[$config['clientIdKey']] : getenv($config['clientIdKey']),
+                'clientSecret' => isset($_SERVER[$config['clientSecretKey']]) ? $_SERVER[$config['clientSecretKey']] : getenv($config['clientSecretKey']),
+                'redirectUri' => 'http://id.craftcms.dev/apps/callback'
+            ]);
+        }
+    }
+
+    /**
+     * @return Github
+     */
+    private function _getProviderConfig($providerHandle)
+    {
+        if(isset($this->providers[$providerHandle])) {
+            return $this->providers[$providerHandle];
+        }
     }
 
     private function _getPayouts()

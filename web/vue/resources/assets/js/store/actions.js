@@ -15,8 +15,8 @@ export const getCraftIdData = ({commit}) => {
     })
 };
 
-export const updateApps = ({commit, state}, apps) => {
-    commit(types.UPDATE_APPS, { apps })
+export const connectAppCallback = ({commit, state}, apps) => {
+    commit(types.CONNECT_APP_CALLBACK, { apps })
 };
 
 export const disconnectApp = ({commit, state}, appHandle) => {

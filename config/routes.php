@@ -31,9 +31,9 @@ return [
     ],
     'craftId' => [
         'GET  v1/id' => 'id/v1/id',
-        'GET  apps/connect' => 'id/apps/connect',
+        'GET  apps/connect/<providerHandle:{handle}>' => 'id/apps/connect',
         'GET  apps/callback' => 'id/apps/callback',
-        'GET  apps/disconnect' => 'id/apps/disconnect',
+        'GET  apps/disconnect/<providerHandle:{handle}>' => 'id/apps/disconnect',
 
         'GET  test' => 'id/account',
         'GET  test/developer/connect' => 'id/connect/connect',

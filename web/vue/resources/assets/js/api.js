@@ -17,6 +17,7 @@ export default {
         let options = { emulateJSON: true };
 
         let formData = new FormData();
+        formData.append('providerHandle', appHandle);
         formData.append(csrfTokenName, csrfTokenValue);
 
         Vue.http.post(window.craftActionUrl+'/id/apps/disconnect', formData, options)

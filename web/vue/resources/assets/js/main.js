@@ -27,8 +27,10 @@ window.craftIdApp = new Vue({
 
     methods: {
 
-        updateApps(apps) {
-            this.$store.dispatch('updateApps', apps);
+        connectAppCallback(apps) {
+            this.$store.dispatch('connectAppCallback', apps);
+
+            this.$root.displayNotice('App connected.');
         },
 
         displayNotification(type, message) {
