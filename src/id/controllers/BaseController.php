@@ -14,10 +14,5 @@ abstract class BaseController extends Controller
     /**
      * @inheritdoc
      */
-    public $allowAnonymous = true;
-
-    /**
-     * @inheritdoc
-     */
     public $enableCsrfValidation = false;
 }
