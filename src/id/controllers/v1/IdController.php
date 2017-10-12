@@ -10,7 +10,7 @@ use yii\web\Response;
  *
  * @package craftcom\id\controllers\v1
  */
-class IdController extends BaseApiController
+class IdController extends BaseController
 {
     /**
      * Handles /v1/id requests.

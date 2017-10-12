@@ -9,7 +9,7 @@ use craft\web\Controller;
  *
  * @package craftcom\id\controllers
  */
-abstract class BaseApiController extends Controller
+abstract class BaseController extends Controller
 {
     /**
      * @inheritdoc

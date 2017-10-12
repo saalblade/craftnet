@@ -19,7 +19,7 @@ use League\OAuth2\Client\Provider\Github;
  *
  * @package craftcom\id\controllers
  */
-class CraftIdController extends BaseApiController
+class CraftIdController extends BaseController
 {
     /**
      * @var array

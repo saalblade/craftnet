@@ -15,7 +15,7 @@ use craft\db\Query;
  *
  * @package craftcom\id\controllers
  */
-class ConnectController extends BaseApiController
+class ConnectController extends BaseController
 {
     /**
      * @var string

@@ -19,7 +19,7 @@ use yii\web\Response;
  *
  * @package craftcom\id\controllers
  */
-class StripeController extends BaseApiController
+class StripeController extends BaseController
 {
     // Public Methods
     // =========================================================================
