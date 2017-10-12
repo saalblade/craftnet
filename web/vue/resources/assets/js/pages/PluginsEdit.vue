@@ -7,13 +7,13 @@
                     <template v-if="connectedAppsCount > 0">
                         <h2>Choose a repository</h2>
 
-                        <template v-for="app, appHandle in apps">
+                        <div v-for="app, appHandle in apps" class="mb-3">
                             <repositories :appHandle="appHandle" @selectRepository="onSelectRepository"></repositories>
-                        </template>
+                        </div>
 
-                        <p class="mt-3">
+                        <div>
                             <router-link to="/account/settings#connected-apps" class="btn btn-secondary">Manage connected apps</router-link>
-                        </p>
+                        </div>
                     </template>
                     <template v-else="">
                         <h2>Connect</h2>

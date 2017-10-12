@@ -2,7 +2,8 @@
 	<div>
 		<h3>{{ appHandle }}</h3>
 
-		<div class="list-group">
+
+		<div v-if="app.repositories.length > 0" class="list-group">
 			<div v-for="repository in app.repositories" class="list-group-item">
 				<div class="d-flex">
 					<div class="media-body">
@@ -14,6 +15,8 @@
 				</div>
 			</div>
 		</div>
+
+		<p v-else="">No repositories.</p>
 	</div>
 </template>
 
