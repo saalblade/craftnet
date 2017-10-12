@@ -9,7 +9,9 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\events\RegisterUserPermissionsEvent;
 use craft\services\Fields;
+use craft\services\UserPermissions;
 use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
@@ -100,6 +102,14 @@ class Module extends \yii\base\Module
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = Plugins::class;
+        });
+
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $e) {
+            $e->permissions['Craftcom'] = [
+                'craftcom:managePlugins' => [
+                    'label' => 'Manage plugins',
+                ],
+            ];
         });
     }
 
