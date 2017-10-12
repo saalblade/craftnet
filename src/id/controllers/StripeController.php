@@ -31,7 +31,7 @@ class StripeController extends BaseController
      */
     public function actionConnect()
     {
-        $provider = $this->_getProvider();
+        $provider = $this->_getStripeProvider();
 
         Craft::$app->getSession()->set('stripe.referrer', Craft::$app->getRequest()->getReferrer());
 
@@ -75,7 +75,7 @@ class StripeController extends BaseController
 
         // Save new token
 
-        $provider = $this->_getProvider();
+        $provider = $this->_getStripeProvider();
         $code = Craft::$app->getRequest()->getParam('code');
 
         $accessToken = $provider->getAccessToken('authorization_code', [
@@ -118,7 +118,7 @@ class StripeController extends BaseController
             ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
             ->one();
 
-        $provider = $this->_getProvider();
+        $provider = $this->_getStripeProvider();
         $accessToken = new AccessToken(['access_token' => $tokenRecord->accessToken]);
         $resourceOwner = $provider->getResourceOwner($accessToken);
         $accountId = $resourceOwner->getId();
@@ -271,7 +271,7 @@ class StripeController extends BaseController
             ->one();
     }
 
-    private function _getProvider()
+    private function _getStripeProvider()
     {
         $provider = new StripeOauthProvider([
             'clientId' => Craft::$app->getConfig()->getGeneral()->stripeClientId,

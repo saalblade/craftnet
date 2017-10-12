@@ -4,21 +4,16 @@ namespace craftcom\id\controllers;
 
 use Craft;
 use craft\records\OAuthToken;
-use League\OAuth2\Client\Provider\Exception\GithubIdentityProviderException;
-use League\OAuth2\Client\Provider\Github;
+use Exception;
 use yii\web\Response;
 use craft\helpers\Db;
-use craft\db\Query;
-use League\OAuth2\Client\Token\AccessToken;
-use craft\web\Controller;
-use craft\helpers\Json;
 
 /**
  * Class AppsController
  *
  * @package craftcom\id\controllers
  */
-class AppsController extends Controller
+class AppsController extends BaseController
 {
     // Properties
     // =========================================================================
@@ -81,7 +76,7 @@ class AppsController extends Controller
      * OAuth callback.
      *
      * @return Response
-     * @throws GithubIdentityProviderException
+     * @throws Exception
      */
     public function actionCallback()
     {
@@ -141,49 +136,7 @@ class AppsController extends Controller
 
         // Apps
 
-        $apps = [];
-
-        foreach($this->providers as $handle => $config) {
-            $appProvider = $this->_getProvider($handle);
-            $token = $this->_getOauthTokenByUserId($config['class'], $currentUser->id);
-            if ($token) {
-                $options = [
-                    'access_token' => $token['accessToken'],
-                ];
-
-                if(isset($token['expiresIn'])) {
-                    $options['expires_in'] = $token['expiresIn'];
-                }
-
-                $accessToken = new AccessToken($options);
-
-                $resourceOwner = $appProvider->getResourceOwner($accessToken);
-                $account = $resourceOwner->toArray();
-
-                $repositories = [];
-
-                if($handle == 'github') {
-                    $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
-                        'headers' => [
-                            'Accept' => 'application/vnd.github.v3+json',
-                            'Authorization' => 'token '.$accessToken->getToken(),
-                        ],
-                        'query' => [
-                            'per_page' => 100
-                        ]
-                    ]);
-                    $body = $response->getBody();
-                    $contents = $body->getContents();
-                    $repositories = Json::decode($contents);
-                }
-
-                $apps[$handle] = [
-                    'token' => $token,
-                    'account' => $account,
-                    'repositories' => $repositories,
-                ];
-            }
-        }
+        $apps = $this->getApps();
 
         return $this->renderTemplate('apps/callback', [
             'apps' => $apps
@@ -207,71 +160,5 @@ class AppsController extends Controller
             ->execute();
 
         return $this->asJson(['success' => true]);
-    }
-
-    // Private Methods
-    // =========================================================================
-
-    /**
-     * @param int $userId
-     *
-     * @return false|null|string
-     */
-    private function _getAuthTokenByUserId($providerClass, int $userId)
-    {
-        return (new Query())
-            ->select(['accessToken'])
-            ->from(['oauthtokens'])
-            ->where(['userId' => $userId, 'provider' => $providerClass])
-            ->scalar();
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return false|null|string
-     */
-    private function _getOauthTokenByUserId($providerClass, int $userId)
-    {
-        return (new Query())
-            ->select([
-                'id',
-                'userId',
-                'provider',
-                'accessToken',
-                'tokenType',
-                'expiresIn',
-                'expiryDate',
-                'refreshToken',
-            ])
-            ->from(['oauthtokens'])
-            ->where(['userId' => $userId, 'provider' => $providerClass])
-            ->one();
-    }
-
-    /**
-     * @return Github
-     */
-    private function _getProvider($providerHandle)
-    {
-        $config = $this->_getProviderConfig($providerHandle);
-
-        if($config) {
-            return new $config['nsClass']([
-                'clientId' => isset($_SERVER[$config['clientIdKey']]) ? $_SERVER[$config['clientIdKey']] : getenv($config['clientIdKey']),
-                'clientSecret' => isset($_SERVER[$config['clientSecretKey']]) ? $_SERVER[$config['clientSecretKey']] : getenv($config['clientSecretKey']),
-                'redirectUri' => 'http://id.craftcms.dev/apps/callback'
-            ]);
-        }
-    }
-
-    /**
-     * @return Github
-     */
-    private function _getProviderConfig($providerHandle)
-    {
-        if(isset($this->providers[$providerHandle])) {
-            return $this->providers[$providerHandle];
-        }
     }
 }
