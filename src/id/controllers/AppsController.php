@@ -31,18 +31,18 @@ class AppsController extends BaseController
      *
      * @return Response
      */
-    public function actionConnect($providerHandle)
+    public function actionConnect($appTypeHandle)
     {
-        Craft::$app->getSession()->set('connectProviderHandle', $providerHandle);
+        Craft::$app->getSession()->set('connectAppTypeHandle', $appTypeHandle);
 
-        $providerConfig = $this->_getProviderConfig($providerHandle);
-        $provider = $this->_getProvider($providerHandle);
+        $appTypeConfig = $this->getAppTypeConfig($appTypeHandle);
+        $oauthProvider = $this->getAppTypeOauthProvider($appTypeHandle);
 
         $options = [
-            'scope' => $providerConfig['scope'],
+            'scope' => $appTypeConfig['scope'],
         ];
-        $authUrl = $provider->getAuthorizationUrl($options);
-        Craft::$app->getSession()->set('oauth2state', $provider->getState());
+        $authUrl = $oauthProvider->getAuthorizationUrl($options);
+        Craft::$app->getSession()->set('oauth2state', $oauthProvider->getState());
 
         return $this->redirect($authUrl);
     }
@@ -55,31 +55,31 @@ class AppsController extends BaseController
      */
     public function actionCallback()
     {
-        $providerHandle = Craft::$app->getSession()->get('connectProviderHandle');
-        $providerConfig = $this->_getProviderConfig($providerHandle);
-        $provider = $this->_getProvider($providerHandle);
+        $appTypeHandle = Craft::$app->getSession()->get('connectAppTypeHandle');
+        $appTypeConfig = $this->getAppTypeConfig($appTypeHandle);
+        $oauthProvider = $this->getAppTypeOauthProvider($appTypeHandle);
 
         $code = Craft::$app->getRequest()->getParam('code');
         $state = Craft::$app->getRequest()->getParam('state');
 
         if (!$code || !$state) {
-            Craft::$app->getSession()->remove('connectProviderHandle');
-            Craft::error("Either the code or the oauth2state param was missing in the {$providerConfig['class']} callback.", __METHOD__);
+            Craft::$app->getSession()->remove('connectAppTypeHandle');
+            Craft::error("Either the code or the oauth2state param was missing in the {$appTypeConfig['class']} callback.", __METHOD__);
             throw new \Exception('There was a problem getting an authorzation token.');
         }
 
         if ($state !== Craft::$app->getSession()->get('oauth2state')) {
-            Craft::$app->getSession()->remove('connectProviderHandle');
-            Craft::error("oauth2state was missing in session from the {$providerConfig['class']} callback.", __METHOD__);
+            Craft::$app->getSession()->remove('connectAppTypeHandle');
+            Craft::error("oauth2state was missing in session from the {$appTypeConfig['class']} callback.", __METHOD__);
             throw new \Exception('There was a problem getting an authorzation token.');
         }
 
         try {
-            $accessToken = $provider->getAccessToken('authorization_code', [
+            $accessToken = $oauthProvider->getAccessToken('authorization_code', [
                 'code' => $code,
             ]);
 
-            Craft::$app->getSession()->remove('connectProviderHandle');
+            Craft::$app->getSession()->remove('connectAppTypeHandle');
 
         } catch (\Exception $e) {
             Craft::error('There was a problem getting an authorization token.', __METHOD__);
@@ -87,19 +87,19 @@ class AppsController extends BaseController
         }
 
         $currentUser = Craft::$app->getUser()->getIdentity();
-        $existingToken = $this->_getAuthTokenByUserId($providerConfig['class'], $currentUser->id);
+        $existingToken = $this->_getAuthTokenByUserId($appTypeConfig['class'], $currentUser->id);
 
         // No previous acces token, create a new one.
         if (!$existingToken) {
             $tokenRecord = new OAuthToken();
             $tokenRecord->userId = $currentUser->id;
-            $tokenRecord->provider = $providerConfig['class'];
+            $tokenRecord->provider = $appTypeConfig['class'];
 
         } else {
             // A previous one, let's update it.
             $tokenRecord = OAuthToken::find()
                 ->where(Db::parseParam('accessToken', $existingToken))
-                ->andWhere(Db::parseParam('provider', $providerConfig['class']))
+                ->andWhere(Db::parseParam('provider', $appTypeConfig['class']))
                 ->one();
         }
 
@@ -125,13 +125,13 @@ class AppsController extends BaseController
      */
     public function actionDisconnect()
     {
-        $providerHandle = Craft::$app->getRequest()->getBodyParam('providerHandle');
-        $providerConfig = $this->_getProviderConfig($providerHandle);
+        $appTypeHandle = Craft::$app->getRequest()->getBodyParam('appTypeHandle');
+        $appTypeConfig = $this->getAppTypeConfig($appTypeHandle);
 
         $currentUser = Craft::$app->getUser()->getIdentity();
 
         Craft::$app->getDb()->createCommand()
-            ->delete('oauthtokens', ['userId' => $currentUser->id, 'provider' => $providerConfig['class']])
+            ->delete('oauthtokens', ['userId' => $currentUser->id, 'provider' => $appTypeConfig['class']])
             ->execute();
 
         return $this->asJson(['success' => true]);

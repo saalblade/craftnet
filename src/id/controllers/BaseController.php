@@ -29,17 +29,17 @@ abstract class BaseController extends Controller
     /**
      * @var array
      */
-    private $providers = [
+    private $appTypes = [
         'github' => [
             'class' => 'Github',
-            'nsClass' => 'League\OAuth2\Client\Provider\Github',
+            'oauthClass' => 'League\OAuth2\Client\Provider\Github',
             'clientIdKey' => 'GITHUB_APP_CLIENT_ID',
             'clientSecretKey' => 'GITHUB_APP_CLIENT_SECRET',
-            'scope' => ['user:email', 'write:repo_hook'],
+            'scope' => ['user:email', 'write:repo_hook', 'repo'],
         ],
         'bitbucket' => [
             'class' => 'Bitbucket',
-            'nsClass' => 'Stevenmaguire\OAuth2\Client\Provider\Bitbucket',
+            'oauthClass' => 'Stevenmaguire\OAuth2\Client\Provider\Bitbucket',
             'clientIdKey' => 'BITBUCKET_APP_CLIENT_ID',
             'clientSecretKey' => 'BITBUCKET_APP_CLIENT_SECRET',
             'scope' => 'account',
@@ -55,8 +55,8 @@ abstract class BaseController extends Controller
 
         $apps = [];
 
-        foreach($this->providers as $handle => $config) {
-            $appProvider = $this->_getProvider($handle);
+        foreach($this->appTypes as $handle => $config) {
+            $oauthProvider = $this->getAppTypeOauthProvider($handle);
             $token = $this->_getOauthTokenByUserId($config['class'], $currentUser->id);
             if ($token) {
                 $options = [
@@ -69,7 +69,7 @@ abstract class BaseController extends Controller
 
                 $accessToken = new AccessToken($options);
 
-                $resourceOwner = $appProvider->getResourceOwner($accessToken);
+                $resourceOwner = $oauthProvider->getResourceOwner($accessToken);
                 $account = $resourceOwner->toArray();
 
                 $repositories = [];
@@ -185,12 +185,12 @@ abstract class BaseController extends Controller
     /**
      * @return Github
      */
-    protected function _getProvider($providerHandle)
+    protected function getAppTypeOauthProvider($appTypeHandle)
     {
-        $config = $this->_getProviderConfig($providerHandle);
+        $config = $this->getAppTypeConfig($appTypeHandle);
 
         if($config) {
-            return new $config['nsClass']([
+            return new $config['oauthClass']([
                 'clientId' => isset($_SERVER[$config['clientIdKey']]) ? $_SERVER[$config['clientIdKey']] : getenv($config['clientIdKey']),
                 'clientSecret' => isset($_SERVER[$config['clientSecretKey']]) ? $_SERVER[$config['clientSecretKey']] : getenv($config['clientSecretKey']),
                 'redirectUri' => 'http://id.craftcms.dev/apps/callback'
@@ -201,10 +201,10 @@ abstract class BaseController extends Controller
     /**
      * @return Github
      */
-    protected function _getProviderConfig($providerHandle)
+    protected function getAppTypeConfig($appTypeHandle)
     {
-        if(isset($this->providers[$providerHandle])) {
-            return $this->providers[$providerHandle];
+        if(isset($this->appTypes[$appTypeHandle])) {
+            return $this->appTypes[$appTypeHandle];
         }
     }
 
