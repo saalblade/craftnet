@@ -73,7 +73,7 @@
 
                         <div class="row">
                             <div class="col-sm-6">
-                                <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" />
+                                <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
                             </div>
                             <div class="col-sm-6">
                                 <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" />
@@ -144,6 +144,7 @@
     import TextareaField from '../components/fields/TextareaField'
     import ConnectedApps from '../components/ConnectedApps'
     import Repositories from '../components/Repositories'
+    import slug from 'limax';
 
     export default {
         components: {
@@ -204,6 +205,13 @@
         },
 
         methods: {
+
+            onInputName(name) {
+                if(!this.pluginId) {
+                    const handle = slug(name);
+                    this.pluginDraft.handle = handle;
+                }
+            },
 
             onSelectRepository(repository) {
                 this.pluginDraft.repository = repository.html_url;
