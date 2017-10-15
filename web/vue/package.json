@@ -4,6 +4,7 @@
     "laravel-elixir": "^6.0.0-15",
     "laravel-elixir-vue-2": "^0.3.0",
     "laravel-elixir-webpack-official": "^1.0.10",
+    "limax": "^1.5.0",
     "lodash": "^4.17.4",
     "marked": "^0.3.6",
     "vue": "^2.3.3",
