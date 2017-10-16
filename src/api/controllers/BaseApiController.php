@@ -94,18 +94,6 @@ abstract class BaseApiController extends Controller
             $categoryIds[] = $category->id;
         }
 
-
-        // Package
-
-        try {
-            $client = new Client();
-            $response = $client->get('https://packagist.org/packages/'.$plugin->getDeveloper()->vendor.'/'.$plugin->slug.'.json');
-            $data = Json::decode($response->getBody()->getContents());
-            $package = $data['package'];
-        } catch (\Exception $e) {
-            $package = null;
-        }
-
         return [
             'id' => $plugin->id,
             'status' => $plugin->status,
@@ -132,7 +120,6 @@ abstract class BaseApiController extends Controller
             'screenshotUrls' => $screenshotUrls,
             'screenshotIds' => $screenshotIds,
             'categoryIds' => $categoryIds,
-            'package' => $package,
         ];
     }
 }
