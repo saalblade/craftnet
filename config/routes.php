@@ -47,6 +47,12 @@ return [
         'GET  stripe/customer' => 'id/stripe/customer',
         'POST stripe/save-card' => 'id/stripe/save-card',
         'POST stripe/remove-card' => 'id/stripe/remove-card',
+
+        'oauth/login' => 'oauth-server/oauth/login',
+        'oauth/authorize' => 'oauth-server/oauth/authorize',
+        'oauth/access-token' => 'oauth-server/oauth/access-token',
+        'oauth/revoke' => 'oauth-server/oauth/revoke',
+
         // Catch-all route for Vue when people reload the page.
         '<url:(.*)>'=> 'id/account',
     ],
