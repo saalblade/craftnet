@@ -18,6 +18,8 @@ class Module extends \yii\base\Module
 {
     use ModuleTrait;
 
+    public $oauthServerConfig = null;
+
     /**
      * @inheritdoc
      */
@@ -76,8 +78,8 @@ class Module extends \yii\base\Module
         parent::init();
     }
 
-    public static function getSettings()
+    public function getSettings()
     {
-        return new Settings(Craft::$app->getConfig()->getGeneral()->oauthServer);
+        return new Settings($this->oauthServerConfig);
     }
 }

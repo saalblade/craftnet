@@ -15,7 +15,38 @@ return [
                 ]
             ],
             'id' => \craftcom\id\Module::class,
-            'oauth-server' => \craftcom\oauthserver\Module::class,
+            'oauth-server' => [
+                'class' => \craftcom\oauthserver\Module::class,
+                'oauthServerConfig' => [
+                    'accessTokenExpiry' => 'PT1H',
+                    'refreshTokenExpiry' => 'P1M',
+                    'authCodeExpiry' => 'P1M',
+                    'clientApprovalTemplate' => 'oauth/clientApproval',
+                    'enabledGrants' => [
+                        'ClientCredentialsGrant',
+                        'PasswordGrant',
+                        'RefreshTokenGrant',
+                        'ImplicitGrant',
+                        'AuthCodeGrant',
+                    ],
+                    'grants' => [
+                        'ClientCredentialsGrant' => 'Client Credentials Grant',
+                        'PasswordGrant' => 'Password Grant',
+                        'AuthCodeGrant' => 'Authorization Code Grant',
+                        'ImplicitGrant' => 'Implicit Grant',
+                        'RefreshTokenGrant' => 'Refresh Token Grant',
+                    ],
+                    'privateKey' => __DIR__.'/keys/oauth-server',
+                    'publicKey' => __DIR__.'/keys/oauth-server.pub',
+                    'encryptionKey' => 'j3wsUhGQtKCTnAiYdMHz2oCqyv3pYron',
+                    'scopes' => [
+                        'purchasePlugins' => "Purchase plugins",
+                        'existingPlugins' => "List existing plugins",
+                        'transferPluginLicense' => "Transfer plugin license",
+                        'deassociatePluginLicense' => "Deassociate plugin license",
+                    ]
+                ],
+            ],
             'q' => \craftcom\q\Module::class,
         ],
     ],
