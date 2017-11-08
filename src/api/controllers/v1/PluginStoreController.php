@@ -115,7 +115,7 @@ class PluginStoreController extends BaseApiController
             }
 
             foreach ($query->all() as $pluginElement) {
-                $plugins[] = $this->pluginTransformer($pluginElement);
+                $plugins[] = $this->pluginTransformer($pluginElement, true);
             }
 
             $pluginStoreData = [
