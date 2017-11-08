@@ -54,7 +54,7 @@ abstract class BaseApiController extends Controller
         return $body;
     }
 
-    protected function pluginTransformer(Plugin $plugin)
+    protected function pluginTransformer(Plugin $plugin, $snippetOnly = false)
     {
         // Developer name
 
@@ -94,32 +94,37 @@ abstract class BaseApiController extends Controller
             $categoryIds[] = $category->id;
         }
 
-        return [
+
+        // Return data
+
+        $data = [
             'id' => $plugin->id,
-            'status' => $plugin->status,
-            'iconId' => $plugin->iconId,
             'iconUrl' => $iconUrl,
-            'packageName' => $plugin->packageName,
             'handle' => $plugin->handle,
             'name' => $plugin->name,
             'shortDescription' => $plugin->shortDescription,
-            'longDescription' => $plugin->longDescription,
-            'documentationUrl' => $plugin->documentationUrl,
-            'changelogUrl' => $plugin->changelogUrl,
-            'repository' => $plugin->repository,
-            'license' => $plugin->license,
             'price' => $plugin->price,
             'renewalPrice' => $plugin->renewalPrice,
-
-            // 'iconUrl' => $iconUrl,
             'developerId' => $plugin->getDeveloper()->id,
             'developerName' => $developerName,
-            'developerUrl' => $plugin->getDeveloper()->developerUrl,
-            'developerVendor' => $plugin->getDeveloper()->vendor,
-
-            'screenshotUrls' => $screenshotUrls,
-            'screenshotIds' => $screenshotIds,
             'categoryIds' => $categoryIds,
         ];
+
+        if(!$snippetOnly) {
+            $data['status'] = $plugin->status;
+            $data['iconId'] = $plugin->iconId;
+            $data['packageName'] = $plugin->packageName;
+            $data['longDescription'] = $plugin->longDescription;
+            $data['documentationUrl'] = $plugin->documentationUrl;
+            $data['changelogUrl'] = $plugin->changelogUrl;
+            $data['repository'] = $plugin->repository;
+            $data['license'] = $plugin->license;
+            $data['developerUrl'] = $plugin->getDeveloper()->developerUrl;
+            $data['developerVendor'] = $plugin->getDeveloper()->vendor;
+            $data['screenshotUrls'] = $screenshotUrls;
+            $data['screenshotIds'] = $screenshotIds;
+        }
+
+        return $data;
     }
 }
