@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2b0dd96dd0437fc1fdaf992b4d6fd7c",
+    "content-hash": "568b755c4b58849de0be4eec0eadc4db",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -565,16 +565,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "dev-develop",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "86fc1c7f114f76accbe5c45f8aaffba4c03eefd6"
+                "reference": "4690d8faa9f095c7410a39230b92e464885d7167"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/86fc1c7f114f76accbe5c45f8aaffba4c03eefd6",
-                "reference": "86fc1c7f114f76accbe5c45f8aaffba4c03eefd6",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/4690d8faa9f095c7410a39230b92e464885d7167",
+                "reference": "4690d8faa9f095c7410a39230b92e464885d7167",
                 "shasum": ""
             },
             "require": {
@@ -640,7 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-11-09 17:30:58"
+            "time": "2017-11-09 01:54:54"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -4242,7 +4242,7 @@
         {
             "alias": "3.0.0-beta.99",
             "alias_normalized": "3.0.0.0-beta99",
-            "version": "dev-develop",
+            "version": "9999999-dev",
             "package": "craftcms/cms"
         }
     ],
