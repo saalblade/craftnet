@@ -35,7 +35,11 @@ return [
             ]
         ],
     ],
+    'prod' => [
+        'craftIdUrl' => 'https://id.craftcms.com',
+    ],
     'dev' => [
+        'craftIdUrl' => 'https://id.craftcms.dev',
         'enablePluginStoreCache' => false,
     ]
 ];

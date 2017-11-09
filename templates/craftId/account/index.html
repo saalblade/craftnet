@@ -12,6 +12,8 @@
 </head>
 <body>
 
+{% set config = craft.app.config.getConfigFromFile('craftid') %}
+
 <div id="app">
 	<app :loading="loading" :notification="notification"></app>
 </div>
@@ -20,7 +22,7 @@
     window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
     window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
     window.craftActionUrl = "{{ actionUrl() }}";
-    window.craftIdUrl = "{{ craft.app.config.general.craftIdUrl }}";
+    window.craftIdUrl = "{{ config.craftIdUrl }}";
     window.currentUserId = "{{ currentUser.id }}";
     window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken.attributes|json_encode|raw : 'false' }};
 </script>
