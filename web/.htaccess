@@ -1,6 +1,12 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Force SSL for all .com requests
+  RewriteCond %{HTTP_HOST} craftcms\.com$ [NC]
+  RewriteCond %{ENV:SECURE_REDIRECT} !=on
+  RewriteCond %{SERVER_PORT} !^443$
+  RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [NC,R=301,L]
+
   # Send would-be 404 requests to Craft
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
