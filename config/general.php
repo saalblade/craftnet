@@ -16,10 +16,6 @@ return [
         'securityKey' => getenv('CRAFT_SECURITY_KEY') ?: $_SERVER['CRAFT_SECURITY_KEY'],
         'csrfTokenName' => 'CRAFTCOM_CSRF_TOKEN',
         'phpSessionName' => 'CraftComSessionId',
-
-        'stripeClientId' => 'ca_2b3yXOngHtKxb4cDEGHeCMhrNwXyWvu5',
-        'stripeClientSecret' => 'sk_test_FgnfF68q9L8Hp3RRDETaJefc',
-        'enablePluginStoreCache' => true,
     ],
     'prod' => [
         'allowAutoUpdates' => false,

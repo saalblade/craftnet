@@ -47,7 +47,10 @@ class PluginStoreController extends BaseApiController
         }
 
         $pluginStoreData = null;
-        $enablePluginStoreCache = Craft::$app->getConfig()->getGeneral()->enablePluginStoreCache;
+
+        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+
+        $enablePluginStoreCache = $craftIdConfig['enablePluginStoreCache'];
 
         if ($enablePluginStoreCache) {
             $pluginStoreData = Craft::$app->getCache()->get($cacheKey);

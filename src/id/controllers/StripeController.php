@@ -123,8 +123,10 @@ class StripeController extends BaseController
         $resourceOwner = $provider->getResourceOwner($accessToken);
         $accountId = $resourceOwner->getId();
 
-        Stripe::setClientId(Craft::$app->getConfig()->getGeneral()->stripeClientId);
-        Stripe::setApiKey(Craft::$app->getConfig()->getGeneral()->stripeClientSecret);
+        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+
+        Stripe::setClientId($craftIdConfig['stripeClientId']);
+        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
 
         $account = Account::retrieve($accountId);
         $account->deauthorize();
@@ -185,7 +187,9 @@ class StripeController extends BaseController
         $customer = null;
 
         if ($customerRecord && $customerRecord->stripeCustomerId) {
-            Stripe::setApiKey(Craft::$app->getConfig()->getGeneral()->stripeClientSecret);
+            $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+
+            Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
             $customer = Customer::retrieve($customerRecord->stripeCustomerId);
         }
 
@@ -197,7 +201,9 @@ class StripeController extends BaseController
 
     public function actionSaveCard()
     {
-        Stripe::setApiKey(Craft::$app->getConfig()->getGeneral()->stripeClientSecret);
+        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+
+        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
 
         $user = Craft::$app->getUser()->getIdentity();
 
@@ -240,7 +246,9 @@ class StripeController extends BaseController
 
     public function actionRemoveCard()
     {
-        Stripe::setApiKey(Craft::$app->getConfig()->getGeneral()->stripeClientSecret);
+        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+
+        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
 
         $user = Craft::$app->getUser()->getIdentity();
 
@@ -273,9 +281,11 @@ class StripeController extends BaseController
 
     private function _getStripeProvider()
     {
+        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+
         $provider = new StripeOauthProvider([
-            'clientId' => Craft::$app->getConfig()->getGeneral()->stripeClientId,
-            'clientSecret' => Craft::$app->getConfig()->getGeneral()->stripeClientSecret,
+            'clientId' => $craftIdConfig['stripeClientId'],
+            'clientSecret' => $craftIdConfig['stripeClientSecret'],
             'redirectUri' => UrlHelper::actionUrl('id/stripe/callback'),
         ]);
 

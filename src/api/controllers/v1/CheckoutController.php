@@ -50,7 +50,9 @@ class CheckoutController extends BaseApiController
 
                 if ($stripeCustomerRecord) {
                     if ($stripeCustomerRecord->stripeCustomerId) {
-                        Stripe::setApiKey(Craft::$app->getConfig()->getGeneral()->stripeClientSecret);
+                        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+
+                        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
                         $customer = Customer::retrieve($stripeCustomerRecord->stripeCustomerId);
 
                         if ($customer->default_source) {
