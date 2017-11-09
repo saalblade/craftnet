@@ -26,6 +26,5 @@ return [
         'devMode' => true,
         'allowAutoUpdates' => true,
         'defaultCookieDomain' => '.craftcms.dev',
-        'enablePluginStoreCache' => false,
     ]
 ];
