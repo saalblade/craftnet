@@ -1,5 +1,6 @@
 {
-  "minimum-stability": "beta",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "php": ">=7.0.0",
     "craftcms/cms": "dev-feature/ssl-config#e9dcbaa7207311901accef2ee81839deccd543d3 as 3.0.0-beta.99",
