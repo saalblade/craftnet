@@ -20,7 +20,10 @@ return [
     'prod' => [
         'allowAutoUpdates' => false,
         'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] == 'mgt3md9snyd2' ? true : false,
-        'defaultCookieDomain' => '.craftcms.com'
+        'defaultCookieDomain' => '.craftcms.com',
+        'trustedHosts' => [
+            '172.31.29.101'
+        ],
     ],
     'dev' => [
         'devMode' => true,
