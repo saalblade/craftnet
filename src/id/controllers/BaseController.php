@@ -14,11 +14,11 @@ use League\OAuth2\Client\Provider\Github;
 /**
  * Class BaseController
  *
- * @package craftcom\id\controllers
+ * @property array $apps
  */
 abstract class BaseController extends Controller
 {
-    // Properties Methods
+    // Properties
     // =========================================================================
 
     /**
@@ -29,7 +29,7 @@ abstract class BaseController extends Controller
     /**
      * @var array
      */
-    private $appTypes = [
+    private $_appTypes = [
         'github' => [
             'class' => 'Github',
             'oauthClass' => 'League\OAuth2\Client\Provider\Github',
@@ -49,15 +49,19 @@ abstract class BaseController extends Controller
     // Protected Methods
     // =========================================================================
 
-    protected function getApps()
+    /**
+     * @return array
+     */
+    protected function getApps(): array
     {
         $currentUser = Craft::$app->getUser()->getIdentity();
 
         $apps = [];
 
-        foreach($this->appTypes as $handle => $config) {
+        foreach($this->_appTypes as $handle => $config) {
             $oauthProvider = $this->getAppTypeOauthProvider($handle);
             $token = $this->_getOauthTokenByUserId($config['class'], $currentUser->id);
+
             if ($token) {
                 $options = [
                     'access_token' => $token['accessToken'],
@@ -100,19 +104,21 @@ abstract class BaseController extends Controller
         return $apps;
     }
 
-    protected function pluginTransformer(Plugin $plugin)
+    /**
+     * @param Plugin $plugin
+     *
+     * @return array
+     */
+    protected function pluginTransformer(Plugin $plugin): array
     {
         // Developer name
-
         $developerName = $plugin->getDeveloper()->developerName;
 
         if (empty($developerName)) {
             $developerName = $plugin->getDeveloper()->getFullName();
         }
 
-
         // Icon url
-
         $iconUrl = null;
         $icon = $plugin->icon;
 
@@ -120,9 +126,7 @@ abstract class BaseController extends Controller
             $iconUrl = $icon->getUrl();
         }
 
-
         // Screenshots
-
         $screenshotUrls = [];
         $screenshotIds = [];
 
@@ -131,18 +135,14 @@ abstract class BaseController extends Controller
             $screenshotIds[] = $screenshot->getId();
         }
 
-
         // Categories
-
         $categoryIds = [];
 
         foreach ($plugin->categories as $category) {
             $categoryIds[] = $category->id;
         }
 
-
         // Package
-
         try {
             $client = new Client();
             $response = $client->get('https://packagist.org/packages/'.$plugin->getDeveloper()->vendor.'/'.$plugin->slug.'.json');
@@ -193,18 +193,20 @@ abstract class BaseController extends Controller
             return new $config['oauthClass']([
                 'clientId' => isset($_SERVER[$config['clientIdKey']]) ? $_SERVER[$config['clientIdKey']] : getenv($config['clientIdKey']),
                 'clientSecret' => isset($_SERVER[$config['clientSecretKey']]) ? $_SERVER[$config['clientSecretKey']] : getenv($config['clientSecretKey']),
-                'redirectUri' => 'http://id.craftcms.dev/apps/callback'
+                'redirectUri' => 'https://id.craftcms.com/apps/callback'
             ]);
         }
     }
 
     /**
-     * @return Github
+     * @param $appTypeHandle
+     *
+     * @return mixed
      */
     protected function getAppTypeConfig($appTypeHandle)
     {
-        if(isset($this->appTypes[$appTypeHandle])) {
-            return $this->appTypes[$appTypeHandle];
+        if(isset($this->_appTypes[$appTypeHandle])) {
+            return $this->_appTypes[$appTypeHandle];
         }
     }
 
@@ -213,7 +215,7 @@ abstract class BaseController extends Controller
      *
      * @return false|null|string
      */
-    protected function _getAuthTokenByUserId($providerClass, int $userId)
+    protected function getAuthTokenByUserId($providerClass, int $userId)
     {
         return (new Query())
             ->select(['accessToken'])

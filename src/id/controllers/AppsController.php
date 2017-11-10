@@ -31,7 +31,7 @@ class AppsController extends BaseController
      *
      * @return Response
      */
-    public function actionConnect($appTypeHandle)
+    public function actionConnect($appTypeHandle): Response
     {
         Craft::$app->getSession()->set('connectAppTypeHandle', $appTypeHandle);
 
@@ -41,6 +41,7 @@ class AppsController extends BaseController
         $options = [
             'scope' => $appTypeConfig['scope'],
         ];
+
         $authUrl = $oauthProvider->getAuthorizationUrl($options);
         Craft::$app->getSession()->set('oauth2state', $oauthProvider->getState());
 
@@ -53,7 +54,7 @@ class AppsController extends BaseController
      * @return Response
      * @throws Exception
      */
-    public function actionCallback()
+    public function actionCallback(): Response
     {
         $appTypeHandle = Craft::$app->getSession()->get('connectAppTypeHandle');
         $appTypeConfig = $this->getAppTypeConfig($appTypeHandle);
@@ -87,7 +88,7 @@ class AppsController extends BaseController
         }
 
         $currentUser = Craft::$app->getUser()->getIdentity();
-        $existingToken = $this->_getAuthTokenByUserId($appTypeConfig['class'], $currentUser->id);
+        $existingToken = $this->getAuthTokenByUserId($appTypeConfig['class'], $currentUser->id);
 
         // No previous acces token, create a new one.
         if (!$existingToken) {
@@ -108,9 +109,7 @@ class AppsController extends BaseController
         $tokenRecord->refreshToken = $accessToken->getRefreshToken();
         $tokenRecord->save();
 
-
         // Apps
-
         $apps = $this->getApps();
 
         return $this->renderTemplate('apps/callback', [
@@ -123,7 +122,7 @@ class AppsController extends BaseController
      *
      * @return Response
      */
-    public function actionDisconnect()
+    public function actionDisconnect(): Response
     {
         $appTypeHandle = Craft::$app->getRequest()->getBodyParam('appTypeHandle');
         $appTypeConfig = $this->getAppTypeConfig($appTypeHandle);
