@@ -62,17 +62,6 @@ class Module extends \yii\base\Module
             $event->rules = array_merge($event->rules, $rules);
         });
 
-        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function(RegisterUrlRulesEvent $event) {
-            $rules = [
-                'oauth/login' => 'oauth-server/oauth/login',
-                'oauth/authorize' => 'oauth-server/oauth/authorize',
-                'oauth/access-token' => 'oauth-server/oauth/access-token',
-                'oauth/revoke' => 'oauth-server/oauth/revoke',
-            ];
-
-            $event->rules = array_merge($event->rules, $rules);
-        });
-
         parent::init();
     }
 
