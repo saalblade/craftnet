@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c076002e0281bee4a8a7540b32b158b",
+    "content-hash": "9c9932c85bc10a19c1c6cc21de4a79de",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -140,76 +140,6 @@
                 "sdk"
             ],
             "time": "2017-11-09T19:15:59+00:00"
-        },
-        {
-            "name": "bower-asset/bootstrap",
-            "version": "v3.3.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/0b9c4a4007c44201dce9a6cc1a38407005c26c86",
-                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
-                "shasum": null
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.9.1,<4.0"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/jquery",
-            "version": "2.2.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
-                "reference": "c0185ab7c75aab88762c5aae780b9d83b80eda72"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/c0185ab7c75aab88762c5aae780b9d83b80eda72",
-                "reference": "c0185ab7c75aab88762c5aae780b9d83b80eda72",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/punycode",
-            "version": "v1.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bestiejs/punycode.js.git",
-                "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
-                "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
-                "shasum": null
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/yii2-pjax",
-            "version": "v2.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/jquery-pjax.git",
-                "reference": "60728da6ade5879e807a49ce59ef9a72039b8978"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/jquery-pjax/zipball/60728da6ade5879e807a49ce59ef9a72039b8978",
-                "reference": "60728da6ade5879e807a49ce59ef9a72039b8978",
-                "shasum": null
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.8"
-            },
-            "type": "bower-asset"
         },
         {
             "name": "cebe/markdown",
@@ -635,16 +565,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "dev-feature/ssl-config",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "e9dcbaa7207311901accef2ee81839deccd543d3"
+                "reference": "a58bb4773eefd86f4fd0701d7e5742c75ddb5eed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/e9dcbaa7207311901accef2ee81839deccd543d3",
-                "reference": "e9dcbaa7207311901accef2ee81839deccd543d3",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/a58bb4773eefd86f4fd0701d7e5742c75ddb5eed",
+                "reference": "a58bb4773eefd86f4fd0701d7e5742c75ddb5eed",
                 "shasum": ""
             },
             "require": {
@@ -711,7 +641,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-11-09T20:18:15+00:00"
+            "time": "2017-11-09 23:32:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -770,7 +700,7 @@
                 "source": "https://github.com/pixelandtonic/oauth2-craftid/tree/develop",
                 "issues": "https://github.com/pixelandtonic/oauth2-craftid/issues"
             },
-            "time": "2017-08-29T22:02:55+00:00"
+            "time": "2017-08-29 22:02:55"
         },
         {
             "name": "craftcms/plugin-installer",
@@ -4312,7 +4242,7 @@
         {
             "alias": "3.0.0-beta.99",
             "alias_normalized": "3.0.0.0-beta99",
-            "version": "dev-feature/ssl-config",
+            "version": "dev-develop",
             "package": "craftcms/cms"
         }
     ],
