@@ -32,31 +32,22 @@ class CraftIdController extends BaseController
     public function actionIndex(): Response
     {
         // Current user
-
         $currentUserId = Craft::$app->getRequest()->getParam('userId');
         $currentUser = Craft::$app->getUsers()->getUserById($currentUserId);
 
         // Apps
-
         $apps = $this->getApps();
 
-
-
         // Plugins
-
         $plugins = [];
-
         $pluginElements = Plugin::find()->developerId($currentUser->id)->status(null)->all();
 
         foreach ($pluginElements as $pluginElement) {
             $plugins[] = $this->pluginTransformer($pluginElement);
         }
 
-
         // Craft licenses
-
         $craftLicenses = [];
-
         $craftLicenseEntries = Entry::find()->section('licenses')->type('craftLicense')->authorId($currentUser->id)->all();
 
         foreach ($craftLicenseEntries as $craftLicenseEntry) {
@@ -74,11 +65,8 @@ class CraftIdController extends BaseController
             $craftLicenses[] = $craftLicense;
         }
 
-
         // Plugin licenses
-
         $pluginLicenses = [];
-
         $pluginLicenseEntries = Entry::find()->section('licenses')->type('pluginLicense')->authorId($currentUser->id)->all();
 
         foreach ($pluginLicenseEntries as $pluginLicenseEntry) {
@@ -98,16 +86,13 @@ class CraftIdController extends BaseController
             $pluginLicenses[] = $pluginLicense;
         }
 
-
         // Customers
-
         $customers = [];
 
         foreach ($pluginElements as $pluginElement) {
             $entries = Entry::find()->section('licenses')->relatedTo($pluginElement)->all();
 
             foreach ($entries as $entry) {
-
                 $found = false;
 
                 foreach ($customers as $c) {
@@ -129,11 +114,10 @@ class CraftIdController extends BaseController
             }
         }
 
-
         // Categories
-
         $categories = [];
         $categoryElements = Category::find()->group('pluginCategories')->all();
+
         foreach ($categoryElements as $categoryElement) {
             $categories[] = [
                 'id' => $categoryElement->id,
@@ -141,9 +125,7 @@ class CraftIdController extends BaseController
             ];
         }
 
-
         // Data
-
         $data = [
             'currentUser' => [
                 'id' => $currentUser->id,
@@ -189,6 +171,9 @@ class CraftIdController extends BaseController
     // Private Methods
     // =========================================================================
 
+    /**
+     * @return array
+     */
     private function _getPayouts()
     {
         return [
@@ -222,6 +207,9 @@ class CraftIdController extends BaseController
         ];
     }
 
+    /**
+     * @return array
+     */
     private function _getScheduledPayouts()
     {
         return [
@@ -233,6 +221,9 @@ class CraftIdController extends BaseController
         ];
     }
 
+    /**
+     * @return array
+     */
     private function _getPayments()
     {
         return [

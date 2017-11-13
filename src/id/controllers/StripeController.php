@@ -25,11 +25,11 @@ class StripeController extends BaseController
     // =========================================================================
 
     /**
-     * Connect.
+     * OAuth connect to Stripe.
      *
-     * @return \yii\web\Response
+     * @return Response
      */
-    public function actionConnect()
+    public function actionConnect(): Response
     {
         $provider = $this->_getStripeProvider();
 
@@ -43,11 +43,11 @@ class StripeController extends BaseController
     }
 
     /**
-     * Callback.
+     * OAuth callback.
      *
-     * @return \yii\web\Response
+     * @return Response
      */
-    public function actionCallback()
+    public function actionCallback(): Response
     {
         $user = Craft::$app->getUser()->getIdentity();
         $customerRecord = StripeCustomerRecord::find()
@@ -102,7 +102,7 @@ class StripeController extends BaseController
     }
 
     /**
-     * Handles /stripe/disconnect requests.
+     * OAuth disconnect from Stripe.
      *
      * @return Response
      */
@@ -145,7 +145,7 @@ class StripeController extends BaseController
     }
 
     /**
-     * Handles /stripe/account requests.
+     * Returns Stripe account for the current user.
      *
      * @return Response
      */
@@ -173,7 +173,7 @@ class StripeController extends BaseController
     }
 
     /**
-     * Handles /stripe/customer requests.
+     * Returns Stripe customer and default card for the current user.
      *
      * @return Response
      */
@@ -199,7 +199,12 @@ class StripeController extends BaseController
         ]);
     }
 
-    public function actionSaveCard()
+    /**
+     * Saves a new credit card and sets it as default source for the Stripe customer.
+     *
+     * @return Response
+     */
+    public function actionSaveCard(): Response
     {
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
 
@@ -244,7 +249,12 @@ class StripeController extends BaseController
         return $this->asErrorJson('Couldn’t save credit card.');
     }
 
-    public function actionRemoveCard()
+    /**
+     * Removes the default credit card from the Stripe customer.
+     *
+     * @return Response
+     */
+    public function actionRemoveCard(): Response
     {
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
 
@@ -271,15 +281,10 @@ class StripeController extends BaseController
     // Private Methods
     // =========================================================================
 
-    private function getOauthToken($userId)
-    {
-        return $accessToken = OAuthToken::find()
-            ->where(Db::parseParam('userId', $userId))
-            ->andWhere(Db::parseParam('provider', 'Stripe'))
-            ->one();
-    }
-
-    private function _getStripeProvider()
+    /**
+     * @return StripeOauthProvider
+     */
+    private function _getStripeProvider(): StripeOauthProvider
     {
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
 

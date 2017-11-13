@@ -24,7 +24,12 @@ class AccountController extends Controller
     // Public Methods
     // =========================================================================
 
-    public function actionIndex()
+    /**
+     * Account index.
+     *
+     * @return Response
+     */
+    public function actionIndex(): Response
     {
         $stripeAccessToken = null;
         $userId = Craft::$app->getUser()->id;
