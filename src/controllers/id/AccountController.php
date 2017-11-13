@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\id\controllers;
+namespace craftcom\controllers\id;
 
 use Craft;
 use craft\elements\Asset;
@@ -17,7 +17,7 @@ use yii\web\BadRequestHttpException;
 /**
  * Class AccountController
  *
- * @package craftcom\id\controllers
+ * @package craftcom\controllers\id
  */
 class AccountController extends Controller
 {

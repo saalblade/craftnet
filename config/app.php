@@ -7,18 +7,15 @@ return [
             'oauth-server'
         ],
         'modules' => [
-            'api' => \craftcom\api\Module::class,
             'craftcom' => [
                 'class' => \craftcom\Module::class,
                 'components' => [
                     'packageManager' => \craftcom\composer\PackageManager::class,
                 ]
             ],
-            'id' => \craftcom\id\Module::class,
             'oauth-server' => [
                 'class' => \craftcom\oauthserver\Module::class,
             ],
-            'q' => \craftcom\q\Module::class,
         ],
     ],
     'prod' => [

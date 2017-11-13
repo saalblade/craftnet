@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\cp\controllers;
+namespace craftcom\controllers;
 
 use Craft;
 use craft\elements\Asset;

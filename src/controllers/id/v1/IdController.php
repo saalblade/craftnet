@@ -1,8 +1,8 @@
 <?php
 
-namespace craftcom\id\controllers\v1;
+namespace craftcom\controllers\id\v1;
 
-use craftcom\id\controllers\BaseApiController;
+use craftcom\controllers\id\BaseApiController;
 use yii\web\Response;
 
 /**

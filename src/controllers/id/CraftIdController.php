@@ -1,12 +1,12 @@
 <?php
 
-namespace craftcom\id\controllers;
+namespace craftcom\controllers\id;
 
 use Craft;
 use craft\elements\Category;
 use craft\elements\Entry;
 use craft\helpers\Json;
-use craftcom\api\controllers\BaseApiController;
+use craftcom\controllers\api\BaseApiController;
 use craftcom\plugins\Plugin;
 use League\OAuth2\Client\Token\AccessToken;
 use yii\web\Response;
@@ -17,7 +17,7 @@ use League\OAuth2\Client\Provider\Github;
 /**
  * Class CraftIdController
  *
- * @package craftcom\id\controllers
+ * @package craftcom\controllers\id
  */
 class CraftIdController extends BaseController
 {

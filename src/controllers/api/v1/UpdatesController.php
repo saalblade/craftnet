@@ -1,14 +1,14 @@
 <?php
 
-namespace craftcom\api\controllers\v1;
+namespace craftcom\controllers\api\v1;
 
-use craftcom\api\controllers\BaseApiController;
+use craftcom\controllers\api\BaseApiController;
 use yii\web\Response;
 
 /**
  * Class UpdatesController
  *
- * @package craftcom\api\controllers\v1
+ * @package craftcom\controllers\api\v1
  */
 class UpdatesController extends BaseApiController
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\id\controllers;
+namespace craftcom\controllers\id;
 
 use Craft;
 use craft\records\OAuthToken;
@@ -11,7 +11,7 @@ use craft\helpers\Db;
 /**
  * Class AppsController
  *
- * @package craftcom\id\controllers
+ * @package craftcom\controllers\id
  */
 class AppsController extends BaseController
 {

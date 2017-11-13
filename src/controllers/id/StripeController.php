@@ -1,13 +1,13 @@
 <?php
 
-namespace craftcom\id\controllers;
+namespace craftcom\controllers\id;
 
 use AdamPaterson\OAuth2\Client\Provider\Stripe as StripeOauthProvider;
 use Craft;
 use craft\helpers\Db;
 use craft\helpers\UrlHelper;
 use craft\records\OAuthToken;
-use craftcom\id\records\StripeCustomer as StripeCustomerRecord;
+use craftcom\records\StripeCustomer as StripeCustomerRecord;
 use League\OAuth2\Client\Token\AccessToken;
 use Stripe\Account;
 use Stripe\Customer;
@@ -17,7 +17,7 @@ use yii\web\Response;
 /**
  * Class StripeController
  *
- * @package craftcom\id\controllers
+ * @package craftcom\controllers\id
  */
 class StripeController extends BaseController
 {
@@ -282,7 +282,7 @@ class StripeController extends BaseController
         $provider = new StripeOauthProvider([
             'clientId' => $craftIdConfig['stripeClientId'],
             'clientSecret' => $craftIdConfig['stripeClientSecret'],
-            'redirectUri' => UrlHelper::actionUrl('id/stripe/callback'),
+            'redirectUri' => UrlHelper::actionUrl('craftcom/id/stripe/callback'),
         ]);
 
         return $provider;

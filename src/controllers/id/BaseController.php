@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\id\controllers;
+namespace craftcom\controllers\id;
 
 use Craft;
 use craft\web\Controller;

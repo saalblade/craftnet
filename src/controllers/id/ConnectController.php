@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\id\controllers;
+namespace craftcom\controllers\id;
 
 use Craft;
 use craft\records\OAuthToken;
@@ -13,7 +13,7 @@ use craft\db\Query;
 /**
  * Class ConnectController
  *
- * @package craftcom\id\controllers
+ * @package craftcom\controllers\id
  */
 class ConnectController extends BaseController
 {

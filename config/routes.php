@@ -20,34 +20,34 @@
 
 return [
     'api' => [
-        'POST v1/updates' => 'api/v1/updates',
-        'POST v1/plugin-store' => 'api/v1/plugin-store',
-        'GET  v1/account' => 'api/v1/account',
-        'POST v1/developer/<userId:\d+>' => 'api/v1/developer',
-        'POST v1/plugin/<pluginId:\d+>' => 'api/v1/plugin',
-        'POST v1/checkout' => 'api/v1/checkout',
+        'POST v1/updates' => 'craftcom/api/v1/updates',
+        'POST v1/plugin-store' => 'craftcom/api/v1/plugin-store',
+        'GET  v1/account' => 'craftcom/api/v1/account',
+        'POST v1/developer/<userId:\d+>' => 'craftcom/api/v1/developer',
+        'POST v1/plugin/<pluginId:\d+>' => 'craftcom/api/v1/plugin',
+        'POST v1/checkout' => 'craftcom/api/v1/checkout',
     ],
     'composer' => [
     ],
     'craftId' => [
-        'GET  v1/id' => 'id/v1/id',
-        'GET  craft-id' => 'id/craft-id',
-        'GET  apps/connect/<appTypeHandle:{handle}>' => 'id/apps/connect',
-        'GET  apps/callback' => 'id/apps/callback',
-        'GET  apps/disconnect/<appTypeHandle:{handle}>' => 'id/apps/disconnect',
+        'GET  v1/id' => 'craftcom/id/v1/id',
+        'GET  craft-id' => 'craftcom/id/craft-id',
+        'GET  apps/connect/<appTypeHandle:{handle}>' => 'craftcom/id/apps/connect',
+        'GET  apps/callback' => 'craftcom/id/apps/callback',
+        'GET  apps/disconnect/<appTypeHandle:{handle}>' => 'craftcom/id/apps/disconnect',
 
-        'GET  test' => 'id/account',
-        'GET  test/developer/connect' => 'id/connect/connect',
-        'GET  test/developer/validate' => 'id/connect/validate',
-        'GET  test/developer/gettoken' => 'id/connect/get-token',
-        'GET  test/developer/hooks' => 'id/connect/hooks',
+        'GET  test' => 'craftcom/id/account',
+        'GET  test/developer/connect' => 'craftcom/id/connect/connect',
+        'GET  test/developer/validate' => 'craftcom/id/connect/validate',
+        'GET  test/developer/gettoken' => 'craftcom/id/connect/get-token',
+        'GET  test/developer/hooks' => 'craftcom/id/connect/hooks',
 
-        'GET  stripe/connect' => 'id/stripe/connect',
-        'GET  stripe/account' => 'id/stripe/account',
-        'POST stripe/disconnect' => 'id/stripe/disconnect',
-        'GET  stripe/customer' => 'id/stripe/customer',
-        'POST stripe/save-card' => 'id/stripe/save-card',
-        'POST stripe/remove-card' => 'id/stripe/remove-card',
+        'GET  stripe/connect' => 'craftcom/id/stripe/connect',
+        'GET  stripe/account' => 'craftcom/id/stripe/account',
+        'POST stripe/disconnect' => 'craftcom/id/stripe/disconnect',
+        'GET  stripe/customer' => 'craftcom/id/stripe/customer',
+        'POST stripe/save-card' => 'craftcom/id/stripe/save-card',
+        'POST stripe/remove-card' => 'craftcom/id/stripe/remove-card',
 
         'oauth/login' => 'oauth-server/oauth/login',
         'oauth/authorize' => 'oauth-server/oauth/authorize',
@@ -55,9 +55,6 @@ return [
         'oauth/revoke' => 'oauth-server/oauth/revoke',
 
         // Catch-all route for Vue when people reload the page.
-        '<url:(.*)>'=> 'id/account',
+        '<url:(.*)>'=> 'craftcom/id/account',
     ],
-   // 'queue' => [
-     //   'POST v1/create' => 'queue/v1/q/create',
-    //],
 ];

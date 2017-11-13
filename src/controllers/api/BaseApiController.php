@@ -1,13 +1,11 @@
 <?php
 
-namespace craftcom\api\controllers;
+namespace craftcom\controllers\api;
 
 use Craft;
 use craft\helpers\Json;
 use craft\web\Controller;
-use craftcom\api\Module;
 use craftcom\plugins\Plugin;
-use GuzzleHttp\Client;
 use JsonSchema\Validator;
 use stdClass;
 use yii\web\BadRequestHttpException;
@@ -15,7 +13,7 @@ use yii\web\BadRequestHttpException;
 /**
  * Class BaseController
  *
- * @package craftcom\api\controllers
+ * @package craftcom\controllers\api
  */
 abstract class BaseApiController extends Controller
 {
@@ -43,7 +41,7 @@ abstract class BaseApiController extends Controller
 
         if ($schema !== null) {
             $validator = new Validator();
-            $path = Module::getInstance()->getBasePath()."/json-schemas/$schema.json";
+            $path = Craft::getAlias("@root/json-schemas/{$schema}.json");
             $validator->validate($body, (object)['$ref' => 'file://'.$path]);
 
             if (!$validator->isValid()) {
@@ -110,7 +108,7 @@ abstract class BaseApiController extends Controller
             'categoryIds' => $categoryIds,
         ];
 
-        if(!$snippetOnly) {
+        if (!$snippetOnly) {
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
             $data['packageName'] = $plugin->packageName;

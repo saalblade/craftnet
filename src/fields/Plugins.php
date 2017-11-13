@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\cp\fields;
+namespace craftcom\fields;
 
 use Craft;
 use craft\fields\BaseRelationField;
@@ -9,7 +9,7 @@ use craftcom\plugins\Plugin;
 /**
  * Plugins represents a Plugins field.
  *
- * @package craftcom\cp\fields
+ * @package craftcom\fields
  */
 class Plugins extends BaseRelationField
 {
@@ -37,6 +37,6 @@ class Plugins extends BaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return Craft::t('app', 'Add an entry');
+        return Craft::t('app', 'Add a plugin');
     }
 }

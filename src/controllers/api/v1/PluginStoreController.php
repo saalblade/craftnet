@@ -1,17 +1,17 @@
 <?php
 
-namespace craftcom\api\controllers\v1;
+namespace craftcom\controllers\api\v1;
 
 use Craft;
 use craft\elements\Entry;
-use craftcom\api\controllers\BaseApiController;
+use craftcom\controllers\api\BaseApiController;
 use craftcom\plugins\Plugin;
 use yii\web\Response;
 
 /**
  * Class PluginStoreController
  *
- * @package craftcom\api\controllers\v1
+ * @package craftcom\controllers\api\v1
  */
 class PluginStoreController extends BaseApiController
 {

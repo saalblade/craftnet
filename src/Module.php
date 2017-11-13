@@ -16,7 +16,7 @@ use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
 use craftcom\composer\PackageManager;
-use craftcom\cp\fields\Plugins;
+use craftcom\fields\Plugins;
 use yii\base\Event;
 
 /**
@@ -31,10 +31,12 @@ class Module extends \yii\base\Module
         $request = Craft::$app->getRequest();
         if ($request->getIsConsoleRequest()) {
             $this->_initConsoleRequest();
-        } else if ($request->getIsCpRequest()) {
-            $this->_initCpRequest();
         } else {
             $this->_initWebRequest();
+
+            if ($request->getIsCpRequest()) {
+                $this->_initCpRequest();
+            }
         }
 
         Event::on(User::class, User::EVENT_AFTER_SAVE, function(ModelEvent $e) {
@@ -76,6 +78,13 @@ class Module extends \yii\base\Module
         $this->controllerNamespace = 'craftcom\\console\\controllers';
     }
 
+    private function _initWebRequest()
+    {
+        $this->controllerNamespace = 'craftcom\\controllers';
+
+        Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
+    }
+
     private function _initCpRequest()
     {
         $this->controllerNamespace = 'craftcom\\cp\\controllers';
@@ -111,12 +120,5 @@ class Module extends \yii\base\Module
                 ],
             ];
         });
-    }
-
-    private function _initWebRequest()
-    {
-        $this->controllerNamespace = 'craftcom\\cp\\controllers';
-
-        Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
     }
 }

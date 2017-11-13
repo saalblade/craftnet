@@ -1,16 +1,16 @@
 <?php
 
-namespace craftcom\api\controllers\v1;
+namespace craftcom\controllers\api\v1;
 
 use Craft;
 use craft\elements\User;
-use craftcom\api\controllers\BaseApiController;
+use craftcom\controllers\api\BaseApiController;
 use yii\web\Response;
 
 /**
  * Class DeveloperController
  *
- * @package craftcom\api\controllers\v1
+ * @package craftcom\controllers\api\v1
  */
 class DeveloperController extends BaseApiController
 {

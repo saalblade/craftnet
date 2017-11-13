@@ -1,13 +1,13 @@
 <?php
 
-namespace craftcom\api\controllers\v1;
+namespace craftcom\controllers\api\v1;
 
 use Craft;
 use craft\elements\Entry;
 use craft\helpers\Db;
 use craft\helpers\Json;
-use craftcom\api\controllers\BaseApiController;
-use craftcom\id\records\StripeCustomer as StripeCustomerRecord;
+use craftcom\controllers\api\BaseApiController;
+use craftcom\records\StripeCustomer as StripeCustomerRecord;
 use Stripe\Customer;
 use Stripe\Stripe;
 use yii\web\Response;
@@ -15,7 +15,7 @@ use yii\web\Response;
 /**
  * Class CheckoutController
  *
- * @package craftcom\api\controllers\v1
+ * @package craftcom\controllers\api\v1
  */
 class CheckoutController extends BaseApiController
 {

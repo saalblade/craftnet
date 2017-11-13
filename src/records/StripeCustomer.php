@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\id\records;
+namespace craftcom\records;
 
 use craft\db\ActiveRecord;
 use craft\records\User;
