@@ -9,7 +9,9 @@ Vue.filter('currency', currency)
 Vue.use(VueResource)
 
 window.craftIdApp = new Vue({
+
     el: '#app',
+
     store,
 
     components: {
@@ -43,12 +45,15 @@ window.craftIdApp = new Vue({
                 this.notification = null;
             }.bind(this), 2000);
         },
+
         displayNotice(message) {
             this.displayNotification('success', message);
         },
+
         displayError(message) {
             this.displayNotification('danger', message);
         },
+
     },
 
     created() {

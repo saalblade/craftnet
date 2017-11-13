@@ -10,7 +10,9 @@
     import TextInput from '../inputs/TextInput';
 
     export default {
+
         props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors'],
+
         components: {
             TextInput,
         },
@@ -20,5 +22,6 @@
                 this.$refs.input.$emit('focus');
             })
         }
+
     }
 </script>

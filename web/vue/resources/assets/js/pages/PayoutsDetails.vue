@@ -1,5 +1,4 @@
 <template>
-
     <div v-if="payout">
         <div class="card mb-3">
             <div class="card-body">
@@ -42,6 +41,7 @@
     export default {
 
         computed: {
+
             ...mapGetters({
                 payouts: 'payouts',
             }),
@@ -53,6 +53,8 @@
             payout() {
                 return this.payouts[this.payoutId];
             }
+
         }
+
     }
 </script>

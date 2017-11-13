@@ -68,6 +68,7 @@
     import TextareaField from '../components/fields/TextareaField'
 
     export default {
+
         props: ['license'],
 
         data() {
@@ -82,6 +83,7 @@
         },
 
         methods: {
+
             saveAutoRenew() {
                 this.$store.dispatch('saveLicense', {
                     id: this.license.id,
@@ -94,6 +96,7 @@
                     this.errors = data.errors;
                 });
             },
+
             saveNotes() {
                 this.$store.dispatch('saveLicense', {
                     id: this.license.id,
@@ -106,9 +109,11 @@
                     this.errors = data.errors;
                 });
             },
+
             cancel() {
                 this.licenseDraft.notes = this.license.notes;
             }
+
         },
 
         mounted() {
@@ -117,5 +122,6 @@
                 notes: this.license.notes,
             };
         }
+
     }
 </script>

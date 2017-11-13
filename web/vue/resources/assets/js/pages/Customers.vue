@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class="form-group">
             <input class="form-control" id="searchQuery" name="searchQuery" type="text" placeholder="Search customers" v-model="searchQuery">
         </div>
@@ -21,7 +20,6 @@
             </tr>
             </tbody>
         </table>
-
     </div>
 </template>
 
@@ -29,7 +27,7 @@
     import { mapGetters } from 'vuex'
 
     export default {
-        name: 'customers',
+
         data () {
             return {
                 searchQuery: '',
@@ -37,6 +35,7 @@
         },
 
         computed: {
+
             ...mapGetters({
                 customers: 'customers',
             }),
@@ -61,7 +60,9 @@
                     }
                 });
             },
+
         },
+
     }
 </script>
 

@@ -3,7 +3,6 @@
     <div class="card mb-3">
         <div class="card-header">Bank Account</div>
         <div class="card-body">
-
             <div class="spinner" v-if="loading"></div>
 
             <template v-else>
@@ -42,7 +41,6 @@
                     <a class="btn btn-primary" href="https://id.craftcms.dev/index.php/stripe/connect">Connect a Stripe account</a>
                 </template>
             </template>
-
         </div>
     </div>
 
@@ -53,6 +51,7 @@
     import TextField from '../components/fields/TextField'
 
     export default {
+
         components: {
             TextField
         },
@@ -64,6 +63,7 @@
         },
 
         computed: {
+
             ...mapGetters({
                 stripeAccount: 'stripeAccount',
             }),
@@ -71,9 +71,11 @@
             loading() {
                 return this.$root.stripeAccountLoading;
             }
+
         },
 
         methods: {
+
             disconnect() {
                 this.disconnectLoading = true;
 
@@ -82,6 +84,8 @@
                     this.$root.displayNotice('Stripe account removed.');
                 });
             }
+
         },
+
     }
 </script>

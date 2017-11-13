@@ -1,6 +1,5 @@
 <template>
     <div class="mb-3">
-
         <template v-if="!pluginId && !this.pluginDraft.repository">
             <div class="card">
                 <div class="card-body">
@@ -25,9 +24,8 @@
             </div>
         </template>
 
-        <template v-else="">
+        <template v-else>
             <form @submit.prevent="save()">
-
                 <div class="card mb-3">
                     <div class="card-header">GitHub Repository</div>
                     <div class="card-body">
@@ -70,7 +68,6 @@
                 <div class="card mb-3">
                     <div class="card-header">Plugin Details</div>
                     <div class="card-body">
-
                         <div class="row">
                             <div class="col-sm-6">
                                 <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
@@ -119,9 +116,7 @@
                 </div>
 
                 <div v-if="userIsInGroup('staff')" class="card mb-3">
-                    <div class="card-header">
-                        Pricing
-                    </div>
+                    <div class="card-header">Pricing</div>
                     <div class="card-body">
                         <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />
                         <text-field id="renewalPrice" label="Renewal Price" v-model="pluginDraft.renewalPrice" :errors="errors.renewalPrice" />
@@ -132,7 +127,6 @@
                     <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
                     <div v-if="loading" class="spinner"></div>
                 </div>
-
             </form>
         </template>
     </div>
@@ -147,6 +141,7 @@
     import slug from 'limax';
 
     export default {
+
         components: {
             TextField,
             TextareaField,
@@ -185,6 +180,7 @@
         },
 
         computed: {
+
             ...mapGetters({
                 apps: 'apps',
                 plugins: 'plugins',
@@ -202,6 +198,7 @@
             connectedAppsCount() {
                 return Object.keys(this.apps).length;
             },
+
         },
 
         methods: {
@@ -370,6 +367,7 @@
                 this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
             }
         },
+
     }
 </script>
 

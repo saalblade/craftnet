@@ -5,10 +5,7 @@
         <div v-if="stripeCustomerLoading" class="spinner"></div>
 
         <div v-if="!stripeCustomerLoading">
-
-
             <div v-if="!editing">
-
                 <div class="float-right">
                     <p>
                         <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
@@ -27,22 +24,18 @@
                     </p>
                 </div>
 
-
                 <p v-if="stripeCard">
                     {{ stripeCard.brand }} •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
                 </p>
 
                 <p v-else>No credit card.</p>
-
             </div>
-
 
             <div :class="{'d-none': !editing}">
 
                 <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></card-form>
 
             </div>
-
 
             <div class="mt-3">
                 <img src="/vue/dist/images/powered_by_stripe.svg" height="18" />
@@ -57,6 +50,7 @@
     import CardForm from './CardForm'
 
     export default {
+
         components: {
             CardForm
         },
@@ -66,7 +60,6 @@
                 editing: false,
                 cardFormloading: false,
                 removeCardLoading: false,
-
                 stripe: null,
                 elements: null,
                 card: null,
@@ -74,6 +67,7 @@
         },
 
         computed: {
+
             ...mapGetters({
                 stripeCustomer: 'stripeCustomer',
                 stripeCard: 'stripeCard',
@@ -82,9 +76,11 @@
             stripeCustomerLoading() {
                 return this.$root.stripeCustomerLoading;
             }
+
         },
 
         methods: {
+
             error() {
                 this.cardFormloading = false;
             },
@@ -113,6 +109,7 @@
                     this.$root.displayNotice('Card removed.')
                 })
             }
+
         },
     }
 </script>

@@ -1,13 +1,11 @@
 <template>
     <div>
         <template v-if="notification">
-
             <div id="notifications-wrapper" :class="{'hide': !notification }">
                 <div id="notifications">
                     <div class="notification bg-success" :class="'bg-'+notification.type">{{ notification.message }}</div>
                 </div>
             </div>
-
         </template>
 
         <nav class="navbar navbar-expand navbar-light bg-light mb-5">
@@ -32,7 +30,6 @@
 
         <template v-else>
             <div class="container">
-
                 <div class="row">
                     <div class="col-md-3">
                         <template v-if="userIsInGroup('staff')">
@@ -82,7 +79,6 @@
                 </div>
             </div>
         </template>
-
     </div>
 </template>
 
@@ -91,13 +87,19 @@
     import { mapGetters } from 'vuex'
 
     export default {
+
         router,
+
         props: ['notification', 'loading'],
+
         computed: {
+
             ...mapGetters({
                 currentUser: 'currentUser',
                 userIsInGroup: 'userIsInGroup',
             }),
+
         }
+
     }
 </script>

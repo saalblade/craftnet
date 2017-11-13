@@ -28,7 +28,6 @@
 
             </div>
         </div>
-
     </div>
 </template>
 
@@ -36,6 +35,7 @@
     import TextField from '../components/fields/TextField'
 
     export default {
+
         components: {
             TextField,
         },

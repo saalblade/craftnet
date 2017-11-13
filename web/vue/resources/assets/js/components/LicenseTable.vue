@@ -64,6 +64,8 @@
     import { mapGetters } from 'vuex'
 
     export default {
+
         props: ['type', 'licenses']
+
     }
 </script>

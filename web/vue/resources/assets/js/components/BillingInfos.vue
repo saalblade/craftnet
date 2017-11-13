@@ -49,9 +49,11 @@
     import TextField from './fields/TextField'
 
     export default {
+
         components: {
             TextField,
         },
+
         data() {
             return {
                 errors: {},
@@ -62,6 +64,7 @@
         },
 
 		computed: {
+
             ...mapGetters({
                 currentUser: 'currentUser',
             }),
@@ -78,9 +81,11 @@
 					businessCountry: this.currentUser.businessCountry,
 				};
 			},
+
 		},
 
         methods: {
+
             editInvoiceDetails() {
                 this.showForm = true;
                 this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.companyInfos));
@@ -106,10 +111,13 @@
                     this.errors = data.errors;
                 });
             },
+
             cancel() {
                 this.showForm = false;
                 this.errors = {};
             }
+
         }
+
     }
 </script>

@@ -1,10 +1,7 @@
 <template>
-
     <div class="card mb-3">
         <div class="card-header"><i class="fa fa-institution"></i> Bank Account</div>
         <div class="card-body">
-
-
             <template v-if="stripeConnected">
 
                 <table class="table" v-if="stripeBankAccounts.length > 0">
@@ -39,11 +36,8 @@
                 <a class="btn btn-primary" href="https://id.craftcms.dev/index.php/stripe/connect">Connect to Stripe</a>
                 <!--<a class="btn btn-primary" href="https://id.craftcms.dev/index.php/stripe/connect" value="Connect to Stripe" @click="stripeConnected = true">-->
             </template>
-
-
         </div>
     </div>
-
 </template>
 
 <script>
@@ -56,11 +50,13 @@
         },
 
         directives: {
+
             focus: {
                 inserted (el) {
                     el.focus()
                 }
             }
+
         },
 
         data() {
@@ -85,12 +81,21 @@
         },
 
         computed: {
+
             bank() {
                 return this.stripeBankAccounts[this.stripeSelectedAccount];
+            }
+
+        },
+
+        watch: {
+            stripeSelectedAccount() {
+                this.$root.displayNotice('Bank account saved.');
             }
         },
 
         methods: {
+
             newBankAccount() {
                 this.editingStripeBankAccount = true;
                 this.editedStripeBankAccountId = null;
@@ -125,12 +130,7 @@
 
                 this.$root.displayNotice('Bank account saved.');
             }
-        },
 
-        watch: {
-            stripeSelectedAccount() {
-                this.$root.displayNotice('Bank account saved.');
-            }
         },
 
         created() {

@@ -10,10 +10,12 @@
     import TextareaInput from '../inputs/TextareaInput';
 
     export default {
+
         props: ['label', 'id', 'placeholder', 'value', 'cols', 'rows', 'errors'],
 
         components: {
             TextareaInput,
         },
+
     }
 </script>

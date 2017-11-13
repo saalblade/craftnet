@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class="card mb-3">
             <div class="card-body">
                 <billing-payment></billing-payment>
@@ -42,7 +41,6 @@
                 </table>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -52,10 +50,12 @@
     import BillingInfos from '../components/BillingInfos'
 
     export default {
+
         components: {
             BillingPayment,
             BillingCoupon,
             BillingInfos,
         }
+
     }
 </script>

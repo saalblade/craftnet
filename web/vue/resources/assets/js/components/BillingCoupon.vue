@@ -15,10 +15,14 @@
 
 <script>
 	export default {
+
 	    methods: {
+
 	        redeem() {
 	            console.log('redeem');
 			}
+
 		}
+
 	}
 </script>

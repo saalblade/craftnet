@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class="card mb-3">
             <div class="card-header">Upcoming Invoice</div>
             <div class="card-body">
@@ -22,8 +21,10 @@
     import InvoicesTable from './InvoicesTable';
 
     export default {
+
         components: {
             InvoicesTable
         }
+
     }
 </script>

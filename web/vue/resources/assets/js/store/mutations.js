@@ -62,7 +62,6 @@ export const SAVE_USER = (state, {user, response}) => {
 };
 
 export const UPLOAD_USER_PHOTO = (state, {formData, data}) => {
-
     state.craftId.currentUser.photoId = data.photoId;
     state.craftId.currentUser.photoUrl = data.photoUrl;
 };

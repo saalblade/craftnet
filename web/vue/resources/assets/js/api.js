@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 export default {
+
     getCraftIdData(userId, cb, cbError) {
         let body = { userId: userId };
         let options = { emulateJSON: true };
@@ -158,4 +159,5 @@ export default {
             .then(response => cb(response.body))
             .catch(response => cbError(response));
     }
+
 }

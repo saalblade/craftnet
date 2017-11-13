@@ -39,6 +39,7 @@
     import ConnectedApps from '../components/ConnectedApps'
 
     export default {
+
         components: {
             TextField,
             PasswordField,
@@ -57,10 +58,12 @@
         },
 
         computed: {
+
             ...mapGetters({
                 currentUser: 'currentUser',
                 userIsInGroup: 'userIsInGroup',
             }),
+
         },
 
         methods: {
@@ -90,10 +93,12 @@
                     this.loading = false;
                 });
             }
+
         },
 
         mounted() {
             this.userDraft = JSON.parse(JSON.stringify(this.currentUser));
         }
+
     }
 </script>

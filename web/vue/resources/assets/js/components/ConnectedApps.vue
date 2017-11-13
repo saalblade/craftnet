@@ -2,7 +2,6 @@
 	<div>
 		<div class="card mb-3">
 			<div class="card-body">
-
 				<template v-if="title">
 					<h4>{{ title }}</h4>
 					<hr>
@@ -68,14 +67,17 @@
 		},
 
         computed: {
+
             ...mapGetters({
                 apps: 'apps',
                 currentUser: 'currentUser',
                 userIsInGroup: 'userIsInGroup',
             }),
+
         },
 
         methods: {
+
             accountName(appType) {
 				if(this.apps[appType]) {
 				    let app = this.apps[appType];
@@ -89,6 +91,7 @@
 					}
 				}
 			},
+
             connect(provider) {
                 let width = 800;
                 let height = 830;
@@ -125,6 +128,8 @@
                     	this.$root.displayError('Couldn’t disconnect app.');
 					});
             },
+
         }
+
     }
 </script>

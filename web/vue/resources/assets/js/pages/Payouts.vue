@@ -49,16 +49,20 @@
     import PayoutsBankAccount from '../components/PayoutsBankAccount'
 
     export default {
+
         components: {
             TextField,
             PayoutsBankAccount
         },
 
         computed: {
+
             ...mapGetters({
                 payouts: 'payouts',
                 payoutsScheduled: 'payoutsScheduled',
             }),
+
         },
+
     }
 </script>

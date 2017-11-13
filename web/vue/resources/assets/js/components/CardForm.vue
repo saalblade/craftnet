@@ -13,9 +13,11 @@
 
 <script>
     export default {
+
         props: ['loading'],
 
         methods: {
+
             save() {
                 this.$emit('beforeSave');
 
@@ -39,6 +41,7 @@
 
                 this.$emit('cancel');
             }
+
         },
 
         mounted() {
@@ -53,5 +56,6 @@
             // this.$children cannot be used because it expects a VNode :(
             this.$refs.cardElement.appendChild(el)
         },
+
     }
 </script>

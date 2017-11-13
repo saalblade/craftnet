@@ -51,6 +51,7 @@
     import ConnectedApps from '../components/ConnectedApps'
 
     export default {
+
         components: {
             TextField,
             PasswordField,
@@ -69,13 +70,16 @@
         },
 
         computed: {
+
             ...mapGetters({
                 currentUser: 'currentUser',
                 userIsInGroup: 'userIsInGroup',
             }),
+
         },
 
         methods: {
+
             deletePhoto(ev) {
                 if (confirm("Are you sure you want to delete this image?")) {
                     this.photoLoading = true;
@@ -159,5 +163,6 @@
         mounted() {
             this.userDraft = JSON.parse(JSON.stringify(this.currentUser));
         }
+
     }
 </script>

@@ -40,6 +40,7 @@
     import Invoices from '../components/Invoices';
 
     export default {
+
         components: {
             LicenseDetails,
             LicenseTable,
@@ -47,16 +48,20 @@
         },
 
         computed: {
+
             ...mapGetters({
                 craftLicenses: 'craftLicenses',
                 pluginLicenses: 'pluginLicenses',
             }),
+
             license() {
                 return this.craftLicenses.find(l => l.id == this.$route.params.id);
             },
+
             attachedPluginLicenses() {
                 return this.pluginLicenses;
             }
         }
+
     }
 </script>

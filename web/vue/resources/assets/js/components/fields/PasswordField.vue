@@ -10,7 +10,9 @@
     import PasswordInput from '../inputs/PasswordInput';
 
     export default {
+
         props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors'],
+
         components: {
             PasswordInput,
         },
@@ -20,5 +22,6 @@
                 this.$refs.input.$emit('focus');
             })
         }
+
     }
 </script>

@@ -19,8 +19,11 @@
 
 <script>
     export default {
+
         props: ['upcoming'],
+
         computed: {
+
             invoices() {
                 if(this.upcoming) {
                     return [
@@ -32,6 +35,8 @@
                     {id: 1, email: 'ben@pixelandtonic.com', amount: 299.00, date: '2017/05/11 11:25'}
                 ]
             }
+
         }
+
     }
 </script>

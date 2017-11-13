@@ -1,5 +1,4 @@
 <template>
-
     <div v-if="customer">
         <div class="card mb-3">
             <div class="card-body">
@@ -55,6 +54,7 @@
     export default {
 
         computed: {
+
             ...mapGetters({
                 customers: 'customers',
                 payments: 'payments',
@@ -71,6 +71,7 @@
             customerPayments() {
                 return this.payments.filter(p => p.customer.id == this.customerId);
             }
+
         }
     }
 </script>

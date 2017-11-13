@@ -2,7 +2,6 @@
     <div>
         <div class="card">
             <div class="card-body">
-
                 <div class="text-center mt-1 mb-4">
                     <h3>Renew Licenses</h3>
                     <p class="text-secondary">Renew your licenses for another year of great updates.</p>
@@ -80,10 +79,8 @@
                         <template v-else>
                             <a class="btn btn-primary btn-lg disabled" href="#">Renew {{ selectedLicenses.length }} licenses</a>
                         </template>
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -94,6 +91,7 @@
     import LicenseTable from '../components/LicenseTable';
 
     export default {
+
         components: {
             LicenseTable
         },
@@ -105,9 +103,11 @@
         },
 
         computed: {
+
             ...mapGetters({
                 licenses: 'licenses',
             }),
+
             subtotal() {
                 return this.licenses.reduce((a, b) => {
                     if(b.plugin && this.selectedLicenses.find(lId => lId == b.id)) {
@@ -117,6 +117,7 @@
                     return a;
                 }, 0);
             },
+
         },
 
         mounted() {
@@ -124,5 +125,6 @@
                 this.selectedLicenses.push(license.id)
             })
         }
+
     }
 </script>

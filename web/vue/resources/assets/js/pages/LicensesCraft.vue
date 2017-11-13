@@ -12,14 +12,19 @@
     import LicenseRenewAlert from '../components/LicenseRenewAlert';
 
     export default {
+
         components: {
             LicenseTable,
             LicenseRenewAlert,
         },
+
         computed: {
+
             ...mapGetters({
                 craftLicenses: 'craftLicenses',
             }),
+
         },
+
     }
 </script>

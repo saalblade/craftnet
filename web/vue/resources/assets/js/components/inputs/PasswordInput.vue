@@ -4,6 +4,7 @@
 
 <script>
     export default {
+
         props: ['id', 'placeholder', 'value', 'autofocus'],
 
         created() {
@@ -11,6 +12,7 @@
                 this.$refs.input.focus()
             })
         }
+
     }
 </script>
 

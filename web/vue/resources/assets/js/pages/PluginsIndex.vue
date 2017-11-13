@@ -1,5 +1,4 @@
 <template>
-
     <div>
         <table class="table">
             <thead>
@@ -38,27 +37,25 @@
                     </template>
 
                     <template v-else>
-
                         {{ plugin.price|currency }}
 
                         <template v-if="plugin.renewalPrice && plugin.renewalPrice != '0.00'">
                             <br />
                             <em class="text-secondary text-nowrap">{{ plugin.renewalPrice|currency }} per year</em>
                         </template>
-
                     </template>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
 
     export default {
+
         data () {
             return {
                 showSpinner: 1,
@@ -66,6 +63,7 @@
         },
 
         computed: {
+
             plugins() {
                 let plugins = JSON.parse(JSON.stringify(this.$store.getters.plugins));
 
@@ -79,6 +77,8 @@
 
                 return plugins;
             }
+
         },
+
     }
 </script>

@@ -34,23 +34,25 @@
     import LicenseDetails from '../components/LicenseDetails'
     import LicenseTable from '../components/LicenseTable';
     import Invoices from '../components/Invoices';
-    import LicenseTable from '../components/LicenseTable';
 
     export default {
+
         components: {
             LicenseDetails,
             LicenseTable,
             Invoices,
-            LicenseTable,
         },
 
         computed: {
+
             ...mapGetters({
                 pluginLicenses: 'pluginLicenses',
             }),
+
             license() {
                 return this.pluginLicenses.find(l => l.id == this.$route.params.id);
             },
+
             attachedCraftLicense() {
                 let license = this.license;
 
@@ -58,6 +60,7 @@
                     return license.craftLicense;
                 }
             },
+
             attachedCraftLicenses() {
                 if(this.attachedCraftLicense) {
                     return [this.attachedCraftLicense];
@@ -65,6 +68,8 @@
 
                 return [];
             }
+
         }
+
     }
 </script>

@@ -50,6 +50,7 @@
     export default {
 
         computed: {
+
             ...mapGetters({
                 payments: 'payments',
             }),
@@ -61,6 +62,8 @@
             payment() {
                 return this.payments[this.paymentId];
             }
+
         }
+
     }
 </script>
