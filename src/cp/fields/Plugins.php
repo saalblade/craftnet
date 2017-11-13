@@ -1,9 +1,4 @@
 <?php
-/**
- * @link      https://craftcms.com/
- * @copyright Copyright (c) Pixel & Tonic, Inc.
- * @license   https://craftcms.com/license
- */
 
 namespace craftcom\cp\fields;
 
@@ -12,10 +7,9 @@ use craft\fields\BaseRelationField;
 use craftcom\plugins\Plugin;
 
 /**
- * Plugins represents an Plugins field.
+ * Plugins represents a Plugins field.
  *
- * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @since  3.0
+ * @package craftcom\cp\fields
  */
 class Plugins extends BaseRelationField
 {
