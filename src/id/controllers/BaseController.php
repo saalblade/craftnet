@@ -187,13 +187,14 @@ abstract class BaseController extends Controller
      */
     protected function getAppTypeOauthProvider($appTypeHandle)
     {
+        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
         $config = $this->getAppTypeConfig($appTypeHandle);
 
         if($config) {
             return new $config['oauthClass']([
                 'clientId' => isset($_SERVER[$config['clientIdKey']]) ? $_SERVER[$config['clientIdKey']] : getenv($config['clientIdKey']),
                 'clientSecret' => isset($_SERVER[$config['clientSecretKey']]) ? $_SERVER[$config['clientSecretKey']] : getenv($config['clientSecretKey']),
-                'redirectUri' => 'http://id.craftcms.dev/apps/callback'
+                'redirectUri' => $craftIdConfig['craftIdUrl'].'/apps/callback'
             ]);
         }
     }
