@@ -7,8 +7,6 @@ use yii\web\Response;
 
 /**
  * Class IdController
- *
- * @package craftcom\id\controllers\v1
  */
 class IdController extends BaseController
 {

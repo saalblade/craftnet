@@ -6,6 +6,11 @@ use craft\db\ActiveRecord;
 use craft\records\User;
 use yii\db\ActiveQueryInterface;
 
+/**
+ * Class StripeCustomer
+ *
+ * @property \yii\db\ActiveQueryInterface $user
+ */
 class StripeCustomer extends ActiveRecord
 {
     // Public Methods

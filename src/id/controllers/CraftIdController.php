@@ -174,7 +174,7 @@ class CraftIdController extends BaseController
     /**
      * @return array
      */
-    private function _getPayouts()
+    private function _getPayouts(): array
     {
         return [
             [
@@ -210,7 +210,7 @@ class CraftIdController extends BaseController
     /**
      * @return array
      */
-    private function _getScheduledPayouts()
+    private function _getScheduledPayouts(): array
     {
         return [
             [
@@ -224,7 +224,7 @@ class CraftIdController extends BaseController
     /**
      * @return array
      */
-    private function _getPayments()
+    private function _getPayments(): array
     {
         return [
             [

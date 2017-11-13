@@ -4,6 +4,9 @@ namespace craftcom\id;
 
 use Craft;
 
+/**
+ * Class Module
+ */
 class Module extends \yii\base\Module
 {
     /**

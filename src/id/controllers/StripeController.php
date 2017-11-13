@@ -32,11 +32,9 @@ class StripeController extends BaseController
     public function actionConnect(): Response
     {
         $provider = $this->_getStripeProvider();
-
-        Craft::$app->getSession()->set('stripe.referrer', Craft::$app->getRequest()->getReferrer());
-
         $options = [];
 
+        Craft::$app->getSession()->set('stripe.referrer', Craft::$app->getRequest()->getReferrer());
         $authorizationUrl = $provider->getAuthorizationUrl($options);
 
         return $this->redirect($authorizationUrl);
@@ -59,9 +57,7 @@ class StripeController extends BaseController
             $customerRecord->userId = $user->id;
         }
 
-
         // Remove existing token
-
         if ($customerRecord->oauthTokenId) {
             $tokenRecord = OAuthToken::find()
                 ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
@@ -74,7 +70,6 @@ class StripeController extends BaseController
 
 
         // Save new token
-
         $provider = $this->_getStripeProvider();
         $code = Craft::$app->getRequest()->getParam('code');
 
@@ -135,7 +130,6 @@ class StripeController extends BaseController
             $tokenRecord->delete();
         }
 
-
         if ($customerRecord) {
             $customerRecord->stripeAccountId = null;
             $customerRecord->save();
@@ -161,9 +155,7 @@ class StripeController extends BaseController
                 ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
                 ->one();
 
-
             Stripe::setApiKey($tokenRecord->accessToken);
-
             $account = Account::retrieve();
 
             return $this->asJson($account);
@@ -207,10 +199,9 @@ class StripeController extends BaseController
     public function actionSaveCard(): Response
     {
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+        $user = Craft::$app->getUser()->getIdentity();
 
         Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
-
-        $user = Craft::$app->getUser()->getIdentity();
 
         $customerRecord = StripeCustomerRecord::find()
             ->where(Db::parseParam('userId', $user->id))
