@@ -2,6 +2,7 @@
 
 return [
     '*' => [
+        'craftIdUrl' => 'https://id.craftcms.com',
         'stripeClientId' => 'ca_2b3yXOngHtKxb4cDEGHeCMhrNwXyWvu5',
         'stripeClientSecret' => 'sk_test_FgnfF68q9L8Hp3RRDETaJefc',
         'enablePluginStoreCache' => true,
@@ -34,9 +35,6 @@ return [
                 'deassociatePluginLicense' => "Deassociate plugin license",
             ]
         ],
-    ],
-    'prod' => [
-        'craftIdUrl' => 'https://id.craftcms.com',
     ],
     'dev' => [
         'craftIdUrl' => 'https://id.craftcms.dev',
