@@ -9,7 +9,7 @@ export default {
         let body = { userId: userId };
         let options = { emulateJSON: true };
 
-        Vue.http.post(window.craftActionUrl+'/id/craft-id', body, options)
+        Vue.http.post(window.craftActionUrl+'/craftcom/id/craft-id', body, options)
             .then(response => cb(response.body))
             .catch(response => cbError(response));
     },
@@ -21,7 +21,7 @@ export default {
         formData.append('appTypeHandle', appHandle);
         formData.append(csrfTokenName, csrfTokenValue);
 
-        Vue.http.post(window.craftActionUrl+'/id/apps/disconnect', formData, options)
+        Vue.http.post(window.craftActionUrl+'/craftcom/id/apps/disconnect', formData, options)
             .then(response => cb(response.body))
             .catch(response => cbError(response));
     },
@@ -58,23 +58,23 @@ export default {
     },
 
     uploadUserPhoto(formData, cb, cbError) {
-        formData.append('action', 'id/account/upload-user-photo');
+        formData.append('action', 'craftcom/id/account/upload-user-photo');
         formData.append(csrfTokenName, csrfTokenValue);
 
         let options = { emulateJSON: true };
 
-        Vue.http.post(window.craftActionUrl+'/id/account/upload-user-photo', formData, options)
+        Vue.http.post(window.craftActionUrl+'/craftcom/id/account/upload-user-photo', formData, options)
             .then(response => cb(response.body))
             .catch(response => cbError(response));
     },
 
     deleteUserPhoto(formData, cb, cbError) {
-        formData.append('action', 'id/account/delete-user-photo');
+        formData.append('action', 'craftcom/id/account/delete-user-photo');
         formData.append(csrfTokenName, csrfTokenValue);
 
         let options = { emulateJSON: true };
 
-        Vue.http.post(window.craftActionUrl+'/id/account/delete-user-photo', formData, options)
+        Vue.http.post(window.craftActionUrl+'/craftcom/id/account/delete-user-photo', formData, options)
             .then(response => cb(response.body))
             .catch(response => cbError(response));
     },
