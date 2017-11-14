@@ -17,9 +17,11 @@ use craft\web\UrlManager;
 use craft\web\View;
 use craftcom\composer\PackageManager;
 use craftcom\fields\Plugins;
+use craftcom\services\Oauth;
 use yii\base\Event;
 
 /**
+ * @property Oauth          $oauth
  * @property PackageManager $packageManager
  */
 class Module extends \yii\base\Module
@@ -71,6 +73,14 @@ class Module extends \yii\base\Module
     public function getPackageManager(): PackageManager
     {
         return $this->get('packageManager');
+    }
+
+    /**
+     * @return Oauth
+     */
+    public function getOauth(): Oauth
+    {
+        return $this->get('oauth');
     }
 
     private function _initConsoleRequest()

@@ -7,6 +7,7 @@ use craft\elements\Category;
 use craft\elements\Entry;
 use craft\helpers\Json;
 use craftcom\controllers\api\BaseApiController;
+use craftcom\Module;
 use craftcom\plugins\Plugin;
 use League\OAuth2\Client\Token\AccessToken;
 use yii\web\Response;
@@ -36,7 +37,7 @@ class CraftIdController extends BaseController
         $currentUser = Craft::$app->getUsers()->getUserById($currentUserId);
 
         // Apps
-        $apps = $this->getApps();
+        $apps = Module::getInstance()->getOauth()->getApps();
 
         // Plugins
         $plugins = [];

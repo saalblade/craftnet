@@ -10,7 +10,29 @@ return [
             'craftcom' => [
                 'class' => \craftcom\Module::class,
                 'components' => [
-                    'packageManager' => \craftcom\composer\PackageManager::class,
+                    'packageManager' => [
+                        'class' => \craftcom\composer\PackageManager::class,
+                        'composerWebroot' => getenv('COMPOSER_WEBROOT'),
+                    ],
+                    'oauth' => [
+                        'class' => \craftcom\services\Oauth::class,
+                        'appTypes' => [
+                            'github' => [
+                                'class' => 'Github',
+                                'oauthClass' => \League\OAuth2\Client\Provider\Github::class,
+                                'clientIdKey' => $_SERVER['GITHUB_APP_CLIENT_ID'] ?? getenv('GITHUB_APP_CLIENT_ID'),
+                                'clientSecretKey' => $_SERVER['GITHUB_APP_CLIENT_SECRET'] ?? getenv('GITHUB_APP_CLIENT_SECRET'),
+                                'scope' => ['user:email', 'write:repo_hook', 'repo'],
+                            ],
+                            'bitbucket' => [
+                                'class' => 'Bitbucket',
+                                'oauthClass' => \Stevenmaguire\OAuth2\Client\Provider\Bitbucket::class,
+                                'clientIdKey' => $_SERVER['BITBUCKET_APP_CLIENT_ID'] ?? getenv('BITBUCKET_APP_CLIENT_ID'),
+                                'clientSecretKey' => $_SERVER['BITBUCKET_APP_CLIENT_SECRET'] ?? getenv('BITBUCKET_APP_CLIENT_SECRET'),
+                                'scope' => 'account',
+                            ],
+                        ]
+                    ],
                 ]
             ],
             'oauth-server' => [

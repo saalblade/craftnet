@@ -19,6 +19,11 @@ use yii\helpers\Console;
 
 class PackageManager extends Component
 {
+    /**
+     * @var string
+     */
+    public $composerWebroot;
+
     public function packageExists(string $name): bool
     {
         return (new Query())
@@ -505,17 +510,16 @@ class PackageManager extends Component
         }
 
         // Create the JSON files
-        $web = getenv('COMPOSER_WEBROOT');
         $oldPaths = [];
         $indexData = [];
 
         foreach ($providers as $name => $providerData) {
-            $providerHash = $this->_writeJsonFile($providerData, "{$web}/p/{$name}/%hash%.json", $oldPaths);
+            $providerHash = $this->_writeJsonFile($providerData, "{$this->composerWebroot}/p/{$name}/%hash%.json", $oldPaths);
             $indexData['providers'][$name] = ['sha256' => $providerHash];
         }
 
         $indexPath = 'p/provider/%hash%.json';
-        $indexHash = $this->_writeJsonFile($indexData, "{$web}/{$indexPath}", $oldPaths);
+        $indexHash = $this->_writeJsonFile($indexData, "{$this->composerWebroot}/{$indexPath}", $oldPaths);
 
         $rootData = [
             'packages' => [],
@@ -525,7 +529,7 @@ class PackageManager extends Component
             'providers-url' => '/p/%package%/%hash%.json',
         ];
 
-        FileHelper::writeToFile("{$web}/packages.json", Json::encode($rootData));
+        FileHelper::writeToFile("{$this->composerWebroot}/packages.json", Json::encode($rootData));
 
         if (!empty($oldPaths)) {
             Craft::$app->getQueue()->delay(60 * 5)->push(new DeletePaths([

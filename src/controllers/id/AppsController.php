@@ -4,6 +4,7 @@ namespace craftcom\controllers\id;
 
 use Craft;
 use craft\records\OAuthToken;
+use craftcom\Module;
 use Exception;
 use yii\web\Response;
 use craft\helpers\Db;
@@ -35,8 +36,9 @@ class AppsController extends BaseController
     {
         Craft::$app->getSession()->set('connectAppTypeHandle', $appTypeHandle);
 
-        $appTypeConfig = $this->getAppTypeConfig($appTypeHandle);
-        $oauthProvider = $this->getAppTypeOauthProvider($appTypeHandle);
+        $oauthService = Module::getInstance()->getOauth();
+        $appTypeConfig = $oauthService->getAppTypeConfig($appTypeHandle);
+        $oauthProvider = $oauthService->getAppTypeOauthProvider($appTypeHandle);
 
         $options = [
             'scope' => $appTypeConfig['scope'],
@@ -57,8 +59,9 @@ class AppsController extends BaseController
     public function actionCallback(): Response
     {
         $appTypeHandle = Craft::$app->getSession()->get('connectAppTypeHandle');
-        $appTypeConfig = $this->getAppTypeConfig($appTypeHandle);
-        $oauthProvider = $this->getAppTypeOauthProvider($appTypeHandle);
+        $oauthService = Module::getInstance()->getOauth();
+        $appTypeConfig = $oauthService->getAppTypeConfig($appTypeHandle);
+        $oauthProvider = $oauthService->getAppTypeOauthProvider($appTypeHandle);
 
         $code = Craft::$app->getRequest()->getParam('code');
         $state = Craft::$app->getRequest()->getParam('state');
@@ -88,7 +91,7 @@ class AppsController extends BaseController
         }
 
         $currentUser = Craft::$app->getUser()->getIdentity();
-        $existingToken = $this->getAuthTokenByUserId($appTypeConfig['class'], $currentUser->id);
+        $existingToken = Module::getInstance()->getOauth()->getAuthTokenByUserId($appTypeConfig['class'], $currentUser->id);
 
         // No previous acces token, create a new one.
         if (!$existingToken) {
@@ -110,7 +113,7 @@ class AppsController extends BaseController
         $tokenRecord->save();
 
         // Apps
-        $apps = $this->getApps();
+        $apps = $oauthService->getApps();
 
         return $this->renderTemplate('apps/callback', [
             'apps' => $apps
@@ -125,7 +128,7 @@ class AppsController extends BaseController
     public function actionDisconnect(): Response
     {
         $appTypeHandle = Craft::$app->getRequest()->getBodyParam('appTypeHandle');
-        $appTypeConfig = $this->getAppTypeConfig($appTypeHandle);
+        $appTypeConfig = Module::getInstance()->getOauth()->getAppTypeConfig($appTypeHandle);
 
         $currentUser = Craft::$app->getUser()->getIdentity();
 
