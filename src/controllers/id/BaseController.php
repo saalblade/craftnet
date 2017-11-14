@@ -3,13 +3,14 @@
 namespace craftcom\controllers\id;
 
 use Craft;
-use craft\web\Controller;
+use craft\db\Query;
 use craft\helpers\Json;
+use craft\web\Controller;
 use craftcom\plugins\Plugin;
 use GuzzleHttp\Client;
-use League\OAuth2\Client\Token\AccessToken;
-use craft\db\Query;
 use League\OAuth2\Client\Provider\Github;
+use League\OAuth2\Client\Token\AccessToken;
+use Stevenmaguire\OAuth2\Client\Provider\Bitbucket;
 
 /**
  * Class BaseController
@@ -32,14 +33,14 @@ abstract class BaseController extends Controller
     private $_appTypes = [
         'github' => [
             'class' => 'Github',
-            'oauthClass' => 'League\OAuth2\Client\Provider\Github',
+            'oauthClass' => Github::class,
             'clientIdKey' => 'GITHUB_APP_CLIENT_ID',
             'clientSecretKey' => 'GITHUB_APP_CLIENT_SECRET',
             'scope' => ['user:email', 'write:repo_hook', 'repo'],
         ],
         'bitbucket' => [
             'class' => 'Bitbucket',
-            'oauthClass' => 'Stevenmaguire\OAuth2\Client\Provider\Bitbucket',
+            'oauthClass' => Bitbucket::class,
             'clientIdKey' => 'BITBUCKET_APP_CLIENT_ID',
             'clientSecretKey' => 'BITBUCKET_APP_CLIENT_SECRET',
             'scope' => 'account',
@@ -58,7 +59,7 @@ abstract class BaseController extends Controller
 
         $apps = [];
 
-        foreach($this->_appTypes as $handle => $config) {
+        foreach ($this->_appTypes as $handle => $config) {
             $oauthProvider = $this->getAppTypeOauthProvider($handle);
             $token = $this->_getOauthTokenByUserId($config['class'], $currentUser->id);
 
@@ -67,7 +68,7 @@ abstract class BaseController extends Controller
                     'access_token' => $token['accessToken'],
                 ];
 
-                if(isset($token['expiresIn'])) {
+                if (isset($token['expiresIn'])) {
                     $options['expires_in'] = $token['expiresIn'];
                 }
 
@@ -78,7 +79,7 @@ abstract class BaseController extends Controller
 
                 $repositories = [];
 
-                if($handle === 'github') {
+                if ($handle === 'github') {
                     $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
                         'headers' => [
                             'Accept' => 'application/vnd.github.v3+json',
@@ -190,7 +191,7 @@ abstract class BaseController extends Controller
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
         $config = $this->getAppTypeConfig($appTypeHandle);
 
-        if($config) {
+        if ($config) {
             return new $config['oauthClass']([
                 'clientId' => isset($_SERVER[$config['clientIdKey']]) ? $_SERVER[$config['clientIdKey']] : getenv($config['clientIdKey']),
                 'clientSecret' => isset($_SERVER[$config['clientSecretKey']]) ? $_SERVER[$config['clientSecretKey']] : getenv($config['clientSecretKey']),
@@ -206,7 +207,7 @@ abstract class BaseController extends Controller
      */
     protected function getAppTypeConfig($appTypeHandle)
     {
-        if(isset($this->_appTypes[$appTypeHandle])) {
+        if (isset($this->_appTypes[$appTypeHandle])) {
             return $this->_appTypes[$appTypeHandle];
         }
     }
