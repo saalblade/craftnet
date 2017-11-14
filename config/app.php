@@ -11,7 +11,7 @@ return [
                 'class' => \craftcom\Module::class,
                 'components' => [
                     'packageManager' => [
-                        'class' => \craftcom\composer\PackageManager::class,
+                        'class' => craftcom\composer\PackageManager::class,
                         'composerWebroot' => getenv('COMPOSER_WEBROOT'),
                     ],
                     'oauth' => [
@@ -19,14 +19,14 @@ return [
                         'appTypes' => [
                             'github' => [
                                 'class' => 'Github',
-                                'oauthClass' => \League\OAuth2\Client\Provider\Github::class,
+                                'oauthClass' => League\OAuth2\Client\Provider\Github::class,
                                 'clientIdKey' => $_SERVER['GITHUB_APP_CLIENT_ID'] ?? getenv('GITHUB_APP_CLIENT_ID'),
                                 'clientSecretKey' => $_SERVER['GITHUB_APP_CLIENT_SECRET'] ?? getenv('GITHUB_APP_CLIENT_SECRET'),
                                 'scope' => ['user:email', 'write:repo_hook', 'repo'],
                             ],
                             'bitbucket' => [
                                 'class' => 'Bitbucket',
-                                'oauthClass' => \Stevenmaguire\OAuth2\Client\Provider\Bitbucket::class,
+                                'oauthClass' => Stevenmaguire\OAuth2\Client\Provider\Bitbucket::class,
                                 'clientIdKey' => $_SERVER['BITBUCKET_APP_CLIENT_ID'] ?? getenv('BITBUCKET_APP_CLIENT_ID'),
                                 'clientSecretKey' => $_SERVER['BITBUCKET_APP_CLIENT_SECRET'] ?? getenv('BITBUCKET_APP_CLIENT_SECRET'),
                                 'scope' => 'account',
@@ -36,7 +36,7 @@ return [
                 ]
             ],
             'oauth-server' => [
-                'class' => \craftcom\oauthserver\Module::class,
+                'class' => craftcom\oauthserver\Module::class,
             ],
         ],
     ],
