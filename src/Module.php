@@ -87,7 +87,7 @@ class Module extends \yii\base\Module
 
     private function _initCpRequest()
     {
-        $this->controllerNamespace = 'craftcom\\cp\\controllers';
+        $this->controllerNamespace = 'craftcom\\controllers';
 
         Event::on(Cp::class, Cp::EVENT_REGISTER_CP_NAV_ITEMS, function(RegisterCpNavItemsEvent $e) {
             $e->navItems[] = [
