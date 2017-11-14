@@ -1,5 +1,7 @@
 <?php
 
+use craftcom\services\Oauth;
+
 return [
     '*' => [
         'bootstrap' => [
@@ -15,16 +17,16 @@ return [
                         'composerWebroot' => getenv('COMPOSER_WEBROOT'),
                     ],
                     'oauth' => [
-                        'class' => \craftcom\services\Oauth::class,
+                        'class' => Oauth::class,
                         'appTypes' => [
-                            'github' => [
+                            Oauth::PROVIDER_GITHUB => [
                                 'class' => 'Github',
                                 'oauthClass' => League\OAuth2\Client\Provider\Github::class,
                                 'clientIdKey' => $_SERVER['GITHUB_APP_CLIENT_ID'] ?? getenv('GITHUB_APP_CLIENT_ID'),
                                 'clientSecretKey' => $_SERVER['GITHUB_APP_CLIENT_SECRET'] ?? getenv('GITHUB_APP_CLIENT_SECRET'),
                                 'scope' => ['user:email', 'write:repo_hook', 'repo'],
                             ],
-                            'bitbucket' => [
+                            Oauth::PROVIDER_BITBUCKET => [
                                 'class' => 'Bitbucket',
                                 'oauthClass' => Stevenmaguire\OAuth2\Client\Provider\Bitbucket::class,
                                 'clientIdKey' => $_SERVER['BITBUCKET_APP_CLIENT_ID'] ?? getenv('BITBUCKET_APP_CLIENT_ID'),

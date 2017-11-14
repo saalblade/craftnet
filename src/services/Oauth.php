@@ -13,6 +13,9 @@ use yii\base\Exception;
 
 class Oauth extends Component
 {
+    const PROVIDER_GITHUB = 'github';
+    const PROVIDER_BITBUCKET = 'bitbucket';
+
     /**
      * @var array
      */
@@ -37,7 +40,7 @@ class Oauth extends Component
 
                 $repositories = [];
 
-                if ($handle === 'github') {
+                if ($handle === self::PROVIDER_GITHUB) {
                     $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
                         'headers' => [
                             'Accept' => 'application/vnd.github.v3+json',
