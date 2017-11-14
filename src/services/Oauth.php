@@ -26,22 +26,12 @@ class Oauth extends Component
         $currentUser = Craft::$app->getUser()->getIdentity();
         $apps = [];
 
-
         foreach ($this->appTypes as $handle => $config) {
             $oauthProvider = $this->getAppTypeOauthProvider($handle);
             $token = $this->getOauthTokenByUserId($config['class'], $currentUser->id);
 
             if ($token) {
-                $options = [
-                    'access_token' => $token['accessToken'],
-                ];
-
-                if (isset($token['expiresIn'])) {
-                    $options['expires_in'] = $token['expiresIn'];
-                }
-
-                $accessToken = new AccessToken($options);
-
+                $accessToken = $this->createAccessToken($token);
                 $resourceOwner = $oauthProvider->getResourceOwner($accessToken);
                 $account = $resourceOwner->toArray();
 
@@ -142,4 +132,21 @@ class Oauth extends Component
             ->one();
     }
 
+    /**
+     * @param array $tokenInfo
+     *
+     * @return AccessToken
+     */
+    public function createAccessToken(array $tokenInfo): AccessToken
+    {
+        $options = [
+            'access_token' => $tokenInfo['accessToken'],
+        ];
+
+        if (isset($tokenInfo['expiresIn'])) {
+            $options['expires_in'] = $tokenInfo['expiresIn'];
+        }
+
+        return new AccessToken($options);
+    }
 }
