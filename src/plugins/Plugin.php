@@ -402,9 +402,16 @@ class Plugin extends Element
             [
                 'repository',
                 'documentationUrl',
+            ],
+            'url',
+        ];
+
+        $rules[] = [
+            [
                 'changelogUrl',
             ],
             'url',
+            'validSchemes' => ['https'],
         ];
 
         return $rules;
