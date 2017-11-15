@@ -72,7 +72,10 @@ class Package extends Model
         }
 
         if ($this->_plugin === null) {
-            $this->_plugin = Plugin::findOne(['packageId' => $this->id]) ?: false;
+            $this->_plugin = Plugin::find()
+                ->packageId($this->id)
+                ->status(null)->one()
+                ?? false;
         }
 
         return $this->_plugin ?: null;
