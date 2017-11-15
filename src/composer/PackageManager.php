@@ -297,7 +297,6 @@ class PackageManager extends Component
                 'version' => $version,
                 'sha' => $sha,
             ]);
-            $vcs = $package->getVcs();
             $vcs->populateVersion($packageVersion);
             $this->savePackageVersion($package, $packageVersion);
 
