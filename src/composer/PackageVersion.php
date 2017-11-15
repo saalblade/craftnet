@@ -2,6 +2,7 @@
 
 namespace craftcom\composer;
 
+use Composer\Semver\VersionParser;
 use craft\base\Model;
 use craft\helpers\Json;
 
@@ -64,5 +65,15 @@ class PackageVersion extends Model
         $this->binaries = null;
         $this->source = null;
         $this->dist = null;
+    }
+
+    public function getNormalizedVersion()
+    {
+        return (new VersionParser())->normalize($this->version);
+    }
+
+    public function getStability()
+    {
+        return VersionParser::parseStability($this->version);
     }
 }

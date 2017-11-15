@@ -413,7 +413,7 @@ class PackageManager extends Component
                 'sha' => $version->sha,
                 'description' => $version->description,
                 'version' => $version->version,
-                'normalizedVersion' => (new VersionParser())->normalize($version->version),
+                'normalizedVersion' => $version->getNormalizedVersion(),
                 'type' => $version->type,
                 'keywords' => $version->keywords ? Json::encode($version->keywords) : null,
                 'homepage' => $version->homepage,
