@@ -13,6 +13,7 @@ use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craftcom\composer\jobs\DeletePaths;
 use craftcom\composer\jobs\UpdatePackage;
+use craftcom\errors\MissingTokenException;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\helpers\Console;
@@ -20,9 +21,28 @@ use yii\helpers\Console;
 class PackageManager extends Component
 {
     /**
+     * @var string[]|null
+     */
+    public $githubFallbackTokens;
+
+    /**
+     * @var bool Whether plugins *must* have VCS tokens
+     */
+    public $requirePluginVcsTokens = true;
+
+    /**
      * @var string
      */
     public $composerWebroot;
+
+    public function init()
+    {
+        parent::init();
+
+        if (is_string($this->githubFallbackTokens)) {
+            $this->githubFallbackTokens = array_filter(explode(',', $this->githubFallbackTokens));
+        }
+    }
 
     public function packageExists(string $name): bool
     {
@@ -150,6 +170,12 @@ class PackageManager extends Component
             ->from(['craftcom_packages']);
     }
 
+    /**
+     * @param string $name  The Composer package name
+     * @param bool   $force Whether to update package versions even if their SHA hasn't changed
+     *
+     * @throws MissingTokenException if the package is a plugin, but we don't have a VCS token for it
+     */
     public function updatePackage(string $name, bool $force = false)
     {
         $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
@@ -574,5 +600,20 @@ class PackageManager extends Component
         FileHelper::writeToFile($path, $content);
 
         return $hash;
+    }
+
+    /**
+     * Returns a random fallback GitHub API token.
+     *
+     * @return string|null
+     */
+    public function getRandomGitHubFallbackToken()
+    {
+        if (empty($this->githubFallbackTokens)) {
+            return null;
+        }
+
+        $key = array_rand($this->githubFallbackTokens);
+        return $this->githubFallbackTokens[$key];
     }
 }

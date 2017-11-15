@@ -17,6 +17,11 @@ class PluginQuery extends ElementQuery
      */
     public $developerId;
 
+    /**
+     * @var int|int[]|null The Composer package ID(s) that the resulting plugins must be associated with.
+     */
+    public $packageId;
+
     public function __construct($elementType, array $config = [])
     {
         // Default orderBy
@@ -54,6 +59,20 @@ class PluginQuery extends ElementQuery
         return $this;
     }
 
+    /**
+     * Sets the [[packageId]] property.
+     *
+     * @param int|int[]|null $value The property value
+     *
+     * @return static self reference
+     */
+    public function packageId($value)
+    {
+        $this->packageId = $value;
+
+        return $this;
+    }
+
     protected function beforePrepare(): bool
     {
         $this->joinElementTable('craftcom_plugins');
@@ -82,6 +101,10 @@ class PluginQuery extends ElementQuery
 
         if ($this->developerId) {
             $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.developerId', $this->developerId));
+        }
+
+        if ($this->packageId) {
+            $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.packageId', $this->packageId));
         }
 
         return parent::beforePrepare();

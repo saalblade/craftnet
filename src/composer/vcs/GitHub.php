@@ -6,12 +6,18 @@ use Composer\Semver\Comparator;
 use Craft;
 use craft\helpers\Json;
 use craftcom\composer\PackageVersion;
+use craftcom\errors\VcsException;
 use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
 
 class GitHub extends BaseVcs
 {
+    /**
+     * @var Client The GitHub API client to use
+     */
+    public $client;
+
     /**
      * @var string
      */
@@ -27,16 +33,20 @@ class GitHub extends BaseVcs
     public function getVersions(): array
     {
         $versions = [];
-        $client = new Client();
         /** @var Repo $api */
-        $api = $client->api('repo');
+        $api = $this->client->api('repo');
         $page = 1;
 
         do {
-            $tags = $api->tags($this->owner, $this->repo, [
-                'per_page' => 100,
-                'page' => $page++
-            ]);
+            try {
+                $tags = $api->tags($this->owner, $this->repo, [
+                    'per_page' => 100,
+                    'page' => $page++
+                ]);
+            } catch (RuntimeException $e) {
+                throw new VcsException($e->getMessage(), $e->getCode(), $e);
+            }
+
             foreach ($tags as $tag) {
                 // Special case for Craft CMS - avoid any versions before the 3.0 Beta
                 if ($this->package->name === 'craftcms/cms' && Comparator::lessThan($tag['name'], '3.0.0-beta.1')) {
@@ -63,9 +73,8 @@ class GitHub extends BaseVcs
     public function populateVersion(PackageVersion $version)
     {
         // Get the composer.json contents
-        $client = new Client();
         /** @var Repo $api */
-        $api = $client->api('repo');
+        $api = $this->client->api('repo');
         try {
             $response = $api->contents()->show($this->owner, $this->repo, 'composer.json', $version->sha);
             $config = Json::decode(base64_decode($response['content']));

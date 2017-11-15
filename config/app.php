@@ -14,6 +14,8 @@ return [
                 'components' => [
                     'packageManager' => [
                         'class' => craftcom\composer\PackageManager::class,
+                        'githubFallbackTokens' => getenv('GITHUB_FALLBACK_TOKENS'),
+                        'requirePluginVcsTokens' => false,
                         'composerWebroot' => getenv('COMPOSER_WEBROOT'),
                     ],
                     'oauth' => [

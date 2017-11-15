@@ -55,6 +55,11 @@ class PluginsController extends Controller
         }
 
         $client = new Client();
+
+        if ($token = Module::getInstance()->getPackageManager()->getRandomGitHubFallbackToken()) {
+            $client->authenticate($token, null, Client::AUTH_HTTP_TOKEN);
+        }
+
         /** @var Repo $api */
         $api = $client->api('repo');
 
