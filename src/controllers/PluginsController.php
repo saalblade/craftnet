@@ -164,13 +164,13 @@ class PluginsController extends Controller
         $newName = false;
         $newHandle = false;
 
-        if($plugin->name != $request->getBodyParam('name')) {
+        if ($plugin->name != $request->getBodyParam('name')) {
             $newName = true;
         }
 
         $plugin->name = $request->getBodyParam('name');
 
-        if($plugin->handle != $request->getBodyParam('handle')) {
+        if ($plugin->handle != $request->getBodyParam('handle')) {
             $newHandle = true;
         }
 
@@ -244,15 +244,15 @@ class PluginsController extends Controller
 
             $existingScreenshots = $plugin->getScreenshots();
 
-            foreach($existingScreenshots as $existingScreenshot) {
+            foreach ($existingScreenshots as $existingScreenshot) {
                 $remove = true;
-                foreach($screenshotIds as $screenshotId) {
-                    if($existingScreenshot->id == $screenshotId) {
+                foreach ($screenshotIds as $screenshotId) {
+                    if ($existingScreenshot->id == $screenshotId) {
                         $remove = false;
                     }
                 }
 
-                if($remove) {
+                if ($remove) {
                     Craft::$app->getElements()->deleteElementById($existingScreenshot->id, Asset::class);
                 }
             }
@@ -262,8 +262,8 @@ class PluginsController extends Controller
 
             $screenshotFiles = UploadedFile::getInstancesByName('screenshots');
 
-            if(count($screenshotFiles) > 0) {
-                foreach($screenshotFiles as $screenshotFile) {
+            if (count($screenshotFiles) > 0) {
+                foreach ($screenshotFiles as $screenshotFile) {
                     $name = $plugin->name." Screenshot";
                     $handle = $plugin->handle;
                     $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$screenshotFile->getExtension();
@@ -331,19 +331,19 @@ class PluginsController extends Controller
                 }
             }
 
-           foreach ($plugin->screenshots as $screenshot) {
-               if ($newName) {
-                   $screenshot->title = $plugin->name." Screenshot";
-               }
+            foreach ($plugin->screenshots as $screenshot) {
+                if ($newName) {
+                    $screenshot->title = $plugin->name." Screenshot";
+                }
 
-               if ($newHandle) {
-                   $screenshot->newFilename = $plugin->handle.'-'.StringHelper::randomString().'.'.$screenshot->getExtension();
-               }
+                if ($newHandle) {
+                    $screenshot->newFilename = $plugin->handle.'-'.StringHelper::randomString().'.'.$screenshot->getExtension();
+                }
 
-               if (!Craft::$app->getElements()->saveElement($screenshot, false)) {
-                   throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
-               }
-           }
+                if (!Craft::$app->getElements()->saveElement($screenshot, false)) {
+                    throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+                }
+            }
         }
 
         if ($request->getAcceptsJson()) {
@@ -357,7 +357,7 @@ class PluginsController extends Controller
 
             $return['screenshots'] = [];
 
-            foreach($plugin->getScreenshots() as $screenshot) {
+            foreach ($plugin->getScreenshots() as $screenshot) {
                 $return['screenshots'][] = [
                     'id' => $screenshot->id,
                     'url' => $screenshot->getUrl(),
@@ -385,14 +385,14 @@ class PluginsController extends Controller
 
         // Delete icon
 
-        if($plugin->icon) {
+        if ($plugin->icon) {
             Craft::$app->getElements()->deleteElement($plugin->icon);
         }
 
 
         // Delete screenshots
 
-        foreach($plugin->screenshots as $screenshot) {
+        foreach ($plugin->screenshots as $screenshot) {
             Craft::$app->getElements()->deleteElement($screenshot);
         }
 
