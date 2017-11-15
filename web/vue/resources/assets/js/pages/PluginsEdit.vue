@@ -69,6 +69,10 @@
                     <div class="card-header">Plugin Details</div>
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-sm-12">
+                                <input id="enabled" type="checkbox" name="fields[enabled]" v-model="pluginDraft.enabled">
+                                <label for="enabled">Enabled</label>
+                            </div>
                             <div class="col-sm-6">
                                 <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
                             </div>
@@ -158,6 +162,7 @@
                     icon: null,
                     iconId: null,
                     developerId: null,
+                    enabled: false,
                     handle: '',
                     packageName: '',
                     name: '',
@@ -291,7 +296,7 @@
 
                 let formData = new FormData();
                 formData.append('siteId', 1);
-                formData.append('enabled', 1);
+                formData.append('enabled', this.pluginDraft.enabled ? 1 : 0);
 
                 if(this.pluginDraft.id) {
                     formData.append('pluginId', this.pluginDraft.id);

@@ -138,7 +138,7 @@ class PluginsController extends Controller
         $request = Craft::$app->getRequest();
 
         if ($pluginId = $request->getBodyParam('pluginId')) {
-            $plugin = Plugin::find()->id($pluginId)->one();
+            $plugin = Plugin::find()->id($pluginId)->status(null)->one();
             if ($plugin === false) {
                 throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
             }

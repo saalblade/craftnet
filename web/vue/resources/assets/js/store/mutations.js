@@ -106,7 +106,7 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     }
 
     statePlugin.siteId = formData.get('siteId');
-    statePlugin.enabled = formData.get('enabled');
+    statePlugin.enabled = (formData.get('enabled') == 1 ? true : false);
     statePlugin.pluginId = data.id;
     statePlugin.icon = formData.get('icon');
     statePlugin.iconUrl = data.iconUrl+'?'+ Math.floor(Math.random() * 1000000);

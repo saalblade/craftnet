@@ -81,6 +81,7 @@ abstract class BaseController extends Controller
 
         return [
             'id' => $plugin->id,
+            'enabled' => $plugin->enabled,
             'status' => $plugin->status,
             'iconId' => $plugin->iconId,
             'iconUrl' => $iconUrl,

@@ -6,6 +6,7 @@
                 <th></th>
                 <th>Name</th>
                 <th>Price</th>
+                <th>Status</th>
             </tr>
             </thead>
             <tbody>
@@ -18,20 +19,13 @@
                 <td>
                     <h6>
                         <strong>
-                            <router-link v-if="plugin.status == 'enabled'" :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>
-                            <span v-else>{{plugin.name}}</span>
+                            <router-link :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>
                         </strong>
                     </h6>
                     <p>{{ plugin.shortDescription }}</p>
-                    <p v-if="plugin.status == 'enabled'" class="text-secondary">
-                        XXX Downloads
-                    </p>
-                    <p v-if="plugin.status == 'disabled'" class="text-secondary">
-                        <em>Your plugin is being reviewed by the staff for activation.</em>
-                    </p>
+                    <p class="text-secondary">XXX Downloads</p>
                 </td>
                 <td>
-
                     <template v-if="!plugin.price || plugin.price == '0.00'">
                         Free
                     </template>
@@ -44,6 +38,10 @@
                             <em class="text-secondary text-nowrap">{{ plugin.renewalPrice|currency }} per year</em>
                         </template>
                     </template>
+                </td>
+                <td>
+                    <span v-if="plugin.enabled" class="text-success">Enabled</span>
+                    <span v-else class="text-secondary">Disabled</span>
                 </td>
             </tr>
             </tbody>
