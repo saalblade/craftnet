@@ -200,6 +200,17 @@ class Plugin extends Element
     public $latestVersion;
 
     /**
+     * @var bool Whether the plugin is pending approval.
+     */
+    public $pendingApproval = false;
+
+    /**
+     * @var string|null The plugin’s changelog.
+     * @see PluginQuery::withChangelogs()
+     */
+    public $changelog;
+
+    /**
      * @var User|null
      */
     private $_developer;
