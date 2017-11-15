@@ -33,6 +33,7 @@
                     <a @click.prevent="submit()" href="#" class="btn btn-secondary btn-sm">Submit for Approval</a>
                     <span class="text-secondary">Your plugin will be automatically published once it’s approved.</span>
                 </template>
+                <div v-if="pluginSubmitLoading" class="spinner"></div>
             </div>
 
             <form @submit.prevent="save()">
@@ -162,6 +163,7 @@
         data() {
             return {
                 loading: false,
+                pluginSubmitLoading: false,
                 repositoryLoading: false,
                 pluginDraft: {
                     id: null,
@@ -373,9 +375,12 @@
             },
 
             submit() {
+                this.pluginSubmitLoading = true;
                 this.$store.dispatch('submitPlugin', this.plugin.id).then(data => {
+                    this.pluginSubmitLoading = false;
                     this.$root.displayNotice('Plugin submitted for approval.');
                 }).catch(data => {
+                    this.pluginSubmitLoading = false;
                     this.$root.displayError('Couldn’t submit plugin for approval.');
                 })
             },
