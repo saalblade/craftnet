@@ -205,10 +205,10 @@ class Plugin extends Element
     public $pendingApproval = false;
 
     /**
-     * @var string|null The plugin’s changelog.
+     * @var string|null|false The plugin’s changelog, or false if it wasn't queried in the first place.
      * @see PluginQuery::withChangelogs()
      */
-    public $changelog;
+    public $changelog = false;
 
     /**
      * @var User|null
@@ -453,7 +453,12 @@ class Plugin extends Element
             'longDescription' => $this->longDescription,
             'documentationUrl' => $this->documentationUrl,
             'changelogUrl' => $this->changelogUrl,
+            'pendingApproval' => $this->pendingApproval,
         ];
+
+        if ($this->changelog !== false) {
+            $pluginData['changelog'] = $this->changelog;
+        }
 
         $categoryData = [];
         foreach ($this->getCategories() as $i => $category) {
