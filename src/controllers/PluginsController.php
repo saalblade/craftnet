@@ -27,6 +27,9 @@ use yii\web\Response;
  */
 class PluginsController extends Controller
 {
+    // Public Methods
+    // =========================================================================
+
     public function beforeAction($action)
     {
         if (!parent::beforeAction($action)) {
@@ -150,7 +153,9 @@ class PluginsController extends Controller
             $plugin = new Plugin();
         }
 
-        $plugin->enabled = (bool)$request->getBodyParam('enabled');
+        if ($request->getIsCpRequest()) {
+            $plugin->enabled = (bool)$request->getBodyParam('enabled');
+        }
 
         if (!$plugin->developerId) {
             $plugin->developerId = Craft::$app->getUser()->getId();
@@ -194,7 +199,7 @@ class PluginsController extends Controller
 
         $screenshotIds = (!empty($request->getBodyParam('screenshotIds')) ? $request->getBodyParam('screenshotIds') : []);
 
-        if (!Craft::$app->getRequest()->getIsCpRequest()) {
+        if (!$request->getIsCpRequest()) {
 
             // Icon
 
@@ -407,6 +412,58 @@ class PluginsController extends Controller
         Craft::$app->getSession()->setNotice('Plugin deleted.');
         return $this->redirectToPostedUrl($plugin);
     }
+
+    /**
+     * Submits a plugin for approval.
+     * 
+     * @return Response
+     * @throws NotFoundHttpException
+     */
+    public function actionSubmit(): Response
+    {
+        $request = Craft::$app->getRequest();
+        $pluginId = $request->getBodyParam('pluginId');
+        $plugin = Plugin::find()->id($pluginId)->status(null)->one();
+
+        if (!$plugin) {
+            throw new NotFoundHttpException('Plugin not found');
+        }
+
+        $plugin->pendingApproval = true;
+
+
+        // Save plugin
+
+        if (!Craft::$app->getElements()->saveElement($plugin)) {
+            if ($request->getAcceptsJson()) {
+                return $this->asJson([
+                    'errors' => $plugin->getErrors(),
+                ]);
+            }
+
+            Craft::$app->getSession()->setError('Couldn’t submit plugin for approval.');
+            Craft::$app->getUrlManager()->setRouteParams([
+                'plugin' => $plugin
+            ]);
+            return null;
+        }
+
+
+        // Return
+
+        if ($request->getAcceptsJson()) {
+            $return = [];
+            $return['success'] = true;
+
+            return $this->asJson($return);
+        }
+
+        Craft::$app->getSession()->setNotice('Plugin submitted for approval.');
+        return $this->redirectToPostedUrl($plugin);
+    }
+
+    // Private Methods
+    // =========================================================================
 
     /**
      * Returns a plugin’s README contents

@@ -40,8 +40,14 @@
                     </template>
                 </td>
                 <td>
-                    <span v-if="plugin.enabled" class="text-success">Enabled</span>
-                    <span v-else class="text-secondary">Disabled</span>
+                    <template v-if="plugin.enabled">
+                        <span class="text-success">Approved</span>
+                    </template>
+
+                    <template v-else>
+                        <span v-if="plugin.pendingApproval" class="text-secondary">In Review</span>
+                        <span v-else class="text-secondary">Prepare for submission</span>
+                    </template>
                 </td>
             </tr>
             </tbody>

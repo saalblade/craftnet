@@ -25,6 +25,16 @@
         </template>
 
         <template v-else>
+            <div v-if="!plugin.enabled" role="alert" class="alert alert-secondary">
+                <template v-if="plugin.pendingApproval">
+                    Your plugin is being reviewed, it will be automatically published once it’s approved.
+                </template>
+                <template v-else>
+                    <a @click.prevent="submit()" href="#" class="btn btn-secondary btn-sm">Submit for Approval</a>
+                    <span class="text-secondary">Your plugin will be automatically published once it’s approved.</span>
+                </template>
+            </div>
+
             <form @submit.prevent="save()">
                 <div class="card mb-3">
                     <div class="card-header">GitHub Repository</div>
@@ -69,10 +79,6 @@
                     <div class="card-header">Plugin Details</div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-12">
-                                <input id="enabled" type="checkbox" name="fields[enabled]" v-model="pluginDraft.enabled">
-                                <label for="enabled">Enabled</label>
-                            </div>
                             <div class="col-sm-6">
                                 <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
                             </div>
@@ -296,7 +302,7 @@
 
                 let formData = new FormData();
                 formData.append('siteId', 1);
-                formData.append('enabled', this.pluginDraft.enabled ? 1 : 0);
+                // formData.append('enabled', this.pluginDraft.enabled ? 1 : 0);
 
                 if(this.pluginDraft.id) {
                     formData.append('pluginId', this.pluginDraft.id);
@@ -354,17 +360,25 @@
                     formData.append('screenshotIds', '');
                 }
 
-                this.$store.dispatch('savePlugin', formData).then((data) => {
+                this.$store.dispatch('savePlugin', formData).then(data => {
                     this.loading = false;
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/developer/plugins'});
-                }).catch((data) => {
+                }).catch(data => {
                     console.log('error!');
                     this.loading = false;
                     this.$root.displayError('Couldn’t save plugin.');
                     this.errors = (data.errors ? data.errors : []);
                 });
-            }
+            },
+
+            submit() {
+                this.$store.dispatch('submitPlugin', this.plugin.id).then(data => {
+                    this.$root.displayNotice('Plugin submitted for approval.');
+                }).catch(data => {
+                    this.$root.displayError('Couldn’t submit plugin for approval.');
+                })
+            },
         },
 
         mounted() {

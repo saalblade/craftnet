@@ -152,5 +152,10 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     }
 };
 
+export const SUBMIT_PLUGIN = (state, {pluginId, data}) => {
+    let statePlugin = state.craftId.plugins.find(p => p.id == pluginId);
+    statePlugin.pendingApproval = true;
+};
+
 export const SAVE_CRAFT_ID_DATA = (state) => {
 };

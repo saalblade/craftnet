@@ -154,3 +154,19 @@ export const savePlugin = ({commit, state}, formData) => {
         })
     })
 };
+
+
+export const submitPlugin = ({commit, state}, pluginId) => {
+    return new Promise((resolve, reject) => {
+        api.submitPlugin(pluginId, data => {
+            if (data.success) {
+                commit(types.SUBMIT_PLUGIN, {pluginId, data});
+                resolve(data);
+            } else {
+                reject(data);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
