@@ -30,7 +30,10 @@ class PluginsController extends Controller
     // Public Methods
     // =========================================================================
 
-    public function beforeAction($action)
+    /**
+     * @inheritdoc
+     */
+    public function beforeAction($action): bool
     {
         if (!parent::beforeAction($action)) {
             return false;
@@ -39,6 +42,11 @@ class PluginsController extends Controller
         return true;
     }
 
+    /**
+     * @param string $repository
+     *
+     * @return Response
+     */
     public function actionLoadDetails(string $repository): Response
     {
         $this->requireAcceptsJson();
@@ -111,6 +119,14 @@ class PluginsController extends Controller
         ]);
     }
 
+    /**
+     * @param int|null    $pluginId
+     * @param Plugin|null $plugin
+     *
+     * @return Response
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     */
     public function actionEdit(int $pluginId = null, Plugin $plugin = null): Response
     {
         if ($plugin === null) {
@@ -136,6 +152,12 @@ class PluginsController extends Controller
         return $this->renderTemplate('craftcom/plugins/_edit', compact('plugin', 'title'));
     }
 
+    /**
+     * @return Response
+     * @throws Exception
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     */
     public function actionSave()
     {
         $request = Craft::$app->getRequest();
@@ -381,6 +403,10 @@ class PluginsController extends Controller
         return $this->redirectToPostedUrl($plugin);
     }
 
+    /**
+     * @return null|Response
+     * @throws NotFoundHttpException
+     */
     public function actionDelete()
     {
         $request = Craft::$app->getRequest();
@@ -419,7 +445,7 @@ class PluginsController extends Controller
 
     /**
      * Submits a plugin for approval.
-     * 
+     *
      * @return Response
      * @throws NotFoundHttpException
      */
