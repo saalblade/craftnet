@@ -74,7 +74,6 @@ class Package extends Model
         if ($this->_plugin === null) {
             $this->_plugin = Plugin::find()
                 ->packageId($this->id)
-                ->withChangelogs()
                 ->status(null)
                 ->one()
                 ?? false;

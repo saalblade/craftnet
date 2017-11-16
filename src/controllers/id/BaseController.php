@@ -91,7 +91,7 @@ abstract class BaseController extends Controller
             'shortDescription' => $plugin->shortDescription,
             'longDescription' => $plugin->longDescription,
             'documentationUrl' => $plugin->documentationUrl,
-            'changelogUrl' => $plugin->changelogUrl,
+            'changelogPath' => $plugin->changelogPath,
             'repository' => $plugin->repository,
             'license' => $plugin->license,
             'price' => $plugin->price,

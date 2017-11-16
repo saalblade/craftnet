@@ -32,6 +32,7 @@ class PackageVersion extends Model
     public $binaries;
     public $source;
     public $dist;
+    public $changelog;
 
     public function init()
     {
@@ -65,6 +66,7 @@ class PackageVersion extends Model
         $this->binaries = null;
         $this->source = null;
         $this->dist = null;
+        $this->changelog = null;
     }
 
     public function getNormalizedVersion()

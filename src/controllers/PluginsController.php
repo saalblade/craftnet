@@ -94,6 +94,13 @@ class PluginsController extends Controller
             $iconHtml = null;
         }
 
+        // Get the changelog path
+        if (isset($config['extra']['changelogUrl'])) {
+            $changelogPath = basename($config['extra']['changelogUrl']);
+        } else {
+            $changelogPath = null;
+        }
+
         return $this->asJson([
             'repository' => "https://github.com/{$owner}/{$repo}",
             'name' => $name,
@@ -101,7 +108,7 @@ class PluginsController extends Controller
             'handle' => $handle,
             'shortDescription' => $config['extra']['description'] ?? $config['description'] ?? null,
             'documentationUrl' => $config['extra']['documentationUrl'] ?? $config['support']['docs'] ?? null,
-            'changelogUrl' => $config['extra']['changelogUrl'] ?? null,
+            'changelogPath' => $changelogPath,
             'icon' => $iconHtml,
             'iconId' => (isset($iconId) ? $iconId : null),
             'iconUrl' => (isset($iconUrl) ? $iconUrl : null),
@@ -185,7 +192,7 @@ class PluginsController extends Controller
         $plugin->shortDescription = $request->getBodyParam('shortDescription');
         $plugin->longDescription = $request->getBodyParam('longDescription');
         $plugin->documentationUrl = $request->getBodyParam('documentationUrl');
-        $plugin->changelogUrl = $request->getBodyParam('changelogUrl');
+        $plugin->changelogPath = $request->getBodyParam('changelogPath') ?: null;
 
         $plugin->setCategories(Category::find()->id($request->getBodyParam('categoryIds'))->fixedOrder()->all());
 

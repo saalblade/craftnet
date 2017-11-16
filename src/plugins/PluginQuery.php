@@ -22,11 +22,6 @@ class PluginQuery extends ElementQuery
      */
     public $packageId;
 
-    /**
-     * @var bool Whether the query should grab the plugins’ changelogs too
-     */
-    public $withChangelogs = false;
-
     public function __construct($elementType, array $config = [])
     {
         // Default orderBy
@@ -78,20 +73,6 @@ class PluginQuery extends ElementQuery
         return $this;
     }
 
-    /**
-     * Sets the [[withChangelogs]] property.
-     *
-     * @param int|int[]|null $value The property value
-     *
-     * @return static self reference
-     */
-    public function withChangelogs($value = true)
-    {
-        $this->withChangelogs = $value;
-
-        return $this;
-    }
-
     protected function beforePrepare(): bool
     {
         $this->joinElementTable('craftcom_plugins');
@@ -110,14 +91,10 @@ class PluginQuery extends ElementQuery
             'craftcom_plugins.shortDescription',
             'craftcom_plugins.longDescription',
             'craftcom_plugins.documentationUrl',
-            'craftcom_plugins.changelogUrl',
+            'craftcom_plugins.changelogPath',
             'craftcom_plugins.latestVersion',
             'craftcom_plugins.pendingApproval',
         ]);
-
-        if ($this->withChangelogs) {
-            $this->query->addSelect(['craftcom_plugins.changelog']);
-        }
 
         if ($this->handle) {
             $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.handle', $this->handle));

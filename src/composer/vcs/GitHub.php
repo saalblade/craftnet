@@ -93,5 +93,23 @@ class GitHub extends BaseVcs
             'reference' => $version->sha,
             'shasum' => '',
         ];
+
+        // Get the changelog contents if this is Craft or a plugin
+        if ($this->package->name === 'craftcms/cms') {
+            $changelogPath = 'CHANGELOG-v3.md';
+        } else if ($plugin = $this->package->getPlugin()) {
+            $changelogPath = $plugin->changelogPath;
+        } else {
+            $changelogPath = null;
+        }
+
+        if ($changelogPath) {
+            try {
+                $response = $api->contents()->show($this->owner, $this->repo, $changelogPath, $version->sha);
+                $version->changelog = base64_decode($response['content']);
+            } catch (RuntimeException $e) {
+                Craft::warning("Couldn't fetch changelog for {$this->package->name}:{$version->version} due to error loading {$changelogPath}: {$e->getMessage()}", __METHOD__);
+            }
+        }
     }
 }

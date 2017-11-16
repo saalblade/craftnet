@@ -190,9 +190,9 @@ class Plugin extends Element
     public $documentationUrl;
 
     /**
-     * @var string|null The plugin’s changelog URL
+     * @var string|null The plugin’s changelog path
      */
-    public $changelogUrl;
+    public $changelogPath;
 
     /**
      * @var string|null The latest version available for the plugin
@@ -203,12 +203,6 @@ class Plugin extends Element
      * @var bool Whether the plugin is pending approval.
      */
     public $pendingApproval = false;
-
-    /**
-     * @var string|null|false The plugin’s changelog, or false if it wasn't queried in the first place.
-     * @see PluginQuery::withChangelogs()
-     */
-    public $changelog = false;
 
     /**
      * @var User|null
@@ -406,14 +400,6 @@ class Plugin extends Element
             'url',
         ];
 
-        $rules[] = [
-            [
-                'changelogUrl',
-            ],
-            'url',
-            'validSchemes' => ['https'],
-        ];
-
         return $rules;
     }
 
@@ -459,13 +445,9 @@ class Plugin extends Element
             'shortDescription' => $this->shortDescription,
             'longDescription' => $this->longDescription,
             'documentationUrl' => $this->documentationUrl,
-            'changelogUrl' => $this->changelogUrl,
+            'changelogPath' => $this->changelogPath ?: null,
             'pendingApproval' => $this->pendingApproval,
         ];
-
-        if ($this->changelog !== false) {
-            $pluginData['changelog'] = $this->changelog;
-        }
 
         $categoryData = [];
         foreach ($this->getCategories() as $i => $category) {
@@ -532,7 +514,6 @@ class Plugin extends Element
             'license' => 'License',
             'primaryCategory' => 'Primary Category',
             'documentationUrl' => 'Documentation URL',
-            'changelogUrl' => 'Changelog URL',
         ];
     }
 
@@ -559,7 +540,6 @@ class Plugin extends Element
                 return "<a href='http://packagist.org/packages/{$this->packageName}' target='_blank'>{$this->packageName}</a>";
             case 'repository':
             case 'documentationUrl':
-            case 'changelogUrl':
                 return $this->$attribute ? "<a href='{$this->$attribute}' target='_blank'>{$this->$attribute}</a>" : '';
             case 'price':
             case 'renewalPrice':

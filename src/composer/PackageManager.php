@@ -184,30 +184,6 @@ class PackageManager extends Component
         $db = Craft::$app->getDb();
         $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
 
-        // If it's a plugin, update its changelog.
-        if ($plugin && $plugin->changelogUrl) {
-            if ($isConsole) {
-                Console::stdout("Updating changelog for {$plugin->name}... ");
-            }
-            try {
-                $changelog = (string)Craft::createGuzzleClient()->get($plugin->changelogUrl)->getBody();
-                if ($changelog !== $plugin->changelog) {
-                    $plugin->changelog = $changelog;
-                    $db->createCommand()
-                        ->update('craftcom_plugins', ['changelog' => $changelog], ['id' => $plugin->id])
-                        ->execute();
-                    if ($isConsole) {
-                        Console::output('done');
-                    }
-                } else if ($isConsole) {
-                    Console::output('done (no changes)');
-                }
-            } catch (\Throwable $e) {
-                Craft::$app->getErrorHandler()->logException($e);
-                Console::output('error: '.$e->getMessage());
-            }
-        }
-
         if ($isConsole) {
             Console::output("Updating version data for {$name}...");
         }
@@ -433,6 +409,7 @@ class PackageManager extends Component
                 'binaries' => $version->binaries ? Json::encode($version->binaries) : null,
                 'source' => $version->source ? Json::encode($version->source) : null,
                 'dist' => $version->dist ? Json::encode($version->dist) : null,
+                'changelog' => $version->changelog,
             ])
             ->execute();
         $version->id = $db->getLastInsertID();
