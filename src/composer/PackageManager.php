@@ -213,7 +213,7 @@ class PackageManager extends Component
         }
 
         // Get all of the already known versions
-        $storedVersions = (new Query())
+        $storedVersionInfo = (new Query())
             ->select(['id', 'version', 'sha'])
             ->from(['craftcom_packageversions'])
             ->where(['packageId' => $package->id])
@@ -222,7 +222,7 @@ class PackageManager extends Component
 
         // Get the versions from the VCS
         $versionStability = [];
-        $versions = array_filter($vcs->getVersions(), function($version) use ($package, &$versionStability) {
+        $vcsVersionShas = array_filter($vcs->getVersions(), function($version) use ($package, &$versionStability) {
             // Don't include development versions, and versions that aren't actually required by any managed packages
             if (($stability = VersionParser::parseStability($version)) === 'dev') {
                 return false;
@@ -232,33 +232,36 @@ class PackageManager extends Component
         }, ARRAY_FILTER_USE_KEY);
 
         // See which already-stored versions have been deleted/updated
-        $versionIdsToDelete = [];
-        $totalDeleted = 0;
-        $totalUpdated = 0;
-        foreach ($storedVersions as $version => $info) {
-            if ($force || !isset($versions[$version]) || $versions[$version] !== $info['sha']) {
-                $versionIdsToDelete[] = $info['id'];
-                if (isset($versions[$version])) {
-                    unset($storedVersions[$version]);
-                    $totalUpdated++;
-                } else {
-                    $totalDeleted++;
-                }
+        $storedVersions = array_keys($storedVersionInfo);
+        $vcsVersions = array_keys($vcsVersionShas);
+
+        $deletedVersions = array_diff($storedVersions, $vcsVersions);
+        $newVersions = array_diff($vcsVersions, $storedVersions);
+        $updatedVersions = [];
+
+        foreach (array_intersect($storedVersions, $vcsVersions) as $version) {
+            if ($force || $storedVersionInfo['sha'] !== $vcsVersionShas[$version]) {
+                $updatedVersions[] = $version;
             }
         }
 
         if ($isConsole) {
             Console::stdout(Console::ansiFormat('- new: ', [Console::FG_YELLOW]));
-            Console::output(count($versions) - (count($storedVersions) + $totalUpdated));
+            Console::output(count($newVersions));
             Console::stdout(Console::ansiFormat('- updated: ', [Console::FG_YELLOW]));
-            Console::output($totalUpdated);
+            Console::output(count($updatedVersions));
             Console::stdout(Console::ansiFormat('- deleted: ', [Console::FG_YELLOW]));
-            Console::output($totalDeleted);
+            Console::output(count($deletedVersions));
         }
 
-        if (!empty($versionIdsToDelete)) {
+        if (!empty($deletedVersions) || !empty($updatedVersions)) {
             if ($isConsole) {
                 Console::stdout('Deleting old versions ... ');
+            }
+
+            $versionIdsToDelete = [];
+            foreach (array_merge($deletedVersions, $updatedVersions) as $version) {
+                $versionIdsToDelete[] = $storedVersionInfo[$version]['id'];
             }
 
             $db->createCommand()
@@ -270,10 +273,11 @@ class PackageManager extends Component
             }
         }
 
-        $totalToProcess = max(count($versions) - count($storedVersions), 0);
+        // We can treat "updated" versions as "new" now.
+        $newVersions = array_merge($updatedVersions, $newVersions);
 
         // Bail early if there's nothing new
-        if ($totalToProcess === 0) {
+        if (empty($newVersions)) {
             if ($isConsole) {
                 Console::output('No new versions to process');
             }
@@ -285,7 +289,7 @@ class PackageManager extends Component
         }
 
         // Sort by newest => oldest
-        uksort($versions, function(string $version1, string $version2): int {
+        usort($newVersions, function(string $version1, string $version2): int {
             if (Comparator::lessThan($version1, $version2)) {
                 return 1;
             }
@@ -299,17 +303,13 @@ class PackageManager extends Component
         $latestVersion = null;
         $foundStable = false;
 
-        foreach ($versions as $version => $sha) {
+        foreach ($newVersions as $version) {
+            $sha = $vcsVersionShas[$version];
             if (!$foundStable && $versionStability[$version] === 'stable') {
                 $latestVersion = $version;
                 $foundStable = true;
             } else if ($latestVersion === null) {
                 $latestVersion = $version;
-            }
-
-            // Skip if we already know about it
-            if (isset($storedVersions[$version])) {
-                continue;
             }
 
             if ($isConsole) {
@@ -400,7 +400,7 @@ class PackageManager extends Component
         }
 
         if ($isConsole) {
-            Console::output("Done processing {$totalToProcess} versions");
+            Console::output('Done processing '.count($newVersions).' versions');
         }
     }
 
