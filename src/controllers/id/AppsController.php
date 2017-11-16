@@ -130,11 +130,7 @@ class AppsController extends BaseController
         $appTypeHandle = Craft::$app->getRequest()->getBodyParam('appTypeHandle');
         $appTypeConfig = Module::getInstance()->getOauth()->getAppTypeConfig($appTypeHandle);
 
-        $currentUser = Craft::$app->getUser()->getIdentity();
-
-        Craft::$app->getDb()->createCommand()
-            ->delete('oauthtokens', ['userId' => $currentUser->id, 'provider' => $appTypeConfig['class']])
-            ->execute();
+        Module::getInstance()->getOauth()->deleteAccessToken(Craft::$app->getUser()->getIdentity()->id, $appTypeConfig['class']);
 
         return $this->asJson(['success' => true]);
     }
