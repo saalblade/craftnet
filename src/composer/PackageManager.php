@@ -91,6 +91,134 @@ class PackageManager extends Component
         return true;
     }
 
+    /**
+     * @param string $name The package name
+     * @param string $version The package version
+     *
+     * @return PackageVersion|null
+     */
+    public function getVersion(string $name, string $version)
+    {
+        $normalizedVersion = (new VersionParser())->normalize($version);
+
+        $result = (new Query())
+            ->select([
+                'pv.id',
+                'pv.packageId',
+                'pv.sha',
+                'pv.description',
+                'pv.version',
+                'pv.type',
+                'pv.keywords',
+                'pv.homepage',
+                'pv.time',
+                'pv.license',
+                'pv.authors',
+                'pv.support',
+                'pv.conflict',
+                'pv.replace',
+                'pv.provide',
+                'pv.suggest',
+                'pv.autoload',
+                'pv.includePaths',
+                'pv.targetDir',
+                'pv.extra',
+                'pv.binaries',
+                'pv.source',
+                'pv.dist',
+                'pv.changelog',
+            ])
+            ->from(['craftcom_packageversions pv'])
+            ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
+            ->where(['p.name' => $name, 'pv.normalizedVersion' => $normalizedVersion])
+            ->one();
+
+        if (!$result) {
+            return null;
+        }
+
+        $jsonColumns = [
+            'keywords',
+            'license',
+            'authors',
+            'support',
+            'conflict',
+            'replace',
+            'provide',
+            'suggest',
+            'autoload',
+            'includePaths',
+            'extra',
+            'binaries',
+            'source',
+            'dist',
+        ];
+
+        foreach ($jsonColumns as $column) {
+            if ($result[$column]) {
+                $result[$column] = Json::decode($result[$column]);
+            }
+        }
+
+        return new PackageVersion($result);
+    }
+
+    /**
+     * @param string $name      The package name
+     * @param string $stability The minimum required stability
+     *
+     * @return PackageVersion|null The latest version, or null if none can be found
+     */
+    public function getLatestVersion(string $name, string $stability = 'stable')
+    {
+        $allowedStabilities = [];
+        switch ($stability) {
+            case 'dev':
+                $allowedStabilities[] = 'dev';
+            // no break
+            case 'alpha':
+                $allowedStabilities[] = 'alpha';
+            // no break
+            case 'beta':
+                $allowedStabilities[] = 'beta';
+            // no break
+            case 'RC':
+                $allowedStabilities[] = 'RC';
+            // no break
+            default:
+                $allowedStabilities[] = 'stable';
+        }
+
+        if (count($allowedStabilities) === 1) {
+            $allowedStabilities = reset($allowedStabilities);
+        }
+
+        // Get all the known versions for the package + allowed stability levels
+        $versions = (new Query())
+            ->select(['version'])
+            ->distinct()
+            ->from(['craftcom_packageversions pv'])
+            ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
+            ->where(['p.name' => $name, 'pv.stability' => $allowedStabilities])
+            ->column();
+
+        if (empty($versions)) {
+            return null;
+        }
+
+        // Sort them oldest-to-newest
+        usort($versions, function($a, $b) {
+            if (Comparator::equalTo($a, $b)) {
+                return 0;
+            }
+            return Comparator::lessThan($a, $b) ? -1 : 1;
+        });
+
+        // Return the last one
+        $latestVersion = array_pop($versions);
+        return $this->getVersion($name, $latestVersion);
+    }
+
     public function isDependencyVersionRequired(string $name, string $version): bool
     {
         $constraints = (new Query())
