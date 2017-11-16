@@ -130,11 +130,13 @@
                     </div>
                 </div>
 
-                <div v-if="userIsInGroup('staff')" class="card mb-3">
+                <div class="card mb-3">
                     <div class="card-header">Pricing</div>
                     <div class="card-body">
                         <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />
                         <text-field id="renewalPrice" label="Renewal Price" v-model="pluginDraft.renewalPrice" :errors="errors.renewalPrice" />
+
+                        <p class="text-secondary"><em>All plugins are free until Craft GA is released.</em></p>
                     </div>
                 </div>
 
