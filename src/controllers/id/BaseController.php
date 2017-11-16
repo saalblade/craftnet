@@ -102,7 +102,6 @@ abstract class BaseController extends Controller
             'developerId' => $plugin->getDeveloper()->id,
             'developerName' => $developerName,
             'developerUrl' => $plugin->getDeveloper()->developerUrl,
-            'developerVendor' => $plugin->getDeveloper()->vendor,
 
             'screenshotUrls' => $screenshotUrls,
             'screenshotIds' => $screenshotIds,

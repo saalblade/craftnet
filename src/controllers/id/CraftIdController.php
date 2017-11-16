@@ -146,7 +146,6 @@ class CraftIdController extends BaseController
                 'businessState' => $currentUser->businessState,
                 'businessZipCode' => $currentUser->businessZipCode,
                 'businessCountry' => $currentUser->businessCountry,
-                'vendor' => $currentUser->vendor,
                 'groups' => $currentUser->getGroups(),
                 'photoId' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null),
                 // 'photoUrl' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getUrl() : null),

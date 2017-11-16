@@ -118,7 +118,6 @@ abstract class BaseApiController extends Controller
             $data['repository'] = $plugin->repository;
             $data['license'] = $plugin->license;
             $data['developerUrl'] = $plugin->getDeveloper()->developerUrl;
-            $data['developerVendor'] = $plugin->getDeveloper()->vendor;
             $data['screenshotUrls'] = $screenshotUrls;
             $data['screenshotIds'] = $screenshotIds;
         }
