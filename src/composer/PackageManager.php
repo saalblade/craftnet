@@ -322,7 +322,7 @@ class PackageManager extends Component
                 'sha' => $sha,
             ]);
             $vcs->populateVersion($packageVersion);
-            $this->savePackageVersion($package, $packageVersion);
+            $this->savePackageVersion($packageVersion);
 
             if (!empty($packageVersion->require)) {
                 $depValues = [];
@@ -404,7 +404,7 @@ class PackageManager extends Component
         }
     }
 
-    public function savePackageVersion(Package $package, PackageVersion $version)
+    public function savePackageVersion(PackageVersion $version)
     {
         $db = Craft::$app->getDb();
         $db->createCommand()
