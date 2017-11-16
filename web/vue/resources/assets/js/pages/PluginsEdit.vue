@@ -116,12 +116,16 @@
                         </div>
 
                         <div ref="screenshots" class="d-inline">
-                            <div v-for="(screenshotUrl, key) in pluginDraft.screenshotUrls" class="screenshot">
-                                <img :src="screenshotUrl" class="img-thumbnail mr-3 mb-3" />
-                                <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(key);">
-                                    <i class="fa fa-remove"></i>
-                                </a>
-                            </div>
+
+                            <draggable v-model="screenshots">
+                                <div v-for="(screenshot, key) in screenshots" class="screenshot">
+                                    <img :src="screenshot.url" class="img-thumbnail mr-3 mb-3" />
+                                    <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(key);">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                </div>
+                            </draggable>
+
                         </div>
                     </div>
                 </div>
@@ -149,7 +153,8 @@
     import TextareaField from '../components/fields/TextareaField'
     import ConnectedApps from '../components/ConnectedApps'
     import Repositories from '../components/Repositories'
-    import slug from 'limax';
+    import slug from 'limax'
+    import draggable from 'vuedraggable'
 
     export default {
 
@@ -158,6 +163,7 @@
             TextareaField,
             ConnectedApps,
             Repositories,
+            draggable
         },
 
         data() {
@@ -211,6 +217,35 @@
             connectedAppsCount() {
                 return Object.keys(this.apps).length;
             },
+
+            screenshots: {
+                get() {
+                    let screenshots = [];
+
+                    this.pluginDraft.screenshotIds.forEach((screenshotId, index) => {
+                        let screenshot = {
+                            id: screenshotId,
+                            url: this.pluginDraft.screenshotUrls[index],
+                        };
+                        screenshots.push(screenshot);
+                    });
+
+                    return screenshots;
+                },
+
+                set(screenshots) {
+                    let screenshotIds = [];
+                    let screenshotUrls = [];
+
+                    screenshots.forEach(screenshot => {
+                        screenshotIds.push(screenshot.id);
+                        screenshotUrls.push(screenshot.url);
+                    });
+
+                    this.pluginDraft.screenshotIds = screenshotIds;
+                    this.pluginDraft.screenshotUrls = screenshotUrls;
+                }
+            }
 
         },
 
