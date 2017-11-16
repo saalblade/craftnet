@@ -402,7 +402,6 @@
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/developer/plugins'});
                 }).catch(data => {
-                    console.log('error!');
                     this.loading = false;
                     this.$root.displayError('Couldn’t save plugin.');
                     this.errors = (data.errors ? data.errors : []);
