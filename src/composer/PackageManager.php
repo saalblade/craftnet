@@ -414,6 +414,7 @@ class PackageManager extends Component
                 'description' => $version->description,
                 'version' => $version->version,
                 'normalizedVersion' => $version->getNormalizedVersion(),
+                'stability' => $version->getStability(),
                 'type' => $version->type,
                 'keywords' => $version->keywords ? Json::encode($version->keywords) : null,
                 'homepage' => $version->homepage,
