@@ -25,7 +25,7 @@
         </template>
 
         <template v-else>
-            <div v-if="!plugin.enabled" role="alert" class="alert alert-secondary">
+            <div v-if="plugin && !plugin.enabled" role="alert" class="alert alert-secondary">
                 <template v-if="plugin.pendingApproval">
                     Your plugin is being reviewed, it will be automatically published once it’s approved.
                 </template>
