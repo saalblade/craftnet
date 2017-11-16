@@ -120,7 +120,7 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     statePlugin.longDescription = formData.get('longDescription');
     statePlugin.documentationUrl = formData.get('documentationUrl');
     statePlugin.changelogUrl = formData.get('changelogUrl');
-    // statePlugin.repository = formData.get('repository');
+    statePlugin.repository = formData.get('repository');
     statePlugin.license = formData.get('license');
 
     let price = parseFloat(formData.get('price'));
