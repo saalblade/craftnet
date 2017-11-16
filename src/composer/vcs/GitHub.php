@@ -59,11 +59,6 @@ class GitHub extends BaseVcs
                 if (isset($tag['tagger']['date'])) {
                     $this->_versionDates[$tag['name']] = $tag['tagger']['date'];
                 }
-
-                // todo: remove once we're running authenticated API requests
-                if (count($versions) >= 3) {
-                    break;
-                }
             }
         } while (count($tags) === 100);
 
