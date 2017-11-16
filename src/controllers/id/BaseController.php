@@ -63,19 +63,10 @@ abstract class BaseController extends Controller
             $categoryIds[] = $category->id;
         }
 
-        // Package
-        try {
-            $client = new Client();
-            $response = $client->get('https://packagist.org/packages/'.$plugin->getDeveloper()->vendor.'/'.$plugin->slug.'.json');
-            $data = Json::decode($response->getBody()->getContents());
-            $package = $data['package'];
-        } catch (\Exception $e) {
-            $package = null;
-        }
-
         return [
             'id' => $plugin->id,
             'enabled' => $plugin->enabled,
+            'pendingApproval' => $plugin->pendingApproval,
             'status' => $plugin->status,
             'iconId' => $plugin->iconId,
             'iconUrl' => $iconUrl,
@@ -95,12 +86,10 @@ abstract class BaseController extends Controller
             'developerId' => $plugin->getDeveloper()->id,
             'developerName' => $developerName,
             'developerUrl' => $plugin->getDeveloper()->developerUrl,
-            'developerVendor' => $plugin->getDeveloper()->vendor,
 
             'screenshotUrls' => $screenshotUrls,
             'screenshotIds' => $screenshotIds,
             'categoryIds' => $categoryIds,
-            'package' => $package,
         ];
     }
 }

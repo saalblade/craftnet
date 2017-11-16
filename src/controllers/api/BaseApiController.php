@@ -109,6 +109,10 @@ abstract class BaseApiController extends Controller
         ];
 
         if (!$snippetOnly) {
+            $data['version'] = 'Y.Y.Y';
+            $data['lastUpdate'] = '—';
+            $data['activeInstalls'] = 'YYY,YYY';
+            $data['compatibility'] = 'Craft 3.Y.Y';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
             $data['packageName'] = $plugin->packageName;
@@ -118,7 +122,6 @@ abstract class BaseApiController extends Controller
             $data['repository'] = $plugin->repository;
             $data['license'] = $plugin->license;
             $data['developerUrl'] = $plugin->getDeveloper()->developerUrl;
-            $data['developerVendor'] = $plugin->getDeveloper()->vendor;
             $data['screenshotUrls'] = $screenshotUrls;
             $data['screenshotIds'] = $screenshotIds;
         }

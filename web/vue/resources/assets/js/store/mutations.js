@@ -120,7 +120,7 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     statePlugin.longDescription = formData.get('longDescription');
     statePlugin.documentationUrl = formData.get('documentationUrl');
     statePlugin.changelogUrl = formData.get('changelogUrl');
-    // statePlugin.repository = formData.get('repository');
+    statePlugin.repository = formData.get('repository');
     statePlugin.license = formData.get('license');
 
     let price = parseFloat(formData.get('price'));
@@ -150,6 +150,11 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     if(newPlugin) {
         state.craftId.plugins.push(statePlugin);
     }
+};
+
+export const SUBMIT_PLUGIN = (state, {pluginId, data}) => {
+    let statePlugin = state.craftId.plugins.find(p => p.id == pluginId);
+    statePlugin.pendingApproval = true;
 };
 
 export const SAVE_CRAFT_ID_DATA = (state) => {

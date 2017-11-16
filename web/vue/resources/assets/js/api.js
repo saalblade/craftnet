@@ -158,6 +158,18 @@ export default {
         Vue.http.post(window.craftActionUrl+'/craftcom/plugins/save', formData, options)
             .then(response => cb(response.body))
             .catch(response => cbError(response));
+    },
+
+    submitPlugin(pluginId, cb, cbError) {
+        let options = { emulateJSON: true };
+
+        let formData = new FormData();
+        formData.append('pluginId', pluginId);
+        formData.append(csrfTokenName, csrfTokenValue);
+
+        Vue.http.post(window.craftActionUrl+'/craftcom/plugins/submit', formData, options)
+            .then(response => cb(response.body))
+            .catch(response => cbError(response));
     }
 
 }

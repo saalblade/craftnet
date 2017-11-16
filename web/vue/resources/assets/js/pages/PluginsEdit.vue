@@ -25,6 +25,17 @@
         </template>
 
         <template v-else>
+            <div v-if="plugin && !plugin.enabled" role="alert" class="alert alert-secondary">
+                <template v-if="plugin.pendingApproval">
+                    Your plugin is being reviewed, it will be automatically published once it’s approved.
+                </template>
+                <template v-else>
+                    <a @click.prevent="submit()" href="#" class="btn btn-secondary btn-sm">Submit for Approval</a>
+                    <span class="text-secondary">Your plugin will be automatically published once it’s approved.</span>
+                </template>
+                <div v-if="pluginSubmitLoading" class="spinner"></div>
+            </div>
+
             <form @submit.prevent="save()">
                 <div class="card mb-3">
                     <div class="card-header">GitHub Repository</div>
@@ -69,10 +80,6 @@
                     <div class="card-header">Plugin Details</div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-12">
-                                <input id="enabled" type="checkbox" name="fields[enabled]" v-model="pluginDraft.enabled">
-                                <label for="enabled">Enabled</label>
-                            </div>
                             <div class="col-sm-6">
                                 <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
                             </div>
@@ -109,21 +116,27 @@
                         </div>
 
                         <div ref="screenshots" class="d-inline">
-                            <div v-for="(screenshotUrl, key) in pluginDraft.screenshotUrls" class="screenshot">
-                                <img :src="screenshotUrl" class="img-thumbnail mr-3 mb-3" />
-                                <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(key);">
-                                    <i class="fa fa-remove"></i>
-                                </a>
-                            </div>
+
+                            <draggable v-model="screenshots">
+                                <div v-for="(screenshot, key) in screenshots" class="screenshot">
+                                    <img :src="screenshot.url" class="img-thumbnail mr-3 mb-3" />
+                                    <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(key);">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                </div>
+                            </draggable>
+
                         </div>
                     </div>
                 </div>
 
-                <div v-if="userIsInGroup('staff')" class="card mb-3">
+                <div class="card mb-3">
                     <div class="card-header">Pricing</div>
                     <div class="card-body">
                         <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />
                         <text-field id="renewalPrice" label="Renewal Price" v-model="pluginDraft.renewalPrice" :errors="errors.renewalPrice" />
+
+                        <p class="text-secondary"><em>All plugins are free until Craft GA is released.</em></p>
                     </div>
                 </div>
 
@@ -142,7 +155,8 @@
     import TextareaField from '../components/fields/TextareaField'
     import ConnectedApps from '../components/ConnectedApps'
     import Repositories from '../components/Repositories'
-    import slug from 'limax';
+    import slug from 'limax'
+    import draggable from 'vuedraggable'
 
     export default {
 
@@ -151,11 +165,13 @@
             TextareaField,
             ConnectedApps,
             Repositories,
+            draggable
         },
 
         data() {
             return {
                 loading: false,
+                pluginSubmitLoading: false,
                 repositoryLoading: false,
                 pluginDraft: {
                     id: null,
@@ -203,6 +219,35 @@
             connectedAppsCount() {
                 return Object.keys(this.apps).length;
             },
+
+            screenshots: {
+                get() {
+                    let screenshots = [];
+
+                    this.pluginDraft.screenshotIds.forEach((screenshotId, index) => {
+                        let screenshot = {
+                            id: screenshotId,
+                            url: this.pluginDraft.screenshotUrls[index],
+                        };
+                        screenshots.push(screenshot);
+                    });
+
+                    return screenshots;
+                },
+
+                set(screenshots) {
+                    let screenshotIds = [];
+                    let screenshotUrls = [];
+
+                    screenshots.forEach(screenshot => {
+                        screenshotIds.push(screenshot.id);
+                        screenshotUrls.push(screenshot.url);
+                    });
+
+                    this.pluginDraft.screenshotIds = screenshotIds;
+                    this.pluginDraft.screenshotUrls = screenshotUrls;
+                }
+            }
 
         },
 
@@ -296,7 +341,7 @@
 
                 let formData = new FormData();
                 formData.append('siteId', 1);
-                formData.append('enabled', this.pluginDraft.enabled ? 1 : 0);
+                // formData.append('enabled', this.pluginDraft.enabled ? 1 : 0);
 
                 if(this.pluginDraft.id) {
                     formData.append('pluginId', this.pluginDraft.id);
@@ -354,17 +399,27 @@
                     formData.append('screenshotIds', '');
                 }
 
-                this.$store.dispatch('savePlugin', formData).then((data) => {
+                this.$store.dispatch('savePlugin', formData).then(data => {
                     this.loading = false;
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/developer/plugins'});
-                }).catch((data) => {
-                    console.log('error!');
+                }).catch(data => {
                     this.loading = false;
                     this.$root.displayError('Couldn’t save plugin.');
                     this.errors = (data.errors ? data.errors : []);
                 });
-            }
+            },
+
+            submit() {
+                this.pluginSubmitLoading = true;
+                this.$store.dispatch('submitPlugin', this.plugin.id).then(data => {
+                    this.pluginSubmitLoading = false;
+                    this.$root.displayNotice('Plugin submitted for approval.');
+                }).catch(data => {
+                    this.pluginSubmitLoading = false;
+                    this.$root.displayError('Couldn’t submit plugin for approval.');
+                })
+            },
         },
 
         mounted() {

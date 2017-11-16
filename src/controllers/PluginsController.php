@@ -27,7 +27,13 @@ use yii\web\Response;
  */
 class PluginsController extends Controller
 {
-    public function beforeAction($action)
+    // Public Methods
+    // =========================================================================
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeAction($action): bool
     {
         if (!parent::beforeAction($action)) {
             return false;
@@ -36,6 +42,11 @@ class PluginsController extends Controller
         return true;
     }
 
+    /**
+     * @param string $repository
+     *
+     * @return Response
+     */
     public function actionLoadDetails(string $repository): Response
     {
         $this->requireAcceptsJson();
@@ -114,6 +125,14 @@ class PluginsController extends Controller
         ]);
     }
 
+    /**
+     * @param int|null    $pluginId
+     * @param Plugin|null $plugin
+     *
+     * @return Response
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     */
     public function actionEdit(int $pluginId = null, Plugin $plugin = null): Response
     {
         if ($plugin === null) {
@@ -139,6 +158,12 @@ class PluginsController extends Controller
         return $this->renderTemplate('craftcom/plugins/_edit', compact('plugin', 'title'));
     }
 
+    /**
+     * @return Response
+     * @throws Exception
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     */
     public function actionSave()
     {
         $request = Craft::$app->getRequest();
@@ -156,7 +181,13 @@ class PluginsController extends Controller
             $plugin = new Plugin();
         }
 
-        $plugin->enabled = (bool)$request->getBodyParam('enabled');
+        if ($request->getIsCpRequest()) {
+            $plugin->enabled = (bool)$request->getBodyParam('enabled');
+
+            if($plugin->enabled) {
+                $plugin->pendingApproval = false;
+            }
+        }
 
         if (!$plugin->developerId) {
             $plugin->developerId = Craft::$app->getUser()->getId();
@@ -200,7 +231,7 @@ class PluginsController extends Controller
 
         $screenshotIds = (!empty($request->getBodyParam('screenshotIds')) ? $request->getBodyParam('screenshotIds') : []);
 
-        if (!Craft::$app->getRequest()->getIsCpRequest()) {
+        if (!$request->getIsCpRequest()) {
 
             // Icon
 
@@ -378,6 +409,10 @@ class PluginsController extends Controller
         return $this->redirectToPostedUrl($plugin);
     }
 
+    /**
+     * @return null|Response
+     * @throws NotFoundHttpException
+     */
     public function actionDelete()
     {
         $request = Craft::$app->getRequest();
@@ -413,6 +448,58 @@ class PluginsController extends Controller
         Craft::$app->getSession()->setNotice('Plugin deleted.');
         return $this->redirectToPostedUrl($plugin);
     }
+
+    /**
+     * Submits a plugin for approval.
+     *
+     * @return Response
+     * @throws NotFoundHttpException
+     */
+    public function actionSubmit(): Response
+    {
+        $request = Craft::$app->getRequest();
+        $pluginId = $request->getBodyParam('pluginId');
+        $plugin = Plugin::find()->id($pluginId)->status(null)->one();
+
+        if (!$plugin) {
+            throw new NotFoundHttpException('Plugin not found');
+        }
+
+        $plugin->pendingApproval = true;
+
+
+        // Save plugin
+
+        if (!Craft::$app->getElements()->saveElement($plugin)) {
+            if ($request->getAcceptsJson()) {
+                return $this->asJson([
+                    'errors' => $plugin->getErrors(),
+                ]);
+            }
+
+            Craft::$app->getSession()->setError('Couldn’t submit plugin for approval.');
+            Craft::$app->getUrlManager()->setRouteParams([
+                'plugin' => $plugin
+            ]);
+            return null;
+        }
+
+
+        // Return
+
+        if ($request->getAcceptsJson()) {
+            $return = [];
+            $return['success'] = true;
+
+            return $this->asJson($return);
+        }
+
+        Craft::$app->getSession()->setNotice('Plugin submitted for approval.');
+        return $this->redirectToPostedUrl($plugin);
+    }
+
+    // Private Methods
+    // =========================================================================
 
     /**
      * Returns a plugin’s README contents

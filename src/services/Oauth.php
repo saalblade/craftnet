@@ -7,10 +7,14 @@ use craft\db\Query;
 use craft\helpers\Json;
 use craftcom\Module;
 use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Provider\Exception\GithubIdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use yii\base\Component;
 use yii\base\Exception;
 
+/**
+ * @property array $apps
+ */
 class Oauth extends Component
 {
     const PROVIDER_GITHUB = 'github';
@@ -34,25 +38,38 @@ class Oauth extends Component
             $token = $this->getOauthTokenByUserId($config['class'], $currentUser->id);
 
             if ($token) {
-                $accessToken = $this->createAccessToken($token);
-                $resourceOwner = $oauthProvider->getResourceOwner($accessToken);
-                $account = $resourceOwner->toArray();
 
-                $repositories = [];
+                try {
+                    $accessToken = $this->createAccessToken($token);
+                    $resourceOwner = $oauthProvider->getResourceOwner($accessToken);
+                    $account = $resourceOwner->toArray();
 
-                if ($handle === self::PROVIDER_GITHUB) {
-                    $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
-                        'headers' => [
-                            'Accept' => 'application/vnd.github.v3+json',
-                            'Authorization' => 'token '.$accessToken->getToken(),
-                        ],
-                        'query' => [
-                            'per_page' => 100
-                        ]
-                    ]);
-                    $body = $response->getBody();
-                    $contents = $body->getContents();
-                    $repositories = Json::decode($contents);
+                    $repositories = [];
+
+                    if ($handle === self::PROVIDER_GITHUB) {
+                        $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
+                            'headers' => [
+                                'Accept' => 'application/vnd.github.v3+json',
+                                'Authorization' => 'token '.$accessToken->getToken(),
+                            ],
+                            'query' => [
+                                'per_page' => 200
+                            ]
+                        ]);
+                        $body = $response->getBody();
+                        $contents = $body->getContents();
+                        $repositories = Json::decode($contents);
+                    }
+                }
+                // Something happened with oAuth
+                catch (GithubIdentityProviderException $e) {
+                    // Bad credentials. Likely our oAuth app has been revoked.
+                    // Remove the token locally.
+                    if ($e->getCode() == 401) {
+                        $this->deleteAccessToken($currentUser->id, $config['class']);
+                        Craft::warning('Got a 401 bad credentials response when attempting to validate a Github oAuth token for user ID: '.$currentUser->id.'. Likely our Github oAuth app has been removed or permissions revoked.', __METHOD__);
+                        continue;
+                    }
                 }
 
                 $apps[$handle] = [
@@ -151,5 +168,20 @@ class Oauth extends Component
         }
 
         return new AccessToken($options);
+    }
+
+    /**
+     * Deletes an oAuth token from the database by the given username and provider.
+     *
+     * @param $userId
+     * @param $provider
+     *
+     * @return void
+     */
+    public function deleteAccessToken($userId, $provider)
+    {
+        Craft::$app->getDb()->createCommand()
+            ->delete('oauthtokens', ['userId' => $userId, 'provider' => $provider])
+            ->execute();
     }
 }
