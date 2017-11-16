@@ -2,16 +2,10 @@
 
 namespace craftcom\controllers\id;
 
-use Craft;
-use craft\db\Query;
 use craft\helpers\Json;
 use craft\web\Controller;
-use craftcom\Module;
 use craftcom\plugins\Plugin;
 use GuzzleHttp\Client;
-use League\OAuth2\Client\Provider\Github;
-use League\OAuth2\Client\Token\AccessToken;
-use Stevenmaguire\OAuth2\Client\Provider\Bitbucket;
 
 /**
  * Class BaseController
