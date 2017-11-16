@@ -69,16 +69,6 @@ abstract class BaseController extends Controller
             $categoryIds[] = $category->id;
         }
 
-        // Package
-        try {
-            $client = new Client();
-            $response = $client->get('https://packagist.org/packages/'.$plugin->getDeveloper()->vendor.'/'.$plugin->slug.'.json');
-            $data = Json::decode($response->getBody()->getContents());
-            $package = $data['package'];
-        } catch (\Exception $e) {
-            $package = null;
-        }
-
         return [
             'id' => $plugin->id,
             'enabled' => $plugin->enabled,
@@ -106,7 +96,6 @@ abstract class BaseController extends Controller
             'screenshotUrls' => $screenshotUrls,
             'screenshotIds' => $screenshotIds,
             'categoryIds' => $categoryIds,
-            'package' => $package,
         ];
     }
 }
