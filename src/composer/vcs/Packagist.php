@@ -4,7 +4,7 @@ namespace craftcom\composer\vcs;
 
 use Craft;
 use craft\helpers\Json;
-use craftcom\composer\PackageVersion;
+use craftcom\composer\PackageRelease;
 use GuzzleHttp\Exception\ClientException;
 use yii\base\Exception;
 
@@ -93,24 +93,24 @@ class Packagist extends BaseVcs
         return $versions;
     }
 
-    public function populateVersion(PackageVersion $version)
+    public function populateRelease(PackageRelease $release)
     {
         $packageInfo = self::packageInfo($this->package->name);
 
-        if (!isset($packageInfo['packages'][$this->package->name][$version->version])) {
-            Craft::warning("Ignoring package version {$this->package->name}:{$version->version} because it can't be found in the Packagist provider JSON.");
-            $version->nullify();
+        if (!isset($packageInfo['packages'][$this->package->name][$release->version])) {
+            Craft::warning("Ignoring package version {$this->package->name}:{$release->version} because it can't be found in the Packagist provider JSON.");
+            $release->nullify();
             return;
         }
 
-        $config = $packageInfo['packages'][$this->package->name][$version->version];
+        $config = $packageInfo['packages'][$this->package->name][$release->version];
 
-        if ($this->populateVersionFromComposerConfig($version, $config) === false) {
+        if ($this->populateReleaseFromComposerConfig($release, $config) === false) {
             return;
         }
 
-        $version->source = $config['source'] ?? null;
-        $version->dist = $config['dist'] ?? null;
+        $release->source = $config['source'] ?? null;
+        $release->dist = $config['dist'] ?? null;
 
         $this->package->setAbandoned($config['abandoned'] ?? false);
     }

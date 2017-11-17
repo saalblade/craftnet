@@ -2,7 +2,7 @@
 
 namespace craftcom\composer\vcs;
 
-use craftcom\composer\PackageVersion;
+use craftcom\composer\PackageRelease;
 use craftcom\errors\VcsException;
 
 interface VcsInterface
@@ -14,7 +14,7 @@ interface VcsInterface
     public function getVersions(): array;
 
     /**
-     * @param PackageVersion $version
+     * @param PackageRelease $release
      */
-    public function populateVersion(PackageVersion $version);
+    public function populateRelease(PackageRelease $release);
 }

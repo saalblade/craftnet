@@ -5,7 +5,7 @@ namespace craftcom\composer\vcs;
 use Composer\Semver\Comparator;
 use Craft;
 use craft\helpers\Json;
-use craftcom\composer\PackageVersion;
+use craftcom\composer\PackageRelease;
 use craftcom\errors\VcsException;
 use Github\Api\Repo;
 use Github\Client;
@@ -65,32 +65,32 @@ class GitHub extends BaseVcs
         return $versions;
     }
 
-    public function populateVersion(PackageVersion $version)
+    public function populateRelease(PackageRelease $release)
     {
         // Get the composer.json contents
         /** @var Repo $api */
         $api = $this->client->api('repo');
         try {
-            $response = $api->contents()->show($this->owner, $this->repo, 'composer.json', $version->sha);
+            $response = $api->contents()->show($this->owner, $this->repo, 'composer.json', $release->sha);
             $config = Json::decode(base64_decode($response['content']));
         } catch (RuntimeException $e) {
-            Craft::warning("Ignoring package version {$this->package->name}:{$version->version} due to error loading composer.json: {$e->getMessage()}", __METHOD__);
-            $version->nullify();
+            Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to error loading composer.json: {$e->getMessage()}", __METHOD__);
+            $release->nullify();
             return;
         }
 
-        if ($this->populateVersionFromComposerConfig($version, $config) === false) {
+        if ($this->populateReleaseFromComposerConfig($release, $config) === false) {
             return;
         }
 
-        if ($version->time === null) {
-            $version->time = $this->_versionDates[$version->version];
+        if ($release->time === null) {
+            $release->time = $this->_versionDates[$release->version];
         }
 
-        $version->dist = [
+        $release->dist = [
             'type' => 'zip',
-            'url' => "https://api.github.com/repos/{$this->owner}/{$this->repo}/zipball/{$version->sha}",
-            'reference' => $version->sha,
+            'url' => "https://api.github.com/repos/{$this->owner}/{$this->repo}/zipball/{$release->sha}",
+            'reference' => $release->sha,
             'shasum' => '',
         ];
 
@@ -105,10 +105,10 @@ class GitHub extends BaseVcs
 
         if ($changelogPath) {
             try {
-                $response = $api->contents()->show($this->owner, $this->repo, $changelogPath, $version->sha);
-                $version->changelog = base64_decode($response['content']);
+                $response = $api->contents()->show($this->owner, $this->repo, $changelogPath, $release->sha);
+                $release->changelog = base64_decode($response['content']);
             } catch (RuntimeException $e) {
-                Craft::warning("Couldn't fetch changelog for {$this->package->name}:{$version->version} due to error loading {$changelogPath}: {$e->getMessage()}", __METHOD__);
+                Craft::warning("Couldn't fetch changelog for {$this->package->name}:{$release->version} due to error loading {$changelogPath}: {$e->getMessage()}", __METHOD__);
             }
         }
     }

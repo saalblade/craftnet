@@ -6,7 +6,7 @@ use Composer\Semver\VersionParser;
 use craft\base\Model;
 use craft\helpers\Json;
 
-class PackageVersion extends Model
+class PackageRelease extends Model
 {
     public $id;
     public $packageId;

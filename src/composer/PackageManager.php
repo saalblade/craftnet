@@ -95,9 +95,9 @@ class PackageManager extends Component
      * @param string $name The package name
      * @param string $version The package version
      *
-     * @return PackageVersion|null
+     * @return PackageRelease|null
      */
-    public function getVersion(string $name, string $version)
+    public function getRelease(string $name, string $version)
     {
         $normalizedVersion = (new VersionParser())->normalize($version);
 
@@ -160,14 +160,14 @@ class PackageManager extends Component
             }
         }
 
-        return new PackageVersion($result);
+        return new PackageRelease($result);
     }
 
     /**
      * @param string $name      The package name
      * @param string $stability The minimum required stability
      *
-     * @return PackageVersion|null The latest version, or null if none can be found
+     * @return string|null The latest version, or null if none can be found
      */
     public function getLatestVersion(string $name, string $stability = 'stable')
     {
@@ -215,9 +215,29 @@ class PackageManager extends Component
         });
 
         // Return the last one
-        $latestVersion = array_pop($versions);
-        return $this->getVersion($name, $latestVersion);
+        return array_pop($versions);
     }
+
+    /**
+     * @param string $name      The package name
+     * @param string $stability The minimum required stability
+     *
+     * @return PackageRelease|null The latest release, or null if none can be found
+     */
+    public function getLatestRelease(string $name, string $stability = 'stable')
+    {
+        $version = $this->getLatestVersion($name, $stability);
+        return $this->getRelease($name, $version);
+    }
+
+    /**
+     * Returns the available releases between two versions
+     *
+     * @param string $name
+     * @param string $version
+     *
+     * @return bool
+     */
 
     public function isDependencyVersionRequired(string $name, string $version): bool
     {
@@ -300,7 +320,7 @@ class PackageManager extends Component
 
     /**
      * @param string $name  The Composer package name
-     * @param bool   $force Whether to update package versions even if their SHA hasn't changed
+     * @param bool   $force Whether to update package releases even if their SHA hasn't changed
      *
      * @throws MissingTokenException if the package is a plugin, but we don't have a VCS token for it
      */
@@ -420,18 +440,18 @@ class PackageManager extends Component
                 Console::stdout(Console::ansiFormat("- processing {$version} ({$sha}) ... ", [Console::FG_YELLOW]));
             }
 
-            $packageVersion = new PackageVersion([
+            $release = new PackageRelease([
                 'packageId' => $package->id,
                 'version' => $version,
                 'sha' => $sha,
             ]);
-            $vcs->populateVersion($packageVersion);
-            $this->savePackageVersion($packageVersion);
+            $vcs->populateRelease($release);
+            $this->savePackageVersion($release);
 
-            if (!empty($packageVersion->require)) {
+            if (!empty($release->require)) {
                 $depValues = [];
-                foreach ($packageVersion->require as $depName => $constraints) {
-                    $depValues[] = [$package->id, $packageVersion->id, $depName, $constraints];
+                foreach ($release->require as $depName => $constraints) {
+                    $depValues[] = [$package->id, $release->id, $depName, $constraints];
                     if (
                         $depName !== '__root__' &&
                         $depName !== 'composer-plugin-api' &&
@@ -508,39 +528,39 @@ class PackageManager extends Component
         }
     }
 
-    public function savePackageVersion(PackageVersion $version)
+    public function savePackageVersion(PackageRelease $release)
     {
         $db = Craft::$app->getDb();
         $db->createCommand()
             ->insert('craftcom_packageversions', [
-                'packageId' => $version->packageId,
-                'sha' => $version->sha,
-                'description' => $version->description,
-                'version' => $version->version,
-                'normalizedVersion' => $version->getNormalizedVersion(),
-                'stability' => $version->getStability(),
-                'type' => $version->type,
-                'keywords' => $version->keywords ? Json::encode($version->keywords) : null,
-                'homepage' => $version->homepage,
-                'time' => $version->time,
-                'license' => $version->license ? Json::encode($version->license) : null,
-                'authors' => $version->authors ? Json::encode($version->authors) : null,
-                'support' => $version->support ? Json::encode($version->support) : null,
-                'conflict' => $version->conflict ? Json::encode($version->conflict) : null,
-                'replace' => $version->replace ? Json::encode($version->replace) : null,
-                'provide' => $version->provide ? Json::encode($version->provide) : null,
-                'suggest' => $version->suggest ? Json::encode($version->suggest) : null,
-                'autoload' => $version->autoload ? Json::encode($version->autoload) : null,
-                'includePaths' => $version->includePaths ? Json::encode($version->includePaths) : null,
-                'targetDir' => $version->targetDir,
-                'extra' => $version->extra ? Json::encode($version->extra) : null,
-                'binaries' => $version->binaries ? Json::encode($version->binaries) : null,
-                'source' => $version->source ? Json::encode($version->source) : null,
-                'dist' => $version->dist ? Json::encode($version->dist) : null,
-                'changelog' => $version->changelog,
+                'packageId' => $release->packageId,
+                'sha' => $release->sha,
+                'description' => $release->description,
+                'version' => $release->version,
+                'normalizedVersion' => $release->getNormalizedVersion(),
+                'stability' => $release->getStability(),
+                'type' => $release->type,
+                'keywords' => $release->keywords ? Json::encode($release->keywords) : null,
+                'homepage' => $release->homepage,
+                'time' => $release->time,
+                'license' => $release->license ? Json::encode($release->license) : null,
+                'authors' => $release->authors ? Json::encode($release->authors) : null,
+                'support' => $release->support ? Json::encode($release->support) : null,
+                'conflict' => $release->conflict ? Json::encode($release->conflict) : null,
+                'replace' => $release->replace ? Json::encode($release->replace) : null,
+                'provide' => $release->provide ? Json::encode($release->provide) : null,
+                'suggest' => $release->suggest ? Json::encode($release->suggest) : null,
+                'autoload' => $release->autoload ? Json::encode($release->autoload) : null,
+                'includePaths' => $release->includePaths ? Json::encode($release->includePaths) : null,
+                'targetDir' => $release->targetDir,
+                'extra' => $release->extra ? Json::encode($release->extra) : null,
+                'binaries' => $release->binaries ? Json::encode($release->binaries) : null,
+                'source' => $release->source ? Json::encode($release->source) : null,
+                'dist' => $release->dist ? Json::encode($release->dist) : null,
+                'changelog' => $release->changelog,
             ])
             ->execute();
-        $version->id = $db->getLastInsertID();
+        $release->id = $db->getLastInsertID();
     }
 
     public function dumpProviderJson()

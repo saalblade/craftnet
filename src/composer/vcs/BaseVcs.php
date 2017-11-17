@@ -4,7 +4,7 @@ namespace craftcom\composer\vcs;
 
 use Craft;
 use craftcom\composer\Package;
-use craftcom\composer\PackageVersion;
+use craftcom\composer\PackageRelease;
 use yii\base\Object;
 
 abstract class BaseVcs extends Object implements VcsInterface
@@ -20,85 +20,85 @@ abstract class BaseVcs extends Object implements VcsInterface
         parent::__construct($config);
     }
 
-    protected function populateVersionFromComposerConfig(PackageVersion $version, array $config): bool
+    protected function populateReleaseFromComposerConfig(PackageRelease $release, array $config): bool
     {
         // Make sure the versions line up
-        if (isset($config['version']) && $config['version'] !== $version->version) {
-            Craft::warning("Ignoring package version {$this->package->name}:{$version->version} due to a version mismatch in composer.json: {$config['version']}", __METHOD__);
-            $version->nullify();
+        if (isset($config['version']) && $config['version'] !== $release->version) {
+            Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to a version mismatch in composer.json: {$config['version']}", __METHOD__);
+            $release->nullify();
             return false;
         }
 
         if (isset($config['description'])) {
-            $version->description = $config['description'];
+            $release->description = $config['description'];
         }
 
         if (isset($config['type'])) {
-            $version->type = $config['type'];
+            $release->type = $config['type'];
         }
 
         if (isset($config['keywords'])) {
-            $version->keywords = $config['keywords'];
+            $release->keywords = $config['keywords'];
         }
 
         if (isset($config['homepage'])) {
-            $version->homepage = $config['homepage'];
+            $release->homepage = $config['homepage'];
         }
 
         if (isset($config['time'])) {
-            $version->time = $config['time'];
+            $release->time = $config['time'];
         }
 
         if (isset($config['license'])) {
-            $version->license = (array)$config['license'];
+            $release->license = (array)$config['license'];
         }
 
         if (isset($config['authors'])) {
-            $version->authors = $config['authors'];
+            $release->authors = $config['authors'];
         }
 
         if (isset($config['support'])) {
-            $version->support = $config['support'];
+            $release->support = $config['support'];
         }
 
         if (isset($config['require'])) {
-            $version->require = $config['require'];
+            $release->require = $config['require'];
         }
 
         if (isset($config['conflict'])) {
-            $version->conflict = $config['conflict'];
+            $release->conflict = $config['conflict'];
         }
 
         if (isset($config['replace'])) {
-            $version->replace = $config['replace'];
+            $release->replace = $config['replace'];
         }
 
         if (isset($config['provide'])) {
-            $version->provide = $config['provide'];
+            $release->provide = $config['provide'];
         }
 
         if (isset($config['suggest'])) {
-            $version->suggest = $config['suggest'];
+            $release->suggest = $config['suggest'];
         }
 
         if (isset($config['autoload'])) {
-            $version->autoload = $config['autoload'];
+            $release->autoload = $config['autoload'];
         }
 
         if (isset($config['include-path'])) {
-            $version->includePaths = $config['include-path'];
+            $release->includePaths = $config['include-path'];
         }
 
         if (isset($config['target-dir'])) {
-            $version->targetDir = $config['target-dir'];
+            $release->targetDir = $config['target-dir'];
         }
 
         if (isset($config['extra'])) {
-            $version->extra = $config['extra'];
+            $release->extra = $config['extra'];
         }
 
         if (isset($config['bin'])) {
-            $version->binaries = $config['bin'];
+            $release->binaries = $config['bin'];
         }
 
         return true;

@@ -7,7 +7,7 @@ use Composer\Semver\VersionParser;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
-use craftcom\composer\PackageVersion;
+use craftcom\composer\PackageRelease;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
@@ -47,7 +47,7 @@ class UpdatesController extends BaseApiController
     {
         $releases = null;
         $stability = VersionParser::parseStability($body->cms->version);
-        $latest = Module::getInstance()->getPackageManager()->getLatestVersion('craftcms/cms', $stability);
+        $latest = Module::getInstance()->getPackageManager()->getLatestRelease('craftcms/cms', $stability);
 
         if ($latest) {
             $releases = $this->_getReleases($latest, $body->cms->version);
@@ -87,7 +87,7 @@ class UpdatesController extends BaseApiController
                 $releases = null;
                 if (isset($plugins[$handle])) {
                     $stability = VersionParser::parseStability($pluginInfo->version);
-                    $latest = $packageManager->getLatestVersion($plugins[$handle]->packageName, $stability);
+                    $latest = $packageManager->getLatestRelease($plugins[$handle]->packageName, $stability);
                     if ($latest) {
                         $releases = $this->_getReleases($latest, $pluginInfo->version);
                     }
@@ -105,25 +105,25 @@ class UpdatesController extends BaseApiController
     /**
      * Returns release info based on a given changelog URL.
      *
-     * @param PackageVersion $version The package version model
+     * @param PackageRelease $release The package release model
      * @param string         $from    The version that is already installed
      *
      * @return array
      */
-    private function _getReleases(PackageVersion $version, string $from): array
+    private function _getReleases(PackageRelease $release, string $from): array
     {
         // Make sure they're not already at the target version
-        if (Comparator::equalTo($from, $version->version)) {
+        if (Comparator::equalTo($from, $release->version)) {
             return [];
         }
 
         $releases = [];
         $foundTarget = false;
 
-        if ($version->changelog) {
+        if ($release->changelog) {
             // Move it to a temp file & parse it
             $file = tmpfile();
-            fwrite($file, $version->changelog);
+            fwrite($file, $release->changelog);
             fseek($file, 0);
 
             $currentRelease = null;
@@ -141,7 +141,7 @@ class UpdatesController extends BaseApiController
                     // Is it an H2 version heading?
                     if (preg_match('/^## (?:.* )?\[?v?(\d+\.\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z-\.]+)?)\]?(?:\(.*?\)|\[.*?\])? - (\d{4}[-\.]\d\d?[-\.]\d\d?)( \[critical\])?/i', $line, $match)) {
                         // Is it > the target version? (e.g. an unreleased version)
-                        if (Comparator::greaterThan($match[1], $version->version)) {
+                        if (Comparator::greaterThan($match[1], $release->version)) {
                             continue;
                         }
 
@@ -151,7 +151,7 @@ class UpdatesController extends BaseApiController
                         }
 
                         // Is this the target version?
-                        if (!$foundTarget && Comparator::equalTo($match[1], $version->version)) {
+                        if (!$foundTarget && Comparator::equalTo($match[1], $release->version)) {
                             $foundTarget = true;
                         }
 
@@ -183,7 +183,7 @@ class UpdatesController extends BaseApiController
         // If we never found the target version, add it to the beginning
         if (!$foundTarget) {
             array_unshift($releases, [
-                'version' => $version->version,
+                'version' => $release->version,
                 'date' => null,
                 'critical' => false,
                 'notes' => '',
