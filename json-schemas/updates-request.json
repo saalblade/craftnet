@@ -34,39 +34,16 @@
       },
       "required": ["email"]
     },
-    "server": {
+    "platform": {
       "type": "object",
-      "properties": {
-        "php": {
-          "type": "object",
-          "properties": {
-            "version": {
-              "type": "string"
-            },
-            "extensions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "required": ["version", "extensions"]
-        },
-        "db": {
-          "type": "object",
-          "properties": {
-            "driver": {
-              "type": "string",
-              "enum": ["mysql", "pgsql"]
-            },
-            "version": {
-              "type": "string"
-            }
-          },
-          "required": ["driver", "version"]
-        }
+      "items": {
+        "type": "string"
       },
-      "required": ["php", "db"]
+      "required": ["php"],
+      "oneOf": [
+        {"required": ["mysql"]},
+        {"required": ["pgsql"]}
+      ]
     },
     "cms": {
       "type": "object",
@@ -93,7 +70,7 @@
           "type": "object",
           "properties": {
             "licenseKey": {
-              "type": "string",
+              "type": ["string", "null"],
               "minLength": 24,
               "maxLength": 24
             },
@@ -106,5 +83,5 @@
       }
     }
   },
-  "required": ["request", "user", "server", "cms", "plugins"]
+  "required": ["request", "user", "platform", "cms", "plugins"]
 }
