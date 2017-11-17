@@ -56,6 +56,9 @@ class UpdatesController extends BaseApiController
         return [
             'status' => 'eligible',
             'releases' => $releases ?? [],
+            //'renewalPrice' => '59',
+            //'renewalCurrency' => 'USD',
+            //'renewalUrl' => 'dashboard',
         ];
     }
 
