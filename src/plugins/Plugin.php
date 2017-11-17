@@ -16,9 +16,9 @@ use craftcom\Module;
 use yii\base\InvalidConfigException;
 
 /**
- *
  * @property User       $developer
  * @property Package    $package
+ * @property string     $eagerLoadedElements
  * @property Asset|null $icon
  */
 class Plugin extends Element
@@ -430,10 +430,12 @@ class Plugin extends Element
             ]));
         }
 
+        $this->packageId = $package->id;
+
         $pluginData = [
             'id' => $this->id,
             'developerId' => $this->developerId,
-            'packageId' => $package->id,
+            'packageId' => $this->packageId,
             'iconId' => $this->iconId,
             'packageName' => $this->packageName,
             'repository' => $this->repository,
