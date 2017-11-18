@@ -15,12 +15,14 @@ use craft\services\UserPermissions;
 use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
+use craftcom\composer\JsonDumper;
 use craftcom\composer\PackageManager;
 use craftcom\fields\Plugins;
 use craftcom\services\Oauth;
 use yii\base\Event;
 
 /**
+ * @property JsonDumper     $jsonDumper
  * @property Oauth          $oauth
  * @property PackageManager $packageManager
  */
@@ -73,6 +75,14 @@ class Module extends \yii\base\Module
     public function getPackageManager(): PackageManager
     {
         return $this->get('packageManager');
+    }
+
+    /**
+     * @return JsonDumper
+     */
+    public function getJsonDumper(): JsonDumper
+    {
+        return $this->get('jsonDumper');
     }
 
     /**

@@ -16,7 +16,11 @@ return [
                         'class' => craftcom\composer\PackageManager::class,
                         'githubFallbackTokens' => getenv('GITHUB_FALLBACK_TOKENS'),
                         'requirePluginVcsTokens' => false,
+                    ],
+                    'jsonDumper' => [
+                        'class' => \craftcom\composer\JsonDumper::class,
                         'composerWebroot' => getenv('COMPOSER_WEBROOT'),
+                        'providersBaseUrl' => getenv('COMPOSER_REPO_URL'),
                     ],
                     'oauth' => [
                         'class' => Oauth::class,
