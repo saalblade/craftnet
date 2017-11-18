@@ -691,6 +691,7 @@ class PackageManager extends Component
             ->where(['not', ['latestVersion' => null]])
             ->indexBy('id')
             ->all();
+
         $versions = (new Query())
             ->select([
                 'id',
@@ -718,8 +719,10 @@ class PackageManager extends Component
                 'dist',
             ])
             ->from(['craftcom_packageversions'])
+            ->where(['packageId' => array_keys($packages)])
             ->indexBy('id')
             ->all();
+
         $deps = (new Query())
             ->select(['versionId', 'name', 'constraints'])
             ->from(['craftcom_packagedeps'])
@@ -729,9 +732,6 @@ class PackageManager extends Component
         $depsByVersion = [];
         foreach ($deps as $dep) {
             $depsByVersion[$dep['versionId']][] = $dep;
-//            $name = $packages[$dep['packageId']]['name'];
-//            $version = $versions[$dep['versionId']]['version'];
-//            $providers[$name]['packages'][$name][$version]['require'][$dep['name']] = $dep['constraints'];
         }
 
         $providers = [];
