@@ -7,6 +7,7 @@ use craft\db\Query;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craftcom\composer\jobs\DeletePaths;
+use craftcom\composer\jobs\DumpJson;
 use yii\base\Component;
 
 /**
@@ -27,9 +28,16 @@ class JsonDumper extends Component
 
     /**
      * Dumps out packages.json, and all the provider JSON files.
+     *
+     * @param bool $queue Whether to queue the dump
      */
-    public function dump()
+    public function dump(bool $queue = false)
     {
+        if ($queue) {
+            Craft::$app->getQueue()->push(new DumpJson());
+            return;
+        }
+
         // Fetch all the data
         $packages = (new Query())
             ->select(['id', 'name', 'abandoned', 'replacementPackage'])
