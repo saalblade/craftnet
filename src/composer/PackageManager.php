@@ -31,9 +31,6 @@ class PackageManager extends Component
      */
     public $requirePluginVcsTokens = true;
 
-    public function dumpProviderJson()
-    {}
-
     /**
      *
      */

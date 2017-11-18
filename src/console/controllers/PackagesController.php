@@ -73,9 +73,4 @@ class PackagesController extends Controller
     {
         $this->module->getPackageManager()->updatePackage($name, $this->force);
     }
-
-    public function actionDumpJson()
-    {
-        $this->module->getPackageManager()->dumpProviderJson();
-    }
 }
