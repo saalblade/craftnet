@@ -16,6 +16,7 @@ class PackagesController extends Controller
     public $managed = false;
     public $repository;
     public $type = 'library';
+    public $queue = false;
 
     public function options($actionID)
     {
@@ -30,6 +31,8 @@ class PackagesController extends Controller
             case 'update':
                 $options[] = 'force';
                 break;
+            case 'update-deps':
+                $options[] = 'queue';
         }
 
         return $options;
@@ -42,6 +45,7 @@ class PackagesController extends Controller
         $aliases['m'] = 'managed';
         $aliases['r'] = 'repository';
         $aliases['t'] = 'type';
+        $aliases['q'] = 'queue';
         return $aliases;
     }
 
@@ -72,5 +76,10 @@ class PackagesController extends Controller
     public function actionUpdate(string $name)
     {
         $this->module->getPackageManager()->updatePackage($name, $this->force);
+    }
+
+    public function actionUpdateDeps()
+    {
+        $this->module->getPackageManager()->updateDeps($this->queue);
     }
 }

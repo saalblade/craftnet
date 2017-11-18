@@ -674,6 +674,32 @@ class PackageManager extends Component
     }
 
     /**
+     * Updates all of the unmanaged package dependencies.
+     *
+     * @param bool $queue Whether to queue the updates.
+     */
+    public function updateDeps(bool $queue = false)
+    {
+        $names = $this->_createPackageQuery()
+            ->select(['name'])
+            ->where(['managed' => false])
+            ->column();
+
+        if ($queue) {
+            $theQueue = Craft::$app->getQueue();
+            foreach ($names as $name) {
+                $theQueue->push(new UpdatePackage([
+                    'name' => $name,
+                ]));
+            }
+        } else {
+            foreach ($names as $name) {
+                $this->updatePackage($name);
+            }
+        }
+    }
+
+    /**
      * Returns a random fallback GitHub API token.
      *
      * @return string|null
