@@ -6,6 +6,10 @@ use Composer\Semver\VersionParser;
 use craft\base\Model;
 use craft\helpers\Json;
 
+/**
+ * @property mixed $normalizedVersion
+ * @property mixed $stability
+ */
 class PackageRelease extends Model
 {
     /**
@@ -28,32 +32,134 @@ class PackageRelease extends Model
         'dist',
     ];
 
+    /**
+     * @var
+     */
     public $id;
+
+    /**
+     * @var
+     */
     public $packageId;
+
+    /**
+     * @var
+     */
     public $sha;
+
+    /**
+     * @var
+     */
     public $description;
+
+    /**
+     * @var
+     */
     public $version;
+
+    /**
+     * @var string
+     */
     public $type = 'library';
+
+    /**
+     * @var
+     */
     public $keywords;
+
+    /**
+     * @var
+     */
     public $homepage;
+
+    /**
+     * @var
+     */
     public $time;
+
+    /**
+     * @var
+     */
     public $license;
+
+    /**
+     * @var
+     */
     public $authors;
+
+    /**
+     * @var
+     */
     public $support;
+
+    /**
+     * @var
+     */
     public $require;
+
+    /**
+     * @var
+     */
     public $conflict;
+
+    /**
+     * @var
+     */
     public $replace;
+
+    /**
+     * @var
+     */
     public $provide;
+
+    /**
+     * @var
+     */
     public $suggest;
+
+    /**
+     * @var
+     */
     public $autoload;
+
+    /**
+     * @var
+     */
     public $includePaths;
+
+    /**
+     * @var
+     */
     public $targetDir;
+
+    /**
+     * @var
+     */
     public $extra;
+
+    /**
+     * @var
+     */
     public $binaries;
+
+    /**
+     * @var
+     */
     public $source;
+
+    /**
+     * @var
+     */
     public $dist;
+
+    /**
+     * @var
+     */
     public $changelog;
 
+    /**
+     *
+     */
     public function __construct(array $config = [])
     {
         foreach (self::$_releaseJsonColumns as $column) {
@@ -65,6 +171,9 @@ class PackageRelease extends Model
         parent::__construct($config);
     }
 
+    /**
+     *
+     */
     public function init()
     {
         if (is_string($this->source)) {
@@ -75,6 +184,9 @@ class PackageRelease extends Model
         }
     }
 
+    /**
+     *
+     */
     public function nullify()
     {
         $this->description = null;
@@ -100,12 +212,18 @@ class PackageRelease extends Model
         $this->changelog = null;
     }
 
-    public function getNormalizedVersion()
+    /**
+     * @return string
+     */
+    public function getNormalizedVersion(): string
     {
         return (new VersionParser())->normalize($this->version);
     }
 
-    public function getStability()
+    /**
+     * @return string
+     */
+    public function getStability(): string
     {
         return VersionParser::parseStability($this->version);
     }

@@ -52,19 +52,22 @@ abstract class BaseApiController extends Controller
         return $body;
     }
 
-    protected function pluginTransformer(Plugin $plugin, $snippetOnly = false)
+    /**
+     * @param Plugin $plugin
+     * @param bool   $snippetOnly
+     *
+     * @return array
+     */
+    protected function pluginTransformer(Plugin $plugin, $snippetOnly = false): array
     {
         // Developer name
-
         $developerName = $plugin->getDeveloper()->developerName;
 
         if (empty($developerName)) {
             $developerName = $plugin->getDeveloper()->getFullName();
         }
 
-
         // Icon url
-
         $iconUrl = null;
         $icon = $plugin->icon;
 
@@ -72,9 +75,7 @@ abstract class BaseApiController extends Controller
             $iconUrl = $icon->getUrl();
         }
 
-
         // Screenshots
-
         $screenshotUrls = [];
         $screenshotIds = [];
 
@@ -83,18 +84,14 @@ abstract class BaseApiController extends Controller
             $screenshotIds[] = $screenshot->getId();
         }
 
-
         // Categories
-
         $categoryIds = [];
 
         foreach ($plugin->categories as $category) {
             $categoryIds[] = $category->id;
         }
 
-
         // Return data
-
         $data = [
             'id' => $plugin->id,
             'iconUrl' => $iconUrl,

@@ -18,6 +18,9 @@ use yii\base\Component;
 use yii\base\Exception;
 use yii\helpers\Console;
 
+/**
+ * @property null|string $randomGitHubFallbackToken
+ */
 class PackageManager extends Component
 {
     /**
@@ -35,6 +38,9 @@ class PackageManager extends Component
      */
     public $composerWebroot;
 
+    /**
+     *
+     */
     public function init()
     {
         parent::init();
@@ -44,6 +50,11 @@ class PackageManager extends Component
         }
     }
 
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
     public function packageExists(string $name): bool
     {
         return (new Query())
@@ -52,6 +63,12 @@ class PackageManager extends Component
             ->exists();
     }
 
+    /**
+     * @param string $name
+     * @param int    $seconds
+     *
+     * @return bool
+     */
     public function packageUpdatedWithin(string $name, int $seconds): bool
     {
         $timestamp = Db::prepareDateForDb(new \DateTime("-{$seconds} seconds"));
@@ -63,6 +80,12 @@ class PackageManager extends Component
             ->exists();
     }
 
+    /**
+     * @param string $name
+     * @param array  $constraints
+     *
+     * @return bool
+     */
     public function packageVersionsExist(string $name, array $constraints): bool
     {
         // Get all of the known versions for the package
@@ -287,6 +310,9 @@ class PackageManager extends Component
         return false;
     }
 
+    /**
+     * @param Package $package
+     */
     public function savePackage(Package $package)
     {
         $data = [
@@ -312,6 +338,9 @@ class PackageManager extends Component
         }
     }
 
+    /**
+     * @param string $name
+     */
     public function removePackage(string $name)
     {
         Craft::$app->getDb()->createCommand()
@@ -319,6 +348,12 @@ class PackageManager extends Component
             ->execute();
     }
 
+    /**
+     * @param string $name
+     *
+     * @return Package
+     * @throws Exception
+     */
     public function getPackage(string $name): Package
     {
         $result = $this->_createPackageQuery()
@@ -330,6 +365,12 @@ class PackageManager extends Component
         return new Package($result);
     }
 
+    /**
+     * @param int $id
+     *
+     * @return Package
+     * @throws Exception
+     */
     public function getPackageById(int $id): Package
     {
         $result = $this->_createPackageQuery()
@@ -339,13 +380,6 @@ class PackageManager extends Component
             throw new Exception('Invalid package ID: '.$id);
         }
         return new Package($result);
-    }
-
-    private function _createPackageQuery(): Query
-    {
-        return (new Query())
-            ->select(['id', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage'])
-            ->from(['craftcom_packages']);
     }
 
     /**
@@ -608,6 +642,9 @@ class PackageManager extends Component
         }
     }
 
+    /**
+     * @param PackageRelease $release
+     */
     public function savePackageVersion(PackageRelease $release)
     {
         $db = Craft::$app->getDb();
@@ -643,6 +680,9 @@ class PackageManager extends Component
         $release->id = $db->getLastInsertID();
     }
 
+    /**
+     *
+     */
     public function dumpProviderJson()
     {
         // Fetch all the data
@@ -795,6 +835,31 @@ class PackageManager extends Component
     }
 
     /**
+     * Returns a random fallback GitHub API token.
+     *
+     * @return string|null
+     */
+    public function getRandomGitHubFallbackToken()
+    {
+        if (empty($this->githubFallbackTokens)) {
+            return null;
+        }
+
+        $key = array_rand($this->githubFallbackTokens);
+        return $this->githubFallbackTokens[$key];
+    }
+
+    /**
+     * @return Query
+     */
+    private function _createPackageQuery(): Query
+    {
+        return (new Query())
+            ->select(['id', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage'])
+            ->from(['craftcom_packages']);
+    }
+
+    /**
      * Writes a new JSON file and returns its hash.
      *
      * @param array  $data     The data to write
@@ -830,20 +895,5 @@ class PackageManager extends Component
         FileHelper::writeToFile($path, $content);
 
         return $hash;
-    }
-
-    /**
-     * Returns a random fallback GitHub API token.
-     *
-     * @return string|null
-     */
-    public function getRandomGitHubFallbackToken()
-    {
-        if (empty($this->githubFallbackTokens)) {
-            return null;
-        }
-
-        $key = array_rand($this->githubFallbackTokens);
-        return $this->githubFallbackTokens[$key];
     }
 }

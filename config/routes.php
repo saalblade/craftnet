@@ -36,12 +36,6 @@ return [
         'GET  apps/callback' => 'craftcom/id/apps/callback',
         'GET  apps/disconnect/<appTypeHandle:{handle}>' => 'craftcom/id/apps/disconnect',
 
-        'GET  test' => 'craftcom/id/account',
-        'GET  test/developer/connect' => 'craftcom/id/connect/connect',
-        'GET  test/developer/validate' => 'craftcom/id/connect/validate',
-        'GET  test/developer/gettoken' => 'craftcom/id/connect/get-token',
-        'GET  test/developer/hooks' => 'craftcom/id/connect/hooks',
-
         'GET  stripe/connect' => 'craftcom/id/stripe/connect',
         'GET  stripe/account' => 'craftcom/id/stripe/account',
         'POST stripe/disconnect' => 'craftcom/id/stripe/disconnect',

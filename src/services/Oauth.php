@@ -26,6 +26,9 @@ class Oauth extends Component
     public $appTypes = [];
 
     /**
+     * Lists the repos for a given VSC type. Not going through composer/vsc classes
+     * because they expect the package/plugin to already exist.
+     *
      * @return array
      */
     public function getApps(): array
