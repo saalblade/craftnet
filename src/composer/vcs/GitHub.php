@@ -10,7 +10,11 @@ use craftcom\errors\VcsException;
 use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
+use yii\base\Exception;
 
+/**
+ * @property array $versions
+ */
 class GitHub extends BaseVcs
 {
     /**
@@ -28,8 +32,15 @@ class GitHub extends BaseVcs
      */
     public $repo;
 
+    /**
+     * @var
+     */
     private $_versionDates;
 
+    /**
+     * @return array
+     * @throws VcsException
+     */
     public function getVersions(): array
     {
         $versions = [];
@@ -65,6 +76,9 @@ class GitHub extends BaseVcs
         return $versions;
     }
 
+    /**
+     * @param PackageRelease $release
+     */
     public function populateRelease(PackageRelease $release)
     {
         // Get the composer.json contents
@@ -110,6 +124,32 @@ class GitHub extends BaseVcs
             } catch (RuntimeException $e) {
                 Craft::warning("Couldn't fetch changelog for {$this->package->name}:{$release->version} due to error loading {$changelogPath}: {$e->getMessage()}", __METHOD__);
             }
+        }
+    }
+
+    /**
+     *
+     */
+    public function addWebhook()
+    {
+        $api = $this->client->api('repo');
+
+        $params = [
+            'name' => 'web',
+            'events' => ['push'],
+            'active' => true,
+            'config' => [
+                'url' => 'https://api.craftcms.com/github/push',
+                'content_type' => 'json',
+            ],
+        ];
+
+        try
+        {
+            $api->hooks()->create($this->owner, $this->repo, $params);
+        }
+        catch (\Exception $e) {
+            Craft::warning("Could not create a webhook for {$this->package->name}:{$e->getMessage()}", __METHOD__);
         }
     }
 }

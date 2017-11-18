@@ -20,13 +20,44 @@ use Github\Client;
  */
 class Package extends Model
 {
+    /**
+     * @var
+     */
     public $id;
+
+    /**
+     * @var
+     */
     public $name;
+
+    /**
+     * @var
+     */
     public $type;
+
+    /**
+     * @var
+     */
     public $repository;
+
+    /**
+     * @var bool
+     */
     public $managed = false;
+
+    /**
+     * @var
+     */
     public $latestVersion;
+
+    /**
+     * @var bool
+     */
     public $abandoned = false;
+
+    /**
+     * @var
+     */
     public $replacementPackage;
 
     /**
@@ -99,6 +130,7 @@ class Package extends Model
             $token = null;
             if ($plugin = $this->getPlugin()) {
                 $token = Module::getInstance()->getOauth()->getAuthTokenByUserId(Oauth::PROVIDER_GITHUB, $plugin->developerId);
+
                 if (!$token) {
                     if (Module::getInstance()->getPackageManager()->requirePluginVcsTokens) {
                         throw new MissingTokenException($plugin);

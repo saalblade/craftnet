@@ -14,12 +14,32 @@ abstract class BaseVcs extends Object implements VcsInterface
      */
     public $package;
 
+    /**
+     * BaseVcs constructor.
+     *
+     * @param Package $package
+     * @param array   $config
+     */
     public function __construct(Package $package, array $config = [])
     {
         $this->package = $package;
         parent::__construct($config);
     }
 
+    /**
+     * @return null
+     */
+    public function addWebhook()
+    {
+        return null;
+    }
+
+    /**
+     * @param PackageRelease $release
+     * @param array          $config
+     *
+     * @return bool
+     */
     protected function populateReleaseFromComposerConfig(PackageRelease $release, array $config): bool
     {
         // Make sure the versions line up

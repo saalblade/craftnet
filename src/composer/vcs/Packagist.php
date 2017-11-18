@@ -8,12 +8,27 @@ use craftcom\composer\PackageRelease;
 use GuzzleHttp\Exception\ClientException;
 use yii\base\Exception;
 
+/**
+ * @property array $versions
+ */
 class Packagist extends BaseVcs
 {
+    /**
+     *
+     */
     const BASE_URL = 'https://packagist.org/';
 
+    /**
+     * @var
+     */
     private static $_rootComposerInfo;
 
+    /**
+     * @param string $uri
+     * @param null   $cacheDuration
+     *
+     * @return array
+     */
     public static function fetchPackagistData(string $uri, $cacheDuration = null): array
     {
         if ($cacheDuration !== false) {
@@ -37,11 +52,20 @@ class Packagist extends BaseVcs
         return $data;
     }
 
+    /**
+     * @return array
+     */
     public static function rootComposerInfo(): array
     {
         return self::$_rootComposerInfo ?? self::$_rootComposerInfo = self::fetchPackagistData('packages.json', 60 * 60);
     }
 
+    /**
+     * @param string $name
+     *
+     * @return array
+     * @throws Exception
+     */
     public static function packageInfo(string $name): array
     {
         try {
@@ -76,6 +100,9 @@ class Packagist extends BaseVcs
         return $info;
     }
 
+    /**
+     * @return array
+     */
     public function getVersions(): array
     {
         $packageInfo = self::packageInfo($this->package->name);
@@ -93,6 +120,9 @@ class Packagist extends BaseVcs
         return $versions;
     }
 
+    /**
+     * @param PackageRelease $release
+     */
     public function populateRelease(PackageRelease $release)
     {
         $packageInfo = self::packageInfo($this->package->name);
