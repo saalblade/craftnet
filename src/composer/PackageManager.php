@@ -428,11 +428,20 @@ class PackageManager extends Component
     /**
      * @param string $name  The Composer package name
      * @param bool   $force Whether to update package releases even if their SHA hasn't changed
+     * @param bool   $queue Whether to queue the update
      *
      * @throws MissingTokenException if the package is a plugin, but we don't have a VCS token for it
      */
-    public function updatePackage(string $name, bool $force = false)
+    public function updatePackage(string $name, bool $force = false, bool $queue = false)
     {
+        if ($queue) {
+            Craft::$app->getQueue()->push(new UpdatePackage([
+                'name' => $name,
+                'force' => $force,
+            ]));
+            return;
+        }
+
         $package = $this->getPackage($name);
         $vcs = $package->getVcs();
         $plugin = $package->getPlugin();
@@ -618,11 +627,8 @@ class PackageManager extends Component
             }
 
             if (!empty($depsToUpdate)) {
-                $queue = Craft::$app->getQueue();
                 foreach ($depsToUpdate as $depName) {
-                    $queue->push(new UpdatePackage([
-                        'name' => $depName,
-                    ]));
+                    $this->updatePackage($depName, $force, true);
                     if ($isConsole) {
                         Console::output("{$depName} is queued to be updated");
                     }
@@ -676,26 +682,18 @@ class PackageManager extends Component
     /**
      * Updates all of the unmanaged package dependencies.
      *
-     * @param bool $queue Whether to queue the updates.
+     * @param bool $force Whether to update package releases even if their SHA hasn't changed
+     * @param bool $queue Whether to queue the updates
      */
-    public function updateDeps(bool $queue = false)
+    public function updateDeps(bool $force = false, bool $queue = false)
     {
         $names = $this->_createPackageQuery()
             ->select(['name'])
             ->where(['managed' => false])
             ->column();
 
-        if ($queue) {
-            $theQueue = Craft::$app->getQueue();
-            foreach ($names as $name) {
-                $theQueue->push(new UpdatePackage([
-                    'name' => $name,
-                ]));
-            }
-        } else {
-            foreach ($names as $name) {
-                $this->updatePackage($name);
-            }
+        foreach ($names as $name) {
+            $this->updatePackage($name, $force, $queue);
         }
     }
 

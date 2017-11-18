@@ -29,10 +29,10 @@ class PackagesController extends Controller
                 $options[] = 'type';
                 break;
             case 'update':
-                $options[] = 'force';
-                break;
             case 'update-deps':
+                $options[] = 'force';
                 $options[] = 'queue';
+                break;
         }
 
         return $options;
@@ -75,11 +75,11 @@ class PackagesController extends Controller
 
     public function actionUpdate(string $name)
     {
-        $this->module->getPackageManager()->updatePackage($name, $this->force);
+        $this->module->getPackageManager()->updatePackage($name, $this->force, $this->queue);
     }
 
     public function actionUpdateDeps()
     {
-        $this->module->getPackageManager()->updateDeps($this->queue);
+        $this->module->getPackageManager()->updateDeps($this->force, $this->queue);
     }
 }

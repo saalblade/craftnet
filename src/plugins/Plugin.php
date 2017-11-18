@@ -10,7 +10,6 @@ use craft\elements\Category;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
-use craftcom\composer\jobs\UpdatePackage;
 use craftcom\composer\Package;
 use craftcom\Module;
 use yii\base\InvalidConfigException;
@@ -425,9 +424,7 @@ class Plugin extends Element
                 'managed' => true,
             ]);
             $packageManager->savePackage($package);
-            Craft::$app->getQueue()->push(new UpdatePackage([
-                'name' => $package->name,
-            ]));
+            $packageManager->updatePackage($package->name, false, true);
         }
 
         $this->packageId = $package->id;
