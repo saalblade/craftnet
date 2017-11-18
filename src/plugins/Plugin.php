@@ -425,6 +425,7 @@ class Plugin extends Element
             ]);
             $packageManager->savePackage($package);
             $packageManager->updatePackage($package->name, false, true);
+            Module::getInstance()->getJsonDumper()->dump(true);
         }
 
         $this->packageId = $package->id;
