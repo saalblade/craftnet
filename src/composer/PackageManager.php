@@ -822,7 +822,7 @@ class PackageManager extends Component
             'provider-includes' => [
                 $indexPath => ['sha256' => $indexHash],
             ],
-            'providers-url' => '/p/%package%/%hash%.json',
+            'providers-url' => 'p/%package%/%hash%.json',
         ];
 
         FileHelper::writeToFile("{$this->composerWebroot}/packages.json", Json::encode($rootData));
