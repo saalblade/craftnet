@@ -92,87 +92,136 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string $name The package name
+     * @param string $name    The package name
      * @param string $version The package version
      *
      * @return PackageRelease|null
      */
     public function getRelease(string $name, string $version)
     {
-        $normalizedVersion = (new VersionParser())->normalize($version);
-
-        $result = (new Query())
-            ->select([
-                'pv.id',
-                'pv.packageId',
-                'pv.sha',
-                'pv.description',
-                'pv.version',
-                'pv.type',
-                'pv.keywords',
-                'pv.homepage',
-                'pv.time',
-                'pv.license',
-                'pv.authors',
-                'pv.support',
-                'pv.conflict',
-                'pv.replace',
-                'pv.provide',
-                'pv.suggest',
-                'pv.autoload',
-                'pv.includePaths',
-                'pv.targetDir',
-                'pv.extra',
-                'pv.binaries',
-                'pv.source',
-                'pv.dist',
-                'pv.changelog',
-            ])
-            ->from(['craftcom_packageversions pv'])
-            ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
-            ->where(['p.name' => $name, 'pv.normalizedVersion' => $normalizedVersion])
-            ->one();
+        $result = $this->_createReleaseQuery($name, $version)->one();
 
         if (!$result) {
             return null;
-        }
-
-        $jsonColumns = [
-            'keywords',
-            'license',
-            'authors',
-            'support',
-            'conflict',
-            'replace',
-            'provide',
-            'suggest',
-            'autoload',
-            'includePaths',
-            'extra',
-            'binaries',
-            'source',
-            'dist',
-        ];
-
-        foreach ($jsonColumns as $column) {
-            if ($result[$column]) {
-                $result[$column] = Json::decode($result[$column]);
-            }
         }
 
         return new PackageRelease($result);
     }
 
     /**
-     * @param string $name      The package name
-     * @param string $stability The minimum required stability
+     * @param string $name         The package name
+     * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
+     * @param bool   $sort         Whether the versions should be sorted
+     *
+     * @return string[] The known package versions
+     */
+    public function getAllVersions(string $name, string $minStability = 'stable', bool $sort = true): array
+    {
+        $allowedStabilities = $this->_allowedStabilities($minStability);
+
+        $versions = (new Query())
+            ->select(['version'])
+            ->distinct()
+            ->from(['craftcom_packageversions pv'])
+            ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
+            ->where(['p.name' => $name, 'pv.stability' => $allowedStabilities])
+            ->column();
+
+        if ($sort) {
+            $this->_sortVersions($versions);
+        }
+
+        return $versions;
+    }
+
+    /**
+     * @param string $name         The package name
+     * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
      *
      * @return string|null The latest version, or null if none can be found
      */
-    public function getLatestVersion(string $name, string $stability = 'stable')
+    public function getLatestVersion(string $name, string $minStability = 'stable')
+    {
+        // Get all the versions
+        $versions = $this->getAllVersions($name, $minStability);
+
+        // Return the last one
+        return array_pop($versions);
+    }
+
+    /**
+     * @param string $name         The package name
+     * @param string $minStability The minimum required stability
+     *
+     * @return PackageRelease|null The latest release, or null if none can be found
+     */
+    public function getLatestRelease(string $name, string $minStability = 'stable')
+    {
+        $version = $this->getLatestVersion($name, $minStability);
+        return $this->getRelease($name, $version);
+    }
+
+    /**
+     * Returns all the versions after a given version
+     *
+     * @param string $name         The package name
+     * @param string $from         The version that others should be after
+     * @param string $minStability The minimum required stability
+     * @param bool   $sort         Whether the versions should be sorted
+     *
+     * @return string[] The versions after $from, sorted oldest-to-newest
+     */
+    public function getVersionsAfter(string $name, string $from, string $minStability = 'stable', bool $sort = true): array
+    {
+        // Get all the versions
+        $versions = $this->getAllVersions($name, $minStability, false);
+
+        // Filter out the ones <= $from
+        $versions = array_filter($versions, function($version) use ($from) {
+            return Comparator::greaterThan($version, $from);
+        });
+
+        if ($sort) {
+            $this->_sortVersions($versions);
+        }
+
+        return $versions;
+    }
+
+    /**
+     * Returns all the releases after a given version
+     *
+     * @param string $name         The package name
+     * @param string $from         The version that others should be after
+     * @param string $minStability The minimum required stability
+     *
+     * @return PackageRelease[] The releases after $from, sorted oldest-to-newest
+     */
+    public function getReleasesAfter(string $name, string $from, string $minStability = 'stable'): array
+    {
+        $versions = $this->getVersionsAfter($name, $from, $minStability, false);
+        $results = $this->_createReleaseQuery($name, $versions)->all();
+        $releases = [];
+
+        foreach ($results as $result) {
+            $releases[] = new PackageRelease($result);
+        }
+
+        // Sort them oldest-to-newest
+        $this->_sortVersions($releases);
+
+        return $releases;
+    }
+
+    /**
+     * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
+     *
+     * @return string[]
+     */
+    private function _allowedStabilities(string $minStability = 'stable'): array
     {
         $allowedStabilities = [];
-        switch ($stability) {
+        switch ($minStability) {
             case 'dev':
                 $allowedStabilities[] = 'dev';
             // no break
@@ -189,56 +238,37 @@ class PackageManager extends Component
                 $allowedStabilities[] = 'stable';
         }
 
-        if (count($allowedStabilities) === 1) {
-            $allowedStabilities = reset($allowedStabilities);
-        }
+        return $allowedStabilities;
+    }
 
-        // Get all the known versions for the package + allowed stability levels
-        $versions = (new Query())
-            ->select(['version'])
-            ->distinct()
-            ->from(['craftcom_packageversions pv'])
-            ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
-            ->where(['p.name' => $name, 'pv.stability' => $allowedStabilities])
-            ->column();
+    /**
+     * Sorts a given list of versions from oldest => newest
+     *
+     * @param string[]|PackageRelease[] &$versions
+     */
+    private function _sortVersions(array &$versions)
+    {
+        usort($versions, function($a, $b): int {
+            if ($a instanceof PackageRelease) {
+                $a = $a->version;
+            }
+            if ($b instanceof PackageRelease) {
+                $b = $b->version;
+            }
 
-        if (empty($versions)) {
-            return null;
-        }
-
-        // Sort them oldest-to-newest
-        usort($versions, function($a, $b) {
             if (Comparator::equalTo($a, $b)) {
                 return 0;
             }
             return Comparator::lessThan($a, $b) ? -1 : 1;
         });
-
-        // Return the last one
-        return array_pop($versions);
     }
 
     /**
-     * @param string $name      The package name
-     * @param string $stability The minimum required stability
+     * @param string $name    The dependency package name
+     * @param string $version The dependency package version
      *
-     * @return PackageRelease|null The latest release, or null if none can be found
+     * @return bool Whether any managed packages require this dependency/version
      */
-    public function getLatestRelease(string $name, string $stability = 'stable')
-    {
-        $version = $this->getLatestVersion($name, $stability);
-        return $this->getRelease($name, $version);
-    }
-
-    /**
-     * Returns the available releases between two versions
-     *
-     * @param string $name
-     * @param string $version
-     *
-     * @return bool
-     */
-
     public function isDependencyVersionRequired(string $name, string $version): bool
     {
         $constraints = (new Query())
@@ -316,6 +346,56 @@ class PackageManager extends Component
         return (new Query())
             ->select(['id', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage'])
             ->from(['craftcom_packages']);
+    }
+
+    /**
+     * @param string $name
+     * @param string|string[] $version
+     *
+     * @return Query
+     */
+    private function _createReleaseQuery(string $name, $version): Query
+    {
+        $vp = new VersionParser();
+
+        if (is_array($version)) {
+            foreach ($version as $k => $v) {
+                $version[$k] = $vp->normalize($v);
+            }
+        } else {
+            $version = $vp->normalize($version);
+        }
+
+        return (new Query())
+            ->select([
+                'pv.id',
+                'pv.packageId',
+                'pv.sha',
+                'pv.description',
+                'pv.version',
+                'pv.type',
+                'pv.keywords',
+                'pv.homepage',
+                'pv.time',
+                'pv.license',
+                'pv.authors',
+                'pv.support',
+                'pv.conflict',
+                'pv.replace',
+                'pv.provide',
+                'pv.suggest',
+                'pv.autoload',
+                'pv.includePaths',
+                'pv.targetDir',
+                'pv.extra',
+                'pv.binaries',
+                'pv.source',
+                'pv.dist',
+                'pv.changelog',
+            ])
+            ->from(['craftcom_packageversions pv'])
+            ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
+            ->where(['p.name' => $name, 'pv.normalizedVersion' => $version]);
     }
 
     /**

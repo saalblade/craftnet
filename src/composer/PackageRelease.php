@@ -8,6 +8,26 @@ use craft\helpers\Json;
 
 class PackageRelease extends Model
 {
+    /**
+     * @var array
+     */
+    private static $_releaseJsonColumns = [
+        'keywords',
+        'license',
+        'authors',
+        'support',
+        'conflict',
+        'replace',
+        'provide',
+        'suggest',
+        'autoload',
+        'includePaths',
+        'extra',
+        'binaries',
+        'source',
+        'dist',
+    ];
+
     public $id;
     public $packageId;
     public $sha;
@@ -33,6 +53,17 @@ class PackageRelease extends Model
     public $source;
     public $dist;
     public $changelog;
+
+    public function __construct(array $config = [])
+    {
+        foreach (self::$_releaseJsonColumns as $column) {
+            if (isset($config[$column]) && is_string($config[$column])) {
+                $config[$column] = Json::decode($config[$column]);
+            }
+        }
+
+        parent::__construct($config);
+    }
 
     public function init()
     {

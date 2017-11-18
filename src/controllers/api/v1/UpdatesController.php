@@ -45,17 +45,9 @@ class UpdatesController extends BaseApiController
      */
     private function _getCmsUpdateInfo(\stdClass $body): array
     {
-        $releases = null;
-        $stability = VersionParser::parseStability($body->cms->version);
-        $latest = Module::getInstance()->getPackageManager()->getLatestRelease('craftcms/cms', $stability);
-
-        if ($latest) {
-            $releases = $this->_getReleases($latest, $body->cms->version);
-        }
-
         return [
             'status' => 'eligible',
-            'releases' => $releases ?? [],
+            'releases' => $this->_releases('craftcms/cms', $body->cms->version),
             //'renewalPrice' => '59',
             //'renewalCurrency' => 'USD',
             //'renewalUrl' => 'dashboard',
@@ -84,17 +76,15 @@ class UpdatesController extends BaseApiController
                 ->all();
 
             foreach ($body->plugins as $handle => $pluginInfo) {
-                $releases = null;
-                if (isset($plugins[$handle])) {
-                    $stability = VersionParser::parseStability($pluginInfo->version);
-                    $latest = $packageManager->getLatestRelease($plugins[$handle]->packageName, $stability);
-                    if ($latest) {
-                        $releases = $this->_getReleases($latest, $pluginInfo->version);
-                    }
+                if ($plugin = $plugins[$handle] ?? null) {
+                    $releases = $this->_releases($plugin->packageName, $pluginInfo->version);
+                } else {
+                    // We don't have a record of this plugin
+                    $releases = [];
                 }
                 $updateInfo[$handle] = [
                     'status' => 'eligible',
-                    'releases' => $releases ?? [],
+                    'releases' => $releases,
                 ];
             }
         }
@@ -103,69 +93,81 @@ class UpdatesController extends BaseApiController
     }
 
     /**
-     * Returns release info based on a given changelog URL.
+     * Transforms releases for inclusion in [[actionIndex()]] response JSON.
      *
-     * @param PackageRelease $release The package release model
-     * @param string         $from    The version that is already installed
+     * @param string $name        The package name
+     * @param string $fromVersion The version that is already installed
      *
      * @return array
      */
-    private function _getReleases(PackageRelease $release, string $from): array
+    private function _releases(string $name, string $fromVersion): array
     {
-        // Make sure they're not already at the target version
-        if (Comparator::equalTo($from, $release->version)) {
+        $packageManager = Module::getInstance()->getPackageManager();
+        $minStability = VersionParser::parseStability($fromVersion);
+        $versions = $packageManager->getVersionsAfter($name, $fromVersion, $minStability);
+
+        // Are they already at the latest?
+        if (empty($versions)) {
             return [];
         }
 
-        $releases = [];
-        $foundTarget = false;
+        // Sort descending
+        $versions = array_reverse($versions);
 
-        if ($release->changelog) {
+        // Prep the release info
+        $releaseInfo = [];
+        $vp = new VersionParser();
+        foreach ($versions as $version) {
+            $normalizedVersion = $vp->normalize($version);
+            $releaseInfo[$normalizedVersion] = (object)[
+                'version' => $version,
+            ];
+        }
+
+        // Get the latest release's changelog
+        $toVersion = reset($versions);
+        $changelog = $packageManager->getRelease($name, $toVersion)->changelog ?? null;
+
+        if ($changelog) {
             // Move it to a temp file & parse it
             $file = tmpfile();
-            fwrite($file, $release->changelog);
+            fwrite($file, $changelog);
             fseek($file, 0);
 
-            $currentRelease = null;
+            $currentReleaseInfo = null;
             $currentNotes = '';
 
             while (($line = fgets($file)) !== false) {
                 // Is this an H1 or H2?
                 if (strncmp($line, '# ', 2) === 0 || strncmp($line, '## ', 3) === 0) {
                     // If we're in the middle of getting a release's notes, finish it off
-                    if ($currentRelease !== null) {
-                        $currentRelease->notes = $this->_parseReleaseNotes($currentNotes);
-                        $currentRelease = null;
+                    if ($currentReleaseInfo !== null) {
+                        $currentReleaseInfo->notes = $this->_parseReleaseNotes($currentNotes);
+                        $currentReleaseInfo = null;
                     }
 
                     // Is it an H2 version heading?
                     if (preg_match('/^## (?:.* )?\[?v?(\d+\.\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z-\.]+)?)\]?(?:\(.*?\)|\[.*?\])? - (\d{4}[-\.]\d\d?[-\.]\d\d?)( \[critical\])?/i', $line, $match)) {
-                        // Is it > the target version? (e.g. an unreleased version)
-                        if (Comparator::greaterThan($match[1], $release->version)) {
+                        // Make sure this is a version we care about
+                        $normalizedVersion = $vp->normalize($match[1]);
+                        if (!isset($releaseInfo[$normalizedVersion])) {
+                            // Is it <= the currently-installed version?
+                            if (Comparator::lessThanOrEqualTo($normalizedVersion, $fromVersion)) {
+                                break;
+                            }
                             continue;
                         }
 
-                        // Is it <= the currently-installed version?
-                        if (Comparator::lessThanOrEqualTo($match[1], $from)) {
-                            break;
-                        }
-
-                        // Is this the target version?
-                        if (!$foundTarget && Comparator::equalTo($match[1], $release->version)) {
-                            $foundTarget = true;
-                        }
-
-                        // Prep the new release
+                        // Fill in the date/critical bits
+                        $currentReleaseInfo = $releaseInfo[$normalizedVersion];
                         $date = DateTimeHelper::toDateTime(str_replace('.', '-', $match[2]), true);
-                        $currentRelease = $releases[] = (object)[
-                            'version' => $match[1],
-                            'date' => $date ? $date->format(\DateTime::ATOM) : null,
-                            'critical' => !empty($match[3]),
-                        ];
+                        $currentReleaseInfo->date = $date ? $date->format(\DateTime::ATOM) : null;
+                        $currentReleaseInfo->critical = !empty($match[3]);
 
+                        // Start the release notes
                         $currentNotes = '';
                     }
-                } else if ($currentRelease !== null) {
+                } else if ($currentReleaseInfo !== null) {
                     // Append the line to the current release notes
                     $currentNotes .= $line;
                 }
@@ -175,22 +177,13 @@ class UpdatesController extends BaseApiController
             fclose($file);
 
             // If we're in the middle of getting a release's notes, finish it off
-            if ($currentRelease !== null) {
+            if ($currentReleaseInfo !== null) {
                 $this->_parseReleaseNotes($currentNotes);
             }
         }
 
-        // If we never found the target version, add it to the beginning
-        if (!$foundTarget) {
-            array_unshift($releases, [
-                'version' => $release->version,
-                'date' => null,
-                'critical' => false,
-                'notes' => '',
-            ]);
-        }
-
-        return ArrayHelper::toArray($releases);
+        // Drop the version keys and convert objects to arrays
+        return ArrayHelper::toArray(array_values($releaseInfo));
     }
 
     /**
