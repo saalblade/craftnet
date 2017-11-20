@@ -35,7 +35,7 @@ abstract class BaseApiController extends Controller
      * @return stdClass
      * @throws BadRequestHttpException if the data doesn't validate
      */
-    protected function getRequestBody(string $schema = null): stdClass
+    protected function getPayload(string $schema = null): stdClass
     {
         $body = Json::decode(Craft::$app->getRequest()->getRawBody(), false);
 
