@@ -2,6 +2,7 @@
 /vendor
 /.idea
 /.env
+/node_modules/
 
 
 # Elastic Beanstalk Files

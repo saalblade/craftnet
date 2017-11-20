@@ -65,7 +65,7 @@
                             <h5>Account</h5>
                             <ul class="nav nav-pills flex-column">
                                 <li v-if="userIsInGroup('developers')" class="nav-item"><router-link class="nav-link" to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
-                                <li class="nav-item"><router-link class="nav-link" to="/account/apps"><i class="fa fa-link"></i> Connected Apps</router-link></li>
+                                <li v-if="userIsInGroup('developers')" class="nav-item"><router-link class="nav-link" to="/account/profile"><i class="fa fa-link"></i> Profile</router-link></li>
                                 <li class="nav-item"><router-link class="nav-link" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
                             </ul>
                         </template>

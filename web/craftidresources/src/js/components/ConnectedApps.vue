@@ -9,7 +9,7 @@
 
 				<div v-for="appType, index in appTypes">
 					<div class="d-flex align-items-start">
-						<img class="d-flex mr-3" :src="'/vue/dist/images/' + appType.handle + '.svg'" height="48" />
+						<img class="d-flex mr-3" :src="'/craftidresources/dist/images/' + appType.handle + '.svg'" height="48" />
 						<div class="media-body">
 							<template v-if="apps[appType.handle]">
 								<h5>{{ accountName(appType.handle) }}</h5>

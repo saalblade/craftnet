@@ -38,7 +38,7 @@
             </div>
 
             <div class="mt-3">
-                <img src="/vue/dist/images/powered_by_stripe.svg" height="18" />
+                <img src="/craftidresources/dist/images/powered_by_stripe.svg" height="18" />
             </div>
         </div>
     </div>
