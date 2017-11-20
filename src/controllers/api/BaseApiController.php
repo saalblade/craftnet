@@ -61,7 +61,7 @@ abstract class BaseApiController extends Controller
      *
      * @return array
      */
-    protected function pluginTransformer(Plugin $plugin, $snippetOnly = false): array
+    protected function transformPlugin(Plugin $plugin, $snippetOnly = false): array
     {
         // Developer name
         $developerName = $plugin->getDeveloper()->developerName;
@@ -82,7 +82,7 @@ abstract class BaseApiController extends Controller
         $screenshotUrls = [];
         $screenshotIds = [];
 
-        foreach ($plugin->screenshots as $screenshot) {
+        foreach ($plugin->getScreenshots() as $screenshot) {
             $screenshotUrls[] = $screenshot->getUrl();
             $screenshotIds[] = $screenshot->getId();
         }
@@ -90,7 +90,7 @@ abstract class BaseApiController extends Controller
         // Categories
         $categoryIds = [];
 
-        foreach ($plugin->categories as $category) {
+        foreach ($plugin->getCategories() as $category) {
             $categoryIds[] = $category->id;
         }
 
@@ -109,10 +109,10 @@ abstract class BaseApiController extends Controller
         ];
 
         if (!$snippetOnly) {
-            $data['version'] = 'Y.Y.Y';
-            $data['lastUpdate'] = '—';
+            $data['version'] = $plugin->latestVersion;
+            $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['activeInstalls'] = 'YYY,YYY';
-            $data['compatibility'] = 'Craft 3.Y.Y';
+            $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
             $data['packageName'] = $plugin->packageName;

@@ -4,7 +4,13 @@ namespace craftcom\plugins;
 
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
+use yii\db\Connection;
 
+/**
+ * @method Plugin[]|array all($db = null)
+ * @method Plugin|array|null one($db = null)
+ * @method Plugin|array|null nth(int $n, Connection $db = null)
+ */
 class PluginQuery extends ElementQuery
 {
     /**
