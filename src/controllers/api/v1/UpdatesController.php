@@ -7,9 +7,7 @@ use Composer\Semver\VersionParser;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
-use craftcom\composer\PackageRelease;
 use craftcom\controllers\api\BaseApiController;
-use craftcom\Module;
 use craftcom\plugins\Plugin;
 use yii\helpers\Markdown;
 use yii\web\Response;
@@ -67,7 +65,7 @@ class UpdatesController extends BaseApiController
         $handles = array_keys(get_object_vars($payload->plugins));
 
         if (!empty($handles)) {
-            $packageManager = Module::getInstance()->getPackageManager();
+            $packageManager = $this->module->getPackageManager();
 
             /** @var Plugin[] $plugins */
             $plugins = Plugin::find()
@@ -102,7 +100,7 @@ class UpdatesController extends BaseApiController
      */
     private function _releases(string $name, string $fromVersion): array
     {
-        $packageManager = Module::getInstance()->getPackageManager();
+        $packageManager = $this->module->getPackageManager();
         $minStability = VersionParser::parseStability($fromVersion);
         $versions = $packageManager->getVersionsAfter($name, $fromVersion, $minStability);
 

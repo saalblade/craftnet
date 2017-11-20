@@ -5,6 +5,7 @@ namespace craftcom\controllers\api;
 use Craft;
 use craft\helpers\Json;
 use craft\web\Controller;
+use craftcom\Module;
 use craftcom\plugins\Plugin;
 use JsonSchema\Validator;
 use stdClass;
@@ -14,6 +15,8 @@ use yii\web\BadRequestHttpException;
  * Class BaseController
  *
  * @package craftcom\controllers\api
+ *
+ * @property Module $module
  */
 abstract class BaseApiController extends Controller
 {
