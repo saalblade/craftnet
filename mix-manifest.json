@@ -1,4 +1,5 @@
 {
-    "/web/vue/dist/js/main.js": "/web/vue/dist/js/main.js",
-    "/web/vue/dist/css/main.css": "/web/vue/dist/css/main.css"
+    "/web/craftidresources/dist/js/main.js": "/web/craftidresources/dist/js/main.js",
+    "/web/craftidresources/dist/css/main.css": "/web/craftidresources/dist/css/main.css",
+    "/web/craftidresources/dist/css/main.css.map": "/web/craftidresources/dist/css/main.css.map"
 }
