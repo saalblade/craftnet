@@ -22,11 +22,6 @@ class JsonDumper extends Component
     public $composerWebroot;
 
     /**
-     * @var string The root-relative base URL for the `providers-url` property in packages.json
-     */
-    public $providersBaseUrl;
-
-    /**
      * Dumps out packages.json, and all the provider JSON files.
      *
      * @param bool $queue Whether to queue the dump
@@ -176,7 +171,7 @@ class JsonDumper extends Component
             'provider-includes' => [
                 $indexPath => ['sha256' => $indexHash],
             ],
-            'providers-url' => "{$this->providersBaseUrl}p/%package%/%hash%.json",
+            'providers-url' => "/p/%package%/%hash%.json",
         ];
 
         FileHelper::writeToFile("{$this->composerWebroot}/packages.json", Json::encode($rootData));
