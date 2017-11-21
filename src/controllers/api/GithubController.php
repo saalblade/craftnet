@@ -4,6 +4,7 @@ namespace craftcom\controllers\api;
 
 use Craft;
 use yii\web\NotFoundHttpException;
+use yii\web\BadRequestHttpException;
 
 /**
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
@@ -50,7 +51,7 @@ class GithubController extends BaseApiController
 
         $payloadHash = hash_hmac($algo, Craft::$app->getRequest()->getRawBody(), $webhookToken);
 
-        if (!hash_equals($webhookToken, $token)) {
+        if (!hash_equals($payloadHash, $token)) {
             throw new BadRequestHttpException('Invalid request body.');
         }
     }
