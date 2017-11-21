@@ -112,7 +112,7 @@ abstract class BaseApiController extends Controller
 
         if (!$snippetOnly) {
             $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
-            $data['activeInstalls'] = 'YYY,YYY';
+            $data['activeInstalls'] = 0;
             $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
