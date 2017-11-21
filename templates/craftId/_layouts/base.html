@@ -1,0 +1,21 @@
+{% if not currentUser and craft.app.request.segment(1) != 'login' and craft.app.request.segment(1) != 'forgotpassword' %}
+	{% redirect 'login' %}
+{% endif %}
+
+<html>
+<head>
+	<title>Craft ID</title>
+
+	{% do view.registerCssFile("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css") %}
+	{% do view.registerCssFile("//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css") %}
+	{% do view.registerCssFile("/craftidresources/dist/css/main.css") %}
+
+</head>
+<body>
+
+{{ beginBody() }}
+{% block body %}{% endblock %}
+{{ endBody() }}
+
+</body>
+</html>

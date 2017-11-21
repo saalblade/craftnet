@@ -32,7 +32,7 @@ class PluginStoreController extends BaseApiController
     // =========================================================================
 
     /**
-     * Handles /v1/craft-id requests.
+     * Handles /v1/plugin-store requests.
      *
      * @return Response
      */

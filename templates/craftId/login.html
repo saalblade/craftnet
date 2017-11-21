@@ -1,0 +1,52 @@
+{% if constant('CRAFT_ENVIRONMENT') != 'dev' %}
+	{% exit 404 %}
+{% endif %}
+
+{% extends "_layouts/site" %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-6 ml-auto mr-auto mt-5">
+				<div class="card">
+					<div class="card-body">
+						<h1>Craft ID</h1>
+						<p class="lead">Manage your Craft ID.</p>
+
+						{% if errorMessage is defined %}
+							<div class="alert alert-danger" role="alert">
+								{{ errorMessage }}
+							</div>
+						{% endif %}
+
+						<form method="post" accept-charset="UTF-8">
+							{{ csrfInput() }}
+							<input type="hidden" name="action" value="users/login">
+
+							<div class="form-group">
+								<label for="loginName">Username or email</label>
+								<input class="form-control" id="loginName" type="text" name="loginName" value="" />
+							</div>
+
+							<div class="form-group">
+								<label for="password">Password</label>
+								<input class="form-control" id="password" type="password" name="password" />
+							</div>
+
+							<div class="form-check">
+								<label class="form-check-label">
+									<input type="checkbox" class="form-check-input" name="rememberMe" value="1">
+									Remember me
+								</label>
+							</div>
+
+							<input type="submit" class="btn btn-primary btn-block" value="Login">
+						</form>
+
+						<p><a href="{{ url('forgotpassword') }}">Forgot your password?</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

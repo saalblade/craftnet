@@ -49,6 +49,8 @@ return [
         'oauth/revoke' => 'oauth-server/oauth/revoke',
 
         // Catch-all route for Vue when people reload the page.
+        'login'=> ['template' => 'login'],
+        'forgotpassword'=> ['template' => 'forgotpassword'],
         '<url:(.*)>'=> 'craftcom/id/account',
     ],
 ];

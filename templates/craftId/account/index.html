@@ -1,33 +1,27 @@
-{% if not currentUser %}
-	{% redirect 'login' %}
-{% endif %}
+{% extends "_layouts/base" %}
 
-<html>
-<head>
-	<title>Craft ID</title>
+{% block body %}
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-	<link rel="stylesheet" href="/craftidresources/dist/css/main.css" />
-</head>
-<body>
+	{% for type in ['notice', 'error'] %}
+		{% set message = craft.app.session.getFlash(type) %}
+		{# Silent message #}
+	{% endfor %}
 
-{% set config = craft.app.config.getConfigFromFile('craftid') %}
+	{% set config = craft.app.config.getConfigFromFile('craftid') %}
 
-<div id="app">
-	<app :loading="loading" :notification="notification"></app>
-</div>
+	<div id="app">
+		<app :loading="loading" :notification="notification"></app>
+	</div>
 
-<script type="text/javascript">
-    window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
-    window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
-    window.craftActionUrl = "{{ actionUrl() }}";
-    window.craftIdUrl = "{{ config.craftIdUrl }}";
-    window.currentUserId = "{{ currentUser.id }}";
-    window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken.attributes|json_encode|raw : 'false' }};
-</script>
-<script src="https://js.stripe.com/v3/"></script>
-<script src="/craftidresources/dist/js/main.js"></script>
+	<script type="text/javascript">
+        window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
+        window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
+        window.craftActionUrl = "{{ actionUrl() }}";
+        window.craftIdUrl = "{{ config.craftIdUrl }}";
+        window.currentUserId = "{{ currentUser.id }}";
+        window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken.attributes|json_encode|raw : 'false' }};
+	</script>
 
-</body>
-</html>
+	{% do view.registerJsFile("//js.stripe.com/v3/") %}
+	{% do view.registerJsFile("/craftidresources/dist/js/main.js") %}
+{% endblock %}
