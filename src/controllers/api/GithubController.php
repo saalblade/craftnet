@@ -34,10 +34,10 @@ class GithubController extends BaseApiController
     }
 
     /**
-     * @param $payLoad
+     * @param $payload
      * @param $webhookToken
      */
-    private function _validateSecret($payLoad, $webhookToken)
+    private function _validateSecret($payload, $webhookToken)
     {
         $allHeaders = Craft::$app->getRequest()->getHeaders();
 
