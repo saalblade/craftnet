@@ -2,6 +2,7 @@
 
 namespace craftcom\controllers\api;
 
+use Craft;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -16,6 +17,7 @@ class GithubController extends BaseApiController
     public function actionPush()
     {
         $payload = $this->getPayload('github-push-request');
+
         $url = $payload->repository->url;
         $packageManager = $this->module->getPackageManager();
         $name = $packageManager->getPackageNameByRepoUrl($url);
@@ -24,7 +26,32 @@ class GithubController extends BaseApiController
             throw new NotFoundHttpException('No package exists for the repository '.$url);
         }
 
+        $package = $packageManager->getPackage($name);
+        $this->_validateSecret($payload, $package->webhookToken);
+
         $packageManager->updatePackage($name, false, true);
         $this->module->getJsonDumper()->dump(true);
+    }
+
+    /**
+     * @param $payLoad
+     * @param $webhookToken
+     */
+    private function _validateSecret($payLoad, $webhookToken)
+    {
+        $allHeaders = Craft::$app->getResponse()->getHeaders();
+
+        if (!isset($allHeaders['X-Hub-Signature'])) {
+            throw new BadRequestHttpException('Invalid request body.');
+        }
+
+        $token = $allHeaders['X-Hub-Signature'];
+        list($algo, $hash) = explode('=', $token, 2);
+
+        $payloadHash = hash_hmac($algo, $payload, $webhookToken);
+
+        if (!hash_equals($webhookToken, $token)) {
+            throw new BadRequestHttpException('Invalid request body.');
+        }
     }
 }
