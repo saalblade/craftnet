@@ -116,4 +116,13 @@ class PackagesController extends Controller
     {
         $this->module->getPackageManager()->updateDeps($this->force, $this->queue);
     }
+
+    public function actionRegisterWebhooks($name)
+    {
+        $packageManager = $this->module->getPackageManager();
+        $package = $packageManager->getPackage($name);
+        $package->getVcs()->addWebhook();
+
+        Console::output("Webhook added to package {$name}.");
+    }
 }
