@@ -47,7 +47,7 @@ class GithubController extends BaseApiController
         $token = $allHeaders['X-Hub-Signature'];
         list($algo, $hash) = explode('=', $token, 2);
 
-        $payloadHash = hash_hmac($algo, Craft::$app->getRequest()->getRawBody(), $webhookToken);
+        $payloadHash = hash_hmac($algo, file_get_contents('php://input'), $webhookToken);
 
         if (!hash_equals($webhookToken, $token)) {
             throw new BadRequestHttpException('Invalid request body.');
