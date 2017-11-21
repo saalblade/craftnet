@@ -27,17 +27,16 @@ class GithubController extends BaseApiController
         }
 
         $package = $packageManager->getPackage($name);
-        $this->_validateSecret($payload, $package->webhookToken);
+        $this->_validateSecret($package->webhookToken);
 
         $packageManager->updatePackage($name, false, true);
         $this->module->getJsonDumper()->dump(true);
     }
 
     /**
-     * @param $payload
      * @param $webhookToken
      */
-    private function _validateSecret($payload, $webhookToken)
+    private function _validateSecret($webhookToken)
     {
         $allHeaders = Craft::$app->getRequest()->getHeaders();
 
@@ -48,7 +47,7 @@ class GithubController extends BaseApiController
         $token = $allHeaders['X-Hub-Signature'];
         list($algo, $hash) = explode('=', $token, 2);
 
-        $payloadHash = hash_hmac($algo, $payload, $webhookToken);
+        $payloadHash = hash_hmac($algo, Craft::$app->getRequest()->getRawBody(), $webhookToken);
 
         if (!hash_equals($webhookToken, $token)) {
             throw new BadRequestHttpException('Invalid request body.');
