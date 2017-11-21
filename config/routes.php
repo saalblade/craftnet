@@ -26,6 +26,7 @@ return [
         'POST v1/developer/<userId:\d+>' => 'craftcom/api/v1/developer',
         'POST v1/plugin/<pluginId:\d+>' => 'craftcom/api/v1/plugin',
         'POST v1/checkout' => 'craftcom/api/v1/checkout',
+        'POST github/push' => 'craftcom/api/github/push',
     ],
     'composer' => [
     ],

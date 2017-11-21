@@ -5,6 +5,7 @@ namespace craftcom\controllers\api;
 use Craft;
 use craft\helpers\Json;
 use craft\web\Controller;
+use craftcom\Module;
 use craftcom\plugins\Plugin;
 use JsonSchema\Validator;
 use stdClass;
@@ -14,6 +15,8 @@ use yii\web\BadRequestHttpException;
  * Class BaseController
  *
  * @package craftcom\controllers\api
+ *
+ * @property Module $module
  */
 abstract class BaseApiController extends Controller
 {
@@ -35,7 +38,7 @@ abstract class BaseApiController extends Controller
      * @return stdClass
      * @throws BadRequestHttpException if the data doesn't validate
      */
-    protected function getRequestBody(string $schema = null): stdClass
+    protected function getPayload(string $schema = null): stdClass
     {
         $body = Json::decode(Craft::$app->getRequest()->getRawBody(), false);
 
@@ -58,7 +61,7 @@ abstract class BaseApiController extends Controller
      *
      * @return array
      */
-    protected function pluginTransformer(Plugin $plugin, $snippetOnly = false): array
+    protected function transformPlugin(Plugin $plugin, $snippetOnly = false): array
     {
         // Developer name
         $developerName = $plugin->getDeveloper()->developerName;
@@ -79,7 +82,7 @@ abstract class BaseApiController extends Controller
         $screenshotUrls = [];
         $screenshotIds = [];
 
-        foreach ($plugin->screenshots as $screenshot) {
+        foreach ($plugin->getScreenshots() as $screenshot) {
             $screenshotUrls[] = $screenshot->getUrl();
             $screenshotIds[] = $screenshot->getId();
         }
@@ -87,7 +90,7 @@ abstract class BaseApiController extends Controller
         // Categories
         $categoryIds = [];
 
-        foreach ($plugin->categories as $category) {
+        foreach ($plugin->getCategories() as $category) {
             $categoryIds[] = $category->id;
         }
 
@@ -106,10 +109,10 @@ abstract class BaseApiController extends Controller
         ];
 
         if (!$snippetOnly) {
-            $data['version'] = 'Y.Y.Y';
-            $data['lastUpdate'] = '—';
+            $data['version'] = $plugin->latestVersion;
+            $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['activeInstalls'] = 'YYY,YYY';
-            $data['compatibility'] = 'Craft 3.Y.Y';
+            $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
             $data['packageName'] = $plugin->packageName;

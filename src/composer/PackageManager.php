@@ -376,6 +376,19 @@ class PackageManager extends Component
     }
 
     /**
+     * @param string $url
+     *
+     * @return string|null
+     */
+    public function getPackageNameByRepoUrl(string $url)
+    {
+        return $this->_createPackageQuery()
+            ->select(['name'])
+            ->where(['repository' => $url])
+            ->scalar();
+    }
+
+    /**
      * @param string          $name
      * @param string|string[] $version
      *

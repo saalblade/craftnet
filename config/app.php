@@ -20,7 +20,6 @@ return [
                     'jsonDumper' => [
                         'class' => \craftcom\composer\JsonDumper::class,
                         'composerWebroot' => getenv('COMPOSER_WEBROOT'),
-                        'providersBaseUrl' => getenv('COMPOSER_REPO_URL'),
                     ],
                     'oauth' => [
                         'class' => Oauth::class,

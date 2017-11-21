@@ -7,9 +7,7 @@ use Composer\Semver\VersionParser;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
-use craftcom\composer\PackageRelease;
 use craftcom\controllers\api\BaseApiController;
-use craftcom\Module;
 use craftcom\plugins\Plugin;
 use yii\helpers\Markdown;
 use yii\web\Response;
@@ -28,26 +26,26 @@ class UpdatesController extends BaseApiController
      */
     public function actionIndex(): Response
     {
-        $body = $this->getRequestBody('updates-request');
+        $payload = $this->getPayload('updates-request');
 
         return $this->asJson([
-            'cms' => $this->_getCmsUpdateInfo($body),
-            'plugins' => $this->_getPluginUpdateInfo($body)
+            'cms' => $this->_getCmsUpdateInfo($payload),
+            'plugins' => $this->_getPluginUpdateInfo($payload)
         ]);
     }
 
     /**
      * Returns CMS update info.
      *
-     * @param \stdClass $body
+     * @param \stdClass $payload
      *
      * @return array
      */
-    private function _getCmsUpdateInfo(\stdClass $body): array
+    private function _getCmsUpdateInfo(\stdClass $payload): array
     {
         return [
             'status' => 'eligible',
-            'releases' => $this->_releases('craftcms/cms', $body->cms->version),
+            'releases' => $this->_releases('craftcms/cms', $payload->cms->version),
             //'renewalPrice' => '59',
             //'renewalCurrency' => 'USD',
             //'renewalUrl' => 'dashboard',
@@ -57,17 +55,17 @@ class UpdatesController extends BaseApiController
     /**
      * Returns plugin update info.
      *
-     * @param \stdClass $body
+     * @param \stdClass $payload
      *
      * @return array
      */
-    private function _getPluginUpdateInfo(\stdClass $body): array
+    private function _getPluginUpdateInfo(\stdClass $payload): array
     {
         $updateInfo = [];
-        $handles = array_keys(get_object_vars($body->plugins));
+        $handles = array_keys(get_object_vars($payload->plugins));
 
         if (!empty($handles)) {
-            $packageManager = Module::getInstance()->getPackageManager();
+            $packageManager = $this->module->getPackageManager();
 
             /** @var Plugin[] $plugins */
             $plugins = Plugin::find()
@@ -75,7 +73,7 @@ class UpdatesController extends BaseApiController
                 ->indexBy('handle')
                 ->all();
 
-            foreach ($body->plugins as $handle => $pluginInfo) {
+            foreach ($payload->plugins as $handle => $pluginInfo) {
                 if ($plugin = $plugins[$handle] ?? null) {
                     $releases = $this->_releases($plugin->packageName, $pluginInfo->version);
                 } else {
@@ -102,7 +100,7 @@ class UpdatesController extends BaseApiController
      */
     private function _releases(string $name, string $fromVersion): array
     {
-        $packageManager = Module::getInstance()->getPackageManager();
+        $packageManager = $this->module->getPackageManager();
         $minStability = VersionParser::parseStability($fromVersion);
         $versions = $packageManager->getVersionsAfter($name, $fromVersion, $minStability);
 
