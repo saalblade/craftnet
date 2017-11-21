@@ -57,11 +57,11 @@ abstract class BaseApiController extends Controller
 
     /**
      * @param Plugin $plugin
-     * @param bool   $snippetOnly
+     * @param bool   $fullDetails
      *
      * @return array
      */
-    protected function transformPlugin(Plugin $plugin, $snippetOnly = false): array
+    protected function transformPlugin(Plugin $plugin, $fullDetails = true): array
     {
         // Developer name
         $developerName = $plugin->getDeveloper()->developerName;
@@ -110,7 +110,7 @@ abstract class BaseApiController extends Controller
             'packageName' => $plugin->packageName,
         ];
 
-        if (!$snippetOnly) {
+        if ($fullDetails) {
             $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['activeInstalls'] = 0;
             $data['compatibility'] = 'Craft 3';
