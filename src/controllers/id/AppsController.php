@@ -5,6 +5,7 @@ namespace craftcom\controllers\id;
 use Craft;
 use craft\records\OAuthToken;
 use craftcom\Module;
+use craftcom\plugins\Plugin;
 use Exception;
 use yii\web\Response;
 use craft\helpers\Db;
@@ -114,6 +115,22 @@ class AppsController extends BaseController
 
         // Apps
         $apps = $oauthService->getApps();
+
+        // This is mainly for launch. See if any plugins we've manually added need
+        // a webhook installed.
+        $plugins = Plugin::find()
+            ->where(['developerId'], $currentUser->id)
+            ->all();
+
+        if ($plugins) {
+            foreach ($plugins as $plugin) {
+                $package = $plugin->getPackage();
+
+                if (!$package->webhookToken) {
+                    $package->getVcs()->addWebhook();
+                }
+            }
+        }
 
         return $this->renderTemplate('apps/callback', [
             'apps' => $apps
