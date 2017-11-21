@@ -106,16 +106,16 @@ abstract class BaseApiController extends Controller
             'developerId' => $plugin->getDeveloper()->id,
             'developerName' => $developerName,
             'categoryIds' => $categoryIds,
+            'version' => $plugin->latestVersion,
+            'packageName' => $plugin->packageName,
         ];
 
         if (!$snippetOnly) {
-            $data['version'] = $plugin->latestVersion;
             $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['activeInstalls'] = 'YYY,YYY';
             $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
-            $data['packageName'] = $plugin->packageName;
             $data['longDescription'] = $plugin->longDescription;
             $data['documentationUrl'] = $plugin->documentationUrl;
             $data['changelogPath'] = $plugin->changelogPath;
