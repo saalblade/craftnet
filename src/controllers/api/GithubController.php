@@ -39,7 +39,7 @@ class GithubController extends BaseApiController
      */
     private function _validateSecret($payLoad, $webhookToken)
     {
-        $allHeaders = Craft::$app->getResponse()->getHeaders();
+        $allHeaders = Craft::$app->getRequest()->getHeaders();
 
         if (!isset($allHeaders['X-Hub-Signature'])) {
             throw new BadRequestHttpException('Invalid request body.');
