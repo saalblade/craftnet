@@ -21,6 +21,8 @@ class WebController extends Controller
      */
     public $queue;
 
+    public $enableCsrfValidation = false;
+
     /**
      * Handles an incoming SQS message.
      */
