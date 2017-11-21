@@ -10,6 +10,9 @@ use yii\web\NotFoundHttpException;
  */
 class GithubController extends BaseApiController
 {
+    /**
+     * @throws NotFoundHttpException
+     */
     public function actionPush()
     {
         $payload = $this->getPayload('github-push-request');

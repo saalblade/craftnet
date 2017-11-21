@@ -61,6 +61,11 @@ class Package extends Model
     public $replacementPackage;
 
     /**
+     * @var
+     */
+    public $webhookToken;
+
+    /**
      * @var BaseVcs|null
      */
     private $_vcs;
