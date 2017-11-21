@@ -45,6 +45,7 @@ class GithubController extends BaseApiController
         }
 
         $token = $allHeaders['X-Hub-Signature'];
+        Craft::error('token: '.$token);
         list($algo, $hash) = explode('=', $token, 2);
 
         $payloadHash = hash_hmac($algo, file_get_contents('php://input'), $webhookToken);
