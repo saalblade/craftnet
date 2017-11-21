@@ -19,6 +19,7 @@
  */
 
 return [
+    'queue/handle-message' => 'queue/handle-message',
     'api' => [
         'POST v1/updates' => 'craftcom/api/v1/updates',
         'POST v1/plugin-store' => 'craftcom/api/v1/plugin-store',
