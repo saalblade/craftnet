@@ -1,5 +1,5 @@
 version: 1
 cron:
  — name: "schedule"
-   url: "/schedule"
-   schedule: "0 */12 * * *"
+ url: "/schedule"
+ schedule: "0 */12 * * *"
