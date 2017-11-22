@@ -136,7 +136,7 @@
                         <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />
                         <text-field id="renewalPrice" label="Renewal Price" v-model="pluginDraft.renewalPrice" :errors="errors.renewalPrice" />
 
-                        <p class="text-secondary"><em>All plugins are free until Craft GA is released.</em></p>
+                        <p class="text-secondary"><em>All plugins are free until Craft 3 GA is released.</em></p>
                     </div>
                 </div>
 
