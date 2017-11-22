@@ -5,12 +5,12 @@
     "repository": {
       "type": "object",
       "properties": {
-        "url": {
+        "html_url": {
           "type": "string",
           "format": "url"
         }
       },
-      "required": ["url"]
+      "required": ["html_url"]
     }
   },
   "required": ["repository"]
