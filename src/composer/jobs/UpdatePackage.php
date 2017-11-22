@@ -15,11 +15,16 @@ class UpdatePackage extends BaseJob
     {
         $packageManager = Module::getInstance()->getPackageManager();
 
+        Craft::error('Executing job for '.$this->name.'.', __METHOD__);
+
         if ($this->skipIfRecentlyUpdated && $packageManager->packageUpdatedWithin($this->name, 60 * 5)) {
+            Craft::error('Skipping job for '.$this->name.'. Too soon, man... too soon.', __METHOD__);
             return;
         }
 
         $packageManager->updatePackage($this->name, $this->force);
+
+        Craft::error('Executed job for '.$this->name.'.', __METHOD__);
     }
 
     protected function defaultDescription()
