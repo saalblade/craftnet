@@ -5,6 +5,7 @@ namespace craftcom\plugins;
 use Craft;
 use craft\base\Element;
 use craft\db\Query;
+use craft\elements\actions\SetStatus;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\db\ElementQueryInterface;
@@ -22,6 +23,14 @@ use yii\base\InvalidConfigException;
  */
 class Plugin extends Element
 {
+    // Constants
+    // =========================================================================
+
+    const STATUS_PENDING = 'pending';
+
+    // Static
+    // =========================================================================
+
     /**
      * @return string
      */
@@ -36,23 +45,23 @@ class Plugin extends Element
     }
 
     /**
+     * @inheritdoc
+     */
+    public static function statuses(): array
+    {
+        return [
+            self::STATUS_ENABLED => Craft::t('app', 'Enabled'),
+            self::STATUS_PENDING => Craft::t('app', 'Pending Approval'),
+            self::STATUS_DISABLED => Craft::t('app', 'Disabled')
+        ];
+    }
+
+    /**
      * @return PluginQuery
      */
     public static function find(): ElementQueryInterface
     {
         return new PluginQuery(static::class);
-    }
-
-    /**
-     * @param string|null $context
-     *
-     * @return array
-     */
-    public static function sources(string $context = null): array
-    {
-        return [
-            ['key' => '*', 'label' => 'All Plugins']
-        ];
     }
 
     /**
@@ -122,6 +131,67 @@ class Plugin extends Element
                 return parent::eagerLoadingMap($sourceElements, $handle);
         }
     }
+
+    protected static function defineSources(string $context = null): array
+    {
+        return [
+            [
+                'key' => '*',
+                'label' => 'All Plugins',
+                'criteria' => ['status' => null],
+            ],
+        ];
+    }
+
+    protected static function defineActions(string $source = null): array
+    {
+        return [
+            SetStatus::class,
+        ];
+    }
+
+    protected static function defineSearchableAttributes(): array
+    {
+        return [
+            'developerName',
+            'packageName',
+            'repository',
+            'name',
+            'handle',
+        ];
+    }
+
+    protected static function defineTableAttributes(): array
+    {
+        return [
+            'name' => 'Name',
+            'handle' => 'Handle',
+            'packageName' => 'Package Name',
+            'repository' => 'Repository',
+            'price' => 'Price',
+            'renewalPrice' => 'Renewal Price',
+            'license' => 'License',
+            'primaryCategory' => 'Primary Category',
+            'documentationUrl' => 'Documentation URL',
+        ];
+    }
+
+    protected static function defineDefaultTableAttributes(string $source): array
+    {
+        return [
+            'name',
+            'handle',
+            'packageName',
+            'repository',
+            'price',
+            'renewalPrice',
+            'license',
+            'primaryCategory',
+        ];
+    }
+
+    // Properties
+    // =========================================================================
 
     /**
      * @var int The developer’s user ID
@@ -235,6 +305,9 @@ class Plugin extends Element
     {
         return $this->name;
     }
+
+    // Public Methods
+    // =========================================================================
 
     /**
      * @param string $handle
@@ -438,6 +511,10 @@ class Plugin extends Element
 
         $this->packageId = $package->id;
 
+        if ($this->enabled) {
+            $this->pendingApproval = false;
+        }
+
         $pluginData = [
             'id' => $this->id,
             'developerId' => $this->developerId,
@@ -505,50 +582,25 @@ class Plugin extends Element
         return null;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getStatus()
+    {
+        if (!$this->enabled && $this->pendingApproval) {
+            return self::STATUS_PENDING;
+        }
+
+        return parent::getStatus();
+    }
+
     public function getCpEditUrl()
     {
         return "plugins/{$this->id}-{$this->handle}";
     }
 
-    protected static function defineSearchableAttributes(): array
-    {
-        return [
-            'developerName',
-            'packageName',
-            'repository',
-            'name',
-            'handle',
-        ];
-    }
-
-    protected static function defineTableAttributes(): array
-    {
-        return [
-            'name' => 'Name',
-            'handle' => 'Handle',
-            'packageName' => 'Package Name',
-            'repository' => 'Repository',
-            'price' => 'Price',
-            'renewalPrice' => 'Renewal Price',
-            'license' => 'License',
-            'primaryCategory' => 'Primary Category',
-            'documentationUrl' => 'Documentation URL',
-        ];
-    }
-
-    protected static function defineDefaultTableAttributes(string $source): array
-    {
-        return [
-            'name',
-            'handle',
-            'packageName',
-            'repository',
-            'price',
-            'renewalPrice',
-            'license',
-            'primaryCategory',
-        ];
-    }
+    // Protected Methods
+    // =========================================================================
 
     protected function tableAttributeHtml(string $attribute): string
     {

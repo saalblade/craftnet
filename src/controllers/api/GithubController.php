@@ -20,7 +20,7 @@ class GithubController extends BaseApiController
     {
         $payload = $this->getPayload('github-push-request');
 
-        $url = $payload->repository->url;
+        $url = $payload->repository->html_url;
         $packageManager = $this->module->getPackageManager();
         $name = $packageManager->getPackageNameByRepoUrl($url);
 

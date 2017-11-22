@@ -28,15 +28,15 @@ return [
                             Oauth::PROVIDER_GITHUB => [
                                 'class' => 'Github',
                                 'oauthClass' => League\OAuth2\Client\Provider\Github::class,
-                                'clientIdKey' => $_SERVER['GITHUB_APP_CLIENT_ID'] ?? getenv('GITHUB_APP_CLIENT_ID'),
-                                'clientSecretKey' => $_SERVER['GITHUB_APP_CLIENT_SECRET'] ?? getenv('GITHUB_APP_CLIENT_SECRET'),
+                                'clientIdKey' => getenv('GITHUB_APP_CLIENT_ID'),
+                                'clientSecretKey' => getenv('GITHUB_APP_CLIENT_SECRET'),
                                 'scope' => ['user:email', 'write:repo_hook', 'repo'],
                             ],
                             Oauth::PROVIDER_BITBUCKET => [
                                 'class' => 'Bitbucket',
                                 'oauthClass' => Stevenmaguire\OAuth2\Client\Provider\Bitbucket::class,
-                                'clientIdKey' => $_SERVER['BITBUCKET_APP_CLIENT_ID'] ?? getenv('BITBUCKET_APP_CLIENT_ID'),
-                                'clientSecretKey' => $_SERVER['BITBUCKET_APP_CLIENT_SECRET'] ?? getenv('BITBUCKET_APP_CLIENT_SECRET'),
+                                'clientIdKey' => getenv('BITBUCKET_APP_CLIENT_ID'),
+                                'clientSecretKey' => getenv('BITBUCKET_APP_CLIENT_SECRET'),
                                 'scope' => 'account',
                             ],
                         ]

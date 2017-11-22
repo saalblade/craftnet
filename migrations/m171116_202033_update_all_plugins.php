@@ -29,7 +29,6 @@ class m171116_202033_update_all_plugins extends Migration
             $queue->push(new UpdatePackage([
                 'name' => $name,
                 'force' => true,
-                'skipIfRecentlyUpdated' => false,
             ]));
         }
     }

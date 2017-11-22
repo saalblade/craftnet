@@ -183,10 +183,6 @@ class PluginsController extends Controller
 
         if ($request->getIsCpRequest()) {
             $plugin->enabled = (bool)$request->getBodyParam('enabled');
-
-            if($plugin->enabled) {
-                $plugin->pendingApproval = false;
-            }
         }
 
         if (!$plugin->developerId) {

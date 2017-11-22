@@ -2,6 +2,6 @@
 {% set title = "Plugins"|t('app') %}
 {% set elementType = 'craftcom\\plugins\\Plugin' %}
 
-{% set extraPageHeaderHtml %}
+{% block actionButton %}
     <a href="{{ url('plugins/new') }}" class="btn submit">{{ 'New plugin'|t('app') }}</a>
-{% endset %}
+{% endblock %}

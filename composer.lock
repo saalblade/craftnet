@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a2a05901bf53985d0f3d430aa60ab9a",
+    "content-hash": "9d64a9bf6a715a1d2b0b98854173cf8a",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.39.0",
+            "version": "3.39.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "fd829dedc766a23e00cb155fb3c417f3cc025ef9"
+                "reference": "314ab6aedfde4364f2a5321153638324182e8c13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/fd829dedc766a23e00cb155fb3c417f3cc025ef9",
-                "reference": "fd829dedc766a23e00cb155fb3c417f3cc025ef9",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/314ab6aedfde4364f2a5321153638324182e8c13",
+                "reference": "314ab6aedfde4364f2a5321153638324182e8c13",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-11-20T23:33:24+00:00"
+            "time": "2017-11-22T01:18:54+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -635,22 +635,23 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "dev-develop",
+            "version": "dev-release/3.0.0-RC1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "ecfdb604b94382aef892531d4e1ae16b2d44bcfd"
+                "reference": "c2806ec08831587b1098d0e00abdccd9a025b788"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/ecfdb604b94382aef892531d4e1ae16b2d44bcfd",
-                "reference": "ecfdb604b94382aef892531d4e1ae16b2d44bcfd",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/c2806ec08831587b1098d0e00abdccd9a025b788",
+                "reference": "c2806ec08831587b1098d0e00abdccd9a025b788",
                 "shasum": ""
             },
             "require": {
                 "composer/composer": "~1.4.2",
+                "craftcms/oauth2-craftid": "~1.0.0",
                 "craftcms/plugin-installer": "~1.5.0",
-                "craftcms/server-check": "~1.0.17",
+                "craftcms/server-check": "~1.1.0",
                 "creocoder/yii2-nested-sets": "~0.9.0",
                 "danielstjules/stringy": "~3.0.0",
                 "enshrined/svg-sanitize": "~0.6.0",
@@ -711,25 +712,24 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-11-21T22:27:50+00:00"
+            "time": "2017-11-22T15:57:43+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/pixelandtonic/oauth2-craftid.git",
-                "reference": "750491decd43a73ce33e0f4589fbd522d098f036"
+                "url": "https://github.com/craftcms/oauth2-craftid.git",
+                "reference": "4333c1cca03b947d5a6c49dd0c06f151d8d20d2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixelandtonic/oauth2-craftid/zipball/750491decd43a73ce33e0f4589fbd522d098f036",
-                "reference": "750491decd43a73ce33e0f4589fbd522d098f036",
+                "url": "https://api.github.com/repos/craftcms/oauth2-craftid/zipball/4333c1cca03b947d5a6c49dd0c06f151d8d20d2d",
+                "reference": "4333c1cca03b947d5a6c49dd0c06f151d8d20d2d",
                 "shasum": ""
             },
             "require": {
-                "eloquent/phony": "^0.14.6",
-                "league/oauth2-client": "^2.0"
+                "league/oauth2-client": "~2.2.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.0",
@@ -742,11 +742,7 @@
                     "craftcms\\oauth2\\client\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "craftcms\\oauth2\\client\\test\\": "tests/src/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -758,19 +754,16 @@
             ],
             "description": "Craft OAuth 2.0 Client Provider for The PHP League OAuth2-Client",
             "keywords": [
-                "authentication",
+                "Authentication",
                 "authorization",
                 "client",
                 "cms",
                 "craftcms",
+                "craftid",
                 "oauth",
                 "oauth2"
             ],
-            "support": {
-                "source": "https://github.com/pixelandtonic/oauth2-craftid/tree/develop",
-                "issues": "https://github.com/pixelandtonic/oauth2-craftid/issues"
-            },
-            "time": "2017-08-29T22:02:55+00:00"
+            "time": "2017-11-22T16:16:05+00:00"
         },
         {
             "name": "craftcms/plugin-installer",
@@ -815,16 +808,16 @@
         },
         {
             "name": "craftcms/server-check",
-            "version": "1.0.17",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/server-check.git",
-                "reference": "8dfa94cb48ef4531bea21c91511821469a6f8c7e"
+                "reference": "6e7ecc427b5252b8b878f028a45738e19e7968b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/server-check/zipball/8dfa94cb48ef4531bea21c91511821469a6f8c7e",
-                "reference": "8dfa94cb48ef4531bea21c91511821469a6f8c7e",
+                "url": "https://api.github.com/repos/craftcms/server-check/zipball/6e7ecc427b5252b8b878f028a45738e19e7968b9",
+                "reference": "6e7ecc427b5252b8b878f028a45738e19e7968b9",
                 "shasum": ""
             },
             "type": "library",
@@ -845,7 +838,7 @@
                 "requirements",
                 "yii2"
             ],
-            "time": "2017-06-29T20:23:11+00:00"
+            "time": "2017-11-11T00:13:31+00:00"
         },
         {
             "name": "creocoder/yii2-nested-sets",
@@ -1005,76 +998,6 @@
                 "symmetric key cryptography"
             ],
             "time": "2017-05-18T21:28:48+00:00"
-        },
-        {
-            "name": "eloquent/phony",
-            "version": "0.14.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/eloquent/phony.git",
-                "reference": "d72aa17ac008fb8b595679eeafad832a340f06aa"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/eloquent/phony/zipball/d72aa17ac008fb8b595679eeafad832a340f06aa",
-                "reference": "d72aa17ac008fb8b595679eeafad832a340f06aa",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3"
-            },
-            "require-dev": {
-                "counterpart/counterpart": "^1",
-                "danielstjules/pho": "^1",
-                "errors/exceptions": "^0.1",
-                "ext-pdo": "*",
-                "hamcrest/hamcrest-php": "^2",
-                "icecave/semver": "^3",
-                "mockery/mockery": "^0.9",
-                "peridot-php/leo": "^1",
-                "peridot-php/peridot": "^1",
-                "phake/phake": "^2",
-                "phpspec/prophecy": "^1",
-                "phpunit/phpunit": "^4|^5|^6",
-                "simpletest/simpletest": "^1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Eloquent\\Phony\\": "src"
-                },
-                "files": [
-                    "src/functions.php",
-                    "src/Pho/functions.php",
-                    "src/Phpunit/functions.php",
-                    "src/Simpletest/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Erin Millard",
-                    "email": "ezzatron@gmail.com",
-                    "homepage": "http://ezzatron.com/"
-                }
-            ],
-            "description": "Mocks, stubs, and spies for PHP.",
-            "homepage": "https://github.com/eloquent/phony",
-            "keywords": [
-                "Double",
-                "Dummy",
-                "fake",
-                "mock",
-                "mocking",
-                "spy",
-                "stub",
-                "stubbing",
-                "test"
-            ],
-            "time": "2017-04-22T10:50:55+00:00"
         },
         {
             "name": "enshrined/svg-sanitize",
@@ -4315,17 +4238,16 @@
     ],
     "aliases": [
         {
-            "alias": "3.0.0-beta.99",
-            "alias_normalized": "3.0.0.0-beta99",
-            "version": "dev-develop",
+            "alias": "3.0.0-RC1",
+            "alias_normalized": "3.0.0.0-RC1",
+            "version": "dev-release/3.0.0-RC1",
             "package": "craftcms/cms"
         }
     ],
     "minimum-stability": "dev",
     "stability-flags": {
         "craftcms/cms": 20,
-        "roave/security-advisories": 20,
-        "craftcms/oauth2-craftid": 20
+        "roave/security-advisories": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
