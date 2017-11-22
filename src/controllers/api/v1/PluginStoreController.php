@@ -15,19 +15,6 @@ use yii\web\Response;
  */
 class PluginStoreController extends BaseApiController
 {
-    // Properties
-    // =========================================================================
-
-    /**
-     * @var int
-     */
-    private $craftClientPluginId = 273;
-
-    /**
-     * @var int
-     */
-    private $craftProPluginId = 275;
-
     // Public Methods
     // =========================================================================
 
@@ -125,8 +112,6 @@ class PluginStoreController extends BaseApiController
                 'featuredPlugins' => $featuredPlugins,
                 'categories' => $categories,
                 'plugins' => $plugins,
-                'craftClientPluginId' => $this->craftClientPluginId,
-                'craftProPluginId' => $this->craftProPluginId,
             ];
 
             if ($enablePluginStoreCache) {
