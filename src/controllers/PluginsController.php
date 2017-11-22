@@ -156,6 +156,7 @@ class PluginsController extends Controller
                 }
             } else {
                 $plugin = new Plugin([
+                    'enabled' => false,
                     'categories' => [],
                     'screenshots' => [],
                 ]);
