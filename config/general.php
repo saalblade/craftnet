@@ -20,7 +20,7 @@ return [
     ],
     'prod' => [
         'allowAutoUpdates' => false,
-        'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] == 'mgt3md9snyd2' ? true : false,
+        'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
         'defaultCookieDomain' => '.craftcms.com',
     ],
     'dev' => [
