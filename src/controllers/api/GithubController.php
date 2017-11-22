@@ -24,6 +24,8 @@ class GithubController extends BaseApiController
         $packageManager = $this->module->getPackageManager();
         $name = $packageManager->getPackageNameByRepoUrl($url);
 
+        Craft::error('Received a payload from Github for '.$name.'.', __METHOD__);
+
         if (!$name) {
             throw new NotFoundHttpException('No package exists for the repository '.$url);
         }
