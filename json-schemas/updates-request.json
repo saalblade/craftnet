@@ -83,5 +83,5 @@
       }
     }
   },
-  "required": ["request", "user", "platform", "cms", "plugins"]
+  "required": ["request", "user", "platform", "cms"]
 }
