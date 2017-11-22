@@ -295,6 +295,14 @@ class Plugin extends Element
     }
 
     /**
+     * @return string
+     */
+    public function getDeveloperName(): string
+    {
+        return $this->getDeveloper()->getName();
+    }
+
+    /**
      * @return Asset|null
      * @throws InvalidConfigException
      */
@@ -500,6 +508,17 @@ class Plugin extends Element
     public function getCpEditUrl()
     {
         return "plugins/{$this->id}-{$this->handle}";
+    }
+
+    protected static function defineSearchableAttributes(): array
+    {
+        return [
+            'developerName',
+            'packageName',
+            'repository',
+            'name',
+            'handle',
+        ];
     }
 
     protected static function defineTableAttributes(): array
