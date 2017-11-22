@@ -528,6 +528,19 @@ class PluginsController extends Controller
             return null;
         }
 
+        try
+        {
+            Craft::$app->getMailer()->compose()
+                ->setSubject('A plugin is waiting for approval.'.$plugin->name)
+                ->setTextBody('<a href="https://id.craftcms.com/'.getenv('CRAFT_CP_TRIGGER').'/plugins/'.$plugin->id.'">link</a>')
+                ->setTo(explode(',', getenv('PLUGIN_APPROVAL_RECIPIENTS')))
+                ->send();
+        }
+        catch (\Exception $e)
+        {
+            // Just log and move on.
+            Craft::error('There was a problem sending the plugin approval email: '.$e->getMessage(), __METHOD__);
+        }
 
         // Return
 
