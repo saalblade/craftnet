@@ -6,7 +6,8 @@ return [
     '*' => [
         'bootstrap' => [
             'craftcom',
-            'oauth-server'
+            'oauth-server',
+            'queue',
         ],
         'modules' => [
             'craftcom' => [
@@ -62,6 +63,14 @@ return [
                     'port' => 6379,
                     'database' => 0,
                 ],
+            ],
+            'queue' => [
+                'class' => pixelandtonic\yii\queue\sqs\Queue::class,
+                'url' => 'https://sqs.us-west-2.amazonaws.com/646206613093/plugin-store',
+                'client' => [
+                    'region' => 'us-west-2',
+                    'version' => '2012-11-05',
+                ]
             ],
             'session' => function() {
                 $stateKeyPrefix = md5('Craft.'.craft\web\Session::class.'.'.Craft::$app->id);

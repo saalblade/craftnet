@@ -383,9 +383,10 @@ class PluginsController extends Controller
             }
         }
 
-        // Now add our webhook.
-        $package = $plugin->getPackage();
-        $package->getVcs()->addWebhook();
+        // Now add our webhook if this is a new plugin
+        if (!$pluginId) {
+            $this->module->getPackageManager()->createWebhook($plugin->packageName);
+        }
 
         if ($request->getAcceptsJson()) {
             $return = [];

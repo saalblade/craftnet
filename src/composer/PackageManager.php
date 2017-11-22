@@ -12,6 +12,7 @@ use craft\helpers\Db;
 use craft\helpers\Json;
 use craftcom\composer\jobs\UpdatePackage;
 use craftcom\errors\MissingTokenException;
+use craftcom\errors\VcsException;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\helpers\Console;
@@ -389,6 +390,52 @@ class PackageManager extends Component
     }
 
     /**
+     * Registers a VCS webhook for a given package.
+     *
+     * @param string $name
+     * @param bool   $createIfExists
+     *
+     * @return bool
+     * @throws Exception if the package couldn't be found
+     */
+    public function createWebhook(string $name, bool $createIfExists = true)
+    {
+        $package = $this->getPackage($name);
+
+        if (!$createIfExists && $package->webhookSecret) {
+            return true;
+        }
+
+        $secret = Craft::$app->getSecurity()->generateRandomString();
+
+        // Store the secret first so we're ready for the VCS's test hook request
+        Craft::$app->getDb()->createCommand()
+            ->update(
+                '{{%craftcom_packages}}',
+                ['webhookSecret' => $secret],
+                ['id' => $package->id])
+            ->execute();
+
+        try {
+            $package->getVcs()->createWebhook($secret);
+        } catch (VcsException $e) {
+            Craft::warning("Could not create a webhook for {$package->name}: {$e->getMessage()}", __METHOD__);
+
+            // Clear out the secret
+            Craft::$app->getDb()->createCommand()
+                ->update(
+                    '{{%craftcom_packages}}',
+                    ['webhookSecret' => null],
+                    ['id' => $package->id])
+                ->execute();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param string          $name
      * @param string|string[] $version
      *
@@ -731,7 +778,7 @@ class PackageManager extends Component
     private function _createPackageQuery(): Query
     {
         return (new Query())
-            ->select(['id', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage'])
+            ->select(['id', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage', 'webhookSecret'])
             ->from(['craftcom_packages']);
     }
 }

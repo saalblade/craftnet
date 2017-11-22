@@ -10,7 +10,6 @@ use craftcom\errors\VcsException;
 use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
-use yii\base\Exception;
 
 /**
  * @property array $versions
@@ -128,10 +127,11 @@ class GitHub extends BaseVcs
     }
 
     /**
-     *
+     * @inheritdoc
      */
-    public function addWebhook()
+    public function createWebhook(string $secret)
     {
+        /** @var Repo $api */
         $api = $this->client->api('repo');
 
         $params = [
@@ -141,15 +141,14 @@ class GitHub extends BaseVcs
             'config' => [
                 'url' => 'https://api.craftcms.com/github/push',
                 'content_type' => 'json',
+                'secret' => $secret,
             ],
         ];
 
-        try
-        {
+        try {
             $api->hooks()->create($this->owner, $this->repo, $params);
-        }
-        catch (\Exception $e) {
-            Craft::warning("Could not create a webhook for {$this->package->name}:{$e->getMessage()}", __METHOD__);
+        } catch (RuntimeException $e) {
+            throw new VcsException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

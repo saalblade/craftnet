@@ -27,14 +27,6 @@ abstract class BaseVcs extends Object implements VcsInterface
     }
 
     /**
-     * @return null
-     */
-    public function addWebhook()
-    {
-        return null;
-    }
-
-    /**
      * @param PackageRelease $release
      * @param array          $config
      *

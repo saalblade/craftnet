@@ -116,4 +116,13 @@ class PackagesController extends Controller
     {
         $this->module->getPackageManager()->updateDeps($this->force, $this->queue);
     }
+
+    public function actionCreateWebhook($name)
+    {
+        if (!$this->module->getPackageManager()->createWebhook($name)) {
+            Console::error("There was an error creating a webhook for {$name}.");
+        } else {
+            Console::output("Webhook created for {$name}.");
+        }
+    }
 }
