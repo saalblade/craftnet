@@ -10,7 +10,7 @@ return [
     '*' => [
         'siteUrl' => null,
         'omitScriptNameInUrls' => true,
-        'cpTrigger' => 'ramos',
+        'cpTrigger' => getenv('CRAFT_CP_TRIGGER'),
         'imageDriver' => 'imagick',
         'preventUserEnumeration' => true,
         'securityKey' => getenv('CRAFT_SECURITY_KEY'),
