@@ -3,15 +3,17 @@
 namespace craftcom\controllers\id;
 
 use Craft;
+use craft\helpers\Db;
 use craft\records\OAuthToken;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
 use Exception;
 use yii\web\Response;
-use craft\helpers\Db;
 
 /**
  * Class AppsController
+ *
+ * @property Module $module
  *
  * @package craftcom\controllers\id
  */
@@ -85,7 +87,6 @@ class AppsController extends BaseController
             ]);
 
             Craft::$app->getSession()->remove('connectAppTypeHandle');
-
         } catch (\Exception $e) {
             Craft::error('There was a problem getting an authorization token.', __METHOD__);
             return $this->redirect($this->_connectUri);
@@ -99,7 +100,6 @@ class AppsController extends BaseController
             $tokenRecord = new OAuthToken();
             $tokenRecord->userId = $currentUser->id;
             $tokenRecord->provider = $appTypeConfig['class'];
-
         } else {
             // A previous one, let's update it.
             $tokenRecord = OAuthToken::find()
@@ -122,13 +122,10 @@ class AppsController extends BaseController
             ->where(['developerId' => $currentUser->id])
             ->all();
 
-        if ($plugins) {
+        if (!empty($plugins)) {
+            $packageManager = $this->module->getPackageManager();
             foreach ($plugins as $plugin) {
-                $package = $plugin->getPackage();
-
-                if (!$package->webhookToken) {
-                    $package->getVcs()->addWebhook();
-                }
+                $packageManager->createWebhook($plugin->packageName, false);
             }
         }
 

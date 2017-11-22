@@ -5,13 +5,11 @@ namespace craftcom\composer\vcs;
 use Composer\Semver\Comparator;
 use Craft;
 use craft\helpers\Json;
-use craft\services\Security;
 use craftcom\composer\PackageRelease;
 use craftcom\errors\VcsException;
 use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
-use yii\base\Exception;
 
 /**
  * @property array $versions
@@ -129,12 +127,12 @@ class GitHub extends BaseVcs
     }
 
     /**
-     *
+     * @inheritdoc
      */
-    public function addWebhook()
+    public function createWebhook(string $secret)
     {
+        /** @var Repo $api */
         $api = $this->client->api('repo');
-        $token = Craft::$app->getSecurity()->generateRandomString();
 
         $params = [
             'name' => 'web',
@@ -143,23 +141,14 @@ class GitHub extends BaseVcs
             'config' => [
                 'url' => 'https://api.craftcms.com/github/push',
                 'content_type' => 'json',
-                'secret' => $token,
+                'secret' => $secret,
             ],
         ];
 
-        try
-        {
+        try {
             $api->hooks()->create($this->owner, $this->repo, $params);
-
-            Craft::$app->getDb()->createCommand()->update('{{%craftcom_packages}}',
-                ['webhookToken' => $token],
-                ['id' => $this->package->id]
-            )->execute();
-
-            $this->package->webhookToken = $token;
-        }
-        catch (\Exception $e) {
-            Craft::warning("Could not create a webhook for {$this->package->name}:{$e->getMessage()}", __METHOD__);
+        } catch (RuntimeException $e) {
+            throw new VcsException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

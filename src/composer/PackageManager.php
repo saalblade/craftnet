@@ -12,6 +12,7 @@ use craft\helpers\Db;
 use craft\helpers\Json;
 use craftcom\composer\jobs\UpdatePackage;
 use craftcom\errors\MissingTokenException;
+use craftcom\errors\VcsException;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\helpers\Console;
@@ -386,6 +387,52 @@ class PackageManager extends Component
             ->select(['name'])
             ->where(['repository' => $url])
             ->scalar();
+    }
+
+    /**
+     * Registers a VCS webhook for a given package.
+     *
+     * @param string $name
+     * @param bool   $createIfExists
+     *
+     * @return bool
+     * @throws Exception if the package couldn't be found
+     */
+    public function createWebhook(string $name, bool $createIfExists = true)
+    {
+        $package = $this->getPackage($name);
+
+        if (!$createIfExists && $package->webhookToken) {
+            return true;
+        }
+
+        $secret = Craft::$app->getSecurity()->generateRandomString();
+
+        // Store the secret first so we're ready for the VCS's test hook request
+        Craft::$app->getDb()->createCommand()
+            ->update(
+                '{{%craftcom_packages}}',
+                ['webhookToken' => $secret],
+                ['id' => $package->id])
+            ->execute();
+
+        try {
+            $package->getVcs()->createWebhook($secret);
+        } catch (VcsException $e) {
+            Craft::warning("Could not create a webhook for {$package->name}: {$e->getMessage()}", __METHOD__);
+
+            // Clear out the token
+            Craft::$app->getDb()->createCommand()
+                ->update(
+                    '{{%craftcom_packages}}',
+                    ['webhookToken' => null],
+                    ['id' => $package->id])
+                ->execute();
+
+            return false;
+        }
+
+        return true;
     }
 
     /**

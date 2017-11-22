@@ -7,6 +7,7 @@ use craft\helpers\Json;
 use craftcom\composer\PackageRelease;
 use GuzzleHttp\Exception\ClientException;
 use yii\base\Exception;
+use yii\base\NotSupportedException;
 
 /**
  * @property array $versions
@@ -143,5 +144,10 @@ class Packagist extends BaseVcs
         $release->dist = $config['dist'] ?? null;
 
         $this->package->setAbandoned($config['abandoned'] ?? false);
+    }
+
+    public function createWebhook(string $secret)
+    {
+        throw new NotSupportedException("Packagist doesn't support webhooks");
     }
 }
