@@ -119,7 +119,7 @@ export const SAVE_PLUGIN = (state, {formData, data}) => {
     statePlugin.shortDescription = formData.get('shortDescription');
     statePlugin.longDescription = formData.get('longDescription');
     statePlugin.documentationUrl = formData.get('documentationUrl');
-    statePlugin.changelogUrl = formData.get('changelogUrl');
+    statePlugin.changelogPath = formData.get('changelogPath');
     statePlugin.repository = formData.get('repository');
     statePlugin.license = formData.get('license');
 

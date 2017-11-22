@@ -104,7 +104,7 @@
                         <text-field id="shortDescription" label="Short Description" v-model="pluginDraft.shortDescription" :errors="errors.shortDescription" />
                         <textarea-field id="longDescription" label="Long Description" v-model="pluginDraft.longDescription" :errors="errors.longDescription" rows="16" />
                         <text-field id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
-                        <text-field id="changelogUrl" label="Changelog URL" v-model="pluginDraft.changelogUrl" :errors="errors.changelogUrl" />
+                        <text-field id="changelogPath" label="Changelog Path" v-model="pluginDraft.changelogPath" :errors="errors.changelogPath" />
                     </div>
                 </div>
 
@@ -185,7 +185,7 @@
                     shortDescription: '',
                     longDescription: '',
                     documentationUrl: '',
-                    changelogUrl: '',
+                    changelogPath: '',
                     repository: '',
                     license: 'craft',
                     price: 0,
@@ -320,7 +320,7 @@
 
                 this.$http.post(window.craftActionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), body, options)
                     .then(response => {
-                        this.pluginDraft.changelogUrl = response.body.changelogUrl;
+                        this.pluginDraft.changelogPath = response.body.changelogPath;
                         this.pluginDraft.documentationUrl = response.body.documentationUrl;
                         this.pluginDraft.name = response.body.name;
                         this.pluginDraft.handle = response.body.handle;
@@ -356,7 +356,7 @@
                 formData.append('shortDescription', this.pluginDraft.shortDescription);
                 formData.append('longDescription', this.pluginDraft.longDescription);
                 formData.append('documentationUrl', this.pluginDraft.documentationUrl);
-                formData.append('changelogUrl', this.pluginDraft.changelogUrl);
+                formData.append('changelogPath', this.pluginDraft.changelogPath);
                 formData.append('repository', this.pluginDraft.repository);
                 formData.append('license', this.pluginDraft.license);
 
