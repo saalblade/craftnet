@@ -3,6 +3,7 @@
 namespace craftcom\controllers;
 
 use Craft;
+use craft\base\Element;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\helpers\Db;
@@ -329,6 +330,10 @@ class PluginsController extends Controller
 
 
         // Save plugin
+
+        if ($plugin->enabled) {
+            $plugin->setScenario(Element::SCENARIO_LIVE);
+        }
 
         if (!Craft::$app->getElements()->saveElement($plugin)) {
             if ($request->getAcceptsJson()) {

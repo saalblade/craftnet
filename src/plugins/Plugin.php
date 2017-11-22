@@ -480,6 +480,14 @@ class Plugin extends Element
             'url',
         ];
 
+        $rules[] = [
+            [
+                'categories',
+            ],
+            'required',
+            'on' => self::SCENARIO_LIVE,
+        ];
+
         return $rules;
     }
 
