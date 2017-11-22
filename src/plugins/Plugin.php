@@ -22,6 +22,9 @@ use yii\base\InvalidConfigException;
  */
 class Plugin extends Element
 {
+    // Static
+    // =========================================================================
+
     /**
      * @return string
      */
@@ -41,18 +44,6 @@ class Plugin extends Element
     public static function find(): ElementQueryInterface
     {
         return new PluginQuery(static::class);
-    }
-
-    /**
-     * @param string|null $context
-     *
-     * @return array
-     */
-    public static function sources(string $context = null): array
-    {
-        return [
-            ['key' => '*', 'label' => 'All Plugins']
-        ];
     }
 
     /**
@@ -122,6 +113,60 @@ class Plugin extends Element
                 return parent::eagerLoadingMap($sourceElements, $handle);
         }
     }
+
+    protected static function defineSources(string $context = null): array
+    {
+        return [
+            [
+                'key' => '*',
+                'label' => 'All Plugins',
+                'criteria' => ['status' => null],
+            ],
+        ];
+    }
+
+    protected static function defineSearchableAttributes(): array
+    {
+        return [
+            'developerName',
+            'packageName',
+            'repository',
+            'name',
+            'handle',
+        ];
+    }
+
+    protected static function defineTableAttributes(): array
+    {
+        return [
+            'name' => 'Name',
+            'handle' => 'Handle',
+            'packageName' => 'Package Name',
+            'repository' => 'Repository',
+            'price' => 'Price',
+            'renewalPrice' => 'Renewal Price',
+            'license' => 'License',
+            'primaryCategory' => 'Primary Category',
+            'documentationUrl' => 'Documentation URL',
+        ];
+    }
+
+    protected static function defineDefaultTableAttributes(string $source): array
+    {
+        return [
+            'name',
+            'handle',
+            'packageName',
+            'repository',
+            'price',
+            'renewalPrice',
+            'license',
+            'primaryCategory',
+        ];
+    }
+
+    // Properties
+    // =========================================================================
 
     /**
      * @var int The developer’s user ID
@@ -235,6 +280,9 @@ class Plugin extends Element
     {
         return $this->name;
     }
+
+    // Public Methods
+    // =========================================================================
 
     /**
      * @param string $handle
@@ -510,45 +558,8 @@ class Plugin extends Element
         return "plugins/{$this->id}-{$this->handle}";
     }
 
-    protected static function defineSearchableAttributes(): array
-    {
-        return [
-            'developerName',
-            'packageName',
-            'repository',
-            'name',
-            'handle',
-        ];
-    }
-
-    protected static function defineTableAttributes(): array
-    {
-        return [
-            'name' => 'Name',
-            'handle' => 'Handle',
-            'packageName' => 'Package Name',
-            'repository' => 'Repository',
-            'price' => 'Price',
-            'renewalPrice' => 'Renewal Price',
-            'license' => 'License',
-            'primaryCategory' => 'Primary Category',
-            'documentationUrl' => 'Documentation URL',
-        ];
-    }
-
-    protected static function defineDefaultTableAttributes(string $source): array
-    {
-        return [
-            'name',
-            'handle',
-            'packageName',
-            'repository',
-            'price',
-            'renewalPrice',
-            'license',
-            'primaryCategory',
-        ];
-    }
+    // Protected Methods
+    // =========================================================================
 
     protected function tableAttributeHtml(string $attribute): string
     {
