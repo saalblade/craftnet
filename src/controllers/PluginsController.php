@@ -3,6 +3,7 @@
 namespace craftcom\controllers;
 
 use Craft;
+use craft\base\Element;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\helpers\Db;
@@ -89,6 +90,13 @@ class PluginsController extends Controller
         }
         $name = $config['extra']['name'] ?? null;
 
+        // Get the license
+        if (isset($config['license']) && strtolower($config['license']) === 'mit') {
+            $license = 'mit';
+        } else {
+            $license = 'craft';
+        }
+
         // Get the icon, if we have one
         if ($icon = $this->_getIcon($api, $owner, $repo, $ref, $config, $handle, $name)) {
             if (Craft::$app->getRequest()->getIsCpRequest()) {
@@ -116,6 +124,7 @@ class PluginsController extends Controller
             'name' => $name,
             'packageName' => $config['name'] ?? null,
             'handle' => $handle,
+            'license' => $license,
             'shortDescription' => $config['extra']['description'] ?? $config['description'] ?? null,
             'documentationUrl' => $config['extra']['documentationUrl'] ?? $config['support']['docs'] ?? null,
             'changelogPath' => $changelogPath,
@@ -346,6 +355,10 @@ class PluginsController extends Controller
 
 
         // Save plugin
+
+        if ($plugin->enabled) {
+            $plugin->setScenario(Element::SCENARIO_LIVE);
+        }
 
         if (!Craft::$app->getElements()->saveElement($plugin)) {
             if ($request->getAcceptsJson()) {

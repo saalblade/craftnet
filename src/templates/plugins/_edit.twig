@@ -108,6 +108,8 @@
             name: 'categoryIds',
             elementType: 'craft\\elements\\Category',
             elements: plugin.getCategories(),
+            required: true,
+            errors: plugin.getErrors('categories'),
         }) }}
 
         {{ forms.elementSelectField({
