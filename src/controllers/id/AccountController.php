@@ -58,7 +58,7 @@ class AccountController extends Controller
         $this->requireLogin();
         $userId = Craft::$app->getRequest()->getRequiredBodyParam('userId');
 
-        if ($userId !== Craft::$app->getUser()->getIdentity()->id) {
+        if ($userId != Craft::$app->getUser()->getIdentity()->id) {
             $this->requirePermission('editUsers');
         }
 
