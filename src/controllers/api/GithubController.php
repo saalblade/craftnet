@@ -14,6 +14,7 @@ class GithubController extends BaseApiController
 {
     /**
      * @throws NotFoundHttpException
+     * @throws BadRequestHttpException
      */
     public function actionPush()
     {
@@ -28,27 +29,28 @@ class GithubController extends BaseApiController
         }
 
         $package = $packageManager->getPackage($name);
-        $this->_validateSecret($package->webhookToken);
+        $this->_validateSecret($package->webhookSecret);
 
         $packageManager->updatePackage($name, false, true);
         $this->module->getJsonDumper()->dump(true);
     }
 
     /**
-     * @param $webhookToken
+     * @param string|null $secret
+     *
+     * @throws BadRequestHttpException
      */
-    private function _validateSecret($webhookToken)
+    private function _validateSecret($secret)
     {
-        $allHeaders = Craft::$app->getRequest()->getHeaders();
+        $headers = Craft::$app->getRequest()->getHeaders();
 
-        if (!isset($allHeaders['X-Hub-Signature'])) {
+        if (!isset($headers['X-Hub-Signature'])) {
             throw new BadRequestHttpException('Invalid request body.');
         }
 
-        $token = $allHeaders['X-Hub-Signature'];
-        list($algo, $hash) = explode('=', $token, 2);
+        list($algo, $hash) = explode('=', $headers['X-Hub-Signature'], 2);
 
-        $payloadHash = hash_hmac($algo, Craft::$app->getRequest()->getRawBody(), $webhookToken);
+        $payloadHash = hash_hmac($algo, Craft::$app->getRequest()->getRawBody(), $secret);
 
         if (!hash_equals($payloadHash, $hash)) {
             throw new BadRequestHttpException('Invalid request body.');

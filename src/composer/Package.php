@@ -63,7 +63,7 @@ class Package extends Model
     /**
      * @var
      */
-    public $webhookToken;
+    public $webhookSecret;
 
     /**
      * @var BaseVcs|null

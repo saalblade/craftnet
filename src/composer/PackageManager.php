@@ -402,7 +402,7 @@ class PackageManager extends Component
     {
         $package = $this->getPackage($name);
 
-        if (!$createIfExists && $package->webhookToken) {
+        if (!$createIfExists && $package->webhookSecret) {
             return true;
         }
 
@@ -412,7 +412,7 @@ class PackageManager extends Component
         Craft::$app->getDb()->createCommand()
             ->update(
                 '{{%craftcom_packages}}',
-                ['webhookToken' => $secret],
+                ['webhookSecret' => $secret],
                 ['id' => $package->id])
             ->execute();
 
@@ -421,11 +421,11 @@ class PackageManager extends Component
         } catch (VcsException $e) {
             Craft::warning("Could not create a webhook for {$package->name}: {$e->getMessage()}", __METHOD__);
 
-            // Clear out the token
+            // Clear out the secret
             Craft::$app->getDb()->createCommand()
                 ->update(
                     '{{%craftcom_packages}}',
-                    ['webhookToken' => null],
+                    ['webhookSecret' => null],
                     ['id' => $package->id])
                 ->execute();
 
@@ -778,7 +778,7 @@ class PackageManager extends Component
     private function _createPackageQuery(): Query
     {
         return (new Query())
-            ->select(['id', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage', 'webhookToken'])
+            ->select(['id', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage', 'webhookSecret'])
             ->from(['craftcom_packages']);
     }
 }
