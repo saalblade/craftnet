@@ -54,10 +54,10 @@
 					    handle: 'github',
 						name: 'GitHub',
 					},
-					{
-					    handle: 'bitbucket',
-						name: 'BitBucket',
-					}
+					//{
+					//	handle: 'bitbucket',
+					//	name: 'BitBucket',
+					//}
 				],
           	  	loading: {
           	  	    bitbucket: false,
