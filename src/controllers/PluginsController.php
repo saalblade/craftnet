@@ -229,6 +229,9 @@ class PluginsController extends Controller
 
         // Uploads
 
+        $assetsService = Craft::$app->getAssets();
+        $volumesService = Craft::$app->getVolumes();
+
         $screenshotIds = (!empty($request->getBodyParam('screenshotIds')) ? $request->getBodyParam('screenshotIds') : []);
 
         if (!$request->getIsCpRequest()) {
@@ -245,7 +248,6 @@ class PluginsController extends Controller
 
 
                 // Save as an asset
-                $volumesService = Craft::$app->getVolumes();
                 $volume = $volumesService->getVolumeByHandle('icons');
                 $folderId = $volumesService->ensureTopFolder($volume);
 
@@ -301,7 +303,6 @@ class PluginsController extends Controller
 
             if (count($screenshotFiles) > 0) {
                 foreach ($screenshotFiles as $screenshotFile) {
-                    $name = $plugin->name." Screenshot";
                     $handle = $plugin->handle;
                     $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$screenshotFile->getExtension();
                     move_uploaded_file($screenshotFile->tempName, $tempPath);
@@ -310,17 +311,33 @@ class PluginsController extends Controller
                     // Save as an asset
                     $volumesService = Craft::$app->getVolumes();
                     $volume = $volumesService->getVolumeByHandle('screenshots');
-                    $folderId = $volumesService->ensureTopFolder($volume);
+                    $volumeId = $volumesService->ensureTopFolder($volume);
 
-                    $targetFilename = $handle.'-'.StringHelper::randomString().'.'.$screenshotFile->getExtension();
+                    $subpath = '/'.$handle;
 
-                    $screenshot = new Asset([
-                        'title' => $name,
-                        'tempFilePath' => $tempPath,
-                        'newLocation' => "{folder:{$folderId}}".$targetFilename,
+                    $folder = $assetsService->findFolder([
+                        'volumeId' => $volumeId,
+                        'path' => $subpath.'/'
                     ]);
 
-                    if (!Craft::$app->getElements()->saveElement($screenshot, false)) {
+                    if (!$folder) {
+                        $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
+                    } else {
+                        $folderId = $folder->id;
+                    }
+
+                    $targetFilename = $screenshotFile->name;
+
+                    $screenshot = new Asset([
+                        'title' => $plugin->name,
+                        'tempFilePath' => $tempPath,
+                        'newLocation' => "{folder:{$folderId}}".$targetFilename,
+                        'avoidFilenameConflicts' => true,
+                    ]);
+
+                    $screenshot->validate(['newLocation']);
+
+                    if ($screenshot->hasErrors() || !Craft::$app->getElements()->saveElement($screenshot, false)) {
                         throw new Exception('Unable to save icon asset: '.implode(',', $screenshot->getFirstErrors()));
                     }
 
@@ -352,6 +369,9 @@ class PluginsController extends Controller
         // Rename icon with new name and filename
 
         if ($newName || $newHandle) {
+
+            // Icon
+
             if ($plugin->icon) {
                 $icon = $plugin->icon;
 
@@ -368,17 +388,27 @@ class PluginsController extends Controller
                 }
             }
 
+
+            // Screenshots
+
+            $volume = $volumesService->getVolumeByHandle('screenshots');
+            $volumeId = $volumesService->ensureTopFolder($volume);
+
+            $subpath = '/'.$plugin->handle;
+
+            $folder = $assetsService->findFolder([
+                'volumeId' => $volumeId,
+                'path' => $subpath.'/'
+            ]);
+
+            if (!$folder) {
+                $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
+                $folder = $assetsService->getFolderById($folderId);
+            }
+
             foreach ($plugin->screenshots as $screenshot) {
-                if ($newName) {
-                    $screenshot->title = $plugin->name." Screenshot";
-                }
-
-                if ($newHandle) {
-                    $screenshot->newFilename = $plugin->handle.'-'.StringHelper::randomString().'.'.$screenshot->getExtension();
-                }
-
-                if (!Craft::$app->getElements()->saveElement($screenshot, false)) {
-                    throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+                if (!$assetsService->moveAsset($screenshot, $folder)) {
+                    throw new Exception('Unable to save icon asset: '.implode(',', $screenshot->getFirstErrors()));
                 }
             }
         }
