@@ -5,6 +5,7 @@ namespace craftcom\plugins;
 use Craft;
 use craft\base\Element;
 use craft\db\Query;
+use craft\elements\actions\SetStatus;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\db\ElementQueryInterface;
@@ -139,6 +140,13 @@ class Plugin extends Element
                 'label' => 'All Plugins',
                 'criteria' => ['status' => null],
             ],
+        ];
+    }
+
+    protected static function defineActions(string $source = null): array
+    {
+        return [
+            SetStatus::class,
         ];
     }
 
@@ -502,6 +510,10 @@ class Plugin extends Element
         }
 
         $this->packageId = $package->id;
+
+        if ($this->enabled) {
+            $this->pendingApproval = false;
+        }
 
         $pluginData = [
             'id' => $this->id,
