@@ -2,8 +2,8 @@
 
 return [
     '*' => [
-        'stripeClientId' => 'ca_2b3yXOngHtKxb4cDEGHeCMhrNwXyWvu5',
-        'stripeClientSecret' => 'sk_test_FgnfF68q9L8Hp3RRDETaJefc',
+        'stripeClientId' => getenv('STRIPE_PUBLIC_KEY'),
+        'stripeClientSecret' => getenv('STRIPE_API_KEY'),
         'oauthServer' => [
             'accessTokenExpiry' => 'PT1H',
             'refreshTokenExpiry' => 'P1M',
@@ -25,7 +25,7 @@ return [
             ],
             'privateKey' => __DIR__.'/keys/oauth-server',
             'publicKey' => __DIR__.'/keys/oauth-server.pub',
-            'encryptionKey' => 'j3wsUhGQtKCTnAiYdMHz2oCqyv3pYron',
+            'encryptionKey' => getenv('OAUTH_ENC_KEY'),
             'scopes' => [
                 'purchasePlugins' => "Purchase plugins",
                 'existingPlugins' => "List existing plugins",
