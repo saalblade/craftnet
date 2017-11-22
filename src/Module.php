@@ -44,12 +44,21 @@ class Module extends \yii\base\Module
         }
 
         Event::on(User::class, User::EVENT_AFTER_SAVE, function(ModelEvent $e) {
+            /** @var User $user */
+            $user = $e->sender;
             $request = Craft::$app->getRequest();
             $currentUser = Craft::$app->getUser()->getIdentity();
             $userGroups = Craft::$app->getUserGroups();
 
             // If it's a front-end site POST request and they're not currently a developer, check to see if they've opted into developer features.
-            if ($request->getIsSiteRequest() && $request->getIsPost() && !$currentUser->isInGroup('developers') && $request->getBodyParam('fields.enablePluginDeveloperFeatures')) {
+            if (
+                $currentUser &&
+                $currentUser->id == $user->id &&
+                $request->getIsSiteRequest() &&
+                $request->getIsPost() &&
+                $request->getBodyParam('fields.enablePluginDeveloperFeatures') &&
+                !$currentUser->isInGroup('developers')
+            ) {
 
                 // Get any existing group IDs.
                 $existingGroups = $userGroups->getGroupsByUserId($currentUser->id);
