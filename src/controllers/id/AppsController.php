@@ -119,7 +119,7 @@ class AppsController extends BaseController
         // This is mainly for launch. See if any plugins we've manually added need
         // a webhook installed.
         $plugins = Plugin::find()
-            ->where(['developerId' => $currentUser->id])
+            ->where(['developerId' => $currentUser->id, 'webhookSecret' => null])
             ->all();
 
         if (!empty($plugins)) {
