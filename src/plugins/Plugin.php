@@ -22,6 +22,11 @@ use yii\base\InvalidConfigException;
  */
 class Plugin extends Element
 {
+    // Constants
+    // =========================================================================
+
+    const STATUS_PENDING = 'pending';
+
     // Static
     // =========================================================================
 
@@ -36,6 +41,18 @@ class Plugin extends Element
     public static function hasStatuses(): bool
     {
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function statuses(): array
+    {
+        return [
+            self::STATUS_ENABLED => Craft::t('app', 'Enabled'),
+            self::STATUS_PENDING => Craft::t('app', 'Pending Approval'),
+            self::STATUS_DISABLED => Craft::t('app', 'Disabled')
+        ];
     }
 
     /**
@@ -551,6 +568,18 @@ class Plugin extends Element
             return Craft::$app->getAssets()->getThumbUrl($this->getIcon(), $size, false);
         }
         return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getStatus()
+    {
+        if (!$this->enabled && $this->pendingApproval) {
+            return self::STATUS_PENDING;
+        }
+
+        return parent::getStatus();
     }
 
     public function getCpEditUrl()

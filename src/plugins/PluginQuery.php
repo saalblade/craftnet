@@ -117,4 +117,15 @@ class PluginQuery extends ElementQuery
         return parent::beforePrepare();
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function statusCondition(string $status)
+    {
+        if ($status === Plugin::STATUS_PENDING) {
+            return ['elements.enabled' => false, 'craftcom_plugins.pendingApproval' => true];
+        }
+
+        return parent::statusCondition($status);
+    }
 }
