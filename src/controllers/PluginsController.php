@@ -531,8 +531,8 @@ class PluginsController extends Controller
         try
         {
             Craft::$app->getMailer()->compose()
-                ->setSubject('A plugin is waiting for approval.'.$plugin->name)
-                ->setTextBody('<a href="https://id.craftcms.com/'.getenv('CRAFT_CP_TRIGGER').'/plugins/'.$plugin->id.'">link</a>')
+                ->setSubject('A plugin is waiting for approval: '.$plugin->name)
+                ->setTextBody('https://id.craftcms.com/'.getenv('CRAFT_CP_TRIGGER').'/plugins/'.$plugin->id)
                 ->setTo(explode(',', getenv('PLUGIN_APPROVAL_RECIPIENTS')))
                 ->send();
         }
