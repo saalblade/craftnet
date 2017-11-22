@@ -42,7 +42,7 @@
                     <div class="card-body">
                         <div class="d-flex flex-row">
                             <div class="flex-grow">
-                                <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" />
+                                <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
                             </div>
 
                             <template v-if="!pluginId">
@@ -84,10 +84,10 @@
                                 <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
                             </div>
                             <div class="col-sm-6">
-                                <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" />
+                                <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" disabled="true" />
                             </div>
                             <div class="col-sm-6">
-                                <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" />
+                                <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" disabled="true" />
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
