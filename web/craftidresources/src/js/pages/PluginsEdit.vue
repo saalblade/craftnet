@@ -329,6 +329,7 @@
                         this.pluginDraft.packageName = response.body.packageName;
                         this.pluginDraft.iconId = response.body.iconId;
                         this.pluginDraft.iconUrl = response.body.iconUrl;
+                        this.pluginDraft.license = response.body.license;
                         this.repositoryLoading = false;
                     })
                     .catch(response => {
