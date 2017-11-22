@@ -4,10 +4,10 @@
   # Force SSL for all requests
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteCond %{HTTPS} off
-  RewriteCond %{HTTP_HOST} != localhost
-  RewriteCond %{HTTP_HOST} != 127.0.0.1
-  RewriteCond %{REMOTE_ADDR} != 127.0.0.1
-  RewriteCond %{REMOTE_ADDR} != ::1
+  RewriteCond %{HTTP_HOST} !=localhost
+  RewriteCond %{HTTP_HOST} !=127.0.0.1
+  RewriteCond %{REMOTE_ADDR} !=127.0.0.1
+  RewriteCond %{REMOTE_ADDR} !=::1
   RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
 
   # Send would-be 404 requests to Craft
