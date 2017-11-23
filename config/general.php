@@ -22,10 +22,12 @@ return [
         'allowAutoUpdates' => false,
         'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
         'defaultCookieDomain' => '.craftcms.com',
+        'baseCpUrl' => 'https://id.craftcms.com/',
     ],
     'dev' => [
         'devMode' => true,
         'allowAutoUpdates' => true,
         'defaultCookieDomain' => '.craftcms.dev',
+        'baseCpUrl' => 'http://id.craftcms.dev/',
     ]
 ];
