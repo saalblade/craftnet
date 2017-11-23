@@ -48,6 +48,7 @@ abstract class BaseApiController extends Controller
             $validator->validate($body, (object)['$ref' => 'file://'.$path]);
 
             if (!$validator->isValid()) {
+                Craft::warning("Invalid API request payload (validated against {$schema}):\n".print_r($validator->getErrors(), true));
                 throw new BadRequestHttpException('Invalid request body.');
             }
         }
