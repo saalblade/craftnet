@@ -401,24 +401,26 @@ class PluginsController extends Controller
 
             // Screenshots
 
-            $volume = $volumesService->getVolumeByHandle('screenshots');
-            $volumeId = $volumesService->ensureTopFolder($volume);
+            if($newHandle) {
+                $volume = $volumesService->getVolumeByHandle('screenshots');
+                $volumeId = $volumesService->ensureTopFolder($volume);
 
-            $subpath = '/'.$plugin->handle;
+                $subpath = '/'.$plugin->handle;
 
-            $folder = $assetsService->findFolder([
-                'volumeId' => $volumeId,
-                'path' => $subpath.'/'
-            ]);
+                $folder = $assetsService->findFolder([
+                    'volumeId' => $volumeId,
+                    'path' => $subpath.'/'
+                ]);
 
-            if (!$folder) {
-                $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
-                $folder = $assetsService->getFolderById($folderId);
-            }
+                if (!$folder) {
+                    $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
+                    $folder = $assetsService->getFolderById($folderId);
+                }
 
-            foreach ($plugin->screenshots as $screenshot) {
-                if (!$assetsService->moveAsset($screenshot, $folder)) {
-                    throw new Exception('Unable to save icon asset: '.implode(',', $screenshot->getFirstErrors()));
+                foreach ($plugin->screenshots as $screenshot) {
+                    if (!$assetsService->moveAsset($screenshot, $folder)) {
+                        throw new Exception('Unable to save icon asset: '.implode(',', $screenshot->getFirstErrors()));
+                    }
                 }
             }
         }
