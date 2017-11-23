@@ -13,3 +13,5 @@
 /web/packages.json
 /web/p
 /config/license.key
+/templates/test.twig
+/web/test.php
