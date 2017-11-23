@@ -209,6 +209,15 @@
             name: 'enabled',
             on: plugin.enabled
         }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Pending Approval',
+            id: 'pendingApproval',
+            name: 'pendingApproval',
+            on: plugin.pendingApproval,
+            disabled: true,
+        }) }}
+
     </div>
 {% endblock %}
 
