@@ -65,12 +65,13 @@ abstract class BaseApiController extends Controller
      */
     protected function transformPlugin(Plugin $plugin, $fullDetails = true): array
     {
+        $icon = $plugin->getIcon();
         $developer = $plugin->getDeveloper();
 
         // Return data
         $data = [
             'id' => $plugin->id,
-            'iconUrl' => $plugin->getIcon()->getUrl() ?? null,
+            'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
             'handle' => $plugin->handle,
             'name' => $plugin->name,
             'shortDescription' => $plugin->shortDescription,
@@ -89,7 +90,7 @@ abstract class BaseApiController extends Controller
             $screenshotIds = [];
 
             foreach ($plugin->getScreenshots() as $screenshot) {
-                $screenshotUrls[] = $screenshot->getUrl();
+                $screenshotUrls[] = $screenshot->getUrl().'?'.$screenshot->dateModified->getTimestamp();
                 $screenshotIds[] = $screenshot->getId();
             }
 

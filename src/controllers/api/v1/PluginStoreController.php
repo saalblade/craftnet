@@ -3,6 +3,7 @@
 namespace craftcom\controllers\api\v1;
 
 use Craft;
+use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\Entry;
 use craft\helpers\ArrayHelper;
@@ -68,11 +69,13 @@ class PluginStoreController extends BaseApiController
             ->all();
 
         foreach ($categories as $category) {
+            /** @var Asset|null $icon */
+            $icon = $category->icon[0] ?? null;
             $ret[] = [
                 'id' => $category->id,
                 'title' => $category->title,
                 'slug' => $category->slug,
-                'iconUrl' => $category->icon[0]->getUrl() ?? null,
+                'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
             ];
         }
 
