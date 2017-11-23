@@ -3,7 +3,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.0.0",
-    "craftcms/cms": "dev-release/3.0.0-RC1#c648b3cc15361f2af8c6f8a93a2c085305d6aab3 as 3.0.0-RC1",
+    "craftcms/cms": "dev-release/3.0.0-RC1#b526b220be8e20811912a532f29fe60ea1bd914a as 3.0.0-RC1",
     "roave/security-advisories": "dev-master",
     "justinrainbow/json-schema": "^5.2",
     "yiisoft/yii2-redis": "^2.0.6",

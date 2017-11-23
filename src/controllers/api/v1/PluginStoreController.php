@@ -3,9 +3,14 @@
 namespace craftcom\controllers\api\v1;
 
 use Craft;
+use craft\elements\Asset;
+use craft\elements\Category;
+use craft\elements\db\AssetQuery;
 use craft\elements\Entry;
+use craft\helpers\ArrayHelper;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\plugins\Plugin;
+use yii\caching\FileDependency;
 use yii\web\Response;
 
 /**
@@ -25,14 +30,6 @@ class PluginStoreController extends BaseApiController
      */
     public function actionIndex(): Response
     {
-        $enableCraftId = (Craft::$app->getRequest()->getParam('enableCraftId') === '1' ? true : false);
-
-        $cacheKey = 'pluginStoreData';
-
-        if ($enableCraftId) {
-            $cacheKey = 'pluginStoreDataCraftId';
-        }
-
         $pluginStoreData = null;
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
@@ -40,85 +37,84 @@ class PluginStoreController extends BaseApiController
         $enablePluginStoreCache = $craftIdConfig['enablePluginStoreCache'];
 
         if ($enablePluginStoreCache) {
-            $pluginStoreData = Craft::$app->getCache()->get($cacheKey);
+            $pluginStoreData = Craft::$app->getCache()->get('pluginStoreData');
         }
 
         if (!$pluginStoreData) {
-            // Featured Plugins
-
-            $featuredPluginEntries = Entry::find()->section('featuredPlugins')->all();
-
-            $featuredPlugins = [];
-
-            foreach ($featuredPluginEntries as $featuredPluginEntry) {
-                $plugins = [];
-
-                $pluginElements = $featuredPluginEntry->plugins;
-
-                foreach ($pluginElements->all() as $plugin) {
-                    if ($plugin) {
-                        if ($enableCraftId || (!$enableCraftId && !$plugin->price)) {
-                            $plugins[] = $plugin->id;
-                        }
-                    }
-                }
-
-                $featuredPlugins[] = [
-                    'id' => $featuredPluginEntry->id,
-                    'title' => $featuredPluginEntry->title,
-                    'plugins' => $plugins,
-                    'limit' => $featuredPluginEntry->limit,
-                ];
-            }
-
-
-            // Categories
-
-            $_categories = \craft\elements\Category::find()->orderBy('title asc')->all();
-            $categories = [];
-
-            foreach ($_categories as $category) {
-                $iconUrl = null;
-                $icon = $category->icon->one();
-
-                if ($icon) {
-                    $iconUrl = $icon->getUrl();
-                }
-
-                $categories[] = [
-                    'id' => $category->id,
-                    'title' => $category->title,
-                    'slug' => $category->slug,
-                    'iconUrl' => $iconUrl,
-                ];
-            }
-
-
-            // Plugins
-
-            $plugins = [];
-
-            $query = Plugin::find();
-
-            if (!$enableCraftId) {
-                $query->andWhere(['price' => null]);
-            }
-
-            foreach ($query->all() as $pluginElement) {
-                $plugins[] = $this->transformPlugin($pluginElement, false);
-            }
-
             $pluginStoreData = [
-                'featuredPlugins' => $featuredPlugins,
-                'categories' => $categories,
-                'plugins' => $plugins,
+                'categories' => $this->_categories(),
+                'featuredPlugins' => $this->_featuredPlugins(),
+                'plugins' => $this->_plugins(),
             ];
 
             if ($enablePluginStoreCache) {
-                Craft::$app->getCache()->set($cacheKey, $pluginStoreData, (60 * 60 * 3));
+                Craft::$app->getCache()->set('pluginStoreData', $pluginStoreData, null, new FileDependency([
+                    'fileName' => $this->module->getJsonDumper()->composerWebroot.'/packages.json',
+                ]));
             }
         }
 
         return $this->asJson($pluginStoreData);
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    private function _categories(): array
+    {
+        $ret = [];
+
+        $categories = Category::find()
+            ->orderBy('title asc')
+            ->with('icon')
+            ->all();
+
+        foreach ($categories as $category) {
+            $ret[] = [
+                'id' => $category->id,
+                'title' => $category->title,
+                'slug' => $category->slug,
+                'iconUrl' => $category->icon[0]->getUrl() ?? null,
+            ];
+        }
+
+        return $ret;
+    }
+
+    private function _featuredPlugins(): array
+    {
+        $ret = [];
+
+        $entries = Entry::find()
+            ->select(['elements.id', 'content.title', 'content.field_limit'])
+            ->section('featuredPlugins')
+            ->with('plugins', ['select' => ['elements.id']])
+            ->all();
+
+        foreach ($entries as $entry) {
+            $ret[] = [
+                'id' => $entry->id,
+                'title' => $entry->title,
+                'plugins' => ArrayHelper::getColumn($entry->plugins, 'id'),
+                'limit' => $entry->limit,
+            ];
+        }
+
+        return $ret;
+    }
+
+    private function _plugins(): array
+    {
+        $ret = [];
+
+        $plugins = Plugin::find()
+            ->with(['developer', 'categories', 'icon'])
+            ->all();
+
+        foreach ($plugins as $plugin) {
+            $ret[] = $this->transformPlugin($plugin, false);
+        }
+
+        return $ret;
     }
 }

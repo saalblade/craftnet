@@ -3,6 +3,7 @@
 namespace craftcom\controllers\api;
 
 use Craft;
+use craft\helpers\ArrayHelper;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\Module;
@@ -64,54 +65,34 @@ abstract class BaseApiController extends Controller
      */
     protected function transformPlugin(Plugin $plugin, $fullDetails = true): array
     {
-        // Developer name
-        $developerName = $plugin->getDeveloper()->developerName;
-
-        if (empty($developerName)) {
-            $developerName = $plugin->getDeveloper()->getFullName();
-        }
-
-        // Icon url
-        $iconUrl = null;
-        $icon = $plugin->icon;
-
-        if ($icon) {
-            $iconUrl = $icon->getUrl();
-        }
-
-        // Screenshots
-        $screenshotUrls = [];
-        $screenshotIds = [];
-
-        foreach ($plugin->getScreenshots() as $screenshot) {
-            $screenshotUrls[] = $screenshot->getUrl();
-            $screenshotIds[] = $screenshot->getId();
-        }
-
-        // Categories
-        $categoryIds = [];
-
-        foreach ($plugin->getCategories() as $category) {
-            $categoryIds[] = $category->id;
-        }
+        $developer = $plugin->getDeveloper();
 
         // Return data
         $data = [
             'id' => $plugin->id,
-            'iconUrl' => $iconUrl,
+            'iconUrl' => $plugin->getIcon()->getUrl() ?? null,
             'handle' => $plugin->handle,
             'name' => $plugin->name,
             'shortDescription' => $plugin->shortDescription,
             'price' => $plugin->price,
             'renewalPrice' => $plugin->renewalPrice,
-            'developerId' => $plugin->getDeveloper()->id,
-            'developerName' => $developerName,
-            'categoryIds' => $categoryIds,
+            'developerId' => $developer->id,
+            'developerName' => $developer->developerName ?: $developer->getFullName(),
+            'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
             'version' => $plugin->latestVersion,
             'packageName' => $plugin->packageName,
         ];
 
         if ($fullDetails) {
+            // Screenshots
+            $screenshotUrls = [];
+            $screenshotIds = [];
+
+            foreach ($plugin->getScreenshots() as $screenshot) {
+                $screenshotUrls[] = $screenshot->getUrl();
+                $screenshotIds[] = $screenshot->getId();
+            }
+
             $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['activeInstalls'] = 0;
             $data['compatibility'] = 'Craft 3';
@@ -122,7 +103,7 @@ abstract class BaseApiController extends Controller
             $data['changelogPath'] = $plugin->changelogPath;
             $data['repository'] = $plugin->repository;
             $data['license'] = $plugin->license;
-            $data['developerUrl'] = $plugin->getDeveloper()->developerUrl;
+            $data['developerUrl'] = $developer->developerUrl;
             $data['screenshotUrls'] = $screenshotUrls;
             $data['screenshotIds'] = $screenshotIds;
         }
