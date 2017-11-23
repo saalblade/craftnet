@@ -60,10 +60,11 @@ abstract class BaseApiController extends Controller
     /**
      * @param Plugin $plugin
      * @param bool   $fullDetails
+     * @param bool   $includePrices
      *
      * @return array
      */
-    protected function transformPlugin(Plugin $plugin, $fullDetails = true): array
+    protected function transformPlugin(Plugin $plugin, bool $fullDetails = true, bool $includePrices = true): array
     {
         $icon = $plugin->getIcon();
         $developer = $plugin->getDeveloper();
@@ -75,8 +76,8 @@ abstract class BaseApiController extends Controller
             'handle' => $plugin->handle,
             'name' => $plugin->name,
             'shortDescription' => $plugin->shortDescription,
-            'price' => $plugin->price,
-            'renewalPrice' => $plugin->renewalPrice,
+            'price' => $includePrices ? $plugin->price : null,
+            'renewalPrice' => $includePrices ? $plugin->renewalPrice : null,
             'developerId' => $developer->id,
             'developerName' => $developer->getDeveloperName(),
             'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),

@@ -32,22 +32,23 @@ class PluginStoreController extends BaseApiController
         $pluginStoreData = null;
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
-
         $enablePluginStoreCache = $craftIdConfig['enablePluginStoreCache'];
+        $enableCraftId = (bool)Craft::$app->getRequest()->getParam('enableCraftId', false);
+        $cacheKey = $enableCraftId ? 'pluginStoreDataCraftId' : 'pluginStoreData';
 
         if ($enablePluginStoreCache) {
-            $pluginStoreData = Craft::$app->getCache()->get('pluginStoreData');
+            $pluginStoreData = Craft::$app->getCache()->get($cacheKey);
         }
 
         if (!$pluginStoreData) {
             $pluginStoreData = [
                 'categories' => $this->_categories(),
                 'featuredPlugins' => $this->_featuredPlugins(),
-                'plugins' => $this->_plugins(),
+                'plugins' => $this->_plugins($enableCraftId),
             ];
 
             if ($enablePluginStoreCache) {
-                Craft::$app->getCache()->set('pluginStoreData', $pluginStoreData, null, new FileDependency([
+                Craft::$app->getCache()->set($cacheKey, $pluginStoreData, null, new FileDependency([
                     'fileName' => $this->module->getJsonDumper()->composerWebroot.'/packages.json',
                 ]));
             }
@@ -104,7 +105,12 @@ class PluginStoreController extends BaseApiController
         return $ret;
     }
 
-    private function _plugins(): array
+    /**
+     * @param bool $includePrices
+     *
+     * @return array
+     */
+    private function _plugins(bool $includePrices): array
     {
         $ret = [];
 
@@ -113,7 +119,7 @@ class PluginStoreController extends BaseApiController
             ->all();
 
         foreach ($plugins as $plugin) {
-            $ret[] = $this->transformPlugin($plugin, false);
+            $ret[] = $this->transformPlugin($plugin, false, $includePrices);
         }
 
         return $ret;
