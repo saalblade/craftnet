@@ -3,9 +3,7 @@
 namespace craftcom\controllers\api\v1;
 
 use Craft;
-use craft\elements\Asset;
 use craft\elements\Category;
-use craft\elements\db\AssetQuery;
 use craft\elements\Entry;
 use craft\helpers\ArrayHelper;
 use craftcom\controllers\api\BaseApiController;
