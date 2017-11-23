@@ -20,10 +20,12 @@
                     <label for="enablePluginDeveloperFeatures" :class="userIsInGroup('developers') ? 'disabled' : ''">Enable plugin developer features</label>
                 </p>
 
-                <p>
+                <p v-if="userIsInGroup('staff')">
                     <input id="enableShowcaseFeatures" type="checkbox" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures">
                     <label for="enableShowcaseFeatures">Enable showcase features</label>
                 </p>
+
+                <input v-else type="hidden" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures" />
             </div>
         </div>
 
