@@ -16,6 +16,10 @@ if (file_exists(CRAFT_BASE_PATH.'/.env')) {
     $dotenv->load();
 }
 
+if ($storagePath = getenv('CRAFT_STORAGE_PATH')) {
+    define('CRAFT_STORAGE_PATH', $storagePath);
+}
+
 define('CRAFT_ENVIRONMENT', getenv('CRAFT_ENV') ?: 'prod');
 
 // Craft
