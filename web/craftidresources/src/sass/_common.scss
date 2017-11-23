@@ -1,3 +1,15 @@
+
+.flex-grow  {
+  flex-grow: 1;
+}
+
+.disabled {
+  color: darkgrey;
+}
+
+
+/* Notifications */
+
 #notifications-wrapper {
   left: 0;
   position: fixed;
@@ -29,6 +41,16 @@
   background: #5286d9;
 }
 
+#notifications .notification.success {
+  background: #5286d9;
+}
+
+#notifications .notification.error {
+  background: #dc3545;
+}
+
+
+/* Spinner */
 
 .spinner { display: inline-block; vertical-align: bottom; width: 24px; height:24px; background: url(../images/spinner.gif) no-repeat 50% 50%; }
 .spinner.big { width: 48px; height: 48px; background: url(../images/spinner_big.gif) no-repeat 50% 50%; }
@@ -36,12 +58,4 @@
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .spinner { background-image: url(../images/spinner_2x.gif); background-size: 20px; }
   .spinner.big { background-image: url(../images/spinner_big_2x.gif); background-size: 48px; }
-}
-
-.flex-grow  {
-  flex-grow: 1;
-}
-
-.disabled {
-  color: darkgrey;
 }

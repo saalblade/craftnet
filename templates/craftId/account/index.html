@@ -1,5 +1,9 @@
 {% extends "_layouts/base" %}
 
+{% do view.registerJsFile("//js.stripe.com/v3/") %}
+{% do view.registerJsFile("/craftidresources/dist/js/app.js") %}
+{% do view.registerCssFile("/craftidresources/dist/css/app.css") %}
+
 {% block body %}
 
 	{% for type in ['notice', 'error'] %}
@@ -22,6 +26,4 @@
         window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken.attributes|json_encode|raw : 'false' }};
 	</script>
 
-	{% do view.registerJsFile("//js.stripe.com/v3/") %}
-	{% do view.registerJsFile("/craftidresources/dist/js/main.js") %}
 {% endblock %}

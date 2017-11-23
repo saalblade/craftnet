@@ -4,6 +4,7 @@
             <div id="notifications-wrapper" :class="{'hide': !notification }">
                 <div id="notifications">
                     <div class="notification bg-success" :class="'bg-'+notification.type">{{ notification.message }}</div>
+
                 </div>
             </div>
         </template>

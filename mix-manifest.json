@@ -1,5 +1,8 @@
 {
-    "/web/craftidresources/dist/js/main.js": "/web/craftidresources/dist/js/main.js",
-    "/web/craftidresources/dist/css/main.css": "/web/craftidresources/dist/css/main.css",
-    "/web/craftidresources/dist/css/main.css.map": "/web/craftidresources/dist/css/main.css.map"
+    "/web/craftidresources/dist/js/app.js": "/web/craftidresources/dist/js/app.js",
+    "/web/craftidresources/dist/css/app.css": "/web/craftidresources/dist/css/app.css",
+    "/web/craftidresources/dist/css/site.css": "/web/craftidresources/dist/css/site.css",
+    "/web/craftidresources/dist/css/app.css.map": "/web/craftidresources/dist/css/app.css.map",
+    "/web/craftidresources/dist/css/site.css.map": "/web/craftidresources/dist/css/site.css.map",
+    "/web/craftidresources/dist/js/site.js": "/web/craftidresources/dist/js/site.js"
 }

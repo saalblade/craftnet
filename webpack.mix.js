@@ -13,8 +13,10 @@ let mix = require('laravel-mix');
 const sourcePath = 'web/craftidresources/src';
 const distPath = 'web/craftidresources/dist';
 
-mix.js(sourcePath + '/js/main.js', distPath + '/js/')
-    .sass(sourcePath + '/sass/main.scss', distPath + '/css/')
+mix.js(sourcePath + '/js/app.js', distPath + '/js/')
+    .js(sourcePath + '/js/site.js', distPath + '/js/')
+    .sass(sourcePath + '/sass/app.scss', distPath + '/css/')
+    .sass(sourcePath + '/sass/site.scss', distPath + '/css/')
     .options({
         processCssUrls: false
     })
