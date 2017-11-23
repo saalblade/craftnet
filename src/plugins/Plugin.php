@@ -134,13 +134,31 @@ class Plugin extends Element
 
     protected static function defineSources(string $context = null): array
     {
-        return [
+        $sources = [
             [
                 'key' => '*',
                 'label' => 'All Plugins',
                 'criteria' => ['status' => null],
             ],
+            [
+                'heading' => 'Categories',
+            ],
         ];
+
+        $categories = Category::find()
+            ->group('pluginCategories')
+            ->with('icon')
+            ->all();
+
+        foreach ($categories as $category) {
+            $sources[] = [
+                'key' => 'category:'.$category->id,
+                'label' => $category->title,
+                'criteria' => ['categoryId' => $category->id],
+            ];
+        }
+
+        return $sources;
     }
 
     protected static function defineActions(string $source = null): array
