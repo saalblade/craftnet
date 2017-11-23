@@ -19,6 +19,11 @@ class PluginQuery extends ElementQuery
     public $handle;
 
     /**
+     * @var int|int[]|null The category ID(s) that the resulting plugins must have.
+     */
+    public $categoryId;
+
+    /**
      * @var int|int[]|null The user ID(s) that the resulting plugins’ developers must have.
      */
     public $developerId;
@@ -48,6 +53,20 @@ class PluginQuery extends ElementQuery
     public function handle($value)
     {
         $this->handle = $value;
+        return $this;
+    }
+
+    /**
+     * Sets the [[categoryId]] property.
+     *
+     * @param int|int[]|null $value The property value
+     *
+     * @return static self reference
+     */
+    public function categoryId($value)
+    {
+        $this->categoryId = $value;
+
         return $this;
     }
 
@@ -112,6 +131,12 @@ class PluginQuery extends ElementQuery
 
         if ($this->packageId) {
             $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.packageId', $this->packageId));
+        }
+
+        if ($this->categoryId) {
+            $this->subQuery
+                ->innerJoin(['craftcom_plugincategories pc'], '[[pc.pluginId]] = [[elements.id]]')
+                ->andWhere(Db::parseParam('pc.categoryId', $this->categoryId));
         }
 
         return parent::beforePrepare();
