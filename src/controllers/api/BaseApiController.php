@@ -78,7 +78,7 @@ abstract class BaseApiController extends Controller
             'price' => $plugin->price,
             'renewalPrice' => $plugin->renewalPrice,
             'developerId' => $developer->id,
-            'developerName' => $developer->developerName ?: $developer->getFullName(),
+            'developerName' => $developer->getDeveloperName(),
             'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
             'version' => $plugin->latestVersion,
             'packageName' => $plugin->packageName,

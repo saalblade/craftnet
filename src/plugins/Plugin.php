@@ -11,6 +11,7 @@ use craft\elements\Category;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
+use craftcom\behaviors\Developer;
 use craftcom\composer\Package;
 use craftcom\Module;
 use yii\base\InvalidConfigException;
@@ -353,7 +354,7 @@ class Plugin extends Element
     }
 
     /**
-     * @return User
+     * @return User|Developer
      * @throws InvalidConfigException
      */
     public function getDeveloper(): User
@@ -390,7 +391,7 @@ class Plugin extends Element
      */
     public function getDeveloperName(): string
     {
-        return $this->getDeveloper()->getName();
+        return $this->getDeveloper()->getDeveloperName();
     }
 
     /**

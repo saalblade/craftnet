@@ -5,7 +5,9 @@ namespace craftcom\controllers\id;
 use Craft;
 use craft\elements\Category;
 use craft\elements\Entry;
+use craft\elements\User;
 use craft\helpers\Json;
+use craftcom\behaviors\Developer;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
@@ -36,96 +38,6 @@ class CraftIdController extends BaseController
         $currentUserId = Craft::$app->getRequest()->getParam('userId');
         $currentUser = Craft::$app->getUsers()->getUserById($currentUserId);
 
-        // Apps
-        $apps = Module::getInstance()->getOauth()->getApps();
-
-        // Plugins
-        $plugins = [];
-        $pluginElements = Plugin::find()->developerId($currentUser->id)->status(null)->all();
-
-        foreach ($pluginElements as $pluginElement) {
-            $plugins[] = $this->pluginTransformer($pluginElement);
-        }
-
-        // Craft licenses
-        $craftLicenses = [];
-        $craftLicenseEntries = Entry::find()->section('licenses')->type('craftLicense')->authorId($currentUser->id)->all();
-
-        foreach ($craftLicenseEntries as $craftLicenseEntry) {
-            $craftLicense = $craftLicenseEntry->toArray();
-
-            $plugin = null;
-
-            if ($craftLicenseEntry->plugin) {
-                $plugin = $craftLicenseEntry->plugin->toArray();
-            }
-
-            $craftLicense['plugin'] = $plugin;
-            $craftLicense['author'] = $craftLicenseEntry->getAuthor()->toArray();
-            $craftLicense['type'] = $craftLicenseEntry->getType()->handle;
-            $craftLicenses[] = $craftLicense;
-        }
-
-        // Plugin licenses
-        $pluginLicenses = [];
-        $pluginLicenseEntries = Entry::find()->section('licenses')->type('pluginLicense')->authorId($currentUser->id)->all();
-
-        foreach ($pluginLicenseEntries as $pluginLicenseEntry) {
-            $pluginLicense = $pluginLicenseEntry->toArray();
-            $plugin = $pluginLicenseEntry->plugin;
-            $pluginLicense['plugin'] = $plugin->toArray();
-            $craftLicense = $pluginLicenseEntry->craftLicense->one();
-
-            if ($craftLicense) {
-                $pluginLicense['craftLicense'] = $craftLicense->toArray();
-            } else {
-                $pluginLicense['craftLicense'] = null;
-            }
-            $pluginLicense['type'] = $pluginLicenseEntry->getType()->handle;
-            $pluginLicense['author'] = $pluginLicenseEntry->getAuthor()->toArray();
-
-            $pluginLicenses[] = $pluginLicense;
-        }
-
-        // Customers
-        $customers = [];
-
-        foreach ($pluginElements as $pluginElement) {
-            $entries = Entry::find()->section('licenses')->relatedTo($pluginElement)->all();
-
-            foreach ($entries as $entry) {
-                $found = false;
-
-                foreach ($customers as $c) {
-                    if ($c['id'] == $entry->getAuthor()->id) {
-                        $found = true;
-                    }
-                }
-
-                if (!$found) {
-                    $customer = [
-                        'id' => $entry->getAuthor()->id,
-                        'email' => $entry->getAuthor()->email,
-                        'username' => $entry->getAuthor()->username,
-                        'fullName' => $entry->getAuthor()->fullName
-                    ];
-
-                    $customers[] = $customer;
-                }
-            }
-        }
-
-        // Categories
-        $categories = [];
-        $categoryElements = Category::find()->group('pluginCategories')->all();
-
-        foreach ($categoryElements as $categoryElement) {
-            $categories[] = [
-                'id' => $categoryElement->id,
-                'title' => $categoryElement->title,
-            ];
-        }
-
         // Data
         $data = [
             'currentUser' => [
@@ -151,15 +63,15 @@ class CraftIdController extends BaseController
                 // 'photoUrl' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getUrl() : null),
                 'photoUrl' => $currentUser->getThumbUrl(200),
             ],
-            'apps' => $apps,
-            'plugins' => $plugins,
-            'craftLicenses' => $craftLicenses,
-            'pluginLicenses' => $pluginLicenses,
-            'customers' => $customers,
-            'payouts' => $this->_getPayouts(),
-            'payoutsScheduled' => $this->_getScheduledPayouts(),
-            'payments' => $this->_getPayments(),
-            'categories' => $categories,
+            'apps' => Module::getInstance()->getOauth()->getApps(),
+            'plugins' => $this->_plugins($currentUser),
+            'craftLicenses' => $this->_craftLicenses($currentUser),
+            'pluginLicenses' => $this->_pluginLicenses($currentUser),
+            'customers' => $this->_customers($currentUser),
+            'payouts' => $this->_payouts(),
+            'payoutsScheduled' => $this->_scheduledPayouts(),
+            'payments' => $this->_payments(),
+            'categories' => $this->_pluginCategories(),
         ];
 
         return $this->asJson($data);
@@ -169,9 +81,124 @@ class CraftIdController extends BaseController
     // =========================================================================
 
     /**
+     * @param User|Developer $currentUser
+     *
      * @return array
      */
-    private function _getPayouts(): array
+    private function _plugins(User $currentUser): array
+    {
+        $ret = [];
+
+        foreach ($currentUser->getPlugins() as $plugin) {
+            $ret[] = $this->pluginTransformer($plugin);
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @param User|Developer $currentUser
+     *
+     * @return array
+     */
+    private function _craftLicenses(User $currentUser): array
+    {
+        $ret = [];
+        $craftLicenseEntries = Entry::find()->section('licenses')->type('craftLicense')->authorId($currentUser->id)->all();
+
+        foreach ($craftLicenseEntries as $craftLicenseEntry) {
+            $craftLicense = $craftLicenseEntry->toArray();
+
+            $plugin = null;
+
+            if ($craftLicenseEntry->plugin) {
+                $plugin = $craftLicenseEntry->plugin->toArray();
+            }
+
+            $craftLicense['plugin'] = $plugin;
+            $craftLicense['author'] = $craftLicenseEntry->getAuthor()->toArray();
+            $craftLicense['type'] = $craftLicenseEntry->getType()->handle;
+            $ret[] = $craftLicense;
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @param User|Developer $currentUser
+     *
+     * @return array
+     */
+    private function _pluginLicenses(User $currentUser): array
+    {
+        $ret = [];
+        $pluginLicenseEntries = Entry::find()
+            ->section('licenses')
+            ->type('pluginLicense')
+            ->authorId($currentUser->id)
+            ->all();
+
+        foreach ($pluginLicenseEntries as $pluginLicenseEntry) {
+            $pluginLicense = $pluginLicenseEntry->toArray();
+            $plugin = $pluginLicenseEntry->plugin;
+            $pluginLicense['plugin'] = $plugin->toArray();
+            $craftLicense = $pluginLicenseEntry->craftLicense->one();
+
+            if ($craftLicense) {
+                $pluginLicense['craftLicense'] = $craftLicense->toArray();
+            } else {
+                $pluginLicense['craftLicense'] = null;
+            }
+            $pluginLicense['type'] = $pluginLicenseEntry->getType()->handle;
+            $pluginLicense['author'] = $pluginLicenseEntry->getAuthor()->toArray();
+
+            $ret[] = $pluginLicense;
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @param User|Developer $currentUser
+     *
+     * @return array
+     */
+    private function _customers(User $currentUser): array
+    {
+        $ret = [];
+
+        foreach ($currentUser->getPlugins() as $pluginElement) {
+            $entries = Entry::find()->section('licenses')->relatedTo($pluginElement)->all();
+
+            foreach ($entries as $entry) {
+                $found = false;
+
+                foreach ($ret as $c) {
+                    if ($c['id'] == $entry->getAuthor()->id) {
+                        $found = true;
+                    }
+                }
+
+                if (!$found) {
+                    $customer = [
+                        'id' => $entry->getAuthor()->id,
+                        'email' => $entry->getAuthor()->email,
+                        'username' => $entry->getAuthor()->username,
+                        'fullName' => $entry->getAuthor()->fullName
+                    ];
+
+                    $ret[] = $customer;
+                }
+            }
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @return array
+     */
+    private function _payouts(): array
     {
         return [
             [
@@ -207,7 +234,7 @@ class CraftIdController extends BaseController
     /**
      * @return array
      */
-    private function _getScheduledPayouts(): array
+    private function _scheduledPayouts(): array
     {
         return [
             [
@@ -221,7 +248,7 @@ class CraftIdController extends BaseController
     /**
      * @return array
      */
-    private function _getPayments(): array
+    private function _payments(): array
     {
         return [
             [
@@ -265,5 +292,25 @@ class CraftIdController extends BaseController
                 'date' => '1 year ago',
             ],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    private function _pluginCategories(): array
+    {
+        $ret = [];
+        $categories = Category::find()
+            ->group('pluginCategories')
+            ->all();
+
+        foreach ($categories as $category) {
+            $ret[] = [
+                'id' => $category->id,
+                'title' => $category->title,
+            ];
+        }
+
+        return $ret;
     }
 }
