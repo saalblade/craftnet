@@ -2,6 +2,7 @@
 
 namespace craftcom\controllers\id;
 
+use craft\helpers\ArrayHelper;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\plugins\Plugin;
@@ -32,35 +33,16 @@ abstract class BaseController extends Controller
      */
     protected function pluginTransformer(Plugin $plugin): array
     {
-        // Developer name
-        $developerName = $plugin->getDeveloper()->developerName;
-
-        if (empty($developerName)) {
-            $developerName = $plugin->getDeveloper()->getFullName();
-        }
-
-        // Icon url
-        $iconUrl = null;
-        $icon = $plugin->icon;
-
-        if ($icon) {
-            $iconUrl = $icon->getUrl();
-        }
+        $icon = $plugin->getIcon();
+        $developer = $plugin->getDeveloper();
 
         // Screenshots
         $screenshotUrls = [];
         $screenshotIds = [];
 
-        foreach ($plugin->screenshots as $screenshot) {
-            $screenshotUrls[] = $screenshot->getUrl();
+        foreach ($plugin->getScreenshots() as $screenshot) {
+            $screenshotUrls[] = $screenshot->getUrl().'?'.$screenshot->dateModified->getTimestamp();
             $screenshotIds[] = $screenshot->getId();
-        }
-
-        // Categories
-        $categoryIds = [];
-
-        foreach ($plugin->categories as $category) {
-            $categoryIds[] = $category->id;
         }
 
         return [
@@ -69,7 +51,7 @@ abstract class BaseController extends Controller
             'pendingApproval' => $plugin->pendingApproval,
             'status' => $plugin->status,
             'iconId' => $plugin->iconId,
-            'iconUrl' => $iconUrl,
+            'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
             'packageName' => $plugin->packageName,
             'handle' => $plugin->handle,
             'name' => $plugin->name,
@@ -83,13 +65,13 @@ abstract class BaseController extends Controller
             'renewalPrice' => $plugin->renewalPrice,
 
             // 'iconUrl' => $iconUrl,
-            'developerId' => $plugin->getDeveloper()->id,
-            'developerName' => $developerName,
-            'developerUrl' => $plugin->getDeveloper()->developerUrl,
+            'developerId' => $developer->id,
+            'developerName' => $developer->getDeveloperName(),
+            'developerUrl' => $developer->developerUrl,
 
             'screenshotUrls' => $screenshotUrls,
             'screenshotIds' => $screenshotIds,
-            'categoryIds' => $categoryIds,
+            'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
         ];
     }
 }

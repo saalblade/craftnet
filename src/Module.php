@@ -15,6 +15,7 @@ use craft\services\UserPermissions;
 use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
+use craftcom\behaviors\Developer;
 use craftcom\composer\JsonDumper;
 use craftcom\composer\PackageManager;
 use craftcom\fields\Plugins;
@@ -42,6 +43,12 @@ class Module extends \yii\base\Module
                 $this->_initCpRequest();
             }
         }
+
+        Event::on(User::class, User::EVENT_INIT, function(Event $e) {
+            /** @var User $user */
+            $user = $e->sender;
+            $user->attachBehavior('developer', Developer::class);
+        });
 
         Event::on(User::class, User::EVENT_AFTER_SAVE, function(ModelEvent $e) {
             /** @var User $user */
