@@ -64,6 +64,7 @@ class PluginStoreController extends BaseApiController
 
         $categories = Category::find()
             ->orderBy('title asc')
+            ->group('pluginCategories')
             ->with('icon')
             ->all();
 
