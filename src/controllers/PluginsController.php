@@ -531,16 +531,13 @@ class PluginsController extends Controller
             return null;
         }
 
-        try
-        {
+        try {
             Craft::$app->getMailer()->compose()
                 ->setSubject('A plugin is waiting for approval: '.$plugin->name)
                 ->setTextBody('https://id.craftcms.com/'.getenv('CRAFT_CP_TRIGGER').'/plugins/'.$plugin->id)
                 ->setTo(explode(',', getenv('PLUGIN_APPROVAL_RECIPIENTS')))
                 ->send();
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             // Just log and move on.
             Craft::error('There was a problem sending the plugin approval email: '.$e->getMessage(), __METHOD__);
         }
@@ -560,24 +557,6 @@ class PluginsController extends Controller
 
     // Private Methods
     // =========================================================================
-
-    /**
-     * Returns a plugin’s README contents
-     *
-     * @param Repo   $api
-     * @param string $owner
-     * @param string $repo
-     *
-     * @return string|null
-     */
-    private function _getReadme(Repo $api, string $owner, string $repo)
-    {
-        try {
-            return $api->readme($owner, $repo);
-        } catch (RuntimeException $e) {
-            return null;
-        }
-    }
 
     /**
      * Returns a plugin’s icon.
