@@ -19,6 +19,11 @@ class PluginQuery extends ElementQuery
     public $handle;
 
     /**
+     * @var string|string[]|null The license(s) that the resulting plugins must have.
+     */
+    public $license;
+
+    /**
      * @var int|int[]|null The category ID(s) that the resulting plugins must have.
      */
     public $categoryId;
@@ -53,6 +58,19 @@ class PluginQuery extends ElementQuery
     public function handle($value)
     {
         $this->handle = $value;
+        return $this;
+    }
+
+    /**
+     * Sets the [[license]] property.
+     *
+     * @param string|string[]|null $value The property value
+     *
+     * @return static self reference
+     */
+    public function license($value)
+    {
+        $this->license = $value;
         return $this;
     }
 
@@ -123,6 +141,10 @@ class PluginQuery extends ElementQuery
 
         if ($this->handle) {
             $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.handle', $this->handle));
+        }
+
+        if ($this->license) {
+            $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.license', $this->license));
         }
 
         if ($this->developerId) {
