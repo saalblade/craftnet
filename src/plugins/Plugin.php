@@ -185,6 +185,7 @@ class Plugin extends Element
             'repository',
             'name',
             'handle',
+            'license',
         ];
     }
 
