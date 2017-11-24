@@ -17,6 +17,7 @@ return [
         'csrfTokenName' => 'CRAFTCOM_CSRF_TOKEN',
         'phpSessionName' => 'CraftComSessionId',
         'runQueueAutomatically' => false,
+        'generateTransformsBeforePageLoad' => true,
     ],
     'prod' => [
         'allowAutoUpdates' => false,
