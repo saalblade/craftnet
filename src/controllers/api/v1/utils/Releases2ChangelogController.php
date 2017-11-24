@@ -1,0 +1,110 @@
+<?php
+
+namespace craftcom\controllers\api\v1\utils;
+
+use Composer\Semver\Comparator;
+use Craft;
+use craft\helpers\ArrayHelper;
+use craft\helpers\DateTimeHelper;
+use craft\helpers\Json;
+use craftcom\controllers\api\BaseApiController;
+use yii\web\Response;
+
+/**
+ * Class AccountController
+ *
+ * @package craftcom\controllers\api\v1
+ */
+class Releases2ChangelogController extends BaseApiController
+{
+    // Public Methods
+    // =========================================================================
+
+    /**
+     * Converts a releases.json file contents into a Markdown changelog
+     *
+     * @return Response
+     */
+    public function actionIndex(): Response
+    {
+        $this->requirePostRequest();
+        $changelog = "# Changelog\n";
+
+        $releases = (array)Json::decode(Craft::$app->getRequest()->getRawBody());
+
+        // Filter out any releases w/out a version
+        $releases = array_filter($releases, function($release) {
+            return isset($release['version']);
+        });
+
+        // Sort latest => oldest
+        usort($releases, function($a, $b) {
+            if (Comparator::equalTo($a['version'], $b['version'])) {
+                return 0;
+            }
+            return Comparator::greaterThan($a['version'], $b['version']) ? -1 : 1;
+        });
+
+        foreach ($releases as $release) {
+            if (empty($release['version'])) {
+                continue;
+            }
+
+            $date = isset($release['date']) ? DateTimeHelper::toDateTime($release['date']) : false;
+            $critical = !empty($release['critical']);
+
+            $changelog .= "\n## {$release['version']}";
+            if ($date) {
+                $changelog .= ' - '.$date->format('Y-m-d');
+            }
+            if ($critical) {
+                $changelog .= ' [CRITICAL]';
+            }
+            $changelog .= "\n";
+
+            if (isset($release['notes'])) {
+                $notesByHeading = [];
+                $otherNotes = '';
+                $heading = null;
+
+                foreach ($release['notes'] as $line) {
+                    // Is this a heading?
+                    if (preg_match('/^#\s+(.+)/', $line, $match)) {
+                        $heading = $match[1];
+                    } else {
+                        if (preg_match('/^\[(\w+)\]\s+(.+)/', $line, $match)) {
+                            $heading = ucfirst($match[1]);
+                            if ($heading === 'Improved') {
+                                $heading = 'Changed';
+                            }
+                            $line = $match[2];
+                        } else if ($heading === null) {
+                            $heading = '__other__';
+                        }
+
+                        if ($heading) {
+                            if (!isset($notesByHeading[$heading])) {
+                                $notesByHeading[$heading] = '';
+                            }
+                            $notesByHeading[$heading] .= "- {$line}\n";
+                        } else {
+                            $otherNotes .= "- {$line}\n";
+                        }
+                    }
+                }
+
+                // Uncategorized notes first
+                if ($otherNotes) {
+                    $changelog .= "\n{$otherNotes}";
+                }
+
+                foreach ($notesByHeading as $heading => $headingNotes) {
+                    $changelog .= "\n### {$heading}\n{$headingNotes}";
+                }
+            }
+        }
+
+        Craft::$app->getResponse()->setDownloadHeaders('CHANGELOG.md', 'text/markdown', true);
+        return $this->asRaw($changelog);
+    }
+}

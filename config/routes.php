@@ -27,6 +27,7 @@ return [
         'POST v1/developer/<userId:\d+>' => 'craftcom/api/v1/developer',
         'POST v1/plugin/<pluginId:\d+>' => 'craftcom/api/v1/plugin',
         'POST v1/checkout' => 'craftcom/api/v1/checkout',
+        'POST v1/utils/releases-2-changelog' => 'craftcom/api/v1/utils/releases-2-changelog',
         'POST github/push' => 'craftcom/api/github/push',
         'update-deps' => 'craftcom/update-deps',
 
