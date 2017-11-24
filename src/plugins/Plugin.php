@@ -150,13 +150,20 @@ class Plugin extends Element
             ->group('pluginCategories')
             ->with('icon')
             ->all();
+        $assetsService = Craft::$app->getAssets();
 
         foreach ($categories as $category) {
-            $sources[] = [
+            $source = [
                 'key' => 'category:'.$category->id,
                 'label' => $category->title,
                 'criteria' => ['categoryId' => $category->id],
             ];
+
+            if (!empty($category->icon)) {
+                $source['icon'] = $assetsService->getThumbPath($category->icon[0], 16);
+            }
+
+            $sources[] = $source;
         }
 
         return $sources;
