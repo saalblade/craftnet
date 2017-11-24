@@ -192,7 +192,13 @@ class PluginsController extends Controller
         }
 
         if ($request->getIsCpRequest()) {
-            $plugin->enabled = (bool)$request->getBodyParam('enabled');
+            if ($request->getBodyParam('approve', false)) {
+                $plugin->approve();
+            } else if ($request->getBodyParam('reject', false)) {
+                $plugin->reject();
+            } else if (($enabled = $request->getBodyParam('enabled')) !== null) {
+                $plugin->enabled = (bool)$enabled;
+            }
         }
 
         if (!$plugin->developerId) {
@@ -229,6 +235,7 @@ class PluginsController extends Controller
         $plugin->longDescription = $request->getBodyParam('longDescription');
         $plugin->documentationUrl = $request->getBodyParam('documentationUrl');
         $plugin->changelogPath = $request->getBodyParam('changelogPath') ?: null;
+        $plugin->devComments = $request->getBodyParam('devComments') ?: null;
 
         $plugin->setCategories(Category::find()->id($request->getBodyParam('categoryIds'))->fixedOrder()->all());
 
@@ -512,7 +519,7 @@ class PluginsController extends Controller
             throw new NotFoundHttpException('Plugin not found');
         }
 
-        $plugin->pendingApproval = true;
+        $plugin->submitForApproval();
 
 
         // Save plugin

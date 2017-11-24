@@ -8,6 +8,13 @@
 {% set fullPageForm = true %}
 {% set saveShortcutRedirect = 'plugins/{id}-{handle}' %}
 
+{% if plugin.history|length %}
+    {% set tabs = {
+        'info': {url: '#info', label: 'Info'},
+        'history': {url: '#history', label: 'History'},
+    } %}
+{% endif %}
+
 
 {% block actionButton %}
     <div class="btngroup">
@@ -15,6 +22,14 @@
 
         <div class="btn submit menubtn"></div>
         <div class="menu">
+            {% if plugin.pendingApproval %}
+                <hr>
+                <ul>
+                    <li><a class="formsubmit" data-param="approve" data-value="1"><span class="status green"></span>Approve</a></li>
+                    <li><a class="formsubmit" data-param="reject" data-value="1"><span class="status red"></span>Request changes</a></li>
+                </ul>
+                <hr>
+            {% endif %}
             <ul>
                 <li><a class="formsubmit" data-redirect="{{ saveShortcutRedirect|hash }}">
                         {{ forms.optionShortcutLabel('S') }}
@@ -34,130 +49,155 @@
 
 
 {% block content %}
-    <input type="hidden" name="action" value="craftcom/plugins/save">
-    <input type="hidden" name="redirect" value="{{ 'plugins/{id}'|hash }}">
-    {% if plugin.id %}<input type="hidden" name="pluginId" value="{{ plugin.id }}">{% endif %}
+    <div id="info">
+        <input type="hidden" name="action" value="craftcom/plugins/save">
+        <input type="hidden" name="redirect" value="{{ 'plugins/{id}'|hash }}">
+        {% if plugin.id %}<input type="hidden" name="pluginId" value="{{ plugin.id }}">{% endif %}
 
-    <div id="fields">
-        {% set repositoryInput = forms.text({
-            id: 'repository',
-            name: 'repository',
-            value: plugin.repository,
-            errors: plugin.getErrors('repository'),
-            placeholder: 'http://github.com/...',
-            type: 'url',
-            autofocus: true,
-        }) %}
-        {% if not plugin.id %}
-            {% set repositoryInput %}
-                <div class="flex" style="position: relative;">
-                    <div class="flex-grow">{{ repositoryInput }}</div>
-                    <input id="load-details" class="btn" type="button" value="Load Details">
-                    <div id="load-details-spinner" class="spinner hidden" style="position: absolute; top: 0; right: -24px;"></div>
-                </div>
-            {% endset %}
-        {% endif %}
+        <div id="fields">
+            {% set repositoryInput = forms.text({
+                id: 'repository',
+                name: 'repository',
+                value: plugin.repository,
+                errors: plugin.getErrors('repository'),
+                placeholder: 'http://github.com/...',
+                type: 'url',
+                autofocus: true,
+            }) %}
+            {% if not plugin.id %}
+                {% set repositoryInput %}
+                    <div class="flex" style="position: relative;">
+                        <div class="flex-grow">{{ repositoryInput }}</div>
+                        <input id="load-details" class="btn" type="button" value="Load Details">
+                        <div id="load-details-spinner" class="spinner hidden" style="position: absolute; top: 0; right: -24px;"></div>
+                    </div>
+                {% endset %}
+            {% endif %}
 
-        {{ forms.field({
-            label: 'Repository URL',
-            required: true,
-            id: 'repository',
-        }, repositoryInput) }}
+            {{ forms.field({
+                label: 'Repository URL',
+                required: true,
+                id: 'repository',
+            }, repositoryInput) }}
 
-        {{ forms.textField({
-            label: 'Plugin Name',
-            required: true,
-            id: 'name',
-            name: 'name',
-            value: plugin.name,
-            errors: plugin.getErrors('name'),
-        }) }}
+            {{ forms.textField({
+                label: 'Plugin Name',
+                required: true,
+                id: 'name',
+                name: 'name',
+                value: plugin.name,
+                errors: plugin.getErrors('name'),
+            }) }}
 
-        {{ forms.textField({
-            label: 'Package Name',
-            required: true,
-            id: 'packageName',
-            name: 'packageName',
-            value: plugin.packageName,
-            errors: plugin.getErrors('packageName'),
-        }) }}
+            {{ forms.textField({
+                label: 'Package Name',
+                required: true,
+                id: 'packageName',
+                name: 'packageName',
+                value: plugin.packageName,
+                errors: plugin.getErrors('packageName'),
+            }) }}
 
-        {{ forms.textField({
-            label: 'Plugin Handle',
-            required: true,
-            id: 'handle',
-            name: 'handle',
-            value: plugin.handle,
-            errors: plugin.getErrors('handle'),
-            class: 'code',
-        }) }}
+            {{ forms.textField({
+                label: 'Plugin Handle',
+                required: true,
+                id: 'handle',
+                name: 'handle',
+                value: plugin.handle,
+                errors: plugin.getErrors('handle'),
+                class: 'code',
+            }) }}
 
-        {{ forms.elementSelectField({
-            label: 'Icon',
-            id: 'iconId',
-            name: 'iconId',
-            elementType: 'craft\\elements\\Asset',
-            criteria: {kind: 'image'},
-            limit: 1,
-            elements: plugin.iconId ? [plugin.getIcon()] : null,
-        }) }}
+            {{ forms.elementSelectField({
+                label: 'Icon',
+                id: 'iconId',
+                name: 'iconId',
+                elementType: 'craft\\elements\\Asset',
+                criteria: {kind: 'image'},
+                limit: 1,
+                elements: plugin.iconId ? [plugin.getIcon()] : null,
+            }) }}
 
-        {{ forms.elementSelectField({
-            label: 'Categories',
-            id: 'categoryIds',
-            name: 'categoryIds',
-            elementType: 'craft\\elements\\Category',
-            elements: plugin.getCategories(),
-            required: true,
-            errors: plugin.getErrors('categories'),
-        }) }}
+            {{ forms.elementSelectField({
+                label: 'Categories',
+                id: 'categoryIds',
+                name: 'categoryIds',
+                elementType: 'craft\\elements\\Category',
+                elements: plugin.getCategories(),
+                required: true,
+                errors: plugin.getErrors('categories'),
+            }) }}
 
-        {{ forms.elementSelectField({
-            label: 'Screenshots',
-            id: 'screenshotIds',
-            name: 'screenshotIds',
-            elementType: 'craft\\elements\\Asset',
-            criteria: {kind: 'image'},
-            elements: plugin.getScreenshots(),
-        }) }}
+            {{ forms.elementSelectField({
+                label: 'Screenshots',
+                id: 'screenshotIds',
+                name: 'screenshotIds',
+                elementType: 'craft\\elements\\Asset',
+                criteria: {kind: 'image'},
+                elements: plugin.getScreenshots(),
+            }) }}
 
-        {{ forms.textareaField({
-            label: 'Short Description',
-            id: 'shortDescription',
-            name: 'shortDescription',
-            value: plugin.shortDescription,
-            errors: plugin.getErrors('shortDescription'),
-            class: 'nicetext',
-            rows: 2,
-        }) }}
+            {{ forms.textareaField({
+                label: 'Short Description',
+                id: 'shortDescription',
+                name: 'shortDescription',
+                value: plugin.shortDescription,
+                errors: plugin.getErrors('shortDescription'),
+                class: 'nicetext',
+                rows: 2,
+            }) }}
 
-        {{ forms.textareaField({
-            label: 'Long Description',
-            id: 'longDescription',
-            name: 'longDescription',
-            value: plugin.longDescription,
-            errors: plugin.getErrors('longDescription'),
-            class: 'nicetext',
-            rows: 4,
-        }) }}
+            {{ forms.textareaField({
+                label: 'Long Description',
+                id: 'longDescription',
+                name: 'longDescription',
+                value: plugin.longDescription,
+                errors: plugin.getErrors('longDescription'),
+                class: 'nicetext',
+                rows: 4,
+            }) }}
 
-        {{ forms.textField({
-            label: 'Documentation URL',
-            id: 'documentationUrl',
-            name: 'documentationUrl',
-            value: plugin.documentationUrl,
-            errors: plugin.getErrors('documentationUrl'),
-            type: 'url',
-        }) }}
+            {{ forms.textField({
+                label: 'Documentation URL',
+                id: 'documentationUrl',
+                name: 'documentationUrl',
+                value: plugin.documentationUrl,
+                errors: plugin.getErrors('documentationUrl'),
+                type: 'url',
+            }) }}
 
-        {{ forms.textField({
-            label: 'Changelog Path',
-            id: 'changelogPath',
-            name: 'changelogPath',
-            value: plugin.changelogPath,
-            errors: plugin.getErrors('changelogPath'),
-        }) }}
+            {{ forms.textField({
+                label: 'Changelog Path',
+                id: 'changelogPath',
+                name: 'changelogPath',
+                value: plugin.changelogPath,
+                errors: plugin.getErrors('changelogPath'),
+            }) }}
+        </div>
     </div>
+
+    {% if plugin.history|length %}
+        <div id="history" class="hidden">
+            <table class="data fullwidth">
+                <thead>
+                    <tr>
+                        <th scope="col">Note</th>
+                        <th scope="col">Dev Comments</th>
+                        <th scope="col">Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for state in plugin.history %}
+                        <tr>
+                            <td>{{ state.note }}</td>
+                            <td>{{ state.devComments ? state.devComments|md }}</td>
+                            <td>{{ state.dateCreated|timestamp }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block details %}
@@ -203,21 +243,34 @@
             errors: plugin.getErrors('renewalPrice'),
         }) }}
 
-        {{ forms.lightswitchField({
-            label: 'Enabled',
-            id: 'enabled',
-            name: 'enabled',
-            on: plugin.enabled
-        }) }}
+        {% if plugin.pendingApproval %}
+            <div class="data">
+                <div class="heading">Status</div>
+                <div class="value"><span class="status pending"></span>Pending Approval</div>
+            </div>
+        {% else %}
+            {{ forms.lightswitchField({
+                label: 'Enabled',
+                id: 'enabled',
+                name: 'enabled',
+                on: plugin.enabled,
+                disabled: plugin.pendingApproval
+            }) }}
+        {% endif %}
+    </div>
 
-        {{ forms.lightswitchField({
-            label: 'Pending Approval',
-            id: 'pendingApproval',
-            name: 'pendingApproval',
-            on: plugin.pendingApproval,
-            disabled: true,
+    <hr>
+    <div class="meta">
+        {{ forms.selectField({
+            id: 'canned-comments',
+            label: 'Comments',
+            options: [
+                {label: 'Custom…', value: ''},
+                {label: 'Needs LICENSE.md', value: "Your repo is missing a LICENSE.md file with the #{plugin.license == 'mit' ? '[MIT License](https://opensource.org/licenses/MIT)' : '[Craft License](https://craftcms.github.io/license/)'} text."},
+            ]
         }) }}
-
+        <textarea id="dev-comments" name="devComments" class="text fullwidth nicetext" placeholder="Comments to send the developer" autocomplete="off"></textarea>
+        {% include "_includes/forms/errorList" with { errors: plugin.getErrors('devComments') } %}
     </div>
 {% endblock %}
 
@@ -269,4 +322,8 @@
             return !isNaN(sourceVal) ? sourceVal*0.2 : '';
         });
     {% endif %}
+
+    $('#canned-comments').change(function(ev) {
+        $('#dev-comments').val(ev.currentTarget.value).trigger('change');
+    });
 {% endjs %}

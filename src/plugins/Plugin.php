@@ -15,6 +15,7 @@ use craftcom\behaviors\Developer;
 use craftcom\composer\Package;
 use craftcom\Module;
 use yii\base\InvalidConfigException;
+use yii\helpers\Markdown;
 
 /**
  * @property User       $developer
@@ -295,6 +296,11 @@ class Plugin extends Element
     public $latestVersion;
 
     /**
+     * @var string|null
+     */
+    public $devComments;
+
+    /**
      * @var bool Whether the plugin is pending approval.
      */
     public $pendingApproval = false;
@@ -323,6 +329,28 @@ class Plugin extends Element
      * @var Asset[]|null
      */
     private $_screenshots;
+
+    /**
+     * @var bool Whether the plugin was just submitted for approval
+     */
+    public $_submittedForApproval = false;
+
+    /**
+     * @var bool Whether the plugin was just approved
+     * @see setApproved()
+     */
+    private $_approved = false;
+
+    /**
+     * @var bool Whether the plugin was just rejected
+     * @see setRejected()
+     */
+    private $_rejected = false;
+
+    /**
+     * @var PluginHistory|null
+     */
+    private $_history;
 
     /**
      * @return string
@@ -471,6 +499,45 @@ class Plugin extends Element
         $this->_screenshots = $screenshots;
     }
 
+    /**
+     *
+     */
+    public function submitForApproval()
+    {
+        $this->_submittedForApproval = true;
+        $this->pendingApproval = true;
+        $this->enabled = false;
+    }
+
+    /**
+     *
+     */
+    public function approve()
+    {
+        $this->_approved = true;
+        $this->enabled = true;
+    }
+
+    /**
+     *
+     */
+    public function reject()
+    {
+        $this->_rejected = true;
+        $this->enabled = false;
+    }
+
+    /**
+     * @return PluginHistory
+     */
+    public function getHistory(): PluginHistory
+    {
+        if ($this->_history !== null) {
+            return $this->_history;
+        }
+        return $this->_history = new PluginHistory($this);
+    }
+
     public function rules()
     {
         $rules = parent::rules();
@@ -518,7 +585,26 @@ class Plugin extends Element
     }
 
     /**
-     * @param bool $isNew
+     * @inheritdoc
+     */
+    public function validate($attributeNames = null, $clearErrors = true)
+    {
+        parent::validate($attributeNames, $clearErrors);
+
+        if ($this->_rejected && !$this->devComments) {
+            $this->addError('devComments', 'You must explain why the plugin wasn’t approved.');
+        }
+
+        if ($this->hasErrors() && $this->pendingApproval) {
+            // Undo the enabled=true
+            $this->enabled = false;
+        }
+
+        return !$this->hasErrors();
+    }
+
+    /**
+     * @inheritdoc
      */
     public function afterSave(bool $isNew)
     {
@@ -545,7 +631,7 @@ class Plugin extends Element
 
         $this->packageId = $package->id;
 
-        if ($this->enabled) {
+        if ($this->_approved || $this->_rejected || $this->enabled) {
             $this->pendingApproval = false;
         }
 
@@ -605,9 +691,66 @@ class Plugin extends Element
             ->batchInsert('craftcom_pluginscreenshots', ['pluginId', 'assetId', 'sortOrder'], $screenshotData)
             ->execute();
 
+        $sendDevEmail = false;
+        $emailSubject = null;
+        $emailMessage = null;
+
+        if ($this->_submittedForApproval) {
+            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username.' submitted the plugin for approval');
+        } else if ($this->_approved) {
+            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username.' approved the plugin', $this->devComments);
+            $sendDevEmail = true;
+            $emailSubject = "{$this->name} has been approved!";
+            $emailMessage = <<<EOD
+Congratulations, Element API has been approved, and is now available in the Craft Plugin Store for all to enjoy.
+
+{$this->devComments}
+
+Thanks for submitting it!
+EOD;
+        } else if ($this->_rejected) {
+            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username.' rejected the plugin', $this->devComments);
+            $sendDevEmail = true;
+            $emailSubject = "{$this->name} isn't quite ready for prime time yet...";
+            $emailMessage = <<<EOD
+Thanks for submitting {$this->name} to the Craft Plugin Store!
+
+Before we can approve it, please fix the following:
+
+{$this->devComments}
+
+Once you've taken care of that, re-submit your plugin and we'll give it another look. If you have any questions, just reply to this email and we'll get back to you.
+EOD;
+        } else if ($this->devComments) {
+            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username.' sent the developer a note', $this->devComments);
+            $sendDevEmail = true;
+            $emailSubject = "Quick note about {$this->name}...";
+            $emailMessage = $this->devComments;
+        }
+
+        if ($sendDevEmail) {
+            $emailBody = <<<EOD
+Hi {$this->getDeveloper()->getFriendlyName()},
+
+{$emailMessage}
+
+–The Craft Team
+EOD;
+
+            Craft::$app->getMailer()->compose()
+                ->setSubject($emailSubject)
+                ->setTextBody($emailBody)
+                ->setHtmlBody(Markdown::process($emailBody))
+                ->setTo($this->getDeveloper())
+                ->send();
+        }
+
         parent::afterSave($isNew);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getThumbUrl(int $size)
     {
         if ($this->iconId) {
