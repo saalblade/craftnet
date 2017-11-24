@@ -78,8 +78,6 @@ class Releases2ChangelogController extends BaseApiController
                                 $heading = 'Changed';
                             }
                             $line = $match[2];
-                        } else if ($heading === null) {
-                            $heading = '__other__';
                         }
 
                         if ($heading) {
