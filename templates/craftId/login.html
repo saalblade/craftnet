@@ -3,11 +3,16 @@
 {% block content %}
 	<div class="container">
 		<div class="row">
-			<div class="col-6 ml-auto mr-auto mt-5">
+			<div class="col-12 text-center mt-5 mb-3">
+				<div class="p-3">
+					<img src="/craftidresources/dist/images/craftid.svg" width="80" />
+				</div>
+				<h1>Craft ID</h1>
+				<p class="lead">Manage your Craft ID.</p>
+			</div>
+			<div class="col-6 ml-auto mr-auto">
 				<div class="card">
 					<div class="card-body">
-						<h1>Craft ID</h1>
-						<p class="lead">Manage your Craft ID.</p>
 
 						<form method="post" accept-charset="UTF-8">
 							{{ csrfInput() }}

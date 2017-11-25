@@ -11,7 +11,9 @@
 
         <nav class="navbar navbar-expand navbar-light bg-light mb-5">
             <div class="container">
-                <router-link class="navbar-brand ml-3" to="/">Craft ID</router-link>
+                <router-link class="navbar-brand ml-3" to="/">
+                    Craft ID
+                </router-link>
 
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ml-auto">

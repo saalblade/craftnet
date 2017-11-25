@@ -2,6 +2,8 @@
 	{% redirect 'login' %}
 {% endif %}
 
+{% set bodyClass = (bodyClass is defined ? bodyClass~' ' : '') ~ craft.app.locale.getOrientation() -%}
+
 <html>
 <head>
 	<title>Craft ID</title>
@@ -10,7 +12,7 @@
 	{% do view.registerCssFile("//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css") %}
 
 </head>
-<body>
+<body class="{{ bodyClass }}">
 
 {{ beginBody() }}
 {% block body %}{% endblock %}
