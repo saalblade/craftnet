@@ -23,7 +23,6 @@
                         </strong>
                     </h6>
                     <p>{{ plugin.shortDescription }}</p>
-                    <p class="text-secondary">XXX Downloads</p>
                 </td>
                 <td>
                     <template v-if="!plugin.price || plugin.price == '0.00'">
@@ -43,10 +42,13 @@
                     <template v-if="plugin.enabled">
                         <span class="text-success">Approved</span>
                     </template>
-
                     <template v-else>
+
                         <span v-if="plugin.pendingApproval" class="text-secondary">In Review</span>
-                        <span v-else class="text-secondary">Prepare for submission</span>
+                        <template v-else>
+                            <span v-if="plugin.lastHistoryNote && plugin.lastHistoryNote.devComments" class="text-warning">Changes requested</span>
+                            <span v-else class="text-secondary">Prepare for submission</span>
+                        </template>
                     </template>
                 </td>
             </tr>
