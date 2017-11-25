@@ -9,6 +9,8 @@ use yii\helpers\Console;
 use yii\helpers\Inflector;
 
 /**
+ * Manages Composer packages.
+ *
  * @property Module $module
  */
 class PackagesController extends Controller
@@ -43,6 +45,9 @@ class PackagesController extends Controller
      */
     public $dumpJson = false;
 
+    /**
+     * @inheritdoc
+     */
     public function __get($name)
     {
         // Convert kebab-case names to camelCase
@@ -53,6 +58,9 @@ class PackagesController extends Controller
         return parent::__get($name);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function __set($name, $value)
     {
         // Convert kebab-case names to camelCase
@@ -64,6 +72,9 @@ class PackagesController extends Controller
         parent::__set($name, $value);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function options($actionID)
     {
         $options = parent::options($actionID);
@@ -85,6 +96,9 @@ class PackagesController extends Controller
         return $options;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function optionAliases()
     {
         $aliases = parent::optionAliases();
@@ -96,6 +110,9 @@ class PackagesController extends Controller
         return $aliases;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function afterAction($action, $result)
     {
         if ($this->dumpJson) {
@@ -106,6 +123,11 @@ class PackagesController extends Controller
         return parent::afterAction($action, $result);
     }
 
+    /**
+     * Adds a new Composer package.
+     *
+     * @param string $name The package name
+     */
     public function actionAdd(string $name)
     {
         $packageManager = $this->module->getPackageManager();
@@ -122,6 +144,11 @@ class PackagesController extends Controller
         }
     }
 
+    /**
+     * Removes a Composer package.
+     *
+     * @param string $name The package name
+     */
     public function actionRemove(string $name)
     {
         if ($this->confirm("Are you sure you want to remove {$name}?")) {
@@ -130,17 +157,30 @@ class PackagesController extends Controller
         }
     }
 
+    /**
+     * Updates our version records for a Composer package.
+     *
+     * @param string $name The package name
+     */
     public function actionUpdate(string $name)
     {
         $this->module->getPackageManager()->updatePackage($name, $this->force, $this->queue);
     }
 
+    /**
+     * Updates our version records for all non-managed Composer packages.
+     */
     public function actionUpdateDeps()
     {
         $this->module->getPackageManager()->updateDeps($this->force, $this->queue);
     }
 
-    public function actionCreateWebhook($name)
+    /**
+     * Creates a VCS webhook for a given package.
+     *
+     * @param string $name The package name
+     */
+    public function actionCreateWebhook(string $name)
     {
         if (!$this->module->getPackageManager()->createWebhook($name)) {
             Console::error("There was an error creating a webhook for {$name}.");

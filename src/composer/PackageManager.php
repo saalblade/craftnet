@@ -390,7 +390,7 @@ class PackageManager extends Component
     }
 
     /**
-     * Registers a VCS webhook for a given package.
+     * Creates a VCS webhook for a given package.
      *
      * @param string $name
      * @param bool   $createIfExists
