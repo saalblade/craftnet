@@ -692,6 +692,13 @@ class Plugin extends Element
             ->batchInsert('craftcom_pluginscreenshots', ['pluginId', 'assetId', 'sortOrder'], $screenshotData)
             ->execute();
 
+        // If this is enabled, clear the plugin store cache.
+        if ($this->enabled) {
+            $cache = Craft::$app->getCache();
+            $cache->delete('pluginStoreData');
+            $cache->delete('pluginStoreDataCraftId');
+        }
+
         $sendDevEmail = false;
         $emailSubject = null;
         $emailMessage = null;
