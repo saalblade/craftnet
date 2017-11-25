@@ -30,7 +30,16 @@
                     Your plugin is being reviewed, it will be automatically published once it’s approved.
                 </template>
                 <template v-else>
-                    <a @click.prevent="submit()" href="#" class="btn btn-secondary btn-sm">Submit for Approval</a>
+                    <template v-if="plugin.lastHistoryNote && plugin.lastHistoryNote.devComments">
+                        <h6>Changes requested</h6>
+                        <div v-html="plugin.lastHistoryNote.devComments"></div>
+                        <a @click.prevent="submit()" href="#" class="btn btn-secondary btn-sm">Re-submit for Approval</a>
+                    </template>
+                    <template v-else>
+                        <a @click.prevent="submit()" href="#" class="btn btn-secondary btn-sm">Submit for Approval</a>
+                    </template>
+
+
                     <span class="text-secondary">Your plugin will be automatically published once it’s approved.</span>
                 </template>
                 <div v-if="pluginSubmitLoading" class="spinner"></div>

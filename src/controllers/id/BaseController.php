@@ -7,6 +7,7 @@ use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\plugins\Plugin;
 use GuzzleHttp\Client;
+use yii\helpers\Markdown;
 
 /**
  * Class BaseController
@@ -45,6 +46,18 @@ abstract class BaseController extends Controller
             $screenshotIds[] = $screenshot->getId();
         }
 
+        // Last history note
+        $lastHistoryNote = null;
+        $history = $plugin->getHistory();
+
+        if(count($history) > 0) {
+            $lastHistoryNote = $history[0];
+
+            if($lastHistoryNote['devComments']) {
+                $lastHistoryNote['devComments'] = Markdown::process($lastHistoryNote['devComments']);
+            }
+        }
+
         return [
             'id' => $plugin->id,
             'enabled' => $plugin->enabled,
@@ -72,6 +85,8 @@ abstract class BaseController extends Controller
             'screenshotUrls' => $screenshotUrls,
             'screenshotIds' => $screenshotIds,
             'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
+
+            'lastHistoryNote' => $lastHistoryNote
         ];
     }
 }
