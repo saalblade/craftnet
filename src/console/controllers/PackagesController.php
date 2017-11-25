@@ -13,11 +13,34 @@ use yii\helpers\Inflector;
  */
 class PackagesController extends Controller
 {
+    /**
+     * @var bool Whether to update package releases even if their SHA hasn't changed
+     */
     public $force = false;
+
+    /**
+     * @var bool Whether this is a managed package or just a dependency of a managed package
+     */
     public $managed = false;
+
+    /**
+     * @var string The package's VCS repository URL
+     */
     public $repository;
+
+    /**
+     * @var string The Composer package type
+     */
     public $type = 'library';
+
+    /**
+     * @var bool Whether the action should be added to the queue
+     */
     public $queue = false;
+
+    /**
+     * @var bool Whether the Composer repository JSON files should be regenerated after the action is complete
+     */
     public $dumpJson = false;
 
     public function __get($name)
