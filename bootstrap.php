@@ -37,6 +37,9 @@ if (file_exists(CRAFT_BASE_PATH.'/.env')) {
 if ($storagePath = getenv('CRAFT_STORAGE_PATH')) {
     define('CRAFT_STORAGE_PATH', $storagePath);
 }
+if ($keyPath = getenv('LICENSE_KEY_PATH')) {
+    define('CRAFT_LICENSE_KEY_PATH', $keyPath);
+}
 
 define('CRAFT_ENVIRONMENT', getenv('CRAFT_ENV') ?: 'prod');
 
