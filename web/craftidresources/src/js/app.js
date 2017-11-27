@@ -1,11 +1,9 @@
 import Vue from 'vue';
-import VueResource from 'vue-resource';
 import store from './store'
 import { currency } from './filters/currency';
 import App from './App.vue';
 
 Vue.filter('currency', currency);
-Vue.use(VueResource);
 
 window.craftIdApp = new Vue({
 

@@ -710,7 +710,7 @@ class Plugin extends Element
             $sendDevEmail = true;
             $emailSubject = "{$this->name} has been approved!";
             $emailMessage = <<<EOD
-Congratulations, Element API has been approved, and is now available in the Craft Plugin Store for all to enjoy.
+Congratulations, {$this->name} has been approved, and is now available in the Craft Plugin Store for all to enjoy.
 
 {$this->devComments}
 

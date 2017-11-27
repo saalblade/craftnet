@@ -166,6 +166,8 @@
     import Repositories from '../components/Repositories'
     import slug from 'limax'
     import draggable from 'vuedraggable'
+    import axios from 'axios'
+    import qs from 'qs'
 
     export default {
 
@@ -323,22 +325,21 @@
                 body['action'] = 'craftcom/plugins/load-details';
                 body[csrfTokenName] = csrfTokenValue;
 
-                let options = { emulateJSON: true };
-
+                let params = qs.stringify(body);
                 let url = this.pluginDraft.repository;
 
-                this.$http.post(window.craftActionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), body, options)
+                axios.post(window.craftActionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), params)
                     .then(response => {
-                        this.pluginDraft.changelogPath = response.body.changelogPath;
-                        this.pluginDraft.documentationUrl = response.body.documentationUrl;
-                        this.pluginDraft.name = response.body.name;
-                        this.pluginDraft.handle = response.body.handle;
-                        this.pluginDraft.shortDescription = response.body.shortDescription;
-                        this.pluginDraft.longDescription = response.body.longDescription;
-                        this.pluginDraft.packageName = response.body.packageName;
-                        this.pluginDraft.iconId = response.body.iconId;
-                        this.pluginDraft.iconUrl = response.body.iconUrl;
-                        this.pluginDraft.license = response.body.license;
+                        this.pluginDraft.changelogPath = response.data.changelogPath;
+                        this.pluginDraft.documentationUrl = response.data.documentationUrl;
+                        this.pluginDraft.name = response.data.name;
+                        this.pluginDraft.handle = response.data.handle;
+                        this.pluginDraft.shortDescription = response.data.shortDescription;
+                        this.pluginDraft.longDescription = response.data.longDescription;
+                        this.pluginDraft.packageName = response.data.packageName;
+                        this.pluginDraft.iconId = response.data.iconId;
+                        this.pluginDraft.iconUrl = response.data.iconUrl;
+                        this.pluginDraft.license = response.data.license;
                         this.repositoryLoading = false;
                     })
                     .catch(response => {
