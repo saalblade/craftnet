@@ -95,12 +95,19 @@ abstract class BaseApiController extends Controller
                 $screenshotIds[] = $screenshot->getId();
             }
 
+            // todo: remove this when $includePricens goes away
+            $longDescription = $plugin->longDescription;
+            if (!$includePrices && $plugin->price) {
+                $price = Craft::$app->getFormatter()->asCurrency($plugin->price, 'USD');
+                $longDescription = "_This plugin will cost {$price} once Craft 3 GA is released._\n\n{$longDescription}";
+            }
+
             $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['activeInstalls'] = 0;
             $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
-            $data['longDescription'] = $plugin->longDescription;
+            $data['longDescription'] = $longDescription;
             $data['documentationUrl'] = $plugin->documentationUrl;
             $data['changelogPath'] = $plugin->changelogPath;
             $data['repository'] = $plugin->repository;
