@@ -1,28 +1,25 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex);
+import axios from 'axios';
+import qs from 'qs';
 
 export default {
 
     getCraftIdData(userId, cb, cbError) {
-        let body = { userId: userId };
-        let options = { emulateJSON: true };
+        let params = qs.stringify({
+            userId: userId
+        });
 
-        Vue.http.post(window.craftActionUrl+'/craftcom/id/craft-id', body, options)
-            .then(response => cb(response.body))
+        axios.post(window.craftActionUrl+'/craftcom/id/craft-id', params)
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
     disconnectApp(appHandle, cb, cbError) {
-        let options = { emulateJSON: true };
-
         let formData = new FormData();
         formData.append('appTypeHandle', appHandle);
         formData.append(csrfTokenName, csrfTokenValue);
 
-        Vue.http.post(window.craftActionUrl+'/craftcom/id/apps/disconnect', formData, options)
-            .then(response => cb(response.body))
+        axios.post(window.craftActionUrl+'/craftcom/id/apps/disconnect', formData)
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
@@ -50,21 +47,17 @@ export default {
         formData.append('action', 'users/save-user');
         formData.append(csrfTokenName, csrfTokenValue);
 
-        let options = { emulateJSON: true };
-
-        Vue.http.post(window.craftActionUrl+'/users/save-user', formData, options)
-            .then(response => cb(response.body))
-            .catch(response => cbError(response.body));
+        axios.post(window.craftActionUrl+'/users/save-user', formData)
+            .then(response => cb(response.data))
+            .catch(response => cbError(response.data));
     },
 
     uploadUserPhoto(formData, cb, cbError) {
         formData.append('action', 'craftcom/id/account/upload-user-photo');
         formData.append(csrfTokenName, csrfTokenValue);
 
-        let options = { emulateJSON: true };
-
-        Vue.http.post(window.craftActionUrl+'/craftcom/id/account/upload-user-photo', formData, options)
-            .then(response => cb(response.body))
+        axios.post(window.craftActionUrl+'/craftcom/id/account/upload-user-photo', formData)
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
@@ -72,48 +65,41 @@ export default {
         formData.append('action', 'craftcom/id/account/delete-user-photo');
         formData.append(csrfTokenName, csrfTokenValue);
 
-        let options = { emulateJSON: true };
-
-        Vue.http.post(window.craftActionUrl+'/craftcom/id/account/delete-user-photo', formData, options)
-            .then(response => cb(response.body))
+        axios.post(window.craftActionUrl+'/craftcom/id/account/delete-user-photo', formData)
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
     getStripeAccount(cb, cbError) {
-        Vue.http.get(window.craftIdUrl+'/stripe/account')
-            .then(response => cb(response.body))
+        axios.get(window.craftIdUrl+'/stripe/account')
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
     getStripeCustomer(cb, cbError) {
-        Vue.http.get(window.craftIdUrl+'/stripe/customer')
-            .then(response => cb(response.body))
+        axios.get(window.craftIdUrl+'/stripe/customer')
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
     disconnectStripeAccount(cb, cbError) {
-        let options = { emulateJSON: true };
-
-        Vue.http.post(window.craftIdUrl+'/stripe/disconnect', options)
-            .then(response => cb(response.body))
+        axios.post(window.craftIdUrl+'/stripe/disconnect')
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
     saveCard(token, cb, cbError) {
-        let body = { token: token.id };
-        let options = { emulateJSON: true };
+        let formData = new FormData();
+        formData.append('token', token.id);
 
-        Vue.http.post(window.craftIdUrl+'/stripe/save-card', body, options)
-            .then(response => cb(response.body))
+        axios.post(window.craftIdUrl+'/stripe/save-card', formData)
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
     removeCard(cb, cbError) {
-        let body = {};
-        let options = { emulateJSON: true };
-
-        Vue.http.post(window.craftIdUrl+'/stripe/remove-card', body, options)
-            .then(response => cb(response.body))
+        axios.post(window.craftIdUrl+'/stripe/remove-card')
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
@@ -142,10 +128,9 @@ export default {
         body['action'] = 'entries/save-entry';
         body[csrfTokenName] = csrfTokenValue;
 
-        let options = { emulateJSON: true };
-
-        Vue.http.post(window.craftActionUrl+'/entries/save-entry', body, options)
-            .then(response => cb(response.body))
+        let params = qs.stringify(body);
+        axios.post(window.craftActionUrl+'/entries/save-entry', params)
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
@@ -153,22 +138,18 @@ export default {
         formData.append('action', 'craftcom/plugins/save');
         formData.append(csrfTokenName, csrfTokenValue);
 
-        let options = { emulateJSON: true };
-
-        Vue.http.post(window.craftActionUrl+'/craftcom/plugins/save', formData, options)
-            .then(response => cb(response.body))
+        axios.post(window.craftActionUrl+'/craftcom/plugins/save', formData)
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
     submitPlugin(pluginId, cb, cbError) {
-        let options = { emulateJSON: true };
-
         let formData = new FormData();
         formData.append('pluginId', pluginId);
         formData.append(csrfTokenName, csrfTokenValue);
 
-        Vue.http.post(window.craftActionUrl+'/craftcom/plugins/submit', formData, options)
-            .then(response => cb(response.body))
+        axios.post(window.craftActionUrl+'/craftcom/plugins/submit', formData)
+            .then(response => cb(response.data))
             .catch(response => cbError(response));
     }
 
