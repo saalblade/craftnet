@@ -519,6 +519,14 @@ class PluginsController extends Controller
             throw new NotFoundHttpException('Plugin not found');
         }
 
+        if ($plugin->enabled) {
+            // Pretend we did
+            if ($request->getAcceptsJson()) {
+                return $this->asJson(['success' => true]);
+            }
+            return $this->redirectToPostedUrl($plugin);
+        }
+
         $plugin->submitForApproval();
 
 
@@ -552,10 +560,7 @@ class PluginsController extends Controller
         // Return
 
         if ($request->getAcceptsJson()) {
-            $return = [];
-            $return['success'] = true;
-
-            return $this->asJson($return);
+            return $this->asJson(['success' => true]);
         }
 
         Craft::$app->getSession()->setNotice('Plugin submitted for approval.');
