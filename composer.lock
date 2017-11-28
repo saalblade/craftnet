@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1992bcb158dd70b56d0a02c7d35a8693",
+    "content-hash": "7f073d942de50603b3cac0bd6e5b1db2",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -639,12 +639,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "921c269e434a0301936dbe052d502f322552e702"
+                "reference": "37a28fa32825829bbbabb53b50ba53ea32326685"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/921c269e434a0301936dbe052d502f322552e702",
-                "reference": "921c269e434a0301936dbe052d502f322552e702",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/37a28fa32825829bbbabb53b50ba53ea32326685",
+                "reference": "37a28fa32825829bbbabb53b50ba53ea32326685",
                 "shasum": ""
             },
             "require": {
@@ -712,7 +712,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2017-11-27T18:59:30+00:00"
+            "time": "2017-11-28T12:40:08+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
