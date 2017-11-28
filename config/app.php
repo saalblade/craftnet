@@ -52,23 +52,23 @@ return [
         'components' => [
             'redis' => [
                 'class' => yii\redis\Connection::class,
-                'hostname' => 'craft.4qveoj.ng.0001.usw2.cache.amazonaws.com',
-                'port' => 6379,
+                'hostname' => getenv('ELASTICACHE_HOSTNAME'),
+                'port' => getenv('ELASTICACHE_PORT'),
                 'database' => 0,
             ],
             'cache' => [
                 'class' => yii\redis\Cache::class,
                 'redis' => [
-                    'hostname' => 'craft.4qveoj.ng.0001.usw2.cache.amazonaws.com',
-                    'port' => 6379,
+                    'hostname' => getenv('ELASTICACHE_HOSTNAME'),
+                    'port' => getenv('ELASTICACHE_PORT'),
                     'database' => 0,
                 ],
             ],
             'queue' => [
                 'class' => pixelandtonic\yii\queue\sqs\Queue::class,
-                'url' => 'https://sqs.us-west-2.amazonaws.com/646206613093/plugin-store',
+                'url' => getenv('SQS_URL'),
                 'client' => [
-                    'region' => 'us-west-2',
+                    'region' => getenv('REGION'),
                     'version' => '2012-11-05',
                 ]
             ],
