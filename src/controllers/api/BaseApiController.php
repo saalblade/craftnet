@@ -3,13 +3,17 @@
 namespace craftcom\controllers\api;
 
 use Craft;
+use craft\db\Connection;
 use craft\helpers\ArrayHelper;
+use craft\helpers\DateTimeHelper;
+use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
 use JsonSchema\Validator;
 use stdClass;
+use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 
 /**
@@ -22,6 +26,11 @@ use yii\web\BadRequestHttpException;
 abstract class BaseApiController extends Controller
 {
     /**
+     * @var
+     */
+    private $_logRequestId;
+
+    /**
      * @inheritdoc
      */
     public $allowAnonymous = true;
@@ -30,6 +39,53 @@ abstract class BaseApiController extends Controller
      * @inheritdoc
      */
     public $enableCsrfValidation = false;
+
+    /**
+     * @return mixed
+     */
+    public function getLogRequestId()
+    {
+        return $this->_logRequestId;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function runAction($id, $params = [])
+    {
+        /** @var Connection $logDb */
+        $logDb = Craft::$app->get('logDb', false);
+
+        // This should only exist on production.
+        if ($logDb) {
+            $insert = [];
+
+            $insert['verb'] = Craft::$app->getRequest()->getMethod();
+            $insert['ip'] = Craft::$app->getRequest()->getRemoteIP();
+            $insert['url'] = (Craft::$app->getRequest()->getIsSecureConnection() ? 'https://' : 'http://').Craft::$app->getRequest()->getRemoteHost().Craft::$app->getRequest()->getUrl();
+            $insert['route'] = $this->getRoute();
+            $insert['dateCreated'] = Db::prepareDateForDb(new \DateTime());
+
+            try
+            {
+                $rawBody = Craft::$app->getRequest()->getRawBody();
+
+                // See if it's valid JSON.
+                Json::decode($rawBody);
+                $insert['bodyJson'] = $rawBody;
+            }
+            // There was a problem JSON decoding.
+            catch (InvalidParamException $e)
+            {
+                $insert['bodyText'] = $rawBody;
+            }
+
+            $logDb->createCommand()->insert('request', $insert, false)->execute();
+            $this->_logRequestId = $logDb->getLastInsertID('request');
+        }
+
+        return parent::runAction($id, $params);
+    }
 
     /**
      * Returns the JSON-decoded request body.
