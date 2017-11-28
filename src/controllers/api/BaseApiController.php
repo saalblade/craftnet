@@ -36,10 +36,10 @@ abstract class BaseApiController extends Controller
      *
      * @param string|null $schema JSON schema to validate the body with (optional)
      *
-     * @return stdClass
+     * @return stdClass|array
      * @throws BadRequestHttpException if the data doesn't validate
      */
-    protected function getPayload(string $schema = null): stdClass
+    protected function getPayload(string $schema = null)
     {
         $body = Json::decode(Craft::$app->getRequest()->getRawBody(), false);
 
@@ -78,6 +78,7 @@ abstract class BaseApiController extends Controller
             'shortDescription' => $plugin->shortDescription,
             'price' => $includePrices ? $plugin->price : null,
             'renewalPrice' => $includePrices ? $plugin->renewalPrice : null,
+            'currency' => 'USD',
             'developerId' => $developer->id,
             'developerName' => $developer->getDeveloperName(),
             'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
