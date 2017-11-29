@@ -52,7 +52,6 @@ class m171127_232934_apiaudit extends Migration
             'requestId' => $this->integer()->notNull(),
             'level' => $this->integer(),
             'category' => $this->string(),
-            'logTime' => 'float8',
             'message' => $this->text(),
             'dateCreated' => $this->dateTime()->notNull(),
         ]);
