@@ -36,10 +36,10 @@ abstract class BaseApiController extends Controller
      *
      * @param string|null $schema JSON schema to validate the body with (optional)
      *
-     * @return stdClass
+     * @return stdClass|array
      * @throws BadRequestHttpException if the data doesn't validate
      */
-    protected function getPayload(string $schema = null): stdClass
+    protected function getPayload(string $schema = null)
     {
         $body = Json::decode(Craft::$app->getRequest()->getRawBody(), false);
 
@@ -78,6 +78,7 @@ abstract class BaseApiController extends Controller
             'shortDescription' => $plugin->shortDescription,
             'price' => $includePrices ? $plugin->price : null,
             'renewalPrice' => $includePrices ? $plugin->renewalPrice : null,
+            'currency' => 'USD',
             'developerId' => $developer->id,
             'developerName' => $developer->getDeveloperName(),
             'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
@@ -95,12 +96,19 @@ abstract class BaseApiController extends Controller
                 $screenshotIds[] = $screenshot->getId();
             }
 
+            // todo: remove this when $includePricens goes away
+            $longDescription = $plugin->longDescription;
+            if (!$includePrices && $plugin->price) {
+                $price = Craft::$app->getFormatter()->asCurrency($plugin->price, 'USD');
+                $longDescription = "_This plugin will cost {$price} once Craft 3 GA is released._\n\n{$longDescription}";
+            }
+
             $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['activeInstalls'] = 0;
             $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
-            $data['longDescription'] = $plugin->longDescription;
+            $data['longDescription'] = $longDescription;
             $data['documentationUrl'] = $plugin->documentationUrl;
             $data['changelogPath'] = $plugin->changelogPath;
             $data['repository'] = $plugin->repository;
