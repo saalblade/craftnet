@@ -32,6 +32,7 @@ export default {
                     formData.append('userId', user[attribute]);
                     break;
                 case 'email':
+                case 'username':
                 case 'firstName':
                 case 'lastName':
                 case 'password':

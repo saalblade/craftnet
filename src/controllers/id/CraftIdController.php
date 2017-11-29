@@ -43,6 +43,7 @@ class CraftIdController extends BaseController
             'currentUser' => [
                 'id' => $currentUser->id,
                 'email' => $currentUser->email,
+                'username' => $currentUser->username,
                 'firstName' => $currentUser->firstName,
                 'lastName' => $currentUser->lastName,
                 'developerName' => $currentUser->developerName,
