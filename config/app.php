@@ -10,6 +10,19 @@ return [
             'oauth-server',
             'queue',
         ],
+        'components' => [
+            'logDb' => function() {
+                $logDbConfig = Craft::$app->getConfig()->getConfigFromFile('logdb');
+                return craft\db\Connection::createFromConfig(new DbConfig($logDbConfig));
+            },
+            'log' => [
+                'targets' => [
+                    [
+                        'class' => 'craftcom\logs\DbTarget',
+                    ],
+                ],
+            ],
+        ],
         'modules' => [
             'craftcom' => [
                 'class' => \craftcom\Module::class,
@@ -87,10 +100,6 @@ return [
                 $session->attachBehaviors([craft\behaviors\SessionBehavior::class]);
                 $session->authAccessParam = $stateKeyPrefix.'__auth_access';
                 return $session;
-            },
-            'logDb' => function() {
-                $logDbConfig = Craft::$app->getConfig()->getConfigFromFile('logdb');
-                return craft\db\Connection::createFromConfig(new DbConfig($logDbConfig));
             },
         ],
     ]
