@@ -323,12 +323,12 @@
                     repository: encodeURIComponent(url)
                 };
                 body['action'] = 'craftcom/plugins/load-details';
-                body[csrfTokenName] = csrfTokenValue;
+                body[Craft.csrfTokenName] = Craft.csrfTokenValue;
 
                 let params = qs.stringify(body);
                 let url = this.pluginDraft.repository;
 
-                axios.post(window.craftActionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), params)
+                axios.post(Craft.actionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), params)
                     .then(response => {
                         this.pluginDraft.changelogPath = response.data.changelogPath;
                         this.pluginDraft.documentationUrl = response.data.documentationUrl;

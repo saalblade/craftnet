@@ -8,7 +8,7 @@ export default {
             userId: userId
         });
 
-        axios.post(window.craftActionUrl+'/craftcom/id/craft-id', params)
+        axios.post(Craft.actionUrl+'/craftcom/id/craft-id', params)
             .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
@@ -16,9 +16,9 @@ export default {
     disconnectApp(appHandle, cb, cbError) {
         let formData = new FormData();
         formData.append('appTypeHandle', appHandle);
-        formData.append(csrfTokenName, csrfTokenValue);
+        formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(window.craftActionUrl+'/craftcom/id/apps/disconnect', formData)
+        axios.post(Craft.actionUrl+'/craftcom/id/apps/disconnect', formData)
             .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
@@ -45,27 +45,27 @@ export default {
         }
 
         formData.append('action', 'users/save-user');
-        formData.append(csrfTokenName, csrfTokenValue);
+        formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(window.craftActionUrl+'/users/save-user', formData)
+        axios.post(Craft.actionUrl+'/users/save-user', formData)
             .then(response => cb(response.data))
             .catch(response => cbError(response.data));
     },
 
     uploadUserPhoto(formData, cb, cbError) {
         formData.append('action', 'craftcom/id/account/upload-user-photo');
-        formData.append(csrfTokenName, csrfTokenValue);
+        formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(window.craftActionUrl+'/craftcom/id/account/upload-user-photo', formData)
+        axios.post(Craft.actionUrl+'/craftcom/id/account/upload-user-photo', formData)
             .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
     deleteUserPhoto(formData, cb, cbError) {
         formData.append('action', 'craftcom/id/account/delete-user-photo');
-        formData.append(csrfTokenName, csrfTokenValue);
+        formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(window.craftActionUrl+'/craftcom/id/account/delete-user-photo', formData)
+        axios.post(Craft.actionUrl+'/craftcom/id/account/delete-user-photo', formData)
             .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
@@ -126,19 +126,19 @@ export default {
         }
 
         body['action'] = 'entries/save-entry';
-        body[csrfTokenName] = csrfTokenValue;
+        body[Craft.csrfTokenName] = Craft.csrfTokenValue;
 
         let params = qs.stringify(body);
-        axios.post(window.craftActionUrl+'/entries/save-entry', params)
+        axios.post(Craft.actionUrl+'/entries/save-entry', params)
             .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
 
     savePlugin(formData, cb, cbError) {
         formData.append('action', 'craftcom/plugins/save');
-        formData.append(csrfTokenName, csrfTokenValue);
+        formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(window.craftActionUrl+'/craftcom/plugins/save', formData)
+        axios.post(Craft.actionUrl+'/craftcom/plugins/save', formData)
             .then(response => cb(response.data))
             .catch(response => cbError(response));
     },
@@ -146,9 +146,9 @@ export default {
     submitPlugin(pluginId, cb, cbError) {
         let formData = new FormData();
         formData.append('pluginId', pluginId);
-        formData.append(csrfTokenName, csrfTokenValue);
+        formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(window.craftActionUrl+'/craftcom/plugins/submit', formData)
+        axios.post(Craft.actionUrl+'/craftcom/plugins/submit', formData)
             .then(response => cb(response.data))
             .catch(response => cbError(response));
     }
