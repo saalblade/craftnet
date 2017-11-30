@@ -126,7 +126,7 @@ class Oauth extends Component
     {
         return (new Query())
             ->select(['accessToken'])
-            ->from(['oauthtokens'])
+            ->from(['craftcom_vcstokens'])
             ->where(['userId' => $userId, 'provider' => $providerClass])
             ->scalar();
     }
@@ -150,7 +150,7 @@ class Oauth extends Component
                 'expiryDate',
                 'refreshToken',
             ])
-            ->from(['oauthtokens'])
+            ->from(['craftcom_vcstokens'])
             ->where(['userId' => $userId, 'provider' => $providerClass])
             ->one();
     }
@@ -184,7 +184,7 @@ class Oauth extends Component
     public function deleteAccessToken($userId, $provider)
     {
         Craft::$app->getDb()->createCommand()
-            ->delete('oauthtokens', ['userId' => $userId, 'provider' => $provider])
+            ->delete('craftcom_vcstokens', ['userId' => $userId, 'provider' => $provider])
             ->execute();
     }
 }
