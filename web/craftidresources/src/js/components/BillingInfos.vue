@@ -102,13 +102,13 @@
 					businessState: this.invoiceDetailsDraft.businessState,
 					businessZipCode: this.invoiceDetailsDraft.businessZipCode,
 					businessCountry: this.invoiceDetailsDraft.businessCountry,
-                }).then((data) => {
+                }).then(response => {
                     this.$root.displayNotice('Company infos saved.');
                     this.showForm = false;
                     this.errors = {};
-                }).catch((data) => {
+                }).catch(response => {
                     this.$root.displayError('Couldn’t save company infos.');
-                    this.errors = data.errors;
+                    this.errors = response.data.errors;
                 });
             },
 

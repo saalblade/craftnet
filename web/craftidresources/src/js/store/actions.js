@@ -5,9 +5,9 @@ export const getCraftIdData = ({commit}) => {
     return new Promise((resolve, reject) => {
         let userId = window.currentUserId;
 
-        api.getCraftIdData(userId, data => {
-            commit(types.RECEIVE_CRAFT_ID_DATA, {data})
-            resolve(data);
+        api.getCraftIdData(userId, response => {
+            commit(types.RECEIVE_CRAFT_ID_DATA, {response});
+            resolve(response);
         },
         response => {
             reject(response);
@@ -15,15 +15,15 @@ export const getCraftIdData = ({commit}) => {
     })
 };
 
-export const connectAppCallback = ({commit, state}, apps) => {
+export const connectAppCallback = ({commit}, apps) => {
     commit(types.CONNECT_APP_CALLBACK, { apps })
 };
 
-export const disconnectApp = ({commit, state}, appHandle) => {
+export const disconnectApp = ({commit}, appHandle) => {
     return new Promise((resolve, reject) => {
-        api.disconnectApp(appHandle, data => {
-            commit(types.DISCONNECT_APP, {appHandle, data});
-            resolve(data);
+        api.disconnectApp(appHandle, response => {
+            commit(types.DISCONNECT_APP, {appHandle});
+            resolve(response);
         },
         response => {
             reject(response);
@@ -31,14 +31,14 @@ export const disconnectApp = ({commit, state}, appHandle) => {
     })
 };
 
-export const saveUser = ({commit, state}, user) => {
+export const saveUser = ({commit}, user) => {
     return new Promise((resolve, reject) => {
-        api.saveUser(user, data => {
-            if (!data.errors) {
-                commit(types.SAVE_USER, {user, data});
-                resolve(data);
+        api.saveUser(user, response => {
+            if (!response.data.errors) {
+                commit(types.SAVE_USER, {user, response});
+                resolve(response);
             } else {
-                reject(data);
+                reject(response);
             }
         },
         response => {
@@ -47,21 +47,21 @@ export const saveUser = ({commit, state}, user) => {
     })
 };
 
-export const uploadUserPhoto = ({commit, state}, formData) => {
+export const uploadUserPhoto = ({commit}, data) => {
     return new Promise((resolve, reject) => {
-        api.uploadUserPhoto(formData, data => {
-            commit(types.UPLOAD_USER_PHOTO, {formData, data});
-            resolve(data);
-        }, data => {
-            reject(data);
+        api.uploadUserPhoto(data, response => {
+            commit(types.UPLOAD_USER_PHOTO, {data, response});
+            resolve(response);
+        }, response => {
+            reject(response);
         })
     })
 };
-export const deleteUserPhoto = ({commit, state}, formData) => {
+export const deleteUserPhoto = ({commit}, data) => {
     return new Promise((resolve, reject) => {
-        api.deleteUserPhoto(formData, data => {
-            commit(types.DELETE_USER_PHOTO, {formData, data});
-            resolve(data);
+        api.deleteUserPhoto(data, response => {
+            commit(types.DELETE_USER_PHOTO, {data, response});
+            resolve(response);
         }, response => {
             reject(response);
         })
@@ -71,9 +71,9 @@ export const deleteUserPhoto = ({commit, state}, formData) => {
 
 export const getStripeAccount = ({commit}) => {
     return new Promise((resolve, reject) => {
-        api.getStripeAccount(data => {
-            commit(types.RECEIVE_STRIPE_ACCOUNT, {data})
-            resolve(data);
+        api.getStripeAccount(response => {
+            commit(types.RECEIVE_STRIPE_ACCOUNT, {response});
+            resolve(response);
         }, response => {
             reject(response);
         })
@@ -82,10 +82,10 @@ export const getStripeAccount = ({commit}) => {
 
 export const getStripeCustomer = ({commit}) => {
     return new Promise((resolve, reject) => {
-        api.getStripeCustomer(data => {
-            commit(types.RECEIVE_STRIPE_CUSTOMER, {data})
-            commit(types.RECEIVE_STRIPE_CARD, {data})
-            resolve(data);
+        api.getStripeCustomer(response => {
+            commit(types.RECEIVE_STRIPE_CUSTOMER, {response});
+            commit(types.RECEIVE_STRIPE_CARD, {response});
+            resolve(response);
         }, response => {
             reject(response);
         })
@@ -94,9 +94,9 @@ export const getStripeCustomer = ({commit}) => {
 
 export const disconnectStripeAccount = ({commit}) => {
     return new Promise((resolve, reject) => {
-        api.disconnectStripeAccount(data => {
-            commit(types.DISCONNECT_STRIPE_ACCOUNT, {data})
-            resolve(data);
+        api.disconnectStripeAccount(response => {
+            commit(types.DISCONNECT_STRIPE_ACCOUNT);
+            resolve(response);
         }, response => {
             reject(response);
         })
@@ -105,9 +105,9 @@ export const disconnectStripeAccount = ({commit}) => {
 
 export const saveCard = ({commit}, token) => {
     return new Promise((resolve, reject) => {
-        api.saveCard(token, data => {
-            commit(types.SAVE_CARD, {data})
-            resolve(data);
+        api.saveCard(token, response => {
+            commit(types.SAVE_CARD, {response});
+            resolve(response);
         }, response => {
             reject(response);
         })
@@ -116,23 +116,23 @@ export const saveCard = ({commit}, token) => {
 
 export const removeCard = ({commit}) => {
     return new Promise((resolve, reject) => {
-        api.removeCard(data => {
-            commit(types.REMOVE_CARD, {data})
-            resolve(data);
+        api.removeCard(response => {
+            commit(types.REMOVE_CARD);
+            resolve(response);
         }, response => {
             reject(response);
         })
     })
 };
 
-export const saveLicense = ({commit, state}, license) => {
+export const saveLicense = ({commit}, license) => {
     return new Promise((resolve, reject) => {
-        api.saveLicense(license, data => {
-            if (!data.errors) {
-                commit(types.SAVE_LICENSE, {license, data});
-                resolve(data);
+        api.saveLicense(license, response => {
+            if (!response.data.errors) {
+                commit(types.SAVE_LICENSE, {license});
+                resolve(response);
             } else {
-                reject(data);
+                reject(response);
             }
         }, response => {
             reject(response);
@@ -140,14 +140,14 @@ export const saveLicense = ({commit, state}, license) => {
     })
 };
 
-export const savePlugin = ({commit, state}, formData) => {
+export const savePlugin = ({commit}, {plugin}) => {
     return new Promise((resolve, reject) => {
-        api.savePlugin(formData, data => {
-            if (data.success) {
-                commit(types.SAVE_PLUGIN, {formData, data});
-                resolve(data);
+        api.savePlugin({plugin}, response => {
+            if (response.data.success) {
+                commit(types.SAVE_PLUGIN, {plugin, response});
+                resolve(response);
             } else {
-                reject(data);
+                reject(response);
             }
         }, response => {
             reject(response);
@@ -155,15 +155,14 @@ export const savePlugin = ({commit, state}, formData) => {
     })
 };
 
-
-export const submitPlugin = ({commit, state}, pluginId) => {
+export const submitPlugin = ({commit}, pluginId) => {
     return new Promise((resolve, reject) => {
-        api.submitPlugin(pluginId, data => {
-            if (data.success) {
-                commit(types.SUBMIT_PLUGIN, {pluginId, data});
-                resolve(data);
+        api.submitPlugin(pluginId, response => {
+            if (response.data.success) {
+                commit(types.SUBMIT_PLUGIN, {pluginId});
+                resolve(response);
             } else {
-                reject(data);
+                reject(response);
             }
         }, response => {
             reject(response);
