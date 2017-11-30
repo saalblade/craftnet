@@ -4,9 +4,9 @@ namespace craftcom\controllers\id;
 
 use Craft;
 use craft\helpers\Db;
-use craft\records\OAuthToken;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
+use craftcom\records\VcsToken;
 use Exception;
 use yii\web\Response;
 
@@ -97,12 +97,12 @@ class AppsController extends BaseController
 
         // No previous acces token, create a new one.
         if (!$existingToken) {
-            $tokenRecord = new OAuthToken();
+            $tokenRecord = new VcsToken();
             $tokenRecord->userId = $currentUser->id;
             $tokenRecord->provider = $appTypeConfig['class'];
         } else {
             // A previous one, let's update it.
-            $tokenRecord = OAuthToken::find()
+            $tokenRecord = VcsToken::find()
                 ->where(Db::parseParam('accessToken', $existingToken))
                 ->andWhere(Db::parseParam('provider', $appTypeConfig['class']))
                 ->one();
