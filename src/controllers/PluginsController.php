@@ -83,8 +83,18 @@ class PluginsController extends Controller
             return $this->asErrorJson($e->getMessage());
         }
 
+        // Make sure it's a Craft plugin
+        if (!isset($config['type']) || $config['type'] !== 'craft-plugin') {
+            return $this->asErrorJson('The "type" property in composer.json must be set to "craft-plugin".');
+        }
+
+        // Make sure it has a handle
+        if (!isset($config['extra']['handle'])) {
+            return $this->asErrorJson('The "extra"."handle" property in composer.json must be set.');
+        }
+
         // Get the title and handle
-        $handle = $config['extra']['handle'] ?? null;
+        $handle = $config['extra']['handle'];
         if (strtolower($handle) !== $handle) {
             $handle = preg_replace('/\-{2,}/', '-', Inflector::camel2id($handle));
         }
