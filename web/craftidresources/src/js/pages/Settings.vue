@@ -83,17 +83,17 @@
                     enableShowcaseFeatures: (this.userDraft.enableShowcaseFeatures ? 1 : 0),
                     password: this.password,
                     newPassword: this.newPassword,
-                }).then(data => {
+                }).then(response => {
                     this.$root.displayNotice('Settings saved.');
                     this.password = '';
                     this.newPassword = '';
                     this.errors = {};
                     this.loading = false;
-                }).catch(data => {
+                }).catch(response => {
                     this.$root.displayError('Couldn’t save settings.');
                     this.errors = {};
-                    if(data.errors) {
-                        this.errors = data.errors;
+                    if(response.data.errors) {
+                        this.errors = response.data.errors;
                     }
                     this.loading = false;
                 });
