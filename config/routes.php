@@ -55,6 +55,8 @@ return [
 
         // Catch-all route for Vue when people reload the page.
         'login'=> ['template' => 'login'],
+        'register'=> ['template' => 'register'],
+        'register/success'=> ['template' => 'register/success'],
         'forgotpassword'=> ['template' => 'forgotpassword'],
         '<url:(.*)>'=> 'craftcom/id/account',
     ],
