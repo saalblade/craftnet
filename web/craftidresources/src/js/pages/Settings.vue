@@ -15,6 +15,8 @@
             <div class="card-body">
                 <h4>Account Settings</h4>
 
+                <text-field id="username" label="Username" v-model="userDraft.username" :errors="errors.username" />
+
                 <p>
                     <input id="enablePluginDeveloperFeatures" :disabled="userIsInGroup('developers')" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
                     <label for="enablePluginDeveloperFeatures" :class="userIsInGroup('developers') ? 'disabled' : ''">Enable plugin developer features</label>
@@ -76,6 +78,7 @@
                 this.$store.dispatch('saveUser', {
                     id: this.userDraft.id,
                     email: this.userDraft.email,
+                    username: this.userDraft.username,
                     enablePluginDeveloperFeatures: (this.userDraft.enablePluginDeveloperFeatures ? 1 : 0),
                     enableShowcaseFeatures: (this.userDraft.enableShowcaseFeatures ? 1 : 0),
                     password: this.password,

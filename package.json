@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "humanize-duration": "^3.12.0",
     "limax": "^1.5.0",
     "lodash": "^4.17.4",
     "marked": "^0.3.6",
+    "mobile-detect": "^1.3.7",
     "qs": "^6.5.1",
     "vue": "^2.4.4",
     "vue-lodash": "^1.0.3",
