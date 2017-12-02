@@ -32,7 +32,6 @@ class m171127_232934_apiaudit extends Migration
             'ip' => $this->string(45)->notNull(),
             'route' => $this->string()->notNull(),
             'verb' => $this->string(20)->notNull(),
-            'licenseKey' => $this->string(250),
             'bodyJson' => 'jsonb',
             'bodyText' => $this->text(),
             'dateCreated' => $this->dateTime()->notNull(),
@@ -66,7 +65,6 @@ class m171127_232934_apiaudit extends Migration
 
 
         $this->createIndex(null, '{{%request}}', ['url']);
-        $this->createIndex(null, '{{%request}}', ['licenseKey']);
         $this->createIndex(null, '{{%errors}}', ['message']);
         $this->createIndex(null, '{{%errors}}', ['httpStatus']);
         $this->createIndex(null, '{{%logs}}', ['level']);
