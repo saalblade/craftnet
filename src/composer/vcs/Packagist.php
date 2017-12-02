@@ -146,7 +146,12 @@ class Packagist extends BaseVcs
         $this->package->setAbandoned($config['abandoned'] ?? false);
     }
 
-    public function createWebhook(string $secret)
+    public function createWebhook()
+    {
+        throw new NotSupportedException("Packagist doesn't support webhooks");
+    }
+
+    public function deleteWebhook()
     {
         throw new NotSupportedException("Packagist doesn't support webhooks");
     }

@@ -19,9 +19,12 @@ interface VcsInterface
     public function populateRelease(PackageRelease $release);
 
     /**
-     * @param string $secret
-     *
      * @throws VcsException
      */
-    public function createWebhook(string $secret);
+    public function createWebhook();
+
+    /**
+     * @throws VcsException
+     */
+    public function deleteWebhook();
 }
