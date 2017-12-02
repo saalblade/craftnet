@@ -70,7 +70,7 @@ class Oauth extends Component
                     // Remove the token locally.
                     if ($e->getCode() == 401) {
                         $this->deleteAccessToken($currentUser->id, $config['class']);
-                        Craft::warning('Got a 401 bad credentials response when attempting to validate a Github oAuth token for user ID: '.$currentUser->id.'. Likely our Github oAuth app has been removed or permissions revoked.', __METHOD__);
+                        Craft::warning('Got a 401 bad credentials response when attempting to validate a GitHub oAuth token for user ID: '.$currentUser->id.'. Likely our Github oAuth app has been removed or permissions revoked.', __METHOD__);
                         continue;
                     }
                 }
