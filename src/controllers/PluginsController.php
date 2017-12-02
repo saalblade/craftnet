@@ -80,7 +80,7 @@ class PluginsController extends Controller
             $response = $api->contents()->show($owner, $repo, 'composer.json', $ref);
             $config = Json::decode(base64_decode($response['content']));
         } catch (\Throwable $e) {
-            return $this->asErrorJson($e->getMessage());
+            return $this->asErrorJson('There was an error loading composer.json: '.$e->getMessage());
         }
 
         // Make sure it's a Craft plugin
