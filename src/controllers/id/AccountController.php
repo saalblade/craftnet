@@ -4,15 +4,15 @@ namespace craftcom\controllers\id;
 
 use Craft;
 use craft\elements\Asset;
-use craft\helpers\Db;
-use craft\records\OAuthToken;
-use craft\web\Controller;
-use yii\web\Response;
 use craft\errors\UploadFailedException;
 use craft\helpers\Assets;
+use craft\helpers\Db;
 use craft\helpers\FileHelper;
+use craft\web\Controller;
 use craft\web\UploadedFile;
+use craftcom\records\VcsToken;
 use yii\web\BadRequestHttpException;
+use yii\web\Response;
 
 /**
  * Class AccountController
@@ -35,7 +35,7 @@ class AccountController extends Controller
         $userId = Craft::$app->getUser()->id;
 
         if ($userId) {
-            $stripeAccessToken = OAuthToken::find()
+            $stripeAccessToken = VcsToken::find()
                 ->where(Db::parseParam('userId', $userId))
                 ->andWhere(Db::parseParam('provider', 'Stripe'))
                 ->one();

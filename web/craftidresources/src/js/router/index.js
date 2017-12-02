@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 import Profile from '../pages/Profile'
 import Billing from '../pages/Billing'
 import Customers from '../pages/Customers'
@@ -20,9 +20,9 @@ import PluginsEdit from '../pages/PluginsEdit'
 import PluginsIndex from '../pages/PluginsIndex'
 import Settings from '../pages/Settings'
 
-Vue.use(Router)
+Vue.use(VueRouter);
 
-export default new Router({
+const router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
     routes: [
@@ -133,4 +133,14 @@ export default new Router({
             component: PayoutsDetails,
         }
     ]
-})
+});
+
+router.beforeEach((to, from, next) => {
+    if(router.app.$refs.authManager) {
+        router.app.$refs.authManager.renewSession();
+    }
+
+    next();
+});
+
+export default router;

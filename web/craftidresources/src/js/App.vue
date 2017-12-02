@@ -1,5 +1,7 @@
 <template>
     <div>
+        <auth-manager ref="authManager"></auth-manager>
+
         <template v-if="notification">
             <div id="notifications-wrapper" :class="{'hide': !notification }">
                 <div id="notifications">
@@ -86,12 +88,17 @@
 </template>
 
 <script>
+    import AuthManager from './components/AuthManager';
     import router from './router';
     import { mapGetters } from 'vuex'
 
     export default {
 
         router,
+
+        components: {
+            AuthManager
+        },
 
         props: ['notification', 'loading'],
 

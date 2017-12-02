@@ -6,8 +6,8 @@ use AdamPaterson\OAuth2\Client\Provider\Stripe as StripeOauthProvider;
 use Craft;
 use craft\helpers\Db;
 use craft\helpers\UrlHelper;
-use craft\records\OAuthToken;
 use craftcom\records\StripeCustomer as StripeCustomerRecord;
+use craftcom\records\VcsToken;
 use League\OAuth2\Client\Token\AccessToken;
 use Stripe\Account;
 use Stripe\Customer;
@@ -59,7 +59,7 @@ class StripeController extends BaseController
 
         // Remove existing token
         if ($customerRecord->oauthTokenId) {
-            $tokenRecord = OAuthToken::find()
+            $tokenRecord = VcsToken::find()
                 ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
                 ->one();
 
@@ -77,7 +77,7 @@ class StripeController extends BaseController
             'code' => $code
         ]);
 
-        $tokenRecord = new OAuthToken();
+        $tokenRecord = new VcsToken();
         $tokenRecord->userId = Craft::$app->getUser()->getIdentity()->id;
         $tokenRecord->provider = 'Stripe';
         $tokenRecord->accessToken = $accessToken->getToken();
@@ -109,7 +109,7 @@ class StripeController extends BaseController
             ->where(Db::parseParam('userId', $userId))
             ->one();
 
-        $tokenRecord = OAuthToken::find()
+        $tokenRecord = VcsToken::find()
             ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
             ->one();
 
@@ -151,7 +151,7 @@ class StripeController extends BaseController
             ->one();
 
         if ($customerRecord && $customerRecord->oauthTokenId) {
-            $tokenRecord = OAuthToken::find()
+            $tokenRecord = VcsToken::find()
                 ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
                 ->one();
 

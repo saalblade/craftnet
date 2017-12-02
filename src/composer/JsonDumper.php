@@ -126,7 +126,7 @@ class JsonDumper extends Component
                 $data['target-dir'] = $version['targetDir'];
             }
             if ($version['includePaths'] !== null) {
-                $data['include-path'] = $version['includePaths'];
+                $data['include-path'] = Json::decode($version['includePaths']);
             }
             if ($version['binaries'] !== null) {
                 $data['bin'] = Json::decode($version['binaries']);

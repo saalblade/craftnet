@@ -1,39 +1,39 @@
 import * as types from './mutation-types'
 import Vue from 'vue';
 
-export const SAVE_CARD = (state, {data}) => {
-    state.stripeCard = data.card
+export const SAVE_CARD = (state, {response}) => {
+    state.stripeCard = response.data.card
 };
 
-export const REMOVE_CARD = (state, {data}) => {
+export const REMOVE_CARD = (state) => {
     state.stripeCard = null
 };
 
-export const RECEIVE_STRIPE_CUSTOMER = (state, {data}) => {
-    state.stripeCustomer = data.customer
+export const RECEIVE_STRIPE_CUSTOMER = (state, {response}) => {
+    state.stripeCustomer = response.data.customer
 };
 
-export const RECEIVE_STRIPE_CARD = (state, {data}) => {
-    state.stripeCard = data.card
+export const RECEIVE_STRIPE_CARD = (state, {response}) => {
+    state.stripeCard = response.data.card
 };
 
-export const RECEIVE_STRIPE_ACCOUNT = (state, {data}) => {
-    state.stripeAccount = data
+export const RECEIVE_STRIPE_ACCOUNT = (state, {response}) => {
+    state.stripeAccount = response.data
 };
 
-export const DISCONNECT_STRIPE_ACCOUNT = (state, {data}) => {
+export const DISCONNECT_STRIPE_ACCOUNT = (state) => {
     state.stripeAccount = null
 };
 
-export const RECEIVE_CRAFT_ID_DATA = (state, {data}) => {
-    state.craftId = data
+export const RECEIVE_CRAFT_ID_DATA = (state, {response}) => {
+    state.craftId = response.data
 };
 
 export const CONNECT_APP_CALLBACK = (state, {apps}) => {
     state.craftId.apps = apps;
 };
 
-export const DISCONNECT_APP = (state, {appHandle, data}) => {
+export const DISCONNECT_APP = (state, {appHandle}) => {
     Vue.delete(state.craftId.apps, appHandle);
 };
 
@@ -61,17 +61,17 @@ export const SAVE_USER = (state, {user, response}) => {
     }
 };
 
-export const UPLOAD_USER_PHOTO = (state, {formData, data}) => {
-    state.craftId.currentUser.photoId = data.photoId;
-    state.craftId.currentUser.photoUrl = data.photoUrl;
+export const UPLOAD_USER_PHOTO = (state, {data, response}) => {
+    state.craftId.currentUser.photoId = response.data.photoId;
+    state.craftId.currentUser.photoUrl = response.data.photoUrl;
 };
 
-export const DELETE_USER_PHOTO = (state, {formData, data}) => {
-    state.craftId.currentUser.photoId = data.photoId;
-    state.craftId.currentUser.photoUrl = data.photoUrl;
+export const DELETE_USER_PHOTO = (state, {data, response}) => {
+    state.craftId.currentUser.photoId = response.data.photoId;
+    state.craftId.currentUser.photoUrl = response.data.photoUrl;
 };
 
-export const SAVE_LICENSE = (state, {license, response}) => {
+export const SAVE_LICENSE = (state, {license}) => {
     let stateLicense = null;
     if(license.type === 'craftLicense') {
         stateLicense = state.craftId.craftLicenses.find(l => l.id == license.id);
@@ -94,68 +94,61 @@ export const SAVE_LICENSE = (state, {license, response}) => {
     }
 };
 
-export const SAVE_PLUGIN = (state, {formData, data}) => {
+export const SAVE_PLUGIN = (state, {plugin, response}) => {
     let newPlugin = false;
-    let statePlugin = state.craftId.plugins.find(p => p.id == formData.get('pluginId'));
+    let statePlugin = state.craftId.plugins.find(p => p.id == plugin.pluginId);
 
     if(!statePlugin) {
         statePlugin = {
-            id: data.id,
+            id: response.data.id,
         };
         newPlugin = true;
     }
 
-    statePlugin.siteId = formData.get('siteId');
-    statePlugin.enabled = (formData.get('enabled') == 1 ? true : false);
-    statePlugin.pluginId = data.id;
-    statePlugin.icon = formData.get('icon');
-    statePlugin.iconUrl = data.iconUrl+'?'+ Math.floor(Math.random() * 1000000);
-    statePlugin.iconId = data.iconId;
-    statePlugin.developerId = formData.get('developerId');
-    statePlugin.developerName = formData.get('developerName');
-    statePlugin.handle = formData.get('handle');
-    statePlugin.packageName = formData.get('packageName');
-    statePlugin.name = formData.get('name');
-    statePlugin.shortDescription = formData.get('shortDescription');
-    statePlugin.longDescription = formData.get('longDescription');
-    statePlugin.documentationUrl = formData.get('documentationUrl');
-    statePlugin.changelogPath = formData.get('changelogPath');
-    statePlugin.repository = formData.get('repository');
-    statePlugin.license = formData.get('license');
+    statePlugin.siteId = plugin.siteId;
+    statePlugin.pluginId = response.data.id;
+    statePlugin.icon = plugin.icon;
+    statePlugin.iconUrl = response.data.iconUrl+'?'+ Math.floor(Math.random() * 1000000);
+    statePlugin.iconId = response.data.iconId;
+    statePlugin.developerId = plugin.developerId;
+    statePlugin.developerName = plugin.developerName;
+    statePlugin.handle = plugin.handle;
+    statePlugin.packageName = plugin.packageName;
+    statePlugin.name = plugin.name;
+    statePlugin.shortDescription = plugin.shortDescription;
+    statePlugin.longDescription = plugin.longDescription;
+    statePlugin.documentationUrl = plugin.documentationUrl;
+    statePlugin.changelogPath = plugin.changelogPath;
+    statePlugin.repository = plugin.repository;
+    statePlugin.license = plugin.license;
 
-    let price = parseFloat(formData.get('price'));
+    let price = parseFloat(plugin.price);
     statePlugin.price = (price ? price : null);
 
-    let renewalPrice = parseFloat(formData.get('renewalPrice'));
+    let renewalPrice = parseFloat(plugin.renewalPrice);
     statePlugin.renewalPrice = (renewalPrice ? renewalPrice : null);
 
-    statePlugin.categoryIds = formData.getAll('categoryIds[]');
+    statePlugin.categoryIds = plugin.categoryIds;
 
     let screenshotIds = [];
     let screenshotUrls = [];
 
-    if(data.screenshots.length > 0) {
-        for(let i = 0; i < data.screenshots.length; i++) {
-            screenshotIds.push(data.screenshots[i].id);
-            screenshotUrls.push(data.screenshots[i].url);
+    if(response.data.screenshots.length > 0) {
+        for(let i = 0; i < response.data.screenshots.length; i++) {
+            screenshotIds.push(response.data.screenshots[i].id);
+            screenshotUrls.push(response.data.screenshots[i].url);
         }
     }
 
     statePlugin.screenshotIds = screenshotIds;
     statePlugin.screenshotUrls = screenshotUrls;
 
-    /*statePlugin.screenshotIds = formData.getAll('screenshotIds[]');
-    statePlugin.screenshotUrls = formData.getAll('screenshotUrls[]');*/
-
     if(newPlugin) {
         state.craftId.plugins.push(statePlugin);
     }
 };
 
-export const SUBMIT_PLUGIN = (state, {pluginId, data}) => {
+export const SUBMIT_PLUGIN = (state, {pluginId}) => {
     let statePlugin = state.craftId.plugins.find(p => p.id == pluginId);
     statePlugin.pendingApproval = true;
-};
-
-export const SAVE_CRAFT_ID_DATA = (state) => {
 };

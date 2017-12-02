@@ -84,13 +84,14 @@
                 if (confirm("Are you sure you want to delete this image?")) {
                     this.photoLoading = true;
 
-                    let formData = new FormData();
-                    formData.append('userId', this.userDraft.id);
+                    let data = {
+						userId: this.userDraft.id,
+					};
 
-                    this.$store.dispatch('deleteUserPhoto', formData).then(data => {
+                    this.$store.dispatch('deleteUserPhoto', data).then(response => {
                         this.$root.displayNotice('Photo deleted.');
-                        this.userDraft.photoId = data.photoId;
-                        this.userDraft.photoUrl = data.photoUrl;
+                        this.userDraft.photoId = response.data.photoId;
+                        this.userDraft.photoUrl = response.data.photoUrl;
                         this.photoLoading = false;
                     }).catch(response => {
                         this.$root.displayError('Couldn’t delete photo.');
@@ -114,25 +115,26 @@
 
                 this.photoLoading = true;
 
-                let formData = new FormData();
-                formData.append('userId', this.userDraft.id);
-                formData.append('photo', this.$refs.photoFile.files[0]);
-                formData.append('photoUrl', this.userDraft.photoUrl);
+                let data = {
+                    userId: this.userDraft.id,
+                    photo: this.$refs.photoFile.files[0],
+                    photoUrl: this.userDraft.photoUrl,
+				};
 
-                this.$store.dispatch('uploadUserPhoto', formData)
-                    .then(data => {
+                this.$store.dispatch('uploadUserPhoto', data)
+                    .then(response => {
                         this.$root.displayNotice('Photo uploaded.');
 
-                        this.userDraft.photoId = data.photoId;
-                        this.userDraft.photoUrl = data.photoUrl + '&'+Math.floor(Math.random() * 1000000);
+                        this.userDraft.photoId = response.data.photoId;
+                        this.userDraft.photoUrl = response.data.photoUrl + '&'+Math.floor(Math.random() * 1000000);
 
                         this.errors = {};
 
                         this.photoLoading = false;
-                    }).catch(data => {
-                    this.$root.displayError('Couldn’t upload photo.');
-                    this.errors = data.errors;
-                });
+                    }).catch(response => {
+						this.$root.displayError('Couldn’t upload photo.');
+						this.errors = response.data.errors;
+					});
             },
 
             save() {
@@ -143,17 +145,16 @@
                     developerName: this.userDraft.developerName,
                     developerUrl: this.userDraft.developerUrl,
                     location: this.userDraft.location,
-                    photo: this.$refs.photoFile.files[0],
                     photoUrl: this.userDraft.photoUrl,
-                }).then(data => {
+                }).then(response => {
                     this.$root.displayNotice('Settings saved.');
                     this.errors = {};
                     this.loading = false;
-                }).catch(data => {
+                }).catch(response => {
                     this.$root.displayError('Couldn’t save settings.');
                     this.errors = {};
-                    if(data.errors) {
-                        this.errors = data.errors;
+                    if(response.data.errors) {
+                        this.errors = response.data.errors;
                     }
                     this.loading = false;
                 });

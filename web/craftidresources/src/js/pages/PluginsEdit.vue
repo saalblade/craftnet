@@ -323,12 +323,12 @@
                     repository: encodeURIComponent(url)
                 };
                 body['action'] = 'craftcom/plugins/load-details';
-                body[csrfTokenName] = csrfTokenValue;
+                body[Craft.csrfTokenName] = Craft.csrfTokenValue;
 
                 let params = qs.stringify(body);
                 let url = this.pluginDraft.repository;
 
-                axios.post(window.craftActionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), params)
+                axios.post(Craft.actionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), params)
                     .then(response => {
                         this.pluginDraft.changelogPath = response.data.changelogPath;
                         this.pluginDraft.documentationUrl = response.data.documentationUrl;
@@ -350,71 +350,49 @@
             save() {
                 this.loading = true;
 
-                let formData = new FormData();
-                formData.append('siteId', 1);
-                // formData.append('enabled', this.pluginDraft.enabled ? 1 : 0);
+                let plugin = {
+                    iconId: [parseInt(this.pluginDraft.iconId)],
+                    icon: this.$refs.iconFile.files[0],
+                    handle: this.pluginDraft.handle,
+                    packageName: this.pluginDraft.packageName,
+                    name: this.pluginDraft.name,
+                    shortDescription: this.pluginDraft.shortDescription,
+                    longDescription: this.pluginDraft.longDescription,
+                    documentationUrl: this.pluginDraft.documentationUrl,
+                    changelogPath: this.pluginDraft.changelogPath,
+                    repository: this.pluginDraft.repository,
+                    license: this.pluginDraft.license,
+                    price: this.pluginDraft.price,
+                    renewalPrice: this.pluginDraft.renewalPrice,
+                    categoryIds: '',
+                    screenshotIds: '',
+                };
 
                 if(this.pluginDraft.id) {
-                    formData.append('pluginId', this.pluginDraft.id);
+                    plugin.pluginId = this.pluginDraft.id;
                 }
-
-                formData.append('iconId[]', parseInt(this.pluginDraft.iconId));
-                formData.append('icon', this.$refs.iconFile.files[0]);
-                formData.append('handle', this.pluginDraft.handle);
-                formData.append('packageName', this.pluginDraft.packageName);
-                formData.append('name', this.pluginDraft.name);
-                formData.append('shortDescription', this.pluginDraft.shortDescription);
-                formData.append('longDescription', this.pluginDraft.longDescription);
-                formData.append('documentationUrl', this.pluginDraft.documentationUrl);
-                formData.append('changelogPath', this.pluginDraft.changelogPath);
-                formData.append('repository', this.pluginDraft.repository);
-                formData.append('license', this.pluginDraft.license);
-
-                if(!this.pluginDraft.price) {
-                    this.pluginDraft.price = 0;
-                }
-
-                formData.append('price', this.pluginDraft.price);
-
-                if(!this.pluginDraft.renewalPrice) {
-                    this.pluginDraft.renewalPrice = 0;
-                }
-
-                formData.append('renewalPrice', this.pluginDraft.renewalPrice);
 
                 if(this.pluginDraft.categoryIds.length > 0) {
-                    this.pluginDraft.categoryIds.forEach(categoryId => {
-                        formData.append('categoryIds[]', categoryId);
-                    });
-                } else {
-                    formData.append('categoryIds', '');
+                    plugin.categoryIds = this.pluginDraft.categoryIds;
                 }
 
                 if(this.$refs.screenshotFiles.files.length > 0) {
-                    for (let i = 0; i < this.$refs.screenshotFiles.files.length; i++) {
-                        formData.append('screenshots[]', this.$refs.screenshotFiles.files[i]);
-                    }
+                    plugin.screenshots = this.$refs.screenshotFiles.files;
                 }
 
                 if(this.pluginDraft.screenshotUrls.length > 0) {
-                    this.pluginDraft.screenshotUrls.forEach(screenshotUrl => {
-                        formData.append('screenshotUrls[]', screenshotUrl);
-                    });
+                    plugin.screenshotUrls = this.pluginDraft.screenshotUrls;
                 }
 
                 if(this.pluginDraft.screenshotIds.length > 0) {
-                    this.pluginDraft.screenshotIds.forEach(screenshotId => {
-                        formData.append('screenshotIds[]', screenshotId);
-                    });
-                } else {
-                    formData.append('screenshotIds', '');
+                    plugin.screenshotIds = this.pluginDraft.screenshotIds;
                 }
 
-                this.$store.dispatch('savePlugin', formData).then(data => {
+                this.$store.dispatch('savePlugin', {plugin}).then(response => {
                     this.loading = false;
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/developer/plugins'});
-                }).catch(data => {
+                }).catch(response => {
                     this.loading = false;
                     this.$root.displayError('Couldn’t save plugin.');
                     this.errors = (data.errors ? data.errors : []);
@@ -423,10 +401,10 @@
 
             submit() {
                 this.pluginSubmitLoading = true;
-                this.$store.dispatch('submitPlugin', this.plugin.id).then(data => {
+                this.$store.dispatch('submitPlugin', this.plugin.id).then(response => {
                     this.pluginSubmitLoading = false;
                     this.$root.displayNotice('Plugin submitted for approval.');
-                }).catch(data => {
+                }).catch(response => {
                     this.pluginSubmitLoading = false;
                     this.$root.displayError('Couldn’t submit plugin for approval.');
                 })

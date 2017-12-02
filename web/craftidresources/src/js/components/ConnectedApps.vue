@@ -120,10 +120,10 @@
             disconnect(provider) {
                 this.loading[provider] = true;
                 this.$store.dispatch('disconnectApp', provider)
-                    .then(data => {
+                    .then(response => {
                         this.loading[provider] = false;
                         this.$root.displayNotice('App disconnected.');
-                    }).catch(data => {
+                    }).catch(response => {
 						this.loading[provider] = false;
                     	this.$root.displayError('Couldn’t disconnect app.');
 					});

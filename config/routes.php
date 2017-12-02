@@ -29,7 +29,7 @@ return [
         'POST v1/checkout' => 'craftcom/api/v1/checkout',
         'POST v1/utils/releases-2-changelog' => 'craftcom/api/v1/utils/releases-2-changelog',
         'POST v1/available-plugins' => 'craftcom/api/v1/available-plugins',
-        'POST github/push' => 'craftcom/api/github/push',
+        'POST webhook/github' => 'craftcom/api/webhook/github',
         'update-deps' => 'craftcom/update-deps',
 
         'oauth/login' => 'oauth-server/oauth/login',

@@ -188,4 +188,56 @@ class PackagesController extends Controller
             Console::output("Webhook created for {$name}.");
         }
     }
+
+    /**
+     * Deletes a VCS webhook for a given package.
+     *
+     * @param string $name The package name
+     */
+    public function actionDeleteWebhook(string $name)
+    {
+        if (!$this->module->getPackageManager()->deleteWebhook($name)) {
+            Console::error("There was an error deleting the webhook for {$name}.");
+        } else {
+            Console::output("Webhook deleted for {$name}.");
+        }
+    }
+
+    /**
+     * Creates new webhooks for all managed packages.
+     *
+     * @param string $name The package name
+     */
+    public function actionCreateAllWebhooks()
+    {
+        $packageManager = $this->module->getPackageManager();
+        $names = $packageManager->getPackageNames();
+
+        foreach ($names as $name) {
+            if ($packageManager->createWebhook($name)) {
+                Console::output("Webhook created for {$name}.");
+            } else {
+                Console::error("There was an error creating a webhook for {$name}.");
+            }
+        }
+    }
+
+    /**
+     * Deletes webhooks for all managed packages.
+     *
+     * @param string $name The package name
+     */
+    public function actionDeleteAllWebhooks()
+    {
+        $packageManager = $this->module->getPackageManager();
+        $names = $packageManager->getPackageNames();
+
+        foreach ($names as $name) {
+            if ($packageManager->deleteWebhook($name)) {
+                Console::output("Webhook deleted for {$name}.");
+            } else {
+                Console::error("There was an error deleting the webhook for {$name}.");
+            }
+        }
+    }
 }
