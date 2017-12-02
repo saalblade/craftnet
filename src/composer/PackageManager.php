@@ -420,6 +420,7 @@ class PackageManager extends Component
             $package->getVcs()->createWebhook($secret);
         } catch (VcsException $e) {
             Craft::warning("Could not create a webhook for {$package->name}: {$e->getMessage()}", __METHOD__);
+            Craft::$app->getErrorHandler()->logException($e->getPrevious() ?? $e);
 
             // Clear out the secret
             Craft::$app->getDb()->createCommand()
