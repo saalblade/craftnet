@@ -139,7 +139,7 @@ class GitHub extends BaseVcs
             'events' => ['create', 'push', 'release', 'delete'],
             'active' => true,
             'config' => [
-                'url' => 'https://api.craftcms.com/github/push',
+                'url' => 'https://api.craftcms.com/webhook/github',
                 'content_type' => 'json',
                 'secret' => $this->package->webhookSecret,
             ],
