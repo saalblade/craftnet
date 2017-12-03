@@ -8,9 +8,9 @@ use craft\db\Query;
 use craftcom\composer\jobs\UpdatePackage;
 
 /**
- * m171203_151608_update_invalid_packages migration.
+ * m171203_153845_update_invalid_packages migration.
  */
-class m171203_151608_update_invalid_packages extends Migration
+class m171203_153845_update_invalid_packages extends Migration
 {
     /**
      * @inheritdoc
@@ -39,7 +39,7 @@ class m171203_151608_update_invalid_packages extends Migration
      */
     public function safeDown()
     {
-        echo "m171203_151608_update_invalid_packages cannot be reverted.\n";
+        echo "m171203_153845_update_invalid_packages cannot be reverted.\n";
         return false;
     }
 }
