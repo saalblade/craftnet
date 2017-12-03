@@ -7,6 +7,7 @@ use craft\db\Connection;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
+use craft\helpers\Html;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\Module;
@@ -14,6 +15,7 @@ use craftcom\plugins\Plugin;
 use JsonSchema\Validator;
 use stdClass;
 use yii\base\InvalidParamException;
+use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
 use yii\web\HttpException;
 
@@ -206,6 +208,9 @@ abstract class BaseApiController extends Controller
                 $price = Craft::$app->getFormatter()->asCurrency($plugin->price, 'USD');
                 $longDescription = "_This plugin will cost {$price} once Craft 3 GA is released._\n\n{$longDescription}";
             }
+
+            $longDescription = Html::encode($longDescription);
+            $longDescription = Markdown::process($longDescription);
 
             $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['activeInstalls'] = 0;
