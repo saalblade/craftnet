@@ -89,7 +89,7 @@ class GitHub extends BaseVcs
         } catch (RuntimeException $e) {
             Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to error loading composer.json: {$e->getMessage()}", __METHOD__);
             Craft::$app->getErrorHandler()->logException($e);
-            $release->invalidate();
+            $release->invalidate("error loading composer.json: {$e->getMessage()}");
             return;
         }
 

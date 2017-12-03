@@ -163,6 +163,11 @@ class PackageRelease extends Model
     public $valid = true;
 
     /**
+     * @var string|null
+     */
+    public $invalidReason;
+
+    /**
      * @inheritdoc
      */
     public function __construct(array $config = [])
@@ -191,10 +196,13 @@ class PackageRelease extends Model
 
     /**
      * Invalidates the version so it won't be available to Composer.
+     *
+     * @param string|null $reason
      */
-    public function invalidate()
+    public function invalidate(string $reason = null)
     {
         $this->valid = false;
+        $this->invalidReason = $reason;
 
         $this->description = null;
         $this->type = null;

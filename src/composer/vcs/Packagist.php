@@ -130,7 +130,7 @@ class Packagist extends BaseVcs
 
         if (!isset($packageInfo['packages'][$this->package->name][$release->version])) {
             Craft::warning("Ignoring package version {$this->package->name}:{$release->version} because it can't be found in the Packagist provider JSON.");
-            $release->invalidate();
+            $release->invalidate('not found on Packagist');
             return;
         }
 

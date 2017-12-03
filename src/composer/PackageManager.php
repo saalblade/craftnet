@@ -605,22 +605,35 @@ class PackageManager extends Component
         $normalizedVersions = [];
         $versionStability = [];
 
-        $vcsVersionShas = array_filter($vcs->getVersions(), function($version) use ($package, &$normalizedVersions, &$versionStability) {
+        $vcsVersionShas = array_filter($vcs->getVersions(), function($sha, $version) use ($isConsole, $package, &$normalizedVersions, &$versionStability) {
             // Don't include development versions, and versions that aren't actually required by any managed packages
             if (($stability = VersionParser::parseStability($version)) === 'dev') {
+                if ($isConsole) {
+                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - dev stability", [Console::FG_RED]));
+                }
                 return false;
             }
 
             // Don't include duplicate versions
             $normalizedVersion = (new VersionParser())->normalize($version);
             if (isset($normalizedVersions[$normalizedVersion])) {
+                if ($isConsole) {
+                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - duplicate version", [Console::FG_RED]));
+                }
                 return false;
             }
             $normalizedVersions[$normalizedVersion] = true;
 
             $versionStability[$version] = $stability;
-            return ($package->managed || $this->isDependencyVersionRequired($package->name, $version));
-        }, ARRAY_FILTER_USE_KEY);
+            if (!$package->managed && !$this->isDependencyVersionRequired($package->name, $version)) {
+                if ($isConsole) {
+                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - not required", [Console::FG_RED]));
+                }
+                return false;
+            }
+
+            return true;
+        }, ARRAY_FILTER_USE_BOTH);
 
         // See which already-stored versions have been deleted/updated
         $storedVersions = array_keys($storedVersionInfo);
@@ -710,7 +723,7 @@ class PackageManager extends Component
             $vcs->populateRelease($release);
 
             if ($isConsole && !$release->valid) {
-                Console::stdout(Console::ansiFormat('invalid', [Console::FG_RED]));
+                Console::stdout(Console::ansiFormat('invalid'.($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
                 Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
             }
 

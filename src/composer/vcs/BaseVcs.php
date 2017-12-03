@@ -37,7 +37,7 @@ abstract class BaseVcs extends Object implements VcsInterface
         // Make sure the versions line up
         if (isset($config['version']) && $config['version'] !== $release->version) {
             Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to a version mismatch in composer.json: {$config['version']}", __METHOD__);
-            $release->invalidate();
+            $release->invalidate("version mismatch -- config says {$config['version']}; tag says {$release->version}");
             return false;
         }
 
