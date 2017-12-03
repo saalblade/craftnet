@@ -39,9 +39,6 @@ class UpdatesController extends BaseApiController
             }
         }
 
-        throw new Exception('help');
-
-
         return $this->asJson([
             'cms' => $this->_getCmsUpdateInfo($payload),
             'plugins' => $this->_getPluginUpdateInfo($payload)
