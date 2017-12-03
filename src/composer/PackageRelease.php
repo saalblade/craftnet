@@ -33,27 +33,27 @@ class PackageRelease extends Model
     ];
 
     /**
-     * @var
+     * @var int
      */
     public $id;
 
     /**
-     * @var
+     * @var int
      */
     public $packageId;
 
     /**
-     * @var
+     * @var string
      */
     public $sha;
 
     /**
-     * @var
+     * @var string|null
      */
     public $description;
 
     /**
-     * @var
+     * @var string
      */
     public $version;
 
@@ -63,97 +63,97 @@ class PackageRelease extends Model
     public $type = 'library';
 
     /**
-     * @var
+     * @var string[]|null
      */
     public $keywords;
 
     /**
-     * @var
+     * @var string|null
      */
     public $homepage;
 
     /**
-     * @var
+     * @var string|null
      */
     public $time;
 
     /**
-     * @var
+     * @var string[]|null
      */
     public $license;
 
     /**
-     * @var
+     * @var array|null
      */
     public $authors;
 
     /**
-     * @var
+     * @var array|null
      */
     public $support;
 
     /**
-     * @var
+     * @var array|null
      */
     public $require;
 
     /**
-     * @var
+     * @var array|null
      */
     public $conflict;
 
     /**
-     * @var
+     * @var array|null
      */
     public $replace;
 
     /**
-     * @var
+     * @var array|null
      */
     public $provide;
 
     /**
-     * @var
+     * @var array|null
      */
     public $suggest;
 
     /**
-     * @var
+     * @var array|null
      */
     public $autoload;
 
     /**
-     * @var
+     * @var array|null
      */
     public $includePaths;
 
     /**
-     * @var
+     * @var string|null
      */
     public $targetDir;
 
     /**
-     * @var
+     * @var array|null
      */
     public $extra;
 
     /**
-     * @var
+     * @var string|null
      */
     public $binaries;
 
     /**
-     * @var
+     * @var array|null
      */
     public $source;
 
     /**
-     * @var
+     * @var array|null
      */
     public $dist;
 
     /**
-     * @var
+     * @var string|null
      */
     public $changelog;
 
@@ -163,7 +163,7 @@ class PackageRelease extends Model
     public $valid = true;
 
     /**
-     *
+     * @inheritdoc
      */
     public function __construct(array $config = [])
     {
@@ -177,7 +177,7 @@ class PackageRelease extends Model
     }
 
     /**
-     *
+     * @inheritdoc
      */
     public function init()
     {
