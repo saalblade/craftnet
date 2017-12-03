@@ -92,7 +92,7 @@ abstract class BaseApiController extends Controller
 
             $insertRequest['verb'] = Craft::$app->getRequest()->getMethod();
             $insertRequest['ip'] = Craft::$app->getRequest()->getRemoteIP();
-            $insertRequest['url'] = (Craft::$app->getRequest()->getIsSecureConnection() ? 'https://' : 'http://').Craft::$app->getRequest()->getRemoteHost().Craft::$app->getRequest()->getUrl();
+            $insertRequest['url'] = Craft::$app->getRequest()->getHostInfo().Craft::$app->getRequest()->getUrl();
             $insertRequest['route'] = $this->getRoute();
             $insertRequest['dateCreated'] = $dateCreated;
 
