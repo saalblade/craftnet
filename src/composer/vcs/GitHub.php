@@ -88,7 +88,8 @@ class GitHub extends BaseVcs
             $config = Json::decode(base64_decode($response['content']));
         } catch (RuntimeException $e) {
             Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to error loading composer.json: {$e->getMessage()}", __METHOD__);
-            $release->nullify();
+            Craft::$app->getErrorHandler()->logException($e);
+            $release->invalidate();
             return;
         }
 
@@ -122,6 +123,7 @@ class GitHub extends BaseVcs
                 $release->changelog = base64_decode($response['content']);
             } catch (RuntimeException $e) {
                 Craft::warning("Couldn't fetch changelog for {$this->package->name}:{$release->version} due to error loading {$changelogPath}: {$e->getMessage()}", __METHOD__);
+                Craft::$app->getErrorHandler()->logException($e);
             }
         }
     }

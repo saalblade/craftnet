@@ -158,6 +158,11 @@ class PackageRelease extends Model
     public $changelog;
 
     /**
+     * @var bool
+     */
+    public $valid = true;
+
+    /**
      *
      */
     public function __construct(array $config = [])
@@ -185,10 +190,12 @@ class PackageRelease extends Model
     }
 
     /**
-     *
+     * Invalidates the version so it won't be available to Composer.
      */
-    public function nullify()
+    public function invalidate()
     {
+        $this->valid = false;
+
         $this->description = null;
         $this->type = null;
         $this->keywords = null;
