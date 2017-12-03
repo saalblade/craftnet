@@ -88,7 +88,8 @@ class GitHub extends BaseVcs
             $config = Json::decode(base64_decode($response['content']));
         } catch (RuntimeException $e) {
             Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to error loading composer.json: {$e->getMessage()}", __METHOD__);
-            $release->nullify();
+            Craft::$app->getErrorHandler()->logException($e);
+            $release->invalidate("error loading composer.json: {$e->getMessage()}");
             return;
         }
 
@@ -122,6 +123,7 @@ class GitHub extends BaseVcs
                 $release->changelog = base64_decode($response['content']);
             } catch (RuntimeException $e) {
                 Craft::warning("Couldn't fetch changelog for {$this->package->name}:{$release->version} due to error loading {$changelogPath}: {$e->getMessage()}", __METHOD__);
+                Craft::$app->getErrorHandler()->logException($e);
             }
         }
     }
@@ -129,24 +131,41 @@ class GitHub extends BaseVcs
     /**
      * @inheritdoc
      */
-    public function createWebhook(string $secret)
+    public function createWebhook()
     {
         /** @var Repo $api */
         $api = $this->client->api('repo');
 
         $params = [
             'name' => 'web',
-            'events' => ['push'],
+            'events' => ['create', 'push', 'release', 'delete'],
             'active' => true,
             'config' => [
-                'url' => 'https://api.craftcms.com/github/push',
+                'url' => 'https://api.craftcms.com/webhook/github',
                 'content_type' => 'json',
-                'secret' => $secret,
+                'secret' => $this->package->webhookSecret,
             ],
         ];
 
         try {
-            $api->hooks()->create($this->owner, $this->repo, $params);
+            $info = $api->hooks()->create($this->owner, $this->repo, $params);
+        } catch (RuntimeException $e) {
+            throw new VcsException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        $this->package->webhookId = $info['id'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteWebhook()
+    {
+        /** @var Repo $api */
+        $api = $this->client->api('repo');
+
+        try {
+            $api->hooks()->remove($this->owner, $this->repo, $this->package->webhookId);
         } catch (RuntimeException $e) {
             throw new VcsException($e->getMessage(), $e->getCode(), $e);
         }

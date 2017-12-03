@@ -63,6 +63,11 @@ class Package extends Model
     /**
      * @var
      */
+    public $webhookId;
+
+    /**
+     * @var
+     */
     public $webhookSecret;
 
     /**
@@ -134,7 +139,7 @@ class Package extends Model
 
             $token = null;
             if ($plugin = $this->getPlugin()) {
-                $token = Module::getInstance()->getOauth()->getAuthTokenByUserId(Oauth::PROVIDER_GITHUB, $plugin->developerId);
+                $token = Module::getInstance()->getOauth()->getAuthTokenByUserId('Github', $plugin->developerId);
 
                 if (!$token) {
                     if (Module::getInstance()->getPackageManager()->requirePluginVcsTokens) {

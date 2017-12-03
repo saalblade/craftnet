@@ -10,15 +10,15 @@ use yii\web\BadRequestHttpException;
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @since  3.0
  */
-class GithubController extends BaseApiController
+class WebhookController extends BaseApiController
 {
     /**
      * @throws NotFoundHttpException
      * @throws BadRequestHttpException
      */
-    public function actionPush()
+    public function actionGithub()
     {
-        $payload = $this->getPayload('github-push-request');
+        $payload = $this->getPayload('github-webhook');
 
         $url = $payload->repository->html_url;
         $packageManager = $this->module->getPackageManager();
