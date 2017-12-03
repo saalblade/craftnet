@@ -75,28 +75,32 @@ class UpdatesController extends BaseApiController
     private function _getPluginUpdateInfo(\stdClass $payload): array
     {
         $updateInfo = [];
-        $handles = array_keys(get_object_vars($payload->plugins));
+        
+        if (isset($payload->plugins)) {
 
-        if (!empty($handles)) {
-            $packageManager = $this->module->getPackageManager();
+            $handles = array_keys(get_object_vars($payload->plugins));
 
-            /** @var Plugin[] $plugins */
-            $plugins = Plugin::find()
-                ->handle($handles)
-                ->indexBy('handle')
-                ->all();
+            if (!empty($handles)) {
+                $packageManager = $this->module->getPackageManager();
 
-            foreach ($payload->plugins as $handle => $pluginInfo) {
-                if ($plugin = $plugins[$handle] ?? null) {
-                    $releases = $this->_releases($plugin->packageName, $pluginInfo->version);
-                } else {
-                    // We don't have a record of this plugin
-                    $releases = [];
+                /** @var Plugin[] $plugins */
+                $plugins = Plugin::find()
+                    ->handle($handles)
+                    ->indexBy('handle')
+                    ->all();
+
+                foreach ($payload->plugins as $handle => $pluginInfo) {
+                    if ($plugin = $plugins[$handle] ?? null) {
+                        $releases = $this->_releases($plugin->packageName, $pluginInfo->version);
+                    } else {
+                        // We don't have a record of this plugin
+                        $releases = [];
+                    }
+                    $updateInfo[$handle] = [
+                        'status' => 'eligible',
+                        'releases' => $releases,
+                    ];
                 }
-                $updateInfo[$handle] = [
-                    'status' => 'eligible',
-                    'releases' => $releases,
-                ];
             }
         }
 
