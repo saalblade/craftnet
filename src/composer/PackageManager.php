@@ -88,7 +88,10 @@ class PackageManager extends Component
             ->distinct()
             ->from(['craftcom_packageversions pv'])
             ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
-            ->where(['p.name' => $name])
+            ->where([
+                'p.name' => $name,
+                'pv.valid' => true,
+            ])
             ->column();
 
         // Make sure each of the constraints is satisfied by at least one of those versions
@@ -141,7 +144,11 @@ class PackageManager extends Component
             ->distinct()
             ->from(['craftcom_packageversions pv'])
             ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
-            ->where(['p.name' => $name, 'pv.stability' => $allowedStabilities])
+            ->where([
+                'p.name' => $name,
+                'pv.stability' => $allowedStabilities,
+                'pv.valid' => true,
+            ])
             ->column();
 
         if ($sort) {
@@ -552,7 +559,11 @@ class PackageManager extends Component
             ])
             ->from(['craftcom_packageversions pv'])
             ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
-            ->where(['p.name' => $name, 'pv.normalizedVersion' => $version]);
+            ->where([
+                'p.name' => $name,
+                'pv.normalizedVersion' => $version,
+                'pv.valid' => true,
+            ]);
     }
 
     /**
@@ -582,7 +593,7 @@ class PackageManager extends Component
             Console::output("Updating version data for {$name}...");
         }
 
-        // Get all of the already known versions
+        // Get all of the already known versions (including invalid releases)
         $storedVersionInfo = (new Query())
             ->select(['id', 'version', 'sha'])
             ->from(['craftcom_packageversions'])
@@ -591,15 +602,38 @@ class PackageManager extends Component
             ->all();
 
         // Get the versions from the VCS
+        $normalizedVersions = [];
         $versionStability = [];
-        $vcsVersionShas = array_filter($vcs->getVersions(), function($version) use ($package, &$versionStability) {
+
+        $vcsVersionShas = array_filter($vcs->getVersions(), function($sha, $version) use ($isConsole, $package, &$normalizedVersions, &$versionStability) {
             // Don't include development versions, and versions that aren't actually required by any managed packages
             if (($stability = VersionParser::parseStability($version)) === 'dev') {
+                if ($isConsole) {
+                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - dev stability", [Console::FG_RED]));
+                }
                 return false;
             }
+
+            // Don't include duplicate versions
+            $normalizedVersion = (new VersionParser())->normalize($version);
+            if (isset($normalizedVersions[$normalizedVersion])) {
+                if ($isConsole) {
+                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - duplicate version", [Console::FG_RED]));
+                }
+                return false;
+            }
+            $normalizedVersions[$normalizedVersion] = true;
+
             $versionStability[$version] = $stability;
-            return ($package->managed || $this->isDependencyVersionRequired($package->name, $version));
-        }, ARRAY_FILTER_USE_KEY);
+            if (!$package->managed && !$this->isDependencyVersionRequired($package->name, $version)) {
+                if ($isConsole) {
+                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - not required", [Console::FG_RED]));
+                }
+                return false;
+            }
+
+            return true;
+        }, ARRAY_FILTER_USE_BOTH);
 
         // See which already-stored versions have been deleted/updated
         $storedVersions = array_keys($storedVersionInfo);
@@ -675,12 +709,6 @@ class PackageManager extends Component
 
         foreach ($newVersions as $version) {
             $sha = $vcsVersionShas[$version];
-            if (!$foundStable && $versionStability[$version] === 'stable') {
-                $latestVersion = $version;
-                $foundStable = true;
-            } else if ($latestVersion === null) {
-                $latestVersion = $version;
-            }
 
             if ($isConsole) {
                 Console::stdout(Console::ansiFormat("- processing {$version} ({$sha}) ... ", [Console::FG_YELLOW]));
@@ -691,8 +719,15 @@ class PackageManager extends Component
                 'version' => $version,
                 'sha' => $sha,
             ]);
+
             $vcs->populateRelease($release);
-            $this->savePackageVersion($release);
+
+            if ($isConsole && !$release->valid) {
+                Console::stdout(Console::ansiFormat('invalid'.($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
+                Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
+            }
+
+            $this->savePackageRelease($release);
 
             if (!empty($release->require)) {
                 $depValues = [];
@@ -711,6 +746,15 @@ class PackageManager extends Component
                 $db->createCommand()
                     ->batchInsert('craftcom_packagedeps', ['packageId', 'versionId', 'name', 'constraints'], $depValues)
                     ->execute();
+            }
+
+            if ($release->valid) {
+                if (!$foundStable && $versionStability[$version] === 'stable') {
+                    $latestVersion = $version;
+                    $foundStable = true;
+                } else if ($latestVersion === null) {
+                    $latestVersion = $version;
+                }
             }
 
             if ($isConsole) {
@@ -774,7 +818,7 @@ class PackageManager extends Component
     /**
      * @param PackageRelease $release
      */
-    public function savePackageVersion(PackageRelease $release)
+    public function savePackageRelease(PackageRelease $release)
     {
         $db = Craft::$app->getDb();
         $db->createCommand()
@@ -804,6 +848,7 @@ class PackageManager extends Component
                 'source' => $release->source ? Json::encode($release->source) : null,
                 'dist' => $release->dist ? Json::encode($release->dist) : null,
                 'changelog' => $release->changelog,
+                'valid' => $release->valid,
             ])
             ->execute();
         $release->id = $db->getLastInsertID();

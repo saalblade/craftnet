@@ -1,9 +1,9 @@
 {
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true,
   "require": {
     "php": ">=7.0.0",
-    "craftcms/cms": "dev-release/3.0.0-RC1#37a28fa32825829bbbabb53b50ba53ea32326685 as 3.0.0-RC1",
+    "craftcms/cms": "dev-release/3.0.0-RC1#3d7f968ffb8418eb7ef93ee2c1ad2e90c0685014 as 3.0.0-RC1",
     "roave/security-advisories": "dev-master",
     "justinrainbow/json-schema": "^5.2",
     "yiisoft/yii2-redis": "^2.0.6",
@@ -15,7 +15,9 @@
     "league/oauth2-server": "^6.0",
     "adam-paterson/oauth2-stripe": "^2.0.0",
     "stripe/stripe-php": "^5.2.0",
-    "stevenmaguire/oauth2-bitbucket": "^2.0"
+    "stevenmaguire/oauth2-bitbucket": "^2.0",
+    "symfony/debug": "~3.0",
+    "symfony/options-resolver": "^3.0"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
