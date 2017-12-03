@@ -27,11 +27,6 @@ use yii\web\HttpException;
 abstract class BaseApiController extends Controller
 {
     /**
-     * @var
-     */
-    private $_logRequestId;
-
-    /**
      * @inheritdoc
      */
     public $allowAnonymous = true;
@@ -42,11 +37,42 @@ abstract class BaseApiController extends Controller
     public $enableCsrfValidation = false;
 
     /**
+     * @var
+     */
+    private $_logRequestId;
+
+    /**
+     * @var array
+     */
+    private $_logRequestKeys = [];
+
+    /**
      * @return mixed
      */
     public function getLogRequestId()
     {
         return $this->_logRequestId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLogRequestKeys(): array
+    {
+        return $this->_logRequestKeys;
+    }
+
+    /**
+     * @param      $key
+     * @param null $pluginHandle
+     */
+    public function addLogRequestKey($key, $pluginHandle = null)
+    {
+        if (!$pluginHandle) {
+            $pluginHandle = 'craft';
+        }
+
+        $this->_logRequestKeys[$pluginHandle] = $key;
     }
 
     /**
@@ -56,6 +82,7 @@ abstract class BaseApiController extends Controller
     {
         /** @var Connection $logDb */
         $logDb = Craft::$app->get('logDb', false);
+        $dateCreated = Db::prepareDateForDb(new \DateTime());
 
         // This should only exist on production.
         if ($logDb) {
@@ -65,7 +92,7 @@ abstract class BaseApiController extends Controller
             $insertRequest['ip'] = Craft::$app->getRequest()->getRemoteIP();
             $insertRequest['url'] = (Craft::$app->getRequest()->getIsSecureConnection() ? 'https://' : 'http://').Craft::$app->getRequest()->getRemoteHost().Craft::$app->getRequest()->getUrl();
             $insertRequest['route'] = $this->getRoute();
-            $insertRequest['dateCreated'] = Db::prepareDateForDb(new \DateTime());
+            $insertRequest['dateCreated'] = $dateCreated;
 
             try {
                 $rawBody = Craft::$app->getRequest()->getRawBody();
@@ -95,9 +122,13 @@ abstract class BaseApiController extends Controller
                 $insertError['message'] = $e->getMessage();
                 $insertError['httpStatus'] = $statusCode;
                 $insertError['stackTrace'] = $e->getTraceAsString();
-                $insertError['dateCreated'] = Db::prepareDateForDb(new \DateTime());
+                $insertError['dateCreated'] = $dateCreated;
 
                 $logDb->createCommand()->insert('errors', $insertError, false)->execute();
+
+                foreach ($this->getLogRequestKeys() as $handle => $key) {
+                    $logDb->createCommand()->insert('keys', ['requestId' => $this->getLogRequestId(), 'plugin' => $handle !== 'craft' ? $handle : null, 'key' => $key, 'dateCreated' => $dateCreated], false)->execute();
+                }
             }
 
             return $this->asErrorJson($e->getMessage())->setStatusCode($statusCode);
