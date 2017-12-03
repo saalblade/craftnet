@@ -33,9 +33,11 @@ class UpdatesController extends BaseApiController
             $this->addLogRequestKey($payload->cms->licenseKey);
         }
 
-        foreach ($payload->plugins as $pluginHandle => $plugin) {
-            if (!empty($plugin->licenseKey)) {
-                $this->addLogRequestKey($plugin->licenseKey, $pluginHandle);
+        if (isset($payload->plugins)) {
+            foreach ($payload->plugins as $pluginHandle => $plugin) {
+                if (!empty($plugin->licenseKey)) {
+                    $this->addLogRequestKey($plugin->licenseKey, $pluginHandle);
+                }
             }
         }
 
