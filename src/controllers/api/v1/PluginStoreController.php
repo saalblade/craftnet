@@ -115,6 +115,7 @@ class PluginStoreController extends BaseApiController
         $ret = [];
 
         $plugins = Plugin::find()
+            ->andWhere(['not', ['craftcom_plugins.packageId' => null]])
             ->with(['developer', 'categories', 'icon'])
             ->all();
 
