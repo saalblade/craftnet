@@ -9,6 +9,7 @@ use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\plugins\Plugin;
+use yii\base\Exception;
 use yii\helpers\Markdown;
 use yii\web\Response;
 
@@ -27,6 +28,16 @@ class UpdatesController extends BaseApiController
     public function actionIndex(): Response
     {
         $payload = $this->getPayload('updates-request');
+
+        if (!empty($payload->cms->licenseKey)) {
+            $this->addLogRequestKey($payload->cms->licenseKey);
+        }
+
+        foreach ($payload->plugins as $pluginHandle => $plugin) {
+            if (!empty($plugin->licenseKey)) {
+                $this->addLogRequestKey($plugin->licenseKey, $pluginHandle);
+            }
+        }
 
         return $this->asJson([
             'cms' => $this->_getCmsUpdateInfo($payload),

@@ -3,7 +3,10 @@
 namespace craftcom\controllers\api;
 
 use Craft;
+use craft\db\Connection;
 use craft\helpers\ArrayHelper;
+use craft\helpers\DateTimeHelper;
+use craft\helpers\Db;
 use craft\helpers\Html;
 use craft\helpers\Json;
 use craft\web\Controller;
@@ -11,8 +14,10 @@ use craftcom\Module;
 use craftcom\plugins\Plugin;
 use JsonSchema\Validator;
 use stdClass;
+use yii\base\InvalidParamException;
 use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
 
 /**
  * Class BaseController
@@ -34,6 +39,105 @@ abstract class BaseApiController extends Controller
     public $enableCsrfValidation = false;
 
     /**
+     * @var
+     */
+    private $_logRequestId;
+
+    /**
+     * @var array
+     */
+    private $_logRequestKeys = [];
+
+    /**
+     * @return mixed
+     */
+    public function getLogRequestId()
+    {
+        return $this->_logRequestId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLogRequestKeys(): array
+    {
+        return $this->_logRequestKeys;
+    }
+
+    /**
+     * @param      $key
+     * @param null $pluginHandle
+     */
+    public function addLogRequestKey($key, $pluginHandle = null)
+    {
+        if (!$pluginHandle) {
+            $pluginHandle = 'craft';
+        }
+
+        $this->_logRequestKeys[$pluginHandle] = $key;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function runAction($id, $params = [])
+    {
+        /** @var Connection $logDb */
+        $logDb = Craft::$app->get('logDb', false);
+        $dateCreated = Db::prepareDateForDb(new \DateTime());
+
+        // This should only exist on production.
+        if ($logDb) {
+            $insertRequest = [];
+
+            $insertRequest['verb'] = Craft::$app->getRequest()->getMethod();
+            $insertRequest['ip'] = Craft::$app->getRequest()->getRemoteIP();
+            $insertRequest['url'] = (Craft::$app->getRequest()->getIsSecureConnection() ? 'https://' : 'http://').Craft::$app->getRequest()->getRemoteHost().Craft::$app->getRequest()->getUrl();
+            $insertRequest['route'] = $this->getRoute();
+            $insertRequest['dateCreated'] = $dateCreated;
+
+            try {
+                $rawBody = Craft::$app->getRequest()->getRawBody();
+
+                // See if it's valid JSON.
+                Json::decode($rawBody);
+                $insertRequest['bodyJson'] = $rawBody;
+            } catch (InvalidParamException $e) {
+                // There was a problem JSON decoding.
+                $insertRequest['bodyText'] = $rawBody;
+            }
+
+            $logDb->createCommand()->insert('request', $insertRequest, false)->execute();
+            $this->_logRequestId = $logDb->getLastInsertID('request');
+        }
+
+        try {
+            return parent::runAction($id, $params);
+        }
+        catch (\Exception $e) {
+            if ($logDb) {
+                $insertError = [];
+
+                $statusCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
+
+                $insertError['requestId'] = $this->getLogRequestId();
+                $insertError['message'] = $e->getMessage();
+                $insertError['httpStatus'] = $statusCode;
+                $insertError['stackTrace'] = $e->getTraceAsString();
+                $insertError['dateCreated'] = $dateCreated;
+
+                $logDb->createCommand()->insert('errors', $insertError, false)->execute();
+
+                foreach ($this->getLogRequestKeys() as $handle => $key) {
+                    $logDb->createCommand()->insert('keys', ['requestId' => $this->getLogRequestId(), 'plugin' => $handle !== 'craft' ? $handle : null, 'key' => $key, 'dateCreated' => $dateCreated], false)->execute();
+                }
+            }
+
+            return $this->asErrorJson($e->getMessage())->setStatusCode($statusCode);
+        }
+    }
+
+    /**
      * Returns the JSON-decoded request body.
      *
      * @param string|null $schema JSON schema to validate the body with (optional)
@@ -51,7 +155,7 @@ abstract class BaseApiController extends Controller
             $validator->validate($body, (object)['$ref' => 'file://'.$path]);
 
             if (!$validator->isValid()) {
-                Craft::warning("Invalid API request payload (validated against {$schema}):\n".print_r($validator->getErrors(), true));
+                Craft::warning("Invalid API request payload (validated against {$schema}):\n".print_r($validator->getErrors(), true), __METHOD__);
                 throw new BadRequestHttpException('Invalid request body.');
             }
         }
