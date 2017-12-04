@@ -260,7 +260,9 @@ class PluginsController extends Controller
         $assetsService = Craft::$app->getAssets();
         $volumesService = Craft::$app->getVolumes();
 
-        $screenshotIds = (!empty($request->getBodyParam('screenshotIds')) ? $request->getBodyParam('screenshotIds') : []);
+        if (empty($screenshotIds = $request->getBodyParam('screenshotIds'))) {
+            $screenshotIds = [];
+        }
 
         if (!$request->getIsCpRequest()) {
 
