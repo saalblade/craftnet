@@ -75,6 +75,12 @@
             save() {
                 this.loading = true;
 
+                let newEmail = false;
+
+                if(this.currentUser.email !== this.userDraft.email) {
+                    newEmail = true;
+                }
+
                 this.$store.dispatch('saveUser', {
                     id: this.userDraft.id,
                     email: this.userDraft.email,
@@ -84,18 +90,28 @@
                     password: this.password,
                     newPassword: this.newPassword,
                 }).then(response => {
-                    this.$root.displayNotice('Settings saved.');
+                    this.loading = false;
+
+                    if(newEmail) {
+                        this.userDraft.email = this.currentUser.email;
+                        this.$root.displayNotice('You’ve been sent an email to verify your new email address.');
+                    } else {
+                        this.$root.displayNotice('Settings saved.');
+                    }
+
                     this.password = '';
                     this.newPassword = '';
                     this.errors = {};
-                    this.loading = false;
                 }).catch(response => {
+                    this.loading = false;
+
                     this.$root.displayError('Couldn’t save settings.');
+
                     this.errors = {};
-                    if(response.data.errors) {
+
+                    if(response.data && response.data.errors) {
                         this.errors = response.data.errors;
                     }
-                    this.loading = false;
                 });
             }
 

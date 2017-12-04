@@ -39,13 +39,11 @@ export const DISCONNECT_APP = (state, {appHandle}) => {
 
 export const SAVE_USER = (state, {user, response}) => {
     for (let attribute in user) {
-        if(attribute == 'id') {
+        if(attribute === 'id' || attribute === 'email') {
             continue;
         }
 
-        for (let attribute in user) {
-            state.craftId.currentUser[attribute] = user[attribute];
-        }
+        state.craftId.currentUser[attribute] = user[attribute];
 
         if(user.enablePluginDeveloperFeatures) {
             let groupExists = state.craftId.currentUser.groups.find(g => g.handle === 'developers');
