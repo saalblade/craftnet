@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h3>{{ appHandle }}</h3>
+		<!--<h3>{{ appHandle }}</h3>-->
 
 		<div v-if="app.repositories.length > 0" class="list-group">
 			<div v-for="repository in app.repositories" class="list-group-item">
@@ -9,7 +9,9 @@
 						{{ repository.full_name }}
 					</div>
 					<div>
-						<a href="#" class="btn btn-sm btn-primary" @click.prevent="$emit('selectRepository', repository)">Select</a>
+						<div v-if="isLoading(repository.html_url)" class="spinner"></div>
+						<a v-if="!repositoryIsInUse(repository.html_url)" href="#" class="btn btn-sm btn-primary" @click.prevent="$emit('selectRepository', repository)">Select</a>
+						<a v-else href="#" class="btn btn-sm btn-light disabled" :class="{ disabled: repositoryIsInUse(repository.html_url )}">Already in use</a>
 					</div>
 				</div>
 			</div>
@@ -25,19 +27,30 @@
 
     export default {
 
-        props: ['appHandle'],
+        props: ['appHandle', 'loadingRepository'],
 
         computed: {
 
             ...mapGetters({
                 apps: 'apps',
+                repositoryIsInUse: 'repositoryIsInUse',
             }),
 
 			app() {
                 return this.apps[this.appHandle];
 			}
 
-        }
+        },
+
+        methods: {
+          	isLoading(repositoryUrl) {
+				if(this.loadingRepository === repositoryUrl) {
+				    return true;
+				}
+
+				return false;
+			}
+		}
 
     }
 </script>

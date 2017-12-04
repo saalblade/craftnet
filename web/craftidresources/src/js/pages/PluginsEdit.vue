@@ -4,17 +4,18 @@
             <div class="card">
                 <div class="card-body">
                     <template v-if="connectedAppsCount > 0">
-                        <h2>Choose a repository</h2>
+                        <h2>Add a new plugin</h2>
+                        <p>To get started, select a repository for your plugin.</p>
 
                         <div v-for="app, appHandle in apps" class="mb-3">
-                            <repositories :appHandle="appHandle" @selectRepository="onSelectRepository"></repositories>
+                            <repositories :appHandle="appHandle" :loading-repository="loadingRepository" @selectRepository="onSelectRepository"></repositories>
                         </div>
 
                         <div>
                             <router-link to="/account/settings#connected-apps" class="btn btn-secondary">Manage connected apps</router-link>
                         </div>
                     </template>
-                    <template v-else="">
+                    <template v-else>
                         <h2>Connect</h2>
                         <p>Connect to GitHub or Bitbucket to retrieve your repositories.</p>
 
@@ -53,14 +54,6 @@
                             <div class="flex-grow">
                                 <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
                             </div>
-
-                            <template v-if="!pluginId">
-                                <div class="form-group ml-2">
-                                    <label>&nbsp;</label>
-                                    <input type="button" class="btn btn-secondary form-control" :disabled="!pluginDraft.repository" @click="loadDetails()" value="Load details">
-                                </div>
-                                <div class="spinner repository-spinner" :class="{'d-none': !repositoryLoading}"></div>
-                            </template>
                         </div>
                     </div>
                 </div>
@@ -185,6 +178,7 @@
                 loading: false,
                 pluginSubmitLoading: false,
                 repositoryLoading: false,
+                loadingRepository: null,
                 pluginDraft: {
                     id: null,
                     icon: null,
@@ -259,7 +253,7 @@
                     this.pluginDraft.screenshotIds = screenshotIds;
                     this.pluginDraft.screenshotUrls = screenshotUrls;
                 }
-            }
+            },
 
         },
 
@@ -273,8 +267,9 @@
             },
 
             onSelectRepository(repository) {
-                this.pluginDraft.repository = repository.html_url;
-                this.loadDetails();
+                // this.pluginDraft.repository = repository.html_url;
+
+                this.loadDetails(repository.html_url);
             },
 
             removeScreenshot(key) {
@@ -317,8 +312,9 @@
                 reader.readAsDataURL(this.$refs.iconFile.files[0]);
             },
 
-            loadDetails() {
+            loadDetails(repositoryUrl) {
                 this.repositoryLoading = true;
+                this.loadingRepository = repositoryUrl;
 
                 let body = {
                     repository: encodeURIComponent(url)
@@ -327,24 +323,32 @@
                 body[Craft.csrfTokenName] = Craft.csrfTokenValue;
 
                 let params = qs.stringify(body);
-                let url = this.pluginDraft.repository;
+                let url = repositoryUrl;
 
                 axios.post(Craft.actionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), params)
                     .then(response => {
-                        this.pluginDraft.changelogPath = response.data.changelogPath;
-                        this.pluginDraft.documentationUrl = response.data.documentationUrl;
-                        this.pluginDraft.name = response.data.name;
-                        this.pluginDraft.handle = response.data.handle;
-                        this.pluginDraft.shortDescription = response.data.shortDescription;
-                        this.pluginDraft.longDescription = response.data.longDescription;
-                        this.pluginDraft.packageName = response.data.packageName;
-                        this.pluginDraft.iconId = response.data.iconId;
-                        this.pluginDraft.iconUrl = response.data.iconUrl;
-                        this.pluginDraft.license = response.data.license;
                         this.repositoryLoading = false;
+                        this.loadingRepository = null;
+
+                        if(response.data.error) {
+                            this.$root.displayError(response.data.error);
+                        } else {
+                            this.pluginDraft.repository = repositoryUrl;
+                            this.pluginDraft.changelogPath = response.data.changelogPath;
+                            this.pluginDraft.documentationUrl = response.data.documentationUrl;
+                            this.pluginDraft.name = response.data.name;
+                            this.pluginDraft.handle = response.data.handle;
+                            this.pluginDraft.shortDescription = response.data.shortDescription;
+                            this.pluginDraft.longDescription = response.data.longDescription;
+                            this.pluginDraft.packageName = response.data.packageName;
+                            this.pluginDraft.iconId = response.data.iconId;
+                            this.pluginDraft.iconUrl = response.data.iconUrl;
+                            this.pluginDraft.license = response.data.license;
+                        }
                     })
                     .catch(response => {
                         this.repositoryLoading = false;
+                        this.$root.displayError("Couldn’t load repository");
                     });
             },
 

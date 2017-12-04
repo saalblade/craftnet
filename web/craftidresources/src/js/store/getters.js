@@ -85,3 +85,9 @@ export const userIsInGroup = state => {
         return state.craftId.currentUser.groups.find(g => g.handle === handle)
     }
 };
+
+export const repositoryIsInUse = state => {
+    return repositoryUrl => {
+        return state.craftId.plugins.find(plugin => plugin.repository === repositoryUrl)
+    }
+};
