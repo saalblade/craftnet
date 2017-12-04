@@ -9,6 +9,7 @@ use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\plugins\Plugin;
+use yii\base\Exception;
 use yii\helpers\Markdown;
 use yii\web\Response;
 
@@ -27,6 +28,18 @@ class UpdatesController extends BaseApiController
     public function actionIndex(): Response
     {
         $payload = $this->getPayload('updates-request');
+
+        if (!empty($payload->cms->licenseKey)) {
+            $this->addLogRequestKey($payload->cms->licenseKey);
+        }
+
+        if (isset($payload->plugins)) {
+            foreach ($payload->plugins as $pluginHandle => $plugin) {
+                if (!empty($plugin->licenseKey)) {
+                    $this->addLogRequestKey($plugin->licenseKey, $pluginHandle);
+                }
+            }
+        }
 
         return $this->asJson([
             'cms' => $this->_getCmsUpdateInfo($payload),
@@ -62,28 +75,32 @@ class UpdatesController extends BaseApiController
     private function _getPluginUpdateInfo(\stdClass $payload): array
     {
         $updateInfo = [];
-        $handles = array_keys(get_object_vars($payload->plugins));
+        
+        if (isset($payload->plugins)) {
 
-        if (!empty($handles)) {
-            $packageManager = $this->module->getPackageManager();
+            $handles = array_keys(get_object_vars($payload->plugins));
 
-            /** @var Plugin[] $plugins */
-            $plugins = Plugin::find()
-                ->handle($handles)
-                ->indexBy('handle')
-                ->all();
+            if (!empty($handles)) {
+                $packageManager = $this->module->getPackageManager();
 
-            foreach ($payload->plugins as $handle => $pluginInfo) {
-                if ($plugin = $plugins[$handle] ?? null) {
-                    $releases = $this->_releases($plugin->packageName, $pluginInfo->version);
-                } else {
-                    // We don't have a record of this plugin
-                    $releases = [];
+                /** @var Plugin[] $plugins */
+                $plugins = Plugin::find()
+                    ->handle($handles)
+                    ->indexBy('handle')
+                    ->all();
+
+                foreach ($payload->plugins as $handle => $pluginInfo) {
+                    if ($plugin = $plugins[$handle] ?? null) {
+                        $releases = $this->_releases($plugin->packageName, $pluginInfo->version);
+                    } else {
+                        // We don't have a record of this plugin
+                        $releases = [];
+                    }
+                    $updateInfo[$handle] = [
+                        'status' => 'eligible',
+                        'releases' => $releases,
+                    ];
                 }
-                $updateInfo[$handle] = [
-                    'status' => 'eligible',
-                    'releases' => $releases,
-                ];
             }
         }
 

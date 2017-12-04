@@ -1,5 +1,6 @@
 <?php
 
+use craft\config\DbConfig;
 use craftcom\services\Oauth;
 
 return [
@@ -87,6 +88,18 @@ return [
                 $session->authAccessParam = $stateKeyPrefix.'__auth_access';
                 return $session;
             },
+            'logDb' => function() {
+                $logDbConfig = Craft::$app->getConfig()->getConfigFromFile('logdb');
+                return craft\db\Connection::createFromConfig(new DbConfig($logDbConfig));
+            },
+            'log' => [
+                'targets' => [
+                    [
+                        'class' => 'craftcom\logs\DbTarget',
+                    ],
+                ],
+            ],
+
         ],
     ]
 ];
