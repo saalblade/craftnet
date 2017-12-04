@@ -415,6 +415,8 @@
         mounted() {
             if(this.plugin) {
                 this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
+            } else {
+                this.$router.push({path: '/developer/plugins'});
             }
         },
 
