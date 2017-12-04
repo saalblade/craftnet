@@ -1,0 +1,47 @@
+{% extends "_layouts/site" %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-12 ml-auto mr-auto">
+				<div class="p-5 text-center">
+					<h1>Craft 3 Plugins</h1>
+				</div>
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Plugin</th>
+							<th>Developer</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						{% for plugin in plugins %}
+
+							{% set icon = craft.assets({id: plugin.iconId, site: 'api'}).one() %}
+
+							<tr>
+								<td>
+									<img src="{{ icon.getUrl() }}" class="plugin-icon" />
+								</td>
+								<td>
+									<strong><a href="{{ plugin.repository }}">{{ plugin.name }}</a></strong>
+									<p>{{ plugin.shortDescription }}</p>
+								</td>
+								<td>
+									{% if plugin.developer.developerUrl %}
+										<a href="{{ plugin.developer.developerUrl }}">{{ plugin.developer.developerName }}</a>
+									{% else %}
+										{{ plugin.developer.developerName }}
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -60,4 +60,7 @@ return [
         'forgotpassword'=> ['template' => 'forgotpassword'],
         '<url:(.*)>'=> 'craftcom/id/account',
     ],
+    'plugins' => [
+        '' => 'craftcom/plugins/index/index'
+    ]
 ];

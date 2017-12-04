@@ -17,6 +17,7 @@ mix.js(sourcePath + '/js/app.js', distPath + '/js/')
     .js(sourcePath + '/js/site.js', distPath + '/js/')
     .sass(sourcePath + '/sass/app.scss', distPath + '/css/')
     .sass(sourcePath + '/sass/site.scss', distPath + '/css/')
+    .sass(sourcePath + '/sass/plugins.scss', distPath + '/css/')
     .options({
         processCssUrls: false
     })

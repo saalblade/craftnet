@@ -1,0 +1,18 @@
+{% if not title is defined %}
+	{% set title = "Craft 3 Plugins" %}
+{% endif %}
+
+{% set bodyClass = (bodyClass is defined ? bodyClass~' ' : '') ~ craft.app.locale.getOrientation() -%}
+
+<html>
+<head>
+	<title>{{ title }}</title>
+</head>
+<body class="{{ bodyClass }}">
+
+{{ beginBody() }}
+{% block body %}{% endblock %}
+{{ endBody() }}
+
+</body>
+</html>

@@ -20,6 +20,10 @@ switch($_SERVER['HTTP_HOST']) {
     case 'queue.craftcms.dev':
         define('CRAFT_SITE', 'queue');
         break;
+    case 'plugins.craftcms.com':
+    case 'plugins.craftcms.dev':
+        define('CRAFT_SITE', 'plugins');
+        break;
 }
 
 define('CRAFT_BASE_PATH', __DIR__);
