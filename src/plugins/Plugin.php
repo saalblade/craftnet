@@ -222,6 +222,11 @@ class Plugin extends Element
     // =========================================================================
 
     /**
+     * @var bool Whether the element is enabled
+     */
+    public $enabled = false;
+
+    /**
      * @var int The developer’s user ID
      */
     public $developerId;
