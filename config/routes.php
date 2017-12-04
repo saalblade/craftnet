@@ -61,6 +61,6 @@ return [
         '<url:(.*)>'=> 'craftcom/id/account',
     ],
     'plugins' => [
-        //'' => 'craftcom/plugins/index/index'
-    ]
+        '/' => 'craftcom/plugins/index/index',
+    ],
 ];
