@@ -15,6 +15,7 @@ use craftcom\errors\MissingTokenException;
 use craftcom\errors\VcsException;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\db\Expression;
 use yii\helpers\Console;
 
 /**
@@ -404,8 +405,8 @@ class PackageManager extends Component
     {
         return $this->_createPackageQuery()
             ->select(['name'])
-            ->where(['repository' => $url])
-            ->scalar();
+            ->where(new Expression('lower([[repository]]) = :url', [':url' => $url]))
+            ->getRawSql();
     }
 
     /**
