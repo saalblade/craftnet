@@ -247,7 +247,12 @@ class PluginsController extends Controller
         $plugin->changelogPath = $request->getBodyParam('changelogPath') ?: null;
         $plugin->devComments = $request->getBodyParam('devComments') ?: null;
 
-        $plugin->setCategories(Category::find()->id($request->getBodyParam('categoryIds'))->fixedOrder()->all());
+        if (!empty($categoryIds = $request->getBodyParam('categoryIds'))) {
+            $categories = Category::find()->id($categoryIds)->fixedOrder()->all();
+        } else {
+            $categories = [];
+        }
+        $plugin->setCategories($categories);
 
 
         // Uploads
