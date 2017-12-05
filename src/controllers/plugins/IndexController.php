@@ -24,7 +24,8 @@ class IndexController extends Controller
     // Public Methods
     // =========================================================================
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $criteria = [];
         $query = Plugin::find();
         if ($criteria) {

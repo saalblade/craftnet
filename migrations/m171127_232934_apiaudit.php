@@ -15,17 +15,12 @@ class m171127_232934_apiaudit extends Migration
     /**
      * @inheritdoc
      */
-    public function init()
-    {
-        $this->db = 'logDb';
-
-        parent::init();
-    }
-    /**
-     * @inheritdoc
-     */
     public function safeUp()
     {
+        if (($this->db = Craft::$app->get('logDb', false)) === null) {
+            return;
+        }
+
         $this->createTable('{{%request}}', [
             'id' => $this->primaryKey(),
             'url' => $this->text()->notNull(),
