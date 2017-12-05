@@ -229,6 +229,7 @@ class PackageRelease extends Model
 
     /**
      * @return string
+     * @throws \UnexpectedValueException
      */
     public function getNormalizedVersion(): string
     {
