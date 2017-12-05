@@ -13,7 +13,6 @@ use craftcom\oauthserver\server\Repositories\RefreshTokenRepository;
 use craftcom\oauthserver\server\Repositories\ScopeRepository;
 use craftcom\oauthserver\server\Repositories\UserRepository;
 use craftcom\oauthserver\server\Response;
-use craftcom\oauthserver\web\assets\clientapproval\ClientApprovalAsset;
 use DateInterval;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -96,8 +95,6 @@ class OauthController extends Controller
                     }
                 }
             }
-
-            Craft::$app->getView()->registerAssetBundle(ClientApprovalAsset::class);
 
             return $this->renderTemplate('oauth/clientApproval', [
                 'scopes' => $scopes,
