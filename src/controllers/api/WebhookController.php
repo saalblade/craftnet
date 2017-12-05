@@ -19,9 +19,10 @@ class WebhookController extends BaseApiController
     public function actionGithub()
     {
         $payload = $this->getPayload('github-webhook');
-        Craft::info('Incoming payload from Github.', __METHOD__);
 
         $url = $payload->repository->html_url;
+        Craft::info('Incoming payload from Github from '.$url, __METHOD__);
+
         $packageManager = $this->module->getPackageManager();
         $name = $packageManager->getPackageNameByRepoUrl($url);
 
