@@ -22,7 +22,7 @@
             let notificationDuration = 2000;
 
             if (this.type === 'error') {
-                notificationDuration = notificationDuration * 2;
+                notificationDuration = notificationDuration * 4;
             }
 
             setTimeout(function() {
