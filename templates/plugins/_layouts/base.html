@@ -6,7 +6,19 @@
 
 <html>
 <head>
+	{% if craft.app.env == 'prod' %}
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-39036834-6"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-39036834-6');
+		</script>
+	{% endif %}
+
 	<title>{{ title }}</title>
+	<meta name="viewport" content="width=device-width">
 </head>
 <body class="{{ bodyClass }}">
 

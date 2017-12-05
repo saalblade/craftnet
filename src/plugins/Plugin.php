@@ -201,6 +201,7 @@ class Plugin extends Element
             'license' => 'License',
             'primaryCategory' => 'Primary Category',
             'documentationUrl' => 'Documentation URL',
+            'latestVersion' => 'Version',
         ];
     }
 

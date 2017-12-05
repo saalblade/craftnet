@@ -54,6 +54,7 @@ class JsonDumper extends Component
                 'time',
                 'license',
                 'authors',
+                'support',
                 'conflict',
                 'replace',
                 'provide',
