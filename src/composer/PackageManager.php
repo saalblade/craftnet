@@ -616,7 +616,15 @@ class PackageManager extends Component
             }
 
             // Don't include duplicate versions
-            $normalizedVersion = (new VersionParser())->normalize($version);
+            try {
+                $normalizedVersion = (new VersionParser())->normalize($version);
+            } catch (\UnexpectedValueException $e) {
+                if ($isConsole) {
+                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - invalid version", [Console::FG_RED]));
+                }
+                return false;
+            }
+
             if (isset($normalizedVersions[$normalizedVersion])) {
                 if ($isConsole) {
                     Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - duplicate version", [Console::FG_RED]));
