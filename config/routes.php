@@ -31,11 +31,6 @@ return [
         'POST v1/available-plugins' => 'craftcom/api/v1/available-plugins',
         'POST webhook/github' => 'craftcom/api/webhook/github',
         'update-deps' => 'craftcom/update-deps',
-
-        'oauth/login' => 'oauth-server/oauth/login',
-        'oauth/authorize' => 'oauth-server/oauth/authorize',
-        'oauth/access-token' => 'oauth-server/oauth/access-token',
-        'oauth/revoke' => 'oauth-server/oauth/revoke',
     ],
     'composer' => [
     ],
@@ -52,6 +47,11 @@ return [
         'GET  stripe/customer' => 'craftcom/id/stripe/customer',
         'POST stripe/save-card' => 'craftcom/id/stripe/save-card',
         'POST stripe/remove-card' => 'craftcom/id/stripe/remove-card',
+
+        'oauth/login' => 'oauth-server/oauth/login',
+        'oauth/authorize' => 'oauth-server/oauth/authorize',
+        'oauth/access-token' => 'oauth-server/oauth/access-token',
+        'oauth/revoke' => 'oauth-server/oauth/revoke',
 
         // Catch-all route for Vue when people reload the page.
         'login'=> ['template' => 'login'],
