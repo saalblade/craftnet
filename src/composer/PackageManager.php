@@ -406,7 +406,7 @@ class PackageManager extends Component
         return $this->_createPackageQuery()
             ->select(['name'])
             ->where(new Expression('lower([[repository]]) = :url', [':url' => $url]))
-            ->getRawSql();
+            ->scalar();
     }
 
     /**
