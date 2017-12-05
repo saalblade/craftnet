@@ -345,6 +345,11 @@ class PackageManager extends Component
      */
     public function removePackage(string $name)
     {
+        try {
+            $this->deleteWebhook($name);
+        } catch (Exception $e) {
+        }
+
         Craft::$app->getDb()->createCommand()
             ->delete('craftcom_packages', ['name' => $name])
             ->execute();
@@ -616,7 +621,15 @@ class PackageManager extends Component
             }
 
             // Don't include duplicate versions
-            $normalizedVersion = (new VersionParser())->normalize($version);
+            try {
+                $normalizedVersion = (new VersionParser())->normalize($version);
+            } catch (\UnexpectedValueException $e) {
+                if ($isConsole) {
+                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - invalid version", [Console::FG_RED]));
+                }
+                return false;
+            }
+
             if (isset($normalizedVersions[$normalizedVersion])) {
                 if ($isConsole) {
                     Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - duplicate version", [Console::FG_RED]));
@@ -875,6 +888,28 @@ class PackageManager extends Component
         }
 
         Craft::info('Done updating package dependencies.', __METHOD__);
+    }
+
+    /**
+     * Updates all of the managed package dependencies.
+     *
+     * @param bool $force Whether to update package releases even if their SHA hasn't changed
+     * @param bool $queue Whether to queue the updates
+     */
+    public function updateManagedPackages(bool $force = false, bool $queue = false)
+    {
+        Craft::info('Starting to update managed packages.', __METHOD__);
+
+        $names = $this->_createPackageQuery()
+            ->select(['name'])
+            ->where(['managed' => true])
+            ->column();
+
+        foreach ($names as $name) {
+            $this->updatePackage($name, $force, $queue);
+        }
+
+        Craft::info('Done updating managed packages.', __METHOD__);
     }
 
     /**

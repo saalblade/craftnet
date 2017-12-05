@@ -140,6 +140,7 @@ class Package extends Model
             $token = null;
             if ($plugin = $this->getPlugin()) {
                 $token = Module::getInstance()->getOauth()->getAuthTokenByUserId('Github', $plugin->developerId);
+                Craft::info('Using package token for '.$plugin->name.' : '.$token, __METHOD__);
 
                 if (!$token) {
                     if (Module::getInstance()->getPackageManager()->requirePluginVcsTokens) {
@@ -151,6 +152,7 @@ class Package extends Model
             if (!$token) {
                 // Just use a fallback token
                 $token = Module::getInstance()->getPackageManager()->getRandomGitHubFallbackToken();
+                Craft::info('Using fallback token for '.$plugin->name.' : '.$token, __METHOD__);
             }
 
             if ($token) {

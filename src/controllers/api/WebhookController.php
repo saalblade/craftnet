@@ -21,6 +21,8 @@ class WebhookController extends BaseApiController
         $payload = $this->getPayload('github-webhook');
 
         $url = $payload->repository->html_url;
+        Craft::info('Incoming payload from Github from '.$url, __METHOD__);
+
         $packageManager = $this->module->getPackageManager();
         $name = $packageManager->getPackageNameByRepoUrl($url);
 
@@ -31,7 +33,9 @@ class WebhookController extends BaseApiController
         $package = $packageManager->getPackage($name);
         $this->_validateSecret($package->webhookSecret);
 
+        Craft::info('Updating package: '.$name, __METHOD__);
         $packageManager->updatePackage($name, false, true);
+        Craft::info('Dumping JSON', __METHOD__);
         $this->module->getJsonDumper()->dump(true);
     }
 
@@ -53,6 +57,7 @@ class WebhookController extends BaseApiController
         $payloadHash = hash_hmac($algo, Craft::$app->getRequest()->getRawBody(), $secret);
 
         if (!hash_equals($payloadHash, $hash)) {
+            Craft::error('Invalid secret from Github payload. Payload Hash: '.$payloadHash.' Hash: '.$hash, __METHOD__);
             throw new BadRequestHttpException('Invalid request body.');
         }
     }
