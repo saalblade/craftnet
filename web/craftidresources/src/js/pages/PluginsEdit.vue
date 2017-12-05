@@ -401,7 +401,7 @@
                 }).catch(response => {
                     this.loading = false;
                     this.$root.displayError('Couldn’t save plugin.');
-                    this.errors = (data.errors ? data.errors : []);
+                    this.errors = (response.data.errors ? response.data.errors : []);
                 });
             },
 
