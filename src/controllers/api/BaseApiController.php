@@ -115,25 +115,33 @@ abstract class BaseApiController extends Controller
             return parent::runAction($id, $params);
         }
         catch (\Exception $e) {
+            $statusCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
+
             if ($logDb) {
-                $insertError = [];
-
-                $statusCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
-
-                $insertError['requestId'] = $this->getLogRequestId();
-                $insertError['message'] = $e->getMessage();
-                $insertError['httpStatus'] = $statusCode;
-                $insertError['stackTrace'] = $e->getTraceAsString();
-                $insertError['dateCreated'] = $dateCreated;
-
-                $logDb->createCommand()->insert('errors', $insertError, false)->execute();
+                $logDb->createCommand()
+                    ->insert('errors', [
+                        'requestId' => $this->getLogRequestId(),
+                        'message' => $e->getMessage(),
+                        'httpStatus' => $statusCode,
+                        'stackTrace' => $e->getTraceAsString(),
+                        'dateCreated' => $dateCreated,
+                    ], false)
+                    ->execute();
 
                 foreach ($this->getLogRequestKeys() as $handle => $key) {
-                    $logDb->createCommand()->insert('keys', ['requestId' => $this->getLogRequestId(), 'plugin' => $handle !== 'craft' ? $handle : null, 'key' => $key, 'dateCreated' => $dateCreated], false)->execute();
+                    $logDb->createCommand()
+                        ->insert('keys', [
+                            'requestId' => $this->getLogRequestId(),
+                            'plugin' => $handle !== 'craft' ? $handle : null,
+                            'key' => $key,
+                            'dateCreated' => $dateCreated
+                        ], false)
+                        ->execute();
                 }
             }
 
-            return $this->asErrorJson($e->getMessage())->setStatusCode($statusCode);
+            return $this->asErrorJson($e->getMessage())
+                ->setStatusCode($statusCode);
         }
     }
 
