@@ -765,6 +765,15 @@ EOD;
     /**
      * @inheritdoc
      */
+    public function afterDelete()
+    {
+        Module::getInstance()->getPackageManager()->removePackage($this->packageName);
+        parent::afterDelete();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getThumbUrl(int $size)
     {
         if ($this->iconId) {
