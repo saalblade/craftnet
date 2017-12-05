@@ -863,6 +863,8 @@ class PackageManager extends Component
      */
     public function updateDeps(bool $force = false, bool $queue = false)
     {
+        Craft::info('Starting to update package dependencies.', __METHOD__);
+
         $names = $this->_createPackageQuery()
             ->select(['name'])
             ->where(['managed' => false])
@@ -871,6 +873,8 @@ class PackageManager extends Component
         foreach ($names as $name) {
             $this->updatePackage($name, $force, $queue);
         }
+
+        Craft::info('Done updating package dependencies.', __METHOD__);
     }
 
     /**

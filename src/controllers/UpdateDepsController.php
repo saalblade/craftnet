@@ -27,10 +27,6 @@ class UpdateDepsController extends Controller
             throw new BadRequestHttpException();
         }
 
-        Craft::info('Starting to update package dependencies.', __METHOD__);
-
         $this->module->getPackageManager()->updateDeps(false, true);
-
-        Craft::info('Done updating package dependencies.', __METHOD__);
     }
 }
