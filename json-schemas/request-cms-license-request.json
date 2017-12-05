@@ -7,8 +7,7 @@
       "format": "email"
     },
     "hostname": {
-      "type": "string",
-      "format": "hostname"
+      "type": "string"
     }
   },
   "required": ["email", "hostname"]

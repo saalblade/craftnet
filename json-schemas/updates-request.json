@@ -13,8 +13,7 @@
           ]
         },
         "hostname": {
-          "type": "string",
-          "format": "hostname"
+          "type": "string"
         },
         "port": {
           "type": "integer",

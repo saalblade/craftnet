@@ -8,8 +8,7 @@
       "maxLength": 250
     },
     "newHostname": {
-      "type": "string",
-      "format": "hostname"
+      "type": "string"
     }
   },
   "required": ["licenseKey", "newHostname"]
