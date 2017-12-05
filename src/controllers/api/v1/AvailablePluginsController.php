@@ -25,9 +25,6 @@ class AvailablePluginsController extends BaseApiController
      */
     public function actionIndex(): Response
     {
-        // todo: remove this when RC1 launches
-        return $this->asJson([]);
-
         $this->requirePostRequest();
         $clientInfo = $this->getPayload();
         $craft2Plugins = require(Craft::getAlias('@config/craft2-plugins.php'));
