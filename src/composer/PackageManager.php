@@ -345,6 +345,11 @@ class PackageManager extends Component
      */
     public function removePackage(string $name)
     {
+        try {
+            $this->deleteWebhook($name);
+        } catch (Exception $e) {
+        }
+
         Craft::$app->getDb()->createCommand()
             ->delete('craftcom_packages', ['name' => $name])
             ->execute();
