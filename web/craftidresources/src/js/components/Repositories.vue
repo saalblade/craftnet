@@ -2,8 +2,8 @@
 	<div>
 		<!--<h3>{{ appHandle }}</h3>-->
 
-		<div v-if="app.repositories.length > 0" class="list-group">
-			<div v-for="repository in app.repositories" class="list-group-item">
+		<div v-if="repositories.length > 0" class="list-group">
+			<div v-for="repository in repositories" class="list-group-item">
 				<div class="d-flex">
 					<div class="media-body">
 						{{ repository.full_name }}
@@ -38,18 +38,23 @@
 
 			app() {
                 return this.apps[this.appHandle];
-			}
+			},
+
+			repositories() {
+                let unusedRepos = this.app.repositories.filter(r => !this.repositoryIsInUse(r.html_url));
+                let inUseRepos = this.app.repositories.filter(r => this.repositoryIsInUse(r.html_url));
+
+              	return unusedRepos.concat(inUseRepos);
+			},
 
         },
 
         methods: {
-          	isLoading(repositoryUrl) {
-				if(this.loadingRepository === repositoryUrl) {
-				    return true;
-				}
 
-				return false;
+          	isLoading(repositoryUrl) {
+          	    return this.loadingRepository === repositoryUrl;
 			}
+
 		}
 
     }
