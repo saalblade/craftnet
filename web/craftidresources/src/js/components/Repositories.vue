@@ -2,8 +2,11 @@
 	<div>
 		<!--<h3>{{ appHandle }}</h3>-->
 
-		<div v-if="repositories.length > 0" class="list-group">
-			<div v-for="repository in repositories" class="list-group-item">
+		<text-field placeholder="Filter repositories" v-model="q" />
+
+
+		<div v-if="filteredRepositories.length > 0" class="list-group">
+			<div v-for="repository in filteredRepositories" class="list-group-item">
 				<div class="d-flex">
 					<div class="media-body">
 						{{ repository.full_name }}
@@ -23,11 +26,24 @@
 
 
 <script>
-    import { mapGetters } from 'vuex'
+    import filter from 'lodash/filter';
+    import includes from 'lodash/includes';
+    import { mapGetters } from 'vuex';
+    import TextField from '../components/fields/TextField';
 
     export default {
 
+        components: {
+            TextField
+        },
+
         props: ['appHandle', 'loadingRepository'],
+
+        data() {
+            return {
+                q: ''
+			};
+        },
 
         computed: {
 
@@ -46,6 +62,20 @@
 
               	return unusedRepos.concat(inUseRepos);
 			},
+
+			filteredRepositories() {
+				let searchQuery = this.q;
+
+				if(!searchQuery) {
+					return this.repositories;
+				}
+
+				return filter(this.repositories, r => {
+					if(r.full_name && includes(r.full_name.toLowerCase(), searchQuery.toLowerCase())) {
+						return true;
+					}
+				});
+			}
 
         },
 
