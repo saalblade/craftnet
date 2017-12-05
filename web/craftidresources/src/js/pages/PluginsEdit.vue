@@ -40,7 +40,6 @@
                         <a @click.prevent="submit()" href="#" class="btn btn-secondary btn-sm">Submit for Approval</a>
                     </template>
 
-
                     <span class="text-secondary">Your plugin will be automatically published once it’s approved.</span>
                 </template>
                 <div v-if="pluginSubmitLoading" class="spinner"></div>
@@ -133,7 +132,7 @@
                     </div>
                 </div>
 
-                <div class="card mb-3">
+                <div v-if="showPriceFields" class="card mb-3">
                     <div class="card-header">Pricing</div>
                     <div class="card-body">
                         <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />
@@ -255,6 +254,10 @@
                 }
             },
 
+            showPriceFields() {
+                return !this.plugin.enabled || (this.plugin.enabled && this.plugin.price);
+            }
+
         },
 
         methods: {
@@ -267,8 +270,6 @@
             },
 
             onSelectRepository(repository) {
-                // this.pluginDraft.repository = repository.html_url;
-
                 this.loadDetails(repository.html_url);
             },
 
