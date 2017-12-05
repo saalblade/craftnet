@@ -891,6 +891,28 @@ class PackageManager extends Component
     }
 
     /**
+     * Updates all of the managed package dependencies.
+     *
+     * @param bool $force Whether to update package releases even if their SHA hasn't changed
+     * @param bool $queue Whether to queue the updates
+     */
+    public function updateManagedPackages(bool $force = false, bool $queue = false)
+    {
+        Craft::info('Starting to update managed packages.', __METHOD__);
+
+        $names = $this->_createPackageQuery()
+            ->select(['name'])
+            ->where(['managed' => true])
+            ->column();
+
+        foreach ($names as $name) {
+            $this->updatePackage($name, $force, $queue);
+        }
+
+        Craft::info('Done updating managed packages.', __METHOD__);
+    }
+
+    /**
      * Returns a random fallback GitHub API token.
      *
      * @return string|null

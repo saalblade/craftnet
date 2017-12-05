@@ -176,6 +176,14 @@ class PackagesController extends Controller
     }
 
     /**
+     * Updates our version records for all managed Composer packages.
+     */
+    public function actionUpdateManagedPackages()
+    {
+        $this->module->getPackageManager()->updateManagedPackages($this->force, $this->queue);
+    }
+
+    /**
      * Creates a VCS webhook for a given package.
      *
      * @param string $name The package name
