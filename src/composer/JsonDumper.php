@@ -220,8 +220,12 @@ class JsonDumper extends Component
         }
 
         Craft::info("Writing JSON file to ".$path, __METHOD__);
-        // Write the new file
-        FileHelper::writeToFile($path, $content);
+        try {
+            // Write the new file
+            FileHelper::writeToFile($path, $content);
+        } catch (\Throwable $throwable) {
+            Craft::error($throwable->getMessage(), __METHOD__);
+        }
 
         return $hash;
     }
