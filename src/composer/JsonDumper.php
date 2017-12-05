@@ -54,7 +54,6 @@ class JsonDumper extends Component
                 'time',
                 'license',
                 'authors',
-                //'support',
                 'conflict',
                 'replace',
                 'provide',
@@ -99,7 +98,7 @@ class JsonDumper extends Component
             }
 
             // Assemble in the same order as \Packagist\WebBundle\Entity\Version::toArray()
-            // `support` and `source` are intentionally ignored for now.
+            // `source` is intentionally ignored for now.
             $data = [
                 'name' => $name,
                 'description' => (string)$version['description'],
@@ -109,6 +108,7 @@ class JsonDumper extends Component
                 'version_normalized' => $version['normalizedVersion'],
                 'license' => $version['license'] ? Json::decode($version['license']) : [],
                 'authors' => $version['authors'] ? Json::decode($version['authors']) : [],
+                'support' => $version['support'] ? Json::decode($version['support']) : [],
                 'dist' => $version['dist'] ? Json::decode($version['dist']) : null,
                 'type' => $version['type'],
             ];
