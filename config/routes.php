@@ -19,7 +19,6 @@
  */
 
 return [
-    'queue/handle-message' => 'queue/handle-message',
     'api' => [
         'POST v1/updates' => 'craftcom/api/v1/updates',
         'POST v1/plugin-store' => 'craftcom/api/v1/plugin-store',
@@ -35,6 +34,8 @@ return [
     'composer' => [
     ],
     'craftId' => [
+        'POST queue/handle-message' => 'queue/handle-message',
+
         'GET  v1/id' => 'craftcom/id/v1/id',
         'GET  craft-id' => 'craftcom/id/craft-id',
         'GET  apps/connect/<appTypeHandle:{handle}>' => 'craftcom/id/apps/connect',
