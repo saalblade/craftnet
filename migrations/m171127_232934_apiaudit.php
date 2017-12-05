@@ -34,16 +34,16 @@ class m171127_232934_apiaudit extends Migration
 
         $this->createTable('{{%errors}}', [
             'id' => $this->primaryKey(),
-            'requestId' => $this->integer()->notNull(),
+            'requestId' => $this->integer(),
             'message' => $this->text()->notNull(),
-            'httpStatus' => $this->integer()->notNull(),
+            'httpStatus' => $this->integer(),
             'stackTrace' => $this->text(),
             'dateCreated' => $this->dateTime()->notNull(),
         ]);
 
         $this->createTable('{{%logs}}', [
             'id' => $this->primaryKey(),
-            'requestId' => $this->integer()->notNull(),
+            'requestId' => $this->integer(),
             'level' => $this->integer(),
             'category' => $this->string(),
             'message' => $this->text(),
