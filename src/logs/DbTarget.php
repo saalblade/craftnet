@@ -29,11 +29,6 @@ class DbTarget extends \yii\log\DbTarget
      */
     public function export()
     {
-        // Only log to the DbTarget for API controller requests.
-        if (!StringHelper::startsWith(Craft::$app->controller->id, 'api/')) {
-            return;
-        }
-
         $tableName = $this->db->quoteTableName($this->logTable);
         $sql = "INSERT INTO $tableName ([[requestId]], [[level]], [[category]], [[message]], [[dateCreated]])
                 VALUES (:requestId, :level, :category, :message, :dateCreated)";
@@ -54,7 +49,7 @@ class DbTarget extends \yii\log\DbTarget
                 }
 
                 $command->bindValues([
-                    ':requestId' => Craft::$app->controller->getLogRequestId(),
+                    ':requestId' => method_exists(Craft::$app->controller, 'getLogRequestId') ? Craft::$app->controller->getLogRequestId() : null,
                     ':level' => $level,
                     ':category' => $category,
                     ':message' => $text,
