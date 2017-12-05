@@ -2,14 +2,13 @@
 
 namespace craftcom\composer\vcs;
 
-use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
 use Craft;
 use craftcom\composer\Package;
 use craftcom\composer\PackageRelease;
-use yii\base\Object;
+use yii\base\BaseObject;
 
-abstract class BaseVcs extends Object implements VcsInterface
+abstract class BaseVcs extends BaseObject implements VcsInterface
 {
     /**
      * @var Package
