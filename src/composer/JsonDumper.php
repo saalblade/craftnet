@@ -33,6 +33,8 @@ class JsonDumper extends Component
             return;
         }
 
+        Craft::info('Dumping JSON.', __METHOD__);
+
         // Fetch all the data
         $packages = (new Query())
             ->select(['id', 'name', 'abandoned', 'replacementPackage'])
@@ -175,6 +177,7 @@ class JsonDumper extends Component
             'providers-url' => "/p/%package%/%hash%.json",
         ];
 
+        Craft::info("Writing JSON file to {$this->composerWebroot}/packages.json", __METHOD__);
         FileHelper::writeToFile("{$this->composerWebroot}/packages.json", Json::encode($rootData));
 
         if (!empty($oldPaths)) {
@@ -216,6 +219,7 @@ class JsonDumper extends Component
             closedir($handle);
         }
 
+        Craft::info("Writing JSON file to ".$path, __METHOD__);
         // Write the new file
         FileHelper::writeToFile($path, $content);
 
