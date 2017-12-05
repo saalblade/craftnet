@@ -238,14 +238,17 @@ class PluginsController extends Controller
         $plugin->iconId = $request->getBodyParam('iconId')[0] ?? null;
         $plugin->packageName = $request->getBodyParam('packageName');
         $plugin->repository = $request->getBodyParam('repository');
-        $plugin->price = (float)$request->getBodyParam('price');
-        $plugin->renewalPrice = (float)$request->getBodyParam('renewalPrice');
         $plugin->license = $request->getBodyParam('license');
         $plugin->shortDescription = $request->getBodyParam('shortDescription');
         $plugin->longDescription = $request->getBodyParam('longDescription');
         $plugin->documentationUrl = $request->getBodyParam('documentationUrl');
         $plugin->changelogPath = $request->getBodyParam('changelogPath') ?: null;
         $plugin->devComments = $request->getBodyParam('devComments') ?: null;
+
+        if(!$plugin->enabled || ($plugin->enabled && $plugin->price)) {
+            $plugin->price = (float)$request->getBodyParam('price');
+            $plugin->renewalPrice = (float)$request->getBodyParam('renewalPrice');
+        }
 
         if (!empty($categoryIds = $request->getBodyParam('categoryIds'))) {
             $categories = Category::find()->id($categoryIds)->fixedOrder()->all();
