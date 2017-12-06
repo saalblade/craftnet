@@ -27,12 +27,12 @@
 									<img src="{{ icon.getUrl() }}" class="plugin-icon" />
 								</td>
 								<td>
-									<strong><a href="{{ plugin.repository }}">{{ plugin.name }}</a></strong>
+									<strong><a href="{{ plugin.repository }}" target="_blank">{{ plugin.name }}</a></strong>
 									<p>{{ plugin.shortDescription }}</p>
 								</td>
 								<td>
 									{% if plugin.developer.developerUrl %}
-										<a href="{{ plugin.developer.developerUrl }}">{{ plugin.developer.developerName }}</a>
+										<a href="{{ plugin.developer.developerUrl }}" target="_blank">{{ plugin.developer.developerName }}</a>
 									{% else %}
 										{{ plugin.developer.developerName }}
 									{% endif %}
