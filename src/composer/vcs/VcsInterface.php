@@ -14,6 +14,11 @@ interface VcsInterface
     public function getVersions(): array;
 
     /**
+     * @return string|null
+     */
+    public function getChangelogUrl();
+
+    /**
      * @param PackageRelease $release
      */
     public function populateRelease(PackageRelease $release);

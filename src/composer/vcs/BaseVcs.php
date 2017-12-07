@@ -28,6 +28,14 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getChangelogUrl()
+    {
+        return null;
+    }
+
+    /**
      * @param PackageRelease $release
      * @param array          $config
      *
