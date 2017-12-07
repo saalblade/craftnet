@@ -28,11 +28,11 @@ class DeveloperController extends BaseApiController
 
         if ($user) {
             return $this->asJson([
-                'developerName' => $user->developerName,
+                'developerName' => strip_tags($user->developerName),
                 'developerUrl' => $user->developerUrl,
                 'location' => $user->location,
                 'username' => $user->username,
-                'fullName' => $user->getFullName(),
+                'fullName' => strip_tags($user->getFullName()),
                 'email' => $user->email,
                 'photoUrl' => ($user->getPhoto() ? $user->getPhoto()->getUrl(['width' => 200, 'height' => 200, 'mode' => 'fit']) : null),
             ]);
