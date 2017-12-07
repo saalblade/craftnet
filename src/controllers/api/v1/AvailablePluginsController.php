@@ -38,13 +38,6 @@ class AvailablePluginsController extends BaseApiController
             $db = Craft::$app->getDb();
 
             foreach ($clientInfo->plugins as $oldHandle) {
-                // Log it
-                $db->createCommand(
-                    'INSERT INTO [[craftcom_craft2pluginhits]] as [[h]] ([[plugin]], [[hits]]) VALUES (:plugin, 1) '.
-                    'ON CONFLICT ([[plugin]]) DO UPDATE SET [[hits]] = [[h.hits]] + 1',
-                    ['plugin' => $oldHandle]
-                )->execute();
-
                 if (isset($craft2Plugins[$oldHandle]['handle'])) {
                     $newHandle = $craft2Plugins[$oldHandle]['handle'];
                 } else {
@@ -92,10 +85,22 @@ class AvailablePluginsController extends BaseApiController
             ];
         }
 
-        // Anything we missed?
+        // Log the plugins, and fill in any gaps in the response
         if (isset($clientInfo->plugins)) {
             foreach ($clientInfo->plugins as $oldHandle) {
-                if (!isset($res[$oldHandle])) {
+                $available = isset($res[$oldHandle]);
+
+                // Log it
+                $db->createCommand(
+                    'INSERT INTO [[craftcom_craft2pluginhits]] as [[h]] ([[plugin]], [[hits]], [[available]]) VALUES (:plugin, 1, :available) '.
+                    'ON CONFLICT ([[plugin]]) DO UPDATE SET [[hits]] = [[h.hits]] + 1, [[available]] = :available',
+                    [
+                        'plugin' => $oldHandle,
+                        'available' => $available || isset($craft2Plugins[$oldHandle]),
+                    ]
+                )->execute();
+
+                if (!$available) {
                     $res[$oldHandle] = [
                         'statusColor' => '',
                         'status' => 'Not available yet',
