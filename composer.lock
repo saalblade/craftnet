@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6a188741cadd43cfcd040da674189519",
+    "content-hash": "8bb4c74d8dd979595754c12117a98789",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -4297,5 +4297,8 @@
     "platform": {
         "php": ">=7.0.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "platform-overrides": {
+        "php": "7.0.21"
+    }
 }
