@@ -152,7 +152,7 @@ class Package extends Model
             if (!$token) {
                 // Just use a fallback token
                 $token = Module::getInstance()->getPackageManager()->getRandomGitHubFallbackToken();
-                Craft::info('Using fallback token for '.$plugin->name.' : '.$token, __METHOD__);
+                Craft::info('Using fallback token for '.($plugin ? $plugin->name : $this->name).' : '.$token, __METHOD__);
             }
 
             if ($token) {
