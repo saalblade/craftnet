@@ -46,9 +46,7 @@ class WebhookController extends BaseApiController
      */
     private function _validateSecret($secret)
     {
-        $headers = Craft::$app->getRequest()->getHeaders();
-
-        if (!isset($headers['X-Hub-Signature'])) {
+        if (($header = Craft::$app->getRequest()->getHeaders()->get('X-Hub-Signature')) === null) {
             throw new BadRequestHttpException('Invalid request body.');
         }
 
