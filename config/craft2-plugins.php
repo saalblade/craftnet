@@ -12,4 +12,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Discontinued. Use [Redactor](https://github.com/craftcms/redactor) instead.'
     ],
+    'MnEager' => [
+        'handle' => 'marionnewlevant/agnostic-fetch'
+    ],
+    'MnTwigPerversion' => [
+        'handle' => 'marionnewlevant/twig-perversion'
+    ]
 ];
