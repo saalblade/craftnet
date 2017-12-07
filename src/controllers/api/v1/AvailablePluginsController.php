@@ -35,7 +35,16 @@ class AvailablePluginsController extends BaseApiController
         $newHandlesByOld = [];
 
         if (isset($clientInfo->plugins)) {
+            $db = Craft::$app->getDb();
+
             foreach ($clientInfo->plugins as $oldHandle) {
+                // Log it
+                $db->createCommand(
+                    'INSERT INTO [[craftcom_craft2pluginhits]] as [[h]] ([[plugin]], [[hits]]) VALUES (:plugin, 1) '.
+                    'ON CONFLICT ([[plugin]]) DO UPDATE SET [[hits]] = [[h.hits]] + 1',
+                    ['plugin' => $oldHandle]
+                )->execute();
+
                 if (isset($craft2Plugins[$oldHandle]['handle'])) {
                     $newHandle = $craft2Plugins[$oldHandle]['handle'];
                 } else {
