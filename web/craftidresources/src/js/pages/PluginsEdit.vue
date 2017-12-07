@@ -255,6 +255,10 @@
             },
 
             showPriceFields() {
+                if(!this.plugin) {
+                    return true;
+                }
+
                 return !this.plugin.enabled || (this.plugin.enabled && this.plugin.price);
             }
 
