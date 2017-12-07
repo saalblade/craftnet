@@ -574,6 +574,14 @@ class Plugin extends Element
 
         $rules[] = [
             [
+                'price',
+                'renewalPrice'
+            ],
+            'number',
+        ];
+
+        $rules[] = [
+            [
                 'repository',
                 'documentationUrl',
             ],
