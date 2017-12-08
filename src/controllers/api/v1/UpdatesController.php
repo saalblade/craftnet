@@ -4,12 +4,15 @@ namespace craftcom\controllers\api\v1;
 
 use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
+use Craft;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\Db;
 use craft\helpers\Html;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\plugins\Plugin;
 use yii\base\Exception;
+use yii\db\Expression;
 use yii\helpers\Markdown;
 use yii\web\Response;
 
@@ -29,9 +32,7 @@ class UpdatesController extends BaseApiController
     {
         $payload = $this->getPayload('updates-request');
 
-        if (!empty($payload->cms->licenseKey)) {
-            $this->addLogRequestKey($payload->cms->licenseKey);
-        }
+        $this->addLogRequestKey($payload->cms->licenseKey);
 
         if (isset($payload->plugins)) {
             foreach ($payload->plugins as $pluginHandle => $plugin) {
@@ -75,14 +76,20 @@ class UpdatesController extends BaseApiController
     private function _getPluginUpdateInfo(\stdClass $payload): array
     {
         $updateInfo = [];
-        
-        if (isset($payload->plugins)) {
+        $db = Craft::$app->getDb();
 
+        // Delete any installedplugins rows where lastActivity > 30 days ago
+        $db->createCommand()
+            ->delete('craftcom_installedplugins', ['and',
+                ['craftLicenseKey' => $payload->cms->licenseKey],
+                ['<', 'lastActivity', Db::prepareDateForDb(new \DateTime('-30 days'))],
+            ])
+            ->execute();
+
+        if (isset($payload->plugins)) {
             $handles = array_keys(get_object_vars($payload->plugins));
 
             if (!empty($handles)) {
-                $packageManager = $this->module->getPackageManager();
-
                 /** @var Plugin[] $plugins */
                 $plugins = Plugin::find()
                     ->handle($handles)
@@ -92,6 +99,25 @@ class UpdatesController extends BaseApiController
                 foreach ($payload->plugins as $handle => $pluginInfo) {
                     if ($plugin = $plugins[$handle] ?? null) {
                         $releases = $this->_releases($plugin->packageName, $pluginInfo->version);
+
+                        // Log it
+                        $db->createCommand()
+                            ->upsert('craftcom_installedplugins', [
+                                'craftLicenseKey' => $payload->cms->licenseKey,
+                                'pluginId' => $plugin->id,
+                            ], [
+                                'lastActivity' => Db::prepareDateForDb(new \DateTime()),
+                            ], false)
+                            ->execute();
+
+                        // Update the plugin's active installs count
+                        $db->createCommand()
+                            ->update('craftcom_plugins', [
+                                'activeInstalls' => new Expression('(select count(*) from [[craftcom_installedplugins]] where [[pluginId]] = :pluginId)', ['pluginId' => $plugin->id]),
+                            ], [
+                                'id' => $plugin->id,
+                            ])
+                            ->execute();
                     } else {
                         // We don't have a record of this plugin
                         $releases = [];

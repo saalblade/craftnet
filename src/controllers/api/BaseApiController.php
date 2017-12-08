@@ -197,8 +197,8 @@ abstract class BaseApiController extends Controller
             'developerName' => strip_tags($developer->getDeveloperName()),
             'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
             'version' => $plugin->latestVersion,
+            'activeInstalls' => $plugin->activeInstalls,
             'packageName' => $plugin->packageName,
-            'installs' => 0,
         ];
 
         if ($fullDetails) {
@@ -222,7 +222,6 @@ abstract class BaseApiController extends Controller
             $longDescription = Markdown::process($longDescription);
 
             $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
-            $data['activeInstalls'] = 0;
             $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;

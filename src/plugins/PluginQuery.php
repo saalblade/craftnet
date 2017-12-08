@@ -136,6 +136,7 @@ class PluginQuery extends ElementQuery
             'craftcom_plugins.documentationUrl',
             'craftcom_plugins.changelogPath',
             'craftcom_plugins.latestVersion',
+            'craftcom_plugins.activeInstalls',
             'craftcom_plugins.pendingApproval',
         ]);
 

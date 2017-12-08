@@ -303,6 +303,11 @@ class Plugin extends Element
     public $latestVersion;
 
     /**
+     * @var int The number of active installs.
+     */
+    public $activeInstalls = 0;
+
+    /**
      * @var string|null
      */
     public $devComments;
