@@ -31,7 +31,7 @@ return [
     ],
     'Hue' => [
         'statusColor' => 'orange',
-        'status' => 'Unnecessary thanks to [Color field improvements](https://github.com/craftcms/cms/issues/2059).'
+        'status' => 'Unnecessary thanks to [Color field improvements](https://github.com/craftcms/cms/issues/2059)'
     ],
     'MnBreakAndContinue' => [
         'handle' => 'twig-perversion'
@@ -44,6 +44,6 @@ return [
     ],
     'RedactorI' => [
         'statusColor' => 'orange',
-        'status' => 'Discontinued. Use [Redactor](https://github.com/craftcms/redactor) instead.'
+        'status' => 'Discontinued (use [Redactor](https://github.com/craftcms/redactor) instead)'
     ],
 ];
