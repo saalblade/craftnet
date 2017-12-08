@@ -1,0 +1,16 @@
+<table class="data fullwidth">
+    <thead>
+        <tr>
+            <th scope="col">Plugin Handle</th>
+            <th scope="col">Hits</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for plugin, hits in plugins %}
+            <tr>
+                <td>{{ plugin }}</td>
+                <td>{{ hits }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -12,6 +12,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\services\Fields;
 use craft\services\UserPermissions;
+use craft\services\Utilities;
 use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
@@ -20,6 +21,7 @@ use craftcom\composer\JsonDumper;
 use craftcom\composer\PackageManager;
 use craftcom\fields\Plugins;
 use craftcom\services\Oauth;
+use craftcom\utilities\UnavailablePlugins;
 use yii\base\Event;
 
 /**
@@ -147,6 +149,10 @@ class Module extends \yii\base\Module
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $e) {
             $e->types[] = Plugins::class;
+        });
+
+        Event::on(Utilities::class, Utilities::EVENT_REGISTER_UTILITY_TYPES, function(RegisterComponentTypesEvent $e) {
+            $e->types[] = UnavailablePlugins::class;
         });
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $e) {
