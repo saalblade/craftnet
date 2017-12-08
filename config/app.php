@@ -95,11 +95,15 @@ return [
             'log' => [
                 'targets' => [
                     [
-                        'class' => 'craftcom\logs\DbTarget',
+                        'class' => craftcom\logs\DbTarget::class,
+                    ],
+                    [
+                        'class' => craft\log\FileTarget::class,
+                        'levels' => !YII_DEBUG ? yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING : yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING | yii\log\Logger::LEVEL_INFO | yii\log\Logger::LEVEL_TRACE | yii\log\Logger::LEVEL_PROFILE,
+                        'logFile' => '@storage/logs/web.log',
                     ],
                 ],
             ],
-
         ],
     ]
 ];
