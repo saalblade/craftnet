@@ -22,6 +22,7 @@ use craftcom\composer\PackageManager;
 use craftcom\fields\Plugins;
 use craftcom\services\Oauth;
 use craftcom\utilities\PopularPlugins;
+use craftcom\utilities\UnavailablePlugins;
 use yii\base\Event;
 
 /**
@@ -152,6 +153,7 @@ class Module extends \yii\base\Module
         });
 
         Event::on(Utilities::class, Utilities::EVENT_REGISTER_UTILITY_TYPES, function(RegisterComponentTypesEvent $e) {
+            $e->types[] = UnavailablePlugins::class;
             $e->types[] = PopularPlugins::class;
         });
 
