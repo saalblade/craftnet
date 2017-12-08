@@ -339,16 +339,42 @@
                             this.$root.displayError(response.data.error);
                         } else {
                             this.pluginDraft.repository = repositoryUrl;
-                            this.pluginDraft.changelogPath = response.data.changelogPath;
-                            this.pluginDraft.documentationUrl = response.data.documentationUrl;
-                            this.pluginDraft.name = response.data.name;
-                            this.pluginDraft.handle = response.data.handle;
-                            this.pluginDraft.shortDescription = response.data.shortDescription;
-                            this.pluginDraft.longDescription = response.data.longDescription;
-                            this.pluginDraft.packageName = response.data.packageName;
-                            this.pluginDraft.iconId = response.data.iconId;
-                            this.pluginDraft.iconUrl = response.data.iconUrl;
-                            this.pluginDraft.license = response.data.license;
+
+                            if(response.data.changelogPath) {
+                                this.pluginDraft.changelogPath = response.data.changelogPath;
+                            }
+
+                            if(response.data.documentationUrl) {
+                                this.pluginDraft.documentationUrl = response.data.documentationUrl;
+                            }
+
+                            if(response.data.name) {
+                                this.pluginDraft.name = response.data.name;
+                            }
+
+                            if(response.data.handle) {
+                                this.pluginDraft.handle = response.data.handle;
+                            }
+
+                            if(response.data.shortDescription) {
+                                this.pluginDraft.shortDescription = response.data.shortDescription;
+                            }
+
+                            if(response.data.packageName) {
+                                this.pluginDraft.packageName = response.data.packageName;
+                            }
+
+                            if(response.data.iconId) {
+                                this.pluginDraft.iconId = response.data.iconId;
+                            }
+
+                            if(response.data.iconUrl) {
+                                this.pluginDraft.iconUrl = response.data.iconUrl;
+                            }
+
+                            if(response.data.license) {
+                                this.pluginDraft.license = response.data.license;
+                            }
                         }
                     })
                     .catch(response => {
