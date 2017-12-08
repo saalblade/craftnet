@@ -198,7 +198,7 @@ abstract class BaseApiController extends Controller
             'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
             'version' => $plugin->latestVersion,
             'packageName' => $plugin->packageName,
-            'totalInstalls' => 0,
+            'installs' => 0,
         ];
 
         if ($fullDetails) {
