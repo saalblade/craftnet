@@ -1,0 +1,25 @@
+<table class="data fullwidth">
+    <thead>
+        <tr>
+            <th scope="col">Plugin</th>
+            <th scope="col">Developer</th>
+            <th scope="col">Installs</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for plugin in plugins %}
+            {% set developer = plugin.getDeveloper() %}
+            <tr>
+                <td><a href="{{ plugin.getCpEditUrl() }}">{{ plugin.name }}</a></td>
+                <td>
+                    {% if developer.developerUrl %}
+                        <a href="{{ developer.developerUrl }}">{{ developer.getDeveloperName() }}</a>
+                    {% else %}
+                        {{ developer.getDeveloperName() }}
+                    {% endif %}
+                </td>
+                <td>{{ plugin.activeInstalls }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
