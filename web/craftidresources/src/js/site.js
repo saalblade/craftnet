@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Notification from './components/Notification';
+import LoginForm from './components/LoginForm';
 
 window.craftIdSite = new Vue({
 
@@ -7,6 +8,7 @@ window.craftIdSite = new Vue({
 
     components: {
         Notification,
+        LoginForm
     },
 
 });

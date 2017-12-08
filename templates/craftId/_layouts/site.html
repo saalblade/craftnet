@@ -8,6 +8,24 @@
 
 {% set bodyClass = 'bg-light' %}
 
+{% set config = craft.app.config.getConfigFromFile('craftid') %}
+
+{% js at head %}
+	window.craftIdUrl = "{{ config.craftIdUrl }}";
+	window.currentUserId = {{ currentUser is defined and currentUser and currentUser.id ? currentUser.id : 'null'  }};
+
+	window.Craft = {
+	actionUrl:             "{{ actionUrl()|e('js') }}",
+	username:              {{ currentUser is defined and currentUser ? ('"'~currentUser.username|e('js')~'"')|raw : 'null' }},
+	remainingSessionTime:  {{ craft.app.request.getSegment(1) not in ['updates', 'manualupdate'] ? craft.app.user.getRemainingSessionTime() : 0 }},
+
+	{% if craft.app.config.general.enableCsrfProtection %}
+		csrfTokenValue:        "{{ craft.app.request.getCsrfToken()|e('js') }}",
+		csrfTokenName:         "{{ craft.app.config.general.csrfTokenName|e('js') }}",
+	{% endif %}
+	};
+{% endjs %}
+
 {% block body %}
 
 	<div id="site">

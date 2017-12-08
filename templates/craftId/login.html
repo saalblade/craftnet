@@ -14,29 +14,7 @@
 				<div class="card">
 					<div class="card-body">
 
-						<form method="post" accept-charset="UTF-8">
-							{{ csrfInput() }}
-							<input type="hidden" name="action" value="users/login">
-
-							<div class="form-group">
-								<label for="loginName">Username or email</label>
-								<input class="form-control" id="loginName" type="text" name="loginName" value="{{ craft.app.user.rememberedUsername }}" />
-							</div>
-
-							<div class="form-group">
-								<label for="password">Password</label>
-								<input class="form-control" id="password" type="password" name="password" />
-							</div>
-
-							<div class="form-check">
-								<label class="form-check-label">
-									<input type="checkbox" class="form-check-input" name="rememberMe" value="1">
-									Remember me
-								</label>
-							</div>
-
-							<input type="submit" class="btn btn-primary btn-block" value="Login">
-						</form>
+						<login-form remembered-username="{{ craft.app.user.rememberedUsername }}"></login-form>
 
 						<p><a href="{{ url('forgotpassword') }}">Forgot your password?</a></p>
 					</div>
