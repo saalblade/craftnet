@@ -245,7 +245,7 @@ class PluginsController extends Controller
         $plugin->changelogPath = $request->getBodyParam('changelogPath') ?: null;
         $plugin->devComments = $request->getBodyParam('devComments') ?: null;
 
-        if(!$plugin->enabled || ($plugin->enabled && $plugin->price)) {
+        if (!$plugin->enabled || ($plugin->enabled && $plugin->price)) {
             $plugin->price = (float)$request->getBodyParam('price');
             $plugin->renewalPrice = (float)$request->getBodyParam('renewalPrice');
         }
@@ -428,7 +428,7 @@ class PluginsController extends Controller
 
             // Screenshots
 
-            if($newHandle) {
+            if ($newHandle) {
                 $volume = $volumesService->getVolumeByHandle('screenshots');
                 $volumeId = $volumesService->ensureTopFolder($volume);
 
