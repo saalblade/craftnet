@@ -3,6 +3,7 @@
 namespace craftcom\controllers\api\v1;
 
 use Craft;
+use craft\helpers\ArrayHelper;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\plugins\Plugin;
 use yii\helpers\Inflector;
@@ -29,87 +30,88 @@ class AvailablePluginsController extends BaseApiController
         $clientInfo = $this->getPayload();
         $craft2Plugins = require(Craft::getAlias('@config/craft2-plugins.php'));
 
-        $pluginHandles = [];
-
-        // Get the new plugin handles for the plugins they already have installed
-        $newHandlesByOld = [];
+        // Start with any info we know from craft2-plugins.php, and get a list of
+        // all the plugin handles we should query for
+        $newHandles = [];
+        $oldHandlesByNew = [];
+        $res = [];
 
         if (isset($clientInfo->plugins)) {
-            $db = Craft::$app->getDb();
-
             foreach ($clientInfo->plugins as $oldHandle) {
                 if (isset($craft2Plugins[$oldHandle]['handle'])) {
-                    $newHandle = $craft2Plugins[$oldHandle]['handle'];
+                    $newHandle = ArrayHelper::remove($craft2Plugins[$oldHandle], 'handle');
                 } else {
                     $newHandle = Inflector::camel2id($oldHandle);
                 }
-                $pluginHandles[] = $newHandle;
-                $newHandlesByOld[$oldHandle] = $newHandle;
-            }
-        }
-        $oldHandlesByNew = array_flip($newHandlesByOld);
 
-        // Get the volume type plugin handles
-        if (isset($clientInfo->assetSourceTypes)) {
-            if (in_array('GoogleCloud', $clientInfo->assetSourceTypes)) {
-                $pluginHandles[] = 'google-cloud';
-            }
-            if (in_array('Rackspace', $clientInfo->assetSourceTypes)) {
-                $pluginHandles[] = 'rackspace';
-            }
-            if (in_array('S3', $clientInfo->assetSourceTypes)) {
-                $pluginHandles[] = 'aws-s3';
-            }
-        }
-
-        $res = [];
-
-        $plugins = Plugin::find()
-            ->handle($pluginHandles)
-            ->with(['icon', 'developer'])
-            ->all();
-
-        foreach ($plugins as $plugin) {
-            $key = $oldHandlesByNew[$plugin->handle] ?? $plugin->handle;
-            $icon = $plugin->getIcon();
-            $developer = $plugin->getDeveloper();
-            $res[$key] = [
-                'statusColor' => 'green',
-                'status' => "[Available]({$plugin->repository})",
-                'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
-                'name' => $plugin->name,
-                'price' => $plugin->price,
-                'currency' => 'USD',
-                'developerName' => $developer->getDeveloperName(),
-                'developerUrl' => $developer->developerUrl,
-            ];
-        }
-
-        // Log the plugins, and fill in any gaps in the response
-        if (isset($clientInfo->plugins)) {
-            foreach ($clientInfo->plugins as $oldHandle) {
-                $available = isset($res[$oldHandle]);
-
-                // Log it
-                $db->createCommand(
-                    'INSERT INTO [[craftcom_craft2pluginhits]] as [[h]] ([[plugin]], [[hits]], [[available]]) VALUES (:plugin, 1, :available) '.
-                    'ON CONFLICT ([[plugin]]) DO UPDATE SET [[hits]] = [[h.hits]] + 1, [[available]] = :available',
-                    [
-                        'plugin' => $oldHandle,
-                        'available' => $available || isset($craft2Plugins[$oldHandle]),
-                    ]
-                )->execute();
-
-                if (!$available) {
-                    $res[$oldHandle] = [
+                if (!empty($craft2Plugins[$oldHandle])) {
+                    $resInfo = $craft2Plugins[$oldHandle];
+                } else {
+                    $resInfo = [
                         'statusColor' => '',
                         'status' => 'Not available yet',
                     ];
                 }
 
-                if (isset($craft2Plugins[$oldHandle])) {
-                    $res[$oldHandle] = array_merge($res[$oldHandle], $craft2Plugins[$oldHandle]);
-                }
+                $newHandles[] = $newHandle;
+                $oldHandlesByNew[$newHandle] = $oldHandle;
+                $res[$oldHandle] = $resInfo;
+            }
+        }
+
+        // Include the volume type plugin handles
+        if (isset($clientInfo->assetSourceTypes)) {
+            if (in_array('GoogleCloud', $clientInfo->assetSourceTypes)) {
+                $newHandles[] = 'google-cloud';
+            }
+            if (in_array('Rackspace', $clientInfo->assetSourceTypes)) {
+                $newHandles[] = 'rackspace';
+            }
+            if (in_array('S3', $clientInfo->assetSourceTypes)) {
+                $newHandles[] = 'aws-s3';
+            }
+        }
+
+        // Find the plugins
+        $plugins = Plugin::find()
+            ->handle($newHandles)
+            ->with(['icon', 'developer'])
+            ->status(null)
+            ->all();
+
+        foreach ($plugins as $plugin) {
+            $oldHandle = $oldHandlesByNew[$plugin->handle] ?? $plugin->handle;
+            $icon = $plugin->getIcon();
+            $developer = $plugin->getDeveloper();
+            $statusColor = $plugin->enabled ? 'green' : 'orange';
+            $status = $plugin->enabled ? 'Available' : 'Coming soon';
+
+            $res[$oldHandle] = [
+                'statusColor' => $statusColor,
+                'status' => "[$status]({$plugin->repository})",
+                'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
+                'name' => strip_tags($plugin->name),
+                'price' => $plugin->price,
+                'currency' => 'USD',
+                'developerName' => strip_tags($developer->getDeveloperName()),
+                'developerUrl' => $developer->developerUrl,
+            ];
+        }
+
+        // Log the plugin hits
+        if (isset($clientInfo->plugins)) {
+            $db = Craft::$app->getDb();
+
+            foreach ($clientInfo->plugins as $oldHandle) {
+                $available = in_array($res[$oldHandle]['statusColor'], ['green', 'orange'], true);
+                $db->createCommand(
+                    'INSERT INTO [[craftcom_craft2pluginhits]] as [[h]] ([[plugin]], [[hits]], [[available]]) VALUES (:plugin, 1, :available) '.
+                    'ON CONFLICT ([[plugin]]) DO UPDATE SET [[hits]] = [[h.hits]] + 1, [[available]] = :available',
+                    [
+                        'plugin' => $oldHandle,
+                        'available' => $available,
+                    ]
+                )->execute();
             }
         }
 
