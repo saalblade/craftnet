@@ -25,6 +25,10 @@
  */
 
 return [
+    'Hacksaw' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead'
+    ],
     'Hue' => [
         'statusColor' => 'orange',
         'status' => 'Unnecessary thanks to [Color field improvements](https://github.com/craftcms/cms/issues/2059).'
