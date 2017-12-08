@@ -25,6 +25,9 @@
  */
 
 return [
+    'CpFieldLinks' => [
+        'handle' => 'cp-field-inspect'
+    ],
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
     ],
