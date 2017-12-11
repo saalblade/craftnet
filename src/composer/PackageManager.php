@@ -618,7 +618,7 @@ class PackageManager extends Component
         $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
 
         if ($isConsole) {
-            Console::output("Updating version data for {$name}...");
+            Console::output("Updating version data for {$name} ...");
         }
 
         // Get all of the already known versions (including invalid releases)
@@ -709,7 +709,7 @@ class PackageManager extends Component
                 ->execute();
 
             if ($isConsole) {
-                Console::output('done');
+                Console::output('done.');
             }
         }
 
