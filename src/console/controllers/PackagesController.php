@@ -88,6 +88,7 @@ class PackagesController extends Controller
                 break;
             case 'update':
             case 'update-deps':
+            case 'update-managed-packages':
                 $options[] = 'force';
                 $options[] = 'queue';
                 break;
