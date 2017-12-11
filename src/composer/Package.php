@@ -46,11 +46,6 @@ class Package extends Model
     public $managed = false;
 
     /**
-     * @var
-     */
-    public $latestVersion;
-
-    /**
      * @var bool
      */
     public $abandoned = false;
