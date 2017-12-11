@@ -146,6 +146,9 @@ class PackagesController extends Controller
         if ($this->confirm('Update its versions now?')) {
             $packageManager->updatePackage($name);
         }
+        if ($this->confirm('Dump new Composer JSON?')) {
+            $this->module->getJsonDumper()->dump();
+        }
     }
 
     /**
