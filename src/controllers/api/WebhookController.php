@@ -34,9 +34,7 @@ class WebhookController extends BaseApiController
         $this->_validateSecret($package->webhookSecret);
 
         Craft::info('Updating package: '.$name, __METHOD__);
-        $packageManager->updatePackage($name, false, true);
-        Craft::info('Dumping JSON', __METHOD__);
-        $this->module->getJsonDumper()->dump(true);
+        $packageManager->updatePackage($name, false, true, true);
     }
 
     /**
