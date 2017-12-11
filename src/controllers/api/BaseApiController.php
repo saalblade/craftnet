@@ -211,7 +211,7 @@ abstract class BaseApiController extends Controller
                 $screenshotIds[] = $screenshot->getId();
             }
 
-            // todo: remove this when $includePricens goes away
+            // todo: remove this when $includePrices goes away
             $longDescription = $plugin->longDescription;
             if (!$includePrices && $plugin->price) {
                 $price = Craft::$app->getFormatter()->asCurrency($plugin->price, 'USD');
