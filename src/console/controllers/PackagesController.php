@@ -51,7 +51,7 @@ class PackagesController extends Controller
     public function __get($name)
     {
         // Convert kebab-case names to camelCase
-        if (strpos($name, '-') !== false ) {
+        if (strpos($name, '-') !== false) {
             $name = lcfirst(Inflector::id2camel($name));
             return $this->$name;
         }
@@ -64,7 +64,7 @@ class PackagesController extends Controller
     public function __set($name, $value)
     {
         // Convert kebab-case names to camelCase
-        if (strpos($name, '-') !== false ) {
+        if (strpos($name, '-') !== false) {
             $name = lcfirst(Inflector::id2camel($name));
             $this->$name = $value;
             return;
