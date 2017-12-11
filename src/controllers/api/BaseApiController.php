@@ -183,6 +183,8 @@ abstract class BaseApiController extends Controller
         $icon = $plugin->getIcon();
         $developer = $plugin->getDeveloper();
 
+        $latestRelease = Module::getInstance()->getPackageManager()->getRelease($plugin->packageName, $plugin->latestVersion);
+
         // Return data
         $data = [
             'id' => $plugin->id,
@@ -199,6 +201,7 @@ abstract class BaseApiController extends Controller
             'version' => $plugin->latestVersion,
             'activeInstalls' => $plugin->activeInstalls,
             'packageName' => $plugin->packageName,
+            'lastUpdate' => $latestRelease->time ?? $plugin->dateUpdated->format(\DateTime::ATOM),
         ];
 
         if ($fullDetails) {
@@ -221,9 +224,6 @@ abstract class BaseApiController extends Controller
             $longDescription = Html::encode($longDescription);
             $longDescription = Markdown::process($longDescription);
 
-            $latestRelease = Module::getInstance()->getPackageManager()->getRelease($plugin->packageName, $plugin->latestVersion);
-
-            $data['lastUpdate'] = $latestRelease->time ?? $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
