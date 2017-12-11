@@ -417,23 +417,29 @@ class PackageManager extends Component
     /**
      * Creates a VCS webhook for a given package.
      *
-     * @param string $name
-     * @param bool   $createIfExists
+     * @param string|Package $package The package or its name
+     * @param bool           $force   Whether the webhook should be created even if one already exists
      *
-     * @return bool
      * @throws Exception if the package couldn't be found
      */
-    public function createWebhook(string $name, bool $createIfExists = true): bool
+    public function createWebhook($package, bool $force = false)
     {
-        $package = $this->getPackage($name);
+        if (is_string($package)) {
+            $package = $this->getPackage($package);
+        }
+
+        $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
 
         // Does the package already have a webhook registered?
         if ($package->webhookId) {
-            if (!$createIfExists) {
-                return true;
+            if (!$force) {
+                if ($isConsole) {
+                    Console::output("A webhook for {$package->name} already exists.");
+                }
+                return;
             }
 
-            if ($this->deleteWebhook($name)) {
+            if ($this->deleteWebhook($package)) {
                 $package->webhookId = null;
                 $package->webhookSecret = null;
             }
@@ -456,6 +462,10 @@ class PackageManager extends Component
             Craft::warning("Could not create a webhook for {$package->name}: {$e->getMessage()}", __METHOD__);
             Craft::$app->getErrorHandler()->logException($e->getPrevious() ?? $e);
 
+            if ($isConsole) {
+                Console::error("Could not create a webhook for {$package->name}: {$e->getMessage()}");
+            }
+
             // Clear out the secret
             $package->webhookSecret = null;
             Craft::$app->getDb()->createCommand()
@@ -465,7 +475,7 @@ class PackageManager extends Component
                     ['id' => $package->id])
                 ->execute();
 
-            return false;
+            return;
         }
 
         // Store the new ID
@@ -476,32 +486,42 @@ class PackageManager extends Component
                 ['id' => $package->id])
             ->execute();
 
-        return true;
+        if ($isConsole) {
+            Console::output("Webhook created for {$package->name}.");
+        }
     }
 
     /**
      * Deletes a VCS webhook for a given package.
      *
-     * @param string $name
-     * @param bool   $createIfExists
+     * @param string|Package $package The package or its name
      *
-     * @return bool
      * @throws Exception if the package couldn't be found
      */
-    public function deleteWebhook(string $name): bool
+    public function deleteWebhook($package)
     {
-        $package = $this->getPackage($name);
+        if (is_string($package)) {
+            $package = $this->getPackage($package);
+        }
+
+        $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
 
         if (!$package->webhookId) {
-            return true;
+            if ($isConsole) {
+                Console::output("No webhook for {$package->name} exists.");
+            }
+            return;
         }
 
         try {
             $package->getVcs()->deleteWebhook();
         } catch (VcsException $e) {
-            Craft::warning("Could not delete a webhook for {$package->name}: {$e->getMessage()}", __METHOD__);
+            Craft::warning("Could not delete the webhook for {$package->name}: {$e->getMessage()}", __METHOD__);
             Craft::$app->getErrorHandler()->logException($e->getPrevious() ?? $e);
-            return false;
+            if ($isConsole) {
+                Console::error("Could not delete the webhook for {$package->name}: {$e->getMessage()}");
+            }
+            return;
         }
 
         // Remove our record of it
@@ -515,7 +535,9 @@ class PackageManager extends Component
                 ['id' => $package->id])
             ->execute();
 
-        return true;
+        if ($isConsole) {
+            Console::output("Webhook deleted for {$package->name}.");
+        }
     }
 
     /**

@@ -92,6 +92,9 @@ class PackagesController extends Controller
                 $options[] = 'force';
                 $options[] = 'queue';
                 break;
+            case 'create-webhook':
+            case 'create-all-webhooks':
+                $options[] = 'force';
         }
 
         return $options;
@@ -191,11 +194,7 @@ class PackagesController extends Controller
      */
     public function actionCreateWebhook(string $name)
     {
-        if (!$this->module->getPackageManager()->createWebhook($name)) {
-            Console::error("There was an error creating a webhook for {$name}.");
-        } else {
-            Console::output("Webhook created for {$name}.");
-        }
+        $this->module->getPackageManager()->createWebhook($name, $this->force);
     }
 
     /**
@@ -205,11 +204,7 @@ class PackagesController extends Controller
      */
     public function actionDeleteWebhook(string $name)
     {
-        if (!$this->module->getPackageManager()->deleteWebhook($name)) {
-            Console::error("There was an error deleting the webhook for {$name}.");
-        } else {
-            Console::output("Webhook deleted for {$name}.");
-        }
+        $this->module->getPackageManager()->deleteWebhook($name);
     }
 
     /**
@@ -223,10 +218,9 @@ class PackagesController extends Controller
         $names = $packageManager->getPackageNames();
 
         foreach ($names as $name) {
-            if ($packageManager->createWebhook($name)) {
-                Console::output("Webhook created for {$name}.");
-            } else {
-                Console::error("There was an error creating a webhook for {$name}.");
+            $package = $packageManager->getPackage($name);
+            if ($package->managed) {
+                $packageManager->createWebhook($package, $this->force);
             }
         }
     }
@@ -242,10 +236,9 @@ class PackagesController extends Controller
         $names = $packageManager->getPackageNames();
 
         foreach ($names as $name) {
-            if ($packageManager->deleteWebhook($name)) {
-                Console::output("Webhook deleted for {$name}.");
-            } else {
-                Console::error("There was an error deleting the webhook for {$name}.");
+            $package = $packageManager->getPackage($name);
+            if ($package->managed) {
+                $packageManager->deleteWebhook($package);
             }
         }
     }
