@@ -13,6 +13,7 @@ use craft\helpers\Json;
 use craftcom\composer\jobs\UpdatePackage;
 use craftcom\errors\MissingTokenException;
 use craftcom\errors\VcsException;
+use craftcom\Module;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\db\Expression;
@@ -595,18 +596,20 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string $name  The Composer package name
-     * @param bool   $force Whether to update package releases even if their SHA hasn't changed
-     * @param bool   $queue Whether to queue the update
+     * @param string $name     The Composer package name
+     * @param bool   $force    Whether to update package releases even if their SHA hasn't changed
+     * @param bool   $queue    Whether to queue the update
+     * @param bool   $dumpJson Whether to update the JSON if anything changed
      *
      * @throws MissingTokenException if the package is a plugin, but we don't have a VCS token for it
      */
-    public function updatePackage(string $name, bool $force = false, bool $queue = false)
+    public function updatePackage(string $name, bool $force = false, bool $queue = false, bool $dumpJson = false)
     {
         if ($queue) {
             Craft::$app->getQueue()->push(new UpdatePackage([
                 'name' => $name,
                 'force' => $force,
+                'dumpJson' => $dumpJson,
             ]));
             return;
         }
@@ -717,137 +720,144 @@ class PackageManager extends Component
         $newVersions = array_merge($updatedVersions, $newVersions);
 
         // Bail early if there's nothing new
-        if (empty($newVersions)) {
+        if (!empty($newVersions)) {
             if ($isConsole) {
-                Console::output('No new versions to process');
-            }
-            return;
-        }
-
-        if ($isConsole) {
-            Console::output('Processing new versions ...');
-        }
-
-        // Sort by newest => oldest
-        usort($newVersions, function(string $version1, string $version2): int {
-            if (Comparator::lessThan($version1, $version2)) {
-                return 1;
-            }
-            if (Comparator::equalTo($version1, $version2)) {
-                return 0;
-            }
-            return -1;
-        });
-
-        $packageDeps = [];
-        $latestVersion = null;
-        $foundStable = false;
-
-        foreach ($newVersions as $version) {
-            $sha = $vcsVersionShas[$version];
-
-            if ($isConsole) {
-                Console::stdout(Console::ansiFormat("- processing {$version} ({$sha}) ... ", [Console::FG_YELLOW]));
+                Console::output('Processing new versions ...');
             }
 
-            $release = new PackageRelease([
-                'packageId' => $package->id,
-                'version' => $version,
-                'sha' => $sha,
-            ]);
+            // Sort by newest => oldest
+            usort($newVersions, function(string $version1, string $version2): int {
+                if (Comparator::lessThan($version1, $version2)) {
+                    return 1;
+                }
+                if (Comparator::equalTo($version1, $version2)) {
+                    return 0;
+                }
+                return -1;
+            });
 
-            $vcs->populateRelease($release);
+            $packageDeps = [];
+            $latestVersion = null;
+            $foundStable = false;
 
-            if ($isConsole && !$release->valid) {
-                Console::stdout(Console::ansiFormat('invalid'.($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
-                Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
-            }
+            foreach ($newVersions as $version) {
+                $sha = $vcsVersionShas[$version];
 
-            $this->savePackageRelease($release);
+                if ($isConsole) {
+                    Console::stdout(Console::ansiFormat("- processing {$version} ({$sha}) ... ", [Console::FG_YELLOW]));
+                }
 
-            if (!empty($release->require)) {
-                $depValues = [];
-                foreach ($release->require as $depName => $constraints) {
-                    $depValues[] = [$package->id, $release->id, $depName, $constraints];
-                    if (
-                        $depName !== '__root__' &&
-                        $depName !== 'composer-plugin-api' &&
-                        !preg_match(PlatformRepository::PLATFORM_PACKAGE_REGEX, $depName) &&
-                        strpos($depName, 'bower-asset/') !== 0 &&
-                        strpos($depName, 'npm-asset/') !== 0
-                    ) {
-                        $packageDeps[$depName][$constraints] = true;
+                $release = new PackageRelease([
+                    'packageId' => $package->id,
+                    'version' => $version,
+                    'sha' => $sha,
+                ]);
+
+                $vcs->populateRelease($release);
+
+                if ($isConsole && !$release->valid) {
+                    Console::stdout(Console::ansiFormat('invalid'.($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
+                    Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
+                }
+
+                $this->savePackageRelease($release);
+
+                if (!empty($release->require)) {
+                    $depValues = [];
+                    foreach ($release->require as $depName => $constraints) {
+                        $depValues[] = [$package->id, $release->id, $depName, $constraints];
+                        if (
+                            $depName !== '__root__' &&
+                            $depName !== 'composer-plugin-api' &&
+                            !preg_match(PlatformRepository::PLATFORM_PACKAGE_REGEX, $depName) &&
+                            strpos($depName, 'bower-asset/') !== 0 &&
+                            strpos($depName, 'npm-asset/') !== 0
+                        ) {
+                            $packageDeps[$depName][$constraints] = true;
+                        }
+                    }
+                    $db->createCommand()
+                        ->batchInsert('craftcom_packagedeps', ['packageId', 'versionId', 'name', 'constraints'], $depValues)
+                        ->execute();
+                }
+
+                if ($release->valid) {
+                    if (!$foundStable && $versionStability[$version] === 'stable') {
+                        $latestVersion = $version;
+                        $foundStable = true;
+                    } else if ($latestVersion === null) {
+                        $latestVersion = $version;
                     }
                 }
+
+                if ($isConsole) {
+                    Console::output(Console::ansiFormat('done.', [Console::FG_YELLOW]));
+                }
+            }
+
+            // Update the package's latestVersion and dateUpdated
+            $db->createCommand()
+                ->update('craftcom_packages', ['latestVersion' => $latestVersion], ['id' => $package->id])
+                ->execute();
+
+            if ($plugin && $latestVersion !== $plugin->latestVersion) {
+                $plugin->latestVersion = $latestVersion;
                 $db->createCommand()
-                    ->batchInsert('craftcom_packagedeps', ['packageId', 'versionId', 'name', 'constraints'], $depValues)
+                    ->update('craftcom_plugins', ['latestVersion' => $latestVersion], ['id' => $plugin->id])
                     ->execute();
             }
 
-            if ($release->valid) {
-                if (!$foundStable && $versionStability[$version] === 'stable') {
-                    $latestVersion = $version;
-                    $foundStable = true;
-                } else if ($latestVersion === null) {
-                    $latestVersion = $version;
+            // For each dependency, see if we already have a version that satisfies the conditions
+            if (!empty($packageDeps)) {
+                $depsToUpdate = [];
+                foreach ($packageDeps as $depName => $depVersions) {
+                    $update = false;
+                    if (!$this->packageExists($depName)) {
+                        if ($isConsole) {
+                            Console::stdout("Adding dependency {$depName} ... ");
+                        }
+                        $this->savePackage(new Package([
+                            'name' => $depName,
+                            'type' => 'library',
+                            'managed' => false,
+                        ]));
+                        if ($isConsole) {
+                            Console::output('done.');
+                        }
+                        $update = true;
+                    } else if (!$this->packageVersionsExist($depName, array_keys($depVersions))) {
+                        $update = true;
+                    }
+                    if ($update) {
+                        $depsToUpdate[] = $depName;
+                    }
+                }
+
+                if (!empty($depsToUpdate)) {
+                    foreach ($depsToUpdate as $depName) {
+                        $this->updatePackage($depName, $force, true);
+                        if ($isConsole) {
+                            Console::output("{$depName} is queued to be updated.");
+                        }
+                    }
                 }
             }
 
             if ($isConsole) {
-                Console::output(Console::ansiFormat('done', [Console::FG_YELLOW]));
+                Console::output('Done processing '.count($newVersions).' versions.');
+            }
+        } else {
+            if ($isConsole) {
+                Console::output('No new versions to process.');
             }
         }
 
-        // Update the package's latestVersion and dateUpdated
-        $db->createCommand()
-            ->update('craftcom_packages', ['latestVersion' => $latestVersion], ['id' => $package->id])
-            ->execute();
+        if ($dumpJson && (!empty($deletedVersions) || !empty($newVersions))) {
+            Module::getInstance()->getJsonDumper()->dump(true);
 
-        if ($plugin && $latestVersion !== $plugin->latestVersion) {
-            $plugin->latestVersion = $latestVersion;
-            $db->createCommand()
-                ->update('craftcom_plugins', ['latestVersion' => $latestVersion], ['id' => $plugin->id])
-                ->execute();
-        }
-
-        // For each dependency, see if we already have a version that satisfies the conditions
-        if (!empty($packageDeps)) {
-            $depsToUpdate = [];
-            foreach ($packageDeps as $depName => $depVersions) {
-                $update = false;
-                if (!$this->packageExists($depName)) {
-                    if ($isConsole) {
-                        Console::stdout("Adding dependency {$depName} ... ");
-                    }
-                    $this->savePackage(new Package([
-                        'name' => $depName,
-                        'type' => 'library',
-                        'managed' => false,
-                    ]));
-                    if ($isConsole) {
-                        Console::output('done');
-                    }
-                    $update = true;
-                } else if (!$this->packageVersionsExist($depName, array_keys($depVersions))) {
-                    $update = true;
-                }
-                if ($update) {
-                    $depsToUpdate[] = $depName;
-                }
+            if ($isConsole) {
+                Console::output('The Composer JSON is queued to be dumped.');
             }
-
-            if (!empty($depsToUpdate)) {
-                foreach ($depsToUpdate as $depName) {
-                    $this->updatePackage($depName, $force, true);
-                    if ($isConsole) {
-                        Console::output("{$depName} is queued to be updated");
-                    }
-                }
-            }
-        }
-
-        if ($isConsole) {
-            Console::output('Done processing '.count($newVersions).' versions');
         }
     }
 

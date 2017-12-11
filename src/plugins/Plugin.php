@@ -645,8 +645,7 @@ class Plugin extends Element
                 'managed' => true,
             ]);
             $packageManager->savePackage($package);
-            $packageManager->updatePackage($package->name, false, true);
-            Module::getInstance()->getJsonDumper()->dump(true);
+            $packageManager->updatePackage($package->name, false, true, true);
         }
 
         $this->packageId = $package->id;
