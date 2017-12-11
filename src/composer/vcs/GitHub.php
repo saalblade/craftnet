@@ -32,11 +32,6 @@ class GitHub extends BaseVcs
     public $repo;
 
     /**
-     * @var
-     */
-    private $_versionDates;
-
-    /**
      * @return array
      * @throws VcsException
      */
@@ -64,11 +59,6 @@ class GitHub extends BaseVcs
                 }
 
                 $versions[$tag['name']] = $tag['commit']['sha'];
-
-                // Store the date for later, if needed
-                if (isset($tag['tagger']['date'])) {
-                    $this->_versionDates[$tag['name']] = $tag['tagger']['date'];
-                }
             }
         } while (count($tags) === 100);
 
@@ -109,7 +99,13 @@ class GitHub extends BaseVcs
         }
 
         if ($release->time === null) {
-            $release->time = $this->_versionDates[$release->version];
+            try {
+                $commit = $api->commits()->show($this->owner, $this->repo, $release->sha);
+                $release->time = $commit['commit']['committer']['date'];
+            } catch (RuntimeException $e) {
+                Craft::warning("Couldn't determine the release time for {$this->package->name}:{$release->version} due to error loading commit info: {$e->getMessage()}", __METHOD__);
+                Craft::$app->getErrorHandler()->logException($e);
+            }
         }
 
         $release->dist = [
