@@ -221,7 +221,9 @@ abstract class BaseApiController extends Controller
             $longDescription = Html::encode($longDescription);
             $longDescription = Markdown::process($longDescription);
 
-            $data['lastUpdate'] = $plugin->dateUpdated->format(\DateTime::ATOM);
+            $latestRelease = Module::getInstance()->getPackageManager()->getRelease($plugin->packageName, $plugin->latestVersion);
+
+            $data['lastUpdate'] = $latestRelease->time ?? $plugin->dateUpdated->format(\DateTime::ATOM);
             $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
             $data['iconId'] = $plugin->iconId;
