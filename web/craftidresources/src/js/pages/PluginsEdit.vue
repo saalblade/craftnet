@@ -387,7 +387,6 @@
                 this.loading = true;
 
                 let plugin = {
-                    iconId: [parseInt(this.pluginDraft.iconId)],
                     icon: this.$refs.iconFile.files[0],
                     handle: this.pluginDraft.handle,
                     packageName: this.pluginDraft.packageName,
@@ -403,6 +402,10 @@
                     categoryIds: '',
                     screenshotIds: '',
                 };
+
+                if(this.pluginDraft.iconId) {
+                    plugin.iconId = [parseInt(this.pluginDraft.iconId)];
+                }
 
                 if(this.pluginDraft.id) {
                     plugin.pluginId = this.pluginDraft.id;
