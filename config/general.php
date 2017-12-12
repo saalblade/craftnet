@@ -28,7 +28,7 @@ return [
     'dev' => [
         'devMode' => true,
         'allowAutoUpdates' => true,
-        'defaultCookieDomain' => '.craftcms.dev',
-        'baseCpUrl' => 'http://id.craftcms.dev/',
+        'defaultCookieDomain' => '.craftcms.test',
+        'baseCpUrl' => 'http://id.craftcms.test/',
     ]
 ];

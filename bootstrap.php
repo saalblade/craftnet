@@ -5,19 +5,19 @@
 
 switch($_SERVER['HTTP_HOST']) {
     case 'api.craftcms.com':
-    case 'api.craftcms.dev':
+    case 'api.craftcms.test':
         define('CRAFT_SITE', 'api');
         break;
     case 'composer.craftcms.com':
-    case 'composer.craftcms.dev':
+    case 'composer.craftcms.test':
         define('CRAFT_SITE', 'composer');
         break;
     case 'id.craftcms.com':
-    case 'id.craftcms.dev':
+    case 'id.craftcms.test':
         define('CRAFT_SITE', 'craftId');
         break;
     case 'plugins.craftcms.com':
-    case 'plugins.craftcms.dev':
+    case 'plugins.craftcms.test':
         define('CRAFT_SITE', 'plugins');
         break;
 }
