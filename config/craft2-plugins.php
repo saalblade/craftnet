@@ -33,7 +33,7 @@ return [
     ],
     'Inflect' => [
         'statusColor' => 'red',
-        'status' => 'Discontinued. Craft 2.x and Craft 3 now contain most of the twig filters provided. but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead.'
+        'status' => 'Craft 2.x and Craft 3 now contain most of the twig filters provided, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead.'
     ],
     'Hacksaw' => [
         'statusColor' => 'orange',
