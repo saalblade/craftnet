@@ -51,7 +51,7 @@ return [
     ],
     'Inflect' => [
         'statusColor' => 'red',
-        'status' => 'Discontinued (use [Typogrify](https://github.com/nystudio107/craft3-typogrify) instead)'
+        'status' => 'Discontinued (see the [readme](https://github.com/lukeholder/craft-inflect/blob/master/readme.md#craft-2-only) for upgrade guidance)'
     ],
     'MnBreakAndContinue' => [
         'handle' => 'twig-perversion'
