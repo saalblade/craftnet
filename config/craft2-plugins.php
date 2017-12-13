@@ -31,6 +31,10 @@ return [
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
     ],
+    'Inflect' => [
+        'statusColor' => 'red',
+        'status' => 'Discontinued. Craft 2.x and Craft 3 now contain most of the twig filters provided. but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead.'
+    ],
     'Hacksaw' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead'
