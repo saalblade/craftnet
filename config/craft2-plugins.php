@@ -28,6 +28,9 @@ return [
     'AmCommand' => [
         'handle' => 'command-palette',
     ],
+    'AssetRev' => [
+        'handle' => 'assetrev',
+    ],
     'CpFieldLinks' => [
         'handle' => 'cp-field-inspect'
     ],
