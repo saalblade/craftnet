@@ -37,10 +37,6 @@ return [
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
     ],
-    'Inflect' => [
-        'statusColor' => 'red',
-        'status' => 'Craft 2.x and Craft 3 now contain most of the twig filters provided, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead.'
-    ],
     'Hacksaw' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead'
@@ -52,6 +48,10 @@ return [
     'Imager' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [ImageOptimize](https://github.com/nystudio107/craft3-imageoptimize) or [Imgix](https://github.com/sjelfull/craft3-imgix) could be used instead'
+    ],
+    'Inflect' => [
+        'statusColor' => 'red',
+        'status' => 'Discontinued (use [Typogrify](https://github.com/nystudio107/craft3-typogrify) instead)'
     ],
     'MnBreakAndContinue' => [
         'handle' => 'twig-perversion'
