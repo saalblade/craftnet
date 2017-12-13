@@ -25,6 +25,9 @@
  */
 
 return [
+    'AmCommand' => [
+        'handle' => 'command-palette',
+    ],
     'CpFieldLinks' => [
         'handle' => 'cp-field-inspect'
     ],
