@@ -46,7 +46,7 @@ return [
         'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead'
     ],
     'Hue' => [
-        'statusColor' => 'orange',
+        'statusColor' => 'red',
         'status' => 'Unnecessary thanks to [Color field improvements](https://github.com/craftcms/cms/issues/2059)'
     ],
     'Imager' => [
@@ -67,7 +67,7 @@ return [
         'status' => 'Not available yet, but the new [Redactor](https://github.com/craftcms/redactor) plugin makes it easy to include Redactor plugins without a Craft plugin.'
     ],
     'RedactorI' => [
-        'statusColor' => 'orange',
+        'statusColor' => 'red',
         'status' => 'Discontinued (use [Redactor](https://github.com/craftcms/redactor) instead)'
     ],
     'Retour' => [
