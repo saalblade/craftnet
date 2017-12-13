@@ -8,7 +8,6 @@
 
 return [
     '*' => [
-        'siteUrl' => null,
         'omitScriptNameInUrls' => true,
         'cpTrigger' => getenv('CRAFT_CP_TRIGGER'),
         'imageDriver' => 'imagick',
@@ -22,12 +21,24 @@ return [
     'prod' => [
         'allowAutoUpdates' => false,
         'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
+        'siteUrl' => [
+            'api' => 'https://api.craftcms.com/',
+            'composer' => 'https://composer.craftcms.com/',
+            'craftId' => 'https://id.craftcms.com/',
+            'plugins' => 'https://plugins.craftcms.com/',
+        ],
         'defaultCookieDomain' => '.craftcms.com',
         'baseCpUrl' => 'https://id.craftcms.com/',
     ],
     'dev' => [
         'devMode' => true,
         'allowAutoUpdates' => true,
+        'siteUrl' => [
+            'api' => 'https://api.craftcms.test/',
+            'composer' => 'https://composer.craftcms.test/',
+            'craftId' => 'https://id.craftcms.test/',
+            'plugins' => 'https://plugins.craftcms.test/',
+        ],
         'defaultCookieDomain' => '.craftcms.test',
         'baseCpUrl' => 'http://id.craftcms.test/',
     ]
