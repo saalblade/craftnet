@@ -50,18 +50,23 @@ class Oauth extends Component
                     $repositories = [];
 
                     if ($handle === self::PROVIDER_GITHUB) {
-                        $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
-                            'headers' => [
-                                'Accept' => 'application/vnd.github.v3+json',
-                                'Authorization' => 'token '.$accessToken->getToken(),
-                            ],
-                            'query' => [
-                                'per_page' => 200
-                            ]
-                        ]);
-                        $body = $response->getBody();
-                        $contents = $body->getContents();
-                        $repositories = Json::decode($contents);
+                        $page = 1;
+                        do {
+                            $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
+                                'headers' => [
+                                    'Accept' => 'application/vnd.github.v3+json',
+                                    'Authorization' => 'token '.$accessToken->getToken(),
+                                ],
+                                'query' => [
+                                    'per_page' => 100,
+                                    'page' => $page++
+                                ]
+                            ]);
+                            $body = $response->getBody();
+                            $contents = $body->getContents();
+                            $repos = Json::decode($contents);
+                            $repositories = array_merge($repositories, $repos);
+                        } while (count($repos) === 100);
                     }
                 }
                 // Something happened with oAuth
