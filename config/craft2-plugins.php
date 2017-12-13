@@ -39,6 +39,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Unnecessary thanks to [Color field improvements](https://github.com/craftcms/cms/issues/2059)'
     ],
+    'Imager' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [ImageOptimize](https://github.com/nystudio107/craft3-imageoptimize) or [Imgix](https://github.com/sjelfull/craft3-imgix) could be used instead'
+    ],
     'MnBreakAndContinue' => [
         'handle' => 'twig-perversion'
     ],
@@ -48,8 +52,24 @@ return [
     'MnTwigPerversion' => [
         'handle' => 'twig-perversion'
     ],
+    'redactorExtras' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but the new [Redactor](https://github.com/craftcms/redactor) plugin makes it easy to include Redactor plugins without a Craft plugin.'
+    ],
     'RedactorI' => [
         'statusColor' => 'orange',
         'status' => 'Discontinued (use [Redactor](https://github.com/craftcms/redactor) instead)'
+    ],
+    'Retour' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Redirect Manager](https://github.com/Dolphiq/craft3-plugin-redirect) could be used instead'
+    ],
+    'SearchPlus' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Scout](https://github.com/Rias500/craft3-scout) could be used instead'
+    ],
+    'SproutFields' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [NSM Fields](https://github.com/newism/craft3-fields) could be used instead'
     ],
 ];
