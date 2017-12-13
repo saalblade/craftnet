@@ -37,6 +37,9 @@ return [
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
     ],
+    'EntriesSubset' => [
+        'handle' => 'entriessubset'
+    ],
     'Hacksaw' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead'
