@@ -4,6 +4,7 @@ namespace craftcom\console\controllers;
 
 use craftcom\composer\Package;
 use craftcom\Module;
+use yii\base\Exception;
 use yii\console\Controller;
 use yii\helpers\Console;
 use yii\helpers\Inflector;
@@ -158,9 +159,16 @@ class PackagesController extends Controller
      */
     public function actionRemove(string $name)
     {
+        $packageManager = $this->module->getPackageManager();
+        try {
+            $package = $packageManager->getPackage($name);
+        } catch (Exception $e) {
+            Console::output("{$name} doesn't exist.");
+            return;
+        }
         if ($this->confirm("Are you sure you want to remove {$name}?")) {
-            $this->module->getPackageManager()->removePackage($name);
-            Console::output("{$name} removed");
+            $packageManager->removePackage($package);
+            Console::output("{$name} removed.");
         }
     }
 

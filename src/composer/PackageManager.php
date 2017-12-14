@@ -342,17 +342,21 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string $name
+     * @param string|Package $package
      */
-    public function removePackage(string $name)
+    public function removePackage($package)
     {
+        if (is_string($package)) {
+            $package = $this->getPackage($package);
+        }
+
         try {
-            $this->deleteWebhook($name);
+            $this->deleteWebhook($package->name);
         } catch (Exception $e) {
         }
 
         Craft::$app->getDb()->createCommand()
-            ->delete('craftcom_packages', ['name' => $name])
+            ->delete('craftcom_packages', ['name' => $package->name])
             ->execute();
     }
 

@@ -202,6 +202,7 @@ class Plugin extends Element
             'primaryCategory' => 'Primary Category',
             'documentationUrl' => 'Documentation URL',
             'latestVersion' => 'Version',
+            'activeInstalls' => 'Installs',
         ];
     }
 
