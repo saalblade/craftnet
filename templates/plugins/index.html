@@ -19,12 +19,12 @@
 
 					<tbody>
 						{% for plugin in plugins %}
-
-							{% set icon = craft.assets({id: plugin.iconId, site: 'api'}).one() %}
-
 							<tr>
 								<td>
-									<img src="{{ icon.getUrl() }}" class="plugin-icon" />
+                                    {% if plugin.iconId %}
+                                        {% set icon = craft.assets({id: plugin.iconId, site: 'api'}).one() %}
+										<img src="{{ icon.getUrl() }}" class="plugin-icon" />
+                                    {% endif %}
 								</td>
 								<td>
 									<strong><a href="{{ plugin.repository }}" target="_blank">{{ plugin.name }}</a></strong>
