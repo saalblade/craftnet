@@ -155,6 +155,12 @@ class JsonDumper extends Component
             $data['uid'] = (int)$version['id'];
 
             $providers[$name]['packages'][$name][$version['version']] = $data;
+
+            if (!empty($data['provide'])) {
+                foreach (array_keys($data['provide']) as $provideName) {
+                    $providers[$provideName]['packages'][$name][$version['version']] = $data;
+                }
+            }
         }
 
         // Create the JSON files
