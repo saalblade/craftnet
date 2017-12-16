@@ -87,11 +87,11 @@ return [
     ],
     'Moltin' => [
         'statusColor' => 'red',
-        'status' => 'Discontinued (see [README](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
+        'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
     ],
     'PhpTweak' => [
         'statusColor' => 'red',
-        'status' => 'Discontinued (see [README](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
+        'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
     ],
     'redactorExtras' => [
         'statusColor' => 'orange',
