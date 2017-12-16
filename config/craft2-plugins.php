@@ -25,17 +25,33 @@
  */
 
 return [
+    'AdWizard' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
+    ],
     'AmCommand' => [
         'handle' => 'command-palette',
     ],
     'AssetRev' => [
         'handle' => 'assetrev',
     ],
+    'BusinessLogic' => [
+        'statusColor' => 'red',
+        'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
+    ],
+    'CodeBlock' => [
+        'statusColor' => 'red',
+        'status' => 'Discontinued (use [Simple Text](https://github.com/craftcms/simple-text) instead)'
+    ],
     'CpFieldLinks' => [
         'handle' => 'cp-field-inspect'
     ],
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
+    ],
+    'DigitalDownload' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
     ],
     'EntriesSubset' => [
         'handle' => 'entriessubset'
@@ -56,6 +72,10 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lukeholder/craft-inflect/blob/master/readme.md#craft-2-only) for upgrade guidance)'
     ],
+    'LanguageLink' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
+    ],
     'MnBreakAndContinue' => [
         'handle' => 'twig-perversion'
     ],
@@ -64,6 +84,14 @@ return [
     ],
     'MnTwigPerversion' => [
         'handle' => 'twig-perversion'
+    ],
+    'Moltin' => [
+        'statusColor' => 'red',
+        'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
+    ],
+    'PhpTweak' => [
+        'statusColor' => 'red',
+        'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
     ],
     'redactorExtras' => [
         'statusColor' => 'orange',
@@ -81,8 +109,20 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Scout](https://github.com/Rias500/craft3-scout) could be used instead'
     ],
+    'SmartMap' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
+    ],
     'SproutFields' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [NSM Fields](https://github.com/newism/craft3-fields) could be used instead'
+    ],
+    'StarRatings' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
+    ],
+    'Upvote' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
     ],
 ];
