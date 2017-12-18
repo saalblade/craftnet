@@ -161,7 +161,10 @@ class Plugin extends Element
             ];
 
             if (!empty($category->icon)) {
-                $source['icon'] = $assetsService->getThumbPath($category->icon[0], 16);
+                try {
+                    $source['icon'] = $assetsService->getThumbPath($category->icon[0], 16);
+                } catch (\Throwable $e) {
+                }
             }
 
             $sources[] = $source;

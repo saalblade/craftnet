@@ -8,6 +8,7 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
 use craft\helpers\Html;
+use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\Module;
@@ -221,8 +222,8 @@ abstract class BaseApiController extends Controller
                 $longDescription = "_This plugin will cost {$price} once Craft 3 GA is released._\n\n{$longDescription}";
             }
 
-            $longDescription = Html::encode($longDescription);
-            $longDescription = Markdown::process($longDescription);
+            $longDescription = Markdown::process($longDescription, 'gfm');
+            $longDescription = HtmlPurifier::process($longDescription);
 
             $data['compatibility'] = 'Craft 3';
             $data['status'] = $plugin->status;
