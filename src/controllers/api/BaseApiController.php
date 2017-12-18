@@ -199,6 +199,7 @@ abstract class BaseApiController extends Controller
             'developerId' => $developer->id,
             'developerName' => strip_tags($developer->getDeveloperName()),
             'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
+            'keywords' => [],
             'version' => $plugin->latestVersion,
             'activeInstalls' => $plugin->activeInstalls,
             'packageName' => $plugin->packageName,
