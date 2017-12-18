@@ -13,6 +13,8 @@ let mix = require('laravel-mix');
 const sourcePath = 'web/craftidresources/src';
 const distPath = 'web/craftidresources/dist';
 
+mix.setPublicPath("./");
+
 mix.js(sourcePath + '/js/app.js', distPath + '/js/')
     .js(sourcePath + '/js/site.js', distPath + '/js/')
     .sass(sourcePath + '/sass/app.scss', distPath + '/css/')
