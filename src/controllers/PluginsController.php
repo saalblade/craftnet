@@ -244,6 +244,7 @@ class PluginsController extends Controller
         $plugin->documentationUrl = $request->getBodyParam('documentationUrl');
         $plugin->changelogPath = $request->getBodyParam('changelogPath') ?: null;
         $plugin->devComments = $request->getBodyParam('devComments') ?: null;
+        $plugin->keywords = $request->getBodyParam('keywords');
 
         if (!$plugin->enabled || ($plugin->enabled && $plugin->price)) {
             $plugin->price = (float)$request->getBodyParam('price');

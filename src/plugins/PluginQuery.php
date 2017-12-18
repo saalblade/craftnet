@@ -138,6 +138,7 @@ class PluginQuery extends ElementQuery
             'craftcom_plugins.latestVersion',
             'craftcom_plugins.activeInstalls',
             'craftcom_plugins.pendingApproval',
+            'craftcom_plugins.keywords',
         ]);
 
         if ($this->handle) {

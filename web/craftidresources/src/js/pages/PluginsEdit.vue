@@ -107,6 +107,7 @@
                         <p class="text-secondary"><small>Styling with Markdown is supported.</small></p>
                         <text-field id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
                         <text-field id="changelogPath" label="Changelog Path" instructions="The path to your changelog file, relative to the repository root." v-model="pluginDraft.changelogPath" :errors="errors.changelogPath" />
+                        <text-field id="keywords" label="Keywords" instructions="Comma-separated list of keyworkds." v-model="pluginDraft.keywords" :errors="errors.keywords" />
                     </div>
                 </div>
 
@@ -399,6 +400,7 @@
                     license: this.pluginDraft.license,
                     price: this.pluginDraft.price,
                     renewalPrice: this.pluginDraft.renewalPrice,
+                    keywords: this.pluginDraft.keywords,
                     categoryIds: '',
                     screenshotIds: '',
                 };

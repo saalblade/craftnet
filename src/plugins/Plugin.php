@@ -189,6 +189,7 @@ class Plugin extends Element
             'name',
             'handle',
             'license',
+            'keywords',
         ];
     }
 
@@ -206,6 +207,7 @@ class Plugin extends Element
             'documentationUrl' => 'Documentation URL',
             'latestVersion' => 'Version',
             'activeInstalls' => 'Installs',
+            'keywords' => 'Keywords',
         ];
     }
 
@@ -320,6 +322,11 @@ class Plugin extends Element
      * @var bool Whether the plugin is pending approval.
      */
     public $pendingApproval = false;
+
+    /**
+     * @var string|null
+     */
+    public $keywords;
 
     /**
      * @var User|null
@@ -675,6 +682,7 @@ class Plugin extends Element
             'documentationUrl' => $this->documentationUrl,
             'changelogPath' => $this->changelogPath ?: null,
             'pendingApproval' => $this->pendingApproval,
+            'keywords' => $this->keywords,
         ];
 
         $categoryData = [];
