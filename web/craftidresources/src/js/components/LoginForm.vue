@@ -54,7 +54,7 @@
         methods: {
 
             passwordValidates() {
-            	if(this.password.length > 6) {
+            	if(this.password.length >= 6) {
             	    return true;
 				}
 			},
