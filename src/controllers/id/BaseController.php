@@ -77,6 +77,7 @@ abstract class BaseController extends Controller
             'price' => $plugin->price,
             'renewalPrice' => $plugin->renewalPrice,
             'keywords' => $plugin->keywords,
+            'latestVersion' => $plugin->latestVersion,
 
             // 'iconUrl' => $iconUrl,
             'developerId' => $developer->id,
