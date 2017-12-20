@@ -109,6 +109,9 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Scout](https://github.com/Rias500/craft3-scout) could be used instead'
     ],
+    'SimpleMap' => [
+        'handle' => 'simplemap',
+    ],
     'SmartMap' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
