@@ -107,6 +107,9 @@
                         <p class="text-secondary"><small>Styling with Markdown is supported.</small></p>
                         <text-field id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
                         <text-field id="changelogPath" label="Changelog Path" instructions="The path to your changelog file, relative to the repository root." v-model="pluginDraft.changelogPath" :errors="errors.changelogPath" />
+
+                        <plugin-categories :plugin-draft="pluginDraft"></plugin-categories>
+
                         <text-field id="keywords" label="Keywords" instructions="Comma-separated list of keyworkds." v-model="pluginDraft.keywords" :errors="errors.keywords" />
                     </div>
                 </div>
@@ -158,6 +161,7 @@
     import TextareaField from '../components/fields/TextareaField'
     import ConnectedApps from '../components/ConnectedApps'
     import Repositories from '../components/Repositories'
+    import PluginCategories from '../components/PluginCategories'
     import slug from 'limax'
     import draggable from 'vuedraggable'
     import axios from 'axios'
@@ -170,6 +174,7 @@
             TextareaField,
             ConnectedApps,
             Repositories,
+            PluginCategories,
             draggable
         },
 
