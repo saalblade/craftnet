@@ -21,6 +21,8 @@
                         <strong>
                             <router-link :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>
                         </strong>
+
+                        <small class="text-secondary" v-if="plugin.latestVersion">{{ plugin.latestVersion }}</small>
                     </h6>
                     <p>{{ plugin.shortDescription }}</p>
                 </td>
