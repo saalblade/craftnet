@@ -39,7 +39,7 @@ return [
         'enablePluginStoreCache' => true,
     ],
     'dev' => [
-        'craftIdUrl' => 'https://id.craftcms.dev',
+        'craftIdUrl' => 'https://id.craftcms.test',
         'enablePluginStoreCache' => false,
     ]
 ];
