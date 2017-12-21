@@ -382,6 +382,10 @@
                             if(response.data.license) {
                                 this.pluginDraft.license = response.data.license;
                             }
+
+                            if(response.data.keywords) {
+                                this.pluginDraft.keywords = response.data.keywords.join(', ');
+                            }
                         }
                     })
                     .catch(response => {
