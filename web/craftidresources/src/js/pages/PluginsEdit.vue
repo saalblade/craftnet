@@ -206,6 +206,7 @@
                     screenshots: [],
                     screenshotIds: [],
                     screenshotUrls: [],
+                    keywords: '',
                 },
                 errors: {},
             }
