@@ -87,6 +87,18 @@ class PluginStoreController extends BaseApiController
     {
         $ret = [];
 
+        $recents = Plugin::find()
+            ->orderBy(['elements.dateCreated' => SORT_DESC])
+            ->limit(10)
+            ->ids();
+
+        $ret[] = [
+            'id' => 'recently-added',
+            'title' => 'Recently Added',
+            'plugins' => $recents,
+            'limit' => 3,
+        ];
+
         $entries = Entry::find()
             ->site('craftId')
             ->select(['elements.id', 'content.title', 'content.field_limit'])

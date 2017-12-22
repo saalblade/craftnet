@@ -161,7 +161,10 @@ class Plugin extends Element
             ];
 
             if (!empty($category->icon)) {
-                $source['icon'] = $assetsService->getThumbPath($category->icon[0], 16);
+                try {
+                    $source['icon'] = $assetsService->getThumbPath($category->icon[0], 16);
+                } catch (\Throwable $e) {
+                }
             }
 
             $sources[] = $source;
@@ -186,6 +189,7 @@ class Plugin extends Element
             'name',
             'handle',
             'license',
+            'keywords',
         ];
     }
 
@@ -203,6 +207,7 @@ class Plugin extends Element
             'documentationUrl' => 'Documentation URL',
             'latestVersion' => 'Version',
             'activeInstalls' => 'Installs',
+            'keywords' => 'Keywords',
         ];
     }
 
@@ -317,6 +322,11 @@ class Plugin extends Element
      * @var bool Whether the plugin is pending approval.
      */
     public $pendingApproval = false;
+
+    /**
+     * @var string|null
+     */
+    public $keywords;
 
     /**
      * @var User|null
@@ -672,6 +682,7 @@ class Plugin extends Element
             'documentationUrl' => $this->documentationUrl,
             'changelogPath' => $this->changelogPath ?: null,
             'pendingApproval' => $this->pendingApproval,
+            'keywords' => $this->keywords,
         ];
 
         $categoryData = [];

@@ -119,6 +119,7 @@ export const SAVE_PLUGIN = (state, {plugin, response}) => {
     statePlugin.changelogPath = plugin.changelogPath;
     statePlugin.repository = plugin.repository;
     statePlugin.license = plugin.license;
+    statePlugin.keywords = plugin.keywords;
 
     let price = parseFloat(plugin.price);
     statePlugin.price = (price ? price : null);

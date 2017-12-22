@@ -129,6 +129,13 @@ class PluginsController extends Controller
             $changelogPath = null;
         }
 
+        // Get the keywords
+        if(isset($config['keywords']) && is_array($config['keywords'])) {
+            $keywords = $config['keywords'];
+        } else {
+            $keywords = [];
+        }
+
         return $this->asJson([
             'repository' => "https://github.com/{$owner}/{$repo}",
             'name' => $name,
@@ -141,6 +148,7 @@ class PluginsController extends Controller
             'icon' => $iconHtml,
             'iconId' => (isset($iconId) ? $iconId : null),
             'iconUrl' => (isset($iconUrl) ? $iconUrl : null),
+            'keywords' => $keywords,
         ]);
     }
 
@@ -244,6 +252,7 @@ class PluginsController extends Controller
         $plugin->documentationUrl = $request->getBodyParam('documentationUrl');
         $plugin->changelogPath = $request->getBodyParam('changelogPath') ?: null;
         $plugin->devComments = $request->getBodyParam('devComments') ?: null;
+        $plugin->keywords = $request->getBodyParam('keywords');
 
         if (!$plugin->enabled || ($plugin->enabled && $plugin->price)) {
             $plugin->price = (float)$request->getBodyParam('price');

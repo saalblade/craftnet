@@ -173,6 +173,14 @@
                 value: plugin.changelogPath,
                 errors: plugin.getErrors('changelogPath'),
             }) }}
+
+			{{ forms.textField({
+				label: 'Keywords',
+				id: 'keywords',
+				name: 'keywords',
+				value: plugin.keywords,
+				errors: plugin.getErrors('keywords'),
+			}) }}
         </div>
     </div>
 
