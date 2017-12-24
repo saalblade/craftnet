@@ -116,6 +116,11 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
+    'Sitemap' => [
+        'handle' => 'sitemap-tmp',
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) could be used instead',
+    ],
     'SproutFields' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [NSM Fields](https://github.com/newism/craft3-fields) could be used instead'
