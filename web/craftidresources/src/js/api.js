@@ -10,7 +10,7 @@ export default {
 
         axios.post(Craft.actionUrl+'/craftcom/id/craft-id', params)
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     disconnectApp(appHandle, cb, cbError) {
@@ -22,7 +22,7 @@ export default {
 
         axios.post(Craft.actionUrl+'/craftcom/id/apps/disconnect', params)
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     saveUser(user, cb, cbError) {
@@ -67,7 +67,7 @@ export default {
 
         axios.post(Craft.actionUrl+'/craftcom/id/account/upload-user-photo', formData)
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     deleteUserPhoto(data, cb, cbError) {
@@ -78,25 +78,25 @@ export default {
 
         axios.post(Craft.actionUrl+'/craftcom/id/account/delete-user-photo', params)
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     getStripeAccount(cb, cbError) {
         axios.get(window.craftIdUrl+'/stripe/account')
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     getStripeCustomer(cb, cbError) {
         axios.get(window.craftIdUrl+'/stripe/customer')
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     disconnectStripeAccount(cb, cbError) {
         axios.post(window.craftIdUrl+'/stripe/disconnect')
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     saveCard(token, cb, cbError) {
@@ -108,13 +108,13 @@ export default {
 
         axios.post(window.craftIdUrl+'/stripe/save-card', params)
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     removeCard(cb, cbError) {
         axios.post(window.craftIdUrl+'/stripe/remove-card')
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     saveLicense(license, cb, cbError) {
@@ -145,7 +145,7 @@ export default {
         let params = qs.stringify(body);
         axios.post(Craft.actionUrl+'/entries/save-entry', params)
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     savePlugin({plugin}, cb, cbError) {
@@ -173,7 +173,7 @@ export default {
 
         axios.post(Craft.actionUrl+'/craftcom/plugins/save', formData)
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     },
 
     submitPlugin(pluginId, cb, cbError) {
@@ -187,7 +187,7 @@ export default {
 
         axios.post(Craft.actionUrl+'/craftcom/plugins/submit', params)
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(response => cbError(error.response));
     }
 
 }
