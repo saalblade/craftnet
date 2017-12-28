@@ -52,7 +52,7 @@ export default {
 
         axios.post(Craft.actionUrl+'/users/save-user', formData)
             .then(response => cb(response))
-            .catch(response => cbError(response));
+            .catch(error => cbError(error.response));
     },
 
     uploadUserPhoto(data, cb, cbError) {

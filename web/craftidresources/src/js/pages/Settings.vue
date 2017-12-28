@@ -105,7 +105,13 @@
                 }).catch(response => {
                     this.loading = false;
 
-                    this.$root.displayError('Couldn’t save settings.');
+                    let errorMessage = 'Couldn’t save settings.';
+
+                    if(response.data && response.data.error) {
+                        errorMessage = response.data.error;
+                    }
+
+                    this.$root.displayError(errorMessage);
 
                     this.errors = {};
 
