@@ -93,7 +93,7 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
     ],
-    'redactorExtras' => [
+    'RedactorExtras' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but the new [Redactor](https://github.com/craftcms/redactor) plugin makes it easy to include Redactor plugins without a Craft plugin.'
     ],
