@@ -56,6 +56,10 @@ return [
     'EntriesSubset' => [
         'handle' => 'entriessubset'
     ],
+    'FruitLinkIt' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Typed Link Field](https://github.com/sebastian-lenz/craft-linkfield) could be used instead'
+    ],
     'Hacksaw' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead'
