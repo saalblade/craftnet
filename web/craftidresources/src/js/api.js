@@ -152,19 +152,21 @@ export default {
         let formData = new FormData();
 
         for(let pluginKey in plugin) {
-            switch(pluginKey) {
-                case 'iconId':
-                case 'categoryIds':
-                case 'screenshots':
-                case 'screenshotUrls':
-                case 'screenshotIds':
-                    for(let i = 0; i < plugin[pluginKey].length; i++) {
-                        formData.append(pluginKey+'[]', plugin[pluginKey][i]);
-                    }
-                    break;
+            if(plugin[pluginKey] !== null && plugin[pluginKey] !== undefined) {
+                switch(pluginKey) {
+                    case 'iconId':
+                    case 'categoryIds':
+                    case 'screenshots':
+                    case 'screenshotUrls':
+                    case 'screenshotIds':
+                        for(let i = 0; i < plugin[pluginKey].length; i++) {
+                            formData.append(pluginKey+'[]', plugin[pluginKey][i]);
+                        }
+                        break;
 
-                default:
-                    formData.append(pluginKey, plugin[pluginKey]);
+                    default:
+                            formData.append(pluginKey, plugin[pluginKey]);
+                }
             }
         }
 
