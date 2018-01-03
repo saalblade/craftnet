@@ -56,6 +56,10 @@ return [
     'EntriesSubset' => [
         'handle' => 'entriessubset'
     ],
+    'FruitLinkIt' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Typed Link Field](https://github.com/sebastian-lenz/craft-linkfield) could be used instead'
+    ],
     'Hacksaw' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead'
@@ -93,7 +97,7 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
     ],
-    'redactorExtras' => [
+    'RedactorExtras' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but the new [Redactor](https://github.com/craftcms/redactor) plugin makes it easy to include Redactor plugins without a Craft plugin.'
     ],
