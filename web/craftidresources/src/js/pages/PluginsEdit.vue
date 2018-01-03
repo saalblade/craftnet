@@ -465,6 +465,14 @@
         mounted() {
             if(this.plugin) {
                 this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
+
+                if(!this.pluginDraft.price) {
+                    this.pluginDraft.price = 0;
+                }
+
+                if(!this.pluginDraft.renewalPrice) {
+                    this.pluginDraft.renewalPrice = 0;
+                }
             } else {
                 if(this.pluginId) {
                     this.$router.push({path: '/developer/plugins'});
