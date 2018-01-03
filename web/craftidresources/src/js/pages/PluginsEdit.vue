@@ -411,8 +411,8 @@
                     price: this.pluginDraft.price,
                     renewalPrice: this.pluginDraft.renewalPrice,
                     keywords: this.pluginDraft.keywords,
-                    categoryIds: '',
-                    screenshotIds: '',
+                    categoryIds: [],
+                    screenshotIds: [],
                 };
 
                 if(this.pluginDraft.iconId) {
