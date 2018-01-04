@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\elements\Asset;
 use craft\elements\Category;
+use craft\errors\AssetDisallowedExtensionException;
 use craft\errors\ImageException;
 use craft\helpers\ConfigHelper;
 use craft\helpers\Db;
@@ -367,6 +368,8 @@ class PluginsController extends Controller
 
             // Upload new screenshots
 
+            $allowedFileExtensions = ['jp2', 'jpeg', 'jpg', 'jpx', 'png'];
+
             $screenshotFiles = UploadedFile::getInstancesByName('screenshots');
 
             if (count($screenshotFiles) > 0) {
@@ -381,6 +384,12 @@ class PluginsController extends Controller
 
                     if($screenshotFile->size > $maxUpload) {
                         throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
+                    }
+
+                    $extension = $screenshotFile->getExtension();
+
+                    if (!in_array(strtolower($extension), $allowedFileExtensions, true)) {
+                        throw new AssetDisallowedExtensionException("Screenshot was not uploaded because extension “{$extension}” is not allowed.");
                     }
 
                     $handle = $plugin->handle;
