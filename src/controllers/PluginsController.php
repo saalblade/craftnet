@@ -304,6 +304,9 @@ class PluginsController extends Controller
                         'Not enough memory available to perform this image operation.'));
                 }
 
+                $imageService->cleanImage($tempPath);
+
+
                 // Save as an asset
                 $volume = $volumesService->getVolumeByHandle('icons');
                 $folderId = $volumesService->ensureTopFolder($volume);
@@ -379,7 +382,11 @@ class PluginsController extends Controller
                             'Not enough memory available to perform this image operation.'));
                     }
 
+                    $imageService->cleanImage($tempPath);
+
+
                     // Save as an asset
+
                     $volumesService = Craft::$app->getVolumes();
                     $volume = $volumesService->getVolumeByHandle('screenshots');
                     $volumeId = $volumesService->ensureTopFolder($volume);
