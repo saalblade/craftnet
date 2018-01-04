@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\elements\Asset;
 use craft\elements\Category;
+use craft\errors\ImageException;
 use craft\helpers\Db;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
@@ -268,7 +269,7 @@ class PluginsController extends Controller
 
 
         // Uploads
-
+        $imageService = Craft::$app->getImages();
         $assetsService = Craft::$app->getAssets();
         $volumesService = Craft::$app->getVolumes();
 
@@ -298,6 +299,10 @@ class PluginsController extends Controller
                 $tempPath = Craft::$app->getPath()->getTempPath()."/icon-{$handle}-".StringHelper::randomString().'.svg';
                 move_uploaded_file($iconFile->tempName, $tempPath);
 
+                if (!$imageService->checkMemoryForImage($tempPath)) {
+                    throw new ImageException(Craft::t('app',
+                        'Not enough memory available to perform this image operation.'));
+                }
 
                 // Save as an asset
                 $volume = $volumesService->getVolumeByHandle('icons');
@@ -355,7 +360,6 @@ class PluginsController extends Controller
 
             if (count($screenshotFiles) > 0) {
                 foreach ($screenshotFiles as $screenshotFile) {
-
                     if ($screenshotFile->error != UPLOAD_ERR_OK) {
                         if($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
                             $maxUpload = ini_get('upload_max_filesize');
@@ -370,6 +374,10 @@ class PluginsController extends Controller
                     $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$screenshotFile->getExtension();
                     move_uploaded_file($screenshotFile->tempName, $tempPath);
 
+                    if (!$imageService->checkMemoryForImage($tempPath)) {
+                        throw new ImageException(Craft::t('app',
+                            'Not enough memory available to perform this image operation.'));
+                    }
 
                     // Save as an asset
                     $volumesService = Craft::$app->getVolumes();
