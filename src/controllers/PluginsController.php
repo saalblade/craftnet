@@ -283,6 +283,16 @@ class PluginsController extends Controller
             $iconFile = UploadedFile::getInstanceByName('icon');
 
             if ($iconFile) {
+                if ($iconFile->error != UPLOAD_ERR_OK) {
+                    if($iconFile->error == UPLOAD_ERR_INI_SIZE) {
+                        $maxUpload = ini_get('upload_max_filesize');
+
+                        throw new Exception('Couldn’t upload icon because it exceeds the limit of '.$maxUpload.'.');
+                    }
+
+                    throw new Exception('Couldn’t upload icon. (Error '.$iconFile->error.')');
+                }
+
                 $name = $plugin->name;
                 $handle = $plugin->handle;
                 $tempPath = Craft::$app->getPath()->getTempPath()."/icon-{$handle}-".StringHelper::randomString().'.svg';
