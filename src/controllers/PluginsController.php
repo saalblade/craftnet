@@ -345,6 +345,17 @@ class PluginsController extends Controller
 
             if (count($screenshotFiles) > 0) {
                 foreach ($screenshotFiles as $screenshotFile) {
+
+                    if ($screenshotFile->error != UPLOAD_ERR_OK) {
+                        if($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
+                            $maxUpload = ini_get('upload_max_filesize');
+
+                            throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUpload.'.');
+                        }
+
+                        throw new Exception('Couldn’t upload screenshot. (Error '.$screenshotFile->error.')');
+                    }
+
                     $handle = $plugin->handle;
                     $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$screenshotFile->getExtension();
                     move_uploaded_file($screenshotFile->tempName, $tempPath);
