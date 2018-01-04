@@ -47,7 +47,6 @@ export default {
             }
         }
 
-        formData.append('action', 'users/save-user');
         formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
         axios.post(Craft.actionUrl+'/users/save-user', formData)
@@ -62,7 +61,6 @@ export default {
             formData.append(dataKey, data[dataKey]);
         }
 
-        formData.append('action', 'craftcom/id/account/upload-user-photo');
         formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
         axios.post(Craft.actionUrl+'/craftcom/id/account/upload-user-photo', formData)
@@ -170,7 +168,6 @@ export default {
             }
         }
 
-        formData.append('action', 'craftcom/plugins/save');
         formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
         axios.post(Craft.actionUrl+'/craftcom/plugins/save', formData)
