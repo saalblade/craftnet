@@ -7,6 +7,7 @@ use craft\base\Element;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\errors\ImageException;
+use craft\helpers\ConfigHelper;
 use craft\helpers\Db;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
@@ -273,6 +274,11 @@ class PluginsController extends Controller
         $assetsService = Craft::$app->getAssets();
         $volumesService = Craft::$app->getVolumes();
 
+        $iniMaxUpload = ConfigHelper::sizeInBytes(ini_get('upload_max_filesize'));
+        $configMaxUpload = Craft::$app->getConfig()->getGeneral()->maxUploadFileSize;
+        $maxUpload = min($iniMaxUpload, $configMaxUpload);
+        $maxUploadM = round($maxUpload / 1000 / 1000);
+
         if (empty($screenshotIds = $request->getBodyParam('screenshotIds'))) {
             $screenshotIds = [];
         }
@@ -286,12 +292,14 @@ class PluginsController extends Controller
             if ($iconFile) {
                 if ($iconFile->error != UPLOAD_ERR_OK) {
                     if($iconFile->error == UPLOAD_ERR_INI_SIZE) {
-                        $maxUpload = ini_get('upload_max_filesize');
-
-                        throw new Exception('Couldn’t upload icon because it exceeds the limit of '.$maxUpload.'.');
+                        throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                     }
 
                     throw new Exception('Couldn’t upload icon. (Error '.$iconFile->error.')');
+                }
+
+                if($iconFile->size > $maxUpload) {
+                    throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                 }
 
                 $name = $plugin->name;
@@ -365,12 +373,14 @@ class PluginsController extends Controller
                 foreach ($screenshotFiles as $screenshotFile) {
                     if ($screenshotFile->error != UPLOAD_ERR_OK) {
                         if($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
-                            $maxUpload = ini_get('upload_max_filesize');
-
-                            throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUpload.'.');
+                            throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                         }
 
                         throw new Exception('Couldn’t upload screenshot. (Error '.$screenshotFile->error.')');
+                    }
+
+                    if($screenshotFile->size > $maxUpload) {
+                        throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                     }
 
                     $handle = $plugin->handle;
