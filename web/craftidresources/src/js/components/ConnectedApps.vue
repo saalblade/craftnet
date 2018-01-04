@@ -125,7 +125,11 @@
                         this.$root.displayNotice('App disconnected.');
                     }).catch(response => {
 						this.loading[provider] = false;
-                    	this.$root.displayError('Couldn’t disconnect app.');
+
+						const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t disconnect app.';
+						this.$root.displayError(errorMessage);
+
+						this.errors = response.data && response.data.errors ? response.data.errors : {};
 					});
             },
 

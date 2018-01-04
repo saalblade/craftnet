@@ -94,8 +94,12 @@
                         this.userDraft.photoUrl = response.data.photoUrl;
                         this.photoLoading = false;
                     }).catch(response => {
-                        this.$root.displayError('Couldn’t delete photo.');
                         this.photoLoading = false;
+
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t delete photo.';
+                        this.$root.displayError(errorMessage);
+
+                        this.errors = response.data && response.data.errors ? response.data.errors : {};
                     })
                 }
             },
@@ -132,8 +136,12 @@
 
                         this.photoLoading = false;
                     }).catch(response => {
-						this.$root.displayError('Couldn’t upload photo.');
-						this.errors = response.data.errors;
+						this.photoLoading = false;
+
+						const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t upload photo.';
+						this.$root.displayError(errorMessage);
+
+						this.errors = response.data && response.data.errors ? response.data.errors : {};
 					});
             },
 
@@ -151,12 +159,12 @@
                     this.errors = {};
                     this.loading = false;
                 }).catch(response => {
-                    this.$root.displayError('Couldn’t save settings.');
-                    this.errors = {};
-                    if(response.data.errors) {
-                        this.errors = response.data.errors;
-                    }
                     this.loading = false;
+
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save profile.';
+                    this.$root.displayError(errorMessage);
+
+                    this.errors = response.data && response.data.errors ? response.data.errors : {};
                 });
             }
         },

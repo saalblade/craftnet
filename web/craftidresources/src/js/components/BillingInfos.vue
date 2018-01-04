@@ -107,8 +107,10 @@
                     this.showForm = false;
                     this.errors = {};
                 }).catch(response => {
-                    this.$root.displayError('Couldn’t save company infos.');
-                    this.errors = response.data.errors;
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save company infos.';
+                    this.$root.displayError(errorMessage);
+
+                    this.errors = response.data && response.data.errors ? response.data.errors : {};
                 });
             },
 

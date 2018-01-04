@@ -105,19 +105,10 @@
                 }).catch(response => {
                     this.loading = false;
 
-                    let errorMessage = 'Couldn’t save settings.';
-
-                    if(response.data && response.data.error) {
-                        errorMessage = response.data.error;
-                    }
-
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.';
                     this.$root.displayError(errorMessage);
 
-                    this.errors = {};
-
-                    if(response.data && response.data.errors) {
-                        this.errors = response.data.errors;
-                    }
+                    this.errors = response.data && response.data.errors ? response.data.errors : {};
                 });
             }
 
