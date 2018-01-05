@@ -18,6 +18,7 @@
 	actionUrl:             "{{ actionUrl()|e('js') }}",
 	username:              {{ currentUser is defined and currentUser ? ('"'~currentUser.username|e('js')~'"')|raw : 'null' }},
 	remainingSessionTime:  {{ craft.app.request.getSegment(1) not in ['updates', 'manualupdate'] ? craft.app.user.getRemainingSessionTime() : 0 }},
+	maxUploadSize:         {{ craft.io.getMaxUploadSize() }},
 
 	{% if craft.app.config.general.enableCsrfProtection %}
 		csrfTokenValue:        "{{ craft.app.request.getCsrfToken()|e('js') }}",

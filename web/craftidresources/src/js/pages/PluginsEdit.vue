@@ -69,6 +69,9 @@
                             </div>
                             <div class="col-sm-10">
                                 <div class="form-group">
+                                    <div class="instructions">
+                                        <p>Plugin icons must be square SVG files, and should not exceed {{ maxUploadSize }}.</p>
+                                    </div>
                                     <input type="file" ref="iconFile" class="form-control" @change="changeIcon" :class="{'is-invalid': errors.iconId }" />
                                     <div class="invalid-feedback" v-for="error in errors.iconId">{{ error }}</div>
                                 </div>
@@ -118,6 +121,9 @@
                     <div class="card-header">Screenshots</div>
                     <div class="card-body">
                         <div class="form-group">
+                            <div class="instructions">
+                                <p>Plugin screenshots must be JPG or PNG files, and should not exceed {{ maxUploadSize }}.</p>
+                            </div>
                             <input type="file" ref="screenshotFiles" class="form-control" multiple="">
                         </div>
 
@@ -267,6 +273,10 @@
                 }
 
                 return !this.plugin.enabled || (this.plugin.enabled && this.plugin.price);
+            },
+
+            maxUploadSize() {
+                return this.humanFileSize(Craft.maxUploadSize);
             }
 
         },
@@ -466,6 +476,28 @@
 
                     this.errors = response.data && response.data.errors ? response.data.errors : {};
                 })
+            },
+
+
+            humanFileSize(bytes) {
+                const threshold = 1024;
+
+                if (bytes < threshold) {
+                    return bytes + ' B';
+                }
+
+                const units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+                let u = -1;
+
+                do
+                {
+                    bytes = bytes / threshold;
+                    ++u;
+                }
+                while (bytes >= threshold);
+
+                return bytes.toFixed(1) + ' ' + units[u];
             },
         },
 
