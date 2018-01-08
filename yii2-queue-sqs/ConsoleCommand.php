@@ -36,4 +36,12 @@ class ConsoleCommand extends \yii\queue\cli\Command
     {
         $this->queue->listen($delay);
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function isWorkerAction($actionID)
+    {
+        return in_array($actionID, ['run', 'listen'], true);
+    }
 }
