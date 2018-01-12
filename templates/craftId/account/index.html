@@ -13,6 +13,7 @@
 	window.craftIdUrl = "{{ config.craftIdUrl }}";
 	window.currentUserId = {{ currentUser is defined and currentUser and currentUser.id ? currentUser.id : 'null'  }};
 	window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken.attributes|json_encode|raw : 'false' }};
+	window.stripePublishableKey = {{ stripePublishableKey|json_encode|raw }};
 
 	window.Craft = {
 	actionUrl:             "{{ actionUrl()|e('js') }}",

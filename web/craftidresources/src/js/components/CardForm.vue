@@ -45,7 +45,7 @@
         },
 
         mounted() {
-            this.stripe = Stripe('pk_test_B2opWU3D3nmA2QXyHKlIx6so');
+            this.stripe = Stripe(window.stripePublishableKey);
             this.elements = this.stripe.elements();
             this.card = this.elements.create('card');
 
