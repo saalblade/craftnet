@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "require": {
+      "type": "object",
+      "items": {
+        "type": "string"
+      }
+    },
+    "install": {
+      "type": "object",
+      "items": {
+        "type": "string"
+      }
+    },
+    "platform": {
+      "type": "object",
+      "items": {
+        "type": "string"
+      },
+      "required": ["php"]
+    },
+    "minimum-stability": {
+      "type": "string",
+      "enum": ["dev", "alpha", "beta", "RC", "stable"]
+    },
+    "prefer-stable": {
+      "type": "boolean"
+    },
+    "installed": {
+      "type": "object",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["require", "install", "platform", "minimum-stability", "prefer-stable"]
+}
