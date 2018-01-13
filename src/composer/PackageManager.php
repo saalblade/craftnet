@@ -131,27 +131,48 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string $name         The package name
-     * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
-     * @param bool   $sort         Whether the versions should be sorted
+     * @param string      $name         The package name
+     * @param string      $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
+     * @param string|null $constraint   The version constraint, if any
+     * @param bool        $sort         Whether the versions should be sorted
      *
      * @return string[] The known package versions
      */
-    public function getAllVersions(string $name, string $minStability = 'stable', bool $sort = true): array
+    public function getAllVersions(string $name, string $minStability = 'stable', string $constraint = null, bool $sort = true): array
     {
-        $allowedStabilities = $this->_allowedStabilities($minStability);
-
-        $versions = (new Query())
-            ->select(['version'])
+        $query = (new Query())
+            ->select(['pv.version'])
             ->distinct()
             ->from(['craftcom_packageversions pv'])
             ->innerJoin(['craftcom_packages p'], '[[p.id]] = [[pv.packageId]]')
             ->where([
                 'p.name' => $name,
-                'pv.stability' => $allowedStabilities,
                 'pv.valid' => true,
-            ])
-            ->column();
+            ]);
+
+        // Restrict to certain stabilities?
+        $allowedStabilities = $this->_allowedStabilities($minStability);
+        if (!empty($allowedStabilities)) {
+            $query->andWhere(['pv.stability' => $allowedStabilities]);
+        }
+
+        // Was a specific version requested by the constraint?
+        if ($constraint !== null) {
+            try {
+                $version = (new VersionParser())->normalize($constraint);
+                $query->andWhere(['pv.normalizedVersion' => $version]);
+                $constraint = null;
+            } catch (\UnexpectedValueException $e) {
+            }
+        }
+
+        $versions = $query->column();
+
+        if ($constraint !== null) {
+            $versions = array_filter($versions, function($version) use ($constraint) {
+                return Semver::satisfies($version, $constraint);
+            });
+        }
 
         if ($sort) {
             $this->_sortVersions($versions);
@@ -161,46 +182,49 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string $name         The package name
-     * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
+     * @param string      $name         The package name
+     * @param string      $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
+     * @param string|null $constraint   The version constraint, if any
      *
      * @return string|null The latest version, or null if none can be found
      */
-    public function getLatestVersion(string $name, string $minStability = 'stable')
+    public function getLatestVersion(string $name, string $minStability = 'stable', string $constraint = null)
     {
         // Get all the versions
-        $versions = $this->getAllVersions($name, $minStability);
+        $versions = $this->getAllVersions($name, $minStability, $constraint);
 
         // Return the last one
         return array_pop($versions);
     }
 
     /**
-     * @param string $name         The package name
-     * @param string $minStability The minimum required stability
+     * @param string      $name         The package name
+     * @param string      $minStability The minimum required stability
+     * @param string|null $constraint   The version constraint, if any
      *
      * @return PackageRelease|null The latest release, or null if none can be found
      */
-    public function getLatestRelease(string $name, string $minStability = 'stable')
+    public function getLatestRelease(string $name, string $minStability = 'stable', string $constraint = null)
     {
-        $version = $this->getLatestVersion($name, $minStability);
+        $version = $this->getLatestVersion($name, $minStability, $constraint);
         return $this->getRelease($name, $version);
     }
 
     /**
      * Returns all the versions after a given version
      *
-     * @param string $name         The package name
-     * @param string $from         The version that others should be after
-     * @param string $minStability The minimum required stability
-     * @param bool   $sort         Whether the versions should be sorted
+     * @param string      $name         The package name
+     * @param string      $from         The version that others should be after
+     * @param string      $minStability The minimum required stability
+     * @param string|null $constraint   The version constraint, if any
+     * @param bool        $sort         Whether the versions should be sorted
      *
      * @return string[] The versions after $from, sorted oldest-to-newest
      */
-    public function getVersionsAfter(string $name, string $from, string $minStability = 'stable', bool $sort = true): array
+    public function getVersionsAfter(string $name, string $from, string $minStability = 'stable', string $constraint = null, bool $sort = true): array
     {
         // Get all the versions
-        $versions = $this->getAllVersions($name, $minStability, false);
+        $versions = $this->getAllVersions($name, $minStability, $constraint, false);
 
         // Filter out the ones <= $from
         $versions = array_filter($versions, function($version) use ($from) {
@@ -217,15 +241,16 @@ class PackageManager extends Component
     /**
      * Returns all the releases after a given version
      *
-     * @param string $name         The package name
-     * @param string $from         The version that others should be after
-     * @param string $minStability The minimum required stability
+     * @param string      $name         The package name
+     * @param string      $from         The version that others should be after
+     * @param string      $minStability The minimum required stability
+     * @param string|null $constraint   The version constraint, if any
      *
      * @return PackageRelease[] The releases after $from, sorted oldest-to-newest
      */
-    public function getReleasesAfter(string $name, string $from, string $minStability = 'stable'): array
+    public function getReleasesAfter(string $name, string $from, string $minStability = 'stable', string $constraint = null): array
     {
-        $versions = $this->getVersionsAfter($name, $from, $minStability, false);
+        $versions = $this->getVersionsAfter($name, $from, $minStability, $constraint, false);
         $results = $this->_createReleaseQuery($name, $versions)->all();
         $releases = [];
 
@@ -242,14 +267,13 @@ class PackageManager extends Component
     /**
      * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
      *
-     * @return string[]
+     * @return string[] The allowed stabilities, or an empty array if all stabilities should be allowed
      */
     private function _allowedStabilities(string $minStability = 'stable'): array
     {
         $allowedStabilities = [];
+
         switch ($minStability) {
-            case 'dev':
-                $allowedStabilities[] = 'dev';
             // no break
             case 'alpha':
                 $allowedStabilities[] = 'alpha';
@@ -260,7 +284,7 @@ class PackageManager extends Component
             case 'RC':
                 $allowedStabilities[] = 'RC';
             // no break
-            default:
+            case 'stable':
                 $allowedStabilities[] = 'stable';
         }
 
