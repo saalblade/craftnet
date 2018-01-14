@@ -44,7 +44,8 @@ class OptimizeComposerReqsController extends BaseApiController
         $optimized = [];
 
         // Start by setting specific versions on the to-be-installed requirements
-        $install = (array)$payload->install;
+        $install = (array)($payload->install ?? []);
+
         $packageManager = Module::getInstance()->getPackageManager();
         $releaseIds = [];
 
@@ -69,11 +70,15 @@ class OptimizeComposerReqsController extends BaseApiController
         }
 
         if (isset($payload->installed)) {
-            // Don't include any of the to-be-installed releases' dependencies in the optimized requirements
+            // Don't include any of the to-be-(un)installed releases' dependencies in the optimized requirements
             $deps = $this->_createDepQuery()
                 ->andWhere(['versionId' => $releaseIds])
                 ->column();
             $this->_ignoreInstalledDeps($deps);
+
+            if (isset($payload->uninstall)) {
+                $this->_ignoreInstalledDeps($payload->uninstall);
+            }
 
             foreach ($payload->installed as $name => $version) {
                 if (!isset($this->_ignore[$name]) && !isset($optimized[$name])) {
