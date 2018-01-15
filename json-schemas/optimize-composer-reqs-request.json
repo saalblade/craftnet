@@ -14,12 +14,6 @@
         "type": "string"
       }
     },
-    "uninstall": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
     "platform": {
       "type": "object",
       "items": {
@@ -41,5 +35,5 @@
       }
     }
   },
-  "required": ["require", "platform", "minimum-stability", "prefer-stable"]
+  "required": ["require", "install", "platform", "minimum-stability", "prefer-stable"]
 }
