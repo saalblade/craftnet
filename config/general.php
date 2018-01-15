@@ -40,6 +40,6 @@ return [
             'plugins' => 'https://plugins.craftcms.test/',
         ],
         'defaultCookieDomain' => '.craftcms.test',
-        'baseCpUrl' => 'http://id.craftcms.test/',
+        'baseCpUrl' => 'https://id.craftcms.test/',
     ]
 ];
