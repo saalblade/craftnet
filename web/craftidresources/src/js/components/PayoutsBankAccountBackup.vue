@@ -33,7 +33,7 @@
 
 
             <template v-else>
-                <a class="btn btn-primary" href="https://id.craftcms.dev/index.php/stripe/connect">Connect to Stripe</a>
+                <a class="btn btn-primary" :href="window.stripeConnectUrl">Connect to Stripe</a>
                 <!--<a class="btn btn-primary" href="https://id.craftcms.dev/index.php/stripe/connect" value="Connect to Stripe" @click="stripeConnected = true">-->
             </template>
         </div>

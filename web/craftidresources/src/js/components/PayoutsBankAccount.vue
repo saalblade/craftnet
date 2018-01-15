@@ -38,7 +38,7 @@
                 </template>
 
                 <template v-else>
-                    <a class="btn btn-primary" href="https://id.craftcms.dev/index.php/stripe/connect">Connect a Stripe account</a>
+                    <a class="btn btn-primary" :href="stripeConnectUrl">Connect a Stripe account</a>
                 </template>
             </template>
         </div>
@@ -70,6 +70,10 @@
 
             loading() {
                 return this.$root.stripeAccountLoading;
+            },
+
+            stripeConnectUrl() {
+                return window.stripeConnectUrl;
             }
 
         },
