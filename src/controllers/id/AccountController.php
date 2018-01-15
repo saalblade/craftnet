@@ -42,7 +42,7 @@ class AccountController extends Controller
         }
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
-        $stripePublishableKey = $craftIdConfig['stripeClientId'];
+        $stripePublishableKey = $craftIdConfig['stripePublishableKey'];
 
         return $this->renderTemplate('account/index', [
             'stripeAccessToken' => $stripeAccessToken,

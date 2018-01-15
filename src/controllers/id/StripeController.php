@@ -121,7 +121,7 @@ class StripeController extends BaseController
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
 
         Stripe::setClientId($craftIdConfig['stripeClientId']);
-        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
+        Stripe::setApiKey($craftIdConfig['stripeSecretKey']);
 
         $account = Account::retrieve($accountId);
         $account->deauthorize();
@@ -181,7 +181,7 @@ class StripeController extends BaseController
         if ($customerRecord && $customerRecord->stripeCustomerId) {
             $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
 
-            Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
+            Stripe::setApiKey($craftIdConfig['stripeSecretKey']);
             $customer = Customer::retrieve($customerRecord->stripeCustomerId);
         }
 
@@ -201,7 +201,7 @@ class StripeController extends BaseController
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
         $user = Craft::$app->getUser()->getIdentity();
 
-        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
+        Stripe::setApiKey($craftIdConfig['stripeSecretKey']);
 
         $customerRecord = StripeCustomerRecord::find()
             ->where(Db::parseParam('userId', $user->id))
@@ -249,7 +249,7 @@ class StripeController extends BaseController
     {
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
 
-        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
+        Stripe::setApiKey($craftIdConfig['stripeSecretKey']);
 
         $user = Craft::$app->getUser()->getIdentity();
 
@@ -281,7 +281,7 @@ class StripeController extends BaseController
 
         $provider = new StripeOauthProvider([
             'clientId' => $craftIdConfig['stripeClientId'],
-            'clientSecret' => $craftIdConfig['stripeClientSecret'],
+            'clientSecret' => $craftIdConfig['stripeSecretKey'],
             'redirectUri' => UrlHelper::actionUrl('craftcom/id/stripe/callback'),
         ]);
 

@@ -2,8 +2,9 @@
 
 return [
     '*' => [
-        'stripeClientId' => getenv('STRIPE_PUBLIC_KEY'),
-        'stripeClientSecret' => getenv('STRIPE_API_KEY'),
+        'stripePublishableKey' => getenv('STRIPE_PUBLISHABLE_KEY'),
+        'stripeSecretKey' => getenv('STRIPE_SECRET_KEY'),
+        'stripeClientId' => getenv('STRIPE_CLIENT_ID'),
         'oauthServer' => [
             'accessTokenExpiry' => 'PT1H',
             'refreshTokenExpiry' => 'P1M',

@@ -78,7 +78,7 @@ class AccountController extends BaseApiController
                             if ($stripeCustomerRecord->stripeCustomerId) {
                                 $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
 
-                                Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
+                                Stripe::setApiKey($craftIdConfig['stripeSecretKey']);
                                 $customer = Customer::retrieve($stripeCustomerRecord->stripeCustomerId);
 
                                 if ($customer && $customer->default_source) {
