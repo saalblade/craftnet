@@ -8,13 +8,17 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Amount</th>
+                        <th>Sales</th>
+                        <th>Fees</th>
+                        <th>Total</th>
                         <th>Date</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="payout in payoutsScheduled">
-                        <td>{{ payout.amount|currency }}</td>
+                        <td class="text-secondary">{{ payout.sales|currency }}</td>
+                        <td class="text-secondary">{{ payout.fees|currency }}</td>
+                        <td>{{ payout.total|currency }}</td>
                         <td>{{ payout.date }}</td>
                     </tr>
                     </tbody>
@@ -27,13 +31,19 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Amount</th>
+                        <th>ID</th>
+                        <th>Sales</th>
+                        <th>Fees</th>
+                        <th>Total</th>
                         <th>Date</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="payout in payouts">
-                        <td><router-link :to="'/developer/payouts/'+payout.id">{{ payout.amount|currency }}</router-link></td>
+                        <td><router-link :to="'/developer/payouts/'+payout.id">PAY000{{ payout.id }}</router-link></td>
+                        <td class="text-secondary">{{ payout.sales|currency }}</td>
+                        <td class="text-secondary">{{ payout.fees|currency }}</td>
+                        <td>{{ payout.total|currency }}</td>
                         <td>{{ payout.date }}</td>
                     </tr>
                     </tbody>

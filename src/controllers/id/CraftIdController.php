@@ -205,8 +205,10 @@ class CraftIdController extends BaseController
         return [
             [
                 'id' => 1,
-                'amount' => 99.00,
-                'date' => '1 year ago',
+                'sales' => 99.00,
+                'fees' => 19.90,
+                'total' => 79.20,
+                'date' => date('Y-m-d', strtotime("-10 days")),
                 'bank' => [
                     'name' => 'BNP Parisbas',
                     'accountNumber' => '2345678923456783456',
@@ -214,8 +216,10 @@ class CraftIdController extends BaseController
             ],
             [
                 'id' => 2,
-                'amount' => 99.00,
-                'date' => '1 year ago',
+                'sales' => 99.00,
+                'fees' => 19.90,
+                'total' => 79.20,
+                'date' => date('Y-m-d', strtotime("-15 days")),
                 'bank' => [
                     'name' => 'BNP Parisbas',
                     'accountNumber' => '2345678923456783456',
@@ -223,8 +227,10 @@ class CraftIdController extends BaseController
             ],
             [
                 'id' => 3,
-                'amount' => 298.00,
-                'date' => '1 year ago',
+                'sales' => 298.00,
+                'fees' => 59.60,
+                'total' => 238.40,
+                'date' => date('Y-m-d', strtotime("-20 days")),
                 'bank' => [
                     'name' => 'BNP Parisbas',
                     'accountNumber' => '2345678923456783456',
@@ -240,9 +246,10 @@ class CraftIdController extends BaseController
     {
         return [
             [
-                'id' => 8,
-                'amount' => 116.00,
-                'date' => 'Tomorrow',
+                'sales' => 99.00,
+                'fees' => 19.90,
+                'total' => 79.20,
+                'date' => date('Y-m-d', strtotime("+3 days")),
             ],
         ];
     }

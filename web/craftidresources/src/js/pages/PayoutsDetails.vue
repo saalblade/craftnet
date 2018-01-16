@@ -3,20 +3,26 @@
         <div class="card mb-3">
             <div class="card-body">
 
-                <h3>{{ payout.amount|currency }}</h3>
+                <h3>{{ payout.total|currency }}</h3>
                 <p class="text-secondary">#00000{{payoutId}}</p>
 
                 <hr>
 
                 <dl>
-                    <dt>Date Paid</dt>
-                    <dd>{{payout.date}}</dd>
+                    <dt>Date</dt>
+                    <dd>{{ payout.date }}</dd>
 
-                    <dt>Amount</dt>
-                    <dd>{{payout.amount|currency}}</dd>
+                    <dt>Sales</dt>
+                    <dd>{{ payout.sales|currency }}</dd>
+
+                    <dt>Fees</dt>
+                    <dd>{{ payout.fees|currency }}</dd>
+
+                    <dt>Total</dt>
+                    <dd>{{ payout.total|currency }}</dd>
 
                     <dt>ID</dt>
-                    <dd>#00000{{payoutId}}</dd>
+                    <dd>#00000{{ payout.id }}</dd>
 
                 </dl>
             </div>
