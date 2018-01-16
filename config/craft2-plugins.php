@@ -29,6 +29,11 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
+    'Algolia' => [
+        'handle' => 'algolia',
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Scout](https://github.com/rias500/craft-scout) could be used instead'
+    ],
     'AmCommand' => [
         'handle' => 'command-palette',
     ],
@@ -42,6 +47,11 @@ return [
     'CodeBlock' => [
         'statusColor' => 'red',
         'status' => 'Discontinued (use [Simple Text](https://github.com/craftcms/simple-text) instead)'
+    ],
+    'Color Swatches' => [
+        'handle' => 'colorswatches',
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Colour Swatches](https://github.com/rias500/craft-colour-swatches) could be used instead'
     ],
     'CpFieldLinks' => [
         'handle' => 'cp-field-inspect'
