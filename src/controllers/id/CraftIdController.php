@@ -72,6 +72,7 @@ class CraftIdController extends BaseController
             'payouts' => $this->_payouts(),
             'payoutsScheduled' => $this->_scheduledPayouts(),
             'payments' => $this->_payments(),
+            'invoices' => $this->_invoices(),
             'categories' => $this->_pluginCategories(),
         ];
 
@@ -284,13 +285,92 @@ class CraftIdController extends BaseController
             ],
             [
                 'items' => [['id' => 6, 'name' => 'Analytics'], ['id' => 7, 'name' => 'Videos']],
-                'amount' => 298.00,
+                'amount' => 198.00,
                 'customer' => [
                     'id' => 15,
                     'name' => 'Andrew Welsh',
                     'email' => 'andrew@nystudio107.com',
                 ],
                 'date' => '1 year ago',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function _invoices(): array
+    {
+        return [
+            [
+                'id' => 1,
+                'date' => date('Y-m-d'),
+                'paymentMethod' => [
+                    'type' => 'visa',
+                    'last4' => '2424',
+                ],
+                'items' => [
+                    ['id' => 6, 'name' => 'Analytics', 'amount' => 29, 'type' => 'renewal'],
+                    ['id' => 8, 'name' => 'Social', 'amount' => 99, 'type' => 'license']
+                ],
+                'total' => 128,
+                'customer' => [
+                    'id' => 1,
+                    'name' => 'Benjamin David',
+                    'email' => 'ben@pixelandtonic.com',
+                ],
+            ],
+            [
+                'id' => 2,
+                'date' => date('Y-m-d'),
+                'paymentMethod' => [
+                    'type' => 'visa',
+                    'last4' => '2424',
+                ],
+                'items' => [
+                    ['id' => 6, 'name' => 'Analytics', 'amount' => 29, 'type' => 'renewal']
+                ],
+                'total' => 29,
+                'customer' => [
+                    'id' => 15,
+                    'name' => 'Andrew Welsh',
+                    'email' => 'andrew@nystudio107.com',
+                ],
+            ],
+            [
+                'id' => 3,
+                'date' => date('Y-m-d'),
+                'paymentMethod' => [
+                    'type' => 'visa',
+                    'last4' => '2424',
+                ],
+                'items' => [
+                    ['id' => 7, 'name' => 'Videos', 'amount' => 29, 'type' => 'renewal']
+                ],
+                'total' => 29,
+                'customer' => [
+                    'id' => 15,
+                    'name' => 'Andrew Welsh',
+                    'email' => 'andrew@nystudio107.com',
+                ],
+            ],
+            [
+                'id' => 4,
+                'date' => date('Y-m-d'),
+                'paymentMethod' => [
+                    'type' => 'visa',
+                    'last4' => '2424',
+                ],
+                'items' => [
+                    ['id' => 6, 'name' => 'Analytics', 'amount' => 99, 'type' => 'license'],
+                    ['id' => 7, 'name' => 'Videos', 'amount' => 99, 'type' => 'license']
+                ],
+                'total' => 198,
+                'customer' => [
+                    'id' => 15,
+                    'name' => 'Andrew Welsh',
+                    'email' => 'andrew@nystudio107.com',
+                ],
             ],
         ];
     }

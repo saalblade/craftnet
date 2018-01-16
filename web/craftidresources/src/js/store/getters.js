@@ -38,6 +38,31 @@ export const customers = state => {
     }
 };
 
+export const invoices = state => {
+    if(state.craftId) {
+        return state.craftId.invoices;
+    }
+};
+
+export const getInvoiceById = state => {
+    return id => {
+        if(state.craftId.invoices) {
+            return state.craftId.invoices.find(inv => inv.id == id);
+        }
+    }
+};
+
+/*
+
+getCategoryById(state) {
+    return id => {
+        if(state.data.categories) {
+            return state.data.categories.find(c => c.id == id)
+        }
+    };
+},
+*/
+
 export const licenses = state => {
     if(state.craftId) {
         return state.craftId.pluginLicenses.concat(state.craftId.craftLicenses);

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Profile from '../pages/Profile'
 import Billing from '../pages/Billing'
+import BillingInvoiceDetails from '../pages/BillingInvoiceDetails'
 import Customers from '../pages/Customers'
 import CustomersDetails from '../pages/CustomersDetails'
 import Licenses from '../pages/Licenses'
@@ -70,6 +71,11 @@ const router = new VueRouter({
             path: '/account/billing',
             name: 'Billing',
             component: Billing
+        },
+        {
+            path: '/account/billing/invoices/:id',
+            name: 'BillingInvoiceDetails',
+            component: BillingInvoiceDetails
         },
         {
             path: '/account/profile',
