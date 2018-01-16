@@ -52,26 +52,23 @@ export const getInvoiceById = state => {
     }
 };
 
-/*
-
-getCategoryById(state) {
-    return id => {
-        if(state.data.categories) {
-            return state.data.categories.find(c => c.id == id)
-        }
-    };
-},
-*/
-
 export const licenses = state => {
     if(state.craftId) {
         return state.craftId.pluginLicenses.concat(state.craftId.craftLicenses);
     }
 };
 
-export const payments = state => {
+export const sales = state => {
     if(state.craftId) {
-        return state.craftId.payments;
+        return state.craftId.sales;
+    }
+};
+
+export const getSaleById = state => {
+    return id => {
+        if(state.craftId.sales) {
+            return state.craftId.sales.find(sale => sale.id == id);
+        }
     }
 };
 

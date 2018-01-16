@@ -12,8 +12,8 @@ import LicensesCraftDetails from '../pages/LicensesCraftDetails'
 import LicensesPlugins from '../pages/LicensesPlugins'
 import LicensesPluginsDetails from '../pages/LicensesPluginsDetails'
 import LicensesRenew from '../pages/LicensesRenew'
-import Payments from '../pages/Payments'
-import PaymentsDetails from '../pages/PaymentsDetails'
+import Sales from '../pages/Sales'
+import SalesDetails from '../pages/SalesDetails'
 import Payouts from '../pages/Payouts'
 import PayoutsDetails from '../pages/PayoutsDetails'
 import Plugins from '../pages/Plugins'
@@ -119,14 +119,14 @@ const router = new VueRouter({
             ]
         },
         {
-            path: '/developer/payments',
-            name: 'Payments',
-            component: Payments
+            path: '/developer/sales',
+            name: 'Sales',
+            component: Sales
         },
         {
-            path: '/developer/payments/:id',
-            name: 'PaymentsDetails',
-            component: PaymentsDetails,
+            path: '/developer/sales/:id',
+            name: 'SalesDetails',
+            component: SalesDetails,
         },
         {
             path: '/developer/payouts',

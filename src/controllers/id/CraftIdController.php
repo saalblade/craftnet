@@ -71,7 +71,7 @@ class CraftIdController extends BaseController
             'customers' => $this->_customers($currentUser),
             'payouts' => $this->_payouts(),
             'payoutsScheduled' => $this->_scheduledPayouts(),
-            'payments' => $this->_payments(),
+            'sales' => $this->_sales(),
             'invoices' => $this->_invoices(),
             'categories' => $this->_pluginCategories(),
         ];
@@ -250,48 +250,32 @@ class CraftIdController extends BaseController
     /**
      * @return array
      */
-    private function _payments(): array
+    private function _sales(): array
     {
         return [
             [
-                'items' => [['id' => 6, 'name' => 'Analytics']],
+                'id' => 1,
+                'plugin' => ['id' => 6, 'name' => 'Analytics'],
+                'type' => 'license',
                 'amount' => 99.00,
                 'customer' => [
                     'id' => 1,
                     'name' => 'Benjamin David',
                     'email' => 'ben@pixelandtonic.com',
                 ],
-                'date' => '3 days ago',
+                'date' => date('Y-m-d'),
             ],
             [
-                'items' => [['id' => 6, 'name' => 'Analytics']],
+                'id' => 2,
+                'plugin' => ['id' => 6, 'name' => 'Analytics'],
+                'type' => 'renewal',
                 'amount' => 99.00,
                 'customer' => [
-                    'id' => 15,
-                    'name' => 'Andrew Welsh',
-                    'email' => 'andrew@nystudio107.com',
+                    'id' => 1,
+                    'name' => 'Benjamin David',
+                    'email' => 'ben@pixelandtonic.com',
                 ],
-                'date' => '1 year ago',
-            ],
-            [
-                'items' => [['id' => 7, 'name' => 'Videos']],
-                'amount' => 99.00,
-                'customer' => [
-                    'id' => 15,
-                    'name' => 'Andrew Welsh',
-                    'email' => 'andrew@nystudio107.com',
-                ],
-                'date' => '1 year ago',
-            ],
-            [
-                'items' => [['id' => 6, 'name' => 'Analytics'], ['id' => 7, 'name' => 'Videos']],
-                'amount' => 198.00,
-                'customer' => [
-                    'id' => 15,
-                    'name' => 'Andrew Welsh',
-                    'email' => 'andrew@nystudio107.com',
-                ],
-                'date' => '1 year ago',
+                'date' => date('Y-m-d'),
             ],
         ];
     }
