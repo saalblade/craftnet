@@ -30,7 +30,6 @@ return [
         'status' => 'Currently in development'
     ],
     'Algolia' => [
-        'handle' => 'algolia',
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Scout](https://github.com/rias500/craft-scout) could be used instead'
     ],
@@ -48,7 +47,7 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (use [Simple Text](https://github.com/craftcms/simple-text) instead)'
     ],
-    'Color Swatches' => [
+    'ColorSwatches' => [
         'handle' => 'colorswatches',
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Colour Swatches](https://github.com/rias500/craft-colour-swatches) could be used instead'
