@@ -167,34 +167,20 @@ class CraftIdController extends BaseController
      */
     private function _customers(User $currentUser): array
     {
-        $ret = [];
-
-        foreach ($currentUser->getPlugins() as $pluginElement) {
-            $entries = Entry::find()->section('licenses')->relatedTo($pluginElement)->all();
-
-            foreach ($entries as $entry) {
-                $found = false;
-
-                foreach ($ret as $c) {
-                    if ($c['id'] == $entry->getAuthor()->id) {
-                        $found = true;
-                    }
-                }
-
-                if (!$found) {
-                    $customer = [
-                        'id' => $entry->getAuthor()->id,
-                        'email' => $entry->getAuthor()->email,
-                        'username' => $entry->getAuthor()->username,
-                        'fullName' => $entry->getAuthor()->fullName
-                    ];
-
-                    $ret[] = $customer;
-                }
-            }
-        }
-
-        return $ret;
+        return [
+            [
+                'id' => 1,
+                'email' => 'ben@pixelandtonic.com',
+                'username' => 'benjamin',
+                'fullName' => 'Benjamin David',
+            ],
+            [
+                'id' => 2,
+                'email' => 'brandon@pixelandtonic.com',
+                'username' => 'brandon',
+                'fullName' => 'Brandon Kelly',
+            ]
+        ];
     }
 
     /**
@@ -261,6 +247,30 @@ class CraftIdController extends BaseController
     {
         return [
             [
+                'id' => 3,
+                'plugin' => ['id' => 6, 'name' => 'Analytics'],
+                'type' => 'license',
+                'amount' => 99.00,
+                'customer' => [
+                    'id' => 2,
+                    'name' => 'Brandon Kelly',
+                    'email' => 'brandon@pixelandtonic.com',
+                ],
+                'date' => date('Y-m-d'),
+            ],
+            [
+                'id' => 2,
+                'plugin' => ['id' => 6, 'name' => 'Analytics'],
+                'type' => 'renewal',
+                'amount' => 29.00,
+                'customer' => [
+                    'id' => 1,
+                    'name' => 'Benjamin David',
+                    'email' => 'ben@pixelandtonic.com',
+                ],
+                'date' => date('Y-m-d'),
+            ],
+            [
                 'id' => 1,
                 'plugin' => ['id' => 6, 'name' => 'Analytics'],
                 'type' => 'license',
@@ -270,19 +280,7 @@ class CraftIdController extends BaseController
                     'name' => 'Benjamin David',
                     'email' => 'ben@pixelandtonic.com',
                 ],
-                'date' => date('Y-m-d'),
-            ],
-            [
-                'id' => 2,
-                'plugin' => ['id' => 6, 'name' => 'Analytics'],
-                'type' => 'renewal',
-                'amount' => 99.00,
-                'customer' => [
-                    'id' => 1,
-                    'name' => 'Benjamin David',
-                    'email' => 'ben@pixelandtonic.com',
-                ],
-                'date' => date('Y-m-d'),
+                'date' => date('Y-m-d', strtotime('-1 year')),
             ],
         ];
     }
