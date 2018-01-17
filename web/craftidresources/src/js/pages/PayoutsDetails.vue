@@ -1,8 +1,9 @@
 <template>
     <div v-if="payout">
+        <p><router-link class="nav-link" to="/developer/payouts" exact>← Back to payouts</router-link></p>
+
         <div class="card mb-3">
             <div class="card-body">
-
                 <h3>{{ payout.total|currency }}</h3>
                 <p class="text-secondary">#00000{{payoutId}}</p>
 
