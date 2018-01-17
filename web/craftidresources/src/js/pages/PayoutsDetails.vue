@@ -25,7 +25,7 @@
                             <dt>Date</dt>
                             <dd>{{ payout.date }}</dd>
                             <dt>ID</dt>
-                            <dd>#00000{{ payout.id }}</dd>
+                            <dd>#PAY000{{ payout.id }}</dd>
                         </dl>
                     </div>
                 </div>

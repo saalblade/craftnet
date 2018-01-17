@@ -23,7 +23,7 @@
                     <div class="col-6">
                         <dl>
                             <dt>Sale ID</dt>
-                            <dd>#{{ sale.id }}</dd>
+                            <dd>#SAL000{{ sale.id }}</dd>
                             <dt>Customer</dt>
                             <dd><router-link :to="'/developer/customers/'+sale.customer.id">{{ sale.customer.email }}</router-link></dd>
                             <dt>Date</dt>

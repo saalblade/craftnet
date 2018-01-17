@@ -12,7 +12,7 @@
 
                 <dl>
                     <dt>ID</dt>
-                    <dd>{{customerId}}</dd>
+                    <dd>#CUS000{{customerId}}</dd>
                     <dt>Email</dt>
                     <dd>{{customer.email}}</dd>
                     <dt>Full name</dt>
