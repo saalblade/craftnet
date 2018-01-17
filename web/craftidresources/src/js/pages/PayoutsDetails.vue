@@ -5,27 +5,30 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h3>{{ payout.total|currency }}</h3>
-                <p class="text-secondary">#00000{{payoutId}}</p>
+                <p class="text-secondary">#PAY000{{payoutId}}</p>
 
                 <hr>
 
-                <dl>
-                    <dt>Date</dt>
-                    <dd>{{ payout.date }}</dd>
-
-                    <dt>Sales</dt>
-                    <dd>{{ payout.sales|currency }}</dd>
-
-                    <dt>Fees</dt>
-                    <dd>{{ payout.fees|currency }}</dd>
-
-                    <dt>Total</dt>
-                    <dd>{{ payout.total|currency }}</dd>
-
-                    <dt>ID</dt>
-                    <dd>#00000{{ payout.id }}</dd>
-
-                </dl>
+                <div class="row">
+                    <div class="col-6">
+                        <dl>
+                            <dt>Sales</dt>
+                            <dd>{{ payout.sales|currency }}</dd>
+                            <dt>Fees</dt>
+                            <dd>{{ payout.fees|currency }}</dd>
+                            <dt>Total</dt>
+                            <dd>{{ payout.total|currency }}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-6">
+                        <dl>
+                            <dt>Date</dt>
+                            <dd>{{ payout.date }}</dd>
+                            <dt>ID</dt>
+                            <dd>#00000{{ payout.id }}</dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card mb-3">
