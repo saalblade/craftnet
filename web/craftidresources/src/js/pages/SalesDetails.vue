@@ -4,7 +4,7 @@
 
         <div class="card mb-3">
             <div class="card-body">
-                <h3>{{ sale.amount|currency }}</h3>
+                <h3>{{ sale.netAmount|currency }}</h3>
                 <p class="text-secondary">#SAL000{{sale.id}}</p>
 
                 <hr>
