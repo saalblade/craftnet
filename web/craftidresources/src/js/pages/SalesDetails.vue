@@ -16,8 +16,10 @@
                             <dd>{{ sale.plugin.name }}</dd>
                             <dt>Type</dt>
                             <dd>{{ sale.type }}</dd>
-                            <dt>Amount</dt>
-                            <dd>{{ sale.amount|currency }}</dd>
+                            <dt>Gross Amount</dt>
+                            <dd>{{ sale.grossAmount|currency }}</dd>
+                            <dt>Net Amount</dt>
+                            <dd>{{ sale.netAmount|currency }}</dd>
                         </dl>
                     </div>
                     <div class="col-6">

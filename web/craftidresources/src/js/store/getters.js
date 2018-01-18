@@ -72,18 +72,6 @@ export const getSaleById = state => {
     }
 };
 
-export const payouts = state => {
-    if(state.craftId) {
-        return state.craftId.payouts;
-    }
-};
-
-export const payoutsScheduled = state => {
-    if(state.craftId) {
-        return state.craftId.payoutsScheduled;
-    }
-};
-
 export const pluginLicenses = state => {
     if(state.craftId) {
         return state.craftId.pluginLicenses;

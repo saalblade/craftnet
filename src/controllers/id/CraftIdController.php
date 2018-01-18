@@ -69,8 +69,6 @@ class CraftIdController extends BaseController
             'craftLicenses' => $this->_craftLicenses($currentUser),
             'pluginLicenses' => $this->_pluginLicenses($currentUser),
             'customers' => $this->_customers($currentUser),
-            'payouts' => $this->_payouts(),
-            'payoutsScheduled' => $this->_scheduledPayouts(),
             'sales' => $this->_sales(),
             'invoices' => $this->_invoices(),
             'categories' => $this->_pluginCategories(),
@@ -186,63 +184,6 @@ class CraftIdController extends BaseController
     /**
      * @return array
      */
-    private function _payouts(): array
-    {
-        return [
-            [
-                'id' => 1,
-                'sales' => 99.00,
-                'fees' => 19.90,
-                'total' => 79.20,
-                'date' => date('Y-m-d', strtotime("-10 days")),
-                'bank' => [
-                    'name' => 'BNP Parisbas',
-                    'accountNumber' => '2345678923456783456',
-                ]
-            ],
-            [
-                'id' => 2,
-                'sales' => 99.00,
-                'fees' => 19.90,
-                'total' => 79.20,
-                'date' => date('Y-m-d', strtotime("-15 days")),
-                'bank' => [
-                    'name' => 'BNP Parisbas',
-                    'accountNumber' => '2345678923456783456',
-                ]
-            ],
-            [
-                'id' => 3,
-                'sales' => 298.00,
-                'fees' => 59.60,
-                'total' => 238.40,
-                'date' => date('Y-m-d', strtotime("-20 days")),
-                'bank' => [
-                    'name' => 'BNP Parisbas',
-                    'accountNumber' => '2345678923456783456',
-                ]
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function _scheduledPayouts(): array
-    {
-        return [
-            [
-                'sales' => 99.00,
-                'fees' => 19.90,
-                'total' => 79.20,
-                'date' => date('Y-m-d', strtotime("+3 days")),
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
     private function _sales(): array
     {
         return [
@@ -250,7 +191,8 @@ class CraftIdController extends BaseController
                 'id' => 3,
                 'plugin' => ['id' => 6, 'name' => 'Analytics'],
                 'type' => 'license',
-                'amount' => 99.00,
+                'grossAmount' => 99.00,
+                'netAmount' => 79.20,
                 'customer' => [
                     'id' => 2,
                     'name' => 'Brandon Kelly',
@@ -262,7 +204,8 @@ class CraftIdController extends BaseController
                 'id' => 2,
                 'plugin' => ['id' => 6, 'name' => 'Analytics'],
                 'type' => 'renewal',
-                'amount' => 29.00,
+                'grossAmount' => 29.00,
+                'netAmount' => 23.20,
                 'customer' => [
                     'id' => 1,
                     'name' => 'Benjamin David',
@@ -274,7 +217,8 @@ class CraftIdController extends BaseController
                 'id' => 1,
                 'plugin' => ['id' => 6, 'name' => 'Analytics'],
                 'type' => 'license',
-                'amount' => 99.00,
+                'grossAmount' => 99.00,
+                'netAmount' => 79.20,
                 'customer' => [
                     'id' => 1,
                     'name' => 'Benjamin David',

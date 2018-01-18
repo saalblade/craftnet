@@ -14,8 +14,6 @@ import LicensesPluginsDetails from '../pages/LicensesPluginsDetails'
 import LicensesRenew from '../pages/LicensesRenew'
 import Sales from '../pages/Sales'
 import SalesDetails from '../pages/SalesDetails'
-import Payouts from '../pages/Payouts'
-import PayoutsDetails from '../pages/PayoutsDetails'
 import Plugins from '../pages/Plugins'
 import PluginsEdit from '../pages/PluginsEdit'
 import PluginsIndex from '../pages/PluginsIndex'
@@ -127,16 +125,6 @@ const router = new VueRouter({
             path: '/developer/sales/:id',
             name: 'SalesDetails',
             component: SalesDetails,
-        },
-        {
-            path: '/developer/payouts',
-            name: 'Payouts',
-            component: Payouts,
-        },
-        {
-            path: '/developer/payouts/:id',
-            name: 'PayoutsDetails',
-            component: PayoutsDetails,
         }
     ]
 });

@@ -1,7 +1,7 @@
 <template>
 
     <div class="card mb-3">
-        <div class="card-header">Bank Account</div>
+        <div class="card-header"><i class="fa fa-institution"></i> Bank Account</div>
         <div class="card-body">
             <div class="spinner" v-if="loading"></div>
 

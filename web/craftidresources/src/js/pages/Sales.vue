@@ -1,5 +1,7 @@
 <template>
     <div>
+        <payouts-bank-account></payouts-bank-account>
+
         <table class="table">
             <thead>
             <tr>
@@ -7,7 +9,8 @@
                 <th>Item</th>
                 <th>Type</th>
                 <th>Customer</th>
-                <th>Amount</th>
+                <th>Gross Amount</th>
+                <th>Net Amount</th>
                 <th>Date</th>
             </tr>
             </thead>
@@ -17,7 +20,8 @@
                 <td>{{ sale.plugin.name }}</td>
                 <td class="text-secondary">{{ sale.type }}</td>
                 <td><router-link :to="'/developer/customers/'+sale.customer.id">{{sale.customer.email}}</router-link></td>
-                <td>{{sale.amount|currency}}</td>
+                <td>{{ sale.grossAmount|currency }}</td>
+                <td>{{ sale.netAmount|currency }}</td>
                 <td>{{ sale.date }}</td>
             </tr>
             </tbody>
@@ -27,8 +31,13 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import PayoutsBankAccount from '../components/PayoutsBankAccount'
 
     export default {
+
+        components: {
+            PayoutsBankAccount
+        },
 
         computed: {
 
