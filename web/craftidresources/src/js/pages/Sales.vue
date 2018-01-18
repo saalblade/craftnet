@@ -3,7 +3,7 @@
         <payouts-bank-account></payouts-bank-account>
 
         <div class="form-group">
-            <input class="form-control" id="searchQuery" name="searchQuery" type="text" placeholder="Search customers" v-model="searchQuery">
+            <input class="form-control" id="searchQuery" name="searchQuery" type="text" placeholder="Search sales" v-model="searchQuery">
         </div>
 
         <table class="table">
@@ -23,7 +23,7 @@
                 <td><router-link :to="'/developer/sales/'+sale.id">SAL000{{ sale.id }}</router-link></td>
                 <td>{{ sale.plugin.name }}</td>
                 <td class="text-secondary">{{ sale.type }}</td>
-                <td><router-link :to="'/developer/customers/'+sale.customer.id">{{sale.customer.email}}</router-link></td>
+                <td><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></td>
                 <td>{{ sale.grossAmount|currency }}</td>
                 <td>{{ sale.netAmount|currency }}</td>
                 <td>{{ sale.date }}</td>

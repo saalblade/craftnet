@@ -51,7 +51,6 @@
                                 <ul class="nav nav-pills flex-column">
                                     <li class="nav-item"><router-link class="nav-link" to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
                                     <li class="nav-item"><router-link class="nav-link" to="/developer/sales"><i class="fa fa-dollar"></i> Sales</router-link></li>
-                                    <li class="nav-item"><router-link class="nav-link" to="/developer/customers"><i class="fa fa-group"></i> Customers</router-link></li>
                                 </ul>
                             </template>
 

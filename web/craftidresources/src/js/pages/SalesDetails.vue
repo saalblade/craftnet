@@ -27,7 +27,7 @@
                             <dt>Sale ID</dt>
                             <dd>#SAL000{{ sale.id }}</dd>
                             <dt>Customer</dt>
-                            <dd><router-link :to="'/developer/customers/'+sale.customer.id">{{ sale.customer.email }}</router-link></dd>
+                            <dd><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></dd>
                             <dt>Date</dt>
                             <dd>{{ sale.date }}</dd>
                         </dl>

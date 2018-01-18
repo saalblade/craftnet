@@ -3,8 +3,6 @@ import VueRouter from 'vue-router'
 import Profile from '../pages/Profile'
 import Billing from '../pages/Billing'
 import BillingInvoiceDetails from '../pages/BillingInvoiceDetails'
-import Customers from '../pages/Customers'
-import CustomersDetails from '../pages/CustomersDetails'
 import Licenses from '../pages/Licenses'
 import LicensesClaim from '../pages/LicensesClaim'
 import LicensesCraft from '../pages/LicensesCraft'
@@ -84,16 +82,6 @@ const router = new VueRouter({
             path: '/account/settings',
             name: 'Settings',
             component: Settings
-        },
-        {
-            path: '/developer/customers',
-            name: 'Customers',
-            component: Customers
-        },
-        {
-            path: '/developer/customers/:id',
-            name: 'CustomersDetails',
-            component: CustomersDetails
         },
         {
             path: '/developer/plugins',
