@@ -142,7 +142,7 @@ class CraftIdController extends BaseController
 
         foreach ($pluginLicenseEntries as $pluginLicenseEntry) {
             $pluginLicense = $pluginLicenseEntry->toArray();
-            $plugin = $pluginLicenseEntry->plugin;
+            $plugin = $pluginLicenseEntry->plugin->one();
             $pluginLicense['plugin'] = $plugin->toArray();
             $craftLicense = $pluginLicenseEntry->craftLicense->one();
 
