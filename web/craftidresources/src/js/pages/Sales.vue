@@ -2,6 +2,10 @@
     <div>
         <payouts-bank-account></payouts-bank-account>
 
+        <div class="form-group">
+            <input class="form-control" id="searchQuery" name="searchQuery" type="text" placeholder="Search customers" v-model="searchQuery">
+        </div>
+
         <table class="table">
             <thead>
             <tr>
@@ -15,7 +19,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="sale in sales">
+            <tr v-for="sale in salesToRender">
                 <td><router-link :to="'/developer/sales/'+sale.id">SAL000{{ sale.id }}</router-link></td>
                 <td>{{ sale.plugin.name }}</td>
                 <td class="text-secondary">{{ sale.type }}</td>
@@ -39,12 +43,34 @@
             PayoutsBankAccount
         },
 
+        data () {
+            return {
+                searchQuery: '',
+            }
+        },
+
         computed: {
 
             ...mapGetters({
                 sales: 'sales',
             }),
 
+            salesToRender() {
+                let searchQuery = this.searchQuery;
+                return this.sales.filter(function(sale) {
+                    if(sale) {
+                        let searchQueryRegExp = new RegExp(searchQuery, 'gi');
+
+                        if(sale.customer.name.match(searchQueryRegExp)) {
+                            return true;
+                        }
+
+                        if(sale.customer.email.match(searchQueryRegExp)) {
+                            return true;
+                        }
+                    }
+                });
+            },
         },
 
     }
