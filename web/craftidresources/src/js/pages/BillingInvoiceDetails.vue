@@ -17,6 +17,10 @@ USA
 support@craftcms.com</pre>
 					</div>
 					<div class="col-6">
+
+						<pre>Payment Method
+{{ invoice.paymentMethod.type }} ending with {{ invoice.paymentMethod.last4 }}</pre>
+
 						<pre>{{ currentUser.businessName }}
 {{ currentUser.businessVatId }}
 {{ currentUser.businessAddressLine1 }}
@@ -24,7 +28,8 @@ support@craftcms.com</pre>
 {{ currentUser.businessCity }}
 {{ currentUser.businessState }}
 {{ currentUser.businessZipCode }}
-{{ currentUser.businessCountry }}</pre>
+{{ currentUser.businessCountry }}
+</pre>
 					</div>
 				</div>
 
