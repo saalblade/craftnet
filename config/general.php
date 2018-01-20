@@ -19,7 +19,7 @@ return [
         'generateTransformsBeforePageLoad' => true,
     ],
     'prod' => [
-        'allowAutoUpdates' => false,
+        'allowUpdates' => false,
         'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
         'siteUrl' => [
             'api' => 'https://api.craftcms.com/',
@@ -32,7 +32,7 @@ return [
     ],
     'dev' => [
         'devMode' => true,
-        'allowAutoUpdates' => true,
+        'allowUpdates' => true,
         'siteUrl' => [
             'api' => 'https://api.craftcms.test/',
             'composer' => 'https://composer.craftcms.test/',
