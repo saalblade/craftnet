@@ -113,7 +113,7 @@
 
                         <plugin-categories :plugin-draft="pluginDraft"></plugin-categories>
 
-                        <text-field id="keywords" label="Keywords" instructions="Comma-separated list of keyworkds." v-model="pluginDraft.keywords" :errors="errors.keywords" />
+                        <text-field id="keywords" label="Keywords" instructions="Comma-separated list of keywords." v-model="pluginDraft.keywords" :errors="errors.keywords" />
                     </div>
                 </div>
 
