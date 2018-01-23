@@ -1,29 +1,25 @@
 {% extends "_layouts/site" %}
 
 {% block content %}
-	<div class="container">
-		<div class="row">
-			<div class="col-12 text-center mt-5 mb-3">
-				<div class="p-3">
-					<img src="/craftidresources/dist/images/craftid.svg" width="80" />
-				</div>
-				<h1>Craft ID</h1>
-				<p class="lead">Manage your Craft ID.</p>
+	<div class="mx-auto max-w-sm">
+		<div class="pt-8 text-center">
+			<div class="pt-8 pb-3">
+				<img src="/craftidresources/dist/images/craftid.svg" width="80" />
 			</div>
-			<div class="col-6 ml-auto mr-auto">
-				<div class="card">
-					<div class="card-body">
+			<h1>Craft ID</h1>
+			<p class="lead">Manage your Craft ID.</p>
+		</div>
 
-						<login-form remembered-username="{{ craft.app.user.rememberedUsername }}"></login-form>
+		<div class="card">
+			<div class="card-body">
+				<login-form remembered-username="{{ craft.app.user.rememberedUsername }}"></login-form>
 
-						<p><a href="{{ url('forgotpassword') }}">Forgot your password?</a></p>
-					</div>
-				</div>
-
-				<div class="mt-4 text-center">
-					<p>Don’t have an account? <a href="{{ url('register') }}">Sign up</a>.</p>
-				</div>
+				<p><a href="{{ url('forgotpassword') }}">Forgot your password?</a></p>
 			</div>
+		</div>
+
+		<div class="mt-4 text-center">
+			<p>Don’t have an account? <a href="{{ url('register') }}">Sign up</a>.</p>
 		</div>
 	</div>
 {% endblock %}

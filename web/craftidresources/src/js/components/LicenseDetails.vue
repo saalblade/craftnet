@@ -4,8 +4,8 @@
         <div class="card-body">
             <template v-if="license">
 
-                <div class="row">
-                    <div class="col-sm-6">
+                <div class="flex">
+                    <div class="w-1/2">
 
                         <dl>
                             <dt>License ID</dt>
@@ -28,7 +28,7 @@
                             <dd>{{ license.author.email }}</dd>
                         </dl>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="w-1/2">
                         <dl>
 
                             <dt>Update Period</dt>

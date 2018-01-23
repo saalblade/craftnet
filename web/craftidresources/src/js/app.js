@@ -1,3 +1,5 @@
+// import './../sass/app.scss';
+
 import Vue from 'vue';
 import store from './store'
 import { currency } from './filters/currency';

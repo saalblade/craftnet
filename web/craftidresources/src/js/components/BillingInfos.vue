@@ -2,13 +2,12 @@
 	<div>
 		<h4>Invoice details</h4>
 
-		<div v-if="!showForm" class="row">
-			<div class="col-sm-8">
+		<div v-if="!showForm" class="flex">
 
-				<div class="flex-auto">
-					<p>Here’s what currently appears on your receipts:</p>
+			<div class="flex-1">
+				<p>Here’s what currently appears on your receipts:</p>
 
-					<pre>{{ companyInfos.businessName }}
+				<pre>{{ companyInfos.businessName }}
 {{ companyInfos.businessVatId }}
 {{ companyInfos.businessAddressLine1 }}
 {{ companyInfos.businessAddressLine2 }}
@@ -17,9 +16,9 @@
 {{ companyInfos.businessZipCode }}
 {{ companyInfos.businessCountry }}</pre>
 
-				</div>
 			</div>
-			<div class="col-sm-4 text-right">
+
+			<div>
 				<button @click="editInvoiceDetails()" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
 					<i class="fa fa-pencil"></i>
 					Change information

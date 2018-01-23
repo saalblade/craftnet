@@ -7,8 +7,8 @@
 
 		<div v-if="filteredRepositories.length > 0" class="list-group">
 			<div v-for="repository in filteredRepositories" class="list-group-item">
-				<div class="d-flex">
-					<div class="media-body">
+				<div class="flex items-center">
+					<div class="flex-1">
 						{{ repository.full_name }}
 					</div>
 					<div>

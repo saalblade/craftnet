@@ -49,25 +49,21 @@
                 <div class="card mb-3">
                     <div class="card-header">GitHub Repository</div>
                     <div class="card-body">
-                        <div class="d-flex flex-row">
-                            <div class="flex-grow">
-                                <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
-                            </div>
-                        </div>
+                        <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
                     </div>
                 </div>
 
                 <div class="card mb-3">
                     <div class="card-header">Plugin Icon</div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-2">
+                        <div class="flex">
+                            <div class="mr-6">
 
                                 <div class="form-group">
                                     <img :src="pluginDraft.iconUrl" height="80" />
                                 </div>
                             </div>
-                            <div class="col-sm-10">
+                            <div class="flex-1">
                                 <div class="form-group">
                                     <div class="instructions">
                                         <p>Plugin icons must be square SVG files, and should not exceed {{ maxUploadSize }}.</p>
@@ -83,24 +79,26 @@
                 <div class="card mb-3">
                     <div class="card-header">Plugin Details</div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6">
+                        <div class="flex flex-wrap -mx-4">
+                            <div class="w-1/2 px-4">
                                 <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
                             </div>
-                            <div class="col-sm-6">
+                            <div class="w-1/2 px-4">
                                 <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" disabled="true" />
                             </div>
-                            <div class="col-sm-6">
+                            <div class="w-1/2 px-4">
                                 <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" disabled="true" />
                             </div>
-                            <div class="col-sm-6">
+                            <div class="w-1/2 px-4">
                                 <div class="form-group">
                                     <label for="license">License</label>
 
-                                    <select id="license" class="form-control" v-model="pluginDraft.license">
-                                        <option value="craft">Craft</option>
-                                        <option value="mit">MIT</option>
-                                    </select>
+                                   <div class="select">
+                                       <select id="license" class="form-control" v-model="pluginDraft.license">
+                                           <option value="craft">Craft</option>
+                                           <option value="mit">MIT</option>
+                                       </select>
+                                   </div>
                                 </div>
                             </div>
                         </div>
@@ -523,10 +521,6 @@
 </script>
 
 <style scoped>
-    .d-flex { position: relative; }
-
-    .repository-spinner { position: absolute; top: 36px; right: -24px; }
-
     .screenshot { position: relative; display: inline-block; width: 230px; margin-right:24px; margin-top: 14px; }
     .screenshot .remove { position: absolute; top: -10px; right: -10px; }
     .screenshot img {  }

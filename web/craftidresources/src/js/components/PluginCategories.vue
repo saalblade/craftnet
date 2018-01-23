@@ -5,11 +5,11 @@
 			<div class="instructions"><p>Pick up to {{maxCategories}} categories. ({{ pluginDraft.categoryIds.length }}/{{maxCategories}} selected)</p></div>
 
 			<draggable v-model="pluginDraft.categoryIds">
-				<div class="alert alert-secondary float-left clearboth" v-for="category in selectedCategories">
-					<div class="d-flex">
+				<div class="alert alert-secondary float-left clearboth mb-3" v-for="category in selectedCategories">
+					<div class="flex">
 						<div>{{category.title}}</div>
 						<div class="ml-3 mt-1">
-							<a class="" href="#" @click.prevent="unselectCategory(category.id)"><i class="fa fa-remove text-danger"></i></a>
+							<a class="" href="#" @click.prevent="unselectCategory(category.id)"><i class="fa fa-remove text-red"></i></a>
 						</div>
 					</div>
 				</div>
@@ -18,7 +18,7 @@
 			<div class="clearfix"></div>
 
 			<div>
-				<div class="d-inline-block" v-for="category in availableCategories">
+				<div class="inline-block" v-for="category in availableCategories">
 					<a class="btn btn-outline-secondary mb-2" :class="{disabled: pluginDraft.categoryIds.length >= maxCategories }" href="#" @click.prevent="selectCategory(category.id)"><i class="fa fa-plus"></i> {{category.title}}</a>&nbsp;
 				</div>
 			</div>

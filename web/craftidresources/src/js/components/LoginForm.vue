@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<form method="post" accept-charset="UTF-8">
-
 			<input type="hidden" :name="csrfTokenName" :value="csrfTokenValue">
 			<input type="hidden" name="action" value="users/login">
 
@@ -22,7 +21,7 @@
 				</label>
 			</div>
 
-			<input type="submit" class="btn btn-primary btn-block" :disabled="!formValidates()" value="Login">
+			<input type="submit" class="btn btn-primary w-full" :disabled="!formValidates()" value="Login">
 		</form>
 	</div>
 </template>

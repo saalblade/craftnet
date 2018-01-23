@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let tailwindcss = require('tailwindcss');
 
 /*
  |--------------------------------------------------------------------------
@@ -10,10 +11,11 @@ let mix = require('laravel-mix');
  | file for your application, as well as bundling up your JS files.
  |
  */
+
 const sourcePath = 'web/craftidresources/src';
 const distPath = 'web/craftidresources/dist';
 
-mix.setPublicPath("./");
+mix.setPublicPath("./web/craftidresources/dist");
 
 mix.js(sourcePath + '/js/app.js', distPath + '/js/')
     .js(sourcePath + '/js/site.js', distPath + '/js/')
@@ -21,7 +23,18 @@ mix.js(sourcePath + '/js/app.js', distPath + '/js/')
     .sass(sourcePath + '/sass/site.scss', distPath + '/css/')
     .sass(sourcePath + '/sass/plugins.scss', distPath + '/css/')
     .options({
-        processCssUrls: false
+        processCssUrls: false,
+        postCss: [ tailwindcss('./tailwind-config.js') ],
     })
     .copy(sourcePath + '/images', distPath + '/images/')
     .sourceMaps();
+
+/*
+mix.browserSync({
+    host: 'id.craftcms.test',
+    proxy: 'https://id.craftcms.test/',
+    files: [
+        distPath + '/css/!*.css',
+        distPath + '/js/!*.js',
+    ]
+});*/

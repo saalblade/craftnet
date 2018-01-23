@@ -6,7 +6,7 @@
                 <i class="fa fa-warning"></i>
                 {{ logoutWarningPara }}
 
-                <div class="float-right mt-5">
+                <div class="float-right mt-4">
                     <a @click.prevent="logout" href="#" class="btn btn-secondary">Logout now</a>
                     <a @click.prevent="renewSession" ref="renewSessionBtn" href="#" class="btn btn-primary">Keep me logged in</a>
                 </div>
@@ -22,14 +22,14 @@
                     <p>Enter your password to log back in.</p>
 
                     <div>
-                        <div class="d-flex">
+                        <div class="flex">
                             <input v-model="password" ref="passwordInput" placeholder="Password" type="password" id="password" class="form-control mr-2"  :class="{'is-invalid': loginErrorPara }" />
                             <input type="submit" class="btn btn-primary mr-2" value="Login" :disabled="!passwordValidates" />
                             <div class="spinner" :class="{'invisible': !passwordSpinner}"></div>
                         </div>
                     </div>
 
-                    <div class="text-danger" v-if="loginErrorPara">{{ loginErrorPara }}</div>
+                    <div class="text-red" v-if="loginErrorPara">{{ loginErrorPara }}</div>
                 </form>
             </template>
         </modal>

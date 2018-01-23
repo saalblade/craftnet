@@ -8,15 +8,15 @@
 				<h4>Invoice #{{ invoice.id }}</h4>
 				<p class="text-secondary">Order Date: {{ invoice.date }}</p>
 
-				<div class="row">
-					<div class="col-6">
+				<div class="lg:flex">
+					<div class="lg:w-1/2">
 						<pre>Pixel & Tonic, Inc.
 Address
 Bend, OR 97701
 USA
 support@craftcms.com</pre>
 					</div>
-					<div class="col-6">
+					<div class="lg:w-1/2 sm:mt-4 lg:mt-0">
 
 						<pre>Payment Method
 {{ invoice.paymentMethod.type }} ending with {{ invoice.paymentMethod.last4 }}</pre>

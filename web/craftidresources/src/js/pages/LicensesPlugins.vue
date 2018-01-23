@@ -2,7 +2,9 @@
     <div>
         <license-renew-alert></license-renew-alert>
 
-        <license-table type="plugins" :licenses="pluginLicenses"></license-table>
+        <div class="card card-table">
+            <license-table type="plugins" :licenses="pluginLicenses"></license-table>
+        </div>
     </div>
 </template>
 

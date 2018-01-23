@@ -8,20 +8,20 @@
             <template v-else>
                 <template v-if="stripeAccount">
 
-                    <div class="row">
-                        <dl class="col-md-6">
+                    <div class="flex">
+                        <dl class="w-1/2">
                             <dt>Stripe Account</dt>
                             <dd><template v-if="stripeAccount.display_name">{{ stripeAccount.display_name }}</template><em v-else class="text-secondary">Not provided</em></dd>
                             <dt>ID</dt>
                             <dd>{{ stripeAccount.id }}</dd>
                             <dt>Payouts enabled</dt>
-                            <dd v-if="stripeAccount.payouts_enabled" class="text-success">Yes</dd>
-                            <dd v-else class="text-success">No</dd>
+                            <dd v-if="stripeAccount.payouts_enabled" class="text-green">Yes</dd>
+                            <dd v-else class="text-green">No</dd>
                             <dt>Details Submitted</dt>
-                            <dd v-if="stripeAccount.details_submitted" class="text-success">Yes</dd>
-                            <dd v-else class="text-success">No</dd>
+                            <dd v-if="stripeAccount.details_submitted" class="text-green">Yes</dd>
+                            <dd v-else class="text-green">No</dd>
                         </dl>
-                        <dl class="col-md-6">
+                        <dl class="w-1/2">
                             <dt>Email</dt>
                             <dd>{{ stripeAccount.email }}</dd>
                             <dt>Business name</dt>

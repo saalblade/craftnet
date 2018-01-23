@@ -66,12 +66,22 @@
 /* Modals */
 
 .modal {
-  display: block;
+  @apply .fixed .pin .block;
   background: rgba(0,0,0,0.7);
+
+  .modal-dialog {
+    @apply .w-auto .max-w-sm .mx-auto .my-8;
+  }
+
+  .modal-content {
+    @apply .flex .flex-col .bg-white .rounded;
+    border: 1px solid rgba(0,0,0,.2);
+  }
 }
 
-.modal-dialog {
-  margin: 80px auto;
+.fade {
+  opacity: 0;
+  transition: opacity .15s linear;
 }
 
 
@@ -92,3 +102,354 @@
 .quick-fade-enter, .quick-fade-leave-to {
   opacity: 0;
 }
+
+
+
+
+
+
+
+
+
+
+/************/
+
+
+
+
+@tailwind preflight;
+
+
+/* HTML Basics */
+
+body {
+  @apply .leading-normal .bg-grey-lighter;
+}
+
+a {
+  @apply .text-blue .no-underline;
+
+  &:hover {
+    @apply .text-blue-darker .underline;
+  }
+}
+
+h4 {
+  @apply .text-xl .mb-2;
+}
+
+h5 {
+  @apply .text-lg .mb-2;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+hr {
+  @apply .my-6 .border-t .border-grey-light;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="tel"],
+textarea {
+  @apply .border .border-grey .p-2 .rounded .block .w-full;
+
+  &:disabled,
+  &[readonly] {
+    @apply .bg-grey-lightest;
+  }
+
+  &.is-invalid {
+    @apply .border-red;
+  }
+}
+
+.select {
+  /*@apply .relative;
+
+  select {
+    @apply .inline-block .w-full .px-4 .py-2 pr-8 .appearance-none .border .border-grey-light;
+  }*/
+
+  /*  &:after {
+      @apply .absolute  .pin-y .pin-r .px-4 .flex .items-center;
+
+      font-size: 10px;
+      content: '▼';
+    }*/
+}
+
+select {
+  @apply .border .border-grey-light;
+}
+
+dl {
+  @apply .mb-4;
+
+  dt {
+    @apply .font-bold;
+  }
+  dd {
+    @apply .mb-3;
+  }
+}
+
+/* Layout */
+
+.app {
+  @apply .flex .flex-col .h-screen .mx-auto;
+
+  // .max-w-4xl
+
+  .content {
+    @apply .flex-1 .flex;
+    overflow: hidden;
+
+    #sidebar {
+      @apply .flex-1;
+      max-width: 240px;
+    }
+
+    .main {
+      @apply .flex-1 .p-6 .pl-0;
+      overflow: auto;
+    }
+  }
+}
+
+/* Header */
+
+.header {
+  @apply .flex .justify-between .bg-grey-lighter .px-8 .py-4 .w-full;
+
+  .navbar-brand {
+    @apply .text-xl .text-black;
+  }
+
+  ul {
+    @apply .list-reset;
+
+    li {
+      @apply .inline-block;
+
+      a {
+        @apply .block;
+      }
+    }
+  }
+}
+
+
+/* Sidebar */
+
+#sidebar .sidenav {
+  @apply .px-8 .py-6;
+
+  h5 {
+    @apply .text-lg .mb-3;
+
+    &:not(:first-child) {
+      @apply .mt-4;
+    }
+  }
+
+  ul {
+    @apply .list-reset;
+
+    li {
+      a {
+        @apply .block .text-grey-darker .px-0 .py-3 .rounded .no-underline;
+
+        &:hover {
+          @apply .text-black;
+        }
+
+        &.active {
+          @apply .text-blue .font-bold;
+        }
+
+        &.disabled {
+          @apply .text-grey;
+        }
+      }
+    }
+  }
+}
+
+
+/* Classes */
+
+.table {
+  border-collapse: collapse;
+
+  @apply .w-full;
+
+  th {
+    text-align: inherit;
+  }
+
+  th, td {
+    @apply .border-t .border-grey-light .p-3;
+
+    &.thin {
+      width: 0.01% !important;
+    }
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+
+.alert {
+  @apply .p-4 .mb-6 .bg-grey-lightest .text-grey-darker .border .border-grey-light .rounded;
+}
+
+.img-thumbnail {
+  @apply .border .border-solid .border-grey .p-1 .rounded .block .w-full;
+}
+
+.text-secondary {
+  @apply .text-grey-dark;
+}
+
+.card-element {
+  @apply .border .border-grey-light .px-3 .py-2;
+}
+
+.invalid-feedback {
+  @apply .text-red .text-sm .mt-2 .mb-4;
+}
+
+.plugin-icon {
+  width: 36px;
+  height: 36px;
+}
+
+
+/* Buttons */
+
+.btn {
+  @apply .inline-block .py-2 .px-4 .rounded .no-underline;
+
+  &:hover {
+    @apply .no-underline;
+  }
+}
+
+.btn-blue,
+.btn-primary {
+  @apply .bg-blue .text-white;
+
+  &:hover {
+    @apply .bg-blue-dark .text-white;
+  }
+}
+
+.btn-outline-red,
+.btn-outline-danger {
+  @apply .border .border-red .text-red .bg-white;
+
+  &:hover {
+    @apply .bg-red .text-white;
+  }
+}
+
+.btn-outline-grey,
+.btn-outline-secondary {
+  @apply .border .border-grey-dark .text-grey-dark .bg-white;
+
+  &:hover {
+    @apply .bg-grey-dark .text-white;
+  }
+}
+
+.btn-red,
+.btn-danger {
+  @apply .bg-red .text-white;
+
+  &:hover {
+    @apply .bg-red-dark;
+  }
+}
+.btn-grey,
+.btn-secondary {
+  @apply .bg-grey-dark .text-white;
+
+  &:hover {
+    @apply .bg-grey-darker;
+  }
+}
+
+
+/* Card */
+
+.card {
+  @apply .border .border-grey-light .bg-white .rounded;
+
+  .card-header {
+    @apply .px-6 .py-4 .bg-grey-lightest .border-b .border-grey-light;
+  }
+
+  .card-body {
+    @apply .p-6;
+  }
+}
+
+.card-danger {
+  @apply .border .border-red;
+
+  .card-header {
+    @apply .bg-red .text-white .bg-red;
+  }
+}
+
+.card-table {
+  table th {
+    @apply .bg-grey-lightest .border-t-0;
+  }
+}
+
+
+/* Nav pills */
+
+.nav-pills {
+  @apply .list-reset .flex;
+
+  li {
+    a {
+      @apply .px-2 .text-grey-darker .inline-block;
+
+      &:hover {
+        @apply .text-black .no-underline;
+      }
+
+      &.active {
+        @apply .text-blue .font-bold;
+      }
+    }
+  }
+}
+
+/* List group */
+
+.list-group {
+  @apply .flex .flex-col;
+
+  .list-group-item {
+    @apply .border .border-grey-light .px-4 .py-3;
+
+    margin-bottom: -1px;
+  }
+}
+
+@tailwind utilities;

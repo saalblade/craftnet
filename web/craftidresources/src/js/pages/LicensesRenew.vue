@@ -52,23 +52,23 @@
                 <hr>
 
                 <div class="text-center mt-4">
-                    <p>
+                    <div class="mb-4">
                         <select name="" id="">
                             <option value="">Renew for 3 years and save $XX.00</option>
                         </select>
-                    </p>
+                    </div>
 
-                    <div class="row">
-                        <div class="col-sm-6 text-right"><strong>Subtotal</strong></div>
-                        <div class="col-sm-6 text-left">{{ subtotal|currency }}</div>
+                    <div class="flex">
+                        <div class="w-1/2 px-4 py-2 text-right"><strong>Subtotal</strong></div>
+                        <div class="w-1/2 px-4 py-2 text-left">{{ subtotal|currency }}</div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6 text-right"><strong>Pro-Rate discount</strong></div>
-                        <div class="col-sm-6 text-left">$XX.00</div>
+                    <div class="flex">
+                        <div class="w-1/2 px-4 py-2 text-right"><strong>Pro-Rate discount</strong></div>
+                        <div class="w-1/2 px-4 py-2 text-left">$XX.00</div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6 text-right"><strong>Total</strong></div>
-                        <div class="col-sm-6 text-left">$XX.00</div>
+                    <div class="flex">
+                        <div class="w-1/2 px-4 py-2 text-right"><strong>Total</strong></div>
+                        <div class="w-1/2 px-4 py-2 text-left">$XX.00</div>
                     </div>
 
                     <div class="mt-3">

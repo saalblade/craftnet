@@ -1,10 +1,14 @@
 {% extends "_layouts/base" %}
 
 {% do view.registerCssFile("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css") %}
-{% do view.registerCssFile("//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css") %}
 
 {% do view.registerCssFile("/craftidresources/dist/css/site.css?v4") %}
 {% do view.registerJsFile("/craftidresources/dist/js/site.js?v4") %}
+
+{#
+{% do view.registerJsFile("https://localhost:8080/craftidresources/dist/js/site.js") %}
+{% do view.registerCssFile("https://localhost:8080/craftidresources/dist/css/site.css") %}
+#}
 
 {% set bodyClass = 'bg-light' %}
 

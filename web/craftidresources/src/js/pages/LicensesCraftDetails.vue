@@ -16,8 +16,9 @@
 
         <invoices></invoices>
 
-        <div class="card border-danger mb-3">
-            <div class="card-header text-white bg-danger">Danger Zone</div>
+        <div class="card card-danger mb-3">
+            <div class="card-header">Danger Zone</div>
+
             <div class="card-body">
                 <h5>Unlock license</h5>
                 <p>Unlock this license to make it ready for transfer to another domain.</p>

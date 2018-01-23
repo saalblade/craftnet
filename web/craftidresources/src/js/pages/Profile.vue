@@ -14,7 +14,7 @@
 			<div class="card-body">
 				<h4>Photo</h4>
 
-				<div class="d-flex">
+				<div class="flex">
 					<div class="">
 						<img ref="photo" :src="userDraft.photoUrl" style="width: 150px; height: 150px;" class="img-thumbnail mr-3" />
 					</div>
@@ -33,7 +33,7 @@
 							</div>
 						</template>
 						<div v-if="photoLoading" class="spinner"></div>
-						<input type="file" ref="photoFile" class="d-none" @change="onChangePhoto" />
+						<input type="file" ref="photoFile" class="hidden" @change="onChangePhoto" />
 					</div>
 				</div>
 			</div>

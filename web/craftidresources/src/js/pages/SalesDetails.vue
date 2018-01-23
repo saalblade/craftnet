@@ -9,8 +9,8 @@
 
                 <hr>
 
-                <div class="row">
-                    <div class="col-6">
+                <div class="flex">
+                    <div class=w-1/2>
                         <dl>
                             <dt>Item</dt>
                             <dd>{{ sale.plugin.name }}</dd>
@@ -22,7 +22,7 @@
                             <dd>{{ sale.netAmount|currency }}</dd>
                         </dl>
                     </div>
-                    <div class="col-6">
+                    <div class=w-1/2>
                         <dl>
                             <dt>Sale ID</dt>
                             <dd>#SAL000{{ sale.id }}</dd>

@@ -5,10 +5,18 @@
         <div v-if="stripeCustomerLoading" class="spinner"></div>
 
         <div v-if="!stripeCustomerLoading">
-            <div v-if="!editing">
+            <div v-if="!editing" class="flex">
+                <div class="flex-1">
+                    <p v-if="stripeCard">
+                        {{ stripeCard.brand }} •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
+                    </p>
+
+                    <p v-else>No credit card.</p>
+                </div>
+
                 <div class="float-right">
                     <p>
-                        <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
+                        <button @click="editing = true" type="button" class="btn btn-blue btn-sm" data-facebox="#billing-contact-info-modal">
                             <i class="fa fa-plus"></i>
                             New Card
                         </button>
@@ -20,18 +28,12 @@
                             Remove
                         </button>
 
-                        <div v-if="removeCardLoading" class="spinner"></div>
+                    <div v-if="removeCardLoading" class="spinner"></div>
                     </p>
                 </div>
-
-                <p v-if="stripeCard">
-                    {{ stripeCard.brand }} •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
-                </p>
-
-                <p v-else>No credit card.</p>
             </div>
 
-            <div :class="{'d-none': !editing}">
+            <div :class="{'hidden': !editing}">
 
                 <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></card-form>
 
