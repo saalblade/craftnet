@@ -2,8 +2,14 @@
     <div>
         <license-renew-alert></license-renew-alert>
 
-        <div class="card card-table">
+        <div v-if="craftLicenses.length > 0" class="card card-table">
             <license-table type="craft" :licenses="craftLicenses"></license-table>
+        </div>
+
+        <div v-else class="card card-empty">
+            <div class="card-body">
+                No Craft licenses.
+            </div>
         </div>
     </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="card card-table">
+        <div v-if="plugins.length > 0" class="card card-table">
             <table class="table">
                 <thead>
                 <tr>
@@ -53,12 +53,16 @@
                 </tbody>
             </table>
         </div>
+
+        <div v-else class="card card-empty">
+            <div class="card-body">
+                No plugins.
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-
     export default {
 
         data () {

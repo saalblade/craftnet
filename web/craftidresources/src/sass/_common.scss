@@ -419,6 +419,11 @@ dl {
   }
 }
 
+.card-empty {
+  .card-body {
+    @apply .text-center .text-grey-dark .py-8;
+  }
+}
 
 /* Nav pills */
 
