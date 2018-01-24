@@ -5,7 +5,7 @@
 			<div class="instructions"><p>Pick up to {{maxCategories}} categories. ({{ pluginDraft.categoryIds.length }}/{{maxCategories}} selected)</p></div>
 
 			<draggable v-model="pluginDraft.categoryIds">
-				<div class="alert alert-secondary float-left clearboth mb-3" v-for="category in selectedCategories">
+				<div class="alert alert-secondary float-left clearfix mb-3" v-for="category in selectedCategories">
 					<div class="flex">
 						<div>{{category.title}}</div>
 						<div class="ml-3 mt-1">

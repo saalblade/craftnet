@@ -93,12 +93,10 @@
                                 <div class="form-group">
                                     <label for="license">License</label>
 
-                                   <div class="select">
-                                       <select id="license" class="form-control" v-model="pluginDraft.license">
-                                           <option value="craft">Craft</option>
-                                           <option value="mit">MIT</option>
-                                       </select>
-                                   </div>
+                                   <select id="license" class="form-control w-full" v-model="pluginDraft.license">
+                                       <option value="craft">Craft</option>
+                                       <option value="mit">MIT</option>
+                                   </select>
                                 </div>
                             </div>
                         </div>

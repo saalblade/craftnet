@@ -1,122 +1,3 @@
-.clearboth {
-  clear: both;
-}
-
-.flex-grow  {
-  flex-grow: 1;
-}
-
-.instructions {
-  color: #8f98a3;
-}
-
-/* Notifications */
-
-#notifications-wrapper {
-  left: 0;
-  position: fixed;
-  z-index: 101;
-  width: 100%;
-  pointer-events: none;
-}
-
-#notifications {
-  text-align: center;
-}
-
-#notifications .notification {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 0 0 3px 3px;
-  border-width: 0 1px 1px;
-  color: #fff !important;
-  pointer-events: auto;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  font-weight: 600;
-  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-}
-
-#notifications .notification.notice {
-  background: #5286d9;
-}
-
-#notifications .notification.success {
-  background: #5286d9;
-}
-
-#notifications .notification.error {
-  background: #dc3545;
-}
-
-
-/* Spinner */
-
-.spinner { display: inline-block; vertical-align: bottom; width: 24px; height:24px; background: url(../images/spinner.gif) no-repeat 50% 50%; }
-.spinner.big { width: 48px; height: 48px; background: url(../images/spinner_big.gif) no-repeat 50% 50%; }
-
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
-  .spinner { background-image: url(../images/spinner_2x.gif); background-size: 20px; }
-  .spinner.big { background-image: url(../images/spinner_big_2x.gif); background-size: 48px; }
-}
-
-
-/* Modals */
-
-.modal {
-  @apply .fixed .pin .block;
-  background: rgba(0,0,0,0.7);
-
-  .modal-dialog {
-    @apply .w-auto .max-w-sm .mx-auto .my-8;
-  }
-
-  .modal-content {
-    @apply .flex .flex-col .bg-white .rounded;
-    border: 1px solid rgba(0,0,0,.2);
-  }
-}
-
-.fade {
-  opacity: 0;
-  transition: opacity .15s linear;
-}
-
-
-/* Vue Transitions */
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
-.quick-fade-enter-active, .quick-fade-leave-active {
-  transition: opacity 0s;
-}
-
-.quick-fade-enter, .quick-fade-leave-to {
-  opacity: 0;
-}
-
-
-
-
-
-
-
-
-
-
-/************/
-
-
-
-
 @tailwind preflight;
 
 
@@ -172,23 +53,9 @@ textarea {
   }
 }
 
-.select {
-  /*@apply .relative;
-
-  select {
-    @apply .inline-block .w-full .px-4 .py-2 pr-8 .appearance-none .border .border-grey-light;
-  }*/
-
-  /*  &:after {
-      @apply .absolute  .pin-y .pin-r .px-4 .flex .items-center;
-
-      font-size: 10px;
-      content: '▼';
-    }*/
-}
-
 select {
-  @apply .border .border-grey-light;
+  @apply .border .border-grey-light .bg-white;
+  height: calc(2.25rem + 2px);
 }
 
 dl {
@@ -311,7 +178,6 @@ dl {
   margin-bottom: 1rem;
 }
 
-
 .alert {
   @apply .p-4 .mb-6 .bg-grey-lightest .text-grey-darker .border .border-grey-light .rounded;
 }
@@ -335,6 +201,121 @@ dl {
 .plugin-icon {
   width: 36px;
   height: 36px;
+}
+
+.instructions {
+  color: #8f98a3;
+}
+
+
+/* Notifications */
+
+#notifications-wrapper {
+  left: 0;
+  position: fixed;
+  z-index: 101;
+  width: 100%;
+  pointer-events: none;
+
+  #notifications {
+    @apply .text-center;
+
+    .notification {
+      @apply .inline-block;
+
+      padding: 5px 10px;
+      border-radius: 0 0 3px 3px;
+      border-width: 0 1px 1px;
+      color: #fff !important;
+      pointer-events: auto;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+      font-weight: 600;
+      -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+      -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+
+      &.notice {
+        @apply .bg-blue;
+      }
+
+      &.success {
+        @apply .bg-green;
+      }
+
+      &.error {
+        @apply .bg-red;
+      }
+    }
+  }
+}
+
+
+/* Spinner */
+
+.spinner {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 24px;
+  height:24px;
+  background: url(../images/spinner.gif) no-repeat 50% 50%;
+}
+.spinner.big {
+  width: 48px;
+  height: 48px;
+  background: url(../images/spinner_big.gif) no-repeat 50% 50%;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3 / 2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+  .spinner {
+    background-image: url(../images/spinner_2x.gif);
+    background-size: 20px;
+  }
+  .spinner.big {
+    background-image: url(../images/spinner_big_2x.gif);
+    background-size: 48px;
+  }
+}
+
+
+/* Modals */
+
+.modal {
+  @apply .fixed .pin .block;
+  background: rgba(0,0,0,0.7);
+
+  .modal-dialog {
+    @apply .w-auto .max-w-sm .mx-auto .my-8;
+  }
+
+  .modal-content {
+    @apply .flex .flex-col .bg-white .rounded;
+    border: 1px solid rgba(0,0,0,.2);
+  }
+}
+
+.fade {
+  opacity: 0;
+  transition: opacity .15s linear;
+}
+
+
+/* Vue Transitions */
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.quick-fade-enter-active, .quick-fade-leave-active {
+  transition: opacity 0s;
+}
+
+.quick-fade-enter, .quick-fade-leave-to {
+  opacity: 0;
 }
 
 
@@ -380,7 +361,7 @@ dl {
   @apply .bg-red .text-white;
 
   &:hover {
-    @apply .bg-red-dark;
+    @apply .bg-red-dark .text-white;
   }
 }
 .btn-grey,
@@ -388,7 +369,7 @@ dl {
   @apply .bg-grey-dark .text-white;
 
   &:hover {
-    @apply .bg-grey-darker;
+    @apply .bg-grey-darker .text-white;
   }
 }
 
@@ -447,6 +428,7 @@ dl {
   }
 }
 
+
 /* Nav pills */
 
 .nav-pills {
@@ -466,6 +448,7 @@ dl {
     }
   }
 }
+
 
 /* List group */
 
