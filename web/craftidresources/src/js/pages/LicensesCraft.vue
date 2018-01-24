@@ -8,7 +8,8 @@
 
         <div v-else class="card card-empty">
             <div class="card-body">
-                No Craft licenses.
+                <div class="font-bold">No Craft licenses</div>
+                <div>You don’t have any Craft licenses yet.</div>
             </div>
         </div>
     </div>

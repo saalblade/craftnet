@@ -8,7 +8,8 @@
 
         <div v-else class="card card-empty">
             <div class="card-body">
-                No plugin licenses.
+                <div class="font-bold">No plugin licenses</div>
+                <div>You don’t have any plugin licenses yet.</div>
             </div>
         </div>
     </div>

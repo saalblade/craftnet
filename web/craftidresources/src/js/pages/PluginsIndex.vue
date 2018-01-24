@@ -56,7 +56,8 @@
 
         <div v-else class="card card-empty">
             <div class="card-body">
-                No plugins.
+                <div class="font-bold">No plugins</div>
+                <div>You haven’t created any plugins yet.</div>
             </div>
         </div>
     </div>

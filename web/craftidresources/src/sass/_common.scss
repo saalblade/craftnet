@@ -202,6 +202,7 @@ dl {
   }
 }
 
+
 /* Layout */
 
 .app {
@@ -225,10 +226,11 @@ dl {
   }
 }
 
+
 /* Header */
 
 .header {
-  @apply .flex .justify-between .bg-grey-lighter .px-8 .py-4 .w-full;
+  @apply .flex .justify-between .bg-grey-lighter .border .border-grey-light .px-8 .py-4 .w-full;
 
   .navbar-brand {
     @apply .text-xl .text-black;
@@ -420,6 +422,9 @@ dl {
 }
 
 .card-empty {
+  @apply .flex .items-center justify-center;
+  min-height: 500px;
+
   .card-body {
     @apply .text-center .text-grey-dark .py-8;
   }
