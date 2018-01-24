@@ -75,8 +75,6 @@ dl {
 .app {
   @apply .flex .flex-col .h-screen .mx-auto;
 
-  // .max-w-4xl
-
   .content {
     @apply .flex-1 .flex;
     overflow: hidden;
@@ -93,6 +91,28 @@ dl {
   }
 }
 
+@media (min-width: 576px) {
+
+  /*.app {
+    @apply .flex .flex-col .h-screen .mx-auto;
+
+    .content {
+      @apply .flex-1 .flex;
+      overflow: hidden;
+
+      #sidebar {
+        @apply .flex-1;
+        max-width: 240px;
+      }
+
+      .main {
+        @apply .flex-1 .p-6 .pl-0;
+        overflow: auto;
+      }
+    }
+  }*/
+}
+  // @media (min-width: 768px) {
 
 /* Header */
 
