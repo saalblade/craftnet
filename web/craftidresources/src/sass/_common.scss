@@ -135,7 +135,7 @@ dl {
 
     li {
       a {
-        @apply .block .text-grey-darker .px-0 .py-3 .rounded .no-underline;
+        @apply .block .text-grey-darker .px-0 .py-2 .rounded .no-underline;
 
         &:hover {
           @apply .text-black;
