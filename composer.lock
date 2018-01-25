@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "01b02442367797df71bc5fc9885535d0",
+    "content-hash": "24e3900b44dee2df9f8ef96a945fe58d",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -562,16 +562,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0-RC7",
+            "version": "3.0.0-RC7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "b592e1d16c36618399f03e5a565a30067dff57e4"
+                "reference": "f8c991cb01afce44cb0803749e84e776f1ce2d51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/b592e1d16c36618399f03e5a565a30067dff57e4",
-                "reference": "b592e1d16c36618399f03e5a565a30067dff57e4",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/f8c991cb01afce44cb0803749e84e776f1ce2d51",
+                "reference": "f8c991cb01afce44cb0803749e84e776f1ce2d51",
                 "shasum": ""
             },
             "require": {
@@ -612,6 +612,12 @@
                 "bower-asset/punycode": "1.3.*",
                 "bower-asset/yii2-pjax": "~2.0.1"
             },
+            "require-dev": {
+                "codeception/codeception": "~2.3.3",
+                "codeception/mockery-module": "~0.2.2",
+                "codeception/specify": "~0.4.6",
+                "codeception/verify": "~0.3.3"
+            },
             "suggest": {
                 "ext-iconv": "Adds support for more character encodings than PHP’s built-in mb_convert_encoding() function, which Craft will take advantage of when converting strings to UTF-8.",
                 "ext-imagick": "Adds support for more image processing formats and options.",
@@ -623,6 +629,7 @@
                     "craft\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "proprietary"
             ],
@@ -633,15 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "support": {
-                "email": "support@craftcms.com",
-                "issues": "https://github.com/craftcms/cms/issues?state=open",
-                "forum": "https://craftcms.stackexchange.com/",
-                "source": "https://github.com/craftcms/cms",
-                "docs": "https://github.com/craftcms/docs",
-                "rss": "https://github.com/craftcms/cms/releases.atom"
-            },
-            "time": "2018-01-23T21:16:12+00:00"
+            "time": "2018-01-24T23:47:15+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -2999,16 +2998,16 @@
         },
         {
             "name": "seld/jsonlint",
-            "version": "1.7.0",
+            "version": "1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/jsonlint.git",
-                "reference": "9b355654ea99460397b89c132b5c1087b6bf4473"
+                "reference": "d15f59a67ff805a44c50ea0516d2341740f81a38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/9b355654ea99460397b89c132b5c1087b6bf4473",
-                "reference": "9b355654ea99460397b89c132b5c1087b6bf4473",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/d15f59a67ff805a44c50ea0516d2341740f81a38",
+                "reference": "d15f59a67ff805a44c50ea0516d2341740f81a38",
                 "shasum": ""
             },
             "require": {
@@ -3044,7 +3043,7 @@
                 "parser",
                 "validator"
             ],
-            "time": "2018-01-03T12:13:57+00:00"
+            "time": "2018-01-24T12:46:19+00:00"
         },
         {
             "name": "seld/phar-utils",
