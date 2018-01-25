@@ -2,7 +2,7 @@
 	<form v-if="userDraft" @submit.prevent="save()">
 		<div class="card mb-3">
 			<div class="card-body">
-				<h4>Information</h4>
+				<h4>Informations</h4>
 
 				<text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
 				<text-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
