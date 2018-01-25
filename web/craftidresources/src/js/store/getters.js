@@ -32,6 +32,12 @@ export const currentUser = state => {
     }
 };
 
+export const upcomingInvoice = state => {
+    if(state.craftId) {
+        return state.craftId.upcomingInvoice;
+    }
+};
+
 export const invoices = state => {
     if(state.craftId) {
         return state.craftId.invoices;

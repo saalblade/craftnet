@@ -70,6 +70,7 @@ class CraftIdController extends BaseController
             'pluginLicenses' => $this->_pluginLicenses($currentUser),
             'customers' => $this->_customers($currentUser),
             'sales' => $this->_sales(),
+            'upcomingInvoice' => $this->_upcomingInvoice(),
             'invoices' => $this->_invoices(),
             'categories' => $this->_pluginCategories(),
         ];
@@ -225,6 +226,31 @@ class CraftIdController extends BaseController
                     'email' => 'ben@pixelandtonic.com',
                 ],
                 'date' => date('Y-m-d', strtotime('-1 year')),
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function _upcomingInvoice(): array
+    {
+        return [
+            'id' => 5,
+            'date' => date('Y-m-d'),
+            'paymentMethod' => [
+                'type' => 'visa',
+                'last4' => '2424',
+            ],
+            'items' => [
+                ['id' => 6, 'name' => 'Analytics', 'amount' => 29, 'type' => 'renewal'],
+                ['id' => 8, 'name' => 'Social', 'amount' => 99, 'type' => 'license']
+            ],
+            'total' => 128,
+            'customer' => [
+                'id' => 1,
+                'name' => 'Benjamin David',
+                'email' => 'ben@pixelandtonic.com',
             ],
         ];
     }

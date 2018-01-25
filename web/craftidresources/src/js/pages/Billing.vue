@@ -18,29 +18,17 @@
 
         <div class="card mb-3">
             <div class="card-body">
+                <h4>Upcoming Invoice</h4>
+
+                <invoices-table :invoices="[upcomingInvoice]" :upcoming="true"></invoices-table>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
                 <h4>Invoices</h4>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Payment Method</th>
-                        <th>Amount</th>
-                        <th>Receipt</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="invoice in invoices">
-                            <td>
-                                <router-link :to="'/account/billing/invoices/'+invoice.id">INV000{{ invoice.id }}</router-link>
-                            </td>
-                            <td>{{ invoice.date }}</td>
-                            <td>{{ invoice.paymentMethod.type }} ending with {{ invoice.paymentMethod.last4 }}</td>
-                            <td>{{ invoice.total|currency }}</td>
-                            <td><a href="#">Receipt</a></td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <invoices-table :invoices="invoices"></invoices-table>
             </div>
         </div>
     </div>
@@ -51,6 +39,8 @@
     import BillingPayment from '../components/BillingPayment'
     import BillingCoupon from '../components/BillingCoupon'
     import BillingInfos from '../components/BillingInfos'
+    import InvoicesTable from '../components/InvoicesTable'
+
 
     export default {
 
@@ -58,11 +48,13 @@
             BillingPayment,
             BillingCoupon,
             BillingInfos,
+            InvoicesTable,
         },
 
         computed: {
 
             ...mapGetters({
+                upcomingInvoice: 'upcomingInvoice',
                 invoices: 'invoices',
             }),
 

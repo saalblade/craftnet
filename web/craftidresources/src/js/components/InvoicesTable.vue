@@ -5,14 +5,17 @@
             <th>Invoice</th>
             <th>Amount</th>
             <th>Date</th>
+            <th v-if="!upcoming">Receipt</th>
         </tr>
         </thead>
         <tbody>
-            <tr v-for="invoice in invoices">
-                <td>#00000{{ invoice.id }}</td>
-                <td>{{ invoice.amount|currency }}</td>
-                <td>{{ invoice.date }}</td>
-            </tr>
+        <tr v-for="invoice in invoices">
+            <td v-if="!upcoming"><router-link :to="'/account/billing/invoices/'+invoice.id">INV000{{ invoice.id }}</router-link></td>
+            <td v-else>INV000{{ invoice.id }}</td>
+            <td>{{ invoice.total|currency }}</td>
+            <td>{{ invoice.date }}</td>
+            <td v-if="!upcoming"><a href="#">Receipt</a></td>
+        </tr>
         </tbody>
     </table>
 </template>
@@ -20,23 +23,7 @@
 <script>
     export default {
 
-        props: ['upcoming'],
-
-        computed: {
-
-            invoices() {
-                if(this.upcoming) {
-                    return [
-                        {id: 2, email: 'ben@pixelandtonic.com', amount: 299.00, date: '2018/05/11 11:25'}
-                    ]
-                }
-
-                return [
-                    {id: 1, email: 'ben@pixelandtonic.com', amount: 299.00, date: '2017/05/11 11:25'}
-                ]
-            }
-
-        }
+        props: ['upcoming', 'invoices'],
 
     }
 </script>
