@@ -3,7 +3,7 @@
         <!-- logout warning modal -->
         <modal :show.sync="showingLogoutWarningModal" :transition.sync="logoutWarningModalTransitionName" @after-enter="onAfterEnterLogoutWarningModal" class="auth-manager-modal">
             <template slot="body">
-                <i class="fa fa-warning"></i>
+                <i class="fas fa-exclamation-triangle"></i>
                 {{ logoutWarningPara }}
 
                 <div class="float-right mt-4">
@@ -16,7 +16,7 @@
         <!-- login modal -->
         <modal :show.sync="showingLoginModal" :transition.sync="loginModalTransitionName" @after-enter="onAfterEnterLoginModal" @leave="onLeaveLoginModal" class="auth-manager-modal">
             <template slot="body">
-                <i class="fa fa-warning"></i>
+                <i class="fas fa-exclamation-triangle"></i>
                 <form @submit.prevent="login">
                     <h6>Your session has ended</h6>
                     <p>Enter your password to log back in.</p>

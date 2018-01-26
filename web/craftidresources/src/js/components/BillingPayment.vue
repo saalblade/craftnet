@@ -8,7 +8,8 @@
             <div v-if="!editing" class="flex">
                 <div class="flex-1">
                     <p v-if="stripeCard">
-                        {{ stripeCard.brand }} •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
+                        <i :class="'fab text-secondary fa-cc-'+ stripeCard.brand.toLowerCase()"></i>
+                         •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
                     </p>
 
                     <p v-else>No credit card.</p>
@@ -16,7 +17,7 @@
 
                 <div class="float-right">
                     <p>
-                        <button @click="editing = true" type="button" class="btn btn-blue btn-sm" data-facebox="#billing-contact-info-modal">
+                        <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
                             <i class="fa fa-plus"></i>
                             New Card
                         </button>
@@ -24,11 +25,11 @@
 
                     <p v-if="stripeCard">
                         <button @click="removeCard()" class="btn btn-sm btn-outline-danger">
-                            <i class="fa fa-remove"></i>
+                            <i class="fas fa-times"></i>
                             Remove
                         </button>
 
-                    <div v-if="removeCardLoading" class="spinner"></div>
+                        <div v-if="removeCardLoading" class="spinner"></div>
                     </p>
                 </div>
             </div>

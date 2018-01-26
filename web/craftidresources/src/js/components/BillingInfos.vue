@@ -20,7 +20,7 @@
 
 			<div>
 				<button @click="editInvoiceDetails()" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
-					<i class="fa fa-pencil"></i>
+					<i class="fas fa-pencil-alt"></i>
 					Change information
 				</button>
 			</div>

@@ -199,7 +199,7 @@ dl {
 }
 
 .alert {
-  @apply .p-4 .mb-6 .bg-grey-lightest .text-grey-darker .border .border-grey-light .rounded;
+  @apply .p-4 .mb-6 .bg-grey-light .text-grey-darker .border .border-grey .rounded;
 }
 
 .img-thumbnail {
@@ -227,6 +227,9 @@ dl {
   color: #8f98a3;
 }
 
+.text-secondary {
+  @apply .text-grey-dark;
+}
 
 /* Notifications */
 
@@ -360,10 +363,13 @@ dl {
 
 .btn-outline-red,
 .btn-outline-danger {
-  @apply .border .border-red .text-red .bg-white;
+  @apply .text-red .bg-white;
+  box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 1px rgba(0, 0, 0, 0.1);
+  transition: all 0.1s ease-in;
 
   &:hover {
-    @apply .bg-red .text-white;
+    @apply .text-red-dark;
+    box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 5px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -384,8 +390,7 @@ dl {
     @apply .bg-red-dark .text-white;
   }
 }
-.btn-grey,
-.btn-secondary {
+.btn-grey {
   @apply .bg-grey-dark .text-white;
 
   &:hover {
@@ -393,6 +398,16 @@ dl {
   }
 }
 
+.btn-secondary {
+  @apply .bg-white .text-grey-darker;
+  box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 1px rgba(0, 0, 0, 0.2);
+  transition: all 0.1s ease-in;
+
+  &:hover {
+    @apply .text-black;
+    box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 5px rgba(0, 0, 0, 0.3);
+  }
+}
 
 /* Badges */
 

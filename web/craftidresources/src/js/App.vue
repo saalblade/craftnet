@@ -35,7 +35,7 @@
                                 <h5>Account</h5>
                                 <ul>
                                     <li><router-link to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
-                                    <li><router-link to="/account/billing"><i class="fa fa-file-text-o"></i> Billing</router-link></li>
+                                    <li><router-link to="/account/billing"><i class="fa fa-file-alt"></i> Billing</router-link></li>
                                     <li><router-link to="/account/profile"><i class="fa fa-link"></i> Profile</router-link></li>
                                     <li><router-link to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
                                 </ul>
@@ -44,7 +44,7 @@
                                     <h5>Developer</h5>
                                     <ul>
                                         <li><router-link to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
-                                        <li><router-link to="/developer/sales"><i class="fa fa-dollar"></i> Sales</router-link></li>
+                                        <li><router-link to="/developer/sales"><i class="fa fa-dollar-sign"></i> Sales</router-link></li>
                                     </ul>
                                 </template>
 
