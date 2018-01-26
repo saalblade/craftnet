@@ -76,23 +76,56 @@ dl {
   @apply .flex .flex-col .h-screen .mx-auto;
 
   .content {
-    @apply .flex-1 .flex;
+    @apply .flex-1 .flex .flex-col;
     overflow: hidden;
 
     #sidebar {
       @apply .flex-1;
-      max-width: 240px;
+
+      &:not(.showing-sidebar) {
+        @apply .hidden;
+      }
     }
 
     .main {
-      @apply .flex-1 .p-6 .pl-0;
+      @apply .flex-1 .p-6;
       overflow: auto;
     }
   }
 }
 
-@media (min-width: 576px) {
+@media (max-width: 768px) {
+  .app {
+    .content {
+      #sidebar {
+        @apply .bg-grey-lightest .pin-l .pin-r .pin-b;
+        top: 64px;
+        position: fixed;
+        z-index: 1;
+      }
+    }
+  }
+}
 
+@media (min-width: 768px) {
+
+  .app {
+    .content {
+      @apply .flex-row;
+
+      #sidebar {
+        max-width: 240px;
+
+        &:not(.showing-sidebar) {
+          @apply .block;
+        }
+      }
+
+      .main {
+        @apply .pl-0;
+      }
+    }
+  }
   /*.app {
     @apply .flex .flex-col .h-screen .mx-auto;
 
