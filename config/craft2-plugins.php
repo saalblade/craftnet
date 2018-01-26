@@ -46,6 +46,14 @@ return [
         'statusColor' => 'red',
         'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
     ],
+    'Calendars' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Solspace Calendar](https://solspace.com/craft/calendar/) could be used instead.'
+    ],
+    'Charge' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development.'
+    ],
     'CodeBlock' => [
         'statusColor' => 'red',
         'status' => 'Discontinued (use [Simple Text](https://github.com/craftcms/simple-text) instead)'
@@ -64,6 +72,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
+    'Entitle' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/casing.html#apTitleize) could be used instead.'
+    ],
     'EntriesSubset' => [
         'handle' => 'entriessubset'
     ],
@@ -73,7 +85,7 @@ return [
     ],
     'Hacksaw' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead'
+        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/truncation.html#hacksaw) or [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead.'
     ],
     'Help' => [
         'statusColor' => 'orange',
@@ -81,19 +93,27 @@ return [
     ],
     'Hue' => [
         'statusColor' => 'red',
-        'status' => 'Unnecessary thanks to [Color field improvements](https://github.com/craftcms/cms/issues/2059)'
+        'status' => 'Unnecessary thanks to [Color field improvements](https://github.com/craftcms/cms/issues/2059).'
     ],
     'Imager' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [ImageOptimize](https://github.com/nystudio107/craft3-imageoptimize) or [Imgix](https://github.com/sjelfull/craft3-imgix) could be used instead'
     ],
     'Inflect' => [
-        'statusColor' => 'red',
-        'status' => 'Discontinued (see the [readme](https://github.com/lukeholder/craft-inflect/blob/master/readme.md#craft-2-only) for upgrade guidance)'
+        'statusColor' => 'orange',
+        'status' => '[Discontinued](https://github.com/lukeholder/craft-inflect/blob/master/readme.md#craft-2-only), but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
+    ],
+    'Inflector' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
     ],
     'LanguageLink' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
+    ],
+    'Maps' => [
+        'statusColor' => 'orange',
+        'status' => 'Craft 3 upgrade path will be available via [Smart Map](https://www.doublesecretagency.com/plugins/smart-map).'
     ],
     'MnBreakAndContinue' => [
         'handle' => 'twig-perversion'
@@ -112,6 +132,14 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
     ],
+    'Printmaker' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development.'
+    ],
+    'ReadTime' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/statistics.html#readTime) could be used instead.'
+    ],
     'RedactorExtras' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but the new [Redactor](https://github.com/craftcms/redactor) plugin makes it easy to include Redactor plugins without a Craft plugin.'
@@ -124,9 +152,17 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Redirect Manager](https://github.com/Dolphiq/craft3-plugin-redirect) could be used instead'
     ],
+    'Scraper' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development.'
+    ],
     'SearchPlus' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Scout](https://github.com/Rias500/craft3-scout) could be used instead'
+        'status' => 'Currently in development.'
+    ],
+    'Shortlist' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development.'
     ],
     'SimpleMap' => [
         'handle' => 'simplemap',
@@ -134,6 +170,10 @@ return [
     'SmartMap' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
+    ],
+    'SmartyPants' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/typography.html#smartypants) could be used instead.'
     ],
     'Sitemap' => [
         'handle' => 'sitemap-tmp',
@@ -144,6 +184,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [NSM Fields](https://github.com/newism/craft3-fields) could be used instead'
     ],
+    'SquareBitMaps' => [
+        'statusColor' => 'orange',
+        'status' => 'Craft 3 upgrade path will be available via [Smart Map](https://www.doublesecretagency.com/plugins/smart-map).'
+    ],
     'StarRatings' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
@@ -151,5 +195,10 @@ return [
     'Upvote' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
+    ],
+    'Widont' => [
+        'handle' => 'widontextension',
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/typography.html#widont) could be used instead.'
     ],
 ];
