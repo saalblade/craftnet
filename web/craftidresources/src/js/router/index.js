@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Profile from '../pages/Profile'
 import Billing from '../pages/Billing'
 import BillingInvoiceDetails from '../pages/BillingInvoiceDetails'
-import Licenses from '../pages/Licenses'
 import LicensesClaim from '../pages/LicensesClaim'
 import LicensesCraft from '../pages/LicensesCraft'
 import LicensesCraftDetails from '../pages/LicensesCraftDetails'
@@ -12,7 +11,6 @@ import LicensesPluginsDetails from '../pages/LicensesPluginsDetails'
 import LicensesRenew from '../pages/LicensesRenew'
 import Sales from '../pages/Sales'
 import SalesDetails from '../pages/SalesDetails'
-import Plugins from '../pages/Plugins'
 import PluginsEdit from '../pages/PluginsEdit'
 import PluginsIndex from '../pages/PluginsIndex'
 import Settings from '../pages/Settings'
@@ -22,46 +20,39 @@ Vue.use(VueRouter);
 const router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
+    canReuse: false,
     routes: [
         {
             path: '/',
-            redirect: '/account',
+            redirect: '/account/licenses',
         },
         {
             path: '/account',
-            redirect: '/developer/plugins',
+            redirect: '/account/billing',
         },
         {
-            path: '/account/licenses',
-            name: 'Licenses',
-            component: Licenses,
-            redirect: '/account/licenses/craft',
-            children: [
-                {
-                    path: 'craft',
-                    component: LicensesCraft,
-                },
-                {
-                    path: 'craft/:id',
-                    component: LicensesCraftDetails
-                },
-                {
-                    path: 'plugins',
-                    component: LicensesPlugins
-                },
-                {
-                    path: 'plugins/:id',
-                    component: LicensesPluginsDetails
-                },
-                {
-                    path: 'claim',
-                    component: LicensesClaim
-                },
-                {
-                    path: 'renew',
-                    component: LicensesRenew
-                }
-            ],
+            path: '/account/licenses/craft',
+            component: LicensesCraft,
+        },
+        {
+            path: '/account/licenses/craft/:id',
+            component: LicensesCraftDetails
+        },
+        {
+            path: '/account/licenses/plugins',
+            component: LicensesPlugins
+        },
+        {
+            path: '/account/licenses/plugins/:id',
+            component: LicensesPluginsDetails
+        },
+        {
+            path: '/account/licenses/claim',
+            component: LicensesClaim
+        },
+        {
+            path: '/account/licenses/renew',
+            component: LicensesRenew
         },
         {
             path: '/account/billing',
@@ -84,25 +75,22 @@ const router = new VueRouter({
             component: Settings
         },
         {
+            path: '/developer',
+            redirect: '/developer/plugins',
+        },
+        {
             path: '/developer/plugins',
-            component: Plugins,
-            children: [
-                {
-                    path: '',
-                    name: 'Plugins',
-                    component: PluginsIndex
-                },
-                {
-                    path: 'submit',
-                    component: PluginsEdit,
-                },
-                {
-                    path: ':id',
-                    name: 'PluginsEdit',
-                    component: PluginsEdit,
-                }
-
-            ]
+            name: 'Plugins',
+            component: PluginsIndex
+        },
+        {
+            path: '/developer/add-plugin',
+            component: PluginsEdit,
+        },
+        {
+            path: '/developer/plugins/:id',
+            name: 'PluginsEdit',
+            component: PluginsEdit,
         },
         {
             path: '/developer/sales',

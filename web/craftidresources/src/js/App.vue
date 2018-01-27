@@ -21,7 +21,7 @@
             <div class="app">
                 <div class="header">
                     <div class="actions-left">
-                        <a href="#" @click.prevent="toggleSidebar()">=</a>
+                        <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()"><i class="fas fa-bars"></i></a>
                     </div>
                     <router-link class="navbar-brand" to="/">Craft ID</router-link>
 
@@ -37,28 +37,35 @@
 
                         <div class="sidenav">
                             <template v-if="userIsInGroup('staff')">
-                                <h5>Account</h5>
+                                <h5><router-link @click.native="closeSidebar()" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></h5>
                                 <ul>
-                                    <li><router-link @click.native="closeSidebar()" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
-                                    <li><router-link @click.native="closeSidebar()" to="/account/billing"><i class="fa fa-file-alt"></i> Billing</router-link></li>
-                                    <li><router-link @click.native="closeSidebar()" to="/account/profile"><i class="fa fa-link"></i> Profile</router-link></li>
-                                    <li><router-link @click.native="closeSidebar()" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/licenses/craft">Craft CMS</router-link></li>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
+                                </ul>
+
+                                <h5><router-link @click.native="closeSidebar()" to="/account"><i class="fas fa-user"></i> Account</router-link></h5>
+                                <ul>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
                                 </ul>
 
                                 <template v-if="userIsInGroup('developers')">
-                                    <h5>Developer</h5>
+                                    <h5><router-link @click.native="closeSidebar()" to="/developer"><i class="fa fa-plug"></i> Developer</router-link></h5>
                                     <ul>
-                                        <li><router-link @click.native="closeSidebar()" to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
-                                        <li><router-link @click.native="closeSidebar()" to="/developer/sales"><i class="fa fa-dollar-sign"></i> Sales</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/developer/add-plugin">Add a plugin</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
                                     </ul>
                                 </template>
 
                                 <template v-if="currentUser.enableShowcaseFeatures">
-                                    <h5>Showcase</h5>
+                                    <h5><a class="disabled" href="#"><i class="fa fa-image"></i> Showcase</a></h5>
                                     <ul>
-                                        <li><a class="disabled" href="#"><i class="fa fa-heart"></i> Activity</a></li>
-                                        <li><a class="disabled" href="#"><i class="fa fa-image"></i> Projects</a></li>
-                                        <li><a class="disabled" href="#"><i class="fa fa-industry"></i> Agency Profile</a></li>
+                                        <li><a class="disabled" href="#">Activity</a></li>
+                                        <li><a class="disabled" href="#">Projects</a></li>
+                                        <li><a class="disabled" href="#">Agency Profile</a></li>
                                     </ul>
                                 </template>
                             </template>
@@ -75,7 +82,7 @@
                     </div>
 
                     <div class="main">
-                        <router-view></router-view>
+                        <router-view :key="$route.path"></router-view>
                     </div>
                 </div>
             </div>
