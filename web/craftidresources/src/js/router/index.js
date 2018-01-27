@@ -31,6 +31,10 @@ const router = new VueRouter({
             redirect: '/account/billing',
         },
         {
+            path: '/account/licenses',
+            redirect: '/account/licenses/craft',
+        },
+        {
             path: '/account/licenses/craft',
             component: LicensesCraft,
         },
