@@ -22,13 +22,13 @@
             <div class="card-body">
                 <h5>Unlock license</h5>
                 <p>Unlock this license to make it ready for transfer to another domain.</p>
-                <div><a class="btn btn-outline-danger" href="#">Unlock License</a></div>
+                <div><a class="btn btn-danger" href="#">Unlock License</a></div>
 
                 <hr>
 
                 <h5>Transfer ownership</h5>
                 <p>Transfer this license to another Craft ID.</p>
-                <div><a class="btn btn-outline-danger" href="#">Transfer License</a></div>
+                <div><a class="btn btn-danger" href="#">Transfer License</a></div>
             </div>
         </div>
     </div>

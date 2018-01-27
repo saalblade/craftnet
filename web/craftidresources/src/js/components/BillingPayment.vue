@@ -24,7 +24,7 @@
                     </p>
 
                     <p v-if="stripeCard">
-                        <button @click="removeCard()" class="btn btn-sm btn-outline-danger">
+                        <button @click="removeCard()" class="btn btn-sm btn-danger">
                             <i class="fas fa-times"></i>
                             Remove
                         </button>

@@ -24,7 +24,7 @@
 								<input type="button" class="btn btn-secondary" value="Change Photo" @click="changePhoto" :disabled="photoLoading" />
 							</div>
 							<div class="form-group">
-								<input type="button" class="btn btn-danger" value="Delete" @click="deletePhoto" :disabled="photoLoading" />
+								<a href="#" class="btn btn-danger" @click.prevent="deletePhoto" :disabled="photoLoading"><i class="fas fa-times"></i> Delete</a>
 							</div>
 						</template>
 						<template v-else>

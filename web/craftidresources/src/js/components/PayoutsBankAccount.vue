@@ -33,7 +33,7 @@
                         </dl>
                     </div>
 
-                    <button type="button" class="btn btn-secondary btn-sm" @click="disconnect()">Remove Stripe account</button> <div v-if="disconnectLoading" class="spinner"></div>
+                    <button type="button" class="btn btn-danger btn-sm" @click="disconnect()">Remove Stripe account</button> <div v-if="disconnectLoading" class="spinner"></div>
 
                 </template>
 
