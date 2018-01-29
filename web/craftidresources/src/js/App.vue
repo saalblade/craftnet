@@ -19,16 +19,18 @@
 
         <template v-else>
             <div class="app">
-                <div class="header">
-                    <div class="actions-left">
-                        <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()"><i class="fas fa-bars"></i></a>
-                    </div>
-                    <router-link class="navbar-brand" to="/">Craft ID</router-link>
+                <div class="header-container">
+                    <div class="header">
+                        <div class="actions-left">
+                            <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()"><i class="fas fa-bars"></i></a>
+                        </div>
+                        <router-link class="navbar-brand" to="/">Craft ID</router-link>
 
-                    <div class="actions-right">
-                        <ul>
-                            <li><a href="/logout">Logout</a></li>
-                        </ul>
+                        <div class="actions-right">
+                            <ul>
+                                <li><a href="/logout">Logout</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
