@@ -57,6 +57,7 @@
                                         <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/developer/add-plugin">Add a plugin</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
                                     </ul>
                                 </template>
 

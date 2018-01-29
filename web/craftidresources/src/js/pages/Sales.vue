@@ -1,7 +1,6 @@
 <template>
     <div>
         <h1>Sales</h1>
-        <payouts-bank-account></payouts-bank-account>
 
         <div class="card">
             <div class="card-body">
@@ -40,14 +39,9 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import PayoutsBankAccount from '../components/PayoutsBankAccount'
 
     export default {
-
-        components: {
-            PayoutsBankAccount
-        },
-
+        
         data () {
             return {
                 searchQuery: '',

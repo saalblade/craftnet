@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Renew Licenses</h1>
-        
+
         <div class="card">
             <div class="card-body">
                 <p>Renew your licenses for another year of great updates.</p>

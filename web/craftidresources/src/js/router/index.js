@@ -14,6 +14,7 @@ import SalesDetails from '../pages/SalesDetails'
 import PluginsEdit from '../pages/PluginsEdit'
 import PluginsIndex from '../pages/PluginsIndex'
 import Settings from '../pages/Settings'
+import DeveloperSettings from '../pages/DeveloperSettings'
 
 Vue.use(VueRouter);
 
@@ -105,7 +106,12 @@ const router = new VueRouter({
             path: '/developer/sales/:id',
             name: 'SalesDetails',
             component: SalesDetails,
-        }
+        },
+        {
+            path: '/developer/settings',
+            name: 'DeveloperSettings',
+            component: DeveloperSettings
+        },
     ]
 });
 
