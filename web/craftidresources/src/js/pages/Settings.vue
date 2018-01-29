@@ -1,5 +1,6 @@
 <template>
     <form v-if="userDraft" @submit.prevent="save()">
+        <h1>Settings</h1>
         <connected-apps title="Connected Apps"></connected-apps>
 
         <div class="card mb-3">

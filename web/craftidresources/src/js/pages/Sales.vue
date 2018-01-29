@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1>Sales</h1>
         <payouts-bank-account></payouts-bank-account>
 
         <div class="card">

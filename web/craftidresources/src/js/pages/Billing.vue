@@ -1,5 +1,7 @@
 <template>
     <div>
+        <h1>Billing</h1>
+
         <div class="card mb-3">
             <div class="card-body">
                 <billing-payment></billing-payment>

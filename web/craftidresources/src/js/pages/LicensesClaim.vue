@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1>Claim license</h1>
         <div class="card">
             <div class="card-body">
                 <p>Attach Craft CMS and plugin licenses to your Craft ID account</p>

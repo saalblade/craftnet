@@ -1,5 +1,7 @@
 <template>
 	<form v-if="userDraft" @submit.prevent="save()">
+		<h1>Profile</h1>
+
 		<div class="card mb-3">
 			<div class="card-body">
 				<h4>Informations</h4>

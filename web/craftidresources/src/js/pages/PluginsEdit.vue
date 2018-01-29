@@ -1,6 +1,8 @@
 <template>
     <div class="mb-3">
         <template v-if="!pluginId && !this.pluginDraft.repository">
+            <h1>Add a plugin</h1>
+
             <div class="card">
                 <div class="card-body">
                     <template v-if="connectedAppsCount > 0">
@@ -26,6 +28,8 @@
         </template>
 
         <template v-else>
+            <h1><router-link class="nav-link" to="/developer/plugins" exact>Plugins</router-link> / {{ plugin.name }}</h1>
+
             <div v-if="plugin && !plugin.enabled" role="alert" class="alert alert-secondary">
                 <template v-if="plugin.pendingApproval">
                     Your plugin is being reviewed, it will be automatically published once it’s approved.

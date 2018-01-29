@@ -15,6 +15,18 @@ a {
   }
 }
 
+h1 {
+  @apply .text-2xl .mb-4 .text-grey-darkest;
+
+  a {
+    @apply .text-grey;
+
+    &:hover {
+      @apply .text-grey-darker .no-underline;
+    }
+  }
+}
+
 h4 {
   @apply .text-xl .mb-2;
 }

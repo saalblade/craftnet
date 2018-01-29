@@ -1,7 +1,7 @@
 <template>
 	<div>
+		<h1><router-link class="nav-link" to="/account/billing" exact>Billing</router-link> / #INV000{{ invoice.id }}</h1>
 
-		<p><router-link class="nav-link" to="/account/billing" exact>← Back to billing</router-link></p>
 
 		<div class="card">
 			<div class="card-body">

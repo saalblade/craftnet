@@ -1,5 +1,7 @@
 <template>
     <div>
+        <h1><router-link class="nav-link" to="/account/licenses/plugins" exact>Plugins</router-link> / #LIC000{{license.id}}</h1>
+
         <license-details :license="license"></license-details>
 
         <div class="card mb-3">

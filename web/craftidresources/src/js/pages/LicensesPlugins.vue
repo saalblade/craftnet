@@ -1,5 +1,7 @@
 <template>
     <div>
+        <h1>Plugins</h1>
+
         <license-renew-alert></license-renew-alert>
 
         <div v-if="pluginLicenses.length > 0" class="card card-table">

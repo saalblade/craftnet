@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1>Craft CMS</h1>
         <license-renew-alert></license-renew-alert>
 
         <div v-if="craftLicenses.length > 0" class="card card-table">
