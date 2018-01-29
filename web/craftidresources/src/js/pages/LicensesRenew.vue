@@ -1,11 +1,12 @@
 <template>
     <div>
+        <h1>Renew Licenses</h1>
+
+
         <div class="card">
             <div class="card-body">
-                <div class="text-center mt-1 mb-4">
-                    <h3>Renew Licenses</h3>
-                    <p class="text-secondary">Renew your licenses for another year of great updates.</p>
-                </div>
+
+                <p>Renew your licenses for another year of great updates.</p>
 
                 <table class="table">
                     <thead>
