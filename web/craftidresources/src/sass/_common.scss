@@ -282,11 +282,11 @@ dl {
 }
 
 .alert {
-  @apply .p-4 .mb-6 .bg-grey-light .text-grey-darker .border .border-grey .rounded;
+  @apply .p-4 .mb-6 .rounded .border .border-grey .bg-grey-light .text-grey-darker;
 }
 
 .alert-warning {
-  @apply .bg-orange-lighter .text-orange-darker .border-orange-light .text-orange-darker;
+  @apply .bg-orange-lighter .border-orange-light .text-orange-darker;
 }
 
 .img-thumbnail {
@@ -317,6 +317,7 @@ dl {
 .text-secondary {
   @apply .text-grey-dark;
 }
+
 
 /* Notifications */
 
