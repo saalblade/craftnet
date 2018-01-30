@@ -85,7 +85,7 @@ dl {
 /* Layout */
 
 .app {
-  @apply .flex .flex-col .h-screen;
+  @apply .fixed .pin .flex .flex-col;
 
   .header-container {
     .header {
