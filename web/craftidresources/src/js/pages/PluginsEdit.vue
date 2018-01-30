@@ -6,7 +6,6 @@
             <div class="card">
                 <div class="card-body">
                     <template v-if="connectedAppsCount > 0">
-                        <h2>Add a new plugin</h2>
                         <p>To get started, select a repository for your plugin.</p>
 
                         <div v-for="app, appHandle in apps" class="mb-3">

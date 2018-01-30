@@ -14,7 +14,6 @@
                     <th>Plugin Licenses</th>
                 </template>
 
-
                 <th>Domain</th>
                 <th>Next Payment</th>
                 <th>Auto Renew</th>
@@ -27,7 +26,6 @@
 
                     <template v-if="type == 'plugins'">
                         <td>{{ license.plugin.name }}</td>
-
                         <td>
                             <template v-if="license.craftLicense">
                                 <a href="#">000000{{ license.craftLicense.id }}</a>
@@ -45,9 +43,7 @@
                     </template>
 
                     <td>{{ license.domain }}</td>
-
                     <td>November 16th, 2017</td>
-
                     <td>
                         <span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
                         <span v-else="" class="badge badge-secondary">Disabled</span>
@@ -61,8 +57,6 @@
 
 
 <script>
-    import { mapGetters } from 'vuex'
-
     export default {
 
         props: ['type', 'licenses']
