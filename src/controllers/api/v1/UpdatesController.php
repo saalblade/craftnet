@@ -144,6 +144,8 @@ class UpdatesController extends BaseApiController
     private function _releases(string $name, string $fromVersion): array
     {
         $packageManager = $this->module->getPackageManager();
+        $vp = new VersionParser();
+        $fromVersion = $vp->normalize($fromVersion);
         $minStability = VersionParser::parseStability($fromVersion);
         $versions = $packageManager->getVersionsAfter($name, $fromVersion, $minStability);
 
@@ -157,7 +159,6 @@ class UpdatesController extends BaseApiController
 
         // Prep the release info
         $releaseInfo = [];
-        $vp = new VersionParser();
         foreach ($versions as $version) {
             $normalizedVersion = $vp->normalize($version);
             $releaseInfo[$normalizedVersion] = (object)[
