@@ -29,7 +29,7 @@
         <template v-else>
             <h1><router-link class="nav-link" to="/developer/plugins" exact>Plugins</router-link> / {{ plugin.name }}</h1>
 
-            <div v-if="plugin && !plugin.enabled" role="alert" class="alert alert-secondary">
+            <div v-if="plugin && !plugin.enabled" role="alert" class="alert alert-info">
                 <template v-if="plugin.pendingApproval">
                     Your plugin is being reviewed, it will be automatically published once it’s approved.
                 </template>

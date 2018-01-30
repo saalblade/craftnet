@@ -285,6 +285,10 @@ dl {
   @apply .p-4 .mb-6 .rounded .border .border-grey .bg-grey-light .text-grey-darker;
 }
 
+.alert-info {
+  @apply .bg-blue-lighter .border-blue-light .text-blue-darker;
+}
+
 .alert-warning {
   @apply .bg-orange-lighter .border-orange-light .text-orange-darker;
 }
