@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Plugins</h1>
-        <div v-if="plugins.length > 0" class="card card-table">
+        <div v-if="plugins.length > 0" class="card card-table table-responsive">
             <table class="table">
                 <thead>
                 <tr>

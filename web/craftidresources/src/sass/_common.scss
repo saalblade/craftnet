@@ -255,6 +255,10 @@ dl {
 
 /* Classes */
 
+.table-responsive {
+  overflow-x: auto;
+}
+
 .table {
   border-collapse: collapse;
 
