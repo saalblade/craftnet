@@ -1,6 +1,9 @@
 <template>
     <div>
         <h1>Plugins</h1>
+
+        <bank-account-alert></bank-account-alert>
+
         <div v-if="plugins.length > 0" class="card card-table table-responsive">
             <table class="table">
                 <thead>
@@ -65,7 +68,13 @@
 </template>
 
 <script>
+    import BankAccountAlert from '../components/BankAccountAlert'
+
     export default {
+
+        components: {
+            BankAccountAlert
+        },
 
         data () {
             return {

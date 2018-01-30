@@ -2,6 +2,8 @@
     <div>
         <h1>Sales</h1>
 
+        <bank-account-alert></bank-account-alert>
+
         <div class="card">
             <div class="card-body">
                 <div class="form-group">
@@ -39,8 +41,13 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import BankAccountAlert from '../components/BankAccountAlert'
 
     export default {
+
+        components: {
+            BankAccountAlert
+        },
 
         data () {
             return {
