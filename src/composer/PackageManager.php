@@ -292,13 +292,14 @@ class PackageManager extends Component
     }
 
     /**
-     * Sorts a given list of versions from oldest => newest
+     * Sorts a given list of versions.
      *
      * @param string[]|PackageRelease[] &$versions
+     * @param int $dir The sort direction (SORT_ASC = oldest -> newest; SORT_DESC = newest -> oldest)
      */
-    private function _sortVersions(array &$versions)
+    private function _sortVersions(array &$versions, int $dir = SORT_ASC)
     {
-        usort($versions, function($a, $b): int {
+        usort($versions, function($a, $b) use ($dir): int {
             if ($a instanceof PackageRelease) {
                 $a = $a->version;
             }
@@ -309,7 +310,10 @@ class PackageManager extends Component
             if (Comparator::equalTo($a, $b)) {
                 return 0;
             }
-            return Comparator::lessThan($a, $b) ? -1 : 1;
+            if (Comparator::lessThan($a, $b)) {
+                return $dir === SORT_ASC ? -1 : 1;
+            }
+            return $dir === SORT_ASC ? 1 : -1;
         });
     }
 
@@ -754,15 +758,7 @@ class PackageManager extends Component
             }
 
             // Sort by newest => oldest
-            usort($newVersions, function(string $version1, string $version2): int {
-                if (Comparator::lessThan($version1, $version2)) {
-                    return 1;
-                }
-                if (Comparator::equalTo($version1, $version2)) {
-                    return 0;
-                }
-                return -1;
-            });
+            $this->_sortVersions($newVersions, SORT_DESC);
 
             $packageDeps = [];
             $latestVersion = null;
