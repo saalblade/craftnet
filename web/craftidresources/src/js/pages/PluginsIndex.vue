@@ -4,7 +4,7 @@
 
         <bank-account-alert></bank-account-alert>
 
-        <div v-if="plugins.length > 0" class="card card-table table-responsive">
+        <div v-if="plugins.length > 0" class="card card-table responsive-content">
             <table class="table">
                 <thead>
                 <tr>

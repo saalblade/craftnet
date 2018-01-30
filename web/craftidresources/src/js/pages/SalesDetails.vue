@@ -9,28 +9,30 @@
 
                 <hr>
 
-                <div class="flex">
-                    <div class=w-1/2>
-                        <dl>
-                            <dt>Item</dt>
-                            <dd>{{ sale.plugin.name }}</dd>
-                            <dt>Type</dt>
-                            <dd>{{ sale.type }}</dd>
-                            <dt>Gross Amount</dt>
-                            <dd>{{ sale.grossAmount|currency }}</dd>
-                            <dt>Net Amount</dt>
-                            <dd>{{ sale.netAmount|currency }}</dd>
-                        </dl>
-                    </div>
-                    <div class=w-1/2>
-                        <dl>
-                            <dt>Sale ID</dt>
-                            <dd>#SAL000{{ sale.id }}</dd>
-                            <dt>Customer</dt>
-                            <dd><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></dd>
-                            <dt>Date</dt>
-                            <dd>{{ sale.date }}</dd>
-                        </dl>
+                <div class="responsive-content">
+                    <div class="flex">
+                        <div class=w-1/2>
+                            <dl>
+                                <dt>Item</dt>
+                                <dd>{{ sale.plugin.name }}</dd>
+                                <dt>Type</dt>
+                                <dd>{{ sale.type }}</dd>
+                                <dt>Gross Amount</dt>
+                                <dd>{{ sale.grossAmount|currency }}</dd>
+                                <dt>Net Amount</dt>
+                                <dd>{{ sale.netAmount|currency }}</dd>
+                            </dl>
+                        </div>
+                        <div class=w-1/2>
+                            <dl>
+                                <dt>Sale ID</dt>
+                                <dd>#SAL000{{ sale.id }}</dd>
+                                <dt>Customer</dt>
+                                <dd><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></dd>
+                                <dt>Date</dt>
+                                <dd>{{ sale.date }}</dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
