@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!stripeAccount" class="alert alert-warning" role="alert">
+	<div v-if="!$root.stripeAccountLoading && !stripeAccount" class="alert alert-warning" role="alert">
 		<strong>Bank account missing.</strong>
 		Define a bank account in the <router-link to="/developer/settings">developer settings</router-link>.
 	</div>
