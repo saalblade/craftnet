@@ -1,6 +1,11 @@
 <template>
     <div>
-        <h1>Plugins</h1>
+        <div class="flex justify-between mb-2">
+            <h1>Plugins</h1>
+            <div>
+                <router-link to="/developer/add-plugin" class="btn btn-primary">Add a plugin</router-link>
+            </div>
+        </div>
 
         <bank-account-alert></bank-account-alert>
 

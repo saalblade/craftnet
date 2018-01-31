@@ -1,6 +1,7 @@
 <template>
     <div class="mb-3">
         <template v-if="!pluginId && !this.pluginDraft.repository">
+            <p><router-link class="nav-link" to="/developer/plugins" exact>← Plugins</router-link></p>
             <h1>Add a plugin</h1>
 
             <div class="card">
@@ -27,7 +28,9 @@
         </template>
 
         <template v-else>
-            <h1><router-link class="nav-link" to="/developer/plugins" exact>Plugins</router-link> / {{ plugin.name }}</h1>
+            <p><router-link class="nav-link" to="/developer/plugins" exact>← Plugins</router-link></p>
+
+            <h1>{{ plugin.name }}</h1>
 
             <div v-if="plugin && !plugin.enabled" role="alert" class="alert alert-info">
                 <template v-if="plugin.pendingApproval">
