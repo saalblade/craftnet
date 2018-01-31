@@ -39,7 +39,7 @@
                 </template>
 
                 <template v-else>
-                    <p class="text-secondary">Connect to your Stripe account to receive money on your bank account.</p>
+                    <p class="text-secondary">Connect your Stripe account to receive money on your bank account.</p>
 
                     <a class="btn btn-primary" :href="stripeConnectUrl">Connect to Stripe</a>
                 </template>
