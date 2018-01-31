@@ -64,6 +64,9 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
                 $release->invalidate("version mismatch -- config says {$config['version']}; tag says {$release->version}");
                 return false;
             }
+
+            // Use the composer.json version value, in case it differs from the tag name
+            $release->version = $config['version'];
         }
 
         if (isset($config['description'])) {
