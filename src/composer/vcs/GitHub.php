@@ -11,6 +11,7 @@ use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
 use Github\ResultPager;
+use yii\base\InvalidParamException;
 
 /**
  * @property array $versions
@@ -82,11 +83,19 @@ class GitHub extends BaseVcs
         $api = $this->client->repos();
         try {
             $response = $api->contents()->show($this->owner, $this->repo, 'composer.json', $release->sha);
-            $config = Json::decode(base64_decode($response['content']));
         } catch (RuntimeException $e) {
             Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to error loading composer.json: {$e->getMessage()}", __METHOD__);
             Craft::$app->getErrorHandler()->logException($e);
             $release->invalidate("error loading composer.json: {$e->getMessage()}");
+            return;
+        }
+
+        try {
+            $config = Json::decode(base64_decode($response['content']));
+        } catch (InvalidParamException $e) {
+            Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to error decoding composer.json: {$e->getMessage()}", __METHOD__);
+            Craft::$app->getErrorHandler()->logException($e);
+            $release->invalidate("error decoding composer.json: {$e->getMessage()}");
             return;
         }
 
