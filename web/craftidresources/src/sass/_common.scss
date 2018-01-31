@@ -44,10 +44,6 @@ hr {
   @apply .my-6 .border-t .border-grey-light;
 }
 
-form {
-  margin-bottom: 0;
-}
-
 label {
   display: inline-block;
   margin-bottom: .5rem;
@@ -586,9 +582,17 @@ dl {
   @apply .flex .flex-col;
 
   .list-group-item {
-    @apply .border .border-grey-light .px-4 .py-3;
+    @apply .border .border-grey-light .px-4 .py-4;
 
     margin-bottom: -1px;
+
+    &:first-child {
+      @apply .rounded-t;
+    }
+
+    &:last-child {
+      @apply .rounded-b;
+    }
   }
 }
 
