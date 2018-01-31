@@ -223,15 +223,12 @@ class PackageManager extends Component
      */
     public function getVersionsAfter(string $name, string $from, string $minStability = 'stable', string $constraint = null, bool $sort = true): array
     {
-        $vp = new VersionParser();
-        $from = $vp->normalize($from);
-
         // Get all the versions
         $versions = $this->getAllVersions($name, $minStability, $constraint, false);
 
         // Filter out the ones <= $from
-        $versions = array_filter($versions, function($version) use ($vp, $from) {
-            return Comparator::greaterThan($vp->normalize($version), $from);
+        $versions = array_filter($versions, function($version) use ($from) {
+            return Comparator::greaterThan($version, $from);
         });
 
         if ($sort) {
@@ -302,18 +299,13 @@ class PackageManager extends Component
      */
     private function _sortVersions(array &$versions, int $dir = SORT_ASC)
     {
-        $vp = new VersionParser();
-
-        usort($versions, function($a, $b) use ($vp, $dir): int {
+        usort($versions, function($a, $b) use ($dir): int {
             if ($a instanceof PackageRelease) {
                 $a = $a->version;
             }
             if ($b instanceof PackageRelease) {
                 $b = $b->version;
             }
-
-            $a = $vp->normalize($a);
-            $b = $vp->normalize($b);
 
             if (Comparator::equalTo($a, $b)) {
                 return 0;
