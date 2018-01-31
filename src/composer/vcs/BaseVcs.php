@@ -44,8 +44,8 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
      */
     protected function cleanTag(string $tag): string
     {
-        // Strip the 'v'/'release-' prefix from the version if present
-        return preg_replace('/^(v|release-)/', '', $tag);
+        // Strip the 'release-' prefix from the version if present
+        return preg_replace('/^release-/', '', $tag);
     }
 
     /**
