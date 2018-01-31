@@ -1,17 +1,17 @@
 <template>
 	<div>
 		<h1>Developer Settings</h1>
-		<payouts-bank-account></payouts-bank-account>
+		<bank-account></bank-account>
 	</div>
 </template>
 
 <script>
-    import PayoutsBankAccount from '../components/PayoutsBankAccount'
+    import BankAccount from '../components/BankAccount'
 
     export default {
 
         components: {
-            PayoutsBankAccount
+            BankAccount
         },
 
     }

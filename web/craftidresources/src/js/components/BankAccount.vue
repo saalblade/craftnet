@@ -1,8 +1,9 @@
 <template>
 
     <div class="card mb-3">
-        <div class="card-header"><i class="fas fa-building"></i> Bank Account</div>
         <div class="card-body">
+            <h4>Bank Account</h4>
+
             <div class="spinner" v-if="loading"></div>
 
             <template v-else>
