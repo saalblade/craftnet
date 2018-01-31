@@ -49,12 +49,14 @@ class GitHub extends BaseVcs
         }
 
         foreach ($tags as $tag) {
+            $name = $this->cleanTag($tag['name']);
+
             // Special case for Craft CMS - avoid any versions before the 3.0 Beta
-            if ($this->package->name === 'craftcms/cms' && Comparator::lessThan($tag['name'], '3.0.0-beta.1')) {
+            if ($this->package->name === 'craftcms/cms' && Comparator::lessThan($name, '3.0.0-beta.1')) {
                 continue;
             }
 
-            $versions[$tag['name']] = $tag['commit']['sha'];
+            $versions[$name] = $tag['commit']['sha'];
         }
 
         return $versions;

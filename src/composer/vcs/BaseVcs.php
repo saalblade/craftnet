@@ -36,6 +36,19 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
     }
 
     /**
+     * Cleans up a given version tag.
+     *
+     * @param string $tag
+     *
+     * @return string
+     */
+    protected function cleanTag(string $tag): string
+    {
+        // Strip the 'v'/'release-' prefix from the version if present
+        return preg_replace('/^(v|release-)/', '', $tag);
+    }
+
+    /**
      * @param PackageRelease $release
      * @param array          $config
      *
