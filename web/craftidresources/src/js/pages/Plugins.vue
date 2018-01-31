@@ -16,10 +16,8 @@
                 </thead>
                 <tbody>
                 <tr v-for="plugin in plugins">
-                    <td class="thin">
-                        <div class="plugin-icon">
-                            <img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" />
-                        </div>
+                    <td class="icon-col">
+                        <router-link :to="'/developer/plugins/' + plugin.id"><img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" /></router-link>
                     </td>
                     <td>
                         <router-link :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>

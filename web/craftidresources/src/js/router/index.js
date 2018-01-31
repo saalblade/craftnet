@@ -12,7 +12,7 @@ import LicensesRenew from '../pages/LicensesRenew'
 import Sales from '../pages/Sales'
 import SalesDetails from '../pages/SalesDetails'
 import PluginsEdit from '../pages/PluginsEdit'
-import PluginsIndex from '../pages/PluginsIndex'
+import Plugins from '../pages/Plugins'
 import Settings from '../pages/Settings'
 import DeveloperSettings from '../pages/DeveloperSettings'
 
@@ -86,7 +86,7 @@ const router = new VueRouter({
         {
             path: '/developer/plugins',
             name: 'Plugins',
-            component: PluginsIndex
+            component: Plugins
         },
         {
             path: '/developer/add-plugin',

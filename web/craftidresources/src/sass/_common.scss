@@ -260,9 +260,9 @@ dl {
 }
 
 .table {
+  @apply .w-full .leading-normal;
   border-collapse: collapse;
 
-  @apply .w-full;
 
   th {
     text-align: inherit;
@@ -273,6 +273,15 @@ dl {
 
     &.thin {
       width: 0.01% !important;
+    }
+  }
+
+  td.icon-col {
+    @apply .pr-0;
+    img {
+      margin-right: -7px;
+      width: 40px;
+      height: 40px;
     }
   }
 }
@@ -307,11 +316,6 @@ dl {
 
 .invalid-feedback {
   @apply .text-red .text-sm .mt-2 .mb-4;
-}
-
-.plugin-icon {
-  width: 36px;
-  height: 36px;
 }
 
 .instructions {
@@ -532,11 +536,11 @@ dl {
 .card-table {
   table {
     th {
-      @apply .bg-grey-lightest .border-t-0 .px-6 .py-3;
+      @apply .bg-grey-lightest .border-t-0 .px-4 .py-3;
     }
 
     td {
-      @apply .p-6;
+      @apply .p-4;
     }
   }
 }
