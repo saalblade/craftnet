@@ -11,8 +11,7 @@ use craftcom\composer\vcs\VcsInterface;
 use craftcom\errors\MissingTokenException;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
-use craftcom\services\Oauth;
-use Github\Client;
+use Github\Client as GithubClient;
 
 /**
  * @property Plugin|null  $plugin
@@ -130,7 +129,7 @@ class Package extends Model
             list($owner, $repo) = explode('/', trim($parsed['path'], '/'), 2);
 
             // Create an authenticated GitHub API client
-            $client = new Client();
+            $client = new GithubClient();
 
             $token = null;
             if ($plugin = $this->getPlugin()) {
@@ -151,7 +150,7 @@ class Package extends Model
             }
 
             if ($token) {
-                $client->authenticate($token, null, Client::AUTH_HTTP_TOKEN);
+                $client->authenticate($token, null, GithubClient::AUTH_HTTP_TOKEN);
             }
 
             return new GitHub($this, [

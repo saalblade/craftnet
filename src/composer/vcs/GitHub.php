@@ -10,6 +10,7 @@ use craftcom\errors\VcsException;
 use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
+use Github\ResultPager;
 
 /**
  * @property array $versions
@@ -38,29 +39,23 @@ class GitHub extends BaseVcs
     public function getVersions(): array
     {
         $versions = [];
-        /** @var Repo $api */
-        $api = $this->client->api('repo');
-        $page = 1;
 
-        do {
-            try {
-                $tags = $api->tags($this->owner, $this->repo, [
-                    'per_page' => 100,
-                    'page' => $page++
-                ]);
-            } catch (RuntimeException $e) {
-                throw new VcsException($e->getMessage(), $e->getCode(), $e);
+        $api = $this->client->repos();
+        $paginator = new ResultPager($this->client);
+        try {
+            $tags = $paginator->fetchAll($api, 'tags', [$this->owner, $this->repo]);
+        } catch (RuntimeException $e) {
+            throw new VcsException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        foreach ($tags as $tag) {
+            // Special case for Craft CMS - avoid any versions before the 3.0 Beta
+            if ($this->package->name === 'craftcms/cms' && Comparator::lessThan($tag['name'], '3.0.0-beta.1')) {
+                continue;
             }
 
-            foreach ($tags as $tag) {
-                // Special case for Craft CMS - avoid any versions before the 3.0 Beta
-                if ($this->package->name === 'craftcms/cms' && Comparator::lessThan($tag['name'], '3.0.0-beta.1')) {
-                    continue;
-                }
-
-                $versions[$tag['name']] = $tag['commit']['sha'];
-            }
-        } while (count($tags) === 100);
+            $versions[$tag['name']] = $tag['commit']['sha'];
+        }
 
         return $versions;
     }
@@ -82,8 +77,7 @@ class GitHub extends BaseVcs
     public function populateRelease(PackageRelease $release)
     {
         // Get the composer.json contents
-        /** @var Repo $api */
-        $api = $this->client->api('repo');
+        $api = $this->client->repos();
         try {
             $response = $api->contents()->show($this->owner, $this->repo, 'composer.json', $release->sha);
             $config = Json::decode(base64_decode($response['content']));
@@ -140,8 +134,7 @@ class GitHub extends BaseVcs
      */
     public function createWebhook()
     {
-        /** @var Repo $api */
-        $api = $this->client->api('repo');
+        $api = $this->client->repos();
 
         $params = [
             'name' => 'web',
@@ -168,8 +161,7 @@ class GitHub extends BaseVcs
      */
     public function deleteWebhook()
     {
-        /** @var Repo $api */
-        $api = $this->client->api('repo');
+        $api = $this->client->repos();
 
         try {
             $api->hooks()->remove($this->owner, $this->repo, $this->package->webhookId);
