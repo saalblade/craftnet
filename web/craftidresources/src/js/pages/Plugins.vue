@@ -3,7 +3,7 @@
         <div class="flex justify-between mb-2">
             <h1>Plugins</h1>
             <div>
-                <router-link to="/developer/add-plugin" class="btn btn-primary">Add a plugin</router-link>
+                <router-link to="/developer/add-plugin" class="btn btn-primary"><i class="fas fa-plus"></i> Add a plugin</router-link>
             </div>
         </div>
 
