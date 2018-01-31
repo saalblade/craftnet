@@ -58,14 +58,23 @@ class Oauth extends Component
                                     'Authorization' => 'token '.$accessToken->getToken(),
                                 ],
                                 'query' => [
+                                    'visibility' => 'public',
+                                    'affiliation' => 'owner,organization_member',
                                     'per_page' => 100,
                                     'page' => $page++
                                 ]
                             ]);
+
                             $body = $response->getBody();
                             $contents = $body->getContents();
                             $repos = Json::decode($contents);
-                            $repositories = array_merge($repositories, $repos);
+
+                            foreach ($repos as $repo) {
+                                // Make sure they have administrative privileges on the repo
+                                if ($repo['permissions']['admin']) {
+                                    $repositories[] = $repo;
+                                }
+                            }
                         } while (count($repos) === 100);
                     }
                 }
