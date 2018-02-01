@@ -10,7 +10,13 @@
 
         <div class="card mb-3">
             <div class="card-body">
-                <billing-infos></billing-infos>
+                <billing-invoice-details></billing-invoice-details>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <billing-address></billing-address>
             </div>
         </div>
 
@@ -35,7 +41,8 @@
 <script>
     import { mapGetters } from 'vuex'
     import BillingPayment from '../components/BillingPayment'
-    import BillingInfos from '../components/BillingInfos'
+    import BillingInvoiceDetails from '../components/BillingInvoiceDetails'
+    import BillingAddress from '../components/BillingAddress'
     import InvoicesTable from '../components/InvoicesTable'
 
 
@@ -43,7 +50,8 @@
 
         components: {
             BillingPayment,
-            BillingInfos,
+            BillingInvoiceDetails,
+            BillingAddress,
             InvoicesTable,
         },
 
