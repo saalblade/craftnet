@@ -15,7 +15,6 @@ return [
         'securityKey' => getenv('CRAFT_SECURITY_KEY'),
         'csrfTokenName' => 'CRAFTCOM_CSRF_TOKEN',
         'phpSessionName' => 'CraftComSessionId',
-        'runQueueAutomatically' => false,
         'generateTransformsBeforePageLoad' => true,
     ],
     'prod' => [
@@ -29,6 +28,7 @@ return [
         ],
         'defaultCookieDomain' => '.craftcms.com',
         'baseCpUrl' => 'https://id.craftcms.com/',
+        'runQueueAutomatically' => false,
     ],
     'dev' => [
         'devMode' => true,
