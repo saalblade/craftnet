@@ -207,7 +207,7 @@ class PackageManager extends Component
     public function getLatestRelease(string $name, string $minStability = 'stable', string $constraint = null)
     {
         $version = $this->getLatestVersion($name, $minStability, $constraint);
-        return $this->getRelease($name, $version);
+        return $version ? $this->getRelease($name, $version) : null;
     }
 
     /**
