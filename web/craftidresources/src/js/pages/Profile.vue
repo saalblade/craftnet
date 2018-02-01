@@ -41,6 +41,8 @@
 			</div>
 		</div>
 
+		<p class="text-secondary"><em>Your profile data is being used for your developer page on the Plugin Store.</em></p>
+
 		<input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
 		<div v-if="loading" class="spinner"></div>
 	</form>
