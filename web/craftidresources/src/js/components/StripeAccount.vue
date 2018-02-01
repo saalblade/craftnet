@@ -2,7 +2,7 @@
 
     <div class="card mb-3">
         <div class="card-body">
-            <h4>Bank Account</h4>
+            <h4>Stripe Account</h4>
 
             <div class="spinner" v-if="loading"></div>
 

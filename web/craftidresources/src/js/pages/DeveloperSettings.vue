@@ -1,17 +1,17 @@
 <template>
 	<div>
 		<h1>Developer Settings</h1>
-		<bank-account></bank-account>
+		<stripe-account></stripe-account>
 	</div>
 </template>
 
 <script>
-    import BankAccount from '../components/BankAccount'
+    import StripeAccount from '../components/StripeAccount'
 
     export default {
 
         components: {
-            BankAccount
+            StripeAccount
         },
 
     }

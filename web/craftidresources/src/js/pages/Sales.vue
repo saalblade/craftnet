@@ -2,7 +2,7 @@
     <div>
         <h1>Sales</h1>
 
-        <bank-account-alert></bank-account-alert>
+        <stripe-account-alert></stripe-account-alert>
 
         <div class="card">
             <div class="card-body">
@@ -43,12 +43,12 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import BankAccountAlert from '../components/BankAccountAlert'
+    import StripeAccountAlert from '../components/StripeAccountAlert'
 
     export default {
 
         components: {
-            BankAccountAlert
+            StripeAccountAlert
         },
 
         data () {

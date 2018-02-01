@@ -7,7 +7,7 @@
             </div>
         </div>
 
-        <bank-account-alert></bank-account-alert>
+        <stripe-account-alert></stripe-account-alert>
 
         <div v-if="plugins.length > 0" class="card card-table responsive-content">
             <table class="table">
@@ -71,12 +71,12 @@
 </template>
 
 <script>
-    import BankAccountAlert from '../components/BankAccountAlert'
+    import StripeAccountAlert from '../components/StripeAccountAlert'
 
     export default {
 
         components: {
-            BankAccountAlert
+            StripeAccountAlert
         },
 
         data () {
