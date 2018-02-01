@@ -45,6 +45,7 @@
                                         <li><router-link @click.native="closeSidebar()" to="/account/licenses/craft">Craft CMS</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/account/licenses/renew">Renew Licenses</router-link></li>
                                     </ul>
 
                                     <template v-if="userIsInGroup('developers')">
