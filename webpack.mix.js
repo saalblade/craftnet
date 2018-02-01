@@ -15,7 +15,11 @@ let tailwindcss = require('tailwindcss');
 const sourcePath = 'web/craftidresources/src';
 const distPath = 'web/craftidresources/dist';
 
-mix.setPublicPath("./web/craftidresources/dist");
+if(mix.config.hmr) {
+    mix.setResourceRoot("//localhost:8080/");
+}
+
+mix.setPublicPath(distPath);
 
 mix.js(sourcePath + '/js/app.js', distPath + '/js/')
     .js(sourcePath + '/js/site.js', distPath + '/js/')
