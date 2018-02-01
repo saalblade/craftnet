@@ -47,13 +47,6 @@
                                         <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
                                     </ul>
 
-                                    <h5><router-link @click.native="closeSidebar()" to="/account"><i class="fas fa-user"></i> Account</router-link></h5>
-                                    <ul>
-                                        <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
-                                        <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
-                                        <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
-                                    </ul>
-
                                     <template v-if="userIsInGroup('developers')">
                                         <h5><router-link @click.native="closeSidebar()" to="/developer"><i class="fa fa-plug"></i> Developer</router-link></h5>
                                         <ul>
@@ -71,6 +64,13 @@
                                             <li><a class="disabled" href="#">Agency Profile</a></li>
                                         </ul>
                                     </template>
+
+                                    <h5><router-link @click.native="closeSidebar()" to="/account"><i class="fas fa-user"></i> Account</router-link></h5>
+                                    <ul>
+                                        <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
+                                    </ul>
                                 </template>
 
                                 <template v-else>
