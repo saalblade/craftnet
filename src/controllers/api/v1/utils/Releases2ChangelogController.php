@@ -3,6 +3,7 @@
 namespace craftcom\controllers\api\v1\utils;
 
 use Composer\Semver\Comparator;
+use Composer\Semver\VersionParser;
 use Craft;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
@@ -38,11 +39,15 @@ class Releases2ChangelogController extends BaseApiController
         });
 
         // Sort latest => oldest
-        usort($releases, function($a, $b) {
-            if (Comparator::equalTo($a['version'], $b['version'])) {
+        $vp = new VersionParser();
+        usort($releases, function($a, $b) use ($vp) {
+            $a = $vp->normalize($a['version']);
+            $b = $vp->normalize($b['version']);
+
+            if (Comparator::equalTo($a, $b)) {
                 return 0;
             }
-            return Comparator::greaterThan($a['version'], $b['version']) ? -1 : 1;
+            return Comparator::greaterThan($a, $b) ? -1 : 1;
         });
 
         foreach ($releases as $release) {

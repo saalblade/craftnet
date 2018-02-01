@@ -36,6 +36,19 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
     }
 
     /**
+     * Cleans up a given version tag.
+     *
+     * @param string $tag
+     *
+     * @return string
+     */
+    protected function cleanTag(string $tag): string
+    {
+        // Strip the 'release-' prefix from the version if present
+        return preg_replace('/^release-/', '', $tag);
+    }
+
+    /**
      * @param PackageRelease $release
      * @param array          $config
      *
@@ -51,6 +64,9 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
                 $release->invalidate("version mismatch -- config says {$config['version']}; tag says {$release->version}");
                 return false;
             }
+
+            // Use the composer.json version value, in case it differs from the tag name
+            $release->version = $config['version'];
         }
 
         if (isset($config['description'])) {
