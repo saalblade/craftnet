@@ -1,6 +1,7 @@
 <template>
     <div v-if="sale">
-        <h1><router-link class="nav-link" to="/developer/sales" exact>Sales</router-link> / #SAL000{{sale.id}}</h1>
+        <p><router-link class="nav-link" to="/developer/sales" exact>← Sales</router-link></p>
+        <h1>#SAL000{{sale.id}}</h1>
 
         <div class="card mb-3">
             <div class="card-body">

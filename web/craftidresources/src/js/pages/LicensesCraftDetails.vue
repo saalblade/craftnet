@@ -1,6 +1,7 @@
 <template>
     <div>
-        <h1><router-link class="nav-link" to="/account/licenses/craft" exact>Craft CMS</router-link> / #LIC000{{license.id}}</h1>
+        <p><router-link class="nav-link" to="/account/licenses/craft" exact>← Craft CMS</router-link></p>
+        <h1>#LIC000{{license.id}}</h1>
 
         <license-details :license="license"></license-details>
 

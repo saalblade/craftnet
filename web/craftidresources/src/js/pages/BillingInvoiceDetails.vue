@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<h1><router-link class="nav-link" to="/account/billing" exact>Billing</router-link> / #INV000{{ invoice.id }}</h1>
+		<p><router-link class="nav-link" to="/account/billing" exact>← Billing</router-link></p>
+		<h1>#INV000{{ invoice.id }}</h1>
 
 
 		<div class="card">
 			<div class="card-body">
-				<h4>Invoice #{{ invoice.id }}</h4>
 				<p class="text-secondary">Order Date: {{ invoice.date }}</p>
 
 				<div class="lg:flex">
