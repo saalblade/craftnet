@@ -23,24 +23,14 @@ if(mix.config.hmr) {
 
 mix.setPublicPath(distPath);
 
-mix.js(sourcePath + '/js/app.js', distPath + '/js/')
-    .js(sourcePath + '/js/site.js', distPath + '/js/')
-    .sass(sourcePath + '/sass/app.scss', distPath + '/css/')
-    .sass(sourcePath + '/sass/site.scss', distPath + '/css/')
-    .sass(sourcePath + '/sass/plugins.scss', distPath + '/css/')
+mix.js(sourcePath + '/js/app.js', 'js')
+    .js(sourcePath + '/js/site.js', 'js')
+    .sass(sourcePath + '/sass/app.scss', 'css')
+    .sass(sourcePath + '/sass/site.scss', 'css')
+    .sass(sourcePath + '/sass/plugins.scss', 'css')
     .options({
         processCssUrls: false,
         postCss: [ tailwindcss('./tailwind-config.js') ],
     })
     .copy(sourcePath + '/images', distPath + '/images/')
     .sourceMaps();
-
-/*
-mix.browserSync({
-    host: 'id.craftcms.test',
-    proxy: 'https://id.craftcms.test/',
-    files: [
-        distPath + '/css/!*.css',
-        distPath + '/js/!*.js',
-    ]
-});*/
