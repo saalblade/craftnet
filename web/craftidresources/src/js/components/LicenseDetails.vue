@@ -90,7 +90,12 @@
                     type: this.license.type,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then((data) => {
-                    this.$root.displayNotice('License saved.');
+                    if(this.licenseDraft.autoRenew) {
+                        this.$root.displayNotice('Auto renew enabled.');
+                    } else {
+                        this.$root.displayNotice('Auto renew disabled.');
+                    }
+
                 }).catch((data) => {
                     this.$root.displayError('Couldn’t save license.');
                     this.errors = data.errors;
