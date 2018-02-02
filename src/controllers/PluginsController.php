@@ -75,8 +75,7 @@ class PluginsController extends Controller
             $client->authenticate($token, null, Client::AUTH_HTTP_TOKEN);
         }
 
-        /** @var Repo $api */
-        $api = $client->api('repo');
+        $api = $client->repos();
 
         // Get the composer.json contents
         try {

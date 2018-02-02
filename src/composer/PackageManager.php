@@ -207,7 +207,7 @@ class PackageManager extends Component
     public function getLatestRelease(string $name, string $minStability = 'stable', string $constraint = null)
     {
         $version = $this->getLatestVersion($name, $minStability, $constraint);
-        return $this->getRelease($name, $version);
+        return $version ? $this->getRelease($name, $version) : null;
     }
 
     /**
@@ -223,12 +223,15 @@ class PackageManager extends Component
      */
     public function getVersionsAfter(string $name, string $from, string $minStability = 'stable', string $constraint = null, bool $sort = true): array
     {
+        $vp = new VersionParser();
+        $from = $vp->normalize($from);
+
         // Get all the versions
         $versions = $this->getAllVersions($name, $minStability, $constraint, false);
 
         // Filter out the ones <= $from
-        $versions = array_filter($versions, function($version) use ($from) {
-            return Comparator::greaterThan($version, $from);
+        $versions = array_filter($versions, function($version) use ($vp, $from) {
+            return Comparator::greaterThan($vp->normalize($version), $from);
         });
 
         if ($sort) {
@@ -292,13 +295,16 @@ class PackageManager extends Component
     }
 
     /**
-     * Sorts a given list of versions from oldest => newest
+     * Sorts a given list of versions.
      *
      * @param string[]|PackageRelease[] &$versions
+     * @param int $dir The sort direction (SORT_ASC = oldest -> newest; SORT_DESC = newest -> oldest)
      */
-    private function _sortVersions(array &$versions)
+    private function _sortVersions(array &$versions, int $dir = SORT_ASC)
     {
-        usort($versions, function($a, $b): int {
+        $vp = new VersionParser();
+
+        usort($versions, function($a, $b) use ($vp, $dir): int {
             if ($a instanceof PackageRelease) {
                 $a = $a->version;
             }
@@ -306,10 +312,16 @@ class PackageManager extends Component
                 $b = $b->version;
             }
 
+            $a = $vp->normalize($a);
+            $b = $vp->normalize($b);
+
             if (Comparator::equalTo($a, $b)) {
                 return 0;
             }
-            return Comparator::lessThan($a, $b) ? -1 : 1;
+            if (Comparator::lessThan($a, $b)) {
+                return $dir === SORT_ASC ? -1 : 1;
+            }
+            return $dir === SORT_ASC ? 1 : -1;
         });
     }
 
@@ -754,15 +766,7 @@ class PackageManager extends Component
             }
 
             // Sort by newest => oldest
-            usort($newVersions, function(string $version1, string $version2): int {
-                if (Comparator::lessThan($version1, $version2)) {
-                    return 1;
-                }
-                if (Comparator::equalTo($version1, $version2)) {
-                    return 0;
-                }
-                return -1;
-            });
+            $this->_sortVersions($newVersions, SORT_DESC);
 
             $packageDeps = [];
             $latestVersion = null;

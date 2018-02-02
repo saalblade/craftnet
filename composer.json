@@ -15,11 +15,18 @@
     "adam-paterson/oauth2-stripe": "^2.0.0",
     "stripe/stripe-php": "^5.2.0",
     "stevenmaguire/oauth2-bitbucket": "^2.0",
-    "flipboxfactory/craft-postmark": "^1.0.0-rc.1"
+    "flipboxfactory/craft-postmark": "^1.0.0-rc.1",
+    "craftcms/commerce": "^2.0.0-alpha.1"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
   },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../craft3-commerce"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "craftcom\\": "src/",
