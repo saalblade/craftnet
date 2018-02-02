@@ -25,12 +25,12 @@
                             </td>
 
                             <template v-if="license.type == 'pluginLicense'">
-                                <td><router-link :to="'/licenses/plugins/'+license.id">000000{{ license.id }}</router-link></td>
+                                <td><router-link :to="'/account/licenses/plugins/'+license.id">000000{{ license.id }}</router-link></td>
                                 <td>{{ license.plugin.name }}</td>
                             </template>
 
                             <template v-if="license.type == 'craftLicense'">
-                                <td><router-link :to="'/licenses/craft/'+license.id">000000{{ license.id }}</router-link></td>
+                                <td><router-link :to="'/account/licenses/craft/'+license.id">000000{{ license.id }}</router-link></td>
                                 <td>Craft {{ license.craftEdition.value }}</td>
                             </template>
 
