@@ -29,7 +29,6 @@ return [
         'defaultCookieDomain' => '.craftcms.com',
         'baseCpUrl' => 'https://id.craftcms.com/',
         'runQueueAutomatically' => false,
-        'requireUserAgentAndIpForSession' => true,
     ],
     'dev' => [
         'devMode' => true,
