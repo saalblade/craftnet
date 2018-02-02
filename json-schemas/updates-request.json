@@ -21,7 +21,7 @@
           "maximum": 65536
         }
       },
-      "required": ["ip", "hostname", "port"]
+      "required": ["hostname", "port"]
     },
     "user": {
       "type": "object",
