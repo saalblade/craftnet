@@ -39,6 +39,9 @@ return [
     'AmCommand' => [
         'handle' => 'command-palette',
     ],
+    'TheArchitect' => [
+        'handle' => 'architect',
+    ],
     'AssetRev' => [
         'handle' => 'assetrev',
     ],
