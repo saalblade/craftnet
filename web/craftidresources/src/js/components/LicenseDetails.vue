@@ -36,7 +36,7 @@
 
                             <dt>Auto Renew</dt>
                             <dd>
-                                <label><input @change="saveAutoRenew()" type="checkbox" v-model="licenseDraft.autoRenew"> Auto renew license</label>
+                                <lightswitch-input @input="saveAutoRenew()" v-model="licenseDraft.autoRenew"></lightswitch-input>
                             </dd>
 
                             <dt>Created</dt>
@@ -66,6 +66,7 @@
 
 <script>
     import TextareaField from '../components/fields/TextareaField'
+    import LightswitchInput from '../components/inputs/LightswitchInput'
 
     export default {
 
@@ -80,6 +81,7 @@
 
         components: {
             TextareaField,
+            LightswitchInput,
         },
 
         methods: {
