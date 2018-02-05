@@ -46,7 +46,7 @@
                     <td>November 16th, 2017</td>
                     <td>
                         <span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
-                        <span v-else="" class="badge badge-secondary">Disabled</span>
+                        <span v-else="" class="badge">Disabled</span>
                     </td>
                 </tr>
             </template>
