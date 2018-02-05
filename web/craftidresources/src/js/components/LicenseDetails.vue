@@ -9,7 +9,7 @@
 
                         <dl>
                             <dt>License ID</dt>
-                            <dd>000000{{ license.id }}</dd>
+                            <dd>LIC000{{ license.id }}</dd>
 
                             <template v-if="license.type == 'craftLicense'">
                                 <dt>Edition</dt>
