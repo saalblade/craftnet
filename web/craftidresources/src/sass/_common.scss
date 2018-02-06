@@ -49,6 +49,10 @@ label {
   margin-bottom: .5rem;
 }
 
+form {
+  @apply .m-0;
+}
+
 input[type="text"],
 input[type="password"],
 input[type="tel"],
