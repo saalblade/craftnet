@@ -7,7 +7,7 @@ body {
   @apply .leading-normal .bg-grey-lighter;
 }
 
-a {
+a:not(.btn) {
   @apply .text-blue .no-underline;
 
   &:hover {
@@ -532,6 +532,11 @@ dl {
   &:hover {
     @apply .no-underline;
   }
+
+  &.disabled {
+    opacity: .5;
+    cursor: default;
+  }
 }
 
 .btn-blue,
@@ -541,7 +546,7 @@ dl {
   transition: all 0.1s ease-in;
 
 
-  &:hover {
+  &:hover:not(.disabled) {
     @apply .bg-blue .text-white;
     box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 5px rgba(0, 0, 0, 0.2);
   }
@@ -552,7 +557,7 @@ dl {
   box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 1px rgba(0, 0, 0, 0.1);
   transition: all 0.1s ease-in;
 
-  &:hover {
+  &:hover:not(.disabled) {
     @apply .text-red-dark;
     box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 5px rgba(0, 0, 0, 0.2);
   }
@@ -562,7 +567,7 @@ dl {
 .btn-outline-secondary {
   @apply .border .border-grey-dark .text-grey-dark .bg-white;
 
-  &:hover {
+  &:hover:not(.disabled) {
     @apply .bg-grey-dark .text-white;
   }
 }
@@ -570,7 +575,7 @@ dl {
 .btn-grey {
   @apply .bg-grey-dark .text-white;
 
-  &:hover {
+  &:hover:not(.disabled) {
     @apply .bg-grey-darker .text-white;
   }
 }
@@ -580,7 +585,7 @@ dl {
   box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 1px rgba(0, 0, 0, 0.2);
   transition: all 0.1s ease-in;
 
-  &:hover {
+  &:hover:not(.disabled) {
     @apply .text-black;
     box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 5px rgba(0, 0, 0, 0.3);
   }
