@@ -310,9 +310,6 @@ dl {
   @apply .text-grey-dark;
 }
 
-.card-element {
-  @apply .border .border-grey-light .px-3 .py-2;
-}
 
 .invalid-feedback {
   @apply .text-red .text-sm .mt-2 .mb-4;
@@ -325,6 +322,25 @@ dl {
 .text-secondary {
   @apply .text-grey-dark;
 }
+
+
+/* Credit Cards */
+
+.card-element {
+  @apply .border .border-grey-light .px-3 .py-2 .rounded;
+  max-width: 410px;
+}
+
+.card-icon {
+  @apply .inline-block;
+}
+
+.credit-card {
+  .card-icon {
+    @apply .mb-1;
+  }
+}
+
 
 /* Lightswitches */
 

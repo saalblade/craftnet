@@ -1,61 +1,65 @@
 <template>
     <div>
-        <h4>Payment</h4>
+        <div class="flex">
+            <div class="flex-1">
+                <h4>Payment</h4>
 
-        <div v-if="stripeCustomerLoading" class="spinner"></div>
+                <div v-if="stripeCustomerLoading" class="spinner"></div>
 
-        <div v-if="!stripeCustomerLoading">
-            <div v-if="!editing" class="flex">
-                <div class="flex-1">
-                    <p v-if="stripeCard">
-                        <i :class="'fab text-secondary fa-cc-'+ stripeCard.brand.toLowerCase()"></i>
-                         •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
-                    </p>
+                <div v-if="!stripeCustomerLoading">
+                    <div v-if="!editing">
+                        <div v-if="stripeCard" class="credit-card">
+                            <card-icon :brand="stripeCard.brand"></card-icon>
+                            <ul class="list-reset">
+                                <li>Number: •••• •••• •••• {{ stripeCard.last4 }}</li>
+                                <li>Expiry: {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}</li>
+                            </ul>
+                        </div>
 
-                    <p v-else>No credit card.</p>
-                </div>
+                        <p v-else>No credit card.</p>
+                    </div>
 
-                <div class="float-right">
-                    <p>
-                        <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
-                            <i class="fa fa-plus"></i>
-                            New Card
-                        </button>
-                    </p>
+                    <div :class="{'hidden': !editing}">
+                        <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></card-form>
+                    </div>
 
-                    <p v-if="stripeCard">
-                        <button @click="removeCard()" class="btn btn-sm btn-danger">
-                            <i class="fas fa-times"></i>
-                            Remove
-                        </button>
-
-                        <div v-if="removeCardLoading" class="spinner"></div>
-                    </p>
+                    <div class="mt-3">
+                        <img src="/craftidresources/dist/images/powered_by_stripe.svg" height="18" />
+                    </div>
                 </div>
             </div>
 
-            <div :class="{'hidden': !editing}">
+            <div v-if="!editing" class="pl-4">
+                <p>
+                    <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
+                        <i class="fa fa-plus"></i>
+                        New Card
+                    </button>
+                </p>
 
-                <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></card-form>
+                <p v-if="stripeCard">
+                    <button @click="removeCard()" class="btn btn-sm btn-danger">
+                        <i class="fas fa-times"></i>
+                        Remove
+                    </button>
 
-            </div>
-
-            <div class="mt-3">
-                <img src="/craftidresources/dist/images/powered_by_stripe.svg" height="18" />
+                    <div v-if="removeCardLoading" class="spinner"></div>
+                </p>
             </div>
         </div>
     </div>
 </template>
 
-
 <script>
     import { mapGetters } from 'vuex'
     import CardForm from './CardForm'
+    import CardIcon from './CardIcon'
 
     export default {
 
         components: {
-            CardForm
+            CardForm,
+            CardIcon,
         },
 
         data() {
