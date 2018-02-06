@@ -1,6 +1,6 @@
 <template>
 	<div v-if="cardType" class="card-icon">
-		<img :src="'/craftidresources/dist/images/cards/'+cardType+'.svg'" height="18" />
+		<img :src="'/craftidresources/dist/images/cards/'+cardType+'.svg'" height="20" />
 	</div>
 </template>
 
