@@ -7,7 +7,7 @@
       "properties": {
         "ip": {
           "type": "string",
-          "oneOf": [
+          "anyOf": [
             {"format": "ipv4"},
             {"format": "ipv6"}
           ]
@@ -39,7 +39,7 @@
         "type": "string"
       },
       "required": ["php"],
-      "oneOf": [
+      "anyOf": [
         {"required": ["mysql"]},
         {"required": ["pgsql"]}
       ]
@@ -68,7 +68,7 @@
               "type": "string"
             }
           },
-          "oneOf": [
+          "anyOf": [
             {
               "properties": {
                 "licenseKey": {"$ref": "definitions.json#/pluginLicenseKey"}
