@@ -36,8 +36,7 @@ h5 {
 }
 
 p {
-  margin-top: 0;
-  margin-bottom: 1rem;
+  @apply .mt-0 .mb-2;
 }
 
 hr {
@@ -45,8 +44,7 @@ hr {
 }
 
 label {
-  display: inline-block;
-  margin-bottom: .5rem;
+  @apply .inline-block .mb-1;
 }
 
 form {
@@ -99,8 +97,7 @@ dl {
   }
 
   .content-container {
-    @apply .flex-1 .flex .w-full .mx-auto;
-    overflow: hidden;
+    @apply .flex-1 .flex .w-full .mx-auto .overflow-hidden;
 
     .content {
       @apply .flex-1 .flex .flex-col .w-full .mx-auto;
@@ -117,8 +114,7 @@ dl {
       }
 
       .main {
-        @apply .flex-1 .p-6;
-        overflow: auto;
+        @apply .flex-1 .p-6 .overflow-auto;
       }
     }
   }
@@ -135,19 +131,18 @@ dl {
     }
 
     .content-container {
-      overflow: auto;
+      @apply .overflow-auto;
 
       .content {
         @apply .relative .block;
 
         #sidebar {
-          @apply .fixed;
+          @apply .fixed .overflow-auto;
           left: auto;
           right: auto;
           bottom: auto;
           max-width: 240px;
           max-height: calc(100% - 62px);
-          overflow: auto;
 
           &:not(.showing-sidebar) {
             @apply .block;
@@ -155,8 +150,8 @@ dl {
         }
 
         .main {
+          @apply .overflow-visible;
           margin-left: 240px;
-          overflow: visible;
         }
       }
     }
@@ -222,9 +217,8 @@ dl {
     }
 
     svg {
-      position: absolute;
+      @apply .absolute .pin-l;
       top: 3px;
-      left: 0;
       width: 13px;
     }
 
@@ -350,41 +344,28 @@ dl {
 /* Lightswitches */
 
 .lightswitch {
-  position: relative;
-  display: block;
+  @apply .relative .block .select-none;
   width: 46px;
   height: 30px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
 
   input {
-    position: absolute;
-    opacity: 0;
+    @apply .absolute .opacity-0;
   }
 
   .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    @apply .absolute .pin .cursor-pointer;
     background-color: #ccc;
     -webkit-transition: .4s;
     transition: .4s;
   }
 
   .slider:before {
-    position: absolute;
+    @apply .absolute .bg-white;
     content: "";
     height: 26px;
     width: 26px;
     left: 2px;
     bottom: 2px;
-    background-color: white;
     -webkit-transition: .1s;
     transition: .1s;
   }
@@ -403,7 +384,6 @@ dl {
     transform: translateX(16px);
   }
 
-  /* Rounded sliders */
   .slider.round {
     border-radius: 34px;
   }
@@ -413,26 +393,23 @@ dl {
   }
 }
 
+
 /* Notifications */
 
 #notifications-wrapper {
-  left: 0;
-  position: fixed;
+  @apply .fixed .pin-l .w-full .pointer-events-none;
   z-index: 101;
-  width: 100%;
-  pointer-events: none;
 
   #notifications {
     @apply .text-center;
 
     .notification {
-      @apply .inline-block;
+      @apply .inline-block .pointer-events-auto;
 
       padding: 5px 10px;
       border-radius: 0 0 3px 3px;
       border-width: 0 1px 1px;
       color: #fff !important;
-      pointer-events: auto;
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       font-weight: 600;
@@ -459,8 +436,7 @@ dl {
 /* Spinner */
 
 .spinner {
-  display: inline-block;
-  vertical-align: bottom;
+  @apply .inline-block .align-bottom;
   width: 24px;
   height:24px;
   background: url(../images/spinner.gif) no-repeat 50% 50%;
@@ -500,27 +476,30 @@ dl {
 }
 
 .fade {
-  opacity: 0;
+  @apply .opacity-0;
   transition: opacity .15s linear;
 }
 
 
 /* Vue Transitions */
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity .5s;
 }
 
-.fade-enter, .fade-leave-to {
-  opacity: 0;
+.fade-enter,
+.fade-leave-to {
+  @apply .opacity-0;
 }
 
-.quick-fade-enter-active, .quick-fade-leave-active {
+.quick-fade-enter-active,
+.quick-fade-leave-active {
   transition: opacity 0s;
 }
 
 .quick-fade-enter, .quick-fade-leave-to {
-  opacity: 0;
+  @apply .opacity-0;
 }
 
 
@@ -534,7 +513,7 @@ dl {
   }
 
   &.disabled {
-    opacity: .5;
+    @apply .opacity-50;
     cursor: default;
   }
 }
@@ -590,6 +569,7 @@ dl {
     box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 5px rgba(0, 0, 0, 0.3);
   }
 }
+
 
 /* Badges */
 
