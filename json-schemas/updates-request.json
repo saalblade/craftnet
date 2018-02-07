@@ -21,7 +21,7 @@
           "maximum": 65536
         }
       },
-      "required": ["ip", "hostname", "port"]
+      "required": ["hostname", "port"]
     },
     "user": {
       "type": "object",
@@ -47,11 +47,7 @@
     "cms": {
       "type": "object",
       "properties": {
-        "licenseKey": {
-          "type": "string",
-          "minLength": 250,
-          "maxLength": 250
-        },
+        "licenseKey": {"$ref": "definitions.json#/cmsLicenseKey"},
         "edition": {
           "type": "string",
           "enum": ["personal", "client", "pro"]
@@ -68,15 +64,22 @@
         ".*": {
           "type": "object",
           "properties": {
-            "licenseKey": {
-              "type": ["string", "null"],
-              "minLength": 24,
-              "maxLength": 24
-            },
             "version": {
               "type": "string"
             }
           },
+          "oneOf": [
+            {
+              "properties": {
+                "licenseKey": {"$ref": "definitions.json#/pluginLicenseKey"}
+              }
+            },
+            {
+              "properties": {
+                "licenseKey": {"type": "null"}
+              }
+            }
+          ],
           "required": ["licenseKey", "version"]
         }
       }
