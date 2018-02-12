@@ -111,6 +111,10 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
     ],
+    'Oauth' => [
+        'statusColor' => 'red',
+        'status' => 'Unnecessary thanks to Craft 3’s inclusion of an OAuth 2 client library'
+    ],
     'PhpTweak' => [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
