@@ -11,9 +11,11 @@ use craft\elements\Category;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
+use craft\validators\UniqueValidator;
 use craftcom\behaviors\Developer;
 use craftcom\composer\Package;
 use craftcom\Module;
+use craftcom\records\Plugin as PluginRecord;
 use yii\base\InvalidConfigException;
 use yii\helpers\Markdown;
 
@@ -610,6 +612,16 @@ class Plugin extends Element
             ],
             'required',
             'on' => self::SCENARIO_LIVE,
+        ];
+
+        $rules[] = [
+            [
+                'handle',
+            ],
+            UniqueValidator::class,
+            'targetClass' => PluginRecord::class,
+            'targetAttribute' => ['handle'],
+            'message' => Craft::t('yii', '{attribute} "{value}" has already been taken.'),
         ];
 
         return $rules;
