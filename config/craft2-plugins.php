@@ -49,6 +49,10 @@ return [
         'statusColor' => 'red',
         'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
     ],
+    'CacheFlag' => [
+        'statusColor' => 'orange',
+        'status' => 'Coming soon'
+    ],
     'CodeBlock' => [
         'statusColor' => 'red',
         'status' => 'Discontinued (use [Simple Text](https://github.com/craftcms/simple-text) instead)'
@@ -126,6 +130,11 @@ return [
     'RedactorI' => [
         'statusColor' => 'red',
         'status' => 'Discontinued (use [Redactor](https://github.com/craftcms/redactor) instead)'
+    ],
+    'RetconHtml' => [
+        'handle' => 'retcon',
+        'statusColor' => 'orange',
+        'status' => 'Coming soon'
     ],
     'Retour' => [
         'statusColor' => 'orange',

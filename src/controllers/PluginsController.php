@@ -523,8 +523,8 @@ class PluginsController extends Controller
 
             $return['success'] = true;
             $return['id'] = $plugin->id;
-            $return['iconId'] = $plugin->icon->id;
-            $return['iconUrl'] = $plugin->icon->getUrl();
+            $return['iconId'] = $plugin->iconId;
+            $return['iconUrl'] = $plugin->iconId ? $plugin->getIcon()->getUrl() : null;
             $return['name'] = $plugin->name;
 
             $return['screenshots'] = [];
