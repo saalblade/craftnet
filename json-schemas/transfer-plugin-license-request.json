@@ -2,16 +2,8 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "pluginLicenseKey": {
-      "type": "string",
-      "minLength": 24,
-      "maxLength": 24
-    },
-    "newCmsLicenseKey": {
-      "type": "string",
-      "minLength": 250,
-      "maxLength": 250
-    }
+    "pluginLicenseKey": {"$ref": "definitions.json#/pluginLicenseKey"},
+    "newCmsLicenseKey": {"$ref": "definitions.json#/cmsLicenseKey"}
   },
   "required": ["pluginLicenseKey", "newCmsLicenseKey"]
 }

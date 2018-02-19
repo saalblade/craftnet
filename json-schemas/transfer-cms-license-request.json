@@ -2,11 +2,7 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "licenseKey": {
-      "type": "string",
-      "minLength": 250,
-      "maxLength": 250
-    },
+    "licenseKey": {"$ref": "definitions.json#/cmsLicenseKey"},
     "newHostname": {
       "type": "string"
     }
