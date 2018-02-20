@@ -23,25 +23,25 @@
                                 <dt>Plugin</dt>
                                 <dd>{{ license.plugin.name }}</dd>
                             </template>
-
-                            <dt>Email</dt>
-                            <dd>{{ license.author.email }}</dd>
                         </dl>
                     </div>
                     <div class="w-1/2">
                         <dl>
+                            <dt>Email</dt>
+                            <dd>{{ license.author.email }}</dd>
 
-                            <dt>Update Period</dt>
-                            <dd>2017/05/11 to 2018/05/11</dd>
+                            <template v-if="enableCommercialFeatures">
+                                <dt>Update Period</dt>
+                                <dd>2017/05/11 to 2018/05/11</dd>
 
-                            <dt>Auto Renew</dt>
-                            <dd>
-                                <lightswitch-input @input="saveAutoRenew()" v-model="licenseDraft.autoRenew"></lightswitch-input>
-                            </dd>
+                                <dt>Auto Renew</dt>
+                                <dd>
+                                    <lightswitch-input @input="saveAutoRenew()" v-model="licenseDraft.autoRenew"></lightswitch-input>
+                                </dd>
+                            </template>
 
                             <dt>Created</dt>
                             <dd>{{license.dateCreated}}</dd>
-
                         </dl>
                     </div>
                 </div>
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import TextareaField from '../components/fields/TextareaField'
     import LightswitchInput from '../components/inputs/LightswitchInput'
 
@@ -82,6 +83,14 @@
         components: {
             TextareaField,
             LightswitchInput,
+        },
+
+        computed: {
+
+            ...mapGetters({
+                enableCommercialFeatures: 'enableCommercialFeatures',
+            }),
+
         },
 
         methods: {

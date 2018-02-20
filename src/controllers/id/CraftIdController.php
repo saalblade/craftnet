@@ -38,6 +38,10 @@ class CraftIdController extends BaseController
         $currentUserId = Craft::$app->getRequest()->getParam('userId');
         $currentUser = Craft::$app->getUsers()->getUserById($currentUserId);
 
+        // Craft ID config
+        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+        $enableCommercialFeatures = $craftIdConfig['enableCommercialFeatures'];
+
         // Data
         $data = [
             'currentUser' => [
@@ -73,6 +77,7 @@ class CraftIdController extends BaseController
             'upcomingInvoice' => $this->_upcomingInvoice(),
             'invoices' => $this->_invoices(),
             'categories' => $this->_pluginCategories(),
+            'enableCommercialFeatures' => $enableCommercialFeatures
         ];
 
         return $this->asJson($data);

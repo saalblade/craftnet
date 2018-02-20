@@ -45,15 +45,18 @@
                                         <li><router-link @click.native="closeSidebar()" to="/account/licenses/craft">Craft CMS</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
-                                        <li><router-link @click.native="closeSidebar()" to="/account/licenses/renew">Renew Licenses ({{licenses.length}})</router-link></li>
+                                        <li v-if="enableCommercialFeatures"><router-link @click.native="closeSidebar()" to="/account/licenses/renew">Renew Licenses ({{licenses.length}})</router-link></li>
                                     </ul>
 
                                     <template v-if="userIsInGroup('developers')">
                                         <h5><router-link @click.native="closeSidebar()" to="/developer"><i class="fa fa-plug"></i> Developer</router-link></h5>
                                         <ul>
                                             <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
-                                            <li><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
-                                            <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
+
+                                            <template v-if="enableCommercialFeatures">
+                                                <li><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
+                                                <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
+                                            </template>
                                         </ul>
                                     </template>
 
@@ -68,7 +71,7 @@
 
                                     <h5><router-link @click.native="closeSidebar()" to="/account"><i class="fas fa-user"></i> Account</router-link></h5>
                                     <ul>
-                                        <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
+                                        <li v-if="enableCommercialFeatures"><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
                                     </ul>
@@ -122,11 +125,13 @@
                 currentUser: 'currentUser',
                 userIsInGroup: 'userIsInGroup',
                 licenses: 'licenses',
+                enableCommercialFeatures: 'enableCommercialFeatures',
             }),
 
         },
 
         methods: {
+
             toggleSidebar() {
                 this.showingSidebar = !this.showingSidebar;
             },
@@ -134,7 +139,8 @@
             closeSidebar() {
                 this.showingSidebar = false;
             }
-        }
+
+        },
 
     }
 </script>

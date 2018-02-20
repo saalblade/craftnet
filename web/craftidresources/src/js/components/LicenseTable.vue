@@ -15,8 +15,11 @@
                 </template>
 
                 <th>Domain</th>
-                <th>Next Payment</th>
-                <th>Auto Renew</th>
+
+                <template v-if="enableCommercialFeatures">
+                    <th>Next Payment</th>
+                    <th>Auto Renew</th>
+                </template>
             </tr>
             </thead>
             <tbody>
@@ -43,11 +46,14 @@
                     </template>
 
                     <td>{{ license.domain }}</td>
-                    <td>November 16th, 2017</td>
-                    <td>
-                        <span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
-                        <span v-else="" class="badge">Disabled</span>
-                    </td>
+
+                    <template v-if="enableCommercialFeatures">
+                        <td>November 16th, 2017</td>
+                        <td>
+                            <span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
+                            <span v-else="" class="badge">Disabled</span>
+                        </td>
+                    </template>
                 </tr>
             </template>
             </tbody>
@@ -57,9 +63,15 @@
 
 
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
 
-        props: ['type', 'licenses']
+        props: ['type', 'licenses'],
+
+        ...mapGetters({
+            enableCommercialFeatures: 'enableCommercialFeatures',
+        }),
 
     }
 </script>

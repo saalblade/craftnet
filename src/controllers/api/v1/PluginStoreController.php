@@ -33,6 +33,8 @@ class PluginStoreController extends BaseApiController
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
         $enablePluginStoreCache = $craftIdConfig['enablePluginStoreCache'];
+        $enableCommercialFeatures = $craftIdConfig['enableCommercialFeatures'];
+
         $enableCraftId = (bool)Craft::$app->getRequest()->getParam('enableCraftId', false);
         $cacheKey = $enableCraftId ? 'pluginStoreDataCraftId' : 'pluginStoreData';
 
@@ -45,6 +47,7 @@ class PluginStoreController extends BaseApiController
                 'categories' => $this->_categories(),
                 'featuredPlugins' => $this->_featuredPlugins(),
                 'plugins' => $this->_plugins($enableCraftId),
+                'enableCommercialFeatures' => $enableCommercialFeatures
             ];
 
             if ($enablePluginStoreCache) {

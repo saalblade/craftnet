@@ -2,6 +2,12 @@ export const craftId = state => {
     return state.craftId;
 };
 
+export const enableCommercialFeatures = state => {
+    if(state.craftId) {
+        return state.craftId.enableCommercialFeatures;
+    }
+};
+
 export const stripeAccount = state => {
     return state.stripeAccount;
 };

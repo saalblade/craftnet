@@ -1,8 +1,8 @@
 <template>
-	<div v-if="!$root.stripeAccountLoading && !stripeAccount" class="alert alert-warning" role="alert">
-		<strong>Stripe account missing.</strong>
-		Define a Stripe account in the <router-link to="/developer/settings">developer settings</router-link>.
-	</div>
+    <div v-if="enableCommercialFeatures && !$root.stripeAccountLoading && !stripeAccount" class="alert alert-warning" role="alert">
+        <strong>Stripe account missing.</strong>
+        Define a Stripe account in the <router-link to="/developer/settings">developer settings</router-link>.
+    </div>
 </template>
 
 <script>
@@ -14,6 +14,7 @@
 
             ...mapGetters({
                 stripeAccount: 'stripeAccount',
+                enableCommercialFeatures: 'enableCommercialFeatures',
             }),
 
         },
