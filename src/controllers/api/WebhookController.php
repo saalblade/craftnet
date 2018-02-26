@@ -8,7 +8,7 @@ use yii\web\NotFoundHttpException;
 
 /**
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @since  3.0
+ * @since 3.0
  */
 class WebhookController extends BaseApiController
 {
