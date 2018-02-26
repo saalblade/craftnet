@@ -39,9 +39,9 @@ class ScopeRepository implements ScopeRepositoryInterface
      * append additional scopes or remove requested scopes.
      *
      * @param ScopeEntityInterface[] $scopes
-     * @param string                 $grantType
-     * @param ClientEntityInterface  $clientEntity
-     * @param null|string            $userIdentifier
+     * @param string $grantType
+     * @param ClientEntityInterface $clientEntity
+     * @param null|string $userIdentifier
      *
      * @return ScopeEntityInterface[]
      */

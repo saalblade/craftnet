@@ -132,7 +132,7 @@ class PluginsController extends Controller
         }
 
         // Get the keywords
-        if(isset($config['keywords']) && is_array($config['keywords'])) {
+        if (isset($config['keywords']) && is_array($config['keywords'])) {
             $keywords = $config['keywords'];
         } else {
             $keywords = [];
@@ -155,7 +155,7 @@ class PluginsController extends Controller
     }
 
     /**
-     * @param int|null    $pluginId
+     * @param int|null $pluginId
      * @param Plugin|null $plugin
      *
      * @return Response
@@ -291,14 +291,14 @@ class PluginsController extends Controller
 
             if ($iconFile) {
                 if ($iconFile->error != UPLOAD_ERR_OK) {
-                    if($iconFile->error == UPLOAD_ERR_INI_SIZE) {
+                    if ($iconFile->error == UPLOAD_ERR_INI_SIZE) {
                         throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                     }
 
                     throw new Exception('Couldn’t upload icon. (Error '.$iconFile->error.')');
                 }
 
-                if($iconFile->size > $maxUpload) {
+                if ($iconFile->size > $maxUpload) {
                     throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                 }
 
@@ -374,14 +374,14 @@ class PluginsController extends Controller
             if (count($screenshotFiles) > 0) {
                 foreach ($screenshotFiles as $screenshotFile) {
                     if ($screenshotFile->error != UPLOAD_ERR_OK) {
-                        if($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
+                        if ($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
                             throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                         }
 
                         throw new Exception('Couldn’t upload screenshot. (Error '.$screenshotFile->error.')');
                     }
 
-                    if($screenshotFile->size > $maxUpload) {
+                    if ($screenshotFile->size > $maxUpload) {
                         throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                     }
 
@@ -654,11 +654,11 @@ class PluginsController extends Controller
     /**
      * Returns a plugin’s icon.
      *
-     * @param Repo        $api
-     * @param string      $owner
-     * @param string      $repo
+     * @param Repo $api
+     * @param string $owner
+     * @param string $repo
      * @param string|null $ref
-     * @param array       $config
+     * @param array $config
      * @param string|null $handle
      * @param string|null $name
      *
@@ -727,14 +727,14 @@ class PluginsController extends Controller
     /**
      * Looks for a plugin’s icon within a specific path
      *
-     * @param Repo        $api
-     * @param string      $owner
-     * @param string      $repo
+     * @param Repo $api
+     * @param string $owner
+     * @param string $repo
      * @param string|null $ref
-     * @param string      $handle
+     * @param string $handle
      * @param string|null $name
      *
-     * @param string      $testPath
+     * @param string $testPath
      *
      * @return Asset|null
      * @throws Exception if the icon asset can't be saved

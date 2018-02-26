@@ -112,8 +112,7 @@ abstract class BaseApiController extends Controller
 
         try {
             return parent::runAction($id, $params);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $statusCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
 
             if ($logDb) {
@@ -172,8 +171,8 @@ abstract class BaseApiController extends Controller
 
     /**
      * @param Plugin $plugin
-     * @param bool   $fullDetails
-     * @param bool   $includePrices
+     * @param bool $fullDetails
+     * @param bool $includePrices
      *
      * @return array
      */

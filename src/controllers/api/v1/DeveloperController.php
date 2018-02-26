@@ -2,7 +2,6 @@
 
 namespace craftcom\controllers\api\v1;
 
-use Craft;
 use craft\elements\User;
 use craftcom\controllers\api\BaseApiController;
 use yii\web\Response;

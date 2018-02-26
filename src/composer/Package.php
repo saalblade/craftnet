@@ -14,7 +14,7 @@ use craftcom\plugins\Plugin;
 use Github\Client as GithubClient;
 
 /**
- * @property Plugin|null  $plugin
+ * @property Plugin|null $plugin
  * @property VcsInterface $vcs
  */
 class Package extends Model
@@ -108,9 +108,9 @@ class Package extends Model
 
         if ($this->_plugin === null) {
             $this->_plugin = Plugin::find()
-                ->packageId($this->id)
-                ->status(null)
-                ->one()
+                    ->packageId($this->id)
+                    ->status(null)
+                    ->one()
                 ?? false;
         }
 

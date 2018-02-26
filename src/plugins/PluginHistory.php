@@ -27,7 +27,7 @@ class PluginHistory extends BaseObject implements \IteratorAggregate, \ArrayAcce
 
     /**
      * @param Plugin $plugin
-     * @param array  $config
+     * @param array $config
      *
      * @inheritdoc
      */
@@ -40,7 +40,7 @@ class PluginHistory extends BaseObject implements \IteratorAggregate, \ArrayAcce
     /**
      * Adds a new history state.
      *
-     * @param string      $note
+     * @param string $note
      * @param string|null $devComments
      */
     public function push(string $note, string $devComments = null)

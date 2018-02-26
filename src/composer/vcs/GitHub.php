@@ -7,7 +7,6 @@ use Craft;
 use craft\helpers\Json;
 use craftcom\composer\PackageRelease;
 use craftcom\errors\VcsException;
-use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
 use Github\ResultPager;
