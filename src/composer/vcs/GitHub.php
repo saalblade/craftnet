@@ -11,7 +11,7 @@ use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
 use Github\ResultPager;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
 
 /**
  * @property array $versions
@@ -92,7 +92,7 @@ class GitHub extends BaseVcs
 
         try {
             $config = Json::decode(base64_decode($response['content']));
-        } catch (InvalidParamException $e) {
+        } catch (InvalidArgumentException $e) {
             Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to error decoding composer.json: {$e->getMessage()}", __METHOD__);
             Craft::$app->getErrorHandler()->logException($e);
             $release->invalidate("error decoding composer.json: {$e->getMessage()}");

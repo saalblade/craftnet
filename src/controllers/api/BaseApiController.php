@@ -5,9 +5,7 @@ namespace craftcom\controllers\api;
 use Craft;
 use craft\db\Connection;
 use craft\helpers\ArrayHelper;
-use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
-use craft\helpers\Html;
 use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\web\Controller;
@@ -15,7 +13,7 @@ use craftcom\Module;
 use craftcom\plugins\Plugin;
 use JsonSchema\Validator;
 use stdClass;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
 use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
 use yii\web\HttpException;
@@ -103,7 +101,7 @@ abstract class BaseApiController extends Controller
                 // See if it's valid JSON.
                 Json::decode($rawBody);
                 $insertRequest['bodyJson'] = $rawBody;
-            } catch (InvalidParamException $e) {
+            } catch (InvalidArgumentException $e) {
                 // There was a problem JSON decoding.
                 $insertRequest['bodyText'] = $rawBody;
             }
