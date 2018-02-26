@@ -196,9 +196,9 @@ class JsonDumper extends Component
     /**
      * Writes a new JSON file and returns its hash.
      *
-     * @param array  $data     The data to write
-     * @param string $path     The path to save the content (can contain a %hash% tag)
-     * @param array  $oldPaths Array of existing files that should be deleted
+     * @param array $data The data to write
+     * @param string $path The path to save the content (can contain a %hash% tag)
+     * @param array $oldPaths Array of existing files that should be deleted
      *
      * @return string
      */

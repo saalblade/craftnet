@@ -26,7 +26,7 @@ class Packagist extends BaseVcs
 
     /**
      * @param string $uri
-     * @param null   $cacheDuration
+     * @param null $cacheDuration
      *
      * @return array
      */

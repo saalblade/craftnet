@@ -118,7 +118,7 @@ class Oauth extends Component
 
     /**
      * @param string $providerClass
-     * @param int    $userId
+     * @param int $userId
      *
      * @return string|null|false
      */
@@ -133,7 +133,7 @@ class Oauth extends Component
 
     /**
      * @param string $providerClass
-     * @param int    $userId
+     * @param int $userId
      *
      * @return array|null
      */

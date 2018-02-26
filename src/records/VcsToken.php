@@ -14,14 +14,14 @@ use yii\db\ActiveQueryInterface;
 /**
  * Class OAuthToken record.
  *
- * @property int       $id           ID
- * @property int       $userId       User ID
- * @property string    $provider     Provider
- * @property string    $accessToken  Access Token
- * @property string    $tokenType    Token Type
- * @property int       $expiresIn    Time left to expire
+ * @property int $id           ID
+ * @property int $userId       User ID
+ * @property string $provider     Provider
+ * @property string $accessToken  Access Token
+ * @property string $tokenType    Token Type
+ * @property int $expiresIn    Time left to expire
  * @property \DateTime $expiryDate   Expiration Date
- * @property string    $refreshToken Refresh Token
+ * @property string $refreshToken Refresh Token
  */
 class VcsToken extends ActiveRecord
 {

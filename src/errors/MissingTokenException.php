@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\errors;
 
 use craftcom\plugins\Plugin;

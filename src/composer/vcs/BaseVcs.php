@@ -19,7 +19,7 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
      * BaseVcs constructor.
      *
      * @param Package $package
-     * @param array   $config
+     * @param array $config
      */
     public function __construct(Package $package, array $config = [])
     {
@@ -50,7 +50,7 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
 
     /**
      * @param PackageRelease $release
-     * @param array          $config
+     * @param array $config
      *
      * @return bool
      */

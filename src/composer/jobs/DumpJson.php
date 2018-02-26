@@ -2,9 +2,9 @@
 
 namespace craftcom\composer\jobs;
 
+use Craft;
 use craft\queue\BaseJob;
 use craftcom\Module;
-use Craft;
 
 class DumpJson extends BaseJob
 {

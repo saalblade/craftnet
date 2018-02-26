@@ -6,15 +6,9 @@ use Craft;
 use craft\elements\Category;
 use craft\elements\Entry;
 use craft\elements\User;
-use craft\helpers\Json;
 use craftcom\behaviors\Developer;
-use craftcom\controllers\api\BaseApiController;
 use craftcom\Module;
-use craftcom\plugins\Plugin;
-use League\OAuth2\Client\Token\AccessToken;
 use yii\web\Response;
-use craft\db\Query;
-use League\OAuth2\Client\Provider\Github;
 
 
 /**

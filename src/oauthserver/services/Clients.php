@@ -65,7 +65,7 @@ class Clients extends Component
 
     /**
      * @param Client $client
-     * @param bool   $runValidation
+     * @param bool $runValidation
      *
      * @return bool
      */
