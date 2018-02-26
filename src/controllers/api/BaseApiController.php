@@ -64,7 +64,7 @@ abstract class BaseApiController extends Controller
     }
 
     /**
-     * @param      $key
+     * @param $key
      * @param null $pluginHandle
      */
     public function addLogRequestKey($key, $pluginHandle = null)

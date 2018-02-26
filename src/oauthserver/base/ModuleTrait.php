@@ -7,11 +7,11 @@ use craftcom\oauthserver\Module as OauthServer;
 /**
  * ModuleTrait implements the common methods and properties for plugin classes.
  *
- * @property \craftcom\oauthserver\services\AccessTokens $accessTokens       The accessTokens service
- * @property \craftcom\oauthserver\services\AuthCodes $authCodes          The authCodes service
- * @property \craftcom\oauthserver\services\clients $clients            The clients service
- * @property \craftcom\oauthserver\services\Oauth $oauth              The oauth service
- * @property \craftcom\oauthserver\services\RefreshTokens $refreshTokens      The tokens service
+ * @property \craftcom\oauthserver\services\AccessTokens $accessTokens The accessTokens service
+ * @property \craftcom\oauthserver\services\AuthCodes $authCodes The authCodes service
+ * @property \craftcom\oauthserver\services\clients $clients The clients service
+ * @property \craftcom\oauthserver\services\Oauth $oauth The oauth service
+ * @property \craftcom\oauthserver\services\RefreshTokens $refreshTokens The tokens service
  */
 trait ModuleTrait
 {
