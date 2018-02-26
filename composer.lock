@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-paterson/oauth2-stripe.git",
-                "reference": "d3469dca3063ddc34e1e756b14de1df41d1186d9"
+                "reference": "52a43a58a51dceac5d91c906c6da13f0994951b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-paterson/oauth2-stripe/zipball/d3469dca3063ddc34e1e756b14de1df41d1186d9",
-                "reference": "d3469dca3063ddc34e1e756b14de1df41d1186d9",
+                "url": "https://api.github.com/repos/adam-paterson/oauth2-stripe/zipball/52a43a58a51dceac5d91c906c6da13f0994951b6",
+                "reference": "52a43a58a51dceac5d91c906c6da13f0994951b6",
                 "shasum": ""
             },
             "require": {
@@ -59,20 +59,20 @@
                 "stripe",
                 "stripe api"
             ],
-            "time": "2017-02-22T15:20:05+00:00"
+            "time": "2018-02-26T09:35:45+00:00"
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.2",
+            "version": "3.52.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "69ba4e07288a532fe7635f7cdd73cffa6509f538"
+                "reference": "d0c292e94d53bb131b4ec5d751d76363722d8afc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/69ba4e07288a532fe7635f7cdd73cffa6509f538",
-                "reference": "69ba4e07288a532fe7635f7cdd73cffa6509f538",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d0c292e94d53bb131b4ec5d751d76363722d8afc",
+                "reference": "d0c292e94d53bb131b4ec5d751d76363722d8afc",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-01-26T22:17:57+00:00"
+            "time": "2018-02-23T18:27:59+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -562,16 +562,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0-RC8",
+            "version": "3.0.0-RC12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "952585f7b1afc1905368c2c22457049e2e6f80d6"
+                "reference": "a6b33ecbdda3f9e38087bc94c49424c4b48bc2c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/952585f7b1afc1905368c2c22457049e2e6f80d6",
-                "reference": "952585f7b1afc1905368c2c22457049e2e6f80d6",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/a6b33ecbdda3f9e38087bc94c49424c4b48bc2c0",
+                "reference": "a6b33ecbdda3f9e38087bc94c49424c4b48bc2c0",
                 "shasum": ""
             },
             "require": {
@@ -599,7 +599,7 @@
                 "pixelandtonic/imagine": "~0.7.1.2",
                 "seld/cli-prompt": "~1.0.3",
                 "twig/twig": "~2.4.4",
-                "yiisoft/yii2": "~2.0.13.0",
+                "yiisoft/yii2": "~2.0.14.0",
                 "yiisoft/yii2-debug": "~2.0.10",
                 "yiisoft/yii2-queue": "~2.0.1",
                 "yiisoft/yii2-swiftmailer": "~2.1.0",
@@ -640,7 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-01-30T18:59:17+00:00"
+            "time": "2018-02-22T21:34:48+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -1115,16 +1115,16 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.9.3",
+            "version": "v4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69"
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/95e1bae3182efc0f3422896a3236e991049dac69",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d85d39da4576a6934b72480be6978fb10c860021",
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
                 "shasum": ""
             },
             "require": {
@@ -1158,7 +1158,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-06-03T02:28:16+00:00"
+            "time": "2018-02-23T01:58:20+00:00"
         },
         {
             "name": "flipboxdigital/swiftmailer-postmark",
@@ -1435,16 +1435,16 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "5.2.6",
+            "version": "5.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "d283e11b6e14c6f4664cf080415c4341293e5bbd"
+                "reference": "8560d4314577199ba51bf2032f02cd1315587c23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/d283e11b6e14c6f4664cf080415c4341293e5bbd",
-                "reference": "d283e11b6e14c6f4664cf080415c4341293e5bbd",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/8560d4314577199ba51bf2032f02cd1315587c23",
+                "reference": "8560d4314577199ba51bf2032f02cd1315587c23",
                 "shasum": ""
             },
             "require": {
@@ -1453,7 +1453,7 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.1",
                 "json-schema/json-schema-test-suite": "1.2.0",
-                "phpunit/phpunit": "^4.8.22"
+                "phpunit/phpunit": "^4.8.35"
             },
             "bin": [
                 "bin/validate-json"
@@ -1497,7 +1497,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2017-10-21T13:15:38+00:00"
+            "time": "2018-02-14T22:26:30+00:00"
         },
         {
             "name": "knplabs/github-api",
@@ -2254,16 +2254,16 @@
         },
         {
             "name": "php-http/discovery",
-            "version": "1.3.0",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/discovery.git",
-                "reference": "7b50ab4d6c9fdaa1ed53ae310c955900af6e3372"
+                "reference": "9a6cb24de552bfe1aa9d7d1569e2d49c5b169a33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/discovery/zipball/7b50ab4d6c9fdaa1ed53ae310c955900af6e3372",
-                "reference": "7b50ab4d6c9fdaa1ed53ae310c955900af6e3372",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/9a6cb24de552bfe1aa9d7d1569e2d49c5b169a33",
+                "reference": "9a6cb24de552bfe1aa9d7d1569e2d49c5b169a33",
                 "shasum": ""
             },
             "require": {
@@ -2312,7 +2312,7 @@
                 "message",
                 "psr7"
             ],
-            "time": "2017-08-03T10:12:53+00:00"
+            "time": "2018-02-06T10:55:24+00:00"
         },
         {
             "name": "php-http/guzzle6-adapter",
@@ -2809,17 +2809,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "a5ff7ff05264c8796ffb1b7b6fdde43a9c6b0776"
+                "reference": "f3e52bf601a4224e2eb3ac8e833c129beff8abc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a5ff7ff05264c8796ffb1b7b6fdde43a9c6b0776",
-                "reference": "a5ff7ff05264c8796ffb1b7b6fdde43a9c6b0776",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f3e52bf601a4224e2eb3ac8e833c129beff8abc8",
+                "reference": "f3e52bf601a4224e2eb3ac8e833c129beff8abc8",
                 "shasum": ""
             },
             "conflict": {
+                "3f/pygmentize": "<1.2",
                 "adodb/adodb-php": "<5.20.6",
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
+                "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
                 "aws/aws-sdk-php": ">=3,<3.2.1",
                 "bugsnag/bugsnag-laravel": ">=2,<2.0.2",
                 "cakephp/cakephp": ">=1.3,<1.3.18|>=2,<2.4.99|>=2.5,<2.5.99|>=2.6,<2.6.12|>=2.7,<2.7.6|>=3,<3.0.15|>=3.1,<3.1.4",
@@ -2844,6 +2846,7 @@
                 "dompdf/dompdf": ">=0.6,<0.6.2",
                 "drupal/core": ">=8,<8.3.7",
                 "drupal/drupal": ">=8,<8.3.7",
+                "erusev/parsedown": "<=1.6.4",
                 "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.2|>=5.4,<5.4.10.1|>=2017.8,<2017.8.1.1",
                 "firebase/php-jwt": "<2",
                 "friendsofsymfony/rest-bundle": ">=1.2,<1.2.2",
@@ -2864,9 +2867,13 @@
                 "onelogin/php-saml": "<2.10.4",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
+                "padraic/humbug_get_contents": "<1.1.2",
+                "pagarme/pagarme-php": ">=0,<9.9.99",
                 "phpmailer/phpmailer": ">=5,<5.2.24",
                 "phpunit/phpunit": ">=4.8.19,<4.8.28|>=5.0.10,<5.6.3",
                 "phpxmlrpc/extras": "<0.6.1",
+                "propel/propel": ">=2.0.0-alpha1,<=2.0.0-alpha7",
+                "propel/propel1": ">=1,<=1.7.1",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "shopware/shopware": "<5.3.7",
@@ -2879,6 +2886,7 @@
                 "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "squizlabs/php_codesniffer": ">=1,<2.8.1",
+                "stormpath/sdk": ">=0,<9.9.99",
                 "swiftmailer/swiftmailer": ">=4,<5.4.5",
                 "symfony/dependency-injection": ">=2,<2.0.17",
                 "symfony/form": ">=2.3,<2.3.35|>=2.4,<2.6.12|>=2.7,<2.7.38|>=2.8,<2.8.31|>=3,<3.2.14|>=3.3,<3.3.13",
@@ -2898,16 +2906,17 @@
                 "symfony/web-profiler-bundle": ">=2,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
+                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
+                "titon/framework": ">=0,<9.9.99",
                 "twig/twig": "<1.20",
                 "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.22|>=8,<8.7.5",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "willdurand/js-translation-bundle": "<2.1.1",
                 "yiisoft/yii": ">=1.1.14,<1.1.15",
-                "yiisoft/yii2": "<2.0.5",
+                "yiisoft/yii2": "<2.0.14",
                 "yiisoft/yii2-bootstrap": "<2.0.4",
-                "yiisoft/yii2-dev": "<2.0.4",
+                "yiisoft/yii2-dev": "<2.0.14",
                 "yiisoft/yii2-gii": "<2.0.4",
                 "yiisoft/yii2-jui": "<2.0.4",
                 "zendframework/zend-cache": ">=2.4,<2.4.8|>=2.5,<2.5.3",
@@ -2947,7 +2956,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-01-31T19:36:12+00:00"
+            "time": "2018-02-25T12:47:47+00:00"
         },
         {
             "name": "seld/cli-prompt",
@@ -3147,16 +3156,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v5.9.0",
+            "version": "v5.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "d1978a7f20cdbd05c5c462ffa6728f279f03e0c9"
+                "reference": "026191d12241a76c957884dff75e4f3721b0e77f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/d1978a7f20cdbd05c5c462ffa6728f279f03e0c9",
-                "reference": "d1978a7f20cdbd05c5c462ffa6728f279f03e0c9",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/026191d12241a76c957884dff75e4f3721b0e77f",
+                "reference": "026191d12241a76c957884dff75e4f3721b0e77f",
                 "shasum": ""
             },
             "require": {
@@ -3198,7 +3207,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2018-01-17T20:53:33+00:00"
+            "time": "2018-02-07T18:36:55+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3708,16 +3717,16 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.13.1",
+            "version": "2.0.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "7af96d8da5ea3e9a5dd05d0e734b21c5726a6ddf"
+                "reference": "d99969394c66dc3606134af092b8ec561ea5d7c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/7af96d8da5ea3e9a5dd05d0e734b21c5726a6ddf",
-                "reference": "7af96d8da5ea3e9a5dd05d0e734b21c5726a6ddf",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/d99969394c66dc3606134af092b8ec561ea5d7c6",
+                "reference": "d99969394c66dc3606134af092b8ec561ea5d7c6",
                 "shasum": ""
             },
             "require": {
@@ -3804,20 +3813,20 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2017-11-14T11:08:21+00:00"
+            "time": "2018-02-24T20:23:06+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
-            "version": "2.0.7",
+            "version": "2.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-bootstrap.git",
-                "reference": "02a54d868343ed11d02f0f0f8cbbecb590e0cb3f"
+                "reference": "3f49c47924bb9fa5363c3fc7b073d954168cf438"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/02a54d868343ed11d02f0f0f8cbbecb590e0cb3f",
-                "reference": "02a54d868343ed11d02f0f0f8cbbecb590e0cb3f",
+                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/3f49c47924bb9fa5363c3fc7b073d954168cf438",
+                "reference": "3f49c47924bb9fa5363c3fc7b073d954168cf438",
                 "shasum": ""
             },
             "require": {
@@ -3832,7 +3841,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "yii\\bootstrap\\": ""
+                    "yii\\bootstrap\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3841,8 +3850,22 @@
             ],
             "authors": [
                 {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                },
+                {
+                    "name": "Alexander Makarov",
+                    "email": "sam@rmcreative.ru",
+                    "homepage": "http://rmcreative.ru/"
+                },
+                {
+                    "name": "Antonio Ramirez",
+                    "email": "amigo.cobos@gmail.com"
+                },
+                {
                     "name": "Qiang Xue",
-                    "email": "qiang.xue@gmail.com"
+                    "email": "qiang.xue@gmail.com",
+                    "homepage": "http://www.yiiframework.com/"
                 }
             ],
             "description": "The Twitter Bootstrap extension for the Yii framework",
@@ -3850,7 +3873,7 @@
                 "bootstrap",
                 "yii2"
             ],
-            "time": "2017-10-09T19:48:22+00:00"
+            "time": "2018-02-16T10:41:52+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",
