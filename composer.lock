@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.16",
+            "version": "3.52.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d0c292e94d53bb131b4ec5d751d76363722d8afc"
+                "reference": "b63aa5831954684a24e6c4583329c4a047e3ea61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d0c292e94d53bb131b4ec5d751d76363722d8afc",
-                "reference": "d0c292e94d53bb131b4ec5d751d76363722d8afc",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b63aa5831954684a24e6c4583329c4a047e3ea61",
+                "reference": "b63aa5831954684a24e6c4583329c4a047e3ea61",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-02-23T18:27:59+00:00"
+            "time": "2018-02-26T23:54:37+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -562,16 +562,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0-RC12",
+            "version": "3.0.0-RC13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "a6b33ecbdda3f9e38087bc94c49424c4b48bc2c0"
+                "reference": "39b6e1e84285ed9eb8917630c93d04622f1322df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/a6b33ecbdda3f9e38087bc94c49424c4b48bc2c0",
-                "reference": "a6b33ecbdda3f9e38087bc94c49424c4b48bc2c0",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/39b6e1e84285ed9eb8917630c93d04622f1322df",
+                "reference": "39b6e1e84285ed9eb8917630c93d04622f1322df",
                 "shasum": ""
             },
             "require": {
@@ -612,12 +612,6 @@
                 "bower-asset/punycode": "1.3.*",
                 "bower-asset/yii2-pjax": "~2.0.1"
             },
-            "require-dev": {
-                "codeception/codeception": "~2.3.3",
-                "codeception/mockery-module": "~0.2.2",
-                "codeception/specify": "~0.4.6",
-                "codeception/verify": "~0.3.3"
-            },
             "suggest": {
                 "ext-iconv": "Adds support for more character encodings than PHP’s built-in mb_convert_encoding() function, which Craft will take advantage of when converting strings to UTF-8.",
                 "ext-imagick": "Adds support for more image processing formats and options.",
@@ -629,7 +623,6 @@
                     "craft\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "proprietary"
             ],
@@ -640,7 +633,15 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-02-22T21:34:48+00:00"
+            "support": {
+                "email": "support@craftcms.com",
+                "issues": "https://github.com/craftcms/cms/issues?state=open",
+                "forum": "https://craftcms.stackexchange.com/",
+                "source": "https://github.com/craftcms/cms",
+                "docs": "https://github.com/craftcms/docs",
+                "rss": "https://github.com/craftcms/cms/releases.atom"
+            },
+            "time": "2018-02-27T19:49:36+00:00"
         },
         {
             "name": "craftcms/commerce",
