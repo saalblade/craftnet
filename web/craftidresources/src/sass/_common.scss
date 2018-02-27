@@ -54,6 +54,7 @@ form {
 input[type="text"],
 input[type="password"],
 input[type="tel"],
+input[type="url"],
 textarea {
   @apply .border .border-grey .p-2 .rounded .block .w-full;
 
