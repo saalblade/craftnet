@@ -649,7 +649,7 @@
             "dist": {
                 "type": "path",
                 "url": "../craft3-commerce",
-                "reference": "e25f907439aad74b0d55d5a790e4ce4cb0474fcf",
+                "reference": "ada62f73650835bf76f40fb6c4b5baa9d656ad37",
                 "shasum": null
             },
             "require": {
