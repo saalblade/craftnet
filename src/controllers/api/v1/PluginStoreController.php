@@ -101,7 +101,7 @@ class PluginStoreController extends BaseApiController
 
         $entries = Entry::find()
             ->site('craftId')
-            ->select(['elements.id', 'content.title', 'content.field_limit'])
+            ->select(['elements.id', 'elements.fieldLayoutId', 'content.title', 'content.field_limit'])
             ->section('featuredPlugins')
             ->with('plugins', ['select' => ['elements.id']])
             ->all();
