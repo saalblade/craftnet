@@ -11,6 +11,7 @@ use craftcom\cms\CmsEdition;
 use craftcom\cms\CmsLicenseManager;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\errors\LicenseNotFoundException;
+use craftcom\errors\ValidationException;
 use craftcom\helpers\LicenseHelper;
 use craftcom\plugins\Plugin;
 use craftcom\plugins\PluginLicense;
@@ -19,7 +20,6 @@ use Stripe\Stripe;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
 use yii\base\NotSupportedException;
-use yii\helpers\ArrayHelper;
 use yii\validators\EmailValidator;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -52,7 +52,11 @@ class BuyController extends BaseApiController
         // email validation
         $emailValidator = new EmailValidator(['skipOnEmpty' => false]);
         if (!$emailValidator->validate($payload->email, $error)) {
-            $errors['email'][] = $error;
+            $errors[] = [
+                'param' => 'email',
+                'message' => $error,
+                'code' => self::ERROR_CODE_INVALID,
+            ];
         }
 
         // create the customer
@@ -62,13 +66,21 @@ class BuyController extends BaseApiController
 
         // get the country
         if (($country = $commerce->getCountries()->getCountryByIso($payload->billingAddress->country)) === null) {
-            $errors['billingAddress']['country'][] = 'Invalid country';
+            $errors[] = [
+                'param' => 'billingAddress.country',
+                'message' => 'Invalid country',
+                'code' => self::ERROR_CODE_INVALID,
+            ];
         }
 
         // get the state
         if (!empty($payload->billingAddress->state)) {
             if (($state = $commerce->getStates()->getStateByAbbreviation($country->id, $payload->billingAddress->state)) === null) {
-                $errors['billingAddress']['state'][] = 'Invalid state';
+                $errors[] = [
+                    'param' => 'billingAddress.state',
+                    'message' => 'Invalid state',
+                    'code' => self::ERROR_CODE_INVALID,
+                ];
             }
         }
 
@@ -85,9 +97,7 @@ class BuyController extends BaseApiController
         ];
         $address = new Address($addressConfig);
         if (!$address->validate(array_keys($addressConfig))) {
-            $errors = ArrayHelper::merge($errors, [
-                'billingAddress' => $address->getFirstErrors()
-            ]);
+            array_push($errors, ...$this->modelErrors($address, 'billingAddress'));
         }
         $address->countryId = $country->id;
         $address->stateId = $state->id ?? null;
@@ -98,7 +108,11 @@ class BuyController extends BaseApiController
             !empty($payload->couponCode) &&
             !$commerce->getDiscounts()->matchCode($payload->couponCode, null, $error)
         ) {
-            $errors['couponCode'][] = $error;
+            $errors[] = [
+                'param' => 'couponCode',
+                'message' => $error,
+                'code' => self::ERROR_CODE_INVALID,
+            ];
         }
 
         // begin a transaction
@@ -139,13 +153,19 @@ class BuyController extends BaseApiController
             $newPluginLicenses = [];
 
             foreach ($payload->items as $i => $item) {
+                $lineItem = null;
+
                 switch ($item->type) {
                     case 'cms-edition':
                         // Get the existing license
                         try {
                             $license = $this->module->getCmsLicenseManager()->getLicenseByKey($item->licenseKey);
                         } catch (LicenseNotFoundException $e) {
-                            $errors['items'][$i]['licenseKey'][] = $e->getMessage();
+                            $errors[] = [
+                                'param' => "items[{$i}].licenseKey",
+                                'message' => $e->getMessage(),
+                                'code' => self::ERROR_CODE_MISSING,
+                            ];
                             break;
                         }
 
@@ -162,7 +182,11 @@ class BuyController extends BaseApiController
                         }
 
                         if (!in_array($item->edition, $validUpgrades, true)) {
-                            $errors['items'][$i]['edition'][] = "Invalid upgrade edition: {$item->edition}";
+                            $errors[] = [
+                                'param' => "items[{$i}].edition",
+                                'message' => "Invalid upgrade edition: {$item->edition}",
+                                'code' => self::ERROR_CODE_INVALID,
+                            ];
                             break;
                         }
 
@@ -185,14 +209,22 @@ class BuyController extends BaseApiController
                             ->handle($item->plugin)
                             ->one();
                         if (!$plugin) {
-                            $errors['items'][$i]['plugin'][] = "Invalid plugin handle: {$item->plugin}";
+                            $errors[] = [
+                                'param' => "items[{$i}].plugin",
+                                'message' => "Invalid plugin handle: {$item->plugin}",
+                                'code' => self::ERROR_CODE_MISSING,
+                            ];
                             break;
                         }
 
                         try {
                             $edition = $plugin->getEdition($item->edition);
                         } catch (InvalidArgumentException $e) {
-                            $errors['items'][$i]['edition'][] = "Invalid plugin edition: {$item->edition}";
+                            $errors[] = [
+                                'param' => "items[{$i}].edition",
+                                'message' => $e->getMessage(),
+                                'code' => self::ERROR_CODE_MISSING,
+                            ];
                             break;
                         }
 
@@ -201,7 +233,11 @@ class BuyController extends BaseApiController
                             try {
                                 $license = $this->module->getPluginLicenseManager()->getLicenseByKey($item->licenseKey);
                             } catch (LicenseNotFoundException $e) {
-                                $errors['items'][$i]['licenseKey'][] = $e->getMessage();
+                                $errors[] = [
+                                    'param' => "items[{$i}].licenseKey",
+                                    'message' => $e->getMessage(),
+                                    'code' => self::ERROR_CODE_MISSING,
+                                ];
                                 break;
                             }
                         } else {
@@ -210,7 +246,11 @@ class BuyController extends BaseApiController
                                 try {
                                     $cmsLicense = $this->module->getCmsLicenseManager()->getLicenseByKey($item->cmsLicenseKey);
                                 } catch (LicenseNotFoundException $e) {
-                                    $errors['items'][$i]['cmsLicenseKey'][] = $e->getMessage();
+                                    $errors[] = [
+                                        'param' => "items[{$i}].cmsLicenseKey",
+                                        'message' => $e->getMessage(),
+                                        'code' => self::ERROR_CODE_MISSING,
+                                    ];
                                     break;
                                 }
                             } else {
@@ -248,7 +288,9 @@ class BuyController extends BaseApiController
                         throw new BadRequestHttpException("Invalid item type: {$item->type}");
                 }
 
-                $commerce->getCarts()->addToCart($order, $lineItem);
+                if ($lineItem !== null) {
+                    $commerce->getCarts()->addToCart($order, $lineItem);
+                }
             }
 
             // make sure the cost is in line with what they were expecting
@@ -257,14 +299,17 @@ class BuyController extends BaseApiController
                 $formatter = Craft::$app->getFormatter();
                 $fmtExpected = $formatter->asCurrency($payload->totalPrice, 'USD', [], [], true);
                 $fmtActual = $formatter->asCurrency($totalPrice, 'USD', [], [], true);
-                $errors['totalPrice'][] = "Expected price ({$fmtExpected}) was less than the order total ({$fmtActual}).";
+                $errors[] = [
+                    'param' => 'totalPrice',
+                    'message' => "Expected price ({$fmtExpected}) was less than the order total ({$fmtActual}).",
+                    'code' => self::ERROR_CODE_INVALID,
+                ];
             }
 
             // if there are any errors, bail before we get to the point of no return
             if (!empty($errors)) {
                 $transaction->rollBack();
-                Craft::$app->getResponse()->setStatusCode(400);
-                return $this->asJson(compact('errors'));
+                throw new ValidationException($errors);
             }
 
             // create a source token

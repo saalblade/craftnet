@@ -9,13 +9,15 @@ use craft\helpers\Db;
 use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\web\Controller;
+use craftcom\errors\ValidationException;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
 use JsonSchema\Validator;
 use stdClass;
 use yii\base\InvalidArgumentException;
+use yii\base\Model;
+use yii\base\UserException;
 use yii\helpers\Markdown;
-use yii\web\BadRequestHttpException;
 use yii\web\HttpException;
 
 /**
@@ -27,6 +29,10 @@ use yii\web\HttpException;
  */
 abstract class BaseApiController extends Controller
 {
+    const ERROR_CODE_INVALID = 'invalid';
+    const ERROR_CODE_MISSING = 'missing';
+    const ERROR_CODE_EXISTS = 'already_exists';
+
     /**
      * @inheritdoc
      */
@@ -114,6 +120,7 @@ abstract class BaseApiController extends Controller
             return parent::runAction($id, $params);
         } catch (\Exception $e) {
             $statusCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
+            $message = $e instanceof UserException && $e->getMessage() ? $e->getMessage() : 'A server error occurred';
 
             if ($logDb) {
                 $logDb->createCommand()
@@ -140,7 +147,13 @@ abstract class BaseApiController extends Controller
 
             Craft::$app->getErrorHandler()->logException($e);
 
-            return $this->asErrorJson($e->getMessage())
+            // assemble and return the response
+            $data = compact('message');
+            if ($e instanceof ValidationException) {
+                $data['errors'] = $e->errors;
+            }
+
+            return $this->asJson($data)
                 ->setStatusCode($statusCode);
         }
     }
@@ -151,7 +164,7 @@ abstract class BaseApiController extends Controller
      * @param string|null $schema JSON schema to validate the body with (optional)
      *
      * @return stdClass|array
-     * @throws BadRequestHttpException if the data doesn't validate
+     * @throws ValidationException if the data doesn't validate
      */
     protected function getPayload(string $schema = null)
     {
@@ -163,12 +176,42 @@ abstract class BaseApiController extends Controller
             $validator->validate($body, (object)['$ref' => 'file://'.$path]);
 
             if (!$validator->isValid()) {
-                Craft::warning("Invalid API request payload (validated against {$schema}):\n".print_r($validator->getErrors(), true), __METHOD__);
-                throw new BadRequestHttpException('Invalid request body.');
+                $errors = [];
+                foreach ($validator->getErrors() as $error) {
+                    $errors[] = [
+                        'param' => $error['property'],
+                        'message' => $error['message'],
+                        'code' => self::ERROR_CODE_INVALID,
+                    ];
+                }
+                throw new ValidationException($errors);
             }
         }
 
         return $body;
+    }
+
+    /**
+     * Returns an array of validation errors for a ValdiationException based on a model's validation errors
+     * @param Model $model
+     * @param string|null $paramPrefix
+     * @return array
+     */
+    protected function modelErrors(Model $model, string $paramPrefix = null): array
+    {
+        $errors = [];
+
+        foreach ($model->getErrors() as $attr => $attrErrors) {
+            foreach ($attrErrors as $error) {
+                $errors[] = [
+                    'param' => ($paramPrefix !== null ? $paramPrefix.'.' : '').$attr,
+                    'message' => $error,
+                    'code' => self::ERROR_CODE_INVALID,
+                ];
+            }
+        }
+
+        return $errors;
     }
 
     /**
