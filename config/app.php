@@ -14,6 +14,12 @@ return [
             'craftcom' => [
                 'class' => \craftcom\Module::class,
                 'components' => [
+                    'cmsLicenseManager' => [
+                        'class' => craftcom\cms\CmsLicenseManager::class,
+                    ],
+                    'pluginLicenseManager' => [
+                        'class' => craftcom\plugins\PluginLicenseManager::class,
+                    ],
                     'packageManager' => [
                         'class' => craftcom\composer\PackageManager::class,
                         'githubFallbackTokens' => getenv('GITHUB_FALLBACK_TOKENS'),

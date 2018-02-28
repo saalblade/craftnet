@@ -22,8 +22,10 @@ return [
     'api' => [
         'GET  v1/account' => 'craftcom/api/v1/account',
         'POST v1/available-plugins' => 'craftcom/api/v1/available-plugins',
+        'POST v1/buy' => 'craftcom/api/v1/buy',
         'POST v1/checkout' => 'craftcom/api/v1/checkout',
         'POST v1/developer/<userId:\d+>' => 'craftcom/api/v1/developer',
+        'POST v1/licenses/cms/request' => 'craftcom/api/v1/licenses/cms/request',
         'POST v1/optimize-composer-reqs' => 'craftcom/api/v1/optimize-composer-reqs',
         'POST v1/plugin-store' => 'craftcom/api/v1/plugin-store',
         'POST v1/plugin/<pluginId:\d+>' => 'craftcom/api/v1/plugin',

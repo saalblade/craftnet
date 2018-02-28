@@ -17,17 +17,21 @@ use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
 use craftcom\behaviors\Developer;
+use craftcom\cms\CmsLicenseManager;
 use craftcom\composer\JsonDumper;
 use craftcom\composer\PackageManager;
 use craftcom\fields\Plugins;
+use craftcom\plugins\PluginLicenseManager;
 use craftcom\services\Oauth;
 use craftcom\utilities\UnavailablePlugins;
 use yii\base\Event;
 
 /**
+ * @property CmsLicenseManager $cmsLicenseManager
  * @property JsonDumper $jsonDumper
  * @property Oauth $oauth
  * @property PackageManager $packageManager
+ * @property PluginLicenseManager $pluginLicenseManager
  */
 class Module extends \yii\base\Module
 {
@@ -85,6 +89,22 @@ class Module extends \yii\base\Module
         });
 
         parent::init();
+    }
+
+    /**
+     * @return CmsLicenseManager
+     */
+    public function getCmsLicenseManager(): CmsLicenseManager
+    {
+        return $this->get('cmsLicenseManager');
+    }
+
+    /**
+     * @return PluginLicenseManager
+     */
+    public function getPluginLicenseManager(): PluginLicenseManager
+    {
+        return $this->get('pluginLicenseManager');
     }
 
     /**

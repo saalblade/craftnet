@@ -138,6 +138,8 @@ abstract class BaseApiController extends Controller
                 }
             }
 
+            Craft::$app->getErrorHandler()->logException($e);
+
             return $this->asErrorJson($e->getMessage())
                 ->setStatusCode($statusCode);
         }

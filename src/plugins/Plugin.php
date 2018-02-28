@@ -16,6 +16,7 @@ use craftcom\behaviors\Developer;
 use craftcom\composer\Package;
 use craftcom\Module;
 use craftcom\records\Plugin as PluginRecord;
+use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\helpers\Markdown;
 
@@ -94,6 +95,13 @@ class Plugin extends Element
     public static function eagerLoadingMap(array $sourceElements, string $handle)
     {
         switch ($handle) {
+            case 'editions':
+                $query = (new Query())
+                    ->select(['pluginId as source', 'id as target'])
+                    ->from(['craftcom_plugineditions'])
+                    ->where(['pluginId' => ArrayHelper::getColumn($sourceElements, 'id')]);
+                return ['elementType' => PluginEdition::class, 'map' => $query->all()];
+
             case 'developer':
                 $query = (new Query())
                     ->select(['id as source', 'developerId as target'])
@@ -271,12 +279,12 @@ class Plugin extends Element
     public $handle;
 
     /**
-     * @var int|null The plugin license price
+     * @var float|null The plugin license price
      */
     public $price;
 
     /**
-     * @var int|null The plugin license renewal price
+     * @var float|null The plugin license renewal price
      */
     public $renewalPrice;
 
@@ -331,6 +339,11 @@ class Plugin extends Element
     public $keywords;
 
     /**
+     * @var PluginEdition[]|null
+     */
+    private $_editions;
+
+    /**
      * @var User|null
      */
     private $_developer;
@@ -358,7 +371,7 @@ class Plugin extends Element
     /**
      * @var bool Whether the plugin was just submitted for approval
      */
-    public $_submittedForApproval = false;
+    private $_submittedForApproval = false;
 
     /**
      * @var bool Whether the plugin was just approved
@@ -377,6 +390,9 @@ class Plugin extends Element
      */
     private $_history;
 
+    // Public Methods
+    // =========================================================================
+
     /**
      * @return string
      */
@@ -385,8 +401,16 @@ class Plugin extends Element
         return $this->name;
     }
 
-    // Public Methods
-    // =========================================================================
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
+        $names = parent::attributes();
+        ArrayHelper::removeValue($names, 'activeInstalls');
+        ArrayHelper::removeValue($names, 'devComments');
+        return $names;
+    }
 
     /**
      * @param string $handle
@@ -395,6 +419,8 @@ class Plugin extends Element
     public function setEagerLoadedElements(string $handle, array $elements)
     {
         switch ($handle) {
+            case 'editions':
+                $this->_editions = $elements;
             case 'developer':
                 $this->_developer = $elements[0] ?? null;
                 break;
@@ -414,6 +440,48 @@ class Plugin extends Element
     }
 
     /**
+     * @return PluginEdition[]
+     * @throws InvalidConfigException
+     */
+    public function getEditions(): array
+    {
+        if ($this->_editions !== null) {
+            return $this->_editions;
+        }
+        if ($this->id === null) {
+            throw new InvalidConfigException('Plugin is missing its ID.');
+        }
+
+        return $this->_editions = PluginEdition::find()
+            ->pluginId($this->id)
+            ->all();
+    }
+
+    /**
+     * @param string $handle
+     * @return PluginEdition
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     */
+    public function getEdition(string $handle): PluginEdition
+    {
+        if ($this->id === null) {
+            throw new InvalidConfigException('Plugin is missing its ID.');
+        }
+
+        $edition = PluginEdition::find()
+            ->pluginId($this->id)
+            ->handle($handle)
+            ->one();
+
+        if (!$edition) {
+            throw new InvalidArgumentException("Invalid plugin edition: {$handle}");
+        }
+
+        return $edition;
+    }
+
+    /**
      * @return User|Developer
      * @throws InvalidConfigException
      */
@@ -425,7 +493,7 @@ class Plugin extends Element
         if ($this->developerId === null) {
             throw new InvalidConfigException('Plugin is missing its developer ID');
         }
-        if (($user = User::find()->id($this->developerId)->status(null)->one()) === false) {
+        if (($user = User::find()->id($this->developerId)->status(null)->one()) === null) {
             throw new InvalidConfigException('Invalid developer ID: '.$this->developerId);
         }
         return $this->_developer = $user;
@@ -466,7 +534,7 @@ class Plugin extends Element
         if ($this->iconId === null) {
             return null;
         }
-        if (($asset = Asset::find()->id($this->iconId)->one()) === false) {
+        if (($asset = Asset::find()->id($this->iconId)->one()) === null) {
             throw new InvalidConfigException('Invalid asset ID: '.$this->iconId);
         }
         return $this->_icon = $asset;
@@ -710,10 +778,23 @@ class Plugin extends Element
         $db = Craft::$app->getDb();
 
         if ($isNew) {
+            // Save a new row in the plugins table
             $db->createCommand()
                 ->insert('craftcom_plugins', $pluginData)
                 ->execute();
+
+            // Create a new edition/renewal
+            // todo: create multiple editions when we start supporting editions
+            $edition = new PluginEdition([
+                'pluginId' => $this->id,
+                'name' => 'Standard',
+                'handle' => 'standard',
+            ]);
+            $renewal = new PluginRenewal([
+                'pluginId' => $this->id,
+            ]);
         } else {
+            // Update the plugins table row
             $db->createCommand()
                 ->update('craftcom_plugins', $pluginData, ['id' => $this->id])
                 ->execute();
@@ -725,14 +806,38 @@ class Plugin extends Element
             $db->createCommand()
                 ->delete('craftcom_pluginscreenshots', ['pluginId' => $this->id])
                 ->execute();
+
+            // Fetch the current edition/renewal
+            // todo: fetch multiple editions when we start supporting editions
+            $edition = PluginEdition::find()
+                ->pluginId($this->id)
+                ->one();
+            $renewal = PluginEdition::find()
+                ->pluginId($this->id)
+                ->one();
         }
 
+        // Save the new category/screenshot relations
         $db->createCommand()
             ->batchInsert('craftcom_plugincategories', ['pluginId', 'categoryId', 'sortOrder'], $categoryData)
             ->execute();
         $db->createCommand()
             ->batchInsert('craftcom_pluginscreenshots', ['pluginId', 'assetId', 'sortOrder'], $screenshotData)
             ->execute();
+
+        // Save the edition/renewal
+        // todo: save all editions when we start supporting editions
+        if ($isNew || $edition->price != $this->price || $edition->renewalPrice != $this->renewalPrice) {
+            $edition->price = $this->price;
+            $edition->renewalPrice = $this->price;
+            Craft::$app->getElements()->saveElement($edition);
+
+            if ($isNew) {
+                $renewal->editionId = $edition->id;
+            }
+            $renewal->price = $edition->renewalPrice;
+            Craft::$app->getElements()->saveElement($renewal);
+        }
 
         // If this is enabled, clear the plugin store cache.
         if ($this->enabled) {
