@@ -1,9 +1,7 @@
 <?php
 
-namespace craftcom\controllers\api\v1\licenses;
+namespace craftcom\controllers\api\v1;
 
-use Craft;
-use craftcom\cms\CmsEdition;
 use craftcom\cms\CmsLicense;
 use craftcom\cms\CmsLicenseManager;
 use craftcom\controllers\api\BaseApiController;
@@ -12,21 +10,26 @@ use yii\base\Exception;
 use yii\web\Response;
 
 /**
- * Class CmsController
+ * Class CmsLicensesController
  */
-class CmsController extends BaseApiController
+class CmsLicensesController extends BaseApiController
 {
+    // Properties
+    // =========================================================================
+
+    public $defaultAction = 'create';
+
     // Public Methods
     // =========================================================================
 
     /**
-     * Handles /v1/account requests.
+     * Handles `POST /v1/cms-licenses` requests.
      *
      * @return Response
      */
-    public function actionRequest(): Response
+    public function actionCreate(): Response
     {
-        $payload = $this->getPayload('request-cms-license-request');
+        $payload = $this->getPayload('create-cms-license-request');
 
         $license = new CmsLicense([
             'expirable' => true,
