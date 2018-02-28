@@ -13,7 +13,7 @@
     "craftcms/aws-s3": "^1.0.7",
     "league/oauth2-server": "^6.0",
     "adam-paterson/oauth2-stripe": "^2.0.0",
-    "stripe/stripe-php": "^5.2.0",
+    "stripe/stripe-php": "^6.1",
     "stevenmaguire/oauth2-bitbucket": "^2.0",
     "flipboxfactory/craft-postmark": "^1.0.0-rc.1",
     "craftcms/commerce": "^2.0.0-alpha.1"
