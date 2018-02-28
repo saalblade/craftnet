@@ -241,7 +241,16 @@ class BuyController extends BaseApiController
                                 ];
                                 break;
                             }
+
+                            // todo: verify that this is actually an upgrade
+                            // ...
+
+                            $options = [
+                                'licenseKey' => $license->key,
+                            ];
                         } else {
+                            $license = null;
+
                             // get the Craft license if specified
                             if (!empty($item->cmsLicenseKey)) {
                                 try {
@@ -258,27 +267,14 @@ class BuyController extends BaseApiController
                                 $cmsLicense = null;
                             }
 
-                            // create a license
-                            $license = $newPluginLicenses[] = new PluginLicense([
-                                'pluginId' => $plugin->id,
-                                'editionId' => $edition->id,
-                                'cmsLicenseId' => $cmsLicense->id ?? null,
-                                'expirable' => true,
-                                'expired' => false,
-                                'email' => $payload->email,
-                                'key' => LicenseHelper::generateKey(24),
-                            ]);
-
-                            if (!$this->module->getPluginLicenseManager()->saveLicense($license)) {
-                                throw new Exception('Could not create plugin license: '.implode(',', $license->getFirstErrors()));
-                            }
+                            // generate a license key now to ensure that the line item options are unique
+                            $options = [
+                                'licenseKey' => 'new:'.LicenseHelper::generateKey(24),
+                                'cmsLicenseKey' => $cmsLicense->key ?? null,
+                            ];
                         }
 
-                        // todo: verify that this is actually an upgrade
-
-                        $lineItem = $commerce->getLineItems()->resolveLineItem($order, $edition->id, [
-                            'licenseKey' => $license->key,
-                        ]);
+                        $lineItem = $commerce->getLineItems()->resolveLineItem($order, $edition->id, $options);
 
                         break;
 

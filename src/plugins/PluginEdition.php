@@ -3,9 +3,7 @@
 namespace craftcom\plugins;
 
 use Craft;
-use craft\base\Element;
 use craft\commerce\base\Purchasable;
-use craft\commerce\base\PurchasableInterface;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
 use craft\db\Query;
@@ -13,6 +11,7 @@ use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\Module;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
 
@@ -230,11 +229,56 @@ class PluginEdition extends Purchasable
      */
     public function afterOrderComplete(Order $order, LineItem $lineItem)
     {
-        try {
-            Module::getInstance()->getPluginLicenseManager()->upgradeLicense($lineItem->options['licenseKey'], $this, $lineItem->id);
-        } catch (LicenseNotFoundException $e) {
-            Craft::error("Could not upgrade plugin license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
-            Craft::$app->getErrorHandler()->logException($e);
+        $manager = Module::getInstance()->getPluginLicenseManager();
+
+        // is this for an existing plugin license?
+        if (strncmp($lineItem->options['licenseKey'], 'new:', 4) !== 0) {
+            try {
+                $manager->upgradeLicense($lineItem->options['licenseKey'], $this, $lineItem->id);
+            } catch (LicenseNotFoundException $e) {
+                Craft::error("Could not upgrade plugin license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
+                Craft::$app->getErrorHandler()->logException($e);
+            }
+        } else {
+            // chop off "new:"
+            $key = substr($lineItem->options['licenseKey'], 4);
+
+            // was a Craft license specified?
+            if (!empty($lineItem->options['cmsLicenseKey'])) {
+                try {
+                    $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseByKey($lineItem->options['cmsLicenseKey']);
+                } catch (LicenseNotFoundException $e) {
+                    Craft::error("Could not associate new plugin license with Craft license {$lineItem->options['cmsLicenseKey']} for order {$order->number}: {$e->getMessage()}");
+                    Craft::$app->getErrorHandler()->logException($e);
+                    $cmsLicense = null;
+                }
+            }
+
+            // if this was placed on/after April 4, set the license to expirable
+            $expirable = time() >= 1522800000;
+
+            // create the new license
+            $license = $newPluginLicenses[] = new PluginLicense([
+                'pluginId' => $this->pluginId,
+                'editionId' => $this->id,
+                'cmsLicenseId' => $cmsLicense->id ?? null,
+                'expirable' => $expirable,
+                'expired' => false,
+                'email' => $order->email,
+                'key' => $key,
+            ]);
+
+            $e = null;
+            try {
+                if ($manager->saveLicense($license)) {
+                    $manager->saveLicenseLineItemAssociation($license->id, $lineItem->id);
+                } else {
+                    Craft::error("Could not create plugin license {$key} for order {$order->number}: ".implode(',', $license->getFirstErrors()));
+                }
+            } catch (Exception $e) {
+                Craft::error("Could not create plugin license {$key} for order {$order->number}: {$e->getMessage()}");
+                Craft::$app->getErrorHandler()->logException($e);
+            }
         }
 
         parent::afterOrderComplete($order, $lineItem);

@@ -105,13 +105,24 @@ class PluginLicenseManager extends Component
 
         // Save the line item relation if we have an ID
         if ($lineItemId !== null) {
-            Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_pluginlicenses_lineitems', [
-                    'licenseId' => $license->id,
-                    'lineItemId' => $lineItemId,
-                ], false)
-                ->execute();
+            $this->saveLicenseLineItemAssociation();
         }
+    }
+
+    /**
+     * Associates a license with a line item.
+     *
+     * @param int $licenseId
+     * @param int $lineItemId
+     */
+    public function saveLicenseLineItemAssociation(int $licenseId, int $lineItemId)
+    {
+        Craft::$app->getDb()->createCommand()
+            ->insert('craftcom_pluginlicenses_lineitems', [
+                'licenseId' => $licenseId,
+                'lineItemId' => $lineItemId,
+            ], false)
+            ->execute();
     }
 
     /**
