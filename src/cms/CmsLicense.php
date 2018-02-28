@@ -12,7 +12,7 @@ class CmsLicense extends Model
     public $expired;
     public $edition;
     public $email;
-    public $hostname;
+    public $domain;
     public $key;
     public $notes;
     public $lastEdition;

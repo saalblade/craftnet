@@ -31,12 +31,13 @@ class CmsLicensesController extends BaseApiController
     {
         $payload = $this->getPayload('create-cms-license-request');
 
+        // todo: set domain to just the domain, not the full hostname
         $license = new CmsLicense([
             'expirable' => true,
             'expired' => false,
             'edition' => CmsLicenseManager::EDITION_PERSONAL,
             'email' => $payload->email,
-            'hostname' => $payload->hostname,
+            'domain' => $payload->hostname,
             'key' => LicenseHelper::generateKey(250, '!#$%^&*=+/'),
         ]);
 

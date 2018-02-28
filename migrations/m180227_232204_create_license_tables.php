@@ -81,7 +81,7 @@ class m180227_232204_create_license_tables extends Migration
             'expired' => $this->boolean()->notNull()->defaultValue(false),
             'edition' => $this->string()->notNull(),
             'email' => $this->string()->notNull(),
-            'hostname' => $this->string()->null(),
+            'domain' => $this->string()->null(),
             'key' => $this->string(250)->notNull(),
             'notes' => $this->text()->null(),
             'lastEdition' => $this->smallInteger()->null(),
