@@ -23,7 +23,7 @@ class CmsLicensesController extends BaseApiController
     // =========================================================================
 
     /**
-     * Handles `POST /v1/cms-licenses` requests.
+     * Creates a new CMS license.
      *
      * @return Response
      */
