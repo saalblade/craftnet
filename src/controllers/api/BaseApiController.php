@@ -120,7 +120,7 @@ abstract class BaseApiController extends Controller
             return parent::runAction($id, $params);
         } catch (\Exception $e) {
             $statusCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
-            $message = $e instanceof UserException && $e->getMessage() ? $e->getMessage() : 'A server error occurred';
+            $message = $e instanceof UserException && $e->getMessage() ? $e->getMessage() : 'Server Error';
 
             if ($logDb) {
                 $logDb->createCommand()
