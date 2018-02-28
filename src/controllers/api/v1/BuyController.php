@@ -15,6 +15,7 @@ use craftcom\errors\ValidationException;
 use craftcom\helpers\LicenseHelper;
 use craftcom\plugins\Plugin;
 use craftcom\plugins\PluginLicense;
+use Stripe\Error\InvalidRequest;
 use Stripe\Source;
 use Stripe\Stripe;
 use yii\base\Exception;
@@ -306,19 +307,33 @@ class BuyController extends BaseApiController
                 ];
             }
 
+            // create a source token
+            Stripe::setApiKey(getenv('STRIPE_API_KEY'));
+
+            try {
+                /** @var Source $source */
+                $source = Source::create([
+                    'type' => 'card',
+                    'token' => $payload->cc->token,
+                ]);
+            } catch (InvalidRequest $e) {
+                // only surface this to the user if the error is on the CC token
+                if ($e->getStripeParam() === 'token') {
+                    $errors[] = [
+                        'param' => 'cc.token',
+                        'message' => $e->getMessage(),
+                        'code' => self::ERROR_CODE_INVALID,
+                    ];
+                } else {
+                    throw $e;
+                }
+            }
+
             // if there are any errors, bail before we get to the point of no return
             if (!empty($errors)) {
                 $transaction->rollBack();
                 throw new ValidationException($errors);
             }
-
-            // create a source token
-            Stripe::setApiKey(getenv('STRIPE_API_KEY'));
-            /** @var Source $source */
-            $source = Source::create([
-                'type' => 'card',
-                'token' => $payload->cc->token,
-            ]);
 
             // pay
             $paymentForm = $gateway->getPaymentFormModel();
