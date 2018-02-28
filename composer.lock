@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a53763c9990841be8000df0b2cd4f7ea",
+    "content-hash": "a7099fc80a8cab48f2349cbda096da70",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -689,6 +689,55 @@
                 "source": "https://github.com/craftcms/commerce",
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
+            }
+        },
+        {
+            "name": "craftcms/commerce-stripe",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../craft3-commerce-stripe",
+                "reference": "c5688c2a208346c03d8c8a1f5d3124e44e6aeed6",
+                "shasum": null
+            },
+            "require": {
+                "craftcms/commerce": "*",
+                "stripe/stripe-php": "^6.1"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Stripe",
+                "handle": "commerce-stripe",
+                "changelogUrl": "https://raw.githubusercontent.com/craftcms/commerce-stripe/master/CHANGELOG.md",
+                "downloadUrl": "https://github.com/craftcms/commerce-stripe/archive/master.zip"
+            },
+            "autoload": {
+                "psr-4": {
+                    "craft\\commerce\\stripe\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pixel & Tonic",
+                    "homepage": "https://pixelandtonic.com/"
+                }
+            ],
+            "description": "Stripe integration for Craft Commerce",
+            "keywords": [
+                "commerce",
+                "craftcms",
+                "stripe",
+                "yii2"
+            ],
+            "support": {
+                "email": "support@craftcms.com",
+                "issues": "https://github.com/craftcms/commerce-stripe/issues?state=open",
+                "source": "https://github.com/craftcms/commerce-stripe",
+                "docs": "https://github.com/craftcms/commerce-stripe",
+                "rss": "https://github.com/craftcms/commerce-stripe/commits/master.atom"
             }
         },
         {

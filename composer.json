@@ -16,7 +16,8 @@
     "stripe/stripe-php": "^6.1",
     "stevenmaguire/oauth2-bitbucket": "^2.0",
     "flipboxfactory/craft-postmark": "^1.0.0-rc.1",
-    "craftcms/commerce": "^2.0.0-alpha.1"
+    "craftcms/commerce": "^2.0.0-alpha.1",
+    "craftcms/commerce-stripe": "^1.0"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
@@ -25,6 +26,10 @@
     {
       "type": "path",
       "url": "../craft3-commerce"
+    },
+    {
+      "type": "path",
+      "url": "../craft3-commerce-stripe"
     }
   ],
   "autoload": {
