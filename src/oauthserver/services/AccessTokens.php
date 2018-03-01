@@ -77,7 +77,7 @@ class AccessTokens extends Component
     }
 
     /**
-     * @param      $identifier
+     * @param $identifier
      * @param bool $isRevoked
      *
      * @return AccessToken

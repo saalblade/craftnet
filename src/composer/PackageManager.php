@@ -61,7 +61,7 @@ class PackageManager extends Component
 
     /**
      * @param string $name
-     * @param int    $seconds
+     * @param int $seconds
      *
      * @return bool
      */
@@ -78,7 +78,7 @@ class PackageManager extends Component
 
     /**
      * @param string $name
-     * @param array  $constraints
+     * @param array $constraints
      *
      * @return bool
      */
@@ -114,7 +114,7 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string $name    The package name
+     * @param string $name The package name
      * @param string $version The package version
      *
      * @return PackageRelease|null
@@ -131,10 +131,10 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string      $name         The package name
-     * @param string      $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
-     * @param string|null $constraint   The version constraint, if any
-     * @param bool        $sort         Whether the versions should be sorted
+     * @param string $name The package name
+     * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
+     * @param string|null $constraint The version constraint, if any
+     * @param bool $sort Whether the versions should be sorted
      *
      * @return string[] The known package versions
      */
@@ -182,9 +182,9 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string      $name         The package name
-     * @param string      $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
-     * @param string|null $constraint   The version constraint, if any
+     * @param string $name The package name
+     * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
+     * @param string|null $constraint The version constraint, if any
      *
      * @return string|null The latest version, or null if none can be found
      */
@@ -198,9 +198,9 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string      $name         The package name
-     * @param string      $minStability The minimum required stability
-     * @param string|null $constraint   The version constraint, if any
+     * @param string $name The package name
+     * @param string $minStability The minimum required stability
+     * @param string|null $constraint The version constraint, if any
      *
      * @return PackageRelease|null The latest release, or null if none can be found
      */
@@ -213,11 +213,11 @@ class PackageManager extends Component
     /**
      * Returns all the versions after a given version
      *
-     * @param string      $name         The package name
-     * @param string      $from         The version that others should be after
-     * @param string      $minStability The minimum required stability
-     * @param string|null $constraint   The version constraint, if any
-     * @param bool        $sort         Whether the versions should be sorted
+     * @param string $name The package name
+     * @param string $from The version that others should be after
+     * @param string $minStability The minimum required stability
+     * @param string|null $constraint The version constraint, if any
+     * @param bool $sort Whether the versions should be sorted
      *
      * @return string[] The versions after $from, sorted oldest-to-newest
      */
@@ -244,10 +244,10 @@ class PackageManager extends Component
     /**
      * Returns all the releases after a given version
      *
-     * @param string      $name         The package name
-     * @param string      $from         The version that others should be after
-     * @param string      $minStability The minimum required stability
-     * @param string|null $constraint   The version constraint, if any
+     * @param string $name The package name
+     * @param string $from The version that others should be after
+     * @param string $minStability The minimum required stability
+     * @param string|null $constraint The version constraint, if any
      *
      * @return PackageRelease[] The releases after $from, sorted oldest-to-newest
      */
@@ -326,7 +326,7 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string $name    The dependency package name
+     * @param string $name The dependency package name
      * @param string $version The dependency package version
      *
      * @return bool Whether any managed packages require this dependency/version
@@ -459,7 +459,7 @@ class PackageManager extends Component
      * Creates a VCS webhook for a given package.
      *
      * @param string|Package $package The package or its name
-     * @param bool           $force   Whether the webhook should be created even if one already exists
+     * @param bool $force Whether the webhook should be created even if one already exists
      *
      * @throws Exception if the package couldn't be found
      */
@@ -582,7 +582,7 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string          $name
+     * @param string $name
      * @param string|string[] $version
      *
      * @return Query
@@ -636,10 +636,10 @@ class PackageManager extends Component
     }
 
     /**
-     * @param string $name     The Composer package name
-     * @param bool   $force    Whether to update package releases even if their SHA hasn't changed
-     * @param bool   $queue    Whether to queue the update
-     * @param bool   $dumpJson Whether to update the JSON if anything changed
+     * @param string $name The Composer package name
+     * @param bool $force Whether to update package releases even if their SHA hasn't changed
+     * @param bool $queue Whether to queue the update
+     * @param bool $dumpJson Whether to update the JSON if anything changed
      *
      * @throws MissingTokenException if the package is a plugin, but we don't have a VCS token for it
      */

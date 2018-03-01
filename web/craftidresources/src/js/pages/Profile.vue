@@ -5,7 +5,7 @@
 				<h4>Information</h4>
 
 				<text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
-				<text-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
+				<url-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
 				<text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
 			</div>
 		</div>
@@ -47,6 +47,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import TextField from '../components/fields/TextField'
+    import UrlField from '../components/fields/UrlField'
     import PasswordField from '../components/fields/PasswordField'
     import ConnectedApps from '../components/ConnectedApps'
 
@@ -54,6 +55,7 @@
 
         components: {
             TextField,
+            UrlField,
             PasswordField,
             ConnectedApps,
         },

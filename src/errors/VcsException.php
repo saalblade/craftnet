@@ -1,4 +1,5 @@
 <?php
+
 namespace craftcom\errors;
 
 use yii\base\Exception;

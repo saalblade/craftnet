@@ -17,9 +17,9 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     /**
      * Create a new access token
      *
-     * @param ClientEntityInterface  $clientEntity
+     * @param ClientEntityInterface $clientEntity
      * @param ScopeEntityInterface[] $scopes
-     * @param mixed                  $userIdentifier
+     * @param mixed $userIdentifier
      *
      * @return AccessTokenEntityInterface
      */

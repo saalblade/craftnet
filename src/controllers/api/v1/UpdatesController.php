@@ -11,7 +11,6 @@ use craft\helpers\Db;
 use craft\helpers\Html;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\plugins\Plugin;
-use yii\base\Exception;
 use yii\db\Expression;
 use yii\helpers\Markdown;
 use yii\web\Response;
@@ -80,7 +79,8 @@ class UpdatesController extends BaseApiController
 
         // Delete any installedplugins rows where lastActivity > 30 days ago
         $db->createCommand()
-            ->delete('craftcom_installedplugins', ['and',
+            ->delete('craftcom_installedplugins', [
+                'and',
                 ['craftLicenseKey' => $payload->cms->licenseKey],
                 ['<', 'lastActivity', Db::prepareDateForDb(new \DateTime('-30 days'))],
             ])
@@ -136,7 +136,7 @@ class UpdatesController extends BaseApiController
     /**
      * Transforms releases for inclusion in [[actionIndex()]] response JSON.
      *
-     * @param string $name        The package name
+     * @param string $name The package name
      * @param string $fromVersion The version that is already installed
      *
      * @return array
