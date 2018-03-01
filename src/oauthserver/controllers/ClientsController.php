@@ -32,7 +32,7 @@ class ClientsController extends Controller
     }
 
     /**
-     * @param int|null    $clientId
+     * @param int|null $clientId
      * @param Client|null $client
      *
      * @return Response

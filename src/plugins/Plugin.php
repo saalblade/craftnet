@@ -20,9 +20,9 @@ use yii\base\InvalidConfigException;
 use yii\helpers\Markdown;
 
 /**
- * @property User       $developer
- * @property Package    $package
- * @property string     $eagerLoadedElements
+ * @property User $developer
+ * @property Package $package
+ * @property string $eagerLoadedElements
  * @property Asset|null $icon
  */
 class Plugin extends Element
@@ -70,12 +70,12 @@ class Plugin extends Element
 
     /**
      * @param ElementQueryInterface $elementQuery
-     * @param array|null            $disabledElementIds
-     * @param array                 $viewState
-     * @param string|null           $sourceKey
-     * @param string|null           $context
-     * @param bool                  $includeContainer
-     * @param bool                  $showCheckboxes
+     * @param array|null $disabledElementIds
+     * @param array $viewState
+     * @param string|null $sourceKey
+     * @param string|null $context
+     * @param bool $includeContainer
+     * @param bool $showCheckboxes
      *
      * @return string
      */
@@ -86,7 +86,7 @@ class Plugin extends Element
     }
 
     /**
-     * @param array  $sourceElements
+     * @param array $sourceElements
      * @param string $handle
      *
      * @return array|bool|false
@@ -390,7 +390,7 @@ class Plugin extends Element
 
     /**
      * @param string $handle
-     * @param array  $elements
+     * @param array $elements
      */
     public function setEagerLoadedElements(string $handle, array $elements)
     {

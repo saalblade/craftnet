@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://craftcms.com/
+ * @link https://craftcms.com/
  * @copyright Copyright (c) Pixel & Tonic, Inc.
- * @license   https://craftcms.github.io/license/
+ * @license https://craftcms.github.io/license/
  */
 
 namespace craftcom\records;
@@ -15,25 +15,25 @@ use yii\db\ActiveQueryInterface;
 /**
  * Class Plugin record.
  *
- * @property int         $id               ID
- * @property int         $developerId      Developer ID
- * @property int         $packageId        Package ID
- * @property int|null    $iconId           Icon ID
- * @property string      $packageName      Package name
- * @property string      $repository       Repository
- * @property string      $name             Name
- * @property string      $handle           Handle
- * @property int|null    $price            Price
- * @property int|null    $renewalPrice     Renewal price
- * @property string      $license          License
+ * @property int $id ID
+ * @property int $developerId Developer ID
+ * @property int $packageId Package ID
+ * @property int|null $iconId Icon ID
+ * @property string $packageName Package name
+ * @property string $repository Repository
+ * @property string $name Name
+ * @property string $handle Handle
+ * @property int|null $price Price
+ * @property int|null $renewalPrice Renewal price
+ * @property string $license License
  * @property string|null $shortDescription Short description
- * @property string|null $longDescription  Long description
+ * @property string|null $longDescription Long description
  * @property string|null $documentationUrl Documentation URL
- * @property string|null $changelogPath    Changelog path
- * @property string|null $lastVersion      Last version
- * @property bool        $pendingApproval  Pending approval?
- * @property int         $activeInstalls
- * @property string|null $keywords         Keywords
+ * @property string|null $changelogPath Changelog path
+ * @property string|null $lastVersion Last version
+ * @property bool $pendingApproval Pending approval?
+ * @property int $activeInstalls
+ * @property string|null $keywords Keywords
  */
 class Plugin extends ActiveRecord
 {

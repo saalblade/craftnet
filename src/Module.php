@@ -25,8 +25,8 @@ use craftcom\utilities\UnavailablePlugins;
 use yii\base\Event;
 
 /**
- * @property JsonDumper     $jsonDumper
- * @property Oauth          $oauth
+ * @property JsonDumper $jsonDumper
+ * @property Oauth $oauth
  * @property PackageManager $packageManager
  */
 class Module extends \yii\base\Module

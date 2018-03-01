@@ -145,7 +145,7 @@ class Oauth extends Component
     }
 
     /**
-     * @param      $grantClass
+     * @param $grantClass
      * @param bool $enabledOnly
      *
      * @return mixed

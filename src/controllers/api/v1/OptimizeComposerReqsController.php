@@ -2,20 +2,9 @@
 
 namespace craftcom\controllers\api\v1;
 
-use Composer\Semver\Comparator;
-use Composer\Semver\VersionParser;
-use Craft;
 use craft\db\Query;
-use craft\helpers\ArrayHelper;
-use craft\helpers\DateTimeHelper;
-use craft\helpers\Db;
-use craft\helpers\Html;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\Module;
-use craftcom\plugins\Plugin;
-use yii\base\Exception;
-use yii\db\Expression;
-use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -97,8 +86,10 @@ class OptimizeComposerReqsController extends BaseApiController
             ->select(['pd.name'])
             ->distinct()
             ->from(['craftcom_packagedeps pd'])
-            ->where(['and',
-                ['not in', 'name', array_merge([
+            ->where([
+                'and',
+                [
+                    'not in', 'name', array_merge([
                     '__root__',
                     'composer-plugin-api',
                     'php',
@@ -108,7 +99,8 @@ class OptimizeComposerReqsController extends BaseApiController
                     'php-debug',
                     'hhvm',
                     'craftcms/cms'
-                ], array_keys($this->_ignore))],
+                ], array_keys($this->_ignore))
+                ],
                 ['not like', 'name', 'lib-%', false],
                 ['not like', 'name', 'ext-%', false],
                 ['not like', 'name', 'bower-asset/%', false],
