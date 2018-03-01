@@ -3,15 +3,7 @@
   "type": "object",
   "properties": {
     "email": {"type": "string", "format": "email"},
-    "cc": {
-      "type": "object",
-      "properties": {
-        "token": {"type": "string"},
-        "expMonth": {"type": "integer", "minimum": 1, "maximum": 12},
-        "expYear": {"type": "integer", "minimum": 2018}
-      },
-      "required": ["token", "expMonth", "expYear"]
-    },
+    "billingAddressId": {"type": "integer"},
     "billingAddress": {
       "type": "object",
       "properties": {
@@ -38,69 +30,49 @@
       "items": {
         "type": "object",
         "properties": {
-          "price": {"$ref": "definitions.json#/price"},
-          "salePrice": {"$ref": "definitions.json#/price"},
-          "discount": {"$ref": "definitions.json#/price"}
-        },
-        "required": ["type", "price", "salePrice", "discount"],
-        "anyOf": [
-          {
+          "note": {"type": "string"},
+          "cms-edition": {
+            "type": "object",
             "properties": {
-              "type": {"enum": ["cms-edition"]},
               "edition": {"enum": ["client", "pro"]},
               "licenseKey": {"$ref": "definitions.json#/cmsLicenseKey"}
             },
             "required": ["edition", "licenseKey"]
           },
-          {
+          "cms-renewal": {
+            "type": "object",
             "properties": {
-              "type": {"enum": ["cms-renewal"]},
               "licenseKey": {"$ref": "definitions.json#/cmsLicenseKey"}
             },
             "required": ["licenseKey"]
           },
-          {
+          "plugin-edition": {
+            "type": "object",
             "properties": {
-              "type": {"enum": ["plugin-edition"]},
               "plugin": {"type": "string"},
               "edition": {"type": "string"},
-              "licenseKey": {
-                "anyOf": [
-                  {"$ref": "definitions.json#/pluginLicenseKey"},
-                  {"type": "null"}
-                ]
-              },
-              "cmsLicenseKey": {
-                "anyOf": [
-                  {"$ref": "definitions.json#/cmsLicenseKey"},
-                  {"type": "null"}
-                ]
-              }
+              "licenseKey": {"$ref": "definitions.json#/pluginLicenseKey"},
+              "cmsLicenseKey": {"$ref": "definitions.json#/cmsLicenseKey"}
             },
             "required": ["plugin", "edition"]
           },
-          {
+          "plugin-renewal": {
+            "type": "object",
             "properties": {
-              "type": {"enum": ["plugin-renewal"]},
               "plugin": {"type": "string"},
               "licenseKey": {"$ref": "definitions.json#/pluginLicenseKey"}
             },
             "required": ["plugin", "licenseKey"]
           }
+        },
+        "anyOf": [
+          {"required": ["cms-edition"]},
+          {"required": ["cms-renewal"]},
+          {"required": ["plugin-edition"]},
+          {"required": ["plugin-renewal"]}
         ]
-      },
-      "minItems": 1
+      }
     },
-    "couponCode": {"type": ["string", "null"]},
-    "couponDiscount": {
-      "anyOf": [
-        {"$ref": "definitions.json#/price"},
-        {"type": "null"}
-      ]
-    },
-    "tax": {"$ref": "definitions.json#/price"},
-    "totalPrice": {"$ref": "definitions.json#/price"},
-    "notes": {"type": ["string", "null"]}
-  },
-  "required": ["email", "items", "tax", "totalPrice", "notes"]
+    "couponCode": {"type": "string"}
+  }
 }

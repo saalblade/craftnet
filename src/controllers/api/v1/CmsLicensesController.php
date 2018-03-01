@@ -46,7 +46,7 @@ class CmsLicensesController extends BaseApiController
         }
 
         return $this->asJson([
-            'key' => $license->key,
+            'license' => $license->toArray()
         ]);
     }
 }

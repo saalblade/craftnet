@@ -102,7 +102,7 @@ class CmsLicenseManager extends Component
                 ->insert('craftcom_cmslicenses', $data)
                 ->execute();
 
-            // set the ID on the model
+            // set the ID an UID on the model
             $license->id = Craft::$app->getDb()->getLastInsertID('craftcom_cmslicenses');
         } else {
             $success = (bool)Craft::$app->getDb()->createCommand()
