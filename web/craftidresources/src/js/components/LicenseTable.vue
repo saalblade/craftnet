@@ -69,9 +69,13 @@
 
         props: ['type', 'licenses'],
 
-        ...mapGetters({
-            enableCommercialFeatures: 'enableCommercialFeatures',
-        }),
+        computed: {
+
+            ...mapGetters({
+                enableCommercialFeatures: 'enableCommercialFeatures',
+            }),
+
+        }
 
     }
 </script>

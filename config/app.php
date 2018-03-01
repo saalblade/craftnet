@@ -54,6 +54,11 @@ return [
                 'class' => craftcom\oauthserver\Module::class,
             ],
         ],
+        'components' => [
+            'errorHandler' => [
+                'memoryReserveSize' => 1024000
+            ]
+        ],
     ],
     'prod' => [
         'components' => [
