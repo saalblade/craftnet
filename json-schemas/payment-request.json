@@ -4,15 +4,7 @@
   "properties": {
     "orderNumber": {"type": "string"},
     "expectedPrice": {"$ref": "definitions.json#/price"},
-    "cc": {
-      "type": "object",
-      "properties": {
-        "token": {"type": "string"},
-        "expMonth": {"type": "integer", "minimum": 1, "maximum": 12},
-        "expYear": {"type": "integer", "minimum": 2018}
-      },
-      "required": ["token", "expMonth", "expYear"]
-    }
+    "token": {"type": "string"}
   },
-  "required": ["orderNumber", "expectedPrice", "cc"]
+  "required": ["orderNumber", "expectedPrice", "token"]
 }

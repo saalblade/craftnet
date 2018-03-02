@@ -3,33 +3,14 @@
 namespace craftcom\controllers\api\v1;
 
 use Craft;
-use craft\commerce\elements\Order;
-use craft\commerce\models\Address;
-use craft\commerce\models\Customer;
-use craft\commerce\models\LineItem;
 use craft\commerce\models\Transaction;
 use craft\commerce\Plugin as Commerce;
-use craft\elements\User;
-use craftcom\cms\CmsEdition;
-use craftcom\cms\CmsLicenseManager;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\errors\LicenseNotFoundException;
-use craftcom\errors\ValidationException;
-use craftcom\helpers\LicenseHelper;
-use craftcom\plugins\Plugin;
-use Stripe\Error\InvalidRequest;
-use Stripe\Source;
-use Stripe\Stripe;
-use yii\base\Exception;
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
-use yii\base\UserException;
-use yii\helpers\ArrayHelper;
-use yii\validators\EmailValidator;
-use yii\web\BadRequestHttpException;
-use yii\web\NotFoundHttpException;
-use yii\web\Response;
 use craft\commerce\stripe\gateways\Gateway as StripeGateway;
+use craftcom\errors\ValidationException;
+use Stripe\Error\InvalidRequest;
+use yii\base\Exception;
+use yii\base\UserException;
+use yii\web\Response;
 
 /**
  * Class PaymentsController
@@ -104,32 +85,9 @@ class PaymentsController extends CartsController
             ];
         }
 
-        // if there are any errors, bail before we bother Stripe for a source token
+        // if there are any errors, send them now before the point of no return
         if (!empty($errors)) {
             throw new ValidationException($errors);
-        }
-
-        // create a source token
-        Stripe::setApiKey(getenv('STRIPE_API_KEY'));
-
-        try {
-            /** @var Source $source */
-            $source = Source::create([
-                'type' => 'card',
-                'token' => $payload->cc->token,
-            ]);
-        } catch (InvalidRequest $e) {
-            // only surface this to the user if the error is on the CC token
-            if ($e->getStripeParam() === 'token') {
-                throw new ValidationException([
-                    [
-                        'param' => 'cc.token',
-                        'message' => $e->getMessage(),
-                        'code' => self::ERROR_CODE_INVALID,
-                    ]
-                ], 'Stripe Error', $e->getCode(), $e);
-            }
-            throw $e;
         }
 
         // get the gateway
@@ -138,7 +96,7 @@ class PaymentsController extends CartsController
 
         // pay
         $paymentForm = $gateway->getPaymentFormModel();
-        $paymentForm->token = $source->id;
+        $paymentForm->token = $payload->token;
 
         if (!$commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction)) {
             throw new Exception('Payment not processed.');
