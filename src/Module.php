@@ -3,6 +3,7 @@
 namespace craftcom;
 
 use Craft;
+use craft\commerce\services\OrderAdjustments;
 use craft\elements\User;
 use craft\events\ModelEvent;
 use craft\events\RegisterComponentTypesEvent;
@@ -86,6 +87,10 @@ class Module extends \yii\base\Module
 
                 Craft::$app->getUsers()->assignUserToGroups($currentUser->id, $groupIds);
             }
+        });
+
+        Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
+            $e->types[] = EditionUpgradeDiscount::class;
         });
 
         parent::init();
