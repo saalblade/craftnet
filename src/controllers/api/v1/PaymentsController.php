@@ -140,8 +140,6 @@ class PaymentsController extends CartsController
         $paymentForm = $gateway->getPaymentFormModel();
         $paymentForm->firstName = $address->firstName;
         $paymentForm->lastName = $address->lastName;
-        $paymentForm->month = $payload->cc->expMonth;
-        $paymentForm->year = $payload->cc->expYear;
         $paymentForm->token = $source->id;
 
         if (!$commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction)) {
