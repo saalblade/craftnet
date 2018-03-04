@@ -3,6 +3,7 @@
 namespace craftcom\cms;
 
 use craft\base\Model;
+use LayerShifter\TLDExtract\Extract;
 
 class CmsLicense extends Model
 {
@@ -36,6 +37,14 @@ class CmsLicense extends Model
                 CmsLicenseManager::EDITION_PRO,
             ]],
             [['email'], 'email'],
+            [['domain'], 'validateDomain'],
         ];
+    }
+
+    public function validateDomain()
+    {
+        $this->domain = (new Extract())
+            ->parse($this->domain)
+            ->getRegistrableDomain();
     }
 }

@@ -9,8 +9,14 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
 use craft\helpers\Html;
+use craft\models\Update;
+use craftcom\cms\CmsLicense;
 use craftcom\controllers\api\BaseApiController;
+use craftcom\errors\LicenseNotFoundException;
+use craftcom\errors\ValidationException;
 use craftcom\plugins\Plugin;
+use LayerShifter\TLDExtract\Extract;
+use yii\base\Exception;
 use yii\db\Expression;
 use yii\helpers\Markdown;
 use yii\web\Response;
@@ -26,6 +32,8 @@ class UpdatesController extends BaseApiController
      * Handles /v1/updates requests.
      *
      * @return Response
+     * @throws ValidationException
+     * @throws \Throwable
      */
     public function actionIndex(): Response
     {
@@ -41,9 +49,39 @@ class UpdatesController extends BaseApiController
             }
         }
 
+        try {
+            $cmsLicense = $this->module->getCmsLicenseManager()->getLicenseByKey($payload->cms->licenseKey);
+        } catch (LicenseNotFoundException $e) {
+            throw new ValidationException([
+                [
+                    'param' => 'cms.licensekey',
+                    'message' => $e->getMessage(),
+                    'code' => self::ERROR_CODE_MISSING,
+                ]
+            ]);
+        }
+
+        $transaction = Craft::$app->getDb()->beginTransaction();
+        $errors = [];
+
+        try {
+            $cmsUpdates = $this->_getCmsUpdateInfo($payload, $cmsLicense, $errors);
+            $pluginUpdates = $this->_getPluginUpdateInfo($payload, $cmsLicense, $errors);
+
+            if (!empty($errors)) {
+                throw new ValidationException($errors);
+            }
+
+            $transaction->commit();
+        } catch (\Throwable $e) {
+            // Roll back any license changes we've made
+            $transaction->rollBack();
+            throw $e;
+        }
+
         return $this->asJson([
-            'cms' => $this->_getCmsUpdateInfo($payload),
-            'plugins' => $this->_getPluginUpdateInfo($payload)
+            'cms' => $cmsUpdates,
+            'plugins' => $pluginUpdates,
         ]);
     }
 
@@ -51,13 +89,42 @@ class UpdatesController extends BaseApiController
      * Returns CMS update info.
      *
      * @param \stdClass $payload
-     *
-     * @return array
+     * @param CmsLicense $cmsLicense
+     * @param array $errors
+     * @return array|null
+     * @throws Exception
      */
-    private function _getCmsUpdateInfo(\stdClass $payload): array
+    private function _getCmsUpdateInfo(\stdClass $payload, CmsLicense $cmsLicense, array &$errors)
     {
+        // make sure that the license is being used on the right domain
+        $domain = (new Extract(null, null, Extract::MODE_ALLOW_ICANN))
+            ->parse($payload->request->hostname)
+            ->getRegistrableDomain();
+
+        if ($domain !== null && $domain !== $cmsLicense->domain) {
+            if ($cmsLicense->domain) {
+                $errors[] = [
+                    'param' => 'request.hostname',
+                    'message' => "This license can only be used on {$cmsLicense->domain}.",
+                    'code' => self::ERROR_CODE_INVALID,
+                ];
+                return null;
+            }
+
+            $cmsLicense->domain = $domain;
+            if (!$this->module->getCmsLicenseManager()->saveLicense($cmsLicense)) {
+                throw new Exception("Could not associate Craft license {$cmsLicense->key} with domain {$domain}.");
+            }
+        }
+
+        if ($cmsLicense->expired) {
+            $status = Update::STATUS_EXPIRED;
+        } else {
+            $status = Update::STATUS_ELIGIBLE;
+        }
+
         return [
-            'status' => 'eligible',
+            'status' => $status,
             'releases' => $this->_releases('craftcms/cms', $payload->cms->version),
             //'renewalPrice' => '59',
             //'renewalCurrency' => 'USD',
@@ -69,13 +136,16 @@ class UpdatesController extends BaseApiController
      * Returns plugin update info.
      *
      * @param \stdClass $payload
-     *
-     * @return array
+     * @param CmsLicense $cmsLicense
+     * @param array $errors
+     * @return array|null
+     * @throws Exception
      */
-    private function _getPluginUpdateInfo(\stdClass $payload): array
+    private function _getPluginUpdateInfo(\stdClass $payload, CmsLicense $cmsLicense, array &$errors)
     {
         $updateInfo = [];
         $db = Craft::$app->getDb();
+        $licenseManager = $this->module->getPluginLicenseManager();
 
         // Delete any installedplugins rows where lastActivity > 30 days ago
         $db->createCommand()
@@ -98,6 +168,41 @@ class UpdatesController extends BaseApiController
 
                 foreach ($payload->plugins as $handle => $pluginInfo) {
                     if ($plugin = $plugins[$handle] ?? null) {
+                        if (!empty($pluginInfo->licenseKey)) {
+                            try {
+                                $license = $licenseManager->getLicenseByKey($pluginInfo->licenseKey);
+                            } catch (LicenseNotFoundException $e) {
+                                $errors[] = [
+                                    'param' => "plugins.{$handle}.licenseKey",
+                                    'message' => $e->getMessage(),
+                                    'code' => self::ERROR_CODE_MISSING,
+                                ];
+                                continue;
+                            }
+
+                            if ($license->cmsLicenseId != $cmsLicense->id) {
+                                if ($license->cmsLicenseId) {
+                                    $errors[] = [
+                                        'param' => "plugins.{$handle}.licenseKey",
+                                        'message' => 'This license is for use with a different Craft license.',
+                                        'code' => self::ERROR_CODE_INVALID,
+                                    ];
+                                    continue;
+                                }
+
+                                $license->cmsLicenseId = $license->id;
+                                if (!$licenseManager->saveLicense($license)) {
+                                    throw new Exception("Could not associate plugin license {$license->key} with Craft license {$cmsLicense->key}.");
+                                }
+                            }
+                        }
+
+                        if ($license->expired) {
+                            $status = Update::STATUS_EXPIRED;
+                        } else {
+                            $status = Update::STATUS_ELIGIBLE;
+                        }
+
                         $releases = $this->_releases($plugin->packageName, $pluginInfo->version);
 
                         // Log it
@@ -120,10 +225,12 @@ class UpdatesController extends BaseApiController
                             ->execute();
                     } else {
                         // We don't have a record of this plugin
+                        $status = Update::STATUS_ELIGIBLE;
                         $releases = [];
                     }
+
                     $updateInfo[$handle] = [
-                        'status' => 'eligible',
+                        'status' => $status,
                         'releases' => $releases,
                     ];
                 }
@@ -138,7 +245,6 @@ class UpdatesController extends BaseApiController
      *
      * @param string $name The package name
      * @param string $fromVersion The version that is already installed
-     *
      * @return array
      */
     private function _releases(string $name, string $fromVersion): array
@@ -231,7 +337,6 @@ class UpdatesController extends BaseApiController
      * Parses releases notes into HTML.
      *
      * @param string $notes
-     *
      * @return string
      */
     private function _parseReleaseNotes(string $notes): string
