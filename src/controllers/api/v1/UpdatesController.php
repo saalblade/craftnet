@@ -15,7 +15,6 @@ use craftcom\controllers\api\BaseApiController;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\errors\ValidationException;
 use craftcom\plugins\Plugin;
-use LayerShifter\TLDExtract\Extract;
 use yii\base\Exception;
 use yii\db\Expression;
 use yii\helpers\Markdown;
@@ -97,9 +96,8 @@ class UpdatesController extends BaseApiController
     private function _getCmsUpdateInfo(\stdClass $payload, CmsLicense $cmsLicense, array &$errors)
     {
         // make sure that the license is being used on the right domain
-        $domain = (new Extract(null, null, Extract::MODE_ALLOW_ICANN))
-            ->parse($payload->request->hostname)
-            ->getRegistrableDomain();
+        $licenseManager = $this->module->getCmsLicenseManager();
+        $domain = $licenseManager->normalizeDomain($payload->request->hostname);
 
         if ($domain !== null && $domain !== $cmsLicense->domain) {
             if ($cmsLicense->domain) {
@@ -112,7 +110,7 @@ class UpdatesController extends BaseApiController
             }
 
             $cmsLicense->domain = $domain;
-            if (!$this->module->getCmsLicenseManager()->saveLicense($cmsLicense)) {
+            if (!$licenseManager->saveLicense($cmsLicense)) {
                 throw new Exception("Could not associate Craft license {$cmsLicense->key} with domain {$domain}.");
             }
         }
