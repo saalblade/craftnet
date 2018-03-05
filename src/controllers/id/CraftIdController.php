@@ -81,15 +81,15 @@ class CraftIdController extends BaseController
     // =========================================================================
 
     /**
-     * @param User|Developer $currentUser
+     * @param User $user
      *
      * @return array
      */
-    private function _plugins(User $currentUser): array
+    private function _plugins(User $user): array
     {
         $ret = [];
 
-        foreach ($currentUser->getPlugins() as $plugin) {
+        foreach ($user->getPlugins() as $plugin) {
             $ret[] = $this->pluginTransformer($plugin);
         }
 
@@ -133,11 +133,11 @@ class CraftIdController extends BaseController
     }
 
     /**
-     * @param User|Developer $currentUser
+     * @param User $user
      *
      * @return array
      */
-    private function _customers(User $currentUser): array
+    private function _customers(User $user): array
     {
         return [
             [
