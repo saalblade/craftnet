@@ -9,26 +9,26 @@
 
                         <dl>
                             <dt>License ID</dt>
-                            <dd>LIC000{{ license.id }}</dd>
+                            <dd><template v-if="type == 'plugin'">PLU</template><template v-else-if="type == 'cms'">CMS</template>000{{ license.id }}</dd>
 
-                            <template v-if="license.type == 'craftLicense'">
+                            <template v-if="type === 'cms'">
                                 <dt>Edition</dt>
-                                <dd>Craft {{ license.craftEdition.label }}</dd>
+                                <dd>{{ license.edition }}</dd>
 
                                 <dt>Domain</dt>
                                 <dd>{{ license.domain }}</dd>
                             </template>
 
-                            <template v-if="license.type == 'pluginLicense'">
+                            <template v-if="type === 'plugin'">
                                 <dt>Plugin</dt>
-                                <dd>{{ license.plugin.name }}</dd>
+                                <dd>{{ license.pluginId }}</dd>
                             </template>
                         </dl>
                     </div>
                     <div class="w-1/2">
                         <dl>
                             <dt>Email</dt>
-                            <dd>{{ license.author.email }}</dd>
+                            <dd>{{ license.email }}</dd>
 
                             <template v-if="enableCommercialFeatures">
                                 <dt>Update Period</dt>
@@ -41,7 +41,7 @@
                             </template>
 
                             <dt>Created</dt>
-                            <dd>{{license.dateCreated}}</dd>
+                            <dd>{{ license.dateCreated }}</dd>
                         </dl>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
 
     export default {
 
-        props: ['license'],
+        props: ['license', 'type'],
 
         data() {
             return {
@@ -98,7 +98,7 @@
             saveAutoRenew() {
                 this.$store.dispatch('saveLicense', {
                     id: this.license.id,
-                    type: this.license.type,
+                    type: this.type,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then((data) => {
                     if(this.licenseDraft.autoRenew) {
@@ -116,7 +116,7 @@
             saveNotes() {
                 this.$store.dispatch('saveLicense', {
                     id: this.license.id,
-                    type: this.license.type,
+                    type: this.type,
                     notes: this.licenseDraft.notes,
                 }).then((data) => {
                     this.$root.displayNotice('License saved.');

@@ -1,9 +1,9 @@
 <template>
     <div>
         <p><router-link class="nav-link" to="/account/licenses/craft" exact>← Craft CMS</router-link></p>
-        <h1>#LIC000{{license.id}}</h1>
+        <h1>#CMS000{{license.id}}</h1>
 
-        <license-details :license="license"></license-details>
+        <license-details type="cms" :license="license"></license-details>
 
         <div class="card mb-3">
             <div class="card-header">

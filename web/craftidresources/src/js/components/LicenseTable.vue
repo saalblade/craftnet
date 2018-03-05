@@ -25,13 +25,14 @@
             <tbody>
             <template>
                 <tr v-for="license in licenses">
-                    <td><router-link :to="'/account/licenses/'+type+'/'+license.id">LIC000{{ license.id }}</router-link></td>
+                    <td><router-link :to="'/account/licenses/'+type+'/'+license.id"><template v-if="type == 'plugins'">PLU</template><template v-else-if="type == 'craft'">CMS</template>000{{ license.id }}</router-link></td>
 
                     <template v-if="type == 'plugins'">
-                        <td>{{ license.plugin.name }}</td>
+
+                        <td>{{ license.pluginId }}</td>
                         <td>
-                            <template v-if="license.craftLicense">
-                                <a href="#">LIC000{{ license.craftLicense.id }}</a>
+                            <template v-if="license.cmsLicenseId">
+                                <router-link :to="'/account/licenses/craft/'+license.id">CMS000{{ license.cmsLicenseId }}</router-link>
                             </template>
 
                             <template v-else>
@@ -41,14 +42,14 @@
                     </template>
 
                     <template v-if="type == 'craft'">
-                        <td>Craft {{ license.craftEdition.value }}</td>
+                        <td>Craft {{license.edition}}</td>
                         <td>0</td>
                     </template>
 
                     <td>{{ license.domain }}</td>
 
                     <template v-if="enableCommercialFeatures">
-                        <td>November 16th, 2017</td>
+                        <td>{{ license.dateCreated }}</td>
                         <td>
                             <span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
                             <span v-else="" class="badge">Disabled</span>

@@ -1,9 +1,9 @@
 <template>
     <div>
         <p><router-link class="nav-link" to="/account/licenses/plugins" exact>← Plugins</router-link></p>
-        <h1>#LIC000{{license.id}}</h1>
+        <h1>#PLU000{{license.id}}</h1>
 
-        <license-details :license="license"></license-details>
+        <license-details type="plugin" :license="license"></license-details>
 
         <div class="card mb-3">
             <div class="card-header">Attached Craft License</div>

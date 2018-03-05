@@ -97,65 +97,39 @@ class CraftIdController extends BaseController
     }
 
     /**
-     * @param User|Developer $currentUser
+     * @param User $user
      *
-     * @return array
+     * @return array CMS licenses.
      */
-    private function _craftLicenses(User $currentUser): array
+    private function _craftLicenses(User $user): array
     {
-        $ret = [];
-        $craftLicenseEntries = Entry::find()->section('licenses')->type('craftLicense')->authorId($currentUser->id)->all();
+        $results = Module::getInstance()->getCmsLicenseManager()->getLicenseByOwner($user->id);
 
-        foreach ($craftLicenseEntries as $craftLicenseEntry) {
-            $craftLicense = $craftLicenseEntry->toArray();
+        $licenses = [];
 
-            $plugin = null;
-
-            if ($craftLicenseEntry->plugin) {
-                $plugin = $craftLicenseEntry->plugin->toArray();
-            }
-
-            $craftLicense['plugin'] = $plugin;
-            $craftLicense['author'] = $craftLicenseEntry->getAuthor()->toArray();
-            $craftLicense['type'] = $craftLicenseEntry->getType()->handle;
-            $ret[] = $craftLicense;
+        foreach($results as $result) {
+            $licenses[] = $result->toArray();
         }
 
-        return $ret;
+        return $licenses;
     }
 
     /**
-     * @param User|Developer $currentUser
+     * @param User $user
      *
-     * @return array
+     * @return array Plugin licenses.
      */
-    private function _pluginLicenses(User $currentUser): array
+    private function _pluginLicenses(User $user): array
     {
-        $ret = [];
-        $pluginLicenseEntries = Entry::find()
-            ->section('licenses')
-            ->type('pluginLicense')
-            ->authorId($currentUser->id)
-            ->all();
+        $results = Module::getInstance()->getPluginLicenseManager()->getLicenseByOwner($user->id);
 
-        foreach ($pluginLicenseEntries as $pluginLicenseEntry) {
-            $pluginLicense = $pluginLicenseEntry->toArray();
-            $plugin = $pluginLicenseEntry->plugin->one();
-            $pluginLicense['plugin'] = $plugin->toArray();
-            $craftLicense = $pluginLicenseEntry->craftLicense->one();
+        $licenses = [];
 
-            if ($craftLicense) {
-                $pluginLicense['craftLicense'] = $craftLicense->toArray();
-            } else {
-                $pluginLicense['craftLicense'] = null;
-            }
-            $pluginLicense['type'] = $pluginLicenseEntry->getType()->handle;
-            $pluginLicense['author'] = $pluginLicenseEntry->getAuthor()->toArray();
-
-            $ret[] = $pluginLicense;
+        foreach($results as $result) {
+            $licenses[] = $result->toArray();
         }
 
-        return $ret;
+        return $licenses;
     }
 
     /**
