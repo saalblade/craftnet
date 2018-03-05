@@ -33,6 +33,25 @@ class CmsLicenseManager extends Component
     }
 
     /**
+     * Returns licenses owned by a user.
+     *
+     * @param int $ownerId
+     * @return CmsLicense[]
+     */
+    public function getLicenseByOwner(int $ownerId): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->where(['ownerId' => $ownerId])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new CmsLicense($result);
+        }
+        return $licenses;
+    }
+
+    /**
      * Returns a license by its key.
      *
      * @param string $key
@@ -82,6 +101,7 @@ class CmsLicenseManager extends Component
 
         $data = [
             'editionId' => $license->editionId,
+            'ownerId' => $license->ownerId,
             'expirable' => $license->expirable,
             'expired' => $license->expired,
             'edition' => $license->edition,
@@ -159,6 +179,7 @@ class CmsLicenseManager extends Component
             ->select([
                 'id',
                 'editionId',
+                'ownerId',
                 'expirable',
                 'expired',
                 'edition',

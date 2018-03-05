@@ -9,6 +9,7 @@ class PluginLicense extends Model
     public $id;
     public $pluginId;
     public $editionId;
+    public $ownerId;
     public $cmsLicenseId;
     public $expirable;
     public $expired;
@@ -28,7 +29,7 @@ class PluginLicense extends Model
     {
         return [
             [['pluginId', 'editionId', 'expirable', 'expired', 'email', 'key'], 'required'],
-            [['id', 'pluginId', 'editionId', 'cmsLicenseId'], 'number', 'integerOnly' => true, 'min' => 1],
+            [['id', 'pluginId', 'editionId', 'ownerId', 'cmsLicenseId'], 'number', 'integerOnly' => true, 'min' => 1],
             [['email'], 'email'],
         ];
     }

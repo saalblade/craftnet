@@ -9,6 +9,7 @@ class CmsLicense extends Model
 {
     public $id;
     public $editionId;
+    public $ownerId;
     public $expirable;
     public $expired;
     public $edition;
@@ -30,7 +31,7 @@ class CmsLicense extends Model
     {
         return [
             [['expirable', 'expired', 'edition', 'email', 'key'], 'required'],
-            [['id', 'editionId'], 'number', 'integerOnly' => true, 'min' => 1],
+            [['id', 'editionId', 'ownerId'], 'number', 'integerOnly' => true, 'min' => 1],
             [['edition'], 'in', 'range' => [
                 CmsLicenseManager::EDITION_PERSONAL,
                 CmsLicenseManager::EDITION_CLIENT,

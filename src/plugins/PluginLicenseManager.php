@@ -12,6 +12,25 @@ use yii\base\Exception;
 class PluginLicenseManager extends Component
 {
     /**
+     * Returns licenses owned by a user.
+     *
+     * @param int $ownerId
+     * @return PluginLicense[]
+     */
+    public function getLicenseByOwner(int $ownerId): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->where(['ownerId' => $ownerId])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+        return $licenses;
+    }
+
+    /**
      * Returns a license by its key.
      *
      * @param string $key
@@ -49,6 +68,7 @@ class PluginLicenseManager extends Component
         $data = [
             'pluginId' => $license->pluginId,
             'editionId' => $license->editionId,
+            'ownerId' => $license->ownerId,
             'cmsLicenseId' => $license->cmsLicenseId,
             'expirable' => $license->expirable,
             'expired' => $license->expired,
@@ -135,6 +155,7 @@ class PluginLicenseManager extends Component
                 'id',
                 'pluginId',
                 'editionId',
+                'ownerId',
                 'cmsLicenseId',
                 'expirable',
                 'expired',
