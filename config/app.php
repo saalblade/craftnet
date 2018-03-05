@@ -16,6 +16,21 @@ return [
                 'components' => [
                     'cmsLicenseManager' => [
                         'class' => craftcom\cms\CmsLicenseManager::class,
+                        'devDomains' => require __DIR__.'/dev-domains.php',
+                        'devTlds' => ['dev'],
+                        'devSubdomains' => [
+                            'acc',
+                            'acceptance',
+                            'craftdemo',
+                            'dev',
+                            'loc',
+                            'local',
+                            'sandbox',
+                            'stage',
+                            'staging',
+                            'test',
+                            'testing',
+                        ]
                     ],
                     'pluginLicenseManager' => [
                         'class' => craftcom\plugins\PluginLicenseManager::class,

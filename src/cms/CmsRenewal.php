@@ -3,12 +3,8 @@
 namespace craftcom\cms;
 
 use Craft;
-use craft\base\Element;
 use craft\commerce\base\Purchasable;
-use craft\commerce\base\PurchasableInterface;
-use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
-use craft\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 
 

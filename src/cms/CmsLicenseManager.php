@@ -6,6 +6,7 @@ use Craft;
 use craft\db\Query;
 use craft\helpers\Db;
 use craftcom\errors\LicenseNotFoundException;
+use LayerShifter\TLDExtract\Extract;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
@@ -15,6 +16,21 @@ class CmsLicenseManager extends Component
     const EDITION_PERSONAL = 'personal';
     const EDITION_CLIENT = 'client';
     const EDITION_PRO = 'pro';
+
+    /**
+     * @var array Domains that we treat as private, because they are only used for dev/testing/staging purposes
+     */
+    public $devDomains = [];
+
+    /**
+     * @var array TLDs that we treat as private, because they are only used for dev/testing/staging purposes
+     */
+    public $devTlds = [];
+
+    /**
+     * @var array Subdomains that we treat as private, because they are generally only used for dev/testing/staging purposes
+     */
+    public $devSubdomains = [];
 
     /**
      * Normalizes a license key by trimming whitespace and removing newlines.
@@ -30,6 +46,49 @@ class CmsLicenseManager extends Component
             throw new InvalidArgumentException('Invalid license key: '.$key);
         }
         return $normalized;
+    }
+
+    /**
+     * Normalizes a public domain.
+     *
+     * @param string $url
+     * @return string|null
+     */
+    public function normalizeDomain(string $url)
+    {
+        $result = (new Extract(null, null, Extract::MODE_ALLOW_ICANN))
+            ->parse(mb_strtolower($url));
+
+        if (($domain = $result->getRegistrableDomain()) === null) {
+            return null;
+        }
+
+        // ignore if it's a dev domain
+        if (
+            in_array($domain, $this->devDomains, true) ||
+            in_array($result->getFullHost(), $this->devDomains, true)
+        ) {
+            return null;
+        }
+
+        // ignore if it's a dev TLD
+        if (in_array($result->getSuffix(), $this->devTlds, true)) {
+            return null;
+        }
+
+        // ignore if it's a nonstandard port
+        $port = parse_url($url, PHP_URL_PORT);
+        if ($port && $port != 80 && $port != 443) {
+            return null;
+        }
+
+        // Check if any of the subdomains sound dev-y
+        $subdomains = $result->getSubdomains();
+        if ($subdomains && array_intersect($subdomains, $this->devSubdomains)) {
+            return null;
+        }
+
+        return $domain;
     }
 
     /**

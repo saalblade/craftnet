@@ -33,5 +33,4 @@ class LicenseHelper
 
         return $licenseKey;
     }
-
 }
