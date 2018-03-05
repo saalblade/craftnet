@@ -193,6 +193,7 @@ abstract class BaseApiController extends Controller
 
     /**
      * Returns an array of validation errors for a ValdiationException based on a model's validation errors
+     *
      * @param Model $model
      * @param string|null $paramPrefix
      * @return array

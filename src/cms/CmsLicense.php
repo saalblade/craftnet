@@ -32,11 +32,13 @@ class CmsLicense extends Model
         return [
             [['expirable', 'expired', 'edition', 'email', 'key'], 'required'],
             [['id', 'editionId', 'ownerId'], 'number', 'integerOnly' => true, 'min' => 1],
-            [['edition'], 'in', 'range' => [
+            [
+                ['edition'], 'in', 'range' => [
                 CmsLicenseManager::EDITION_PERSONAL,
                 CmsLicenseManager::EDITION_CLIENT,
                 CmsLicenseManager::EDITION_PRO,
-            ]],
+            ]
+            ],
             [['email'], 'email'],
             [['domain'], 'validateDomain'],
         ];
