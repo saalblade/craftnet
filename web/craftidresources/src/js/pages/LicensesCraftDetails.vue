@@ -54,13 +54,13 @@
         computed: {
 
             ...mapGetters({
-                craftLicenses: 'craftLicenses',
+                cmsLicenses: 'cmsLicenses',
                 pluginLicenses: 'pluginLicenses',
                 enableCommercialFeatures: 'enableCommercialFeatures',
             }),
 
             license() {
-                return this.craftLicenses.find(l => l.id == this.$route.params.id);
+                return this.cmsLicenses.find(l => l.id == this.$route.params.id);
             },
 
             attachedPluginLicenses() {

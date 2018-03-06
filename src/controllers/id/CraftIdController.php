@@ -64,7 +64,7 @@ class CraftIdController extends BaseController
             ],
             'apps' => Module::getInstance()->getOauth()->getApps(),
             'plugins' => $this->_plugins($currentUser),
-            'craftLicenses' => $this->_craftLicenses($currentUser),
+            'cmsLicenses' => $this->_cmsLicenses($currentUser),
             'pluginLicenses' => $this->_pluginLicenses($currentUser),
             'customers' => $this->_customers($currentUser),
             'sales' => $this->_sales(),
@@ -101,7 +101,7 @@ class CraftIdController extends BaseController
      *
      * @return array CMS licenses.
      */
-    private function _craftLicenses(User $user): array
+    private function _cmsLicenses(User $user): array
     {
         $results = Module::getInstance()->getCmsLicenseManager()->getLicenseByOwner($user->id);
 

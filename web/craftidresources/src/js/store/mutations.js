@@ -71,8 +71,8 @@ export const DELETE_USER_PHOTO = (state, {data, response}) => {
 
 export const SAVE_LICENSE = (state, {license}) => {
     let stateLicense = null;
-    if(license.type === 'craftLicense') {
-        stateLicense = state.craftId.craftLicenses.find(l => l.id == license.id);
+    if(license.type === 'cmsLicense') {
+        stateLicense = state.craftId.cmsLicenses.find(l => l.id == license.id);
     } else if(license.type === 'pluginLicense') {
         stateLicense = state.craftId.pluginLicenses.find(l => l.id == license.id);
     }

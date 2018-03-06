@@ -8,7 +8,7 @@
         <div class="card mb-3">
             <div class="card-header">Attached Craft License</div>
             <div class="card-body">
-                <license-table type="craft" v-if="attachedCraftLicense" :licenses="attachedCraftLicenses"></license-table>
+                <license-table type="craft" v-if="attachedCraftLicense" :licenses="attachedCmsLicenses"></license-table>
                 <p v-else><em>No Craft license attached.</em></p>
             </div>
         </div>
@@ -64,7 +64,7 @@
                 }
             },
 
-            attachedCraftLicenses() {
+            attachedCmsLicenses() {
                 if(this.attachedCraftLicense) {
                     return [this.attachedCraftLicense];
                 }

@@ -3,8 +3,8 @@
         <h1>Craft CMS</h1>
         <license-renew-alert></license-renew-alert>
 
-        <div v-if="craftLicenses.length > 0" class="card card-table">
-            <license-table type="craft" :licenses="craftLicenses"></license-table>
+        <div v-if="cmsLicenses.length > 0" class="card card-table">
+            <license-table type="craft" :licenses="cmsLicenses"></license-table>
         </div>
 
         <div v-else class="card card-empty">
@@ -31,7 +31,7 @@
         computed: {
 
             ...mapGetters({
-                craftLicenses: 'craftLicenses',
+                cmsLicenses: 'cmsLicenses',
             }),
 
         },

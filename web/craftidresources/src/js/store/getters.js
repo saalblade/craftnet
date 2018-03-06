@@ -20,9 +20,9 @@ export const stripeCustomer = state => {
     return state.stripeCustomer;
 };
 
-export const craftLicenses = state => {
+export const cmsLicenses = state => {
     if(state.craftId) {
-        return state.craftId.craftLicenses;
+        return state.craftId.cmsLicenses;
     }
 };
 
@@ -60,7 +60,7 @@ export const getInvoiceById = state => {
 
 export const licenses = state => {
     if(state.craftId) {
-        return state.craftId.pluginLicenses.concat(state.craftId.craftLicenses);
+        return state.craftId.pluginLicenses.concat(state.craftId.cmsLicenses);
     }
 };
 
