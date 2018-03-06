@@ -18,7 +18,7 @@ return [
                         'class' => craftcom\cms\CmsLicenseManager::class,
                         'devDomains' => require __DIR__.'/dev-domains.php',
                         'devTlds' => ['dev'],
-                        'devSubdomains' => [
+                        'devSubdomainWords' => [
                             'acc',
                             'acceptance',
                             'craftdemo',
