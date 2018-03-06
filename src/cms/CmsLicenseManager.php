@@ -19,18 +19,21 @@ class CmsLicenseManager extends Component
 
     /**
      * @var array Domains that we treat as private, because they are only used for dev/testing/staging purposes
+     * @see normalizeDomain()
      */
     public $devDomains = [];
 
     /**
      * @var array TLDs that we treat as private, because they are only used for dev/testing/staging purposes
+     * @see normalizeDomain()
      */
     public $devTlds = [];
 
     /**
-     * @var array Subdomains that we treat as private, because they are generally only used for dev/testing/staging purposes
+     * @var array Words that can be found in the subdomain that will cause the domain to be treated as private
+     * @see normalizeDomain()
      */
-    public $devSubdomains = [];
+    public $devSubdomainWords = [];
 
     /**
      * Normalizes a license key by trimming whitespace and removing newlines.
@@ -83,8 +86,8 @@ class CmsLicenseManager extends Component
         }
 
         // Check if any of the subdomains sound dev-y
-        $subdomains = $result->getSubdomains();
-        if ($subdomains && array_intersect($subdomains, $this->devSubdomains)) {
+        $subdomain = $result->getSubdomain();
+        if ($subdomain && array_intersect(preg_split('/\b/', $subdomain), $this->devSubdomainWords)) {
             return null;
         }
 
