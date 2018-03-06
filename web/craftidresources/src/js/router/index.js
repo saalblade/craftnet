@@ -65,7 +65,7 @@ const router = new VueRouter({
             component: Billing
         },
         {
-            path: '/account/billing/invoices/:id',
+            path: '/account/billing/invoices/:number',
             name: 'BillingInvoiceDetails',
             component: BillingInvoiceDetails
         },

@@ -58,6 +58,14 @@ export const getInvoiceById = state => {
     }
 };
 
+export const getInvoiceByNumber = state => {
+    return number => {
+        if(state.craftId.invoices) {
+            return state.craftId.invoices.find(inv => inv.number == number);
+        }
+    }
+};
+
 export const licenses = state => {
     if(state.craftId) {
         return state.craftId.pluginLicenses.concat(state.craftId.cmsLicenses);

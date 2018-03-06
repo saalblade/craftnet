@@ -8,7 +8,9 @@ use craft\elements\Entry;
 use craft\elements\User;
 use craftcom\behaviors\Developer;
 use craftcom\Module;
+use yii\helpers\Json;
 use yii\web\Response;
+use craft\commerce\Plugin as Commerce;
 
 
 /**
@@ -209,8 +211,7 @@ class CraftIdController extends BaseController
     private function _upcomingInvoice(): array
     {
         return [
-            'id' => 5,
-            'date' => date('Y-m-d'),
+            'datePaid' => date('Y-m-d'),
             'paymentMethod' => [
                 'type' => 'visa',
                 'last4' => '2424',
@@ -219,7 +220,7 @@ class CraftIdController extends BaseController
                 ['id' => 6, 'name' => 'Analytics', 'amount' => 29, 'type' => 'renewal'],
                 ['id' => 8, 'name' => 'Social', 'amount' => 99, 'type' => 'license']
             ],
-            'total' => 128,
+            'totalPrice' => 128,
             'customer' => [
                 'id' => 1,
                 'name' => 'Benjamin David',
@@ -233,78 +234,32 @@ class CraftIdController extends BaseController
      */
     private function _invoices(): array
     {
-        return [
-            [
-                'id' => 1,
-                'date' => date('Y-m-d'),
-                'paymentMethod' => [
-                    'type' => 'visa',
-                    'last4' => '2424',
-                ],
-                'items' => [
-                    ['id' => 6, 'name' => 'Analytics', 'amount' => 29, 'type' => 'renewal'],
-                    ['id' => 8, 'name' => 'Social', 'amount' => 99, 'type' => 'license']
-                ],
-                'total' => 128,
-                'customer' => [
-                    'id' => 1,
-                    'name' => 'Benjamin David',
-                    'email' => 'ben@pixelandtonic.com',
-                ],
-            ],
-            [
-                'id' => 2,
-                'date' => date('Y-m-d'),
-                'paymentMethod' => [
-                    'type' => 'visa',
-                    'last4' => '2424',
-                ],
-                'items' => [
-                    ['id' => 6, 'name' => 'Analytics', 'amount' => 29, 'type' => 'renewal']
-                ],
-                'total' => 29,
-                'customer' => [
-                    'id' => 15,
-                    'name' => 'Andrew Welsh',
-                    'email' => 'andrew@nystudio107.com',
-                ],
-            ],
-            [
-                'id' => 3,
-                'date' => date('Y-m-d'),
-                'paymentMethod' => [
-                    'type' => 'visa',
-                    'last4' => '2424',
-                ],
-                'items' => [
-                    ['id' => 7, 'name' => 'Videos', 'amount' => 29, 'type' => 'renewal']
-                ],
-                'total' => 29,
-                'customer' => [
-                    'id' => 15,
-                    'name' => 'Andrew Welsh',
-                    'email' => 'andrew@nystudio107.com',
-                ],
-            ],
-            [
-                'id' => 4,
-                'date' => date('Y-m-d'),
-                'paymentMethod' => [
-                    'type' => 'visa',
-                    'last4' => '2424',
-                ],
-                'items' => [
-                    ['id' => 6, 'name' => 'Analytics', 'amount' => 99, 'type' => 'license'],
-                    ['id' => 7, 'name' => 'Videos', 'amount' => 99, 'type' => 'license']
-                ],
-                'total' => 198,
-                'customer' => [
-                    'id' => 15,
-                    'name' => 'Andrew Welsh',
-                    'email' => 'andrew@nystudio107.com',
-                ],
-            ],
-        ];
+        $customer = Commerce::getInstance()->getCustomers()->getCustomer();
+        $results = Commerce::getInstance()->getOrders()->getOrdersByCustomer($customer);
+
+        $orders = [];
+
+        foreach ($results as $result) {
+            $order = $result->toArray();
+            $order['totalPrice'] = $result->getTotalPrice();
+            $order['billingAddress'] = $result->getBillingAddress();
+
+            $paymentSource = $result->getPaymentSource();
+
+            if($paymentSource) {
+                $order['paymentSource'] = $paymentSource->toArray();
+
+                $response = Json::decode($paymentSource->response);
+
+                if (isset($response['object']) && $response['object'] === 'card') {
+                    $order['card'] = $response;
+                }
+            }
+
+            $orders[] = $order;
+        }
+
+        return $orders;
     }
 
     /**
