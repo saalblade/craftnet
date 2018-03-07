@@ -19,5 +19,9 @@ mix.js(sourcePath + '/js/app.js', 'js')
         postCss: [ tailwindcss('./tailwind-config.js') ],
     })
     .copy(sourcePath + '/images', distPath + '/images/')
-    .sourceMaps()
-    .version();
+    .sourceMaps();
+
+// Run versioning on production only.
+if (mix.inProduction()) {
+    mix.version();
+}
