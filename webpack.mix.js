@@ -19,4 +19,5 @@ mix.js(sourcePath + '/js/app.js', 'js')
         postCss: [ tailwindcss('./tailwind-config.js') ],
     })
     .copy(sourcePath + '/images', distPath + '/images/')
-    .sourceMaps();
+    .sourceMaps()
+    .version();

@@ -1,12 +1,12 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css",
-    "/css/site.css": "/css/site.css",
-    "/css/plugins.css": "/css/plugins.css",
-    "/js/app.js.map": "/js/app.js.map",
-    "/css/app.css.map": "/css/app.css.map",
-    "/css/site.css.map": "/css/site.css.map",
-    "/css/plugins.css.map": "/css/plugins.css.map",
-    "/js/site.js": "/js/site.js",
-    "/js/site.js.map": "/js/site.js.map"
+    "/js/app.js": "/js/app.js?id=ba52b8cff22f488fa83a",
+    "/css/app.css": "/css/app.css?id=8557cd71228f3c7a93db",
+    "/css/site.css": "/css/site.css?id=1c47083714e85c4baaa9",
+    "/css/plugins.css": "/css/plugins.css?id=9e86491df3a0267f2e62",
+    "/js/app.js.map": "/js/app.js.map?id=b8e68dc07b1dbf42e6b9",
+    "/css/app.css.map": "/css/app.css.map?id=8925d8c878bd6e66bbfd",
+    "/css/site.css.map": "/css/site.css.map?id=5ccd921eccf41b63ff47",
+    "/css/plugins.css.map": "/css/plugins.css.map?id=b8f46579c89227276af6",
+    "/js/site.js": "/js/site.js?id=65af53a852c465341328",
+    "/js/site.js.map": "/js/site.js.map?id=fbd7b3d44ae6e49e2c02"
 }
