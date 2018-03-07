@@ -223,6 +223,7 @@ class StripeController extends BaseController
 
         $plugin = Commerce::getInstance();
         $request = Craft::$app->getRequest();
+        $paymentSources = $plugin->getPaymentSources();
 
         // Are we paying anonymously?
         $userId = Craft::$app->getUser()->getId();
@@ -239,6 +240,13 @@ class StripeController extends BaseController
             return $this->asErrorJson($error);
         }
 
+        // Remove existing payment sources
+        $existingPaymentSources = $paymentSources->getAllPaymentSourcesByUserId($userId);
+
+        foreach($existingPaymentSources as $paymentSource) {
+            $paymentSources->deletePaymentSourceById($paymentSource->id);
+        }
+
         // Get the payment method' gateway adapter's expected form model
         $paymentForm = $gateway->getPaymentFormModel();
         $paymentForm->setAttributes($request->getBodyParams(), false);
@@ -247,10 +255,9 @@ class StripeController extends BaseController
         $error = '';
 
         try {
-            $paymentSource = $plugin->getPaymentSources()->createPaymentSource($userId, $gateway, $paymentForm, $description);
+            $paymentSource = $paymentSources->createPaymentSource($userId, $gateway, $paymentForm, $description);
 
             if ($paymentSource) {
-               $success = true;
                $card = $paymentSource->response;
 
                 return $this->asJson([
