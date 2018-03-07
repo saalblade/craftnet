@@ -421,7 +421,7 @@ class CartsController extends BaseApiController
 
         // save the address
         if (!$commerce->getAddresses()->saveAddress($address)) {
-            throw new Exception('Address not saved: '.implode(', ', $address->getErrorSummary(true)));
+            throw new Exception('Could not save address: '.implode(', ', $address->getErrorSummary(true)));
         }
 
         // update the cart

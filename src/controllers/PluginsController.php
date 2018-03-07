@@ -337,7 +337,7 @@ class PluginsController extends Controller
                     ]);
 
                     if (!Craft::$app->getElements()->saveElement($icon, false)) {
-                        throw new Exception('Unable to save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
+                        throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
                     }
 
                     $plugin->iconId = $icon->id;
@@ -434,7 +434,7 @@ class PluginsController extends Controller
                     $screenshot->validate(['newLocation']);
 
                     if ($screenshot->hasErrors() || !Craft::$app->getElements()->saveElement($screenshot, false)) {
-                        throw new Exception('Unable to save icon asset: '.implode(', ', $screenshot->getErrorSummary(true)));
+                        throw new Exception('Could not save icon asset: '.implode(', ', $screenshot->getErrorSummary(true)));
                     }
 
                     $screenshotIds[] = $screenshot->id;
@@ -484,7 +484,7 @@ class PluginsController extends Controller
                 }
 
                 if (!Craft::$app->getElements()->saveElement($icon, false)) {
-                    throw new Exception('Unable to save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
+                    throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
                 }
             }
 
@@ -509,7 +509,7 @@ class PluginsController extends Controller
 
                 foreach ($plugin->screenshots as $screenshot) {
                     if (!$assetsService->moveAsset($screenshot, $folder)) {
-                        throw new Exception('Unable to save icon asset: '.implode(', ', $screenshot->getErrorSummary(true)));
+                        throw new Exception('Could not save icon asset: '.implode(', ', $screenshot->getErrorSummary(true)));
                     }
                 }
             }
@@ -764,7 +764,7 @@ class PluginsController extends Controller
         ]);
 
         if (!Craft::$app->getElements()->saveElement($icon, false)) {
-            throw new Exception('Unable to save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
+            throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
         }
 
         return $icon;
