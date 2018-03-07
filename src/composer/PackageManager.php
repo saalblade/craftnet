@@ -369,7 +369,7 @@ class PackageManager extends Component
             $db->createCommand()
                 ->insert('craftcom_packages', $data)
                 ->execute();
-            $package->id = $db->getLastInsertID();
+            $package->id = $db->getLastInsertID('craftcom_packages');
         } else {
             $db->createCommand()
                 ->update('craftcom_packages', $data, ['id' => $package->id])
