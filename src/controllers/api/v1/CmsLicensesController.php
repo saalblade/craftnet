@@ -42,7 +42,7 @@ class CmsLicensesController extends BaseApiController
         ]);
 
         if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
-            throw new Exception('Could not create CMS license: '.implode(',', $license->getFirstErrors()));
+            throw new Exception('Could not create CMS license: '.implode(', ', $license->getErrorSummary(true)));
         }
 
         return $this->asJson([

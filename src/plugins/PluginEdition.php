@@ -273,7 +273,7 @@ class PluginEdition extends Purchasable
                 if ($manager->saveLicense($license)) {
                     $manager->saveLicenseLineItemAssociation($license->id, $lineItem->id);
                 } else {
-                    Craft::error("Could not create plugin license {$key} for order {$order->number}: ".implode(',', $license->getFirstErrors()));
+                    Craft::error("Could not create plugin license {$key} for order {$order->number}: ".implode(', ', $license->getErrorSummary(true)));
                 }
             } catch (Exception $e) {
                 Craft::error("Could not create plugin license {$key} for order {$order->number}: {$e->getMessage()}");
