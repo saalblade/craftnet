@@ -3,12 +3,10 @@ let tailwindcss = require('tailwindcss');
 const sourcePath = 'web/craftidresources/src';
 const distPath = 'web/craftidresources/dist';
 
+// Set a prefix for all generated asset paths.
 mix.setResourceRoot("/craftidresources/dist/");
 
-if(mix.config.hmr) {
-    mix.setResourceRoot("//localhost:8080/");
-}
-
+// Override the default path to your project's public directory.
 mix.setPublicPath(distPath);
 
 mix.js(sourcePath + '/js/app.js', 'js')

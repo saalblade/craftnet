@@ -3,14 +3,8 @@
 {#{% do view.registerCssFile("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css") %}#}
 {% do view.registerJsFile("//use.fontawesome.com/releases/v5.0.4/js/all.js") %}
 {% do view.registerJsFile("//js.stripe.com/v3/") %}
-
-{% do view.registerJsFile("/craftidresources/dist/js/app.js?v5") %}
-{% do view.registerCssFile("/craftidresources/dist/css/app.css?v5") %}
-
-{#
-{% do view.registerJsFile("https://localhost:8080/craftidresources/dist/js/app.js") %}
-{% do view.registerCssFile("https://localhost:8080/craftidresources/dist/css/app.css") %}
-#}
+{% do view.registerJsFile(mix('/js/app.js', '/craftidresources/dist')) %}
+{% do view.registerCssFile(mix('/css/app.css', '/craftidresources/dist')) %}
 
 {% set config = craft.app.config.getConfigFromFile('craftid') %}
 

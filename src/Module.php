@@ -24,6 +24,7 @@ use craftcom\composer\PackageManager;
 use craftcom\fields\Plugins;
 use craftcom\plugins\PluginLicenseManager;
 use craftcom\services\Oauth;
+use craftcom\twigextensions\CraftIdTwigExtension;
 use craftcom\utilities\UnavailablePlugins;
 use yii\base\Event;
 
@@ -92,6 +93,8 @@ class Module extends \yii\base\Module
         Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
             $e->types[] = EditionUpgradeDiscount::class;
         });
+
+        Craft::$app->view->twig->addExtension(new CraftIdTwigExtension());
 
         parent::init();
     }
