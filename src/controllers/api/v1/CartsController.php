@@ -174,7 +174,7 @@ class CartsController extends BaseApiController
 
             // save the cart if it's new so it gets an ID
             if (!$cart->id && !Craft::$app->getElements()->saveElement($cart)) {
-                throw new Exception('Could not save the cart: '.implode(', ', $cart->getFirstErrors()));
+                throw new Exception('Could not save the cart: '.implode(', ', $cart->getErrorSummary(true)));
             }
 
             // billing address
@@ -233,7 +233,7 @@ class CartsController extends BaseApiController
 
             // save the cart
             if (!Craft::$app->getElements()->saveElement($cart)) {
-                throw new Exception('Could not save the cart: '.implode(', ', $cart->getFirstErrors()));
+                throw new Exception('Could not save the cart: '.implode(', ', $cart->getErrorSummary(true)));
             }
 
             $transaction->commit();
@@ -302,7 +302,7 @@ class CartsController extends BaseApiController
                 'userId' => $userId,
             ]);
             if (!$customersService->saveCustomer($customer)) {
-                throw new Exception('Could not save the customer: '.implode(' ', $customer->getFirstErrors()));
+                throw new Exception('Could not save the customer: '.implode(' ', $customer->getErrorSummary(true)));
             }
         }
 
@@ -421,7 +421,7 @@ class CartsController extends BaseApiController
 
         // save the address
         if (!$commerce->getAddresses()->saveAddress($address)) {
-            throw new Exception('Address not saved: '.implode(', ', $address->getFirstErrors()));
+            throw new Exception('Address not saved: '.implode(', ', $address->getErrorSummary(true)));
         }
 
         // update the cart
