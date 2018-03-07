@@ -5,6 +5,7 @@ namespace craftcom\cms;
 use Craft;
 use craft\db\Query;
 use craft\helpers\Db;
+use craft\helpers\Json;
 use craftcom\errors\LicenseNotFoundException;
 use LayerShifter\TLDExtract\Extract;
 use yii\base\Component;
@@ -133,7 +134,27 @@ class CmsLicenseManager extends Component
             ->one();
 
         if ($result === null) {
-            throw new LicenseNotFoundException($key);
+            // try the inactive licenses table
+            $data = (new Query())
+                ->select(['data'])
+                ->from(['craftcom_inactivecmslicenses'])
+                ->where(['key' => $key])
+                ->scalar();
+
+            if ($data === false) {
+                throw new LicenseNotFoundException($key);
+            }
+
+            $license = new CmsLicense(Json::decode($data));
+            $this->saveLicense($license, false);
+
+            Craft::$app->getDb()->createCommand()
+                ->delete('craftcom_inactivecmslicenses', [
+                    'key' => $key
+                ])
+                ->execute();
+
+            return $license;
         }
 
         return new CmsLicense($result);
@@ -177,6 +198,7 @@ class CmsLicenseManager extends Component
             'lastActivityOn' => Db::prepareDateForDb($license->lastActivityOn),
             'lastRenewedOn' => Db::prepareDateForDb($license->lastRenewedOn),
             'expiresOn' => Db::prepareDateForDb($license->expiresOn),
+            'dateCreated' => Db::prepareDateForDb($license->dateCreated),
         ];
 
         if (!$license->id) {

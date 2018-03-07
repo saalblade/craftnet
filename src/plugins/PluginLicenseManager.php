@@ -80,6 +80,7 @@ class PluginLicenseManager extends Component
             'lastActivityOn' => Db::prepareDateForDb($license->lastActivityOn),
             'lastRenewedOn' => Db::prepareDateForDb($license->lastRenewedOn),
             'expiresOn' => Db::prepareDateForDb($license->expiresOn),
+            'dateCreated' => Db::prepareDateForDb($license->dateCreated),
         ];
 
         if (!$license->id) {
