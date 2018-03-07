@@ -35,6 +35,7 @@ return [
     'microserve-staging.ca',
     'mock-up.ca',
     'modlabdev.com',
+    'mstesting.com.au',
     'mystagingsite.org',
     'mystagingsite.us',
     'nerderylabs.com',
