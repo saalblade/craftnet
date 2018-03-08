@@ -71,7 +71,7 @@
 
                                     <h5><router-link @click.native="closeSidebar()" to="/account"><i class="fas fa-user"></i> Account</router-link></h5>
                                     <ul>
-                                        <li v-if="enableCommercialFeatures"><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
                                     </ul>

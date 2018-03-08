@@ -102,9 +102,9 @@ export default {
             token: token.id
         };
 
-        let params = qs.stringify(data);
+        let qsData = qs.stringify(data);
 
-        axios.post(window.craftIdUrl+'/stripe/save-card', params)
+        axios.post(window.craftIdUrl+'/stripe/save-card', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -142,6 +142,22 @@ export default {
 
         let params = qs.stringify(body);
         axios.post(Craft.actionUrl+'/entries/save-entry', params)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    saveCmsLicense(license, cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        };
+
+        for(let attribute in license) {
+            data[attribute] = license[attribute];
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl+'/craftcom/id/cms-licenses/save', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },

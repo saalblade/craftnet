@@ -92,6 +92,13 @@ export const SAVE_LICENSE = (state, {license}) => {
     }
 };
 
+export const SAVE_CMS_LICENSE = (state, {license}) => {
+    let stateLicense = state.craftId.cmsLicenses.find(l => l.key == license.key);
+    for (let attribute in license) {
+        stateLicense[attribute] = license[attribute];
+    }
+};
+
 export const SAVE_PLUGIN = (state, {plugin, response}) => {
     let newPlugin = false;
     let statePlugin = state.craftId.plugins.find(p => p.id == plugin.pluginId);

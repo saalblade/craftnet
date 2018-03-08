@@ -10,10 +10,6 @@
                     <th>Craft License</th>
                 </template>
 
-                <template v-if="type == 'craft'">
-                    <th>Plugin Licenses</th>
-                </template>
-
                 <th>Domain</th>
 
                 <template v-if="enableCommercialFeatures">
@@ -25,7 +21,13 @@
             <tbody>
             <template>
                 <tr v-for="license in licenses">
-                    <td><router-link :to="'/account/licenses/'+type+'/'+license.id"><template v-if="type == 'plugins'">PLU</template><template v-else-if="type == 'craft'">CMS</template>000{{ license.id }}</router-link></td>
+                    <td>
+                        <code>
+                            <router-link :to="'/account/licenses/'+type+'/'+license.id">
+                                {{ license.key.substr(0, 10) }}…
+                            </router-link>
+                        </code>
+                    </td>
 
                     <template v-if="type == 'plugins'">
 
@@ -43,7 +45,6 @@
 
                     <template v-if="type == 'craft'">
                         <td>Craft {{license.edition}}</td>
-                        <td>0</td>
                     </template>
 
                     <td>{{ license.domain }}</td>

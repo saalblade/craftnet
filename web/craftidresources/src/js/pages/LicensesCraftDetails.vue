@@ -1,9 +1,9 @@
 <template>
     <div>
         <p><router-link class="nav-link" to="/account/licenses/craft" exact>← Craft CMS</router-link></p>
-        <h1>#CMS000{{license.id}}</h1>
+        <h1><code>{{ license.key.substr(0, 10) }}…</code></h1>
 
-        <license-details type="cms" :license="license"></license-details>
+        <cms-license-details :license="license"></cms-license-details>
 
         <div class="card mb-3">
             <div class="card-header">
@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <invoices v-if="enableCommercialFeatures"></invoices>
+        <invoices></invoices>
 
         <div class="card card-danger mb-3">
             <div class="card-header">Danger Zone</div>
@@ -39,14 +39,14 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import LicenseDetails from '../components/LicenseDetails'
+    import CmsLicenseDetails from '../components/CmsLicenseDetails'
     import LicenseTable from '../components/LicenseTable';
     import Invoices from '../components/Invoices';
 
     export default {
 
         components: {
-            LicenseDetails,
+            CmsLicenseDetails,
             LicenseTable,
             Invoices,
         },
@@ -56,7 +56,6 @@
             ...mapGetters({
                 cmsLicenses: 'cmsLicenses',
                 pluginLicenses: 'pluginLicenses',
-                enableCommercialFeatures: 'enableCommercialFeatures',
             }),
 
             license() {
