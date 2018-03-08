@@ -23,6 +23,11 @@ class PluginEditionQuery extends ElementQuery
      */
     public $handle;
 
+    /**
+     * @var bool|null Whether only commercial or non-commercial editions should be returned. Null means all editions.
+     */
+    public $commercial;
+
     public function __construct($elementType, array $config = [])
     {
         // Default orderBy
@@ -59,6 +64,19 @@ class PluginEditionQuery extends ElementQuery
         return $this;
     }
 
+    /**
+     * Sets the [[commercial]] property.
+     *
+     * @param bool|null $value The property value
+     *
+     * @return static self reference
+     */
+    public function commercial($value = true)
+    {
+        $this->commercial = $value;
+        return $this;
+    }
+
     protected function beforePrepare(): bool
     {
         $this->joinElementTable('craftcom_plugineditions');
@@ -77,6 +95,12 @@ class PluginEditionQuery extends ElementQuery
 
         if ($this->handle) {
             $this->subQuery->andWhere(Db::parseParam('craftcom_plugineditions.handle', $this->handle));
+        }
+
+        if ($this->commercial === true) {
+            $this->subQuery->andWhere(['not', ['craftcom_plugineditions.price' => 0]]);
+        } else if ($this->commercial === false) {
+            $this->subQuery->andWhere(['craftcom_plugineditions.price' => 0]);
         }
 
         return parent::beforePrepare();

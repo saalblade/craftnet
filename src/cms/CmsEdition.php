@@ -35,6 +35,31 @@ class CmsEdition extends Purchasable
         return new CmsEditionQuery(static::class);
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected static function defineSources(string $context = null): array
+    {
+        return [
+            [
+                'key' => '*',
+                'label' => 'All editions',
+            ]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected static function defineTableAttributes(): array
+    {
+        return [
+            'name' => ['label' => 'Name'],
+            'price' => ['label' => 'Price'],
+            'renewalPrice' => ['label' => 'Renewal Price'],
+        ];
+    }
+
     // Properties
     // =========================================================================
 
@@ -63,7 +88,7 @@ class CmsEdition extends Purchasable
      */
     public function __toString()
     {
-        return $this->name;
+        return "Craft {$this->name}";
     }
 
     // Public Methods
@@ -198,6 +223,20 @@ class CmsEdition extends Purchasable
         } catch (Exception $e) {
             Craft::error("Could not save Craft license {$license->key} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);
+        }
+    }
+
+    // Protected Methods
+    // =========================================================================
+
+    protected function tableAttributeHtml(string $attribute): string
+    {
+        switch ($attribute) {
+            case 'price':
+            case 'renewalPrice':
+                return Craft::$app->getFormatter()->asCurrency($this->$attribute, 'USD', [], [], true);
+            default:
+                return parent::tableAttributeHtml($attribute);
         }
     }
 }

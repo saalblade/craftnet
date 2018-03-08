@@ -597,7 +597,12 @@ class ElliottImportController extends Controller
         $this->stdout('Importing discounts'.PHP_EOL);
         $startTime = microtime(true);
 
-        $this->import('discounts', function(array $item) {
+        $editionIds = CmsEdition::find()
+            ->select(['handle', 'elements.id'])
+            ->andWhere(['craftcom_cmseditions.handle' => ['client', 'pro']])
+            ->pairs();
+
+        $this->import('discounts', function(array $item) use ($editionIds) {
             $this->stdout("    > Saving discount \"{$item['name']}\" ({$item['code']}) ... ");
 
             $this->db->createCommand()
@@ -630,6 +635,26 @@ class ElliottImportController extends Controller
                     'dateUpdated' => $item['dateUpdated'],
                 ])
                 ->execute();
+            $discountId = $this->db->getLastInsertID('commerce_discounts');
+
+            if (stripos($item['name'], 'craft pro') !== false) {
+                $purchasableIds = [$editionIds['pro']];
+            } else if (stripos($item['name'], 'craft client') !== false) {
+                $purchasableIds = [$editionIds['client']];
+            } else {
+                $purchasableIds = [$editionIds['pro'], $editionIds['client']];
+            }
+
+            foreach ($purchasableIds as $purchasableId) {
+                $this->db->createCommand()
+                    ->insert('commerce_discount_purchasables', [
+                        'discountId' => $discountId,
+                        'purchasableId' => $purchasableId,
+                        'dateCreated' => $item['dateCreated'],
+                        'dateUpdated' => $item['dateUpdated'],
+                    ])
+                    ->execute();
+            }
 
             $this->stdout('done'.PHP_EOL);
         });
