@@ -102,9 +102,9 @@ export default {
             token: token.id
         };
 
-        let params = qs.stringify(data);
+        let qsData = qs.stringify(data);
 
-        axios.post(window.craftIdUrl+'/stripe/save-card', params)
+        axios.post(window.craftIdUrl+'/stripe/save-card', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
