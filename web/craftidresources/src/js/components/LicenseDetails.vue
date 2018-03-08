@@ -95,6 +95,9 @@
 
         methods: {
 
+            /**
+             * Save auto renew
+             */
             saveAutoRenew() {
                 this.$store.dispatch('saveLicense', {
                     id: this.license.id,
@@ -113,6 +116,9 @@
                 });
             },
 
+            /**
+             * Save notes.
+             */
             saveNotes() {
                 this.$store.dispatch('saveLicense', {
                     id: this.license.id,
@@ -126,6 +132,9 @@
                 });
             },
 
+            /**
+             * Cancel.
+             */
             cancel() {
                 this.licenseDraft.notes = this.license.notes;
             }

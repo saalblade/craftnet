@@ -83,6 +83,9 @@
 
         methods: {
 
+            /**
+             * Disconnect Stripe account.
+             */
             disconnect() {
                 this.disconnectLoading = true;
 

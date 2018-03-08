@@ -115,6 +115,7 @@ const router = new VueRouter({
     ]
 });
 
+// Renew session when changing route
 router.beforeEach((to, from, next) => {
     if(router.app.$refs.authManager) {
         router.app.$refs.authManager.renewSession();

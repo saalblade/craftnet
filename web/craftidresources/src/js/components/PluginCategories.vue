@@ -90,6 +90,11 @@
 
 		methods: {
 
+            /**
+			 * Select category.
+			 *
+             * @param categoryId
+             */
             selectCategory(categoryId) {
                 if(this.pluginDraft.categoryIds.length < this.maxCategories) {
 					const exists = this.pluginDraft.categoryIds.find(catId => catId == categoryId);
@@ -100,6 +105,11 @@
                 }
             },
 
+            /**
+			 * Unselect category.
+			 *
+             * @param categoryId
+             */
             unselectCategory(categoryId) {
                 const i = this.pluginDraft.categoryIds.indexOf(categoryId);
 

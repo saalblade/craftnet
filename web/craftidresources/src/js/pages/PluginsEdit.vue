@@ -285,6 +285,11 @@
 
         methods: {
 
+            /**
+             * On input name.
+             *
+             * @param name
+             */
             onInputName(name) {
                 if(!this.pluginId) {
                     const handle = slug(name);
@@ -292,10 +297,20 @@
                 }
             },
 
+            /**
+             * On select repository.
+             *
+             * @param repository
+             */
             onSelectRepository(repository) {
                 this.loadDetails(repository.html_url);
             },
 
+            /**
+             * Remove screenshot.
+             *
+             * @param key
+             */
             removeScreenshot(key) {
                 this.pluginDraft.screenshotUrls.splice(key, 1);
                 this.pluginDraft.screenshotIds.splice(key, 1);
@@ -307,6 +322,11 @@
                 }
             },
 
+            /**
+             * Change screenshots.
+             *
+             * @param ev
+             */
             changeScreenshots(ev) {
                 this.pluginDraft.screenshotUrls = [];
 
@@ -324,6 +344,11 @@
                 }
             },
 
+            /**
+             * Change icon.
+             *
+             * @param ev
+             */
             changeIcon(ev) {
                 this.pluginDraft.icon = ev.target.value;
 
@@ -336,6 +361,11 @@
                 reader.readAsDataURL(this.$refs.iconFile.files[0]);
             },
 
+            /**
+             * Load details.
+             *
+             * @param repositoryUrl
+             */
             loadDetails(repositoryUrl) {
                 this.repositoryLoading = true;
                 this.loadingRepository = repositoryUrl;
@@ -406,6 +436,9 @@
                     });
             },
 
+            /**
+             * Save the plugin.
+             */
             save() {
                 this.loading = true;
 
@@ -465,6 +498,9 @@
                 });
             },
 
+            /**
+             * Submit plugin for approval.
+             */
             submit() {
                 this.pluginSubmitLoading = true;
                 this.$store.dispatch('submitPlugin', this.plugin.id).then(response => {
@@ -480,7 +516,12 @@
                 })
             },
 
-
+            /**
+             * Human file size.
+             *
+             * @param bytes
+             * @returns {string}
+             */
             humanFileSize(bytes) {
                 const threshold = 1024;
 

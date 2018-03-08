@@ -52,16 +52,27 @@
 
         methods: {
 
+            /**
+			 * Password validates.
+			 *
+             * @returns {boolean}
+             */
             passwordValidates() {
             	if(this.password.length >= 6) {
             	    return true;
 				}
 			},
 
+            /**
+			 * Form validates.
+			 *
+             * @returns {boolean}
+             */
             formValidates() {
                 if (this.loginName.length && this.passwordValidates()) {
                     return true;
 				}
+
                 return false;
             },
 

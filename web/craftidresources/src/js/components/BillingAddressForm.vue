@@ -15,7 +15,7 @@
 			</div>
 
 			<div>
-				<button @click="editInvoiceDetails()" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
+				<button @click="edit()" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
 					<i class="fas fa-pencil-alt"></i>
 					Edit
 				</button>
@@ -80,11 +80,17 @@
 
         methods: {
 
-            editInvoiceDetails() {
+            /**
+             * Edit billing address.
+             */
+            edit() {
                 this.showForm = true;
                 this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.companyInfos));
             },
 
+            /**
+			 * Save the billing address.
+             */
             save() {
                 this.$store.dispatch('saveUser', {
                     id: this.currentUser.id,
@@ -108,11 +114,13 @@
                 });
             },
 
+            /**
+			 * Cancel changes.
+             */
             cancel() {
                 this.showForm = false;
                 this.errors = {};
-            }
-
+            },
         }
 
     }

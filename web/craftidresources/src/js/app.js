@@ -28,12 +28,41 @@ window.craftIdApp = new Vue({
 
     methods: {
 
+        /**
+         * Connect app callback.
+         *
+         * @param apps
+         */
         connectAppCallback(apps) {
             this.$store.dispatch('connectAppCallback', apps);
 
             this.$root.displayNotice('App connected.');
         },
 
+        /**
+         *  Displays an error.
+         *
+         * @param {string} message
+         */
+        displayNotice(message) {
+            this.displayNotification('success', message);
+        },
+
+        /**
+         *  Displays an error.
+         *
+         * @param {string} message
+         */
+        displayError(message) {
+            this.displayNotification('danger', message);
+        },
+
+        /**
+         *  Displays a notification.
+         *
+         * @param {string} type
+         * @param {string} message
+         */
         displayNotification(type, message) {
             this.notification = {
                 type: type,
@@ -44,15 +73,6 @@ window.craftIdApp = new Vue({
                 this.notification = null;
             }.bind(this), 2000);
         },
-
-        displayNotice(message) {
-            this.displayNotification('success', message);
-        },
-
-        displayError(message) {
-            this.displayNotification('danger', message);
-        },
-
     },
 
     created() {
@@ -76,4 +96,5 @@ window.craftIdApp = new Vue({
             this.stripeAccountLoading = false;
         }
     }
+
 });

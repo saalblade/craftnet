@@ -18,6 +18,9 @@
 
         methods: {
 
+            /**
+             * Save the credit card.
+             */
             save() {
                 this.$emit('beforeSave');
 
@@ -33,6 +36,9 @@
                 });
             },
 
+            /**
+             * Cancel.
+             */
             cancel() {
                 this.card.clear();
 

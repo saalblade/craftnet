@@ -20,7 +20,7 @@
                     </div>
 
                     <div :class="{'hidden': !editing}">
-                        <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></card-form>
+                        <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard()" @cancel="cancel"></card-form>
                     </div>
 
                     <div class="mt-3">
@@ -88,15 +88,13 @@
 
         methods: {
 
-            error() {
-                this.cardFormloading = false;
-            },
-
-            beforeSave() {
-                this.cardFormloading = true;
-            },
-
-            save(card, token) {
+            /**
+             * Saves a credit card.
+             *
+             * @param card
+             * @param token
+             */
+            saveCard(card, token) {
                 this.$store.dispatch('saveCard', token).then(response => {
                     card.clear();
                     this.cardFormloading = false;
@@ -105,18 +103,39 @@
                 });
             },
 
-            cancel() {
-                this.editing = false;
-            },
-
+            /**
+             * Removes a credit card.
+             */
             removeCard() {
                 this.removeCardLoading = true;
                 this.$store.dispatch('removeCard').then(response => {
                     this.removeCardLoading = false;
                     this.$root.displayNotice('Card removed.')
                 })
-            }
+            },
+
+            /**
+             * Before save.
+             */
+            beforeSave() {
+                this.cardFormloading = true;
+            },
+
+            /**
+             * Cancel changes.
+             */
+            cancel() {
+                this.editing = false;
+            },
+
+            /**
+             * Error.
+             */
+            error() {
+                this.cardFormloading = false;
+            },
 
         },
+
     }
 </script>

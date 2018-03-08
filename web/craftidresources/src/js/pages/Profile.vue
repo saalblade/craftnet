@@ -86,6 +86,11 @@
 
         methods: {
 
+            /**
+			 * Delete photo.
+			 *
+             * @param ev
+             */
             deletePhoto(ev) {
                 if (confirm("Are you sure you want to delete this image?")) {
                     this.photoLoading = true;
@@ -110,10 +115,18 @@
                 }
             },
 
+            /**
+			 * Change photo.
+             */
             changePhoto() {
                 this.$refs.photoFile.click();
             },
 
+            /**
+			 * On change photo.
+			 *
+             * @param ev
+             */
             onChangePhoto(ev) {
                 /*let reader = new FileReader();
 
@@ -151,6 +164,9 @@
 					});
             },
 
+            /**
+			 * Save the profile.
+             */
             save() {
                 this.loading = true;
 

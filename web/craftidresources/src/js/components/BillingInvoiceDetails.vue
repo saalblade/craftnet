@@ -67,11 +67,17 @@
 
         methods: {
 
+            /**
+             * Edit invoice details.
+             */
             editInvoiceDetails() {
                 this.showForm = true;
                 this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.companyInfos));
             },
 
+            /**
+			 * Saves the user’s invoice details.
+             */
             save() {
                 this.$store.dispatch('saveUser', {
                     id: this.currentUser.id,
@@ -95,6 +101,9 @@
                 });
             },
 
+            /**
+			 * Cancel changes.
+             */
             cancel() {
                 this.showForm = false;
                 this.errors = {};

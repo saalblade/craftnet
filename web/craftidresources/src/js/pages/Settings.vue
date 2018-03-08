@@ -73,6 +73,9 @@
 
         methods: {
 
+            /**
+             * Save the settings.
+             */
             save() {
                 this.loading = true;
 

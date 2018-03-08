@@ -129,6 +129,9 @@
 
         methods: {
 
+            /**
+			 * Save auto renew.
+             */
             saveAutoRenew() {
                 this.$store.dispatch('saveCmsLicense', {
                     id: this.license.id,
@@ -147,18 +150,29 @@
                 });
             },
 
+            /**
+			 * Save domain.
+             */
 			saveDomain() {
                 this.saveCmsLicense(() => {
                     this.editingDomain = false;
 				});
 			},
 
+            /**
+			 * Save notes.
+             */
 			saveNotes() {
                 this.saveCmsLicense(() => {
                     this.editingNotes = false;
                 });
 			},
 
+            /**
+			 * Save CMS license.
+			 *
+             * @param cb
+             */
             saveCmsLicense(cb) {
                 this.$store.dispatch('saveCmsLicense', {
                     key: this.license.key,
@@ -173,11 +187,17 @@
                 });
             },
 
+            /**
+			 * Cancel edit domain.
+             */
             cancelEditDomain() {
                 this.licenseDraft.domain = this.license.domain;
                 this.editingDomain = false;
             },
 
+            /**
+			 * Cancel edit notes.
+             */
             cancelEditNotes() {
                 this.licenseDraft.notes = this.license.notes;
                 this.editingNotes = false;

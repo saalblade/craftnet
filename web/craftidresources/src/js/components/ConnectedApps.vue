@@ -79,6 +79,12 @@
 
         methods: {
 
+            /**
+			 * Account name.
+			 *
+             * @param appType
+             * @returns {*}
+             */
             accountName(appType) {
 				if(this.apps[appType]) {
 				    let app = this.apps[appType];
@@ -93,6 +99,11 @@
 				}
 			},
 
+            /**
+			 * Connect.
+			 *
+             * @param provider
+             */
             connect(provider) {
                 let width = 800;
                 let height = 830;
@@ -118,6 +129,11 @@
                 window.open(url, name, specs);
             },
 
+            /**
+			 * Disconnect.
+			 *
+             * @param provider
+             */
             disconnect(provider) {
                 this.loading[provider] = true;
                 this.$store.dispatch('disconnectApp', provider)

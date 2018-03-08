@@ -132,10 +132,16 @@
 
         methods: {
 
+            /**
+             * Toggles the sidebar.
+             */
             toggleSidebar() {
                 this.showingSidebar = !this.showingSidebar;
             },
 
+            /**
+             * Closes the sidebar.
+             */
             closeSidebar() {
                 this.showingSidebar = false;
             }

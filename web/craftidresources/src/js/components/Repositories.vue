@@ -81,6 +81,12 @@
 
         methods: {
 
+            /**
+			 * Is repository loading?
+			 *
+             * @param repositoryUrl
+             * @returns {boolean}
+             */
           	isLoading(repositoryUrl) {
           	    return this.loadingRepository === repositoryUrl;
 			}
