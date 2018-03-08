@@ -104,49 +104,6 @@ class PluginLicenseManager extends Component
     }
 
     /**
-     * Upgrades a license.
-     *
-     * @param string $key
-     * @param PluginEdition $edition
-     * @param int|null $lineItemId
-     * @throws LicenseNotFoundException if $key is missing
-     */
-    public function upgradeLicense(string $key, PluginEdition $edition, int $lineItemId = null)
-    {
-        $license = $this->getLicenseByKey($key);
-        $license->editionId = $edition->id;
-        $license->expired = false;
-
-        // If this was placed before April 4, set the license to non-expirable
-        if (time() < 1522800000) {
-            $license->expirable = false;
-        }
-
-        $this->saveLicense($license, false);
-
-        // Save the line item relation if we have an ID
-        if ($lineItemId !== null) {
-            $this->saveLicenseLineItemAssociation();
-        }
-    }
-
-    /**
-     * Associates a license with a line item.
-     *
-     * @param int $licenseId
-     * @param int $lineItemId
-     */
-    public function saveLicenseLineItemAssociation(int $licenseId, int $lineItemId)
-    {
-        Craft::$app->getDb()->createCommand()
-            ->insert('craftcom_pluginlicenses_lineitems', [
-                'licenseId' => $licenseId,
-                'lineItemId' => $lineItemId,
-            ], false)
-            ->execute();
-    }
-
-    /**
      * @return Query
      */
     private function _createLicenseQuery(): Query

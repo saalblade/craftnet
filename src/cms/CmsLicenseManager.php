@@ -222,39 +222,6 @@ class CmsLicenseManager extends Component
     }
 
     /**
-     * Upgrades a license.
-     *
-     * @param string $key
-     * @param CmsEdition $edition
-     * @param int|null $lineItemId
-     * @throws LicenseNotFoundException if $key is missing
-     */
-    public function upgradeLicense(string $key, CmsEdition $edition, int $lineItemId = null)
-    {
-        $license = $this->getLicenseByKey($key);
-        $license->edition = $edition->handle;
-        $license->editionId = $edition->id;
-        $license->expired = false;
-
-        // If this was placed before April 4, set the license to non-expirable
-        if (time() < 1522800000) {
-            $license->expirable = false;
-        }
-
-        $this->saveLicense($license, false);
-
-        // Save the line item relation if we have an ID
-        if ($lineItemId !== null) {
-            Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_cmslicenses_lineitems', [
-                    'licenseId' => $license->id,
-                    'lineItemId' => $lineItemId,
-                ], false)
-                ->execute();
-        }
-    }
-
-    /**
      * @return Query
      */
     private function _createLicenseQuery(): Query
