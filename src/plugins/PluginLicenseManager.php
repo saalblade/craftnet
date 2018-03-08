@@ -3,7 +3,9 @@
 namespace craftcom\plugins;
 
 use Craft;
+use craft\commerce\elements\Order;
 use craft\db\Query;
+use craft\elements\User;
 use craft\helpers\Db;
 use craftcom\errors\LicenseNotFoundException;
 use yii\base\Component;
@@ -101,6 +103,38 @@ class PluginLicenseManager extends Component
         }
 
         return true;
+    }
+
+    /**
+     * Finds unclaimed licenses that are associated with orders placed by the given user's email,
+     * and and assigns them to the user.
+     *
+     * @param User $user
+     */
+    public function claimLicenses(User $user)
+    {
+        $orderIds = Order::find()
+            ->email($user->email)
+            ->isCompleted(true)
+            ->ids();
+
+        if (!empty($orderIds)) {
+            $cmsLicenseIds = (new Query())
+                ->select(['l.id'])
+                ->from(['craftcom_pluginlicenses l'])
+                ->innerJoin('craftcom_pluginlicenses_lineitems l_li', '[[l_li.licenseId]] = [[l.id]]')
+                ->innerJoin('commerce_lineitems li', '[[li.id]] = [[l_li.lineItemId]]')
+                ->where(['l.ownerId' => null, 'li.orderId' => $orderIds])
+                ->column();
+
+            if (!empty($cmsLicenseIds)) {
+                Craft::$app->getDb()->createCommand()
+                    ->update('craftcom_pluginlicenses', [
+                        'ownerId' => $user->id,
+                    ], ['id' => $cmsLicenseIds])
+                    ->execute();
+            }
+        }
     }
 
     /**
