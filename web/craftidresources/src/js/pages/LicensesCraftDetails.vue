@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <invoices v-if="enableCommercialFeatures"></invoices>
+        <invoices></invoices>
 
         <div class="card card-danger mb-3">
             <div class="card-header">Danger Zone</div>
@@ -56,7 +56,6 @@
             ...mapGetters({
                 cmsLicenses: 'cmsLicenses',
                 pluginLicenses: 'pluginLicenses',
-                enableCommercialFeatures: 'enableCommercialFeatures',
             }),
 
             license() {
