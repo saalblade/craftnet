@@ -688,7 +688,7 @@ class ElliottImportController extends Controller
             'packageId' => $package->id,
             'packageName' => $package->name,
             'repository' => $package->repository,
-            'name' => 'Commerce',
+            'name' => 'Craft Commerce',
             'handle' => 'commerce',
             'price' => 999,
             'renewalPrice' => 199,
