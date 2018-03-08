@@ -1,40 +1,26 @@
 import * as types from './mutation-types'
 import Vue from 'vue';
 
-export const SAVE_CARD = (state, {response}) => {
-    state.stripeCard = response.data.card
-};
 
-export const REMOVE_CARD = (state) => {
-    state.stripeCard = null
-};
-
-export const RECEIVE_STRIPE_CUSTOMER = (state, {response}) => {
-    state.stripeCustomer = response.data.customer
-};
-
-export const RECEIVE_STRIPE_CARD = (state, {response}) => {
-    state.stripeCard = response.data.card
-};
-
-export const RECEIVE_STRIPE_ACCOUNT = (state, {response}) => {
-    state.stripeAccount = response.data
-};
-
-export const DISCONNECT_STRIPE_ACCOUNT = (state) => {
-    state.stripeAccount = null
-};
-
-export const RECEIVE_CRAFT_ID_DATA = (state, {response}) => {
-    state.craftId = response.data
-};
+/**
+ * User
+ */
 
 export const CONNECT_APP_CALLBACK = (state, {apps}) => {
     state.craftId.apps = apps;
 };
 
+export const DELETE_USER_PHOTO = (state, {data, response}) => {
+    state.craftId.currentUser.photoId = response.data.photoId;
+    state.craftId.currentUser.photoUrl = response.data.photoUrl;
+};
+
 export const DISCONNECT_APP = (state, {appHandle}) => {
     Vue.delete(state.craftId.apps, appHandle);
+};
+
+export const RECEIVE_CRAFT_ID_DATA = (state, {response}) => {
+    state.craftId = response.data
 };
 
 export const SAVE_USER = (state, {user, response}) => {
@@ -64,9 +50,16 @@ export const UPLOAD_USER_PHOTO = (state, {data, response}) => {
     state.craftId.currentUser.photoUrl = response.data.photoUrl;
 };
 
-export const DELETE_USER_PHOTO = (state, {data, response}) => {
-    state.craftId.currentUser.photoId = response.data.photoId;
-    state.craftId.currentUser.photoUrl = response.data.photoUrl;
+
+/**
+ * Licenses
+ */
+
+export const SAVE_CMS_LICENSE = (state, {license}) => {
+    let stateLicense = state.craftId.cmsLicenses.find(l => l.key == license.key);
+    for (let attribute in license) {
+        stateLicense[attribute] = license[attribute];
+    }
 };
 
 export const SAVE_LICENSE = (state, {license}) => {
@@ -92,12 +85,10 @@ export const SAVE_LICENSE = (state, {license}) => {
     }
 };
 
-export const SAVE_CMS_LICENSE = (state, {license}) => {
-    let stateLicense = state.craftId.cmsLicenses.find(l => l.key == license.key);
-    for (let attribute in license) {
-        stateLicense[attribute] = license[attribute];
-    }
-};
+
+/**
+ * Plugins
+ */
 
 export const SAVE_PLUGIN = (state, {plugin, response}) => {
     let newPlugin = false;
@@ -158,3 +149,38 @@ export const SUBMIT_PLUGIN = (state, {pluginId}) => {
     let statePlugin = state.craftId.plugins.find(p => p.id == pluginId);
     statePlugin.pendingApproval = true;
 };
+
+
+/**
+ * Cards
+ */
+
+export const REMOVE_CARD = (state) => {
+    state.stripeCard = null
+};
+
+export const SAVE_CARD = (state, {response}) => {
+    state.stripeCard = response.data.card
+};
+
+
+/**
+ * Stripe
+ */
+
+export const DISCONNECT_STRIPE_ACCOUNT = (state) => {
+    state.stripeAccount = null
+};
+
+export const RECEIVE_STRIPE_ACCOUNT = (state, {response}) => {
+    state.stripeAccount = response.data
+};
+
+export const RECEIVE_STRIPE_CARD = (state, {response}) => {
+    state.stripeCard = response.data.card
+};
+
+export const RECEIVE_STRIPE_CUSTOMER = (state, {response}) => {
+    state.stripeCustomer = response.data.customer
+};
+
