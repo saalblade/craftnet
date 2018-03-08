@@ -4,6 +4,7 @@ namespace craftcom;
 
 use Craft;
 use craft\commerce\services\OrderAdjustments;
+use craft\commerce\services\Purchasables;
 use craft\elements\User;
 use craft\events\ModelEvent;
 use craft\events\RegisterComponentTypesEvent;
@@ -20,10 +21,12 @@ use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
 use craftcom\behaviors\Developer;
+use craftcom\cms\CmsEdition;
 use craftcom\cms\CmsLicenseManager;
 use craftcom\composer\JsonDumper;
 use craftcom\composer\PackageManager;
 use craftcom\fields\Plugins;
+use craftcom\plugins\PluginEdition;
 use craftcom\plugins\PluginLicenseManager;
 use craftcom\services\Oauth;
 use craftcom\twigextensions\CraftIdTwigExtension;
@@ -96,6 +99,11 @@ class Module extends \yii\base\Module
             // any unclaimed Craft/plugin licenses that were paid for with this email?
             $this->getCmsLicenseManager()->claimLicenses($e->user);
             $this->getPluginLicenseManager()->claimLicenses($e->user);
+        });
+
+        Event::on(Purchasables::class, Purchasables::EVENT_REGISTER_PURCHASABLE_ELEMENT_TYPES, function(RegisterComponentTypesEvent $e) {
+            $e->types[] = CmsEdition::class;
+            $e->types[] = PluginEdition::class;
         });
 
         Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {

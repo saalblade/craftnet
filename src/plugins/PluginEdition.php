@@ -12,6 +12,7 @@ use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\Module;
+use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
@@ -27,7 +28,7 @@ class PluginEdition extends Purchasable
     // =========================================================================
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public static function displayName(): string
     {
@@ -35,6 +36,7 @@ class PluginEdition extends Purchasable
     }
 
     /**
+     * @inheritdoc
      * @return PluginEditionQuery
      */
     public static function find(): ElementQueryInterface
@@ -59,6 +61,42 @@ class PluginEdition extends Purchasable
         }
 
         return parent::eagerLoadingMap($sourceElements, $handle);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected static function defineSources(string $context = null): array
+    {
+        return [
+            [
+                'key' => '*',
+                'label' => 'All editions',
+            ],
+            [
+                'key' => 'commercial',
+                'label' => 'Commercial editions',
+                'criteria' => ['commercial' => true],
+            ],
+            [
+                'key' => 'free',
+                'label' => 'Free editions',
+                'criteria' => ['commercial' => false],
+            ]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected static function defineTableAttributes(): array
+    {
+        return [
+            'name' => ['label' => 'Name'],
+            'developer' => ['label' => 'Developer'],
+            'price' => ['label' => 'Price'],
+            'renewalPrice' => ['label' => 'Renewal Price'],
+        ];
     }
 
     // Properties
@@ -99,7 +137,11 @@ class PluginEdition extends Purchasable
      */
     public function __toString()
     {
-        return $this->name;
+        try {
+            return $this->getFullName();
+        } catch (\Throwable $e) {
+            return $this->name;
+        }
     }
 
     // Public Methods
@@ -108,10 +150,48 @@ class PluginEdition extends Purchasable
     /**
      * @inheritdoc
      */
+    public function attributes()
+    {
+        $names = parent::attributes();
+        $names[] = 'fullName';
+        return $names;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function extraFields()
     {
         return [
             'plugin',
+        ];
+    }
+
+    /**
+     * Returns the full plugin edition name (including the plugin name).
+     *
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return "{$this->getPlugin()->name} ({$this->name})";
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getThumbUrl(int $size)
+    {
+        return $this->getPlugin()->getThumbUrl($size);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected static function defineSearchableAttributes(): array
+    {
+        return [
+            'fullName',
         ];
     }
 
@@ -304,6 +384,37 @@ class PluginEdition extends Purchasable
         } catch (Exception $e) {
             Craft::error("Could not save plugin license {$license->key} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);
+        }
+    }
+
+    // Protected Methods
+    // =========================================================================
+
+    /**
+     * @inheritdoc
+     */
+    protected static function defineSortOptions(): array
+    {
+        return [
+            'name' => 'Name',
+            'price' => 'price',
+            'renewalPrice' => 'renewalPrice',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tableAttributeHtml(string $attribute): string
+    {
+        switch ($attribute) {
+            case 'developer':
+                return $this->getPlugin()->getDeveloperName();
+            case 'price':
+            case 'renewalPrice':
+                return Craft::$app->getFormatter()->asCurrency($this->$attribute, 'USD', [], [], true);
+            default:
+                return parent::tableAttributeHtml($attribute);
         }
     }
 }
