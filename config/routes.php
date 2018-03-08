@@ -27,6 +27,7 @@ return [
         'POST   v1/carts/<orderNumber:.*>' => 'craftcom/api/v1/carts/update',
         'DELETE v1/carts/<orderNumber:.*>' => 'craftcom/api/v1/carts/delete',
         'POST   v1/checkout' => 'craftcom/api/v1/checkout',
+        'GET    v1/cms-licenses/<key:.*>' => 'craftcom/api/v1/cms-licenses/get',
         'POST   v1/cms-licenses' => 'craftcom/api/v1/cms-licenses/create',
         'POST   v1/developer/<userId:\d+>' => 'craftcom/api/v1/developer',
         'POST   v1/optimize-composer-reqs' => 'craftcom/api/v1/optimize-composer-reqs',

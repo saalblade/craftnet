@@ -5,8 +5,10 @@ namespace craftcom\controllers\api\v1;
 use craftcom\cms\CmsLicense;
 use craftcom\cms\CmsLicenseManager;
 use craftcom\controllers\api\BaseApiController;
+use craftcom\errors\LicenseNotFoundException;
 use craftcom\helpers\LicenseHelper;
 use yii\base\Exception;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 /**
@@ -46,6 +48,25 @@ class CmsLicensesController extends BaseApiController
 
         return $this->asJson([
             'license' => $license->toArray()
+        ]);
+    }
+
+    /**
+     * Retrieves a CMS license.
+     *
+     * @return Response
+     * @throws BadRequestHttpException
+     */
+    public function actionGet(string $key): Response
+    {
+        try {
+            $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
+        } catch (LicenseNotFoundException $e) {
+            throw new BadRequestHttpException($e->getMessage(), 0, $e);
+        }
+
+        return $this->asJson([
+            'license' => $license,
         ]);
     }
 }
