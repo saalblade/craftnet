@@ -3,6 +3,7 @@
 namespace craftcom\cms;
 
 use craft\base\Model;
+use craft\helpers\ArrayHelper;
 use craftcom\Module;
 
 class CmsLicense extends Model
@@ -47,5 +48,15 @@ class CmsLicense extends Model
     public function validateDomain()
     {
         $this->domain = Module::getInstance()->getCmsLicenseManager()->normalizeDomain($this->domain);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
+        $names = parent::attributes();
+        ArrayHelper::removeValue($names, 'notes');
+        return $names;
     }
 }

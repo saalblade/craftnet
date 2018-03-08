@@ -3,6 +3,7 @@
 namespace craftcom\plugins;
 
 use craft\base\Model;
+use craft\helpers\ArrayHelper;
 
 class PluginLicense extends Model
 {
@@ -32,5 +33,15 @@ class PluginLicense extends Model
             [['id', 'pluginId', 'editionId', 'ownerId', 'cmsLicenseId'], 'number', 'integerOnly' => true, 'min' => 1],
             [['email'], 'email'],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
+        $names = parent::attributes();
+        ArrayHelper::removeValue($names, 'notes');
+        return $names;
     }
 }
