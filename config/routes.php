@@ -30,7 +30,9 @@ return [
         'POST v1/available-plugins' => 'craftcom/api/v1/available-plugins',
         'POST v1/optimize-composer-reqs' => 'craftcom/api/v1/optimize-composer-reqs',
         'POST webhook/github' => 'craftcom/api/webhook/github',
-        'update-deps' => 'craftcom/update-deps',
+        'update-deps' => 'craftcom/jobs/update-deps',
+        'sync-staging' => 'craftcom/jobs/sync-staging',
+        '' => '',
     ],
     'composer' => [
     ],
