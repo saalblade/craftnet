@@ -397,7 +397,7 @@ class ElliottImportController extends Controller
                     ->insert('commerce_addresses', [
                         'countryId' => $countryId,
                         'stateId' => $stateId,
-                        'storeLocation' => false,
+                        'isStoreLocation' => false,
                         'attention' => $ba['attention'],
                         'title' => $ba['attention'],
                         'firstName' => (string)$ba['firstName'],
