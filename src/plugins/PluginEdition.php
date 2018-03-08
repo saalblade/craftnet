@@ -6,6 +6,7 @@ use Craft;
 use craft\commerce\base\Purchasable;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
+use craft\commerce\Plugin as Commerce;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
@@ -229,15 +230,26 @@ class PluginEdition extends Purchasable
      */
     public function afterOrderComplete(Order $order, LineItem $lineItem)
     {
+        $this->_upgradeOrderLicense($order, $lineItem);
+        parent::afterOrderComplete($order, $lineItem);
+    }
+
+    /**
+     * @param Order $order
+     * @param LineItem $lineItem
+     */
+    private function _upgradeOrderLicense(Order $order, LineItem $lineItem)
+    {
         $manager = Module::getInstance()->getPluginLicenseManager();
 
         // is this for an existing plugin license?
         if (strncmp($lineItem->options['licenseKey'], 'new:', 4) !== 0) {
             try {
-                $manager->upgradeLicense($lineItem->options['licenseKey'], $this, $lineItem->id);
+                $license = $manager->getLicenseByKey($lineItem->options['licenseKey']);
             } catch (LicenseNotFoundException $e) {
                 Craft::error("Could not upgrade plugin license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
                 Craft::$app->getErrorHandler()->logException($e);
+                return;
             }
         } else {
             // chop off "new:"
@@ -254,33 +266,44 @@ class PluginEdition extends Purchasable
                 }
             }
 
-            // if this was placed on/after April 4, set the license to expirable
-            $expirable = time() >= 1522800000;
-
             // create the new license
-            $license = $newPluginLicenses[] = new PluginLicense([
+            $license = new PluginLicense([
                 'pluginId' => $this->pluginId,
-                'editionId' => $this->id,
                 'cmsLicenseId' => $cmsLicense->id ?? null,
-                'expirable' => $expirable,
-                'expired' => false,
                 'email' => $order->email,
                 'key' => $key,
             ]);
+        }
 
-            $e = null;
-            try {
-                if ($manager->saveLicense($license)) {
-                    $manager->saveLicenseLineItemAssociation($license->id, $lineItem->id);
-                } else {
-                    Craft::error("Could not create plugin license {$key} for order {$order->number}: ".implode(', ', $license->getErrorSummary(true)));
-                }
-            } catch (Exception $e) {
-                Craft::error("Could not create plugin license {$key} for order {$order->number}: {$e->getMessage()}");
-                Craft::$app->getErrorHandler()->logException($e);
+        $license->editionId = $this->id;
+        $license->expired = false;
+
+        // If this was placed before April 4, or it was bought with a coupon created before April 4, set the license to non-expirable
+        if (time() < 1522800000) {
+            $license->expirable = false;
+        } else if ($order->couponCode) {
+            $discount = Commerce::getInstance()->getDiscounts()->getDiscountByCode($order->couponCode);
+            if ($discount && $discount->dateCreated->getTimestamp() < 1522800000) {
+                $license->expirable = false;
             }
         }
 
-        parent::afterOrderComplete($order, $lineItem);
+        try {
+            if (!$manager->saveLicense($license)) {
+                Craft::error("Could not save plugin license {$license->key} for order {$order->number}: ".implode(', ', $license->getErrorSummary(true)));
+                return;
+            }
+
+            // Relate the license to the line item
+            Craft::$app->getDb()->createCommand()
+                ->insert('craftcom_pluginlicenses_lineitems', [
+                    'licenseId' => $license->id,
+                    'lineItemId' => $lineItem->id,
+                ], false)
+                ->execute();
+        } catch (Exception $e) {
+            Craft::error("Could not save plugin license {$license->key} for order {$order->number}: {$e->getMessage()}");
+            Craft::$app->getErrorHandler()->logException($e);
+        }
     }
 }

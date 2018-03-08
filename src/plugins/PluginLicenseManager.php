@@ -3,7 +3,9 @@
 namespace craftcom\plugins;
 
 use Craft;
+use craft\commerce\elements\Order;
 use craft\db\Query;
+use craft\elements\User;
 use craft\helpers\Db;
 use craftcom\errors\LicenseNotFoundException;
 use yii\base\Component;
@@ -80,6 +82,7 @@ class PluginLicenseManager extends Component
             'lastActivityOn' => Db::prepareDateForDb($license->lastActivityOn),
             'lastRenewedOn' => Db::prepareDateForDb($license->lastRenewedOn),
             'expiresOn' => Db::prepareDateForDb($license->expiresOn),
+            'dateCreated' => Db::prepareDateForDb($license->dateCreated),
         ];
 
         if (!$license->id) {
@@ -103,46 +106,35 @@ class PluginLicenseManager extends Component
     }
 
     /**
-     * Upgrades a license.
+     * Finds unclaimed licenses that are associated with orders placed by the given user's email,
+     * and and assigns them to the user.
      *
-     * @param string $key
-     * @param PluginEdition $edition
-     * @param int|null $lineItemId
-     * @throws LicenseNotFoundException if $key is missing
+     * @param User $user
      */
-    public function upgradeLicense(string $key, PluginEdition $edition, int $lineItemId = null)
+    public function claimLicenses(User $user)
     {
-        $license = $this->getLicenseByKey($key);
-        $license->editionId = $edition->id;
-        $license->expired = false;
+        $orderIds = Order::find()
+            ->email($user->email)
+            ->isCompleted(true)
+            ->ids();
 
-        // If this was placed before April 4, set the license to non-expirable
-        if (time() < 1522800000) {
-            $license->expirable = false;
+        if (!empty($orderIds)) {
+            $cmsLicenseIds = (new Query())
+                ->select(['l.id'])
+                ->from(['craftcom_pluginlicenses l'])
+                ->innerJoin('craftcom_pluginlicenses_lineitems l_li', '[[l_li.licenseId]] = [[l.id]]')
+                ->innerJoin('commerce_lineitems li', '[[li.id]] = [[l_li.lineItemId]]')
+                ->where(['l.ownerId' => null, 'li.orderId' => $orderIds])
+                ->column();
+
+            if (!empty($cmsLicenseIds)) {
+                Craft::$app->getDb()->createCommand()
+                    ->update('craftcom_pluginlicenses', [
+                        'ownerId' => $user->id,
+                    ], ['id' => $cmsLicenseIds])
+                    ->execute();
+            }
         }
-
-        $this->saveLicense($license, false);
-
-        // Save the line item relation if we have an ID
-        if ($lineItemId !== null) {
-            $this->saveLicenseLineItemAssociation();
-        }
-    }
-
-    /**
-     * Associates a license with a line item.
-     *
-     * @param int $licenseId
-     * @param int $lineItemId
-     */
-    public function saveLicenseLineItemAssociation(int $licenseId, int $lineItemId)
-    {
-        Craft::$app->getDb()->createCommand()
-            ->insert('craftcom_pluginlicenses_lineitems', [
-                'licenseId' => $licenseId,
-                'lineItemId' => $lineItemId,
-            ], false)
-            ->execute();
     }
 
     /**

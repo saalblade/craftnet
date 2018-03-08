@@ -6,9 +6,11 @@ use Craft;
 use craft\commerce\base\Purchasable;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
+use craft\commerce\Plugin as Commerce;
 use craft\elements\db\ElementQueryInterface;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\Module;
+use yii\base\Exception;
 
 
 class CmsEdition extends Purchasable
@@ -146,13 +148,55 @@ class CmsEdition extends Purchasable
      */
     public function afterOrderComplete(Order $order, LineItem $lineItem)
     {
+        $this->_upgradeOrderLicense($order, $lineItem);
+        parent::afterOrderComplete($order, $lineItem);
+    }
+
+    /**
+     * @param Order $order
+     * @param LineItem $lineItem
+     */
+    private function _upgradeOrderLicense(Order $order, LineItem $lineItem)
+    {
+        $manager = Module::getInstance()->getCmsLicenseManager();
         try {
-            Module::getInstance()->getCmsLicenseManager()->upgradeLicense($lineItem->options['licenseKey'], $this, $lineItem->id);
+            $license = $manager->getLicenseByKey($lineItem->options['licenseKey']);
         } catch (LicenseNotFoundException $e) {
             Craft::error("Could not upgrade Craft license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);
+            return;
         }
 
-        parent::afterOrderComplete($order, $lineItem);
+        $license->edition = $this->handle;
+        $license->editionId = $this->id;
+        $license->expired = false;
+
+        // If this was placed before April 4, or it was bought with a coupon created before April 4, set the license to non-expirable
+        if (time() < 1522800000) {
+            $license->expirable = false;
+        } else if ($order->couponCode) {
+            $discount = Commerce::getInstance()->getDiscounts()->getDiscountByCode($order->couponCode);
+            if ($discount && $discount->dateCreated->getTimestamp() < 1522800000) {
+                $license->expirable = false;
+            }
+        }
+
+        try {
+            if (!$manager->saveLicense($license, false)) {
+                Craft::error("Could not save Craft license {$license->key} for order {$order->number}: ".implode(', ', $license->getErrorSummary(true)));
+                return;
+            }
+
+            // Relate the license to the line item
+            Craft::$app->getDb()->createCommand()
+                ->insert('craftcom_cmslicenses_lineitems', [
+                    'licenseId' => $license->id,
+                    'lineItemId' => $lineItem->id,
+                ], false)
+                ->execute();
+        } catch (Exception $e) {
+            Craft::error("Could not save Craft license {$license->key} for order {$order->number}: {$e->getMessage()}");
+            Craft::$app->getErrorHandler()->logException($e);
+        }
     }
 }

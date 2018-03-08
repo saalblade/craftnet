@@ -11,8 +11,10 @@ use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
+use craft\events\UserEvent;
 use craft\services\Fields;
 use craft\services\UserPermissions;
+use craft\services\Users;
 use craft\services\Utilities;
 use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
@@ -88,6 +90,12 @@ class Module extends \yii\base\Module
 
                 Craft::$app->getUsers()->assignUserToGroups($currentUser->id, $groupIds);
             }
+        });
+
+        Event::on(Users::class, Users::EVENT_AFTER_ACTIVATE_USER, function(UserEvent $e) {
+            // any unclaimed Craft/plugin licenses that were paid for with this email?
+            $this->getCmsLicenseManager()->claimLicenses($e->user);
+            $this->getPluginLicenseManager()->claimLicenses($e->user);
         });
 
         Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {

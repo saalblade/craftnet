@@ -3,8 +3,11 @@
 namespace craftcom\cms;
 
 use Craft;
+use craft\commerce\elements\Order;
 use craft\db\Query;
+use craft\elements\User;
 use craft\helpers\Db;
+use craft\helpers\Json;
 use craftcom\errors\LicenseNotFoundException;
 use LayerShifter\TLDExtract\Extract;
 use yii\base\Component;
@@ -133,7 +136,27 @@ class CmsLicenseManager extends Component
             ->one();
 
         if ($result === null) {
-            throw new LicenseNotFoundException($key);
+            // try the inactive licenses table
+            $data = (new Query())
+                ->select(['data'])
+                ->from(['craftcom_inactivecmslicenses'])
+                ->where(['key' => $key])
+                ->scalar();
+
+            if ($data === false) {
+                throw new LicenseNotFoundException($key);
+            }
+
+            $license = new CmsLicense(Json::decode($data));
+            $this->saveLicense($license, false);
+
+            Craft::$app->getDb()->createCommand()
+                ->delete('craftcom_inactivecmslicenses', [
+                    'key' => $key
+                ])
+                ->execute();
+
+            return $license;
         }
 
         return new CmsLicense($result);
@@ -177,6 +200,7 @@ class CmsLicenseManager extends Component
             'lastActivityOn' => Db::prepareDateForDb($license->lastActivityOn),
             'lastRenewedOn' => Db::prepareDateForDb($license->lastRenewedOn),
             'expiresOn' => Db::prepareDateForDb($license->expiresOn),
+            'dateCreated' => Db::prepareDateForDb($license->dateCreated),
         ];
 
         if (!$license->id) {
@@ -200,35 +224,34 @@ class CmsLicenseManager extends Component
     }
 
     /**
-     * Upgrades a license.
+     * Finds unclaimed licenses that are associated with orders placed by the given user's email,
+     * and and assigns them to the user.
      *
-     * @param string $key
-     * @param CmsEdition $edition
-     * @param int|null $lineItemId
-     * @throws LicenseNotFoundException if $key is missing
+     * @param User $user
      */
-    public function upgradeLicense(string $key, CmsEdition $edition, int $lineItemId = null)
+    public function claimLicenses(User $user)
     {
-        $license = $this->getLicenseByKey($key);
-        $license->edition = $edition->handle;
-        $license->editionId = $edition->id;
-        $license->expired = false;
+        $orderIds = Order::find()
+            ->email($user->email)
+            ->isCompleted(true)
+            ->ids();
 
-        // If this was placed before April 4, set the license to non-expirable
-        if (time() < 1522800000) {
-            $license->expirable = false;
-        }
+        if (!empty($orderIds)) {
+            $cmsLicenseIds = (new Query())
+                ->select(['l.id'])
+                ->from(['craftcom_cmslicenses l'])
+                ->innerJoin('craftcom_cmslicenses_lineitems l_li', '[[l_li.licenseId]] = [[l.id]]')
+                ->innerJoin('commerce_lineitems li', '[[li.id]] = [[l_li.lineItemId]]')
+                ->where(['l.ownerId' => null, 'li.orderId' => $orderIds])
+                ->column();
 
-        $this->saveLicense($license, false);
-
-        // Save the line item relation if we have an ID
-        if ($lineItemId !== null) {
-            Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_cmslicenses_lineitems', [
-                    'licenseId' => $license->id,
-                    'lineItemId' => $lineItemId,
-                ], false)
-                ->execute();
+            if (!empty($cmsLicenseIds)) {
+                Craft::$app->getDb()->createCommand()
+                    ->update('craftcom_cmslicenses', [
+                        'ownerId' => $user->id,
+                    ], ['id' => $cmsLicenseIds])
+                    ->execute();
+            }
         }
     }
 
