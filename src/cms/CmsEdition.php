@@ -19,7 +19,7 @@ class CmsEdition extends Purchasable
     // =========================================================================
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public static function displayName(): string
     {
@@ -27,6 +27,7 @@ class CmsEdition extends Purchasable
     }
 
     /**
+     * @inheritdoc
      * @return CmsEditionQuery
      */
     public static function find(): ElementQueryInterface

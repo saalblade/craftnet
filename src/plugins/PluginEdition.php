@@ -27,7 +27,7 @@ class PluginEdition extends Purchasable
     // =========================================================================
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public static function displayName(): string
     {
@@ -35,6 +35,7 @@ class PluginEdition extends Purchasable
     }
 
     /**
+     * @inheritdoc
      * @return PluginEditionQuery
      */
     public static function find(): ElementQueryInterface
