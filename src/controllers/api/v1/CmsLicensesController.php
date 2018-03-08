@@ -31,7 +31,6 @@ class CmsLicensesController extends BaseApiController
     {
         $payload = $this->getPayload('create-cms-license-request');
 
-        // todo: set domain to just the domain, not the full hostname
         $license = new CmsLicense([
             'expirable' => true,
             'expired' => false,
