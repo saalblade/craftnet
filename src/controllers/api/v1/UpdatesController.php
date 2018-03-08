@@ -294,7 +294,12 @@ class UpdatesController extends BaseApiController
                     // Is it an H2 version heading?
                     if (preg_match('/^## (?:.* )?\[?v?(\d+\.\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z-\.]+)?)\]?(?:\(.*?\)|\[.*?\])? - (\d{4}[-\.]\d\d?[-\.]\d\d?)( \[critical\])?/i', $line, $match)) {
                         // Make sure this is a version we care about
-                        $normalizedVersion = $vp->normalize($match[1]);
+                        try {
+                            $normalizedVersion = $vp->normalize($match[1]);
+                        } catch (\UnexpectedValueException $e) {
+                            continue;
+                        }
+
                         if (!isset($releaseInfo[$normalizedVersion])) {
                             // Is it <= the currently-installed version?
                             if (Comparator::lessThanOrEqualTo($normalizedVersion, $fromVersion)) {
