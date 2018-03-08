@@ -160,7 +160,7 @@ export const REMOVE_CARD = (state) => {
 };
 
 export const SAVE_CARD = (state, {response}) => {
-    state.stripeCard = response.data.card
+    state.stripeCard = response.data.card.card
 };
 
 

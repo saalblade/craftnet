@@ -20,7 +20,7 @@
                     </div>
 
                     <div :class="{'hidden': !editing}">
-                        <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard()" @cancel="cancel"></card-form>
+                        <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard" @cancel="cancel"></card-form>
                     </div>
 
                     <div class="mt-3">
@@ -92,10 +92,10 @@
              * Saves a credit card.
              *
              * @param card
-             * @param token
+             * @param source
              */
-            saveCard(card, token) {
-                this.$store.dispatch('saveCard', token).then(response => {
+            saveCard(card, source) {
+                this.$store.dispatch('saveCard', source).then(response => {
                     card.clear();
                     this.cardFormloading = false;
                     this.editing = false;

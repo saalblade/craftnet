@@ -97,9 +97,9 @@ export default {
             .catch(error => cbError(error.response));
     },
 
-    saveCard(token, cb, cbError) {
+    saveCard(source, cb, cbError) {
         let data = {
-            token: token.id
+            token: source.id
         };
 
         let qsData = qs.stringify(data);

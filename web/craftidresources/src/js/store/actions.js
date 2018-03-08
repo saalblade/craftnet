@@ -160,9 +160,9 @@ export const removeCard = ({commit}) => {
     })
 };
 
-export const saveCard = ({commit}, token) => {
+export const saveCard = ({commit}, source) => {
     return new Promise((resolve, reject) => {
-        api.saveCard(token, response => {
+        api.saveCard(source, response => {
             commit(types.SAVE_CARD, {response});
             resolve(response);
         }, response => {
