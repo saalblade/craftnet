@@ -1,11 +1,17 @@
 <template>
 	<div>
 		<p><router-link class="nav-link" to="/account/billing" exact>← Billing</router-link></p>
-		<h1>Invoice {{ invoice.number }}</h1>
+		<h1>Invoice {{ invoice.shortNumber }}</h1>
 
 		<div class="card mb-4">
 			<div class="card-body">
-				<p class="text-secondary">Date: {{ invoice.datePaid }}</p>
+				<dl>
+					<dt>Invoice Number</dt>
+					<dd>{{ invoice.number }}</dd>
+
+					<dt>Date Paid</dt>
+					<dd>{{ invoice.datePaid }}</dd>
+				</dl>
 
 				<billing-address :address="invoice.billingAddress" class="mb-4"></billing-address>
 

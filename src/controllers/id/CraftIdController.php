@@ -241,6 +241,7 @@ class CraftIdController extends BaseController
 
         foreach ($results as $result) {
             $order = $result->toArray();
+            $order['shortNumber'] = $result->getShortNumber();
             $order['itemTotal'] = $result->getItemTotal();
             $order['totalPrice'] = $result->getTotalPrice();
             $order['billingAddress'] = $result->getBillingAddress();
