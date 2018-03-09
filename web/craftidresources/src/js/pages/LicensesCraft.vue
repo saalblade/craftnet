@@ -4,7 +4,7 @@
         <license-renew-alert></license-renew-alert>
 
         <div v-if="cmsLicenses.length > 0" class="card card-table">
-            <license-table type="craft" :licenses="cmsLicenses"></license-table>
+            <cms-licenses-table type="craft" :licenses="cmsLicenses"></cms-licenses-table>
         </div>
 
         <div v-else class="card card-empty">
@@ -18,13 +18,13 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import LicenseTable from '../components/LicenseTable';
+    import CmsLicensesTable from '../components/CmsLicensesTable';
     import LicenseRenewAlert from '../components/LicenseRenewAlert';
 
     export default {
 
         components: {
-            LicenseTable,
+            CmsLicensesTable,
             LicenseRenewAlert,
         },
 
