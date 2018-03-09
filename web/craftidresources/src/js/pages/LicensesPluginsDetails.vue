@@ -6,10 +6,12 @@
         <license-details type="plugin" :license="license"></license-details>
 
         <div class="card mb-3">
-            <div class="card-header">Attached Craft License</div>
             <div class="card-body">
+                <h4>Craft License</h4>
+                <p class="text-secondary mb-4">Craft license this plugin license is attached to.</p>
+
                 <license-table type="craft" v-if="attachedCraftLicense" :licenses="attachedCmsLicenses"></license-table>
-                <p v-else><em>No Craft license attached.</em></p>
+                <p v-else><em>This plugin license is not attached to a Craft CMS license.</em></p>
             </div>
         </div>
 

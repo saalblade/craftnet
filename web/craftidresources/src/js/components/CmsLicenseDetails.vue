@@ -2,6 +2,7 @@
 	<div>
 		<div class="card mb-3">
 			<div class="card-body">
+				<h4 class="mb-4">License Details</h4>
 				<template v-if="license">
 					<div class="md:flex -mx-4">
 						<div class="md:w-1/2 px-4">

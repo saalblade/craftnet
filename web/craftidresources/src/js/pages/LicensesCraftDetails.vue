@@ -6,14 +6,10 @@
         <cms-license-details :license="license"></cms-license-details>
 
         <div class="card mb-3">
-            <div class="card-header">
-                Attached Plugin Licenses
-            </div>
-
             <div class="card-body">
-
+                <h4>Plugin Licenses</h4>
+                <p class="text-secondary mb-4">Plugin licenses attached to this Craft CMS license.</p>
                 <license-table type="plugins" :licenses="attachedPluginLicenses"></license-table>
-
             </div>
         </div>
 
