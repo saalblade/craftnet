@@ -4,7 +4,7 @@
 			<thead>
 			<tr>
 				<th>License Key</th>
-				<th>Item</th>
+				<th>Craft Edition</th>
 				<th>Domain</th>
 
 				<template v-if="enableCommercialFeatures">
@@ -24,7 +24,7 @@
 						</code>
 					</td>
 
-					<td>Craft {{license.edition}}</td>
+					<td>{{license.edition}}</td>
 
 					<td>{{ license.domain }}</td>
 
