@@ -26,7 +26,7 @@
 					<td>{{ license.pluginId }}</td>
 					<td>
 						<template v-if="license.cmsLicenseId">
-							<router-link :to="'/account/licenses/craft/'+license.id">CMS000{{ license.cmsLicenseId }}</router-link>
+							<router-link :to="'/account/licenses/craft/'+license.id">{{ license.cmsLicenseId }}</router-link>
 						</template>
 
 						<template v-else>
