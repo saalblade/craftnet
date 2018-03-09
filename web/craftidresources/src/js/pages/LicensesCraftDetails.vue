@@ -17,8 +17,6 @@
             </div>
         </div>
 
-        <invoices></invoices>
-
         <div class="card card-danger mb-3">
             <div class="card-header">Danger Zone</div>
 
@@ -41,14 +39,12 @@
     import { mapGetters } from 'vuex'
     import CmsLicenseDetails from '../components/CmsLicenseDetails'
     import LicenseTable from '../components/LicenseTable';
-    import Invoices from '../components/Invoices';
 
     export default {
 
         components: {
             CmsLicenseDetails,
             LicenseTable,
-            Invoices,
         },
 
         computed: {

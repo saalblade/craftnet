@@ -13,8 +13,6 @@
             </div>
         </div>
 
-        <invoices></invoices>
-
         <div class="card card-danger mb-3">
             <div class="card-header">Danger Zone</div>
             <div class="card-body">
@@ -36,14 +34,12 @@
     import { mapGetters } from 'vuex'
     import LicenseDetails from '../components/LicenseDetails'
     import LicenseTable from '../components/LicenseTable';
-    import Invoices from '../components/Invoices';
 
     export default {
 
         components: {
             LicenseDetails,
             LicenseTable,
-            Invoices,
         },
 
         computed: {
