@@ -1,9 +1,9 @@
 <template>
     <div>
         <p><router-link class="nav-link" to="/account/licenses/plugins" exact>← Plugins</router-link></p>
-        <h1>#PLU000{{license.id}}</h1>
+        <h1><code>{{ license.key.substr(0, 10) }}…</code></h1>
 
-        <license-details type="plugin" :license="license"></license-details>
+        <plugin-license-details :license="license"></plugin-license-details>
 
         <div class="card mb-3">
             <div class="card-body">
@@ -32,12 +32,14 @@
     import { mapGetters } from 'vuex'
     import LicenseDetails from '../components/LicenseDetails'
     import LicenseTable from '../components/LicenseTable';
+    import PluginLicenseDetails from '../components/PluginLicenseDetails';
 
     export default {
 
         components: {
             LicenseDetails,
             LicenseTable,
+            PluginLicenseDetails,
         },
 
         computed: {
