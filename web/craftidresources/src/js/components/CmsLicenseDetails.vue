@@ -7,7 +7,7 @@
 					<div class="md:flex -mx-4">
 						<div class="md:w-1/2 px-4">
 							<dl>
-								<dt>Edition</dt>
+								<dt>Craft Edition</dt>
 								<dd>{{ license.edition }}</dd>
 
 								<dt>Domain Name</dt>
