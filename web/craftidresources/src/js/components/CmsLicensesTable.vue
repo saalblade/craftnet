@@ -4,7 +4,7 @@
 			<thead>
 			<tr>
 				<th>License Key</th>
-				<th>Craft Edition</th>
+				<th>Edition</th>
 				<th>Domain</th>
 
 				<template v-if="enableCommercialFeatures">
