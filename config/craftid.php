@@ -43,6 +43,6 @@ return [
     'dev' => [
         'craftIdUrl' => 'https://id.craftcms.test',
         'enablePluginStoreCache' => false,
-        'enableCommercialFeatures' => true,
+        'enableCommercialFeatures' => false,
     ]
 ];
