@@ -20,12 +20,6 @@
                 <h5>Release license</h5>
                 <p>Release this license if you no longer wish to use it, and so that it can be claimed by someone else.</p>
                 <div><a class="btn btn-danger" href="#">Release License</a></div>
-
-                <hr>
-
-                <h5>Transfer ownership</h5>
-                <p>Transfer this license to another Craft ID.</p>
-                <div><a class="btn btn-danger" href="#">Transfer License</a></div>
             </div>
         </div>
     </div>
