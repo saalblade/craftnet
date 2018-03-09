@@ -241,8 +241,12 @@ class CraftIdController extends BaseController
 
         foreach ($results as $result) {
             $order = $result->toArray();
+            $order['itemTotal'] = $result->getItemTotal();
             $order['totalPrice'] = $result->getTotalPrice();
             $order['billingAddress'] = $result->getBillingAddress();
+
+
+            // Payment source
 
             $paymentSource = $result->getPaymentSource();
 
@@ -255,6 +259,20 @@ class CraftIdController extends BaseController
                     $order['card'] = $response;
                 }
             }
+
+
+            // Line Items
+
+            $lineItems = [];
+
+            foreach($result->lineItems as $lineItem) {
+                $row = $lineItem->toArray();
+                $row['description'] = $lineItem->getDescription();
+                $row['subtotal'] = $lineItem->getSubtotal();
+                $lineItems[] = $row;
+            }
+
+            $order['lineItems'] = $lineItems;
 
             $orders[] = $order;
         }

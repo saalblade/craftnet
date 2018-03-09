@@ -3,49 +3,56 @@
 		<p><router-link class="nav-link" to="/account/billing" exact>← Billing</router-link></p>
 		<h1>Invoice {{ invoice.number }}</h1>
 
-		<div class="card">
+		<div class="card mb-4">
 			<div class="card-body">
 				<p class="text-secondary">Date: {{ invoice.datePaid }}</p>
 
-				<div class="lg:flex">
-					<div class="lg:w-1/2">
-						<billing-address :address="invoice.billingAddress"></billing-address>
-					</div>
-					<div class="lg:w-1/2 sm:mt-4 lg:mt-0">
-
-						<h3 class="mb-2">Payment Method</h3>
-
-						<div v-if="invoice.card" class="credit-card">
-							<card-icon :brand="invoice.card.brand"></card-icon>
-							<ul class="list-reset">
-								<li>Number: •••• •••• •••• {{ invoice.card.last4 }}</li>
-								<li>Expiry: {{ invoice.card.exp_month }}/{{ invoice.card.exp_year }}</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+				<billing-address :address="invoice.billingAddress" class="mb-4"></billing-address>
 
 				<table class="table">
 					<thead>
 					<tr>
-						<th>Line Item</th>
-						<th>Purchasable ID</th>
-						<th class="text-right">Amount</th>
+						<th>Item</th>
+						<th>Price</th>
+						<th>Quantity</th>
+						<th></th>
 					</tr>
 					</thead>
 					<tbody>
 						<tr v-for="lineItem in invoice.lineItems">
-							<td>{{ lineItem.id }}</td>
-							<td>{{ lineItem.purchasableId }}</td>
-							<td>{{ lineItem.total|currency }}</td>
+							<td>{{ lineItem.description }}</td>
+							<td>{{ lineItem.salePrice|currency }}</td>
+							<td>{{ lineItem.qty }}</td>
+							<td>{{ lineItem.subtotal|currency }}</td>
 						</tr>
-
+						<tr v-for="adjustment in invoice.adjustments">
+							<th colspan="3">{{ adjustment.name }}</th>
+							<td>{{ adjustment.amount|currency }}</td>
+						</tr>
 						<tr>
-							<th colspan="2">Total</th>
+							<th colspan="3">Items Price</th>
+							<td>{{ invoice.itemTotal|currency }}</td>
+						</tr>
+						<tr>
+							<th colspan="3">Total Price</th>
 							<td>{{ invoice.totalPrice|currency }}</td>
 						</tr>
 					</tbody>
 				</table>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-body">
+				<h3 class="mb-2">Payment Method</h3>
+
+				<div v-if="invoice.card" class="credit-card">
+					<card-icon :brand="invoice.card.brand"></card-icon>
+					<ul class="list-reset">
+						<li>Number: •••• •••• •••• {{ invoice.card.last4 }}</li>
+						<li>Expiry: {{ invoice.card.exp_month }}/{{ invoice.card.exp_year }}</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
