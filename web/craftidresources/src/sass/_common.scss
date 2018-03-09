@@ -84,6 +84,10 @@ dl {
   }
 }
 
+th {
+  text-align: inherit;
+}
+
 
 /* Layout */
 
@@ -262,11 +266,6 @@ dl {
 .table {
   @apply .w-full .leading-normal;
   border-collapse: collapse;
-
-
-  th {
-    text-align: inherit;
-  }
 
   th, td {
     @apply .border-t .border-grey-light .p-3;

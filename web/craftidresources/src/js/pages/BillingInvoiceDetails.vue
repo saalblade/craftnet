@@ -23,28 +23,28 @@
 							<td>{{ lineItem.description }}</td>
 							<td>{{ lineItem.salePrice|currency }}</td>
 							<td>{{ lineItem.qty }}</td>
-							<td>{{ lineItem.subtotal|currency }}</td>
+							<td class="text-right">{{ lineItem.subtotal|currency }}</td>
 						</tr>
 						<tr v-for="adjustment in invoice.adjustments">
-							<th colspan="3">{{ adjustment.name }}</th>
-							<td>{{ adjustment.amount|currency }}</td>
+							<th colspan="3" class="text-right">{{ adjustment.name }}</th>
+							<td class="text-right">{{ adjustment.amount|currency }}</td>
 						</tr>
 						<tr>
-							<th colspan="3">Items Price</th>
-							<td>{{ invoice.itemTotal|currency }}</td>
+							<th colspan="3" class="text-right">Items Price</th>
+							<td class="text-right">{{ invoice.itemTotal|currency }}</td>
 						</tr>
 						<tr>
-							<th colspan="3">Total Price</th>
-							<td>{{ invoice.totalPrice|currency }}</td>
+							<th colspan="3" class="text-right">Total Price</th>
+							<td class="text-right">{{ invoice.totalPrice|currency }}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
 
-		<div class="card">
+		<div class="card mb-4">
 			<div class="card-body">
-				<h3 class="mb-2">Payment Method</h3>
+				<h3 class="mb-2">Transactions</h3>
 
 				<div v-if="invoice.card" class="credit-card">
 					<card-icon :brand="invoice.card.brand"></card-icon>
@@ -55,6 +55,14 @@
 				</div>
 			</div>
 		</div>
+
+
+		<div class="card mb-4">
+			<div class="card-body">
+				<h3 class="mb-2">Status History</h3>
+			</div>
+		</div>
+
 	</div>
 </template>
 
