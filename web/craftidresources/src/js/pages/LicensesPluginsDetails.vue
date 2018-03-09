@@ -10,7 +10,7 @@
                 <h4>Craft License</h4>
                 <p class="text-secondary mb-4">Craft license this plugin license is attached to.</p>
 
-                <license-table type="craft" v-if="attachedCraftLicense" :licenses="attachedCmsLicenses"></license-table>
+                <cms-licenses-table type="craft" v-if="attachedCraftLicense" :licenses="attachedCmsLicenses"></cms-licenses-table>
                 <p v-else><em>This plugin license is not attached to a Craft CMS license.</em></p>
             </div>
         </div>
@@ -30,15 +30,15 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import CmsLicensesTable from '../components/CmsLicensesTable';
     import LicenseDetails from '../components/LicenseDetails'
-    import LicenseTable from '../components/LicenseTable';
     import PluginLicenseDetails from '../components/PluginLicenseDetails';
 
     export default {
 
         components: {
+            CmsLicensesTable,
             LicenseDetails,
-            LicenseTable,
             PluginLicenseDetails,
         },
 

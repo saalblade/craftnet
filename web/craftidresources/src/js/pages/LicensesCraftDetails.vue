@@ -9,7 +9,7 @@
             <div class="card-body">
                 <h4>Plugin Licenses</h4>
                 <p class="text-secondary mb-4">Plugin licenses attached to this Craft CMS license.</p>
-                <license-table type="plugins" :licenses="attachedPluginLicenses"></license-table>
+                <plugin-licenses-table type="plugins" :licenses="attachedPluginLicenses"></plugin-licenses-table>
             </div>
         </div>
 
@@ -27,13 +27,13 @@
 <script>
     import { mapGetters } from 'vuex'
     import CmsLicenseDetails from '../components/CmsLicenseDetails'
-    import LicenseTable from '../components/LicenseTable';
+    import PluginLicensesTable from '../components/PluginLicensesTable';
 
     export default {
 
         components: {
             CmsLicenseDetails,
-            LicenseTable,
+            PluginLicensesTable,
         },
 
         computed: {

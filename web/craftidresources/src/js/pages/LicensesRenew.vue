@@ -87,13 +87,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import LicenseTable from '../components/LicenseTable';
 
     export default {
-
-        components: {
-            LicenseTable
-        },
 
         data() {
             return {
