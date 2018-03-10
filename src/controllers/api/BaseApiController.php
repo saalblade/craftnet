@@ -18,6 +18,7 @@ use JsonSchema\Validator;
 use stdClass;
 use yii\base\Model;
 use yii\base\UserException;
+use yii\db\Expression;
 use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
 use yii\web\HttpException;
@@ -56,6 +57,41 @@ abstract class BaseApiController extends Controller
      * @var int|null
      */
     public $requestId;
+
+    /**
+     * The installed Craft version.
+     *
+     * @var string|null
+     */
+    public $cmsVersion;
+
+    /**
+     * The installed Craft edition.
+     *
+     * @var string|null
+     */
+    public $cmsEdition;
+
+    /**
+     * The installed plugins.
+     *
+     * @var Plugin[]
+     */
+    public $plugins = [];
+
+    /**
+     * The installed plugin versions.
+     *
+     * @var string[]
+     */
+    public $pluginVersions = [];
+
+    /**
+     * The installed plugin editions.
+     *
+     * @var string[]
+     */
+    public $pluginEditions = [];
 
     /**
      * The Craft license associated with this request.
@@ -104,13 +140,38 @@ abstract class BaseApiController extends Controller
     {
         $request = Craft::$app->getRequest();
         $headers = $request->getHeaders();
+        $db = Craft::$app->getDb();
+
+        // was system info provided?
+        if ($headers->has('X-Craft-System')) {
+            foreach (explode(',', $headers->get('X-Craft-System')) as $info) {
+                list($name, $installed) = explode(':', $info, 2);
+                list($version, $edition) = array_pad(explode(';', $installed, 2), 2, null);
+                if ($name === 'craft') {
+                    $this->cmsVersion = $version;
+                    $this->cmsEdition = $edition;
+                } else if (strncmp($name, 'plugin-', 7) === 0) {
+                    $pluginHandle = substr($name, 7);
+                    $this->pluginVersions[$pluginHandle] = $version;
+                    if ($edition !== null) {
+                        $this->pluginEditions[$pluginHandle] = $edition;
+                    }
+                }
+            }
+
+            if (!empty($this->pluginVersions)) {
+                $this->plugins = Plugin::find()
+                    ->handle(array_keys($this->pluginVersions))
+                    ->indexBy('handle')
+                    ->all();
+            }
+        }
 
         $e = null;
         $responseCode = 200;
+        $cmsLicense = null;
 
         try {
-            $e = null;
-            $cmsLicense = null;
             if (($cmsLicenseKey = $headers->get('X-Craft-License')) !== null) {
                 try {
                     $cmsLicenseStatus = self::LICENSE_STATUS_VALID;
@@ -128,7 +189,7 @@ abstract class BaseApiController extends Controller
                         } else {
                             // tie the license to this domain
                             $cmsLicense->domain = $domain;
-                            $cmsLicenseManager->saveLicense($cmsLicense);
+                            $cmsLicenseManager->saveLicense($cmsLicense, false);
                         }
                     }
                 } catch (LicenseNotFoundException $e) {
@@ -146,7 +207,7 @@ abstract class BaseApiController extends Controller
                     $pluginLicenseStatus = self::LICENSE_STATUS_VALID;
                     list($pluginHandle, $pluginLicenseKey) = explode(':', $pluginLicenseInfo);
                     try {
-                        $pluginLicense = $this->pluginLicenses[] = $pluginLicenseManager->getLicenseByKey($pluginHandle, $pluginLicenseKey);
+                        $pluginLicense = $this->pluginLicenses[$pluginHandle] = $pluginLicenseManager->getLicenseByKey($pluginHandle, $pluginLicenseKey);
 
                         if ($cmsLicense !== null) {
                             if ($pluginLicense->cmsLicenseId) {
@@ -156,7 +217,7 @@ abstract class BaseApiController extends Controller
                             } else {
                                 // tie the license to this Craft license
                                 $pluginLicense->cmsLicenseId = $cmsLicense->id;
-                                $pluginLicenseManager->saveLicense($pluginLicense);
+                                $pluginLicenseManager->saveLicense($pluginLicense, false);
                             }
                         }
                     } catch (LicenseNotFoundException $e) {
@@ -182,9 +243,41 @@ abstract class BaseApiController extends Controller
             $responseCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
         }
 
-        // log the request
-        $db = Craft::$app->getDb();
+        $timestamp = Db::prepareDateForDb(new \DateTime());
 
+        // should we update our installed plugin records?
+        if ($this->cmsVersion !== null && $cmsLicense !== null) {
+            // delete any installedplugins rows where lastActivity > 30 days ago
+            $db->createCommand()
+                ->delete('craftcom_installedplugins', [
+                    'and',
+                    ['craftLicenseKey' => $cmsLicense->key],
+                    ['<', 'lastActivity', Db::prepareDateForDb(new \DateTime('-30 days'))],
+                ])
+                ->execute();
+
+            foreach ($this->plugins as $plugin) {
+                $db->createCommand()
+                    ->upsert('craftcom_installedplugins', [
+                        'craftLicenseKey' => $cmsLicense->key,
+                        'pluginId' => $plugin->id,
+                    ], [
+                        'lastActivity' => $timestamp,
+                    ], false)
+                    ->execute();
+
+                // Update the plugin's active installs count
+                $db->createCommand()
+                    ->update('craftcom_plugins', [
+                        'activeInstalls' => new Expression('(select count(*) from [[craftcom_installedplugins]] where [[pluginId]] = :pluginId)', ['pluginId' => $plugin->id]),
+                    ], [
+                        'id' => $plugin->id,
+                    ])
+                    ->execute();
+            }
+        }
+
+        // log the request
         $db->createCommand()
             ->insert('apilog.requests', [
                 'verb' => $request->getMethod(),
@@ -197,7 +290,7 @@ abstract class BaseApiController extends Controller
                 'host' => $headers->get('X-Craft-Host'),
                 'userEmail' => $headers->get('X-Craft-User-Email'),
                 'userIp' => $headers->get('X-Craft-User-Ip'),
-                'timestamp' => Db::prepareDateForDb(new \DateTime()),
+                'timestamp' => $timestamp,
                 'responseCode' => $responseCode,
             ], false)
             ->execute();
