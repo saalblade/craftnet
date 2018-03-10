@@ -168,7 +168,7 @@ class UpdatesController extends BaseApiController
                     if ($plugin = $plugins[$handle] ?? null) {
                         if (!empty($pluginInfo->licenseKey)) {
                             try {
-                                $license = $licenseManager->getLicenseByKey($pluginInfo->licenseKey);
+                                $license = $licenseManager->getLicenseByKey($handle, $pluginInfo->licenseKey);
                             } catch (LicenseNotFoundException $e) {
                                 $errors[] = [
                                     'param' => "plugins.{$handle}.licenseKey",

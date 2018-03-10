@@ -325,7 +325,7 @@ class PluginEdition extends Purchasable
         // is this for an existing plugin license?
         if (strncmp($lineItem->options['licenseKey'], 'new:', 4) !== 0) {
             try {
-                $license = $manager->getLicenseByKey($lineItem->options['licenseKey']);
+                $license = $manager->getLicenseByKey($this->getPlugin()->handle, $lineItem->options['licenseKey']);
             } catch (LicenseNotFoundException $e) {
                 Craft::error("Could not upgrade plugin license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
                 Craft::$app->getErrorHandler()->logException($e);

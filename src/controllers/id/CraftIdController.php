@@ -105,7 +105,7 @@ class CraftIdController extends BaseController
      */
     private function _cmsLicenses(User $user): array
     {
-        $results = Module::getInstance()->getCmsLicenseManager()->getLicenseByOwner($user->id);
+        $results = Module::getInstance()->getCmsLicenseManager()->getLicensesByOwner($user->id);
 
         $licenses = [];
 
@@ -123,7 +123,7 @@ class CraftIdController extends BaseController
      */
     private function _pluginLicenses(User $user): array
     {
-        $results = Module::getInstance()->getPluginLicenseManager()->getLicenseByOwner($user->id);
+        $results = Module::getInstance()->getPluginLicenseManager()->getLicensesByOwner($user->id);
 
         $licenses = [];
 

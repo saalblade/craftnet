@@ -537,7 +537,7 @@ class CartsController extends BaseApiController
         // get the license (if there is one)
         if (!empty($item->licenseKey)) {
             try {
-                $license = $this->module->getPluginLicenseManager()->getLicenseByKey($item->licenseKey);
+                $license = $this->module->getPluginLicenseManager()->getLicenseByKey($item->plugin, $item->licenseKey);
             } catch (LicenseNotFoundException $e) {
                 $errors[] = [
                     'param' => "{$paramPrefix}.licenseKey",
