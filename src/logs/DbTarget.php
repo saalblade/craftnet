@@ -3,59 +3,52 @@
 namespace craftcom\logs;
 
 use Craft;
-use craft\helpers\Db;
-use craft\helpers\StringHelper;
+use craftcom\controllers\api\BaseApiController;
 use yii\helpers\VarDumper;
+use yii\log\LogRuntimeException;
 
 /**
- * Class Plugin
- *
- * @package craftcom\logs
  */
 class DbTarget extends \yii\log\DbTarget
 {
     /**
      * @inheritdoc
      */
-    public $db = 'logDb';
-
-    /**
-     * @inheritdoc
-     */
-    public $logTable = '{{%logs}}';
-
-    /**
-     * @inheritdoc
-     */
     public function export()
     {
-        $tableName = $this->db->quoteTableName($this->logTable);
-        $sql = "INSERT INTO $tableName ([[requestId]], [[level]], [[category]], [[message]], [[dateCreated]])
-                VALUES (:requestId, :level, :category, :message, :dateCreated)";
-        $command = $this->db->createCommand($sql);
+        // get the request ID if this is an API request
+        $controller = Craft::$app->controller;
+        if ($controller instanceof BaseApiController) {
+            $requestId = $controller->requestId;
+        } else {
+            $requestId = null;
+        }
 
+        $tableName = $this->db->quoteTableName($this->logTable);
+        $sql = "INSERT INTO $tableName ([[level]], [[category]], [[log_time]], [[prefix]], [[message]])
+                VALUES (:level, :category, :log_time, :prefix, :message)";
+        $command = $this->db->createCommand($sql);
         foreach ($this->messages as $message) {
             list($text, $level, $category, $timestamp) = $message;
-
-            // Only log the messages for our craftcom module.
-            if (StringHelper::contains($category, 'craftcom')) {
-                if (!is_string($text)) {
-                    // exceptions may not be serializable if in the call stack somewhere is a Closure
-                    if ($text instanceof \Throwable || $text instanceof \Exception) {
-                        $text = (string)$text;
-                    } else {
-                        $text = VarDumper::export($text);
-                    }
+            if (!is_string($text)) {
+                // exceptions may not be serializable if in the call stack somewhere is a Closure
+                if ($text instanceof \Throwable || $text instanceof \Exception) {
+                    $text = (string)$text;
+                } else {
+                    $text = VarDumper::export($text);
                 }
-
-                $command->bindValues([
-                    ':requestId' => method_exists(Craft::$app->controller, 'getLogRequestId') ? Craft::$app->controller->getLogRequestId() : null,
+            }
+            if ($command->bindValues([
+                    ':requestId' => $requestId,
                     ':level' => $level,
                     ':category' => $category,
+                    ':timestamp' => $timestamp,
+                    ':prefix' => $this->getMessagePrefix($message),
                     ':message' => $text,
-                    ':dateCreated' => Db::prepareDateForDb(new \DateTime()),
-                ])->execute();
+                ])->execute() > 0) {
+                continue;
             }
+            throw new LogRuntimeException('Unable to export log through database!');
         }
     }
 }

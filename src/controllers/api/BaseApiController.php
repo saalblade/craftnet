@@ -3,21 +3,22 @@
 namespace craftcom\controllers\api;
 
 use Craft;
-use craft\db\Connection;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\web\Controller;
+use craftcom\cms\CmsLicense;
 use craftcom\errors\ValidationException;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
+use craftcom\plugins\PluginLicense;
 use JsonSchema\Validator;
 use stdClass;
-use yii\base\InvalidArgumentException;
 use yii\base\Model;
 use yii\base\UserException;
 use yii\helpers\Markdown;
+use yii\web\BadRequestHttpException;
 use yii\web\HttpException;
 
 /**
@@ -44,22 +45,30 @@ abstract class BaseApiController extends Controller
     public $enableCsrfValidation = false;
 
     /**
-     * @var
+     * The API request ID, if there is one.
+     *
+     * @var int|null
      */
-    private $_logRequestId;
+    public $requestId;
+
+    /**
+     * The Craft license associated with this request.
+     *
+     * @var CmsLicense[]
+     */
+    public $cmsLicenses = [];
+
+    /**
+     * The plugin licenses associated with this request.
+     *
+     * @var PluginLicense[]
+     */
+    public $pluginLicenses = [];
 
     /**
      * @var array
      */
     private $_logRequestKeys = [];
-
-    /**
-     * @return mixed
-     */
-    public function getLogRequestId()
-    {
-        return $this->_logRequestId;
-    }
 
     /**
      * @return array
@@ -87,75 +96,122 @@ abstract class BaseApiController extends Controller
      */
     public function runAction($id, $params = [])
     {
-        /** @var Connection $logDb */
-        $logDb = Craft::$app->get('logDb', false);
-        $dateCreated = Db::prepareDateForDb(new \DateTime());
+        $request = Craft::$app->getRequest();
+        $headers = $request->getHeaders();
 
-        // This should only exist on production.
-        if ($logDb) {
-            $insertRequest = [];
+//        // get the system info
+//        $systemVersions = [];
+//        $systemEditions = [];
+//        if (($systemHeader = $headers->get('X-Craft-System')) !== null) {
+//            foreach (explode(',', $systemHeader) as $installed) {
+//                list($name, $info) = explode(':', $installed);
+//                list($version, $edition) = array_pad(explode(';', $info), 2, null);
+//            }
+//        }
 
-            $insertRequest['verb'] = Craft::$app->getRequest()->getMethod();
-            $insertRequest['ip'] = Craft::$app->getRequest()->getRemoteIP();
-            $insertRequest['url'] = Craft::$app->getRequest()->getHostInfo().Craft::$app->getRequest()->getUrl();
-            $insertRequest['route'] = $this->getRoute();
-            $insertRequest['dateCreated'] = $dateCreated;
 
-            try {
-                $rawBody = Craft::$app->getRequest()->getRawBody();
-
-                // See if it's valid JSON.
-                Json::decode($rawBody);
-                $insertRequest['bodyJson'] = $rawBody;
-            } catch (InvalidArgumentException $e) {
-                // There was a problem JSON decoding.
-                $insertRequest['bodyText'] = $rawBody;
-            }
-
-            $logDb->createCommand()->insert('request', $insertRequest, false)->execute();
-            $this->_logRequestId = $logDb->getLastInsertID('request');
-        }
+        $e = null;
+        $responseCode = 200;
 
         try {
-            return parent::runAction($id, $params);
-        } catch (\Exception $e) {
-            $statusCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
-            $message = $e instanceof UserException && $e->getMessage() ? $e->getMessage() : 'Server Error';
-
-            if ($logDb) {
-                $logDb->createCommand()
-                    ->insert('errors', [
-                        'requestId' => $this->getLogRequestId(),
-                        'message' => $e->getMessage(),
-                        'httpStatus' => $statusCode,
-                        'stackTrace' => $e->getTraceAsString(),
-                        'dateCreated' => $dateCreated,
-                    ], false)
-                    ->execute();
-
-                foreach ($this->getLogRequestKeys() as $handle => $key) {
-                    $logDb->createCommand()
-                        ->insert('keys', [
-                            'requestId' => $this->getLogRequestId(),
-                            'plugin' => $handle !== 'craft' ? $handle : null,
-                            'key' => $key,
-                            'dateCreated' => $dateCreated
-                        ], false)
-                        ->execute();
+            $e = null;
+            if (($cmsLicenseKey = $headers->get('X-Craft-License')) !== null) {
+                try {
+                    $this->cmsLicenses[] = $this->module->getCmsLicenseManager()->getLicenseByKey($cmsLicenseKey);
+                } catch (\Throwable $e) {
+                    // keep going for now
                 }
             }
 
+            if (($pluginLicenseKeys = $headers->get('X-Craft-Plugin-Licenses')) !== null) {
+                $pluginLicenseManager = $this->module->getPluginLicenseManager();
+                foreach (explode(',', $pluginLicenseKeys) as $pluginLicenseInfo) {
+                    list($pluginHandle, $pluginLicenseKey) = explode(':', $pluginLicenseInfo);
+                    try {
+                        $this->pluginLicenses[] = $pluginLicenseManager->getLicenseByKey($pluginHandle, $pluginLicenseKey);
+                    } catch (\Throwable $e) {
+                        // keep going for now
+                    }
+                }
+            }
+
+            // any exceptions getting the licenses?
+            if ($e !== null) {
+                throw new BadRequestHttpException('Bad Request', 0, $e);
+            }
+
+            $response = parent::runAction($id, $params);
+        } catch (\Throwable $e) {
+            // log it and keep going
             Craft::$app->getErrorHandler()->logException($e);
+            $responseCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
+        }
+
+        // log the request
+        $db = Craft::$app->getDb();
+
+        $db->createCommand()
+            ->insert('apilog.requests', [
+                'verb' => $request->getMethod(),
+                'uri' => $request->getUrl(),
+                'ip' => $request->getUserIP(),
+                'action' => $this->getUniqueId().'/'.$id,
+                'body' => $request->getRawBody(),
+                'system' => $headers->get('X-Craft-System'),
+                'platform' => $headers->get('X-Craft-Platform'),
+                'host' => $headers->get('X-Craft-Host'),
+                'userEmail' => $headers->get('X-Craft-User-Email'),
+                'userIp' => $headers->get('X-Craft-User-Ip'),
+                'timestamp' => Db::prepareDateForDb(new \DateTime()),
+                'responseCode' => $responseCode,
+            ], false)
+            ->execute();
+
+        // get the request ID
+        $this->requestId = $db->getLastInsertID('apilog.requests');
+
+        // log any licenses associated with the request
+        foreach ($this->cmsLicenses as $cmsLicense) {
+            $db->createCommand()
+                ->insert('apilog.request_cmslicenses', [
+                    'requestId' => $this->requestId,
+                    'licenseId' => $cmsLicense->id,
+                ], false)
+                ->execute();
+        }
+        foreach ($this->pluginLicenses as $pluginLicense) {
+            $db->createCommand()
+                ->insert('apilog.request_pluginlicenses', [
+                    'requestId' => $this->requestId,
+                    'licenseId' => $pluginLicense->id,
+                ], false)
+                ->execute();
+        }
+
+        // if there was an exception, log it and return the error response
+        if ($e !== null) {
+            $db->createCommand()
+                ->insert('apilog.request_errors', [
+                    'requestId' => $this->requestId,
+                    'type' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'stackTrace' => $e->getTraceAsString(),
+                ], false)
+                ->execute();
 
             // assemble and return the response
-            $data = compact('message');
+            $data = [
+                'message' => $e instanceof UserException && $e->getMessage() ? $e->getMessage() : 'Server Error',
+            ];
             if ($e instanceof ValidationException) {
                 $data['errors'] = $e->errors;
             }
 
             return $this->asJson($data)
-                ->setStatusCode($statusCode);
+                ->setStatusCode($responseCode);
         }
+
+        return $response;
     }
 
     /**
