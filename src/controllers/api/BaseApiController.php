@@ -181,19 +181,21 @@ abstract class BaseApiController extends Controller
                     $cmsLicenseDomain = $cmsLicense->domain ? $cmsLicenseManager->normalizeDomain($cmsLicense->domain) : null;
 
                     // was a host provided with the request?
-                    if (
-                        ($host = $requestHeaders->get('X-Craft-Host')) !== null &&
-                        ($domain = $cmsLicenseManager->normalizeDomain($host)) !== null
-                    ) {
-                        if ($cmsLicenseDomain !== null) {
-                            if ($domain !== $cmsLicenseDomain) {
-                                $cmsLicenseStatus = self::LICENSE_STATUS_MISMATCHED;
+                    if (($host = $requestHeaders->get('X-Craft-Host')) !== null) {
+                        // is it a public domain?
+                        if (($domain = $cmsLicenseManager->normalizeDomain($host)) !== null) {
+                            if ($cmsLicenseDomain !== null) {
+                                if ($domain !== $cmsLicenseDomain) {
+                                    $cmsLicenseStatus = self::LICENSE_STATUS_MISMATCHED;
+                                }
+                            } else {
+                                // tie the license to this domain
+                                $cmsLicense->domain = $cmsLicenseDomain = $domain;
+                                $cmsLicenseManager->saveLicense($cmsLicense, false);
                             }
-                        } else {
-                            // tie the license to this domain
-                            $cmsLicense->domain = $cmsLicenseDomain = $domain;
-                            $cmsLicenseManager->saveLicense($cmsLicense, false);
                         }
+
+                        $responseHeaders->set('X-Craft-Allow-Trials', (string)($domain === null));
                     }
 
                     $responseHeaders->set('X-Craft-License-Status', $cmsLicenseStatus);
@@ -235,7 +237,9 @@ abstract class BaseApiController extends Controller
                     $pluginLicenseStatuses[] = "{$pluginHandle}:{$pluginLicenseStatus}";
                 }
 
-                $responseHeaders->set('X-Craft-Plugin-License-Statuses', implode(',', $pluginLicenseStatuses));
+                if (!empty($pluginLicenseStatuses)) {
+                    $responseHeaders->set('X-Craft-Plugin-License-Statuses', implode(',', $pluginLicenseStatuses));
+                }
             }
 
             // any exceptions getting the licenses?
