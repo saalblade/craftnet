@@ -275,6 +275,10 @@ class CraftIdController extends BaseController
 
             $order['lineItems'] = $lineItems;
 
+
+            // Transactions
+            $order['transactions'] = $result->getTransactions();
+
             $orders[] = $order;
         }
 

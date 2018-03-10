@@ -52,20 +52,28 @@
 			<div class="card-body">
 				<h3 class="mb-2">Transactions</h3>
 
-				<div v-if="invoice.card" class="credit-card">
-					<card-icon :brand="invoice.card.brand"></card-icon>
-					<ul class="list-reset">
-						<li>Number: •••• •••• •••• {{ invoice.card.last4 }}</li>
-						<li>Expiry: {{ invoice.card.exp_month }}/{{ invoice.card.exp_year }}</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-
-
-		<div class="card mb-4">
-			<div class="card-body">
-				<h3 class="mb-2">Status History</h3>
+				<table class="table">
+					<thead>
+					<tr>
+						<th>Type</th>
+						<th>Status</th>
+						<th>Amount</th>
+						<th>Payment Amount</th>
+						<th>Method</th>
+						<th>Date</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr v-for="transaction in invoice.transactions">
+						<td>{{ transaction.type }}</td>
+						<td>{{ transaction.status }}</td>
+						<td>{{ transaction.amount|currency }}</td>
+						<td>{{ transaction.paymentAmount|currency }}</td>
+						<td>Gateway {{ transaction.gatewayId }}</td>
+						<td>{{ transaction.dateCreated }}</td>
+					</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 
