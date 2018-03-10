@@ -180,7 +180,7 @@ abstract class BaseApiController extends Controller
                     $cmsLicense = $this->cmsLicenses[] = $cmsLicenseManager->getLicenseByKey($cmsLicenseKey);
 
                     if (
-                        ($host = $requestHeaders->get('X-Craft-Host') !== null) &&
+                        ($host = $requestHeaders->get('X-Craft-Host')) !== null &&
                         ($domain = $cmsLicenseManager->normalizeDomain($host)) !== null
                     ) {
                         if ($cmsLicense->domain) {
