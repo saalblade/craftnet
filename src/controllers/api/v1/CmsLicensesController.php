@@ -2,12 +2,14 @@
 
 namespace craftcom\controllers\api\v1;
 
+use Craft;
 use craftcom\cms\CmsLicense;
 use craftcom\cms\CmsLicenseManager;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\helpers\LicenseHelper;
 use yii\base\Exception;
+use yii\validators\EmailValidator;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -28,23 +30,34 @@ class CmsLicensesController extends BaseApiController
      * Creates a new CMS license.
      *
      * @return Response
+     * @throws BadRequestHttpException
+     * @throws Exception
      */
     public function actionCreate(): Response
     {
-        $payload = $this->getPayload('create-cms-license-request');
+        $headers = Craft::$app->getRequest()->getHeaders();
+        if (($email = $headers->get('X-Craft-User-Email')) === null) {
+            throw new BadRequestHttpException('Missing X-Craft-User-Email Header');
+        }
+        if ((new EmailValidator())->validate($email, $error) === false) {
+            throw new BadRequestHttpException($error);
+        }
 
         $license = new CmsLicense([
             'expirable' => true,
             'expired' => false,
             'edition' => CmsLicenseManager::EDITION_PERSONAL,
-            'email' => $payload->email,
-            'domain' => $payload->hostname,
+            'email' => $email,
+            'domain' => $headers->get('X-Craft-Host'),
             'key' => LicenseHelper::generateKey(250, '!#$%^&*=+/'),
         ]);
 
         if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
             throw new Exception('Could not create CMS license: '.implode(', ', $license->getErrorSummary(true)));
         }
+
+        // include this license in the request log
+        $this->cmsLicenses[] = $license;
 
         return $this->asJson([
             'license' => $license->toArray()
@@ -57,16 +70,15 @@ class CmsLicensesController extends BaseApiController
      * @return Response
      * @throws BadRequestHttpException
      */
-    public function actionGet(string $key): Response
+    public function actionGet(): Response
     {
-        try {
-            $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
-        } catch (LicenseNotFoundException $e) {
-            throw new BadRequestHttpException($e->getMessage(), 0, $e);
+        if (empty($this->cmsLicenses)) {
+            throw new BadRequestHttpException('Missing X-Craft-License Header');
         }
 
+        $license = reset($this->cmsLicenses);
         return $this->asJson([
-            'license' => $license,
+            'license' => $license->toArray([], ['pluginLicenses']),
         ]);
     }
 }
