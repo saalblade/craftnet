@@ -19,7 +19,7 @@
             <div class="card-header">Danger Zone</div>
             <div class="card-body">
                 <h5>Release license</h5>
-                <p>Release this license if you no longer wish to use it, and so that it can be claimed by someone else.</p>
+                <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
                 <div><a class="btn btn-danger" href="#">Release License</a></div>
             </div>
 
