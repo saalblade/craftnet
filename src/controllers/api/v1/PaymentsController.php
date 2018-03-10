@@ -55,7 +55,7 @@ class PaymentsController extends CartsController
         $commerce = Commerce::getInstance();
 
         // make sure the cart has a billing address
-        if (($address = $cart->getBillingAddress()) === null) {
+        if ($cart->getBillingAddress() === null) {
             $errors[] = [
                 'param' => 'orderNumber',
                 'message' => 'The cart is missing a billing address',
@@ -64,7 +64,7 @@ class PaymentsController extends CartsController
         }
 
         // make sure the cart isn't empty
-        if ($cart->isEmpty()) {
+        if ($cart->getIsEmpty()) {
             $errors[] = [
                 'param' => 'orderNumber',
                 'message' => 'The cart is empty',
