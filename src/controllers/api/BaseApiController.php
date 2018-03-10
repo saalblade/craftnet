@@ -139,12 +139,14 @@ abstract class BaseApiController extends Controller
     public function runAction($id, $params = [])
     {
         $request = Craft::$app->getRequest();
-        $headers = $request->getHeaders();
+        $requestHeaders = $request->getHeaders();
+        $response = Craft::$app->getResponse();
+        $responseHeaders = $response->getHeaders();
         $db = Craft::$app->getDb();
 
         // was system info provided?
-        if ($headers->has('X-Craft-System')) {
-            foreach (explode(',', $headers->get('X-Craft-System')) as $info) {
+        if ($requestHeaders->has('X-Craft-System')) {
+            foreach (explode(',', $requestHeaders->get('X-Craft-System')) as $info) {
                 list($name, $installed) = explode(':', $info, 2);
                 list($version, $edition) = array_pad(explode(';', $installed, 2), 2, null);
                 if ($name === 'craft') {
@@ -168,18 +170,17 @@ abstract class BaseApiController extends Controller
         }
 
         $e = null;
-        $responseCode = 200;
         $cmsLicense = null;
 
         try {
-            if (($cmsLicenseKey = $headers->get('X-Craft-License')) !== null) {
+            if (($cmsLicenseKey = $requestHeaders->get('X-Craft-License')) !== null) {
                 try {
                     $cmsLicenseStatus = self::LICENSE_STATUS_VALID;
                     $cmsLicenseManager = $this->module->getCmsLicenseManager();
                     $cmsLicense = $this->cmsLicenses[] = $cmsLicenseManager->getLicenseByKey($cmsLicenseKey);
 
                     if (
-                        ($host = $headers->get('X-Craft-Host') !== null) &&
+                        ($host = $requestHeaders->get('X-Craft-Host') !== null) &&
                         ($domain = $cmsLicenseManager->normalizeDomain($host)) !== null
                     ) {
                         if ($cmsLicense->domain) {
@@ -197,10 +198,10 @@ abstract class BaseApiController extends Controller
                 } catch (\Throwable $e) {
                 }
 
-                Craft::$app->getResponse()->getHeaders()->set('X-Craft-License-Status', $cmsLicenseStatus);
+                $responseHeaders->set('X-Craft-License-Status', $cmsLicenseStatus);
             }
 
-            if (($pluginLicenseKeys = $headers->get('X-Craft-Plugin-Licenses')) !== null) {
+            if (($pluginLicenseKeys = $requestHeaders->get('X-Craft-Plugin-Licenses')) !== null) {
                 $pluginLicenseStatuses = [];
                 $pluginLicenseManager = $this->module->getPluginLicenseManager();
                 foreach (explode(',', $pluginLicenseKeys) as $pluginLicenseInfo) {
@@ -228,7 +229,7 @@ abstract class BaseApiController extends Controller
                     $pluginLicenseStatuses[] = "{$pluginHandle}:{$pluginLicenseStatus}";
                 }
 
-                Craft::$app->getResponse()->getHeaders()->set('X-Craft-Plugin-License-Statuses', implode(',', $pluginLicenseStatuses));
+                $responseHeaders->set('X-Craft-Plugin-License-Statuses', implode(',', $pluginLicenseStatuses));
             }
 
             // any exceptions getting the licenses?
@@ -240,7 +241,7 @@ abstract class BaseApiController extends Controller
         } catch (\Throwable $e) {
             // log it and keep going
             Craft::$app->getErrorHandler()->logException($e);
-            $responseCode = $e instanceof HttpException && $e->statusCode ? $e->statusCode : 500;
+            $response->setStatusCode($e instanceof HttpException && $e->statusCode ? $e->statusCode : 500);
         }
 
         $timestamp = Db::prepareDateForDb(new \DateTime());
@@ -285,13 +286,13 @@ abstract class BaseApiController extends Controller
                 'ip' => $request->getUserIP(),
                 'action' => $this->getUniqueId().'/'.$id,
                 'body' => $request->getRawBody(),
-                'system' => $headers->get('X-Craft-System'),
-                'platform' => $headers->get('X-Craft-Platform'),
-                'host' => $headers->get('X-Craft-Host'),
-                'userEmail' => $headers->get('X-Craft-User-Email'),
-                'userIp' => $headers->get('X-Craft-User-Ip'),
+                'system' => $requestHeaders->get('X-Craft-System'),
+                'platform' => $requestHeaders->get('X-Craft-Platform'),
+                'host' => $requestHeaders->get('X-Craft-Host'),
+                'userEmail' => $requestHeaders->get('X-Craft-User-Email'),
+                'userIp' => $requestHeaders->get('X-Craft-User-Ip'),
                 'timestamp' => $timestamp,
-                'responseCode' => $responseCode,
+                'responseCode' => $response->getStatusCode(),
             ], false)
             ->execute();
 
@@ -335,8 +336,7 @@ abstract class BaseApiController extends Controller
                 $data['errors'] = $e->errors;
             }
 
-            return $this->asJson($data)
-                ->setStatusCode($responseCode);
+            return $this->asJson($data);
         }
 
         return $response;
