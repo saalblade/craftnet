@@ -175,40 +175,44 @@ abstract class BaseApiController extends Controller
         try {
             if (($cmsLicenseKey = $requestHeaders->get('X-Craft-License')) !== null) {
                 try {
-                    $cmsLicenseStatus = self::LICENSE_STATUS_VALID;
                     $cmsLicenseManager = $this->module->getCmsLicenseManager();
                     $cmsLicense = $this->cmsLicenses[] = $cmsLicenseManager->getLicenseByKey($cmsLicenseKey);
+                    $cmsLicenseStatus = self::LICENSE_STATUS_VALID;
+                    $cmsLicenseDomain = $cmsLicense->domain ? $cmsLicenseManager->normalizeDomain($cmsLicense->domain) : null;
 
+                    // was a host provided with the request?
                     if (
                         ($host = $requestHeaders->get('X-Craft-Host')) !== null &&
                         ($domain = $cmsLicenseManager->normalizeDomain($host)) !== null
                     ) {
-                        if ($cmsLicense->domain) {
-                            if ($cmsLicenseManager->normalizeDomain($cmsLicense->domain) !== $domain) {
+                        if ($cmsLicenseDomain !== null) {
+                            if ($domain !== $cmsLicenseDomain) {
                                 $cmsLicenseStatus = self::LICENSE_STATUS_MISMATCHED;
                             }
                         } else {
                             // tie the license to this domain
-                            $cmsLicense->domain = $domain;
+                            $cmsLicense->domain = $cmsLicenseDomain = $domain;
                             $cmsLicenseManager->saveLicense($cmsLicense, false);
                         }
                     }
+
+                    $responseHeaders->set('X-Craft-License-Status', $cmsLicenseStatus);
+                    $responseHeaders->set('X-Craft-License-Domain', $cmsLicenseDomain);
+                    $responseHeaders->set('X-Craft-License-Edition', $cmsLicense->edition);
                 } catch (LicenseNotFoundException $e) {
-                    $cmsLicenseStatus = self::LICENSE_STATUS_INVALID;
+                    $responseHeaders->set('X-Craft-License-Status', self::LICENSE_STATUS_INVALID);
                 } catch (\Throwable $e) {
                 }
-
-                $responseHeaders->set('X-Craft-License-Status', $cmsLicenseStatus);
             }
 
             if (($pluginLicenseKeys = $requestHeaders->get('X-Craft-Plugin-Licenses')) !== null) {
                 $pluginLicenseStatuses = [];
                 $pluginLicenseManager = $this->module->getPluginLicenseManager();
                 foreach (explode(',', $pluginLicenseKeys) as $pluginLicenseInfo) {
-                    $pluginLicenseStatus = self::LICENSE_STATUS_VALID;
                     list($pluginHandle, $pluginLicenseKey) = explode(':', $pluginLicenseInfo);
                     try {
                         $pluginLicense = $this->pluginLicenses[$pluginHandle] = $pluginLicenseManager->getLicenseByKey($pluginHandle, $pluginLicenseKey);
+                        $pluginLicenseStatus = self::LICENSE_STATUS_VALID;
 
                         if ($cmsLicense !== null) {
                             if ($pluginLicense->cmsLicenseId) {
@@ -224,6 +228,8 @@ abstract class BaseApiController extends Controller
                     } catch (LicenseNotFoundException $e) {
                         $pluginLicenseStatus = self::LICENSE_STATUS_INVALID;
                     } catch (\Throwable $e) {
+                        // inconclusive so skip this plugin
+                        continue;
                     }
 
                     $pluginLicenseStatuses[] = "{$pluginHandle}:{$pluginLicenseStatus}";
@@ -319,12 +325,18 @@ abstract class BaseApiController extends Controller
 
         // if there was an exception, log it and return the error response
         if ($e !== null) {
+            if ($e instanceof UserException && ($previous = $e->getPrevious()) !== null) {
+                $logException = $previous;
+            } else {
+                $logException = $e;
+            }
+
             $db->createCommand()
                 ->insert('apilog.request_errors', [
                     'requestId' => $this->requestId,
-                    'type' => get_class($e),
-                    'message' => $e->getMessage(),
-                    'stackTrace' => $e->getTraceAsString(),
+                    'type' => get_class($logException),
+                    'message' => $logException->getMessage(),
+                    'stackTrace' => $logException->getTraceAsString(),
                 ], false)
                 ->execute();
 
