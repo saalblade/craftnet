@@ -9,6 +9,7 @@ use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\cms\CmsLicense;
+use craftcom\errors\LicenseNotFoundException;
 use craftcom\errors\ValidationException;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
@@ -33,6 +34,11 @@ abstract class BaseApiController extends Controller
     const ERROR_CODE_INVALID = 'invalid';
     const ERROR_CODE_MISSING = 'missing';
     const ERROR_CODE_EXISTS = 'already_exists';
+
+    const LICENSE_STATUS_VALID = 'valid';
+    const LICENSE_STATUS_INVALID = 'invalid';
+    const LICENSE_STATUS_MISMATCHED = 'mismatched';
+    const LICENSE_STATUS_ASTRAY = 'astray';
 
     /**
      * @inheritdoc
@@ -99,40 +105,69 @@ abstract class BaseApiController extends Controller
         $request = Craft::$app->getRequest();
         $headers = $request->getHeaders();
 
-//        // get the system info
-//        $systemVersions = [];
-//        $systemEditions = [];
-//        if (($systemHeader = $headers->get('X-Craft-System')) !== null) {
-//            foreach (explode(',', $systemHeader) as $installed) {
-//                list($name, $info) = explode(':', $installed);
-//                list($version, $edition) = array_pad(explode(';', $info), 2, null);
-//            }
-//        }
-
-
         $e = null;
         $responseCode = 200;
 
         try {
             $e = null;
+            $cmsLicense = null;
             if (($cmsLicenseKey = $headers->get('X-Craft-License')) !== null) {
                 try {
-                    $this->cmsLicenses[] = $this->module->getCmsLicenseManager()->getLicenseByKey($cmsLicenseKey);
+                    $cmsLicenseStatus = self::LICENSE_STATUS_VALID;
+                    $cmsLicenseManager = $this->module->getCmsLicenseManager();
+                    $cmsLicense = $this->cmsLicenses[] = $cmsLicenseManager->getLicenseByKey($cmsLicenseKey);
+
+                    if (
+                        ($host = $headers->get('X-Craft-Host') !== null) &&
+                        ($domain = $cmsLicenseManager->normalizeDomain($host)) !== null
+                    ) {
+                        if ($cmsLicense->domain) {
+                            if ($cmsLicenseManager->normalizeDomain($cmsLicense->domain) !== $domain) {
+                                $cmsLicenseStatus = self::LICENSE_STATUS_MISMATCHED;
+                            }
+                        } else {
+                            // tie the license to this domain
+                            $cmsLicense->domain = $domain;
+                            $cmsLicenseManager->saveLicense($cmsLicense);
+                        }
+                    }
+                } catch (LicenseNotFoundException $e) {
+                    $cmsLicenseStatus = self::LICENSE_STATUS_INVALID;
                 } catch (\Throwable $e) {
-                    // keep going for now
                 }
+
+                Craft::$app->getResponse()->getHeaders()->set('X-Craft-License-Status', $cmsLicenseStatus);
             }
 
             if (($pluginLicenseKeys = $headers->get('X-Craft-Plugin-Licenses')) !== null) {
+                $pluginLicenseStatuses = [];
                 $pluginLicenseManager = $this->module->getPluginLicenseManager();
                 foreach (explode(',', $pluginLicenseKeys) as $pluginLicenseInfo) {
+                    $pluginLicenseStatus = self::LICENSE_STATUS_VALID;
                     list($pluginHandle, $pluginLicenseKey) = explode(':', $pluginLicenseInfo);
                     try {
-                        $this->pluginLicenses[] = $pluginLicenseManager->getLicenseByKey($pluginHandle, $pluginLicenseKey);
+                        $pluginLicense = $this->pluginLicenses[] = $pluginLicenseManager->getLicenseByKey($pluginHandle, $pluginLicenseKey);
+
+                        if ($cmsLicense !== null) {
+                            if ($pluginLicense->cmsLicenseId) {
+                                if ($pluginLicense->cmsLicenseId != $cmsLicense->id) {
+                                    $pluginLicenseStatus = self::LICENSE_STATUS_MISMATCHED;
+                                }
+                            } else {
+                                // tie the license to this Craft license
+                                $pluginLicense->cmsLicenseId = $cmsLicense->id;
+                                $pluginLicenseManager->saveLicense($pluginLicense);
+                            }
+                        }
+                    } catch (LicenseNotFoundException $e) {
+                        $pluginLicenseStatus = self::LICENSE_STATUS_INVALID;
                     } catch (\Throwable $e) {
-                        // keep going for now
                     }
+
+                    $pluginLicenseStatuses[] = "{$pluginHandle}:{$pluginLicenseStatus}";
                 }
+
+                Craft::$app->getResponse()->getHeaders()->set('X-Craft-Plugin-License-Statuses', implode(',', $pluginLicenseStatuses));
             }
 
             // any exceptions getting the licenses?
