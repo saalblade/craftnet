@@ -58,6 +58,7 @@ class CartsController extends BaseApiController
 
         return $this->asJson([
             'cart' => $this->cartArray($cart),
+            'stripePublicKey' => getenv('STRIPE_PUBLIC_KEY'),
         ]);
     }
 
@@ -73,6 +74,7 @@ class CartsController extends BaseApiController
 
         return $this->asJson([
             'cart' => $this->cartArray($cart),
+            'stripePublicKey' => getenv('STRIPE_PUBLIC_KEY'),
         ]);
     }
 
@@ -91,6 +93,7 @@ class CartsController extends BaseApiController
         return $this->asJson([
             'updated' => true,
             'cart' => $this->cartArray($cart),
+            'stripePublicKey' => getenv('STRIPE_PUBLIC_KEY'),
         ]);
     }
 
