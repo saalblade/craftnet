@@ -5,7 +5,11 @@ namespace craftcom\cms;
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
 use craftcom\Module;
+use craftcom\plugins\PluginLicense;
 
+/**
+ * @property PluginLicense[] $pluginLicenses
+ */
 class CmsLicense extends Model
 {
     public $id;
@@ -58,5 +62,25 @@ class CmsLicense extends Model
         $names = parent::attributes();
         ArrayHelper::removeValue($names, 'notes');
         return $names;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function extraFields()
+    {
+        return [
+            'pluginLicenses',
+        ];
+    }
+
+    /**
+     * Returns plugin licenses associated with this Craft license.
+     *
+     * @return PluginLicense[]
+     */
+    public function getPluginLicenses(): array
+    {
+        return Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicense($this->id);
     }
 }

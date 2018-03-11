@@ -19,10 +19,29 @@ class PluginLicenseManager extends Component
      * @param int $ownerId
      * @return PluginLicense[]
      */
-    public function getLicenseByOwner(int $ownerId): array
+    public function getLicensesByOwner(int $ownerId): array
     {
         $results = $this->_createLicenseQuery()
-            ->where(['ownerId' => $ownerId])
+            ->where(['l.ownerId' => $ownerId])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+        return $licenses;
+    }
+
+    /**
+     * Returns licenses associated with a given Craft license ID.
+     *
+     * @param int $cmsLicenseId
+     * @return PluginLicense[]
+     */
+    public function getLicensesByCmsLicense(int $cmsLicenseId): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->where(['l.cmsLicenseId' => $cmsLicenseId])
             ->all();
 
         $licenses = [];
@@ -35,14 +54,19 @@ class PluginLicenseManager extends Component
     /**
      * Returns a license by its key.
      *
+     * @param string $handle the plugin handle
      * @param string $key
      * @return PluginLicense
      * @throws LicenseNotFoundException if $key is missing
      */
-    public function getLicenseByKey(string $key): PluginLicense
+    public function getLicenseByKey(string $handle, string $key): PluginLicense
     {
         $result = $this->_createLicenseQuery()
-            ->where(['key' => $key])
+            ->innerJoin('craftcom_plugins p', '[[p.id]] = [[l.pluginId]]')
+            ->where([
+                'p.handle' => $handle,
+                'l.key' => $key,
+            ])
             ->one();
 
         if ($result === null) {
@@ -163,25 +187,25 @@ class PluginLicenseManager extends Component
     {
         return (new Query())
             ->select([
-                'id',
-                'pluginId',
-                'editionId',
-                'ownerId',
-                'cmsLicenseId',
-                'expirable',
-                'expired',
-                'email',
-                'key',
-                'notes',
-                'lastVersion',
-                'lastAllowedVersion',
-                'lastActivityOn',
-                'lastRenewedOn',
-                'expiresOn',
-                'dateCreated',
-                'dateUpdated',
-                'uid',
+                'l.id',
+                'l.pluginId',
+                'l.editionId',
+                'l.ownerId',
+                'l.cmsLicenseId',
+                'l.expirable',
+                'l.expired',
+                'l.email',
+                'l.key',
+                'l.notes',
+                'l.lastVersion',
+                'l.lastAllowedVersion',
+                'l.lastActivityOn',
+                'l.lastRenewedOn',
+                'l.expiresOn',
+                'l.dateCreated',
+                'l.dateUpdated',
+                'l.uid',
             ])
-            ->from(['craftcom_pluginlicenses']);
+            ->from(['craftcom_pluginlicenses l']);
     }
 }

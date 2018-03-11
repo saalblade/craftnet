@@ -31,46 +31,8 @@
         "type": "object",
         "properties": {
           "note": {"type": "string"},
-          "cms-edition": {
-            "type": "object",
-            "properties": {
-              "edition": {"enum": ["client", "pro"]},
-              "licenseKey": {"$ref": "definitions.json#/cmsLicenseKey"}
-            },
-            "required": ["edition", "licenseKey"]
-          },
-          "cms-renewal": {
-            "type": "object",
-            "properties": {
-              "licenseKey": {"$ref": "definitions.json#/cmsLicenseKey"}
-            },
-            "required": ["licenseKey"]
-          },
-          "plugin-edition": {
-            "type": "object",
-            "properties": {
-              "plugin": {"type": "string"},
-              "edition": {"type": "string"},
-              "licenseKey": {"$ref": "definitions.json#/pluginLicenseKey"},
-              "cmsLicenseKey": {"$ref": "definitions.json#/cmsLicenseKey"}
-            },
-            "required": ["plugin", "edition"]
-          },
-          "plugin-renewal": {
-            "type": "object",
-            "properties": {
-              "plugin": {"type": "string"},
-              "licenseKey": {"$ref": "definitions.json#/pluginLicenseKey"}
-            },
-            "required": ["plugin", "licenseKey"]
-          }
-        },
-        "anyOf": [
-          {"required": ["cms-edition"]},
-          {"required": ["cms-renewal"]},
-          {"required": ["plugin-edition"]},
-          {"required": ["plugin-renewal"]}
-        ]
+          "type": {"enum": ["cms-edition", "cms-renewal", "plugin-edition", "plugin-renewal"]}
+        }
       }
     },
     "couponCode": {"type": "string"}

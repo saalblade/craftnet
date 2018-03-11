@@ -103,7 +103,7 @@ class CmsLicenseManager extends Component
      * @param int $ownerId
      * @return CmsLicense[]
      */
-    public function getLicenseByOwner(int $ownerId): array
+    public function getLicensesByOwner(int $ownerId): array
     {
         $results = $this->_createLicenseQuery()
             ->where(['ownerId' => $ownerId])

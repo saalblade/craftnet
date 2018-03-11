@@ -58,6 +58,7 @@ class CartsController extends BaseApiController
 
         return $this->asJson([
             'cart' => $this->cartArray($cart),
+            'stripePublicKey' => getenv('STRIPE_PUBLIC_KEY'),
         ]);
     }
 
@@ -73,6 +74,7 @@ class CartsController extends BaseApiController
 
         return $this->asJson([
             'cart' => $this->cartArray($cart),
+            'stripePublicKey' => getenv('STRIPE_PUBLIC_KEY'),
         ]);
     }
 
@@ -91,6 +93,7 @@ class CartsController extends BaseApiController
         return $this->asJson([
             'updated' => true,
             'cart' => $this->cartArray($cart),
+            'stripePublicKey' => getenv('STRIPE_PUBLIC_KEY'),
         ]);
     }
 
@@ -198,21 +201,31 @@ class CartsController extends BaseApiController
 
                 foreach ($payload->items as $i => $item) {
                     $paramPrefix = "items[{$i}]";
-                    if (isset($item->{'cms-edition'})) {
-                        $lineItem = $this->_cmsEditionLineItem($cart, $item->{'cms-edition'}, $paramPrefix, $errors);
-                    } else if (isset($item->{'cms-renewal'})) {
-                        throw new NotSupportedException('Purchasing CMS renewals is not supported yet.');
-                    } else if (isset($item->{'plugin-edition'})) {
-                        $lineItem = $this->_pluginEditionLineItem($cart, $item->{'plugin-edition'}, $paramPrefix, $errors);
-                    } else if (isset($item->{'plugin-renewal'})) {
-                        throw new NotSupportedException('Purchasing plugin renewals is not supported yet.');
-                    } else {
-                        $errors[] = [
-                            'param' => $paramPrefix.'.type',
-                            'message' => "Invalid item type: {$item->type}",
-                            'code' => self::ERROR_CODE_INVALID,
-                        ];
-                        $lineItem = null;
+
+                    // first make sure it validates
+                    // todo: eventually we should be able to handle this from the root payload validation, if JSON schemas can do conditional validation
+                    if (!$this->validatePayload($item, 'line-item-types/'.$item->type, $errors, $paramPrefix)) {
+                        continue;
+                    }
+
+                    switch ($item->type) {
+                        case 'cms-edition':
+                            $lineItem = $this->_cmsEditionLineItem($cart, $item, $paramPrefix, $errors);
+                            break;
+                        case 'cms-renewal':
+                            throw new NotSupportedException('Purchasing CMS renewals is not supported yet.');
+                        case 'plugin-edition':
+                            $lineItem = $this->_pluginEditionLineItem($cart, $item, $paramPrefix, $errors);
+                            break;
+                        case 'plugin-renewal':
+                            throw new NotSupportedException('Purchasing plugin renewals is not supported yet.');
+                        default:
+                            $errors[] = [
+                                'param' => $paramPrefix.'.type',
+                                'message' => "Invalid item type: {$item->type}",
+                                'code' => self::ERROR_CODE_INVALID,
+                            ];
+                            $lineItem = null;
                     }
 
                     if ($lineItem !== null) {
@@ -537,7 +550,7 @@ class CartsController extends BaseApiController
         // get the license (if there is one)
         if (!empty($item->licenseKey)) {
             try {
-                $license = $this->module->getPluginLicenseManager()->getLicenseByKey($item->licenseKey);
+                $license = $this->module->getPluginLicenseManager()->getLicenseByKey($item->plugin, $item->licenseKey);
             } catch (LicenseNotFoundException $e) {
                 $errors[] = [
                     'param' => "{$paramPrefix}.licenseKey",
