@@ -117,6 +117,25 @@ class CmsLicenseManager extends Component
     }
 
     /**
+     * Returns a license by its ID.
+     *
+     * @param int $id
+     * @return CmsLicense|null
+     */
+    public function getLicenseById(int $id)
+    {
+        $result = $this->_createLicenseQuery()
+            ->where(['id' => $id])
+            ->one();
+
+        if($result) {
+            return new CmsLicense($result);
+        }
+
+        return null;
+    }
+
+    /**
      * Returns a license by its key.
      *
      * @param string $key

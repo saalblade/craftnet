@@ -4,8 +4,8 @@
 			<thead>
 			<tr>
 				<th>License Key</th>
-				<th>Item</th>
-				<th>Craft License</th>
+				<th>Plugin</th>
+				<th>CMS License</th>
 
 				<template v-if="enableCommercialFeatures">
 					<th>Next Payment</th>
@@ -23,10 +23,14 @@
 							</router-link>
 						</code>
 					</td>
-					<td>{{ license.pluginId }}</td>
 					<td>
-						<template v-if="license.cmsLicenseId">
-							<router-link :to="'/account/licenses/craft/'+license.id">{{ license.cmsLicenseId }}</router-link>
+						<template v-if="license.plugin">
+							{{ license.plugin.name }}
+						</template>
+					</td>
+					<td>
+						<template v-if="license.cmsLicense">
+							<router-link :to="'/account/licenses/craft/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
 						</template>
 
 						<template v-else>

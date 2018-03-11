@@ -6,8 +6,20 @@
 				<div class="md:flex -mx-4">
 					<div class="md:w-1/2 px-4">
 						<dl>
-							<dt>Plugin</dt>
-							<dd>{{ license.pluginId }}</dd>
+							<template v-if="license.plugin">
+								<dt>Plugin</dt>
+								<dd>{{ license.plugin.name }}</dd>
+							</template>
+
+							<dt>CMS License</dt>
+							<dd>
+								<template v-if="license.cmsLicense">
+									<router-link :to="'/account/licenses/craft/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link> <span class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
+								</template>
+								<template v-else>
+									<span class="text-secondary">Not attached to a CMS license.</span>
+								</template>
+							</dd>
 						</dl>
 					</div>
 					<div class="md:w-1/2 px-4">

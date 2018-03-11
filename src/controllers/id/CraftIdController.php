@@ -4,13 +4,12 @@ namespace craftcom\controllers\id;
 
 use Craft;
 use craft\elements\Category;
-use craft\elements\Entry;
 use craft\elements\User;
-use craftcom\behaviors\Developer;
 use craftcom\Module;
 use yii\helpers\Json;
 use yii\web\Response;
 use craft\commerce\Plugin as Commerce;
+use craftcom\plugins\Plugin;
 
 
 /**
@@ -128,7 +127,30 @@ class CraftIdController extends BaseController
         $licenses = [];
 
         foreach($results as $result) {
-            $licenses[] = $result->toArray();
+            $license = $result->toArray();
+
+
+            // Plugin
+            $plugin = null;
+
+            if($result->pluginId) {
+                $plugin = Plugin::find()->id($result->pluginId)->status(null)->one();
+            }
+
+            $license['plugin'] = $plugin;
+
+
+            // CMS License
+
+            $cmsLicense = null;
+
+            if($result->cmsLicenseId) {
+                $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
+            }
+
+            $license['cmsLicense'] = $cmsLicense;
+
+            $licenses[] = $license;
         }
 
         return $licenses;
