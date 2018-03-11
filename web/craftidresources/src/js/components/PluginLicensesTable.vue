@@ -5,7 +5,7 @@
 			<tr>
 				<th>License Key</th>
 				<th>Plugin</th>
-				<th>CMS License</th>
+				<th v-if="!excludeCmsLicenseColumn">CMS License</th>
 
 				<template v-if="enableCommercialFeatures">
 					<th>Next Payment</th>
@@ -28,7 +28,7 @@
 							{{ license.plugin.name }}
 						</template>
 					</td>
-					<td>
+					<td v-if="!excludeCmsLicenseColumn">
 						<template v-if="license.cmsLicense">
 							<router-link :to="'/account/licenses/craft/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
 						</template>
@@ -58,7 +58,7 @@
 
     export default {
 
-        props: ['licenses'],
+        props: ['excludeCmsLicenseColumn', 'licenses'],
 
         computed: {
 

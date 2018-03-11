@@ -109,7 +109,29 @@ class CraftIdController extends BaseController
         $licenses = [];
 
         foreach($results as $result) {
-            $licenses[] = $result->toArray();
+            $license = $result->toArray();
+            $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
+
+            $pluginLicenses = [];
+
+            foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
+                $pluginLicense = $pluginLicensesResult->toArray();
+
+                $plugin = null;
+
+                if($pluginLicensesResult->pluginId) {
+                    $plugin = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
+                }
+
+                $pluginLicense['plugin'] = $plugin;
+
+                $pluginLicenses[] = $pluginLicense;
+            }
+
+
+
+            $license['pluginLicenses'] = $pluginLicenses;
+            $licenses[] = $license;
         }
 
         return $licenses;
@@ -131,6 +153,7 @@ class CraftIdController extends BaseController
 
 
             // Plugin
+
             $plugin = null;
 
             if($result->pluginId) {

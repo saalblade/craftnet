@@ -53,6 +53,25 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns licenses by CMS license ID.
+     *
+     * @param int $cmsLicenseId
+     * @return PluginLicense[]
+     */
+    public function getLicensesByCmsLicenseId(int $cmsLicenseId): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->where(['cmsLicenseId' => $cmsLicenseId])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+        return $licenses;
+    }
+
+    /**
      * Saves a license.
      *
      * @param PluginLicense $license

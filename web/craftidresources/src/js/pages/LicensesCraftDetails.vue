@@ -9,7 +9,8 @@
             <div class="card-body">
                 <h4>Plugin Licenses</h4>
                 <p class="text-secondary mb-4">Plugin licenses attached to this Craft CMS license.</p>
-                <plugin-licenses-table type="plugins" :licenses="attachedPluginLicenses"></plugin-licenses-table>
+
+                <plugin-licenses-table :licenses="license.pluginLicenses" :exclude-cms-license-column="true"></plugin-licenses-table>
             </div>
         </div>
 
@@ -46,10 +47,7 @@
             license() {
                 return this.cmsLicenses.find(l => l.id == this.$route.params.id);
             },
-
-            attachedPluginLicenses() {
-                return this.pluginLicenses;
-            }
+            
         }
 
     }
