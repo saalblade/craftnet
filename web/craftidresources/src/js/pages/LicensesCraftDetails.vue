@@ -1,7 +1,7 @@
 <template>
     <div>
         <p><router-link class="nav-link" to="/account/licenses/craft" exact>← Craft CMS</router-link></p>
-        <h1><code>{{ license.key.substr(0, 10) }}…</code></h1>
+        <h1><code>{{ license.key.substr(0, 10) }}</code></h1>
 
         <cms-license-details :license="license"></cms-license-details>
 
@@ -47,7 +47,7 @@
             license() {
                 return this.cmsLicenses.find(l => l.id == this.$route.params.id);
             },
-            
+
         }
 
     }

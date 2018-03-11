@@ -19,7 +19,7 @@
 					<td>
 						<code>
 							<router-link :to="'/account/licenses/craft/'+license.id">
-								{{ license.key.substr(0, 10) }}…
+								{{ license.key.substr(0, 10) }}
 							</router-link>
 						</code>
 					</td>
