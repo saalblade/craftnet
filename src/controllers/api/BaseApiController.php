@@ -368,27 +368,43 @@ abstract class BaseApiController extends Controller
      */
     protected function getPayload(string $schema = null)
     {
-        $body = Json::decode(Craft::$app->getRequest()->getRawBody(), false);
+        $payload = Json::decode(Craft::$app->getRequest()->getRawBody(), false);
 
-        if ($schema !== null) {
-            $validator = new Validator();
-            $path = Craft::getAlias("@root/json-schemas/{$schema}.json");
-            $validator->validate($body, (object)['$ref' => 'file://'.$path]);
-
-            if (!$validator->isValid()) {
-                $errors = [];
-                foreach ($validator->getErrors() as $error) {
-                    $errors[] = [
-                        'param' => $error['property'],
-                        'message' => $error['message'],
-                        'code' => self::ERROR_CODE_INVALID,
-                    ];
-                }
-                throw new ValidationException($errors);
-            }
+        if ($schema !== null && !$this->validatePayload($payload, $schema, $errors)) {
+            throw new ValidationException($errors);
         }
 
-        return $body;
+        return $payload;
+    }
+
+    /**
+     * Validates a payload against a JSON schema.
+     *
+     * @param stdClass $payload
+     * @param string $schema
+     * @param array $errors
+     * @param string|null $paramPrefix
+     * @return bool
+     */
+    protected function validatePayload(stdClass $payload, string $schema, &$errors = [], string $paramPrefix = null)
+    {
+        $validator = new Validator();
+        $path = Craft::getAlias("@root/json-schemas/{$schema}.json");
+        $validator->validate($payload, (object)['$ref' => 'file://'.$path]);
+
+        if (!$validator->isValid()) {
+            foreach ($validator->getErrors() as $error) {
+                $errors[] = [
+                    'param' => ($paramPrefix ? $paramPrefix.'.' : '').$error['property'],
+                    'message' => $error['message'],
+                    'code' => self::ERROR_CODE_INVALID,
+                ];
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
