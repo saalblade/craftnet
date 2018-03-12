@@ -1,13 +1,23 @@
 <template>
 	<div>
-		<div v-if="!showForm" class="flex">
+		<div class="flex">
 			<div class="flex-1">
 				<h4>Invoice details</h4>
 
-				<pre>{{ companyInfos.businessVatId }}</pre>
+				<dl v-if="!showForm">
+					<dt>VAT ID</dt>
+					<dd>
+						<template v-if="companyInfos.businessVatId">
+							{{ companyInfos.businessVatId }}
+						</template>
+						<template v-else>
+							<span class="text-secondary">VAT ID not defined.</span>
+						</template>
+					</dd>
+				</dl>
 			</div>
 
-			<div>
+			<div v-if="!showForm">
 				<button @click="editInvoiceDetails()" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
 					<i class="fas fa-pencil-alt"></i>
 					Edit
@@ -17,11 +27,9 @@
 
 		<form v-if="showForm" @submit.prevent="save()">
 			<text-field id="businessVatId" label="Vat ID" v-model="invoiceDetailsDraft.businessVatId" :errors="errors.businessVatId" />
-
 			<input type="submit" class="btn btn-primary" value="Save" />
 			<input type="button" class="btn btn-secondary" value="Cancel" @click="cancel()" />
 		</form>
-
 	</div>
 </template>
 

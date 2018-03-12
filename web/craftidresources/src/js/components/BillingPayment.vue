@@ -16,7 +16,7 @@
                             </ul>
                         </div>
 
-                        <p v-else>No credit card.</p>
+                        <p v-else class="text-secondary">Credit card not defined.</p>
                     </div>
 
                     <div :class="{'hidden': !editing}">

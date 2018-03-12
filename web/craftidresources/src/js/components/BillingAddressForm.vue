@@ -1,20 +1,31 @@
 <template>
 	<div>
-		<div v-if="!showForm" class="flex">
+		<div class="flex">
 			<div class="flex-1">
 				<h4>Billing Address</h4>
 
-				<pre>{{ companyInfos.businessName }}
-{{ companyInfos.businessAddressLine1 }}
-{{ companyInfos.businessAddressLine2 }}
-{{ companyInfos.businessCity }}
-{{ companyInfos.businessState }}
-{{ companyInfos.businessZipCode }}
-{{ companyInfos.businessCountry }}</pre>
+				<template v-if="!showForm">
+					<ul v-if="companyInfos.businessAddressLine1 || companyInfos.businessAddressLine2 || companyInfos.businessCity || companyInfos.businessCountry || companyInfos.businessName || companyInfos.businessState || companyInfos.businessZipCode" class="list-reset">
+						<li v-if="companyInfos.businessName">
+							<strong>
+								<template v-if="companyInfos.businessName">{{ companyInfos.businessName }}</template>
+							</strong>
+						</li>
+						<li v-if="companyInfos.businessAddressLine1">{{ companyInfos.businessAddressLine1 }}</li>
+						<li v-if="companyInfos.businessAddressLine2">{{ companyInfos.businessAddressLine2 }}</li>
+						<li v-if="companyInfos.businessZipCode || companyInfos.businessCity">
+							<template v-if="companyInfos.businessZipCode">{{ companyInfos.businessZipCode }}</template>
+							<template v-if="companyInfos.businessCity">{{ companyInfos.businessCity }}</template>
+						</li>
+						<li v-if="companyInfos.businessCountry">{{ companyInfos.businessCountry}}</li>
+						<li v-if="companyInfos.businessState">{{ companyInfos.businessState }}</li>
+					</ul>
 
+					<p v-else class="text-secondary">Billing address not defined.</p>
+				</template>
 			</div>
 
-			<div>
+			<div v-if="!showForm">
 				<button @click="edit()" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
 					<i class="fas fa-pencil-alt"></i>
 					Edit
