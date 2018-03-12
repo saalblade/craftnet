@@ -368,6 +368,11 @@ class PluginEdition extends Purchasable
             }
         }
 
+        // if the license doesn't have an owner yet and the customer has a Craft ID, go ahead and assign it to them
+        if (!$license->ownerId && $order->getCustomer()->userId) {
+            $license->ownerId = $order->getCustomer()->userId;
+        }
+
         try {
             if (!$manager->saveLicense($license)) {
                 Craft::error("Could not save plugin license {$license->key} for order {$order->number}: ".implode(', ', $license->getErrorSummary(true)));
