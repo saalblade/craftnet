@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d55f9085eea6d75ea8f9f296e2a30b1e",
+    "content-hash": "69b8fad32b218c02000cb560fbaece9f",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -1007,6 +1007,60 @@
                 "vat"
             ],
             "time": "2017-12-04T13:33:24+00:00"
+        },
+        {
+            "name": "ddeboer/vatin",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ddeboer/vatin.git",
+                "reference": "cd6ef239f3eca3d095826ed93da1a4945329f2c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ddeboer/vatin/zipball/cd6ef239f3eca3d095826ed93da1a4945329f2c8",
+                "reference": "cd6ef239f3eca3d095826ed93da1a4945329f2c8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "ext-soap": "*",
+                "phpunit/phpunit": "^4.0 || ^5.0"
+            },
+            "suggest": {
+                "ext-soap": "Required if you want to check the VAT number via VIES"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ddeboer\\Vatin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David de Boer",
+                    "email": "david@ddeboer.nl",
+                    "homepage": "https://github.com/ddeboer"
+                },
+                {
+                    "name": "Community contributions",
+                    "homepage": "https://github.com/ddeboer/vatin/contributors"
+                }
+            ],
+            "description": "Validate VAT identification numbers",
+            "keywords": [
+                "btw",
+                "tax",
+                "vat",
+                "vies"
+            ],
+            "time": "2018-03-09T17:08:41+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -2382,6 +2436,48 @@
                 "shell"
             ],
             "time": "2017-06-30T06:21:01+00:00"
+        },
+        {
+            "name": "moccalotto/eu",
+            "version": "0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moccalotto/phpeu.git",
+                "reference": "432ab801befb8ca8c46f2ea3e29088c195910da7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moccalotto/phpeu/zipball/432ab801befb8ca8c46f2ea3e29088c195910da7",
+                "reference": "432ab801befb8ca8c46f2ea3e29088c195910da7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Moccalotto\\Eu\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kim Ravn Hansen",
+                    "email": "moccalotto@gmail.com"
+                }
+            ],
+            "description": "Tiny lib for info about EU countries",
+            "keywords": [
+                "Europe",
+                "European Union",
+                "eu",
+                "vat"
+            ],
+            "time": "2017-01-31T07:39:32+00:00"
         },
         {
             "name": "moneyphp/money",

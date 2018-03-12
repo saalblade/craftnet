@@ -16,6 +16,8 @@ use craftcom\errors\LicenseNotFoundException;
 use craftcom\errors\ValidationException;
 use craftcom\helpers\LicenseHelper;
 use craftcom\plugins\Plugin;
+use Ddeboer\Vatin\Validator;
+use Moccalotto\Eu\CountryInfo;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
 use yii\base\NotSupportedException;
@@ -374,6 +376,21 @@ class CartsController extends BaseApiController
                 'message' => 'Invalid country',
                 'code' => self::ERROR_CODE_INVALID,
             ];
+        } else if ((new CountryInfo())->isEuMember($country->iso)) {
+            // Make sure they've supplied a VAT ID
+            if (!isset($billingAddress->businessTaxId)) {
+                $addressErrors[] = [
+                    'param' => 'billingAddress.businessTaxId',
+                    'message' => 'A valid VAT ID is required for European orders.',
+                    'code' => self::ERROR_CODE_MISSING_FIELD,
+                ];
+            } else if (!(new Validator())->isValid($billingAddress->businessTaxId)) {
+                $addressErrors[] = [
+                    'param' => 'billingAddress.businessTaxId',
+                    'message' => 'A valid VAT ID is required for European orders.',
+                    'code' => self::ERROR_CODE_INVALID,
+                ];
+            }
         }
 
         // get the state
