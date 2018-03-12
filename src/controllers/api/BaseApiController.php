@@ -35,6 +35,7 @@ abstract class BaseApiController extends Controller
 {
     const ERROR_CODE_INVALID = 'invalid';
     const ERROR_CODE_MISSING = 'missing';
+    const ERROR_CODE_MISSING_FIELD = 'missing_field';
     const ERROR_CODE_EXISTS = 'already_exists';
 
     const LICENSE_STATUS_VALID = 'valid';
