@@ -50,6 +50,9 @@ class CmsLicensesController extends BaseApiController
             'email' => $email,
             'domain' => $headers->get('X-Craft-Host'),
             'key' => LicenseHelper::generateKey(250, '!#$%^&*=+/'),
+            'lastEdition' => $this->cmsEdition,
+            'lastVersion' => $this->cmsVersion,
+            'lastActivityOn' => new \DateTime(),
         ]);
 
         if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {

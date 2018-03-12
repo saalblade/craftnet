@@ -192,7 +192,6 @@ abstract class BaseApiController extends Controller
                             } else {
                                 // tie the license to this domain
                                 $cmsLicense->domain = $cmsLicenseDomain = $domain;
-                                $cmsLicenseManager->saveLicense($cmsLicense, false);
                             }
                         }
 
@@ -202,6 +201,16 @@ abstract class BaseApiController extends Controller
                     $responseHeaders->set('X-Craft-License-Status', $cmsLicenseStatus);
                     $responseHeaders->set('X-Craft-License-Domain', $cmsLicenseDomain);
                     $responseHeaders->set('X-Craft-License-Edition', $cmsLicense->edition);
+
+                    // update the license
+                    $cmsLicense->lastActivityOn = new \DateTime();
+                    if ($this->cmsVersion !== null) {
+                        $cmsLicense->lastVersion = $this->cmsVersion;
+                    }
+                    if ($this->cmsEdition !== null) {
+                        $cmsLicense->lastEdition = $this->cmsEdition;
+                    }
+                    $cmsLicenseManager->saveLicense($cmsLicense, false);
                 } catch (LicenseNotFoundException $e) {
                     $responseHeaders->set('X-Craft-License-Status', self::LICENSE_STATUS_INVALID);
                 } catch (\Throwable $e) {
@@ -225,9 +234,15 @@ abstract class BaseApiController extends Controller
                             } else {
                                 // tie the license to this Craft license
                                 $pluginLicense->cmsLicenseId = $cmsLicense->id;
-                                $pluginLicenseManager->saveLicense($pluginLicense, false);
                             }
                         }
+
+                        // update the license
+                        $pluginLicense->lastActivityOn = new \DateTime();
+                        if (isset($this->pluginVersions[$pluginHandle])) {
+                            $pluginLicense->lastVersion = $this->pluginVersions[$pluginHandle];
+                        }
+                        $pluginLicenseManager->saveLicense($pluginLicense, false);
                     } catch (LicenseNotFoundException $e) {
                         $pluginLicenseStatus = self::LICENSE_STATUS_INVALID;
                     } catch (\Throwable $e) {
