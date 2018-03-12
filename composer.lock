@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a88a524af40ee0a0e1de44e2306eca4",
+    "content-hash": "d55f9085eea6d75ea8f9f296e2a30b1e",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.21",
+            "version": "3.52.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "30d0d9af0594ca14be0775ddb9283f2675ccd8d0"
+                "reference": "3ce95b96c217a699168d937c4ed700e6a27ec783"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/30d0d9af0594ca14be0775ddb9283f2675ccd8d0",
-                "reference": "30d0d9af0594ca14be0775ddb9283f2675ccd8d0",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3ce95b96c217a699168d937c4ed700e6a27ec783",
+                "reference": "3ce95b96c217a699168d937c4ed700e6a27ec783",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-06T21:05:53+00:00"
+            "time": "2018-03-08T22:51:35+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -562,16 +562,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0-RC14",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "fb4faffb435e41756750144c0ed3724d2f52a86f"
+                "reference": "8480f83a3c20d89b428fe70e055822be99744c2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/fb4faffb435e41756750144c0ed3724d2f52a86f",
-                "reference": "fb4faffb435e41756750144c0ed3724d2f52a86f",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/8480f83a3c20d89b428fe70e055822be99744c2e",
+                "reference": "8480f83a3c20d89b428fe70e055822be99744c2e",
                 "shasum": ""
             },
             "require": {
@@ -640,7 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-03-06T19:06:32+00:00"
+            "time": "2018-03-12T09:27:05+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -1775,16 +1775,16 @@
         },
         {
             "name": "layershifter/tld-database",
-            "version": "1.0.54",
+            "version": "1.0.55",
             "source": {
                 "type": "git",
                 "url": "https://github.com/layershifter/TLDDatabase.git",
-                "reference": "b1050b811532cffec44715bb27a0001ba4e6c5ba"
+                "reference": "cb5df36b4750aced85a792aed80b2a493c421d6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/layershifter/TLDDatabase/zipball/b1050b811532cffec44715bb27a0001ba4e6c5ba",
-                "reference": "b1050b811532cffec44715bb27a0001ba4e6c5ba",
+                "url": "https://api.github.com/repos/layershifter/TLDDatabase/zipball/cb5df36b4750aced85a792aed80b2a493c421d6f",
+                "reference": "cb5df36b4750aced85a792aed80b2a493c421d6f",
                 "shasum": ""
             },
             "require": {
@@ -1822,7 +1822,7 @@
                 "domain database",
                 "tld database"
             ],
-            "time": "2018-02-25T12:56:28+00:00"
+            "time": "2018-03-11T11:29:33+00:00"
         },
         {
             "name": "layershifter/tld-extract",
@@ -5051,10 +5051,17 @@
             "time": "2016-09-01T10:05:43+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "3.0.0-RC99",
+            "alias_normalized": "3.0.0.0-RC99",
+            "version": "dev-develop",
+            "package": "craftcms/cms"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "craftcms/cms": 5,
+        "craftcms/cms": 20,
         "roave/security-advisories": 20,
         "flipboxfactory/craft-postmark": 5,
         "craftcms/commerce": 15
