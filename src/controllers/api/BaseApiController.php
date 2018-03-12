@@ -21,6 +21,7 @@ use yii\base\UserException;
 use yii\db\Expression;
 use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
+use yii\web\Controller as YiiController;
 use yii\web\HttpException;
 
 /**
@@ -247,7 +248,7 @@ abstract class BaseApiController extends Controller
                 throw new BadRequestHttpException('Bad Request', 0, $e);
             }
 
-            $response = parent::runAction($id, $params);
+            $response = YiiController::runAction($id, $params);
         } catch (\Throwable $e) {
             // log it and keep going
             Craft::$app->getErrorHandler()->logException($e);
