@@ -23,7 +23,7 @@
         "businessId": {"type": ["string", "null"]},
         "businessTaxId": {"type": ["string", "null"]}
       },
-      "required": ["attention", "title", "firstName", "lastName", "city", "country", "zipCode", "phone", "alternativePhone", "businessName", "businessId", "businessTaxId"]
+      "required": ["firstName", "lastName", "city", "country", "zipCode"]
     },
     "items": {
       "type": "array",
@@ -35,6 +35,6 @@
         }
       }
     },
-    "couponCode": {"type": "string"}
+    "couponCode": {"type": ["string", "null"]}
   }
 }
