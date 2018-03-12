@@ -74,7 +74,7 @@ class PaymentsController extends CartsController
 
         // make sure the cost is in line with what they were expecting
         $totalPrice = $cart->getTotalPrice();
-        if ($payload->expectedPrice < $totalPrice) {
+        if (round($payload->expectedPrice) < round($totalPrice)) {
             $formatter = Craft::$app->getFormatter();
             $fmtExpected = $formatter->asCurrency($payload->expectedPrice, 'USD', [], [], true);
             $fmtTotal = $formatter->asCurrency($totalPrice, 'USD', [], [], true);
