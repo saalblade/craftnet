@@ -21,6 +21,7 @@ use yii\base\UserException;
 use yii\db\Expression;
 use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
+use yii\web\Controller as YiiController;
 use yii\web\HttpException;
 
 /**
@@ -34,6 +35,7 @@ abstract class BaseApiController extends Controller
 {
     const ERROR_CODE_INVALID = 'invalid';
     const ERROR_CODE_MISSING = 'missing';
+    const ERROR_CODE_MISSING_FIELD = 'missing_field';
     const ERROR_CODE_EXISTS = 'already_exists';
 
     const LICENSE_STATUS_VALID = 'valid';
@@ -191,7 +193,6 @@ abstract class BaseApiController extends Controller
                             } else {
                                 // tie the license to this domain
                                 $cmsLicense->domain = $cmsLicenseDomain = $domain;
-                                $cmsLicenseManager->saveLicense($cmsLicense, false);
                             }
                         }
 
@@ -201,6 +202,16 @@ abstract class BaseApiController extends Controller
                     $responseHeaders->set('X-Craft-License-Status', $cmsLicenseStatus);
                     $responseHeaders->set('X-Craft-License-Domain', $cmsLicenseDomain);
                     $responseHeaders->set('X-Craft-License-Edition', $cmsLicense->edition);
+
+                    // update the license
+                    $cmsLicense->lastActivityOn = new \DateTime();
+                    if ($this->cmsVersion !== null) {
+                        $cmsLicense->lastVersion = $this->cmsVersion;
+                    }
+                    if ($this->cmsEdition !== null) {
+                        $cmsLicense->lastEdition = $this->cmsEdition;
+                    }
+                    $cmsLicenseManager->saveLicense($cmsLicense, false);
                 } catch (LicenseNotFoundException $e) {
                     $responseHeaders->set('X-Craft-License-Status', self::LICENSE_STATUS_INVALID);
                 } catch (\Throwable $e) {
@@ -224,9 +235,15 @@ abstract class BaseApiController extends Controller
                             } else {
                                 // tie the license to this Craft license
                                 $pluginLicense->cmsLicenseId = $cmsLicense->id;
-                                $pluginLicenseManager->saveLicense($pluginLicense, false);
                             }
                         }
+
+                        // update the license
+                        $pluginLicense->lastActivityOn = new \DateTime();
+                        if (isset($this->pluginVersions[$pluginHandle])) {
+                            $pluginLicense->lastVersion = $this->pluginVersions[$pluginHandle];
+                        }
+                        $pluginLicenseManager->saveLicense($pluginLicense, false);
                     } catch (LicenseNotFoundException $e) {
                         $pluginLicenseStatus = self::LICENSE_STATUS_INVALID;
                     } catch (\Throwable $e) {
@@ -247,7 +264,7 @@ abstract class BaseApiController extends Controller
                 throw new BadRequestHttpException('Bad Request', 0, $e);
             }
 
-            $response = parent::runAction($id, $params);
+            $response = YiiController::runAction($id, $params);
         } catch (\Throwable $e) {
             // log it and keep going
             Craft::$app->getErrorHandler()->logException($e);

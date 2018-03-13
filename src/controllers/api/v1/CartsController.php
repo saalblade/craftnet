@@ -402,6 +402,12 @@ class CartsController extends BaseApiController
                     'code' => self::ERROR_CODE_INVALID,
                 ];
             }
+        } else if ($country !== null && $country->isStateRequired) {
+            $addressErrors[] = [
+                'param' => 'billingAddress.state',
+                'message' => "{$country->name} addresses must specify a state.",
+                'code' => self::ERROR_CODE_MISSING_FIELD,
+            ];
         }
 
         // is a billing address already set on the order?

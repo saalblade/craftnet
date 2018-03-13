@@ -350,6 +350,8 @@ class PluginEdition extends Purchasable
             $license = new PluginLicense([
                 'pluginId' => $this->pluginId,
                 'cmsLicenseId' => $cmsLicense->id ?? null,
+                'plugin' => $this->getPlugin()->handle,
+                'edition' => $this->handle,
                 'email' => $order->email,
                 'key' => $key,
             ]);
@@ -366,6 +368,11 @@ class PluginEdition extends Purchasable
             if ($discount && $discount->dateCreated->getTimestamp() < 1522800000) {
                 $license->expirable = false;
             }
+        }
+
+        // if the license doesn't have an owner yet and the customer has a Craft ID, go ahead and assign it to them
+        if (!$license->ownerId && $order->getCustomer()->userId) {
+            $license->ownerId = $order->getCustomer()->userId;
         }
 
         try {

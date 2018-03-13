@@ -50,11 +50,19 @@ class CmsLicensesController extends BaseApiController
             'email' => $email,
             'domain' => $headers->get('X-Craft-Host'),
             'key' => LicenseHelper::generateKey(250, '!#$%^&*=+/'),
+            'lastEdition' => $this->cmsEdition,
+            'lastVersion' => $this->cmsVersion,
+            'lastActivityOn' => new \DateTime(),
         ]);
 
         if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
             throw new Exception('Could not create CMS license: '.implode(', ', $license->getErrorSummary(true)));
         }
+
+        Craft::$app->getResponse()->getHeaders()
+            ->set('X-Craft-License-Status', self::LICENSE_STATUS_VALID)
+            ->set('X-Craft-License-Domain', $license->domain)
+            ->set('X-Craft-License-Edition', $license->edition);
 
         // include this license in the request log
         $this->cmsLicenses[] = $license;

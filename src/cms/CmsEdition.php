@@ -174,7 +174,7 @@ class CmsEdition extends Purchasable
      */
     public function afterOrderComplete(Order $order, LineItem $lineItem)
     {
-        $this->_upgradeOrderLicense($order, $lineItem);
+        $this->_updateOrderLicense($order, $lineItem);
         parent::afterOrderComplete($order, $lineItem);
     }
 
@@ -182,13 +182,13 @@ class CmsEdition extends Purchasable
      * @param Order $order
      * @param LineItem $lineItem
      */
-    private function _upgradeOrderLicense(Order $order, LineItem $lineItem)
+    private function _updateOrderLicense(Order $order, LineItem $lineItem)
     {
         $manager = Module::getInstance()->getCmsLicenseManager();
         try {
             $license = $manager->getLicenseByKey($lineItem->options['licenseKey']);
         } catch (LicenseNotFoundException $e) {
-            Craft::error("Could not upgrade Craft license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
+            Craft::error("Could not update Craft license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);
             return;
         }
@@ -205,6 +205,11 @@ class CmsEdition extends Purchasable
             if ($discount && $discount->dateCreated->getTimestamp() < 1522800000) {
                 $license->expirable = false;
             }
+        }
+
+        // if the license doesn't have an owner yet and the customer has a Craft ID, go ahead and assign it to them
+        if (!$license->ownerId && $order->getCustomer()->userId) {
+            $license->ownerId = $order->getCustomer()->userId;
         }
 
         try {

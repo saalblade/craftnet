@@ -110,11 +110,36 @@ class PluginLicenseManager extends Component
             return false;
         }
 
+        if (!$license->pluginId) {
+            $license->pluginId = (int)Plugin::find()
+                ->select('elements.id')
+                ->handle($license->plugin)
+                ->scalar();
+
+            if ($license->pluginId === false) {
+                throw new Exception("Invalid plugin handle: {$license->plugin}");
+            }
+        }
+
+        if (!$license->editionId) {
+            $license->editionId = (int)PluginEdition::find()
+                ->select('elements.id')
+                ->pluginId($license->pluginId)
+                ->handle($license->edition)
+                ->scalar();
+
+            if ($license->editionId === false) {
+                throw new Exception("Invalid plugin edition: {$license->edition}");
+            }
+        }
+
         $data = [
             'pluginId' => $license->pluginId,
             'editionId' => $license->editionId,
             'ownerId' => $license->ownerId,
             'cmsLicenseId' => $license->cmsLicenseId,
+            'plugin' => $license->plugin,
+            'edition' => $license->edition,
             'expirable' => $license->expirable,
             'expired' => $license->expired,
             'email' => $license->email,
@@ -234,6 +259,8 @@ class PluginLicenseManager extends Component
                 'l.editionId',
                 'l.ownerId',
                 'l.cmsLicenseId',
+                'l.plugin',
+                'l.edition',
                 'l.expirable',
                 'l.expired',
                 'l.email',

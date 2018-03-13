@@ -201,6 +201,10 @@ class CmsLicenseManager extends Component
                 ->select('elements.id')
                 ->handle($license->edition)
                 ->scalar();
+
+            if ($license->editionId === false) {
+                throw new Exception("Invalid Craft edition: {$license->edition}");
+            }
         }
 
         $data = [

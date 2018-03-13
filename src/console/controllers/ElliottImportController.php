@@ -199,6 +199,8 @@ class ElliottImportController extends Controller
                 'pluginId' => $plugin->id,
                 'editionId' => $edition->id,
                 'cmsLicenseId' => $cmsLicense->id ?? null,
+                'plugin' => $plugin->handle,
+                'edition' => $edition->handle,
                 'expirable' => false,
                 'expired' => false,
                 'email' => $item['email'],
