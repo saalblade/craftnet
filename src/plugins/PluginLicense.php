@@ -12,6 +12,8 @@ class PluginLicense extends Model
     public $editionId;
     public $ownerId;
     public $cmsLicenseId;
+    public $plugin;
+    public $edition;
     public $expirable = true;
     public $expired;
     public $email;
@@ -29,7 +31,7 @@ class PluginLicense extends Model
     public function rules()
     {
         return [
-            [['pluginId', 'editionId', 'expirable', 'expired', 'email', 'key'], 'required'],
+            [['expirable', 'expired', 'plugin', 'edition', 'email', 'key'], 'required'],
             [['id', 'pluginId', 'editionId', 'ownerId', 'cmsLicenseId'], 'number', 'integerOnly' => true, 'min' => 1],
             [['email'], 'email'],
         ];
@@ -43,5 +45,26 @@ class PluginLicense extends Model
         $names = parent::attributes();
         ArrayHelper::removeValue($names, 'notes');
         return $names;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function extraFields()
+    {
+        return [
+            'plugin',
+        ];
+    }
+
+    /**
+     * @return Plugin
+     */
+    public function getPlugin(): Plugin
+    {
+        return Plugin::find()
+            ->id($this->pluginId)
+            ->status(null)
+            ->one();
     }
 }

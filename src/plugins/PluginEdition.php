@@ -350,6 +350,8 @@ class PluginEdition extends Purchasable
             $license = new PluginLicense([
                 'pluginId' => $this->pluginId,
                 'cmsLicenseId' => $cmsLicense->id ?? null,
+                'plugin' => $this->getPlugin()->handle,
+                'edition' => $this->handle,
                 'email' => $order->email,
                 'key' => $key,
             ]);
