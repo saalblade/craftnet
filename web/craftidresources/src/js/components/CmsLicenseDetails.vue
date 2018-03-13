@@ -87,7 +87,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import TextareaField from '../components/fields/TextareaField'
     import TextField from '../components/fields/TextField'
     import LightswitchInput from '../components/inputs/LightswitchInput'
@@ -100,8 +100,8 @@
             return {
                 errors: {},
                 licenseDraft: {},
-				editingDomain: false,
-				editingNotes: false,
+                editingDomain: false,
+                editingNotes: false,
             }
         },
 
@@ -117,24 +117,24 @@
                 enableCommercialFeatures: 'enableCommercialFeatures',
             }),
 
-			canSave() {
-                if(this.license.domain != this.licenseDraft.domain) {
+            canSave() {
+                if (this.license.domain != this.licenseDraft.domain) {
                     return true;
-				}
+                }
 
-                if(this.license.notes != this.licenseDraft.notes) {
+                if (this.license.notes != this.licenseDraft.notes) {
                     return true;
-				}
+                }
 
-				return false;
-			}
+                return false;
+            }
 
         },
 
         methods: {
 
             /**
-			 * Save auto renew.
+             * Save auto renew.
              */
             saveAutoRenew() {
                 this.$store.dispatch('saveCmsLicense', {
@@ -142,7 +142,7 @@
                     type: this.type,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then((data) => {
-                    if(this.licenseDraft.autoRenew) {
+                    if (this.licenseDraft.autoRenew) {
                         this.$root.displayNotice('Auto renew enabled.');
                     } else {
                         this.$root.displayNotice('Auto renew disabled.');
@@ -155,26 +155,26 @@
             },
 
             /**
-			 * Save domain.
+             * Save domain.
              */
-			saveDomain() {
+            saveDomain() {
                 this.saveCmsLicense(() => {
                     this.editingDomain = false;
-				});
-			},
+                });
+            },
 
             /**
-			 * Save notes.
+             * Save notes.
              */
-			saveNotes() {
+            saveNotes() {
                 this.saveCmsLicense(() => {
                     this.editingNotes = false;
                 });
-			},
+            },
 
             /**
-			 * Save CMS license.
-			 *
+             * Save CMS license.
+             *
              * @param cb
              */
             saveCmsLicense(cb) {
@@ -192,7 +192,7 @@
             },
 
             /**
-			 * Cancel edit domain.
+             * Cancel edit domain.
              */
             cancelEditDomain() {
                 this.licenseDraft.domain = this.license.domain;
@@ -200,7 +200,7 @@
             },
 
             /**
-			 * Cancel edit notes.
+             * Cancel edit notes.
              */
             cancelEditNotes() {
                 this.licenseDraft.notes = this.license.notes;

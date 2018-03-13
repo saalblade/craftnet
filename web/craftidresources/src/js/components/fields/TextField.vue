@@ -1,12 +1,23 @@
 <template>
-    <div class="form-group">
-        <label :id="id" v-if="label">{{ label }}</label>
-        <div v-if="instructions" class="instructions">
-            <p>{{ instructions }}</p>
-        </div>
-        <text-input ref="input" :id="id" :class="{'is-invalid': errors }" :placeholder="placeholder" :value="value" @input="$emit('input', $event)" :autofocus="autofocus" :disabled="disabled" />
-        <div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
-    </div>
+	<div class="form-group">
+		<label :id="id" v-if="label">{{ label }}</label>
+
+		<div v-if="instructions" class="instructions">
+			<p>{{ instructions }}</p>
+		</div>
+
+		<text-input
+			:autofocus="autofocus"
+			:class="{'is-invalid': errors }"
+			:disabled="disabled"
+			:id="id"
+			:placeholder="placeholder"
+			:value="value"
+			@input="$emit('input', $event)"
+			ref="input"/>
+
+		<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
+	</div>
 </template>
 
 <script>
@@ -21,7 +32,7 @@
         },
 
         created() {
-            this.$on('focus', function (msg) {
+            this.$on('focus', function(msg) {
                 this.$refs.input.$emit('focus');
             })
         }

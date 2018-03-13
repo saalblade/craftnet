@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import draggable from 'vuedraggable'
 
     export default {
@@ -39,13 +39,13 @@
 
         props: ['pluginDraft'],
 
-		data() {
-          	return {
-          	    maxCategories: 3,
-			}
-		},
+        data() {
+            return {
+                maxCategories: 3,
+            }
+        },
 
-		computed: {
+        computed: {
 
             ...mapGetters({
                 categories: 'categories',
@@ -56,8 +56,8 @@
 
                 this.pluginDraft.categoryIds.forEach(categoryId => {
                     const category = this.categories.find(c => c.id == categoryId);
-                 	categories.push(category);
-				});
+                    categories.push(category);
+                });
 
                 return categories;
             },
@@ -86,38 +86,38 @@
                 return options;
             }
 
-		},
+        },
 
-		methods: {
+        methods: {
 
             /**
-			 * Select category.
-			 *
+             * Select category.
+             *
              * @param categoryId
              */
             selectCategory(categoryId) {
-                if(this.pluginDraft.categoryIds.length < this.maxCategories) {
-					const exists = this.pluginDraft.categoryIds.find(catId => catId == categoryId);
+                if (this.pluginDraft.categoryIds.length < this.maxCategories) {
+                    const exists = this.pluginDraft.categoryIds.find(catId => catId == categoryId);
 
-					if(!exists) {
-						this.pluginDraft.categoryIds.push(categoryId);
-					}
+                    if (!exists) {
+                        this.pluginDraft.categoryIds.push(categoryId);
+                    }
                 }
             },
 
             /**
-			 * Unselect category.
-			 *
+             * Unselect category.
+             *
              * @param categoryId
              */
             unselectCategory(categoryId) {
                 const i = this.pluginDraft.categoryIds.indexOf(categoryId);
 
-                if(i !== -1) {
+                if (i !== -1) {
                     this.pluginDraft.categoryIds.splice(i, 1);
                 }
             },
 
-		}
+        }
     }
 </script>

@@ -1,39 +1,59 @@
 <template>
-    <div>
-        <!-- logout warning modal -->
-        <modal :show.sync="showingLogoutWarningModal" :transition.sync="logoutWarningModalTransitionName" @after-enter="onAfterEnterLogoutWarningModal" class="auth-manager-modal">
-            <template slot="body">
-                <i class="fas fa-exclamation-triangle"></i>
-                {{ logoutWarningPara }}
+	<div>
+		<!-- logout warning modal -->
+		<modal :show.sync="showingLogoutWarningModal"
+			   :transition.sync="logoutWarningModalTransitionName"
+			   @after-enter="onAfterEnterLogoutWarningModal"
+			   class="auth-manager-modal">
+			<template slot="body">
+				<i class="fas fa-exclamation-triangle"></i>
+				{{ logoutWarningPara }}
 
-                <div class="float-right mt-4">
-                    <a @click.prevent="logout" href="#" class="btn btn-secondary">Logout now</a>
-                    <a @click.prevent="renewSession" ref="renewSessionBtn" href="#" class="btn btn-primary">Keep me logged in</a>
-                </div>
-            </template>
-        </modal>
+				<div class="float-right mt-4">
+					<a href="#"
+					   class="btn btn-secondary"
+					   @click.prevent="logout">Logout now</a>
 
-        <!-- login modal -->
-        <modal :show.sync="showingLoginModal" :transition.sync="loginModalTransitionName" @after-enter="onAfterEnterLoginModal" @leave="onLeaveLoginModal" class="auth-manager-modal">
-            <template slot="body">
-                <i class="fas fa-exclamation-triangle"></i>
-                <form @submit.prevent="login">
-                    <h6>Your session has ended</h6>
-                    <p>Enter your password to log back in.</p>
+					<a href="#"
+					   @click.prevent="renewSession"
+					   ref="renewSessionBtn"
+					   class="btn btn-primary">Keep me logged in</a>
+				</div>
+			</template>
+		</modal>
 
-                    <div>
-                        <div class="flex">
-                            <input v-model="password" ref="passwordInput" placeholder="Password" type="password" id="password" class="form-control mr-2"  :class="{'is-invalid': loginErrorPara }" />
-                            <input type="submit" class="btn btn-primary mr-2" value="Login" :disabled="!passwordValidates" />
-                            <div class="spinner" :class="{'invisible': !passwordSpinner}"></div>
-                        </div>
-                    </div>
+		<!-- login modal -->
+		<modal :show.sync="showingLoginModal"
+			   :transition.sync="loginModalTransitionName"
+			   @after-enter="onAfterEnterLoginModal" @leave="onLeaveLoginModal"
+			   class="auth-manager-modal">
+			<template slot="body">
+				<i class="fas fa-exclamation-triangle"></i>
+				<form @submit.prevent="login">
+					<h6>Your session has ended</h6>
+					<p>Enter your password to log back in.</p>
 
-                    <div class="text-red" v-if="loginErrorPara">{{ loginErrorPara }}</div>
-                </form>
-            </template>
-        </modal>
-    </div>
+					<div>
+						<div class="flex">
+							<input v-model="password" ref="passwordInput"
+								   placeholder="Password" type="password"
+								   id="password" class="form-control mr-2"
+								   :class="{'is-invalid': loginErrorPara }"/>
+							<input type="submit" class="btn btn-primary mr-2"
+								   value="Login"
+								   :disabled="!passwordValidates"/>
+							<div class="spinner"
+								 :class="{'invisible': !passwordSpinner}"></div>
+						</div>
+					</div>
+
+					<div class="text-red" v-if="loginErrorPara">
+						{{ loginErrorPara }}
+					</div>
+				</form>
+			</template>
+		</modal>
+	</div>
 </template>
 
 
@@ -90,13 +110,13 @@
             checkRemainingSessionTime(extendSession) {
                 let config = {};
 
-                if(!extendSession) {
+                if (!extendSession) {
                     config.params = {
                         dontExtendSession: 1
                     };
                 }
 
-                axios.get(Craft.actionUrl+'/users/get-remaining-session-time', config)
+                axios.get(Craft.actionUrl + '/users/get-remaining-session-time', config)
                     .then(response => {
                         if (typeof response.data.csrfTokenValue !== 'undefined' && typeof Craft.csrfTokenValue !== 'undefined') {
                             Craft.csrfTokenValue = response.data.csrfTokenValue;
@@ -197,7 +217,7 @@
              * On after enter logout warning modal.
              */
             onAfterEnterLogoutWarningModal() {
-                if(!this.isMobileBrowser(true)) {
+                if (!this.isMobileBrowser(true)) {
                     this.$refs.renewSessionBtn.focus();
                 }
             },
@@ -228,7 +248,7 @@
              * Hides the logout warning modal.
              */
             hideLogoutWarningModal(quick) {
-                if(quick) {
+                if (quick) {
                     this.logoutWarningModalTransitionName = 'quick-fade';
                 } else {
                     this.logoutWarningModalTransitionName = 'fade';
@@ -271,7 +291,7 @@
              * On after enter login modal.
              */
             onAfterEnterLoginModal() {
-                if(!this.isMobileBrowser(true)) {
+                if (!this.isMobileBrowser(true)) {
                     this.$refs.passwordInput.focus();
                 }
             },
@@ -365,7 +385,7 @@
                     headers['X-CSRF-Token'] = Craft.csrfTokenValue;
                 }
 
-                axios.post(Craft.actionUrl+'/users/login', params, { headers: headers })
+                axios.post(Craft.actionUrl + '/users/login', params, {headers: headers})
                     .then(response => {
                         this.passwordSpinner = false;
 
@@ -375,7 +395,7 @@
                         } else {
                             this.showLoginError(response.data.error);
 
-                            if(!this.isMobileBrowser(true)) {
+                            if (!this.isMobileBrowser(true)) {
                                 this.$refs.passwordInput.focus();
                             }
                         }

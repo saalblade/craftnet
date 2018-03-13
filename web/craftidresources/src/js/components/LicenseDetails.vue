@@ -65,7 +65,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import TextareaField from '../components/fields/TextareaField'
     import LightswitchInput from '../components/inputs/LightswitchInput'
 
@@ -104,7 +104,7 @@
                     type: this.type,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then((data) => {
-                    if(this.licenseDraft.autoRenew) {
+                    if (this.licenseDraft.autoRenew) {
                         this.$root.displayNotice('Auto renew enabled.');
                     } else {
                         this.$root.displayNotice('Auto renew disabled.');

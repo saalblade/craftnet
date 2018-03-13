@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import CmsLicenseDetails from '../components/CmsLicenseDetails'
     import PluginLicensesTable from '../components/PluginLicensesTable';
 

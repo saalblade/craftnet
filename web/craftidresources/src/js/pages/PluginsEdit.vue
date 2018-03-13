@@ -164,7 +164,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import TextField from '../components/fields/TextField'
     import TextareaField from '../components/fields/TextareaField'
     import ConnectedApps from '../components/ConnectedApps'
@@ -270,7 +270,7 @@
             },
 
             showPriceFields() {
-                if(!this.plugin) {
+                if (!this.plugin) {
                     return true;
                 }
 
@@ -291,7 +291,7 @@
              * @param name
              */
             onInputName(name) {
-                if(!this.pluginId) {
+                if (!this.pluginId) {
                     const handle = slug(name);
                     this.pluginDraft.handle = handle;
                 }
@@ -332,10 +332,10 @@
 
                 let files = this.$refs.screenshotFiles.files;
 
-                for(let i = 0; i < files.length; i++) {
+                for (let i = 0; i < files.length; i++) {
                     let reader = new FileReader();
 
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         let screenshotUrl = e.target.result;
                         this.pluginDraft.screenshotUrls.push(screenshotUrl)
                     }.bind(this);
@@ -354,7 +354,7 @@
 
                 let reader = new FileReader();
 
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     this.pluginDraft.iconUrl = e.target.result
                 }.bind(this);
 
@@ -379,53 +379,53 @@
                 let params = qs.stringify(body);
                 let url = repositoryUrl;
 
-                axios.post(Craft.actionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), params)
+                axios.post(Craft.actionUrl + '/craftcom/plugins/load-details&repository=' + encodeURIComponent(url), params)
                     .then(response => {
                         this.repositoryLoading = false;
                         this.loadingRepository = null;
 
-                        if(response.data.error) {
+                        if (response.data.error) {
                             this.$root.displayError(response.data.error);
                         } else {
                             this.pluginDraft.repository = repositoryUrl;
 
-                            if(response.data.changelogPath) {
+                            if (response.data.changelogPath) {
                                 this.pluginDraft.changelogPath = response.data.changelogPath;
                             }
 
-                            if(response.data.documentationUrl) {
+                            if (response.data.documentationUrl) {
                                 this.pluginDraft.documentationUrl = response.data.documentationUrl;
                             }
 
-                            if(response.data.name) {
+                            if (response.data.name) {
                                 this.pluginDraft.name = response.data.name;
                             }
 
-                            if(response.data.handle) {
+                            if (response.data.handle) {
                                 this.pluginDraft.handle = response.data.handle;
                             }
 
-                            if(response.data.shortDescription) {
+                            if (response.data.shortDescription) {
                                 this.pluginDraft.shortDescription = response.data.shortDescription;
                             }
 
-                            if(response.data.packageName) {
+                            if (response.data.packageName) {
                                 this.pluginDraft.packageName = response.data.packageName;
                             }
 
-                            if(response.data.iconId) {
+                            if (response.data.iconId) {
                                 this.pluginDraft.iconId = response.data.iconId;
                             }
 
-                            if(response.data.iconUrl) {
+                            if (response.data.iconUrl) {
                                 this.pluginDraft.iconUrl = response.data.iconUrl;
                             }
 
-                            if(response.data.license) {
+                            if (response.data.license) {
                                 this.pluginDraft.license = response.data.license;
                             }
 
-                            if(response.data.keywords) {
+                            if (response.data.keywords) {
                                 this.pluginDraft.keywords = response.data.keywords.join(', ');
                             }
                         }
@@ -460,27 +460,27 @@
                     screenshotIds: [],
                 };
 
-                if(this.pluginDraft.iconId) {
+                if (this.pluginDraft.iconId) {
                     plugin.iconId = [parseInt(this.pluginDraft.iconId)];
                 }
 
-                if(this.pluginDraft.id) {
+                if (this.pluginDraft.id) {
                     plugin.pluginId = this.pluginDraft.id;
                 }
 
-                if(this.pluginDraft.categoryIds.length > 0) {
+                if (this.pluginDraft.categoryIds.length > 0) {
                     plugin.categoryIds = this.pluginDraft.categoryIds;
                 }
 
-                if(this.$refs.screenshotFiles.files.length > 0) {
+                if (this.$refs.screenshotFiles.files.length > 0) {
                     plugin.screenshots = this.$refs.screenshotFiles.files;
                 }
 
-                if(this.pluginDraft.screenshotUrls.length > 0) {
+                if (this.pluginDraft.screenshotUrls.length > 0) {
                     plugin.screenshotUrls = this.pluginDraft.screenshotUrls;
                 }
 
-                if(this.pluginDraft.screenshotIds.length > 0) {
+                if (this.pluginDraft.screenshotIds.length > 0) {
                     plugin.screenshotIds = this.pluginDraft.screenshotIds;
                 }
 
@@ -533,8 +533,7 @@
 
                 let u = -1;
 
-                do
-                {
+                do {
                     bytes = bytes / threshold;
                     ++u;
                 }
@@ -545,18 +544,18 @@
         },
 
         mounted() {
-            if(this.plugin) {
+            if (this.plugin) {
                 this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
 
-                if(!this.pluginDraft.price) {
+                if (!this.pluginDraft.price) {
                     this.pluginDraft.price = 0;
                 }
 
-                if(!this.pluginDraft.renewalPrice) {
+                if (!this.pluginDraft.renewalPrice) {
                     this.pluginDraft.renewalPrice = 0;
                 }
             } else {
-                if(this.pluginId) {
+                if (this.pluginId) {
                     this.$router.push({path: '/developer/plugins'});
                 }
             }

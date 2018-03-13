@@ -1,5 +1,4 @@
 <template>
-
     <div class="card mb-3">
         <div class="card-body">
             <h4>Stripe Account</h4>
@@ -46,11 +45,10 @@
             </template>
         </div>
     </div>
-
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import TextField from '../components/fields/TextField'
 
     export default {

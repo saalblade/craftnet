@@ -18,7 +18,9 @@
 			</div>
 
 			<div v-if="!showForm">
-				<button @click="editInvoiceDetails()" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
+				<button @click="editInvoiceDetails()" type="button"
+						class="btn btn-secondary btn-sm"
+						data-facebox="#billing-contact-info-modal">
 					<i class="fas fa-pencil-alt"></i>
 					Edit
 				</button>
@@ -34,7 +36,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import TextField from './fields/TextField'
 
     export default {
@@ -52,26 +54,26 @@
             }
         },
 
-		computed: {
+        computed: {
 
             ...mapGetters({
                 currentUser: 'currentUser',
             }),
 
             companyInfos() {
-				return {
-					businessName: this.currentUser.businessName,
-					businessVatId: this.currentUser.businessVatId,
-					businessAddressLine1: this.currentUser.businessAddressLine1,
-					businessAddressLine2: this.currentUser.businessAddressLine2,
-					businessCity: this.currentUser.businessCity,
-					businessState: this.currentUser.businessState,
-					businessZipCode: this.currentUser.businessZipCode,
-					businessCountry: this.currentUser.businessCountry,
-				};
-			},
+                return {
+                    businessName: this.currentUser.businessName,
+                    businessVatId: this.currentUser.businessVatId,
+                    businessAddressLine1: this.currentUser.businessAddressLine1,
+                    businessAddressLine2: this.currentUser.businessAddressLine2,
+                    businessCity: this.currentUser.businessCity,
+                    businessState: this.currentUser.businessState,
+                    businessZipCode: this.currentUser.businessZipCode,
+                    businessCountry: this.currentUser.businessCountry,
+                };
+            },
 
-		},
+        },
 
         methods: {
 
@@ -84,19 +86,19 @@
             },
 
             /**
-			 * Saves the user’s invoice details.
+             * Saves the user’s invoice details.
              */
             save() {
                 this.$store.dispatch('saveUser', {
                     id: this.currentUser.id,
-					businessName: this.invoiceDetailsDraft.businessName,
-					businessVatId: this.invoiceDetailsDraft.businessVatId,
-					businessAddressLine1: this.invoiceDetailsDraft.businessAddressLine1,
-					businessAddressLine2: this.invoiceDetailsDraft.businessAddressLine2,
-					businessCity: this.invoiceDetailsDraft.businessCity,
-					businessState: this.invoiceDetailsDraft.businessState,
-					businessZipCode: this.invoiceDetailsDraft.businessZipCode,
-					businessCountry: this.invoiceDetailsDraft.businessCountry,
+                    businessName: this.invoiceDetailsDraft.businessName,
+                    businessVatId: this.invoiceDetailsDraft.businessVatId,
+                    businessAddressLine1: this.invoiceDetailsDraft.businessAddressLine1,
+                    businessAddressLine2: this.invoiceDetailsDraft.businessAddressLine2,
+                    businessCity: this.invoiceDetailsDraft.businessCity,
+                    businessState: this.invoiceDetailsDraft.businessState,
+                    businessZipCode: this.invoiceDetailsDraft.businessZipCode,
+                    businessCountry: this.invoiceDetailsDraft.businessCountry,
                 }).then(response => {
                     this.$root.displayNotice('Company infos saved.');
                     this.showForm = false;
@@ -110,7 +112,7 @@
             },
 
             /**
-			 * Cancel changes.
+             * Cancel changes.
              */
             cancel() {
                 this.showForm = false;

@@ -7,13 +7,13 @@ export const craftId = state => {
 };
 
 export const enableCommercialFeatures = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.enableCommercialFeatures;
     }
 };
 
 export const apps = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.apps;
     }
 };
@@ -24,7 +24,7 @@ export const apps = state => {
  */
 
 export const currentUser = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.currentUser;
     }
 };
@@ -41,19 +41,19 @@ export const userIsInGroup = state => {
  */
 
 export const cmsLicenses = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.cmsLicenses;
     }
 };
 
 export const licenses = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.pluginLicenses.concat(state.craftId.cmsLicenses);
     }
 };
 
 export const pluginLicenses = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.pluginLicenses;
     }
 };
@@ -70,13 +70,13 @@ export const repositoryIsInUse = state => {
 };
 
 export const plugins = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.plugins;
     }
 };
 
 export const categories = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.categories;
     }
 };
@@ -104,20 +104,20 @@ export const stripeCustomer = state => {
  */
 
 export const upcomingInvoice = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.upcomingInvoice;
     }
 };
 
 export const invoices = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.invoices;
     }
 };
 
 export const getInvoiceById = state => {
     return id => {
-        if(state.craftId.invoices) {
+        if (state.craftId.invoices) {
             return state.craftId.invoices.find(inv => inv.id == id);
         }
     }
@@ -125,7 +125,7 @@ export const getInvoiceById = state => {
 
 export const getInvoiceByNumber = state => {
     return number => {
-        if(state.craftId.invoices) {
+        if (state.craftId.invoices) {
             return state.craftId.invoices.find(inv => inv.number == number);
         }
     }
@@ -137,14 +137,14 @@ export const getInvoiceByNumber = state => {
  */
 
 export const sales = state => {
-    if(state.craftId) {
+    if (state.craftId) {
         return state.craftId.sales;
     }
 };
 
 export const getSaleById = state => {
     return id => {
-        if(state.craftId.sales) {
+        if (state.craftId.sales) {
             return state.craftId.sales.find(sale => sale.id == id);
         }
     }

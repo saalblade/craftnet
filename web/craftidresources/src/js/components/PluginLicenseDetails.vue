@@ -16,7 +16,12 @@
 							<dt>CMS License</dt>
 							<dd>
 								<template v-if="license.cmsLicense">
-									<code><router-link :to="'/account/licenses/craft/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link></code> <span class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
+									<code>
+										<router-link :to="'/account/licenses/craft/'+license.cmsLicenseId">
+											{{ license.cmsLicense.key.substr(0, 10) }}
+										</router-link>
+									</code>
+									<span class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
 								</template>
 								<template v-else>
 									<span class="text-secondary">Not attached to a CMS license.</span>
@@ -47,11 +52,10 @@
 			</template>
 		</div>
 	</div>
-
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import LightswitchInput from '../components/inputs/LightswitchInput'
 
     export default {
@@ -88,7 +92,7 @@
                     type: this.type,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then((data) => {
-                    if(this.licenseDraft.autoRenew) {
+                    if (this.licenseDraft.autoRenew) {
                         this.$root.displayNotice('Auto renew enabled.');
                     } else {
                         this.$root.displayNotice('Auto renew disabled.');

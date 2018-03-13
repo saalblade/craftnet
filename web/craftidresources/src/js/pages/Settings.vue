@@ -38,7 +38,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import TextField from '../components/fields/TextField'
     import PasswordField from '../components/fields/PasswordField'
     import ConnectedApps from '../components/ConnectedApps'
@@ -81,7 +81,7 @@
 
                 let newEmail = false;
 
-                if(this.currentUser.email !== this.userDraft.email) {
+                if (this.currentUser.email !== this.userDraft.email) {
                     newEmail = true;
                 }
 
@@ -96,7 +96,7 @@
                 }).then(response => {
                     this.loading = false;
 
-                    if(newEmail) {
+                    if (newEmail) {
                         this.userDraft.email = this.currentUser.email;
                         this.$root.displayNotice('You’ve been sent an email to verify your new email address.');
                     } else {

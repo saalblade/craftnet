@@ -1,5 +1,15 @@
 <template>
-	<input ref="input" class="form-control" type="url" :id="id" :placeholder="placeholder" autocomplete="off" :autofocus="autofocus" :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled">
+	<input
+		:autofocus="autofocus"
+		:disabled="disabled"
+		:id="id"
+		:placeholder="placeholder"
+		:value="value"
+		@input="$emit('input', $event.target.value)"
+		autocomplete="off"
+		class="form-control"
+		ref="input"
+		type="url"/>
 </template>
 
 <script>
@@ -8,7 +18,7 @@
         props: ['id', 'placeholder', 'value', 'autofocus', 'disabled'],
 
         created() {
-            this.$on('focus', function () {
+            this.$on('focus', function() {
                 this.$refs.input.focus()
             })
         }

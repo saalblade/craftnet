@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import BillingPayment from '../components/BillingPayment'
     import BillingInvoiceDetails from '../components/BillingInvoiceDetails'
     import BillingAddressForm from '../components/BillingAddressForm'

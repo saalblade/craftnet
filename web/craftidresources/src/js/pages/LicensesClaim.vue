@@ -74,10 +74,10 @@
                         this.$root.displayNotice('CMS license claimed.');
                         this.$router.push({path: '/account/licenses/craft'});
                     })
-					.catch(response => {
+                    .catch(response => {
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim CMS license.';
                         this.$root.displayError(errorMessage);
-					});
+                    });
             },
 
             claimPluginLicense() {

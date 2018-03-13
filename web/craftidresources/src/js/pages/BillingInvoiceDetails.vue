@@ -81,7 +81,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import BillingAddress from '../components/BillingAddress'
     import CardIcon from '../components/CardIcon'
 
@@ -99,8 +99,8 @@
             }),
 
             invoice() {
-				return this.getInvoiceByNumber(this.$route.params.number);
-			},
+                return this.getInvoiceByNumber(this.$route.params.number);
+            },
 
         }
 

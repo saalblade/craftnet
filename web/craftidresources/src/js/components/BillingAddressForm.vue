@@ -26,7 +26,9 @@
 			</div>
 
 			<div v-if="!showForm">
-				<button @click="edit()" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
+				<button @click="edit()" type="button"
+						class="btn btn-secondary btn-sm"
+						data-facebox="#billing-contact-info-modal">
 					<i class="fas fa-pencil-alt"></i>
 					Edit
 				</button>
@@ -50,7 +52,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import TextField from './fields/TextField'
 
     export default {
@@ -100,7 +102,7 @@
             },
 
             /**
-			 * Save the billing address.
+             * Save the billing address.
              */
             save() {
                 this.$store.dispatch('saveUser', {
@@ -126,7 +128,7 @@
             },
 
             /**
-			 * Cancel changes.
+             * Cancel changes.
              */
             cancel() {
                 this.showForm = false;

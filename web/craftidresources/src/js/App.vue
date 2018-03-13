@@ -89,7 +89,7 @@
 <script>
     import AuthManager from './components/AuthManager';
     import router from './router';
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
 
     export default {
 

@@ -1,13 +1,16 @@
 <template>
-    <form @submit.prevent="save()">
-        <div ref="cardElement" id="card-element" class="card-element form-control mb-3"></div>
-        <p id="card-errors" class="text-red" role="alert"></p>
+	<form @submit.prevent="save()">
+		<div ref="cardElement" id="card-element"
+			 class="card-element form-control mb-3"></div>
+		<p id="card-errors" class="text-red" role="alert"></p>
 
-        <input type="submit" class="btn btn-primary" value="Save"></input>
-        <button type="button" class="btn btn-secondary" @click="cancel()">Cancel</button>
+		<input type="submit" class="btn btn-primary" value="Save"></input>
+		<button type="button" class="btn btn-secondary" @click="cancel()">
+			Cancel
+		</button>
 
-        <div class="spinner" v-if="loading"></div>
-    </form>
+		<div class="spinner" v-if="loading"></div>
+	</form>
 </template>
 
 

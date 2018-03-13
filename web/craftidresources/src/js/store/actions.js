@@ -7,7 +7,7 @@ import api from '../api'
  */
 
 export const connectAppCallback = ({commit}, apps) => {
-    commit(types.CONNECT_APP_CALLBACK, { apps })
+    commit(types.CONNECT_APP_CALLBACK, {apps})
 };
 
 export const deleteUserPhoto = ({commit}, data) => {
@@ -113,7 +113,7 @@ export const getCmsLicenses = ({commit}) => {
     return new Promise((resolve, reject) => {
         api.getCmsLicenses(response => {
             if (response.data && !response.data.errors) {
-                commit(types.GET_CMS_LICENSES, { response });
+                commit(types.GET_CMS_LICENSES, {response});
                 resolve(response);
             } else {
                 reject(response);
@@ -128,7 +128,7 @@ export const getPluginLicenses = ({commit}) => {
     return new Promise((resolve, reject) => {
         api.getPluginLicenses(response => {
             if (response.data && !response.data.errors) {
-                commit(types.GET_PLUGIN_LICENSES, { response });
+                commit(types.GET_PLUGIN_LICENSES, {response});
                 resolve(response);
             } else {
                 reject(response);
@@ -154,11 +154,11 @@ export const releaseCmsLicense = ({commit}, licenseKey) => {
     })
 };
 
-export const releasePluginLicense = ({commit}, { pluginHandle, licenseKey }) => {
+export const releasePluginLicense = ({commit}, {pluginHandle, licenseKey}) => {
     console.log('a');
     return new Promise((resolve, reject) => {
         console.log('b');
-        api.releasePluginLicense({ pluginHandle, licenseKey }, response => {
+        api.releasePluginLicense({pluginHandle, licenseKey}, response => {
             if (response.data && !response.data.errors) {
                 commit(types.RELEASE_PLUGIN_LICENSE, {licenseKey});
                 resolve(response);

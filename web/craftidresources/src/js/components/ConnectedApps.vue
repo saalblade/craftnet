@@ -42,30 +42,30 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
 
     export default {
 
         props: ['title'],
 
         data() {
-          	return {
-				appTypes: [
-					{
-					    handle: 'github',
-						name: 'GitHub',
-					},
-					//{
-					//	handle: 'bitbucket',
-					//	name: 'BitBucket',
-					//}
-				],
-          	  	loading: {
-          	  	    bitbucket: false,
-          	  	    github: false,
-				},
-			};
-		},
+            return {
+                appTypes: [
+                    {
+                        handle: 'github',
+                        name: 'GitHub',
+                    },
+                    //{
+                    //	handle: 'bitbucket',
+                    //	name: 'BitBucket',
+                    //}
+                ],
+                loading: {
+                    bitbucket: false,
+                    github: false,
+                },
+            };
+        },
 
         computed: {
 
@@ -80,40 +80,40 @@
         methods: {
 
             /**
-			 * Account name.
-			 *
+             * Account name.
+             *
              * @param appType
              * @returns {*}
              */
             accountName(appType) {
-				if(this.apps[appType]) {
-				    let app = this.apps[appType];
-				    switch(appType) {
-						case 'github':
-							return app.account.name;
-						    break;
-						case 'bitbucket':
-							return app.account.display_name;
-						    break;
-					}
-				}
-			},
+                if (this.apps[appType]) {
+                    let app = this.apps[appType];
+                    switch (appType) {
+                        case 'github':
+                            return app.account.name;
+                            break;
+                        case 'bitbucket':
+                            return app.account.display_name;
+                            break;
+                    }
+                }
+            },
 
             /**
-			 * Connect.
-			 *
+             * Connect.
+             *
              * @param provider
              */
             connect(provider) {
                 let width = 800;
                 let height = 830;
 
-                switch(provider) {
-					case 'bitbucket':
+                switch (provider) {
+                    case 'bitbucket':
                         width = 1024;
                         height = 570;
-					    break;
-				}
+                        break;
+                }
 
                 let winWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
                 let winHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
@@ -130,8 +130,8 @@
             },
 
             /**
-			 * Disconnect.
-			 *
+             * Disconnect.
+             *
              * @param provider
              */
             disconnect(provider) {
@@ -141,13 +141,13 @@
                         this.loading[provider] = false;
                         this.$root.displayNotice('App disconnected.');
                     }).catch(response => {
-						this.loading[provider] = false;
+                    this.loading[provider] = false;
 
-						const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t disconnect app.';
-						this.$root.displayError(errorMessage);
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t disconnect app.';
+                    this.$root.displayError(errorMessage);
 
-						this.errors = response.data && response.data.errors ? response.data.errors : {};
-					});
+                    this.errors = response.data && response.data.errors ? response.data.errors : {};
+                });
             },
 
         }

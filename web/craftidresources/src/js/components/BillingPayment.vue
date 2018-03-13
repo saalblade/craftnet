@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import CardForm from './CardForm'
     import CardIcon from './CardIcon'
 

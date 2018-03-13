@@ -2,7 +2,7 @@
 
 import Vue from 'vue';
 import store from './store'
-import { currency } from './filters/currency';
+import {currency} from './filters/currency';
 import App from './App.vue';
 
 Vue.filter('currency', currency);
@@ -86,7 +86,7 @@ window.craftIdApp = new Vue({
             this.stripeCustomerLoading = false;
         });
 
-        if(window.stripeAccessToken) {
+        if (window.stripeAccessToken) {
             this.$store.dispatch('getStripeAccount').then(response => {
                 this.stripeAccountLoading = false;
             }, error => {

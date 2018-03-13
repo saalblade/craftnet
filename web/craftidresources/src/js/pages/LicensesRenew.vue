@@ -86,7 +86,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
 
     export default {
 
@@ -104,7 +104,7 @@
 
             subtotal() {
                 return this.licenses.reduce((a, b) => {
-                    if(b.plugin && this.selectedLicenses.find(lId => lId == b.id)) {
+                    if (b.plugin && this.selectedLicenses.find(lId => lId == b.id)) {
                         return a + parseFloat(b.plugin.renewalPrice);
                     }
 

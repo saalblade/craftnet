@@ -42,7 +42,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import StripeAccountAlert from '../components/StripeAccountAlert'
 
     export default {
@@ -51,7 +51,7 @@
             StripeAccountAlert
         },
 
-        data () {
+        data() {
             return {
                 searchQuery: '',
             }
@@ -66,14 +66,14 @@
             salesToRender() {
                 let searchQuery = this.searchQuery;
                 return this.sales.filter(function(sale) {
-                    if(sale) {
+                    if (sale) {
                         let searchQueryRegExp = new RegExp(searchQuery, 'gi');
 
-                        if(sale.customer.name.match(searchQueryRegExp)) {
+                        if (sale.customer.name.match(searchQueryRegExp)) {
                             return true;
                         }
 
-                        if(sale.customer.email.match(searchQueryRegExp)) {
+                        if (sale.customer.email.match(searchQueryRegExp)) {
                             return true;
                         }
                     }

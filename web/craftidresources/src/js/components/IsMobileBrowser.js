@@ -8,12 +8,12 @@ export default {
             let agent = navigator.userAgent || navigator.vendor || window.opera;
             let md = new MobileDetect(agent);
 
-            if(detectTablets) {
+            if (detectTablets) {
                 if (md.mobile()) {
                     return true;
                 }
             } else {
-                if(md.phone()) {
+                if (md.phone()) {
                     return true;
                 }
             }
