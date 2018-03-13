@@ -24,36 +24,6 @@ class PluginLicensesController extends Controller
     // =========================================================================
 
     /**
-     * Releases a license.
-     *
-     * @return Response
-     * @throws LicenseNotFoundException
-     */
-    public function actionRelease(): Response
-    {
-        $pluginHandle = Craft::$app->getRequest()->getParam('handle');
-        $key = Craft::$app->getRequest()->getParam('key');
-        $user = Craft::$app->getUser()->getIdentity();
-        $license = $this->module->getPluginLicenseManager()->getLicenseByKey($pluginHandle, $key);
-
-        try {
-            if($license && $user && $license->ownerId === $user->id) {
-                $license->ownerId = null;
-
-                if ($this->module->getPluginLicenseManager()->saveLicense($license)) {
-                    return $this->asJson(['success' => true]);
-                }
-
-                throw new Exception("Couldn't save license.");
-            }
-
-            throw new LicenseNotFoundException($key);
-        } catch(Throwable $e) {
-            return $this->asErrorJson($e->getMessage());
-        }
-    }
-
-    /**
      * Claims a license.
      *
      * @return Response
@@ -114,6 +84,36 @@ class PluginLicensesController extends Controller
             }
 
             return $this->asJson($licenses);
+        } catch(Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Releases a license.
+     *
+     * @return Response
+     * @throws LicenseNotFoundException
+     */
+    public function actionRelease(): Response
+    {
+        $pluginHandle = Craft::$app->getRequest()->getParam('handle');
+        $key = Craft::$app->getRequest()->getParam('key');
+        $user = Craft::$app->getUser()->getIdentity();
+        $license = $this->module->getPluginLicenseManager()->getLicenseByKey($pluginHandle, $key);
+
+        try {
+            if($license && $user && $license->ownerId === $user->id) {
+                $license->ownerId = null;
+
+                if ($this->module->getPluginLicenseManager()->saveLicense($license)) {
+                    return $this->asJson(['success' => true]);
+                }
+
+                throw new Exception("Couldn't save license.");
+            }
+
+            throw new LicenseNotFoundException($key);
         } catch(Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
