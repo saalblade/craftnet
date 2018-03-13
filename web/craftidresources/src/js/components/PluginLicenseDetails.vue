@@ -11,6 +11,8 @@
 								<dd>{{ license.plugin.name }}</dd>
 							</template>
 
+							<dt>License Key</dt>
+							<dd><code>{{ license.key }}</code></dd>
 							<dt>CMS License</dt>
 							<dd>
 								<template v-if="license.cmsLicense">

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="license">
         <p><router-link class="nav-link" to="/account/licenses/plugins" exact>← Plugins</router-link></p>
         <h1><code>{{ license.key.substr(0, 10) }}</code></h1>
 
@@ -10,7 +10,7 @@
             <div class="card-body">
                 <h5>Release license</h5>
                 <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
-                <div><a class="btn btn-danger" href="#">Release License</a></div>
+                <div><button class="btn btn-danger" @click="releasePluginLicense()">Release License</button></div>
             </div>
 
         </div>
@@ -42,20 +42,27 @@
                 return this.pluginLicenses.find(l => l.id == this.$route.params.id);
             },
 
-            attachedCraftLicense() {
-                let license = this.license;
+        },
 
-                if(license) {
-                    return license.craftLicense;
-                }
-            },
+        methods: {
 
-            attachedCmsLicenses() {
-                if(this.attachedCraftLicense) {
-                    return [this.attachedCraftLicense];
+            releasePluginLicense() {
+                if (!window.confirm("Are you sure you want to release this license?")) {
+                    return false;
                 }
 
-                return [];
+                this.$store.dispatch('releasePluginLicense', {
+                        pluginHandle: this.license.plugin.handle,
+                        licenseKey: this.license.key,
+                    })
+                    .then(response => {
+                        this.$root.displayNotice('Plugin license released.');
+                        this.$router.push({path: '/account/licenses/plugins'});
+                    })
+                    .catch(response => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release plugin license.';
+                        this.$root.displayError(errorMessage);
+                    });
             }
 
         }

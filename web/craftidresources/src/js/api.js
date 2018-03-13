@@ -146,6 +146,83 @@ export default {
             .catch(error => cbError(error.response));
     },
 
+    claimCmsLicense(licenseKey, cb, cbError) {
+        let data = {
+            key: licenseKey,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl+'/craftcom/id/cms-licenses/claim', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    claimPluginLicense(licenseKey, cb, cbError) {
+        let data = {
+            key: licenseKey,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl+'/craftcom/id/plugin-licenses/claim', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    getCmsLicenses(cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl+'/craftcom/id/cms-licenses/get-licenses', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    getPluginLicenses(cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl+'/craftcom/id/plugin-licenses/get-licenses', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    releaseCmsLicense(licenseKey, cb, cbError) {
+        let data = {
+            key: licenseKey,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl+'/craftcom/id/cms-licenses/release', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    releasePluginLicense({ pluginHandle, licenseKey }, cb, cbError) {
+        let data = {
+            handle: pluginHandle,
+            key: licenseKey,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl+'/craftcom/id/plugin-licenses/release', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
     saveCmsLicense(license, cb, cbError) {
         let data = {
             [Craft.csrfTokenName]: Craft.csrfTokenValue

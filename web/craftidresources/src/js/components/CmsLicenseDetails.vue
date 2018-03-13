@@ -10,6 +10,12 @@
 								<dt>Edition</dt>
 								<dd>{{ license.edition }}</dd>
 
+								<dt>License Key</dt>
+								<dd>
+									<textarea-field id="notes" v-model="license.key" :disabled="true"></textarea-field>
+									<a href="#" class="btn btn-secondary">Download License Key</a>
+								</dd>
+
 								<dt>Domain Name</dt>
 								<dd>
 									<template v-if="!editingDomain">
@@ -28,27 +34,6 @@
 
 										<input type="submit" class="btn btn-primary" value="Save" />
 										<input @click="cancelEditDomain()" type="button" class="btn btn-secondary" value="Cancel" />
-									</form>
-								</dd>
-
-								<dt>Notes</dt>
-								<dd>
-									<template v-if="!editingNotes">
-										<p>{{ license.notes }}</p>
-
-										<div class="buttons">
-											<button @click="editingNotes = true" type="button" class="btn btn-secondary btn-sm">
-												<i class="fas fa-pencil-alt"></i>
-												Edit
-											</button>
-										</div>
-									</template>
-
-									<form v-if="editingNotes" @submit.prevent="saveNotes()">
-										<textarea-field id="notes" v-model="licenseDraft.notes"></textarea-field>
-
-										<input type="submit" class="btn btn-primary" value="Save" />
-										<input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
 									</form>
 								</dd>
 							</dl>
@@ -71,8 +56,26 @@
 								<dt>Created</dt>
 								<dd>{{ license.dateCreated }}</dd>
 
-								<dt>License Key</dt>
-								<dd><a href="#" class="btn btn-secondary">Download License Key</a></dd>
+								<dt>Notes</dt>
+								<dd>
+									<template v-if="!editingNotes">
+										<p>{{ license.notes }}</p>
+
+										<div class="buttons">
+											<button @click="editingNotes = true" type="button" class="btn btn-secondary btn-sm">
+												<i class="fas fa-pencil-alt"></i>
+												Edit
+											</button>
+										</div>
+									</template>
+
+									<form v-if="editingNotes" @submit.prevent="saveNotes()">
+										<textarea-field id="notes" v-model="licenseDraft.notes"></textarea-field>
+
+										<input type="submit" class="btn btn-primary" value="Save" />
+										<input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
+									</form>
+								</dd>
 							</dl>
 						</div>
 					</div>

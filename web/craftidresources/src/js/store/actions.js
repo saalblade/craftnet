@@ -79,6 +79,98 @@ export const uploadUserPhoto = ({commit}, data) => {
  * Licenses
  */
 
+export const claimCmsLicense = ({commit}, licenseKey) => {
+    return new Promise((resolve, reject) => {
+        api.claimCmsLicense(licenseKey, response => {
+            if (response.data && !response.data.error) {
+                commit(types.CLAIM_CMS_LICENSE, {licenseKey});
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
+export const claimPluginLicense = ({commit}, licenseKey) => {
+    return new Promise((resolve, reject) => {
+        api.claimPluginLicense(licenseKey, response => {
+            if (response.data && !response.data.errors) {
+                commit(types.CLAIM_PLUGIN_LICENSE, {licenseKey});
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
+export const getCmsLicenses = ({commit}) => {
+    return new Promise((resolve, reject) => {
+        api.getCmsLicenses(response => {
+            if (response.data && !response.data.errors) {
+                commit(types.GET_CMS_LICENSES, { response });
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
+export const getPluginLicenses = ({commit}) => {
+    return new Promise((resolve, reject) => {
+        api.getPluginLicenses(response => {
+            if (response.data && !response.data.errors) {
+                commit(types.GET_PLUGIN_LICENSES, { response });
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
+export const releaseCmsLicense = ({commit}, licenseKey) => {
+    return new Promise((resolve, reject) => {
+        api.releaseCmsLicense(licenseKey, response => {
+            if (response.data && !response.data.errors) {
+                commit(types.RELEASE_CMS_LICENSE, {licenseKey});
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
+export const releasePluginLicense = ({commit}, { pluginHandle, licenseKey }) => {
+    console.log('a');
+    return new Promise((resolve, reject) => {
+        console.log('b');
+        api.releasePluginLicense({ pluginHandle, licenseKey }, response => {
+            if (response.data && !response.data.errors) {
+                commit(types.RELEASE_PLUGIN_LICENSE, {licenseKey});
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
 export const saveCmsLicense = ({commit}, license) => {
     return new Promise((resolve, reject) => {
         api.saveCmsLicense(license, response => {

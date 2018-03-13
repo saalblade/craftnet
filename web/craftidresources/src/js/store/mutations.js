@@ -55,6 +55,45 @@ export const UPLOAD_USER_PHOTO = (state, {data, response}) => {
  * Licenses
  */
 
+export const CLAIM_CMS_LICENSE = (state, {licenseKey}) => {
+    console.log('claim cms license mutation', licenseKey);
+};
+
+export const CLAIM_PLUGIN_LICENSE = (state, {licenseKey}) => {
+    console.log('claim plugin license mutation', licenseKey);
+};
+
+export const GET_CMS_LICENSES = (state, {response}) => {
+    state.craftId.cmsLicenses = response.data;
+};
+
+
+export const GET_PLUGIN_LICENSES = (state, {response}) => {
+    state.craftId.pluginLicenses = response.data;
+};
+
+export const RELEASE_CMS_LICENSE = (state, {licenseKey}) => {
+    state.craftId.cmsLicenses.find((l, index, array) => {
+        if(l.key === licenseKey) {
+            array.splice(index, 1);
+            return true;
+        }
+
+        return false;
+    });
+};
+
+export const RELEASE_PLUGIN_LICENSE = (state, {licenseKey}) => {
+    state.craftId.pluginLicenses.find((l, index, array) => {
+        if(l.key === licenseKey) {
+            array.splice(index, 1);
+            return true;
+        }
+
+        return false;
+    });
+};
+
 export const SAVE_CMS_LICENSE = (state, {license}) => {
     let stateLicense = state.craftId.cmsLicenses.find(l => l.key == license.key);
     for (let attribute in license) {

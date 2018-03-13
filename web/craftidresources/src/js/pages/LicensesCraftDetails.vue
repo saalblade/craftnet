@@ -19,7 +19,7 @@
             <div class="card-body">
                 <h5>Release license</h5>
                 <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
-                <div><a class="btn btn-danger" href="#">Release License</a></div>
+                <div><button class="btn btn-danger" @click="releaseCmsLicense()">Release License</button></div>
             </div>
         </div>
     </div>
@@ -47,6 +47,26 @@
             license() {
                 return this.cmsLicenses.find(l => l.id == this.$route.params.id);
             },
+
+        },
+
+        methods: {
+
+            releaseCmsLicense() {
+                if (!window.confirm("Are you sure you want to release this license?")) {
+                    return false;
+                }
+
+                this.$store.dispatch('releaseCmsLicense', this.license.key)
+                    .then(response => {
+                        this.$root.displayNotice('CMS license released.');
+                        this.$router.push({path: '/account/licenses/craft'});
+                    })
+                    .catch(response => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release CMS license.';
+                        this.$root.displayError(errorMessage);
+                    });
+            }
 
         }
 

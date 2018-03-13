@@ -147,6 +147,48 @@ class PluginLicenseManager extends Component
 
         return true;
     }
+    
+    /**
+     * Finds unclaimed license by key and assigns it to the user.
+     *
+     * @param User   $user
+     * @param string $key
+     *
+     * @return bool
+     * @throws Exception
+     * @throws LicenseNotFoundException
+     */
+    public function claimLicense(User $user, string $key)
+    {
+        $result = $this->_createLicenseQuery()
+            ->innerJoin('craftcom_plugins p', '[[p.id]] = [[l.pluginId]]')
+            ->where([
+                'l.key' => $key,
+            ])
+            ->one();
+
+        if ($result === null) {
+            throw new LicenseNotFoundException($key);
+        }
+
+        $license = new PluginLicense($result);
+
+        if($user) {
+            if(!$license->ownerId) {
+                $license->ownerId = $user->id;
+
+                if ($this->saveLicense($license)) {
+                    return true;
+                }
+
+                throw new Exception("Couldn't save license.");
+            }
+
+            throw new Exception("License has already been claimed.");
+        }
+
+        throw new LicenseNotFoundException($key);
+    }
 
     /**
      * Finds unclaimed licenses that are associated with orders placed by the given user's email,
