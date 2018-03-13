@@ -16,8 +16,8 @@
     "stripe/stripe-php": "^6.1",
     "stevenmaguire/oauth2-bitbucket": "^2.0",
     "flipboxfactory/craft-postmark": "^1.0.0-rc.1",
-    "craftcms/commerce": "^2.0.0-alpha.1",
-    "craftcms/commerce-stripe": "^1.0",
+    "craftcms/commerce": "dev-develop as 2.0.0-alpha.99",
+    "craftcms/commerce-stripe": "dev-master as 1.0.0-alpha.99",
     "layershifter/tld-extract": "^1.2",
     "ddeboer/vatin": "^2.1",
     "moccalotto/eu": "^0.3.0"
@@ -27,12 +27,12 @@
   },
   "repositories": [
     {
-      "type": "path",
-      "url": "../craft3-commerce"
+      "type": "vcs",
+      "url": "https://github.com/craftcms/commerce"
     },
     {
-      "type": "path",
-      "url": "../craft3-commerce-stripe"
+      "type": "vcs",
+      "url": "https://github.com/craftcms/commerce-stripe"
     }
   ],
   "autoload": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "69b8fad32b218c02000cb560fbaece9f",
+    "content-hash": "c2e4c2df2df8c1578a4422d5f6314219",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.23",
+            "version": "3.52.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3ce95b96c217a699168d937c4ed700e6a27ec783"
+                "reference": "c1ce16adeeb9a47270f6ba8fb7aef5e1d62fa7d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3ce95b96c217a699168d937c4ed700e6a27ec783",
-                "reference": "3ce95b96c217a699168d937c4ed700e6a27ec783",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c1ce16adeeb9a47270f6ba8fb7aef5e1d62fa7d0",
+                "reference": "c1ce16adeeb9a47270f6ba8fb7aef5e1d62fa7d0",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-08T22:51:35+00:00"
+            "time": "2018-03-13T19:14:00+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -566,12 +566,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "8480f83a3c20d89b428fe70e055822be99744c2e"
+                "reference": "8a1a7477c901860e9b3ae09e77bc9a5ce9ca03fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/8480f83a3c20d89b428fe70e055822be99744c2e",
-                "reference": "8480f83a3c20d89b428fe70e055822be99744c2e",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/8a1a7477c901860e9b3ae09e77bc9a5ce9ca03fc",
+                "reference": "8a1a7477c901860e9b3ae09e77bc9a5ce9ca03fc",
                 "shasum": ""
             },
             "require": {
@@ -599,7 +599,7 @@
                 "pixelandtonic/imagine": "~0.7.1.2",
                 "seld/cli-prompt": "~1.0.3",
                 "twig/twig": "~2.4.4",
-                "yiisoft/yii2": "~2.0.14.0",
+                "yiisoft/yii2": "~2.0.14.2",
                 "yiisoft/yii2-debug": "~2.0.10",
                 "yiisoft/yii2-queue": "~2.0.1",
                 "yiisoft/yii2-swiftmailer": "~2.1.0",
@@ -640,16 +640,21 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-03-12T09:27:05+00:00"
+            "time": "2018-03-13T20:20:40+00:00"
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.0.0-alpha.5",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/craftcms/commerce.git",
+                "reference": "7cec71ae26cd5c99974eb29f5e773b3d5ef5c653"
+            },
             "dist": {
-                "type": "path",
-                "url": "../craft3-commerce",
-                "reference": "c5d3416a92325dddd1acfd78d25050c9e6bf4a64",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/7cec71ae26cd5c99974eb29f5e773b3d5ef5c653",
+                "reference": "7cec71ae26cd5c99974eb29f5e773b3d5ef5c653",
+                "shasum": ""
             },
             "require": {
                 "craftcms/cms": "^3.0.0-RC10",
@@ -688,19 +693,25 @@
                 "source": "https://github.com/craftcms/commerce",
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
-            }
+            },
+            "time": "2018-03-13T20:57:15+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
-            "version": "1.0.0",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/craftcms/commerce-stripe.git",
+                "reference": "37fcb67836125183507aa6a3deeb6dc0f618a4ba"
+            },
             "dist": {
-                "type": "path",
-                "url": "../craft3-commerce-stripe",
-                "reference": "0626cd0cdb4f783f811d2be6e618ecb37e05eb96",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/37fcb67836125183507aa6a3deeb6dc0f618a4ba",
+                "reference": "37fcb67836125183507aa6a3deeb6dc0f618a4ba",
+                "shasum": ""
             },
             "require": {
-                "craftcms/commerce": "*",
+                "craftcms/commerce": "^2.0.0-alpha.5",
                 "stripe/stripe-php": "^6.1"
             },
             "type": "craft-plugin",
@@ -724,7 +735,7 @@
                     "homepage": "https://pixelandtonic.com/"
                 }
             ],
-            "description": "Stripe integration for Craft Commerce",
+            "description": "Stripe payment gateway plugin for Craft Commerce 2",
             "keywords": [
                 "commerce",
                 "craftcms",
@@ -737,7 +748,8 @@
                 "source": "https://github.com/craftcms/commerce-stripe",
                 "docs": "https://github.com/craftcms/commerce-stripe",
                 "rss": "https://github.com/craftcms/commerce-stripe/commits/master.atom"
-            }
+            },
+            "time": "2018-03-13T21:39:49+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -4511,16 +4523,16 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.14.1",
+            "version": "2.0.14.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "d99969394c66dc3606134af092b8ec561ea5d7c6"
+                "reference": "ef74f3783e964cea477f06e6d6ce209df1f37881"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/d99969394c66dc3606134af092b8ec561ea5d7c6",
-                "reference": "d99969394c66dc3606134af092b8ec561ea5d7c6",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/ef74f3783e964cea477f06e6d6ce209df1f37881",
+                "reference": "ef74f3783e964cea477f06e6d6ce209df1f37881",
                 "shasum": ""
             },
             "require": {
@@ -4607,7 +4619,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2018-02-24T20:23:06+00:00"
+            "time": "2018-03-13T14:15:01+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -5153,6 +5165,18 @@
             "alias_normalized": "3.0.0.0-RC99",
             "version": "dev-develop",
             "package": "craftcms/cms"
+        },
+        {
+            "alias": "2.0.0-alpha.99",
+            "alias_normalized": "2.0.0.0-alpha99",
+            "version": "dev-develop",
+            "package": "craftcms/commerce"
+        },
+        {
+            "alias": "1.0.0-alpha.99",
+            "alias_normalized": "1.0.0.0-alpha99",
+            "version": "9999999-dev",
+            "package": "craftcms/commerce-stripe"
         }
     ],
     "minimum-stability": "stable",
@@ -5160,7 +5184,8 @@
         "craftcms/cms": 20,
         "roave/security-advisories": 20,
         "flipboxfactory/craft-postmark": 5,
-        "craftcms/commerce": 15
+        "craftcms/commerce": 20,
+        "craftcms/commerce-stripe": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
