@@ -33,7 +33,7 @@ class m180227_232137_install_commerce_stripe extends Migration
         $gateway = new StripeGateway([
             'name' => 'Stripe',
             'handle' => 'stripe',
-            'frontendEnabled' => true,
+            'isFrontendEnabled' => true,
             'isArchived' => false,
         ]);
         $gatewaysService->saveGateway($gateway);
