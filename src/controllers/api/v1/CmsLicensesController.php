@@ -49,7 +49,7 @@ class CmsLicensesController extends BaseApiController
             'edition' => CmsLicenseManager::EDITION_PERSONAL,
             'email' => $email,
             'domain' => $headers->get('X-Craft-Host'),
-            'key' => LicenseHelper::generateKey(250, '!#$%^&*=+/'),
+            'key' => LicenseHelper::generateCmsKey(),
             'lastEdition' => $this->cmsEdition,
             'lastVersion' => $this->cmsVersion,
             'lastActivityOn' => new \DateTime(),

@@ -615,7 +615,7 @@ class CartsController extends BaseApiController
 
             // generate a license key now to ensure that the line item options are unique
             $options = [
-                'licenseKey' => 'new:'.LicenseHelper::generateKey(24),
+                'licenseKey' => 'new:'.LicenseHelper::generatePluginKey(),
                 'cmsLicenseKey' => $cmsLicense->key ?? null,
             ];
         }

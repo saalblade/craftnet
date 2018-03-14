@@ -5,13 +5,33 @@ namespace craftcom\helpers;
 class LicenseHelper
 {
     /**
+     * Generates a new Craft license key.
+     *
+     * @return string
+     */
+    public static function generateCmsKey(): string
+    {
+        return static::key(250, '!#$%^&*=+/');
+    }
+
+    /**
+     * Generates a new plugin license key.
+     *
+     * @return string
+     */
+    public static function generatePluginKey(): string
+    {
+        return static::key(24);
+    }
+
+    /**
      * Generates a new license key.
      *
      * @param int $length
      * @param string $extraChars
      * @return string
      */
-    public static function generateKey(int $length, string $extraChars = ''): string
+    private static function key(int $length, string $extraChars = ''): string
     {
         $licenseKey = '';
 
