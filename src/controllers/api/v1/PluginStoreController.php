@@ -90,6 +90,7 @@ class PluginStoreController extends BaseApiController
         $recents = Plugin::find()
             ->orderBy(['elements.dateCreated' => SORT_DESC])
             ->limit(10)
+            ->hasLatestVersion()
             ->ids();
 
         $ret[] = [

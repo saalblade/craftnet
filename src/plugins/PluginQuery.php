@@ -38,6 +38,14 @@ class PluginQuery extends ElementQuery
      */
     public $packageId;
 
+    /**
+     * @var bool|null Whether the matching plugins must have (or must not have) a latest version.
+     */
+    public $hasLatestVersion;
+
+    /**
+     * @inheritdoc
+     */
     public function __construct($elementType, array $config = [])
     {
         // Default orderBy
@@ -84,7 +92,6 @@ class PluginQuery extends ElementQuery
     public function categoryId($value)
     {
         $this->categoryId = $value;
-
         return $this;
     }
 
@@ -98,7 +105,6 @@ class PluginQuery extends ElementQuery
     public function developerId($value)
     {
         $this->developerId = $value;
-
         return $this;
     }
 
@@ -112,7 +118,19 @@ class PluginQuery extends ElementQuery
     public function packageId($value)
     {
         $this->packageId = $value;
+        return $this;
+    }
 
+    /**
+     * Sets the [[hasLatestVersion]] property.
+     *
+     * @param bool $value The property value
+     *
+     * @return static self reference
+     */
+    public function hasLatestVersion($value = true)
+    {
+        $this->hasLatestVersion = $value;
         return $this;
     }
 
@@ -161,6 +179,12 @@ class PluginQuery extends ElementQuery
             $this->subQuery
                 ->innerJoin(['craftcom_plugincategories pc'], '[[pc.pluginId]] = [[elements.id]]')
                 ->andWhere(Db::parseParam('pc.categoryId', $this->categoryId));
+        }
+
+        if ($this->hasLatestVersion === true) {
+            $this->subQuery->andWhere(['not', ['craftcom_plugins.latestVersion' => null]]);
+        } else if ($this->hasLatestVersion === false) {
+            $this->subQuery->andWhere(['craftcom_plugins.latestVersion' => null]);
         }
 
         return parent::beforePrepare();
