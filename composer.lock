@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.25",
+            "version": "3.52.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "c1ce16adeeb9a47270f6ba8fb7aef5e1d62fa7d0"
+                "reference": "3aefee935e611e1ce959f0288cd160dc81d233a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c1ce16adeeb9a47270f6ba8fb7aef5e1d62fa7d0",
-                "reference": "c1ce16adeeb9a47270f6ba8fb7aef5e1d62fa7d0",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3aefee935e611e1ce959f0288cd160dc81d233a0",
+                "reference": "3aefee935e611e1ce959f0288cd160dc81d233a0",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-13T19:14:00+00:00"
+            "time": "2018-03-14T20:20:20+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -566,12 +566,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "8a1a7477c901860e9b3ae09e77bc9a5ce9ca03fc"
+                "reference": "21d2d5b19fbeb076df3a4aaf64cc12455f648578"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/8a1a7477c901860e9b3ae09e77bc9a5ce9ca03fc",
-                "reference": "8a1a7477c901860e9b3ae09e77bc9a5ce9ca03fc",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/21d2d5b19fbeb076df3a4aaf64cc12455f648578",
+                "reference": "21d2d5b19fbeb076df3a4aaf64cc12455f648578",
                 "shasum": ""
             },
             "require": {
@@ -640,7 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-03-13T20:20:40+00:00"
+            "time": "2018-03-14T13:03:41+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -648,12 +648,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "7cec71ae26cd5c99974eb29f5e773b3d5ef5c653"
+                "reference": "0401dfb982115debf71937e820ac61f911c5f39b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/7cec71ae26cd5c99974eb29f5e773b3d5ef5c653",
-                "reference": "7cec71ae26cd5c99974eb29f5e773b3d5ef5c653",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/0401dfb982115debf71937e820ac61f911c5f39b",
+                "reference": "0401dfb982115debf71937e820ac61f911c5f39b",
                 "shasum": ""
             },
             "require": {
@@ -694,7 +694,7 @@
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-03-13T20:57:15+00:00"
+            "time": "2018-03-14T19:47:06+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
@@ -702,12 +702,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce-stripe.git",
-                "reference": "37fcb67836125183507aa6a3deeb6dc0f618a4ba"
+                "reference": "d2da8fc287368463e21aacba61e2c2ed0bca963f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/37fcb67836125183507aa6a3deeb6dc0f618a4ba",
-                "reference": "37fcb67836125183507aa6a3deeb6dc0f618a4ba",
+                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/d2da8fc287368463e21aacba61e2c2ed0bca963f",
+                "reference": "d2da8fc287368463e21aacba61e2c2ed0bca963f",
                 "shasum": ""
             },
             "require": {
@@ -749,7 +749,7 @@
                 "docs": "https://github.com/craftcms/commerce-stripe",
                 "rss": "https://github.com/craftcms/commerce-stripe/commits/master.atom"
             },
-            "time": "2018-03-13T21:39:49+00:00"
+            "time": "2018-03-14T16:02:21+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",

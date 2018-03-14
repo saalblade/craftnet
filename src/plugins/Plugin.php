@@ -11,11 +11,13 @@ use craft\elements\Category;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
+use craft\helpers\Db;
 use craft\validators\UniqueValidator;
 use craftcom\behaviors\Developer;
 use craftcom\composer\Package;
 use craftcom\Module;
 use craftcom\records\Plugin as PluginRecord;
+use DateTime;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\helpers\Markdown;
@@ -339,6 +341,11 @@ class Plugin extends Element
     public $keywords;
 
     /**
+     * @var DateTime|null The date that the plugin was approved
+     */
+    public $dateApproved;
+
+    /**
      * @var PluginEdition[]|null
      */
     private $_editions;
@@ -410,6 +417,16 @@ class Plugin extends Element
         ArrayHelper::removeValue($names, 'activeInstalls');
         ArrayHelper::removeValue($names, 'devComments');
         return $names;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function datetimeAttributes(): array
+    {
+        $attributes = parent::datetimeAttributes();
+        $attributes[] = 'dateApproved';
+        return $attributes;
     }
 
     /**
@@ -764,6 +781,10 @@ class Plugin extends Element
             'pendingApproval' => $this->pendingApproval,
             'keywords' => $this->keywords,
         ];
+
+        if ($this->_approved) {
+            $pluginData['dateApproved'] = Db::prepareDateForDb(new DateTime());
+        }
 
         $categoryData = [];
         foreach ($this->getCategories() as $i => $category) {

@@ -91,8 +91,9 @@ class PluginStoreController extends BaseApiController
         $ret = [];
 
         $recents = Plugin::find()
-            ->orderBy(['elements.dateCreated' => SORT_DESC])
+            ->orderBy(['craftcom_plugins.dateApproved' => SORT_DESC])
             ->limit(10)
+            ->hasLatestVersion()
             ->ids();
 
         $ret[] = [
