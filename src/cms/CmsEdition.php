@@ -185,12 +185,25 @@ class CmsEdition extends Purchasable
     private function _updateOrderLicense(Order $order, LineItem $lineItem)
     {
         $manager = Module::getInstance()->getCmsLicenseManager();
-        try {
-            $license = $manager->getLicenseByKey($lineItem->options['licenseKey']);
-        } catch (LicenseNotFoundException $e) {
-            Craft::error("Could not update Craft license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
-            Craft::$app->getErrorHandler()->logException($e);
-            return;
+
+        // is this for an existing Craft license?
+        if (strncmp($lineItem->options['licenseKey'], 'new:', 4) !== 0) {
+            try {
+                $license = $manager->getLicenseByKey($lineItem->options['licenseKey']);
+            } catch (LicenseNotFoundException $e) {
+                Craft::error("Could not update Craft license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
+                Craft::$app->getErrorHandler()->logException($e);
+                return;
+            }
+        } else {
+            // chop off "new:"
+            $key = substr($lineItem->options['licenseKey'], 4);
+
+            // create the new license
+            $license = new CmsLicense([
+                'email' => $order->email,
+                'key' => $key,
+            ]);
         }
 
         $license->edition = $this->handle;

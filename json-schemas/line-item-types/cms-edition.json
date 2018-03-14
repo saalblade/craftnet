@@ -5,5 +5,5 @@
     "edition": {"enum": ["client", "pro"]},
     "licenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"}
   },
-  "required": ["edition", "licenseKey"]
+  "required": ["edition"]
 }

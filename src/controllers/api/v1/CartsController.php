@@ -500,46 +500,64 @@ class CartsController extends BaseApiController
      */
     private function _cmsEditionLineItem(Order $cart, \stdClass $item, string $paramPrefix, &$errors)
     {
-        // Get the existing license
-        try {
-            $license = $this->module->getCmsLicenseManager()->getLicenseByKey($item->licenseKey);
-        } catch (LicenseNotFoundException $e) {
+        $edition = CmsEdition::find()
+            ->handle($item->edition)
+            ->one();
+
+        if ($edition === null) {
             $errors[] = [
-                'param' => "{$paramPrefix}.licenseKey",
-                'message' => $e->getMessage(),
+                'param' => "{$paramPrefix}.edition",
+                'message' => "Invalid Craft edition handle: {$item->edition}",
                 'code' => self::ERROR_CODE_MISSING,
             ];
             return null;
         }
 
-        // Make sure this is actually an upgrade
-        switch ($license->edition) {
-            case CmsLicenseManager::EDITION_PERSONAL:
-                $validUpgrades = [CmsLicenseManager::EDITION_CLIENT, CmsLicenseManager::EDITION_PRO];
-                break;
-            case CmsLicenseManager::EDITION_CLIENT:
-                $validUpgrades = [CmsLicenseManager::EDITION_PRO];
-                break;
-            default:
-                $validUpgrades = [];
-        }
+        // get the license (if there is one)
+        if (!empty($item->licenseKey)) {
+            try {
+                $license = $this->module->getCmsLicenseManager()->getLicenseByKey($item->licenseKey);
+            } catch (LicenseNotFoundException $e) {
+                $errors[] = [
+                    'param' => "{$paramPrefix}.licenseKey",
+                    'message' => $e->getMessage(),
+                    'code' => self::ERROR_CODE_MISSING,
+                ];
+                return null;
+            }
 
-        if (!in_array($item->edition, $validUpgrades, true)) {
-            $errors[] = [
-                'param' => "{$paramPrefix}.edition",
-                'message' => "Invalid upgrade edition: {$item->edition}",
-                'code' => self::ERROR_CODE_INVALID,
+            // Make sure this is actually an upgrade
+            switch ($license->edition) {
+                case CmsLicenseManager::EDITION_PERSONAL:
+                    $validUpgrades = [CmsLicenseManager::EDITION_CLIENT, CmsLicenseManager::EDITION_PRO];
+                    break;
+                case CmsLicenseManager::EDITION_CLIENT:
+                    $validUpgrades = [CmsLicenseManager::EDITION_PRO];
+                    break;
+                default:
+                    $validUpgrades = [];
+            }
+
+            if (!in_array($item->edition, $validUpgrades, true)) {
+                $errors[] = [
+                    'param' => "{$paramPrefix}.edition",
+                    'message' => "Invalid upgrade edition: {$item->edition}",
+                    'code' => self::ERROR_CODE_INVALID,
+                ];
+                return null;
+            }
+
+            $options = [
+                'licenseKey' => $license->key,
             ];
-            return null;
+        } else {
+            // generate a license key now to ensure that the line item options are unique
+            $options = [
+                'licenseKey' => 'new:'.LicenseHelper::generateCmsKey(),
+            ];
         }
 
-        $edition = CmsEdition::find()
-            ->handle($item->edition)
-            ->one();
-
-        return Commerce::getInstance()->getLineItems()->resolveLineItem($cart, $edition->id, [
-            'licenseKey' => $item->licenseKey,
-        ]);
+        return Commerce::getInstance()->getLineItems()->resolveLineItem($cart, $edition->id, $options);
     }
 
     /**
