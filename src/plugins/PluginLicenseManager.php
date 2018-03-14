@@ -145,6 +145,7 @@ class PluginLicenseManager extends Component
             'email' => $license->email,
             'key' => $license->key,
             'notes' => $license->notes,
+            'privateNotes' => $license->privateNotes,
             'lastVersion' => $license->lastVersion,
             'lastAllowedVersion' => $license->lastAllowedVersion,
             'lastActivityOn' => Db::prepareDateForDb($license->lastActivityOn),
@@ -172,7 +173,7 @@ class PluginLicenseManager extends Component
 
         return true;
     }
-    
+
     /**
      * Finds unclaimed license by key and assigns it to the user.
      *
@@ -266,6 +267,7 @@ class PluginLicenseManager extends Component
                 'l.email',
                 'l.key',
                 'l.notes',
+                'l.privateNotes',
                 'l.lastVersion',
                 'l.lastAllowedVersion',
                 'l.lastActivityOn',

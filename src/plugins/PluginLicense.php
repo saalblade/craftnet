@@ -19,6 +19,7 @@ class PluginLicense extends Model
     public $email;
     public $key;
     public $notes;
+    public $privateNotes;
     public $lastVersion;
     public $lastAllowedVersion;
     public $lastActivityOn;
@@ -43,7 +44,7 @@ class PluginLicense extends Model
     public function attributes()
     {
         $names = parent::attributes();
-        ArrayHelper::removeValue($names, 'notes');
+        ArrayHelper::removeValue($names, 'privateNotes');
         return $names;
     }
 

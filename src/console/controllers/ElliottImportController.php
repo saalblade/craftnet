@@ -136,7 +136,7 @@ class ElliottImportController extends Controller
                 'email' => $item['email'],
                 'domain' => $item['domain'] ? $manager->normalizeDomain($item['domain']) : null,
                 'key' => $item['licenseKey'],
-                'notes' => $item['notes'],
+                'privateNotes' => $item['notes'],
                 'lastVersion' => $item['lastVersion'],
                 'lastAllowedVersion' => $item['lastVersion'],
                 'lastActivityOn' => $item['lastActivity'],
@@ -205,7 +205,7 @@ class ElliottImportController extends Controller
                 'expired' => false,
                 'email' => $item['email'],
                 'key' => $item['licenseKey'],
-                'notes' => $item['notes'],
+                'privateNotes' => $item['notes'],
                 'lastActivityOn' => $item['dateUpdated'],
                 'dateCreated' => $item['dateCreated'],
             ]);

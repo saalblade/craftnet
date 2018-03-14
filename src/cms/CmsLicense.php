@@ -22,6 +22,7 @@ class CmsLicense extends Model
     public $domain;
     public $key;
     public $notes;
+    public $privateNotes;
     public $lastEdition;
     public $lastVersion;
     public $lastAllowedVersion;
@@ -60,7 +61,7 @@ class CmsLicense extends Model
     public function attributes()
     {
         $names = parent::attributes();
-        ArrayHelper::removeValue($names, 'notes');
+        ArrayHelper::removeValue($names, 'privateNotes');
         return $names;
     }
 
