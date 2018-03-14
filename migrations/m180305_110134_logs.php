@@ -20,7 +20,7 @@ class m180305_110134_logs extends Migration
 
         $this->createTable('apilog.requests', [
             'id' => $this->bigPrimaryKey(),
-            'verb' => $this->string()->notNull(),
+            'method' => $this->string()->notNull(),
             'uri' => $this->string()->notNull(),
             'ip' => $this->string()->notNull(),
             'action' => $this->string()->notNull(),

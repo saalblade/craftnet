@@ -308,7 +308,7 @@ abstract class BaseApiController extends Controller
         // log the request
         $db->createCommand()
             ->insert('apilog.requests', [
-                'verb' => $request->getMethod(),
+                'method' => $request->getMethod(),
                 'uri' => $request->getUrl(),
                 'ip' => $request->getUserIP(),
                 'action' => $this->getUniqueId().'/'.$id,
