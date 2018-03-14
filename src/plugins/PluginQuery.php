@@ -157,6 +157,7 @@ class PluginQuery extends ElementQuery
             'craftcom_plugins.activeInstalls',
             'craftcom_plugins.pendingApproval',
             'craftcom_plugins.keywords',
+            'craftcom_plugins.dateApproved',
         ]);
 
         if ($this->handle) {
