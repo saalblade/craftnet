@@ -370,44 +370,46 @@ class CartsController extends BaseApiController
         $addressErrors = [];
 
         // get the country
-        if (($country = $commerce->getCountries()->getCountryByIso($billingAddress->country)) === null) {
-            $addressErrors[] = [
-                'param' => 'billingAddress.country',
-                'message' => 'Invalid country',
-                'code' => self::ERROR_CODE_INVALID,
-            ];
-        } else if ((new CountryInfo())->isEuMember($country->iso)) {
-            // Make sure they've supplied a VAT ID
-            if (!isset($billingAddress->businessTaxId)) {
+        if (isset($billingAddress->country)) {
+            if (($country = $commerce->getCountries()->getCountryByIso($billingAddress->country)) === null) {
                 $addressErrors[] = [
-                    'param' => 'billingAddress.businessTaxId',
-                    'message' => 'A valid VAT ID is required for European orders.',
-                    'code' => self::ERROR_CODE_MISSING_FIELD,
-                ];
-            } else if (!(new Validator())->isValid($billingAddress->businessTaxId)) {
-                $addressErrors[] = [
-                    'param' => 'billingAddress.businessTaxId',
-                    'message' => 'A valid VAT ID is required for European orders.',
+                    'param' => 'billingAddress.country',
+                    'message' => 'Invalid country',
                     'code' => self::ERROR_CODE_INVALID,
                 ];
+            } else if ((new CountryInfo())->isEuMember($country->iso)) {
+                // Make sure they've supplied a VAT ID
+                if (!isset($billingAddress->businessTaxId)) {
+                    $addressErrors[] = [
+                        'param' => 'billingAddress.businessTaxId',
+                        'message' => 'A valid VAT ID is required for European orders.',
+                        'code' => self::ERROR_CODE_MISSING_FIELD,
+                    ];
+                } else if (!(new Validator())->isValid($billingAddress->businessTaxId)) {
+                    $addressErrors[] = [
+                        'param' => 'billingAddress.businessTaxId',
+                        'message' => 'A valid VAT ID is required for European orders.',
+                        'code' => self::ERROR_CODE_INVALID,
+                    ];
+                }
             }
-        }
 
-        // get the state
-        if (!empty($billingAddress->state)) {
-            if (($state = $commerce->getStates()->getStateByAbbreviation($country->id, $billingAddress->state)) === null) {
+            // get the state
+            if (!empty($billingAddress->state)) {
+                if (($state = $commerce->getStates()->getStateByAbbreviation($country->id, $billingAddress->state)) === null) {
+                    $addressErrors[] = [
+                        'param' => 'billingAddress.state',
+                        'message' => 'Invalid state',
+                        'code' => self::ERROR_CODE_INVALID,
+                    ];
+                }
+            } else if ($country !== null && $country->isStateRequired) {
                 $addressErrors[] = [
                     'param' => 'billingAddress.state',
-                    'message' => 'Invalid state',
-                    'code' => self::ERROR_CODE_INVALID,
+                    'message' => "{$country->name} addresses must specify a state.",
+                    'code' => self::ERROR_CODE_MISSING_FIELD,
                 ];
             }
-        } else if ($country !== null && $country->isStateRequired) {
-            $addressErrors[] = [
-                'param' => 'billingAddress.state',
-                'message' => "{$country->name} addresses must specify a state.",
-                'code' => self::ERROR_CODE_MISSING_FIELD,
-            ];
         }
 
         // is a billing address already set on the order?
@@ -432,12 +434,17 @@ class CartsController extends BaseApiController
         $addressConfig = [
             'firstName' => $billingAddress->firstName,
             'lastName' => $billingAddress->lastName,
-            'address1' => $billingAddress->address1,
-            'address2' => $billingAddress->address2,
-            'city' => $billingAddress->city,
-            'zipCode' => $billingAddress->zipCode,
-            'businessName' => $billingAddress->businessName,
-            'businessTaxId' => $billingAddress->businessTaxId,
+            'attention' => $billingAddress->attention ?? null,
+            'title' => $billingAddress->title ?? null,
+            'address1' => $billingAddress->address1 ?? null,
+            'address2' => $billingAddress->address2 ?? null,
+            'city' => $billingAddress->city ?? null,
+            'zipCode' => $billingAddress->zipCode ?? null,
+            'phone' => $billingAddress->phone ?? null,
+            'alternativePhone' => $billingAddress->alternativePhone ?? null,
+            'businessName' => $billingAddress->businessName ?? null,
+            'businessId' => $billingAddress->businessId ?? null,
+            'businessTaxId' => $billingAddress->businessTaxId ?? null,
         ];
 
         Craft::configure($address, $addressConfig);
@@ -451,7 +458,7 @@ class CartsController extends BaseApiController
             return;
         }
 
-        $address->countryId = $country->id;
+        $address->countryId = $country->id ?? null;
         $address->stateId = $state->id ?? null;
         $address->stateName = $state->abbreviation ?? null; // todo: verify this is right
 

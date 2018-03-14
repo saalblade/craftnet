@@ -7,10 +7,10 @@
     "billingAddress": {
       "type": "object",
       "properties": {
-        "attention": {"type": ["string", "null"]},
-        "title": {"type": ["string", "null"]},
         "firstName": {"type": "string"},
         "lastName": {"type": "string"},
+        "attention": {"type": ["string", "null"]},
+        "title": {"type": ["string", "null"]},
         "address1": {"type": "string"},
         "address2": {"type": ["string", "null"]},
         "city": {"type": "string"},
@@ -23,7 +23,7 @@
         "businessId": {"type": ["string", "null"]},
         "businessTaxId": {"type": ["string", "null"]}
       },
-      "required": ["firstName", "lastName", "city", "country", "zipCode"]
+      "required": ["firstName", "lastName"]
     },
     "items": {
       "type": "array",
