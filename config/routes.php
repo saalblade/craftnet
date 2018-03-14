@@ -20,6 +20,7 @@
 
 return [
     'api' => [
+        'OPTIONS <uri:.*>' => 'craftcom/api/options',
         'GET    v1/account' => 'craftcom/api/v1/account',
         'POST   v1/available-plugins' => 'craftcom/api/v1/available-plugins',
         'POST   v1/carts' => 'craftcom/api/v1/carts/create',
