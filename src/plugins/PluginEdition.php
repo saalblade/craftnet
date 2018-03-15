@@ -314,6 +314,40 @@ class PluginEdition extends Purchasable
         parent::afterOrderComplete($order, $lineItem);
     }
 
+    // Protected Methods
+    // =========================================================================
+
+    /**
+     * @inheritdoc
+     */
+    protected static function defineSortOptions(): array
+    {
+        return [
+            'name' => 'Name',
+            'price' => 'price',
+            'renewalPrice' => 'renewalPrice',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tableAttributeHtml(string $attribute): string
+    {
+        switch ($attribute) {
+            case 'developer':
+                return $this->getPlugin()->getDeveloperName();
+            case 'price':
+            case 'renewalPrice':
+                return Craft::$app->getFormatter()->asCurrency($this->$attribute, 'USD', [], [], true);
+            default:
+                return parent::tableAttributeHtml($attribute);
+        }
+    }
+
+    // Private Methods
+    // =========================================================================
+
     /**
      * @param Order $order
      * @param LineItem $lineItem
@@ -391,37 +425,6 @@ class PluginEdition extends Purchasable
         } catch (Exception $e) {
             Craft::error("Could not save plugin license {$license->key} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);
-        }
-    }
-
-    // Protected Methods
-    // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
-    protected static function defineSortOptions(): array
-    {
-        return [
-            'name' => 'Name',
-            'price' => 'price',
-            'renewalPrice' => 'renewalPrice',
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tableAttributeHtml(string $attribute): string
-    {
-        switch ($attribute) {
-            case 'developer':
-                return $this->getPlugin()->getDeveloperName();
-            case 'price':
-            case 'renewalPrice':
-                return Craft::$app->getFormatter()->asCurrency($this->$attribute, 'USD', [], [], true);
-            default:
-                return parent::tableAttributeHtml($attribute);
         }
     }
 }
