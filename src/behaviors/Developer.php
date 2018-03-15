@@ -15,6 +15,31 @@ use yii\base\Behavior;
 class Developer extends Behavior
 {
     /**
+     * @var string|null
+     */
+    public $country;
+
+    /**
+     * @var float
+     */
+    public $balance = 0;
+
+    /**
+     * @var string|null
+     */
+    public $stripeAccessToken;
+
+    /**
+     * @var string|null
+     */
+    public $stripeAccount;
+
+    /**
+     * @var string|null
+     */
+    public $payPalEmail;
+
+    /**
      * @var Plugin[]|null
      */
     private $_plugins;

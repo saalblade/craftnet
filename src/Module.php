@@ -5,6 +5,7 @@ namespace craftcom;
 use Craft;
 use craft\commerce\services\OrderAdjustments;
 use craft\commerce\services\Purchasables;
+use craft\elements\db\UserQuery;
 use craft\elements\User;
 use craft\events\ModelEvent;
 use craft\events\RegisterComponentTypesEvent;
@@ -57,6 +58,23 @@ class Module extends \yii\base\Module
             }
         }
 
+        Event::on(UserQuery::class, UserQuery::EVENT_AFTER_PREPARE, function(Event $e) {
+            /** @var UserQuery $query */
+            $query = $e->sender;
+
+            if (Craft::$app->getDb()->tableExists('craftcom_developers')) {
+                $query->query->leftJoin('craftcom_developers developers', '[[developers.id]] = [[users.id]]');
+                $query->subQuery->leftJoin('craftcom_developers developers', '[[developers.id]] = [[users.id]]');
+                $query->addSelect([
+                    'developers.country',
+                    'developers.balance',
+                    'developers.stripeAccessToken',
+                    'developers.stripeAccount',
+                    'developers.payPalEmail',
+                ]);
+            }
+        });
+
         Event::on(User::class, User::EVENT_INIT, function(Event $e) {
             /** @var User $user */
             $user = $e->sender;
@@ -64,8 +82,9 @@ class Module extends \yii\base\Module
         });
 
         Event::on(User::class, User::EVENT_AFTER_SAVE, function(ModelEvent $e) {
-            /** @var User $user */
+            /** @var User|Developer $user */
             $user = $e->sender;
+            $isDeveloper = $user->isInGroup('developers');
             $request = Craft::$app->getRequest();
             $currentUser = Craft::$app->getUser()->getIdentity();
             $userGroups = Craft::$app->getUserGroups();
@@ -77,9 +96,8 @@ class Module extends \yii\base\Module
                 $request->getIsSiteRequest() &&
                 $request->getIsPost() &&
                 $request->getBodyParam('fields.enablePluginDeveloperFeatures') &&
-                !$currentUser->isInGroup('developers')
+                !$isDeveloper
             ) {
-
                 // Get any existing group IDs.
                 $existingGroups = $userGroups->getGroupsByUserId($currentUser->id);
                 $groupIds = [];
@@ -92,6 +110,22 @@ class Module extends \yii\base\Module
                 $groupIds[] = $userGroups->getGroupByHandle('developers')->id;
 
                 Craft::$app->getUsers()->assignUserToGroups($currentUser->id, $groupIds);
+                $isDeveloper = true;
+            }
+
+            $db = Craft::$app->getDb();
+
+            if ($isDeveloper && $db->tableExists('craftcom_developers')) {
+                $db->createCommand()
+                    ->upsert('craftcom_developers', [
+                        'id' => $user->id,
+                    ], [
+                        'country' => $user->country,
+                        'stripeAccessToken' => $user->stripeAccessToken,
+                        'stripeAccount' => $user->stripeAccount,
+                        'payPalEmail' => $user->payPalEmail,
+                    ], [], false)
+                    ->execute();
             }
         });
 
