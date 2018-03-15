@@ -5,7 +5,8 @@
     "plugin": {"type": "string"},
     "edition": {"type": "string"},
     "licenseKey": {"$ref": "../definitions.json#/pluginLicenseKey"},
-    "cmsLicenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"}
+    "cmsLicenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"},
+    "autoRenew": {"type": "boolean"}
   },
   "required": ["plugin", "edition"]
 }

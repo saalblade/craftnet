@@ -128,7 +128,7 @@ class CmsLicenseManager extends Component
             ->where(['id' => $id])
             ->one();
 
-        if($result) {
+        if ($result) {
             return new CmsLicense($result);
         }
 
@@ -212,6 +212,7 @@ class CmsLicenseManager extends Component
             'ownerId' => $license->ownerId,
             'expirable' => $license->expirable,
             'expired' => $license->expired,
+            'autoRenew' => $license->autoRenew,
             'edition' => $license->edition,
             'email' => $license->email,
             'domain' => $license->domain,
@@ -291,6 +292,7 @@ class CmsLicenseManager extends Component
                 'ownerId',
                 'expirable',
                 'expired',
+                'autoRenew',
                 'edition',
                 'email',
                 'domain',

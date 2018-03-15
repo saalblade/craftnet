@@ -46,6 +46,7 @@ class CmsLicensesController extends BaseApiController
         $license = new CmsLicense([
             'expirable' => true,
             'expired' => false,
+            'autoRenew' => false,
             'edition' => CmsLicenseManager::EDITION_PERSONAL,
             'email' => $email,
             'domain' => $headers->get('X-Craft-Host'),

@@ -557,6 +557,10 @@ class CartsController extends BaseApiController
             ];
         }
 
+        if (isset($item->autoRenew)) {
+            $options['autoRenew'] = $item->autoRenew;
+        }
+
         return Commerce::getInstance()->getLineItems()->resolveLineItem($cart, $edition->id, $options);
     }
 
@@ -636,6 +640,10 @@ class CartsController extends BaseApiController
                 'licenseKey' => 'new:'.LicenseHelper::generatePluginKey(),
                 'cmsLicenseKey' => $cmsLicense->key ?? null,
             ];
+        }
+
+        if (isset($item->autoRenew)) {
+            $options['autoRenew'] = $item->autoRenew;
         }
 
         return Commerce::getInstance()->getLineItems()->resolveLineItem($cart, $edition->id, $options);

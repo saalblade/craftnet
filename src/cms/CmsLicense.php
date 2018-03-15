@@ -16,7 +16,8 @@ class CmsLicense extends Model
     public $editionId;
     public $ownerId;
     public $expirable = true;
-    public $expired;
+    public $expired = false;
+    public $autoRenew = false;
     public $edition;
     public $email;
     public $domain;

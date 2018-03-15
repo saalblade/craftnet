@@ -404,6 +404,10 @@ class PluginEdition extends Purchasable
             }
         }
 
+        if (isset($lineItem->options['autoRenew'])) {
+            $license->autoRenew = $lineItem->options['autoRenew'];
+        }
+
         // if the license doesn't have an owner yet and the customer has a Craft ID, go ahead and assign it to them
         if (!$license->ownerId && $order->getCustomer()->userId) {
             $license->ownerId = $order->getCustomer()->userId;

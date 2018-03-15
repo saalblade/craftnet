@@ -3,7 +3,8 @@
   "type": "object",
   "properties": {
     "edition": {"enum": ["client", "pro"]},
-    "licenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"}
+    "licenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"},
+    "autoRenew": {"type": "boolean"}
   },
   "required": ["edition"]
 }

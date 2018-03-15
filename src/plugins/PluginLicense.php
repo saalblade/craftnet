@@ -15,7 +15,8 @@ class PluginLicense extends Model
     public $plugin;
     public $edition;
     public $expirable = true;
-    public $expired;
+    public $expired = false;
+    public $autoRenew = false;
     public $email;
     public $key;
     public $notes;

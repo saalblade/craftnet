@@ -26,6 +26,17 @@ class m180315_122041_developer_table extends Migration
         ]);
 
         $this->addForeignKey(null, 'craftcom_developers', ['id'], '{{%users}}', ['id'], 'CASCADE', null);
+
+        $this->createTable('craftcom_developerledger', [
+            'id' => $this->bigPrimaryKey(),
+            'developerId' => $this->integer(),
+            'credit' => $this->decimal(14, 4)->unsigned()->null(),
+            'debit' => $this->decimal(14, 4)->unsigned()->null(),
+            'fee' => $this->decimal(14, 4)->unsigned()->null(),
+            'note' => $this->string(),
+        ]);
+
+        $this->addForeignKey(null, 'craftcom_developerledger', ['developerId'], 'craftcom_developers', ['id'], 'CASCADE', null);
     }
 
     /**
