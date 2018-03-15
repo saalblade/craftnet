@@ -73,6 +73,7 @@ window.craftIdApp = new Vue({
                 this.notification = null;
             }.bind(this), 2000);
         },
+
     },
 
     created() {
