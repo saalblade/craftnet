@@ -35,6 +35,7 @@
             </div>
         </div>
 
+        <!--
         <div class="card">
             <div class="card-body">
                 <h3>By email address</h3>
@@ -44,6 +45,7 @@
                 <input type="submit" class="btn btn-primary" value="Claim Licenses">
             </div>
         </div>
+        -->
     </div>
 </template>
 
