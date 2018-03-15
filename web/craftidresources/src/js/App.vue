@@ -5,8 +5,7 @@
         <template v-if="notification">
             <div id="notifications-wrapper" :class="{'hide': !notification }">
                 <div id="notifications">
-                    <div class="notification bg-green" :class="'bg-'+notification.type">{{ notification.message }}</div>
-
+                    <div class="notification" :class="notification.type">{{ notification.message }}</div>
                 </div>
             </div>
         </template>

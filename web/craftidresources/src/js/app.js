@@ -54,7 +54,7 @@ window.craftIdApp = new Vue({
          * @param {string} message
          */
         displayError(message) {
-            this.displayNotification('danger', message);
+            this.displayNotification('error', message);
         },
 
         /**
