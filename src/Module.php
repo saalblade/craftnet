@@ -71,7 +71,6 @@ class Module extends \yii\base\Module
                 $query->subQuery->leftJoin('craftcom_developers developers', '[[developers.id]] = [[users.id]]');
                 $query->query->addSelect([
                     'developers.country',
-                    'developers.balance',
                     'developers.stripeAccessToken',
                     'developers.stripeAccount',
                     'developers.payPalEmail',

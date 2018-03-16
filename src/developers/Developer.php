@@ -22,11 +22,6 @@ class Developer extends Behavior
     public $country;
 
     /**
-     * @var float
-     */
-    public $balance = 0;
-
-    /**
      * @var string|null
      */
     public $stripeAccessToken;
