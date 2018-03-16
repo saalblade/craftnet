@@ -61,28 +61,6 @@ class StripeController extends BaseController
     public function actionCallback(): Response
     {
         $user = Craft::$app->getUser()->getIdentity();
-        $customerRecord = StripeCustomerRecord::find()
-            ->where(Db::parseParam('userId', $user->id))
-            ->one();
-
-        if (!$customerRecord) {
-            $customerRecord = new StripeCustomerRecord();
-            $customerRecord->userId = $user->id;
-        }
-
-        // Remove existing token
-        if ($customerRecord->oauthTokenId) {
-            $tokenRecord = VcsToken::find()
-                ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
-                ->one();
-
-            if ($tokenRecord) {
-                $tokenRecord->delete();
-            }
-        }
-
-
-        // Save new token
         $provider = $this->_getStripeProvider();
         $code = Craft::$app->getRequest()->getParam('code');
 
@@ -90,19 +68,12 @@ class StripeController extends BaseController
             'code' => $code
         ]);
 
-        $tokenRecord = new VcsToken();
-        $tokenRecord->userId = Craft::$app->getUser()->getIdentity()->id;
-        $tokenRecord->provider = 'Stripe';
-        $tokenRecord->accessToken = $accessToken->getToken();
-        $tokenRecord->expiresIn = $accessToken->getExpires();
-        $tokenRecord->refreshToken = $accessToken->getRefreshToken();
-        $tokenRecord->save();
-
         $resourceOwner = $provider->getResourceOwner($accessToken);
 
-        $customerRecord->oauthTokenId = $tokenRecord->id;
-        $customerRecord->stripeAccountId = $resourceOwner->getId();
-        $customerRecord->save();
+        $user->stripeAccessToken = $accessToken->getToken();
+        $user->stripeAccount = $resourceOwner->getId();
+
+        Craft::$app->getElements()->saveElement($user, false);
 
         $referrer = Craft::$app->getSession()->get('stripe.referrer');
 
@@ -158,19 +129,11 @@ class StripeController extends BaseController
      */
     public function actionAccount(): Response
     {
-        $userId = Craft::$app->getUser()->getIdentity()->id;
-        $customerRecord = StripeCustomerRecord::find()
-            ->where(Db::parseParam('userId', $userId))
-            ->one();
+        $user = Craft::$app->getUser()->getIdentity();
 
-        if ($customerRecord && $customerRecord->oauthTokenId) {
-            $tokenRecord = VcsToken::find()
-                ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
-                ->one();
-
-            Stripe::setApiKey($tokenRecord->accessToken);
+        if($user->stripeAccessToken) {
+            Stripe::setApiKey($user->stripeAccessToken);
             $account = Account::retrieve();
-
             return $this->asJson($account);
         }
 

@@ -32,20 +32,13 @@ class AccountController extends Controller
     public function actionIndex(): Response
     {
         $stripeAccessToken = null;
-        $userId = Craft::$app->getUser()->id;
-
-        if ($userId) {
-            $stripeAccessToken = VcsToken::find()
-                ->where(Db::parseParam('userId', $userId))
-                ->andWhere(Db::parseParam('provider', 'Stripe'))
-                ->one();
-        }
+        $user = Craft::$app->getUser()->getIdentity();
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
         $stripePublishableKey = $craftIdConfig['stripePublishableKey'];
 
         return $this->renderTemplate('account/index', [
-            'stripeAccessToken' => $stripeAccessToken,
+            'stripeAccessToken' => $user->stripeAccessToken,
             'stripePublishableKey' => $stripePublishableKey
         ]);
     }
