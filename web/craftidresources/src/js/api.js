@@ -68,13 +68,12 @@ export default {
             .catch(error => cbError(error.response));
     },
 
-    deleteUserPhoto(data, cb, cbError) {
-        data['action'] = 'craftcom/id/account/delete-user-photo';
-        data[Craft.csrfTokenName] = Craft.csrfTokenValue;
+    deleteUserPhoto(cb, cbError) {
+        const data = qs.stringify({
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        });
 
-        let params = qs.stringify(data);
-
-        axios.post(Craft.actionUrl + '/craftcom/id/account/delete-user-photo', params)
+        axios.post(Craft.actionUrl + '/craftcom/id/account/delete-user-photo', data)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },

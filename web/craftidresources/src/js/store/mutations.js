@@ -10,7 +10,7 @@ export const CONNECT_APP_CALLBACK = (state, {apps}) => {
     state.craftId.apps = apps;
 };
 
-export const DELETE_USER_PHOTO = (state, {data, response}) => {
+export const DELETE_USER_PHOTO = (state, {response}) => {
     state.craftId.currentUser.photoId = response.data.photoId;
     state.craftId.currentUser.photoUrl = response.data.photoUrl;
 };
@@ -45,7 +45,7 @@ export const SAVE_USER = (state, {user, response}) => {
     }
 };
 
-export const UPLOAD_USER_PHOTO = (state, {data, response}) => {
+export const UPLOAD_USER_PHOTO = (state, {response}) => {
     state.craftId.currentUser.photoId = response.data.photoId;
     state.craftId.currentUser.photoUrl = response.data.photoUrl;
 };

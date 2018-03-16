@@ -95,11 +95,7 @@
                 if (confirm("Are you sure you want to delete this image?")) {
                     this.photoLoading = true;
 
-                    let data = {
-                        userId: this.userDraft.id,
-                    };
-
-                    this.$store.dispatch('deleteUserPhoto', data)
+                    this.$store.dispatch('deleteUserPhoto')
                         .then(response => {
                             this.$root.displayNotice('Photo deleted.');
                             this.userDraft.photoId = response.data.photoId;
@@ -141,7 +137,6 @@
                 this.photoLoading = true;
 
                 let data = {
-                    userId: this.userDraft.id,
                     photo: this.$refs.photoFile.files[0],
                     photoUrl: this.userDraft.photoUrl,
                 };

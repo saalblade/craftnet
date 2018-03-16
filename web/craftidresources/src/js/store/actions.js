@@ -10,10 +10,10 @@ export const connectAppCallback = ({commit}, apps) => {
     commit(types.CONNECT_APP_CALLBACK, {apps})
 };
 
-export const deleteUserPhoto = ({commit}, data) => {
+export const deleteUserPhoto = ({commit}) => {
     return new Promise((resolve, reject) => {
-        api.deleteUserPhoto(data, response => {
-            commit(types.DELETE_USER_PHOTO, {data, response});
+        api.deleteUserPhoto(response => {
+            commit(types.DELETE_USER_PHOTO, {response});
             resolve(response);
         }, response => {
             reject(response);
@@ -66,7 +66,7 @@ export const saveUser = ({commit}, user) => {
 export const uploadUserPhoto = ({commit}, data) => {
     return new Promise((resolve, reject) => {
         api.uploadUserPhoto(data, response => {
-            commit(types.UPLOAD_USER_PHOTO, {data, response});
+            commit(types.UPLOAD_USER_PHOTO, {response});
             resolve(response);
         }, response => {
             reject(response);
