@@ -73,6 +73,7 @@
                 this.$store.dispatch('claimCmsLicense', this.cmsLicenseKey)
                     .then(response => {
                         this.$store.dispatch('getCmsLicenses');
+                        this.$store.dispatch('getPluginLicenses');
                         this.$root.displayNotice('CMS license claimed.');
                         this.$router.push({path: '/account/licenses/craft'});
                     })
@@ -85,6 +86,7 @@
             claimPluginLicense() {
                 this.$store.dispatch('claimPluginLicense', this.pluginLicenseKey)
                     .then(response => {
+                        this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
                         this.$root.displayNotice('Plugin license claimed.');
                         this.$router.push({path: '/account/licenses/plugins'});

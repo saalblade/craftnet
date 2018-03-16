@@ -56,6 +56,8 @@
                         licenseKey: this.license.key,
                     })
                     .then(response => {
+                        this.$store.dispatch('getCmsLicenses');
+                        this.$store.dispatch('getPluginLicenses');
                         this.$root.displayNotice('Plugin license released.');
                         this.$router.push({path: '/account/licenses/plugins'});
                     })
