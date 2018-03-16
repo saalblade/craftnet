@@ -2,7 +2,7 @@
 
 namespace craftcom\helpers;
 
-class LicenseHelper
+class KeyHelper
 {
     /**
      * Generates a new Craft license key.

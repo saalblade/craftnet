@@ -7,7 +7,7 @@ use craftcom\cms\CmsLicense;
 use craftcom\cms\CmsLicenseManager;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\errors\LicenseNotFoundException;
-use craftcom\helpers\LicenseHelper;
+use craftcom\helpers\KeyHelper;
 use yii\base\Exception;
 use yii\validators\EmailValidator;
 use yii\web\BadRequestHttpException;
@@ -50,7 +50,7 @@ class CmsLicensesController extends BaseApiController
             'edition' => CmsLicenseManager::EDITION_PERSONAL,
             'email' => $email,
             'domain' => $headers->get('X-Craft-Host'),
-            'key' => LicenseHelper::generateCmsKey(),
+            'key' => KeyHelper::generateCmsKey(),
             'lastEdition' => $this->cmsEdition,
             'lastVersion' => $this->cmsVersion,
             'lastActivityOn' => new \DateTime(),
