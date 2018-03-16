@@ -169,6 +169,10 @@ class CraftIdController extends BaseController
 
             if($result->cmsLicenseId) {
                 $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
+
+                if($cmsLicense->ownerId !== $result->ownerId) {
+                    $cmsLicense = substr($cmsLicense->key, 0, 10);
+                }
             }
 
             $license['cmsLicense'] = $cmsLicense;
