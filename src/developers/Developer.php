@@ -1,16 +1,18 @@
 <?php
 
-namespace craftcom\behaviors;
+namespace craftcom\developers;
 
 use craft\elements\User;
 use craftcom\plugins\Plugin;
 use yii\base\Behavior;
+use yii\base\InvalidArgumentException;
 
 /**
  * The Developer behavior extends users with plugin developer-related features.
  *
- * @property Plugin[] $plugins
+ * @property FundsManager $fundsManager
  * @property User $owner
+ * @property Plugin[] $plugins
  */
 class Developer extends Behavior
 {
@@ -65,5 +67,13 @@ class Developer extends Behavior
             ->developerId($this->owner->id)
             ->status(null)
             ->all();
+    }
+
+    /**
+     * @return FundsManager
+     */
+    public function getFundsManager(): FundsManager
+    {
+        return new FundsManager($this->owner);
     }
 }

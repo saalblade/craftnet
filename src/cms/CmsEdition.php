@@ -3,11 +3,11 @@
 namespace craftcom\cms;
 
 use Craft;
-use craft\commerce\base\Purchasable;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\db\ElementQueryInterface;
+use craftcom\base\Purchasable;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\Module;
 use yii\base\Exception;
@@ -94,6 +94,17 @@ class CmsEdition extends Purchasable
     // Public Methods
     // =========================================================================
 
+    /**
+     * @inheritdoc
+     */
+    public function getType(): string
+    {
+        return 'cms-edition';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         $rules = parent::rules();

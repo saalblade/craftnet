@@ -3,26 +3,21 @@
 namespace craftcom\plugins;
 
 use Craft;
-use craft\commerce\base\Purchasable;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
 use craft\commerce\Plugin as Commerce;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
+use craftcom\base\PluginPurchasable;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\Module;
-use yii\base\ErrorException;
 use yii\base\Exception;
-use yii\base\InvalidConfigException;
-
 
 /**
- * Class PluginEdition
- *
- * @property Plugin $plugin
+ * @property-read string $fullName
  */
-class PluginEdition extends Purchasable
+class PluginEdition extends PluginPurchasable
 {
     // Static
     // =========================================================================
@@ -103,11 +98,6 @@ class PluginEdition extends Purchasable
     // =========================================================================
 
     /**
-     * @var int The plugin ID
-     */
-    public $pluginId;
-
-    /**
      * @var string The edition name
      */
     public $name;
@@ -128,11 +118,6 @@ class PluginEdition extends Purchasable
     public $renewalPrice;
 
     /**
-     * @var Plugin|null
-     */
-    private $_plugin;
-
-    /**
      * @return string
      */
     public function __toString()
@@ -150,21 +135,19 @@ class PluginEdition extends Purchasable
     /**
      * @inheritdoc
      */
-    public function attributes()
+    public function getType(): string
     {
-        $names = parent::attributes();
-        $names[] = 'fullName';
-        return $names;
+        return 'plugin-edition';
     }
 
     /**
      * @inheritdoc
      */
-    public function extraFields()
+    public function attributes()
     {
-        return [
-            'plugin',
-        ];
+        $names = parent::attributes();
+        $names[] = 'fullName';
+        return $names;
     }
 
     /**
@@ -202,35 +185,16 @@ class PluginEdition extends Purchasable
     public function setEagerLoadedElements(string $handle, array $elements)
     {
         if ($handle === 'plugin') {
-            $this->_plugin = $elements[0] ?? null;
+            $this->setPlugin($elements[0] ?? null);
         } else {
             parent::setEagerLoadedElements($handle, $elements);
         }
     }
 
-    /**
-     * @return Plugin
-     * @throws InvalidConfigException
-     */
-    public function getPlugin(): Plugin
-    {
-        if ($this->_plugin !== null) {
-            return $this->_plugin;
-        }
-        if ($this->pluginId === null) {
-            throw new InvalidConfigException('Plugin edition is missing its plugin ID');
-        }
-        if (($plugin = Plugin::find()->id($this->pluginId)->status(null)->one()) === null) {
-            throw new InvalidConfigException('Invalid plugin ID: '.$this->pluginId);
-        }
-        return $this->_plugin = $plugin;
-    }
-
     public function rules()
     {
         $rules = parent::rules();
-        $rules[] = [['pluginId', 'name', 'handle', 'price', 'renewalPrice'], 'required',];
-        $rules[] = [['pluginId'], 'number', 'integerOnly' => true];
+        $rules[] = [['name', 'handle', 'price', 'renewalPrice'], 'required'];
         $rules[] = [['price', 'renewalPrice'], 'number'];
         return $rules;
     }

@@ -91,6 +91,9 @@ return [
                     'database' => 0,
                 ],
             ],
+            'mutex' => [
+                'class' => \yii\redis\Mutex::class,
+            ],
             'queue' => [
                 'class' => pixelandtonic\yii\queue\sqs\Queue::class,
                 'url' => getenv('SQS_URL'),
