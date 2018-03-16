@@ -93,24 +93,24 @@ class AccountController extends Controller
      * Delete all the photos for current user.
      *
      * @return Response
+     * @throws BadRequestHttpException
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \yii\base\Exception
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionDeleteUserPhoto(): Response
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
-        $userId = Craft::$app->getRequest()->getRequiredBodyParam('userId');
-
-        if ($userId != Craft::$app->getUser()->getIdentity()->id) {
-            $this->requirePermission('editUsers');
-        }
-
-        $user = Craft::$app->getUsers()->getUserById($userId);
+        $user = Craft::$app->getUser()->getIdentity();
 
         if ($user->photoId) {
             Craft::$app->getElements()->deleteElementById($user->photoId, Asset::class);
         }
 
         $user->photoId = null;
+
         Craft::$app->getElements()->saveElement($user, false);
 
         return $this->asJson([
