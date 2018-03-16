@@ -54,7 +54,7 @@
         },
 
         mounted() {
-            this.stripe = Stripe(window.stripePublishableKey);
+            this.stripe = Stripe(window.stripePublicKey);
             this.elements = this.stripe.elements();
             this.card = this.elements.create('card');
 
