@@ -10,7 +10,7 @@ use yii\helpers\Json;
 use yii\web\Response;
 use craft\commerce\Plugin as Commerce;
 use craftcom\plugins\Plugin;
-
+use craft\commerce\elements\Order;
 
 /**
  * Class CraftIdController
@@ -280,7 +280,14 @@ class CraftIdController extends BaseController
     private function _invoices(): array
     {
         $customer = Commerce::getInstance()->getCustomers()->getCustomer();
-        $results = Commerce::getInstance()->getOrders()->getOrdersByCustomer($customer);
+
+        $query = Order::find();
+        $query->customer($customer);
+        $query->isCompleted(true);
+        $query->limit(null);
+        $query->orderBy('dateOrdered desc');
+
+        $results = $query->all();
 
         $orders = [];
 
