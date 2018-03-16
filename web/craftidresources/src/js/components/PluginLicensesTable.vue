@@ -18,9 +18,8 @@
 				<tr v-for="license in licenses">
 					<td>
 						<code>
-							<router-link :to="'/account/licenses/plugins/'+license.id">
-								{{ license.key.substr(0, 4) }}
-							</router-link>
+							<router-link v-if="license.key" :to="'/account/licenses/plugins/'+license.id">{{ license.key.substr(0, 4) }}</router-link>
+							<template v-else>{{ license.shortKey }}</template>
 						</code>
 					</td>
 					<td>

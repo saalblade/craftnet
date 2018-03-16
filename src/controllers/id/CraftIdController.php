@@ -115,7 +115,13 @@ class CraftIdController extends BaseController
             $pluginLicenses = [];
 
             foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
-                $pluginLicense = $pluginLicensesResult->toArray();
+                if($pluginLicensesResult->ownerId === $user->id) {
+                    $pluginLicense = $pluginLicensesResult->toArray();
+                } else {
+                    $pluginLicense = [
+                        'shortKey' => substr($pluginLicensesResult->key, 0, 4)
+                    ];
+                }
 
                 $plugin = null;
 

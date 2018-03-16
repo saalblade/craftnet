@@ -8,9 +8,14 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h4>Plugin Licenses</h4>
-                <p class="text-secondary mb-4">Plugin licenses attached to this Craft CMS license.</p>
 
-                <plugin-licenses-table :licenses="license.pluginLicenses" :exclude-cms-license-column="true"></plugin-licenses-table>
+                <template v-if="license.pluginLicenses.length > 0">
+                    <p class="text-secondary mb-4">Plugin licenses attached to this Craft CMS license.</p>
+                    <plugin-licenses-table :licenses="license.pluginLicenses" :exclude-cms-license-column="true"></plugin-licenses-table>
+                </template>
+                <template v-else>
+                    <p class="text-secondary mb-4">No plugin licenses are attached to this Craft CMS license.</p>
+                </template>
             </div>
         </div>
 
