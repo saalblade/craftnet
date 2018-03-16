@@ -155,9 +155,7 @@ export const releaseCmsLicense = ({commit}, licenseKey) => {
 };
 
 export const releasePluginLicense = ({commit}, {pluginHandle, licenseKey}) => {
-    console.log('a');
     return new Promise((resolve, reject) => {
-        console.log('b');
         api.releasePluginLicense({pluginHandle, licenseKey}, response => {
             if (response.data && !response.data.errors) {
                 commit(types.RELEASE_PLUGIN_LICENSE, {licenseKey});

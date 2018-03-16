@@ -140,7 +140,6 @@
 			formattedLicense() {
                 let value = this.license.key;
                 let formattedValue = this.$options.filters.formatCmsLicense(value);
-                console.log('formattedValue', formattedValue);
                 return formattedValue;
 			}
 
