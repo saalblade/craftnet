@@ -53,11 +53,7 @@ class AccountController extends Controller
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
-        $userId = Craft::$app->getRequest()->getRequiredBodyParam('userId');
-
-        if ($userId != Craft::$app->getUser()->getIdentity()->id) {
-            $this->requirePermission('editUsers');
-        }
+        $this->requirePermission('editUsers');
 
         if (($file = UploadedFile::getInstanceByName('photo')) === null) {
             return null;
@@ -68,13 +64,12 @@ class AccountController extends Controller
                 throw new UploadFailedException($file->error);
             }
 
-            $users = Craft::$app->getUsers();
-            $user = $users->getUserById($userId);
+            $user = Craft::$app->getUser()->getIdentity();
 
             // Move to our own temp location
             $fileLocation = Assets::tempFilePath($file->getExtension());
             move_uploaded_file($file->tempName, $fileLocation);
-            $users->saveUserPhoto($fileLocation, $user, $file->name);
+            Craft::$app->getUsers()->saveUserPhoto($fileLocation, $user, $file->name);
 
             return $this->asJson([
                 'photoId' => $user->photoId,
