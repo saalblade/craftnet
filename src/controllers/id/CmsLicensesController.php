@@ -7,6 +7,7 @@ use craft\web\Controller;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\Module;
 use craftcom\plugins\Plugin;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use Exception;
 use Throwable;
@@ -54,6 +55,26 @@ class CmsLicensesController extends Controller
         } catch(Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
+    }
+
+    /**
+     * Download license file.
+     *
+     * @return Response
+     * @throws ForbiddenHttpException
+     * @throws \yii\web\HttpException
+     */
+    public function actionDownload(): Response
+    {
+        $user = Craft::$app->getUser()->getIdentity();
+        $licenseId = Craft::$app->getRequest()->getParam('id');
+        $license = $this->module->getCmsLicenseManager()->getLicenseById($licenseId);
+
+        if($license->ownerId === $user->id) {
+            return Craft::$app->getResponse()->sendContentAsFile($license->key, 'license.key');
+        }
+
+        throw new ForbiddenHttpException('User is not authorized to perform this action');
     }
 
     /**

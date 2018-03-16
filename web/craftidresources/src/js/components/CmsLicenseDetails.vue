@@ -86,7 +86,7 @@
 				<h4>License Key</h4>
 				<div v-if="license">
 					<textarea-field id="notes" v-model="formattedLicense" :disabled="true" rows="6"></textarea-field>
-					<a href="#" class="btn btn-secondary">Download License Key</a>
+					<a :href="downloadLicenseUrl" class="btn btn-secondary" target="_blank">Download License Key</a>
 				</div>
 			</div>
 		</div>
@@ -141,6 +141,10 @@
                 let value = this.license.key;
                 let formattedValue = this.$options.filters.formatCmsLicense(value);
                 return formattedValue;
+			},
+
+			downloadLicenseUrl() {
+                return Craft.actionUrl + '/craftcom/id/cms-licenses/download&id=' + this.license.id;
 			}
 
         },
