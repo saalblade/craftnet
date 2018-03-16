@@ -291,7 +291,7 @@ abstract class BaseApiController extends Controller
                         'pluginId' => $plugin->id,
                     ], [
                         'lastActivity' => $timestamp,
-                    ], false)
+                    ], [], false)
                     ->execute();
 
                 // Update the plugin's active installs count

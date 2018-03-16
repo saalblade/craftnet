@@ -16,7 +16,7 @@ class DeletePaths extends BaseJob
     {
         foreach ($this->paths as $path) {
             if (file_exists($path)) {
-                FileHelper::removeFile($path);
+                FileHelper::unlink($path);
             }
         }
     }
