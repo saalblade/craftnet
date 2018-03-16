@@ -30,8 +30,7 @@ class CraftIdController extends BaseController
     public function actionIndex(): Response
     {
         // Current user
-        $currentUserId = Craft::$app->getRequest()->getParam('userId');
-        $currentUser = Craft::$app->getUsers()->getUserById($currentUserId);
+        $currentUser = Craft::$app->getUser()->getIdentity();
 
         // Craft ID config
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
