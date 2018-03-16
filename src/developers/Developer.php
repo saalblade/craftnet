@@ -46,7 +46,7 @@ class Developer extends Behavior
      */
     public function getDeveloperName(): string
     {
-        return $this->owner->developerName ?: $this->owner->getName();
+        return $this->owner->getFieldValue('developerName') ?: $this->owner->getName();
     }
 
     /**
