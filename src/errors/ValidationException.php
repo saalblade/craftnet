@@ -30,4 +30,12 @@ class ValidationException extends BadRequestHttpException
 
         parent::__construct($message, $code, $previous);
     }
+
+    /**
+     * @return string the user-friendly name of this exception
+     */
+    public function getName()
+    {
+        return 'Validation Error';
+    }
 }

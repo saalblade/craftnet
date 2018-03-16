@@ -13,7 +13,12 @@ class LicenseNotFoundException extends Exception
     public $key;
 
     /**
-     * @inheritdoc
+     * Constructor
+     *
+     * @param string $key
+     * @param string|null $message
+     * @param int $code
+     * @param Throwable|null $previous
      */
     public function __construct(string $key, string $message = null, int $code = 0, Throwable $previous = null)
     {
