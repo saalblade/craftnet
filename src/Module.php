@@ -9,6 +9,7 @@ use craft\commerce\services\OrderAdjustments;
 use craft\commerce\services\Purchasables;
 use craft\elements\db\UserQuery;
 use craft\elements\User;
+use craft\events\DefineBehaviorsEvent;
 use craft\events\ModelEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterCpNavItemsEvent;
@@ -68,7 +69,7 @@ class Module extends \yii\base\Module
             if (Craft::$app->getDb()->tableExists('craftcom_developers')) {
                 $query->query->leftJoin('craftcom_developers developers', '[[developers.id]] = [[users.id]]');
                 $query->subQuery->leftJoin('craftcom_developers developers', '[[developers.id]] = [[users.id]]');
-                $query->addSelect([
+                $query->query->addSelect([
                     'developers.country',
                     'developers.balance',
                     'developers.stripeAccessToken',
@@ -78,10 +79,8 @@ class Module extends \yii\base\Module
             }
         });
 
-        Event::on(User::class, User::EVENT_INIT, function(Event $e) {
-            /** @var User $user */
-            $user = $e->sender;
-            $user->attachBehavior('developer', Developer::class);
+        Event::on(User::class, User::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
+            $e->behaviors['developer'] = Developer::class;
         });
 
         Event::on(User::class, User::EVENT_AFTER_SAVE, function(ModelEvent $e) {
