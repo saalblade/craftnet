@@ -10,7 +10,6 @@ use craft\commerce\services\Purchasables;
 use craft\elements\db\UserQuery;
 use craft\elements\User;
 use craft\events\DefineBehaviorsEvent;
-use craft\events\ModelEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterTemplateRootsEvent;
@@ -30,6 +29,7 @@ use craftcom\cms\CmsLicenseManager;
 use craftcom\composer\JsonDumper;
 use craftcom\composer\PackageManager;
 use craftcom\developers\Developer;
+use craftcom\developers\UserQueryBehavior;
 use craftcom\fields\Plugins;
 use craftcom\plugins\PluginEdition;
 use craftcom\plugins\PluginLicenseManager;
@@ -62,72 +62,12 @@ class Module extends \yii\base\Module
             }
         }
 
-        Event::on(UserQuery::class, UserQuery::EVENT_AFTER_PREPARE, function(Event $e) {
-            /** @var UserQuery $query */
-            $query = $e->sender;
-
-            if (Craft::$app->getDb()->tableExists('craftcom_developers')) {
-                $query->query->leftJoin('craftcom_developers developers', '[[developers.id]] = [[users.id]]');
-                $query->subQuery->leftJoin('craftcom_developers developers', '[[developers.id]] = [[users.id]]');
-                $query->query->addSelect([
-                    'developers.country',
-                    'developers.stripeAccessToken',
-                    'developers.stripeAccount',
-                    'developers.payPalEmail',
-                ]);
-            }
+        Event::on(UserQuery::class, UserQuery::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
+            $e->behaviors[] = UserQueryBehavior::class;
         });
 
         Event::on(User::class, User::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
-            $e->behaviors['developer'] = Developer::class;
-        });
-
-        Event::on(User::class, User::EVENT_AFTER_SAVE, function(ModelEvent $e) {
-            /** @var User|Developer $user */
-            $user = $e->sender;
-            $isDeveloper = $user->isInGroup('developers');
-            $request = Craft::$app->getRequest();
-            $currentUser = Craft::$app->getUser()->getIdentity();
-            $userGroups = Craft::$app->getUserGroups();
-
-            // If it's a front-end site POST request and they're not currently a developer, check to see if they've opted into developer features.
-            if (
-                $currentUser &&
-                $currentUser->id == $user->id &&
-                $request->getIsSiteRequest() &&
-                $request->getIsPost() &&
-                $request->getBodyParam('fields.enablePluginDeveloperFeatures') &&
-                !$isDeveloper
-            ) {
-                // Get any existing group IDs.
-                $existingGroups = $userGroups->getGroupsByUserId($currentUser->id);
-                $groupIds = [];
-
-                foreach ($existingGroups as $existingGroup) {
-                    $groupIds[] = $existingGroup->id;
-                }
-
-                // Add the developer group.
-                $groupIds[] = $userGroups->getGroupByHandle('developers')->id;
-
-                Craft::$app->getUsers()->assignUserToGroups($currentUser->id, $groupIds);
-                $isDeveloper = true;
-            }
-
-            $db = Craft::$app->getDb();
-
-            if ($isDeveloper && $db->tableExists('craftcom_developers')) {
-                $db->createCommand()
-                    ->upsert('craftcom_developers', [
-                        'id' => $user->id,
-                    ], [
-                        'country' => $user->country,
-                        'stripeAccessToken' => $user->stripeAccessToken,
-                        'stripeAccount' => $user->stripeAccount,
-                        'payPalEmail' => $user->payPalEmail,
-                    ], [], false)
-                    ->execute();
-            }
+            $e->behaviors[] = Developer::class;
         });
 
         Event::on(Users::class, Users::EVENT_AFTER_ACTIVATE_USER, function(UserEvent $e) {
