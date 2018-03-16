@@ -104,43 +104,7 @@ class CraftIdController extends BaseController
      */
     private function _cmsLicenses(User $user): array
     {
-        $results = Module::getInstance()->getCmsLicenseManager()->getLicensesByOwner($user->id);
-
-        $licenses = [];
-
-        foreach($results as $result) {
-            $license = $result->toArray();
-            $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
-
-            $pluginLicenses = [];
-
-            foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
-                if($pluginLicensesResult->ownerId === $user->id) {
-                    $pluginLicense = $pluginLicensesResult->toArray();
-                } else {
-                    $pluginLicense = [
-                        'shortKey' => substr($pluginLicensesResult->key, 0, 4)
-                    ];
-                }
-
-                $plugin = null;
-
-                if($pluginLicensesResult->pluginId) {
-                    $plugin = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
-                }
-
-                $pluginLicense['plugin'] = $plugin;
-
-                $pluginLicenses[] = $pluginLicense;
-            }
-
-
-
-            $license['pluginLicenses'] = $pluginLicenses;
-            $licenses[] = $license;
-        }
-
-        return $licenses;
+        return Module::getInstance()->getCmsLicenseManager()->getLicensesArrayByOwner($user);
     }
 
     /**
@@ -150,45 +114,7 @@ class CraftIdController extends BaseController
      */
     private function _pluginLicenses(User $user): array
     {
-        $results = Module::getInstance()->getPluginLicenseManager()->getLicensesByOwner($user->id);
-
-        $licenses = [];
-
-        foreach($results as $result) {
-            $license = $result->toArray();
-
-
-            // Plugin
-
-            $plugin = null;
-
-            if($result->pluginId) {
-                $plugin = Plugin::find()->id($result->pluginId)->status(null)->one();
-            }
-
-            $license['plugin'] = $plugin;
-
-
-            // CMS License
-
-            $cmsLicense = null;
-
-            if($result->cmsLicenseId) {
-                $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
-
-                if($cmsLicense->ownerId !== $result->ownerId) {
-                    $cmsLicense = [
-                        'shortKey' => substr($cmsLicense->key, 0, 10)
-                    ];
-                }
-            }
-
-            $license['cmsLicense'] = $cmsLicense;
-
-            $licenses[] = $license;
-        }
-
-        return $licenses;
+        return Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
     }
 
     /**

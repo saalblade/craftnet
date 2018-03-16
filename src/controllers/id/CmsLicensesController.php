@@ -67,36 +67,7 @@ class CmsLicensesController extends Controller
         $user = Craft::$app->getUser()->getIdentity();
 
         try {
-            $results = Module::getInstance()->getCmsLicenseManager()->getLicensesByOwner($user->id);
-
-            $licenses = [];
-
-            foreach($results as $result) {
-                $license = $result->toArray();
-                $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
-
-                $pluginLicenses = [];
-
-                foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
-                    $pluginLicense = $pluginLicensesResult->toArray();
-
-                    $plugin = null;
-
-                    if($pluginLicensesResult->pluginId) {
-                        $plugin = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
-                    }
-
-                    $pluginLicense['plugin'] = $plugin;
-
-                    $pluginLicenses[] = $pluginLicense;
-                }
-
-
-
-                $license['pluginLicenses'] = $pluginLicenses;
-                $licenses[] = $license;
-            }
-
+            $licenses = Module::getInstance()->getCmsLicenseManager()->getLicensesArrayByOwner($user);
             return $this->asJson($licenses);
         } catch(Throwable $e) {
             return $this->asErrorJson($e->getMessage());

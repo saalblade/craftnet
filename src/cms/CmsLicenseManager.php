@@ -9,6 +9,8 @@ use craft\elements\User;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craftcom\errors\LicenseNotFoundException;
+use craftcom\Module;
+use craftcom\plugins\Plugin;
 use LayerShifter\TLDExtract\Extract;
 use yii\base\Component;
 use yii\base\Exception;
@@ -278,6 +280,52 @@ class CmsLicenseManager extends Component
                     ->execute();
             }
         }
+    }
+
+    /**
+     * Returns licenses by owner as an array.
+     *
+     * @param User $owner
+     *
+     * @return array
+     */
+    public function getLicensesArrayByOwner(User $owner)
+    {
+        $results = Module::getInstance()->getCmsLicenseManager()->getLicensesByOwner($owner->id);
+
+        $licenses = [];
+
+        foreach($results as $result) {
+            $license = $result->toArray();
+            $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
+
+            $pluginLicenses = [];
+
+            foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
+                if($pluginLicensesResult->ownerId === $owner->id) {
+                    $pluginLicenseArray = $pluginLicensesResult->toArray();
+                } else {
+                    $pluginLicenseArray = [
+                        'shortKey' => substr($pluginLicensesResult->key, 0, 4)
+                    ];
+                }
+
+                $plugin = null;
+
+                if($pluginLicensesResult->pluginId) {
+                    $plugin = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
+                }
+
+                $pluginLicenseArray['plugin'] = $plugin;
+
+                $pluginLicenses[] = $pluginLicenseArray;
+            }
+
+            $license['pluginLicenses'] = $pluginLicenses;
+            $licenses[] = $license;
+        }
+
+        return $licenses;
     }
 
     /**
