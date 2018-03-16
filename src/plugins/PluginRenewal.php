@@ -3,12 +3,14 @@
 namespace craftcom\plugins;
 
 use Craft;
-use craft\commerce\base\Purchasable;
 use craft\elements\db\ElementQueryInterface;
+use craftcom\base\PluginPurchasable;
 use yii\base\InvalidConfigException;
 
-
-class PluginRenewal extends Purchasable
+/**
+ * @property-read PluginEdition $edition
+ */
+class PluginRenewal extends PluginPurchasable
 {
     // Static
     // =========================================================================
@@ -33,11 +35,6 @@ class PluginRenewal extends Purchasable
     // =========================================================================
 
     /**
-     * @var int The plugin ID
-     */
-    public $pluginId;
-
-    /**
      * @var int The plugin edition ID
      */
     public $editionId;
@@ -50,11 +47,22 @@ class PluginRenewal extends Purchasable
     // Public Methods
     // =========================================================================
 
+    /**
+     * @inheritdoc
+     */
+    public function getType(): string
+    {
+        return 'plugin-renewal';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         $rules = parent::rules();
-        $rules[] = [['pluginId', 'editionId', 'price'], 'required'];
-        $rules[] = [['pluginId', 'editionId'], 'number', 'integerOnly' => true];
+        $rules[] = [['editionId', 'price'], 'required'];
+        $rules[] = [['editionId'], 'number', 'integerOnly' => true];
         $rules[] = [['price'], 'number'];
         return $rules;
     }
@@ -82,23 +90,6 @@ class PluginRenewal extends Purchasable
         }
 
         parent::afterSave($isNew);
-    }
-
-    /**
-     * Returns the plugin associated with the renewal.
-     *
-     * @return Plugin
-     * @throws InvalidConfigException if [[pluginId]] is invalid
-     */
-    public function getPlugin(): Plugin
-    {
-        if ($this->pluginId === null) {
-            throw new InvalidConfigException('Plugin renewal is missing its plugin ID');
-        }
-        if (($plugin = Plugin::find()->id($this->pluginId)->status(null)->one()) === null) {
-            throw new InvalidConfigException('Invalid plugin ID: '.$this->pluginId);
-        };
-        return $plugin;
     }
 
     /**

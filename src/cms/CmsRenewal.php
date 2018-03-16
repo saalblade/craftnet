@@ -3,11 +3,14 @@
 namespace craftcom\cms;
 
 use Craft;
-use craft\commerce\base\Purchasable;
 use craft\elements\db\ElementQueryInterface;
+use craftcom\base\Purchasable;
 use yii\base\InvalidConfigException;
 
 
+/**
+ * @property-read CmsEdition $edition
+ */
 class CmsRenewal extends Purchasable
 {
     // Static
@@ -45,6 +48,17 @@ class CmsRenewal extends Purchasable
     // Public Methods
     // =========================================================================
 
+    /**
+     * @inheritdoc
+     */
+    public function getType(): string
+    {
+        return 'cms-renewal';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         $rules = parent::rules();
