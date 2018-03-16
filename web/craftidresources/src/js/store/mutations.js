@@ -56,11 +56,9 @@ export const UPLOAD_USER_PHOTO = (state, {data, response}) => {
  */
 
 export const CLAIM_CMS_LICENSE = (state, {licenseKey}) => {
-    console.log('claim cms license mutation', licenseKey);
 };
 
 export const CLAIM_PLUGIN_LICENSE = (state, {licenseKey}) => {
-    console.log('claim plugin license mutation', licenseKey);
 };
 
 export const GET_CMS_LICENSES = (state, {response}) => {

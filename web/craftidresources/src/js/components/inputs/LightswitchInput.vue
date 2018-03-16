@@ -14,7 +14,6 @@
 
 		methods: {
             turnOn() {
-                console.log('turn on');
 			}
 		}
 
