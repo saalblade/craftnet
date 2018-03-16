@@ -16,8 +16,8 @@
                     -->
 
                     <textarea-field id="cmsLicenseKey" v-model="cmsLicenseKey" label="CMS License Key" rows="5" placeholder="Paste license key here." />
-
                     <input type="submit" class="btn btn-primary" value="Claim License">
+                    <div class="spinner" v-if="cmsLicenseLoading"></div>
                 </form>
             </div>
         </div>
@@ -29,8 +29,8 @@
 
                 <form @submit.prevent="claimPluginLicense()">
                     <text-field id="pluginLicenseKey" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" />
-
                     <input type="submit" class="btn btn-primary" value="Claim License">
+                    <div class="spinner" v-if="pluginLicenseLoading"></div>
                 </form>
             </div>
         </div>
@@ -58,7 +58,9 @@
         data() {
             return {
                 cmsLicenseKey: '',
+                cmsLicenseLoading: false,
                 pluginLicenseKey: '',
+                pluginLicenseLoading: false,
             }
         },
 
@@ -70,28 +72,36 @@
         methods: {
 
             claimCmsLicense() {
+                this.cmsLicenseLoading = true;
+
                 this.$store.dispatch('claimCmsLicense', this.cmsLicenseKey)
                     .then(response => {
+                        this.cmsLicenseLoading = false;
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
                         this.$root.displayNotice('CMS license claimed.');
                         this.$router.push({path: '/account/licenses/craft'});
                     })
                     .catch(response => {
+                        this.cmsLicenseLoading = false;
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim CMS license.';
                         this.$root.displayError(errorMessage);
                     });
             },
 
             claimPluginLicense() {
+                this.pluginLicenseLoading = true;
+
                 this.$store.dispatch('claimPluginLicense', this.pluginLicenseKey)
                     .then(response => {
+                        this.pluginLicenseLoading = false;
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
                         this.$root.displayNotice('Plugin license claimed.');
                         this.$router.push({path: '/account/licenses/plugins'});
                     })
                     .catch(response => {
+                        this.pluginLicenseLoading = false;
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim plugin license.';
                         this.$root.displayError(errorMessage);
                     });
