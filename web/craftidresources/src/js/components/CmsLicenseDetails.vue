@@ -11,10 +11,8 @@
 								<dd>{{ license.edition }}</dd>
 
 								<dt>License Key</dt>
-								<dd>
-									<textarea-field id="notes" v-model="license.key" :disabled="true"></textarea-field>
-									<a href="#" class="btn btn-secondary">Download License Key</a>
-								</dd>
+								<dd>{{ license.key.slice(0, 10) }}… <a
+										href="#license-key">View license key</a></dd>
 
 								<dt>Domain Name</dt>
 								<dd>
@@ -83,6 +81,16 @@
 			</div>
 		</div>
 
+		<div id="license-key" class="card mb-3">
+			<div class="card-body">
+				<h4>License Key</h4>
+				<div v-if="license">
+					<textarea-field id="notes" v-model="formattedLicense" :disabled="true" rows="6"></textarea-field>
+					<a href="#" class="btn btn-secondary">Download License Key</a>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </template>
 
@@ -127,7 +135,14 @@
                 }
 
                 return false;
-            }
+            },
+
+			formattedLicense() {
+                let value = this.license.key;
+                let formattedValue = this.$options.filters.formatCmsLicense(value);
+                console.log('formattedValue', formattedValue);
+                return formattedValue;
+			}
 
         },
 

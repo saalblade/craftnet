@@ -1,7 +1,7 @@
 <template>
     <div v-if="license">
         <p><router-link class="nav-link" to="/account/licenses/plugins" exact>← Plugins</router-link></p>
-        <h1><code>{{ license.key.substr(0, 10) }}</code></h1>
+        <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
 
         <plugin-license-details :license="license"></plugin-license-details>
 

@@ -19,7 +19,7 @@
 					<td>
 						<code>
 							<router-link :to="'/account/licenses/plugins/'+license.id">
-								{{ license.key.substr(0, 10) }}
+								{{ license.key.substr(0, 4) }}
 							</router-link>
 						</code>
 					</td>

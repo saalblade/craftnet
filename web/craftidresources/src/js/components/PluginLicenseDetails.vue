@@ -12,7 +12,8 @@
 							</template>
 
 							<dt>License Key</dt>
-							<dd><code>{{ license.key }}</code></dd>
+							<dd><code>{{ license.key|formatPluginLicense }}</code></dd>
+
 							<dt>CMS License</dt>
 							<dd>
 								<template v-if="license.cmsLicense">

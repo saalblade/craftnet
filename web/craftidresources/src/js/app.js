@@ -3,9 +3,12 @@
 import Vue from 'vue';
 import store from './store'
 import {currency} from './filters/currency';
+import {formatCmsLicense, formatPluginLicense} from './filters/licenses';
 import App from './App.vue';
 
 Vue.filter('currency', currency);
+Vue.filter('formatCmsLicense', formatCmsLicense);
+Vue.filter('formatPluginLicense', formatPluginLicense);
 
 window.craftIdApp = new Vue({
 
