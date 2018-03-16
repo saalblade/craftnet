@@ -87,37 +87,23 @@ class StripeController extends BaseController
      */
     public function actionDisconnect(): Response
     {
-        $userId = Craft::$app->getUser()->getIdentity()->id;
-
-        $customerRecord = StripeCustomerRecord::find()
-            ->where(Db::parseParam('userId', $userId))
-            ->one();
-
-        $tokenRecord = VcsToken::find()
-            ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
-            ->one();
+        $user = Craft::$app->getUser()->getIdentity();
 
         $provider = $this->_getStripeProvider();
-        $accessToken = new AccessToken(['access_token' => $tokenRecord->accessToken]);
+        $accessToken = new AccessToken(['access_token' => $user->stripeAccessToken]);
         $resourceOwner = $provider->getResourceOwner($accessToken);
         $accountId = $resourceOwner->getId();
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
 
         Stripe::setClientId($craftIdConfig['stripeClientId']);
-        Stripe::setApiKey($craftIdConfig['stripeSecretKey']);
+        Stripe::setApiKey($craftIdConfig['stripeApiKey']);
 
         $account = Account::retrieve($accountId);
         $account->deauthorize();
 
-        if ($tokenRecord) {
-            $tokenRecord->delete();
-        }
-
-        if ($customerRecord) {
-            $customerRecord->stripeAccountId = null;
-            $customerRecord->save();
-        }
+        $user->stripeAccessToken = null;
+        $user->stripeAccount = null;
 
         return $this->asJson(['success' => true]);
     }
