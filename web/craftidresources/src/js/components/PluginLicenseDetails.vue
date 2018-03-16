@@ -18,8 +18,8 @@
 							<dd>
 								<template v-if="license.cmsLicense">
 									<code>
-										<router-link v-if="typeof(license.cmsLicense) === 'object'" :to="'/account/licenses/craft/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
-										<template v-else>{{ license.cmsLicense }}</template>
+										<router-link v-if="license.cmsLicense.key" :to="'/account/licenses/craft/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
+										<template v-else>{{ license.cmsLicense.shortKey }}</template>
 									</code>
 									<span v-if="license.cmsLicense.edition" class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
 								</template>
