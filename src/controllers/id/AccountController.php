@@ -46,14 +46,14 @@ class AccountController extends Controller
     /**
      * Upload a user photo.
      *
-     * @return Response|null
-     * @throws BadRequestHttpException if the uploaded file is not an image
+     * @return null|Response
+     * @throws BadRequestHttpException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionUploadUserPhoto()
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
-        $this->requirePermission('editUsers');
 
         if (($file = UploadedFile::getInstanceByName('photo')) === null) {
             return null;
