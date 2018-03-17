@@ -6,6 +6,7 @@ use Craft;
 use craft\commerce\elements\Order;
 use craft\db\Query;
 use craft\elements\User;
+use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craftcom\errors\LicenseNotFoundException;
@@ -296,16 +297,17 @@ class CmsLicenseManager extends Component
         $licenses = [];
 
         foreach ($results as $result) {
-            $license = $result->toArray();
+            $license = $result->getAttributes(['id', 'key', 'edition', 'domain', 'notes', 'email', 'dateCreated']);
+
             $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
 
             $pluginLicenses = [];
 
             foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
                 if ($pluginLicensesResult->ownerId === $owner->id) {
-                    $pluginLicenseArray = $pluginLicensesResult->toArray();
+                    $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key']);
                 } else {
-                    $pluginLicenseArray = [
+                    $pluginLicense = [
                         'shortKey' => substr($pluginLicensesResult->key, 0, 4)
                     ];
                 }
@@ -313,12 +315,13 @@ class CmsLicenseManager extends Component
                 $plugin = null;
 
                 if ($pluginLicensesResult->pluginId) {
-                    $plugin = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
+                    $pluginResult = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
+                    $plugin = $pluginResult->getAttributes(['name']);
                 }
 
-                $pluginLicenseArray['plugin'] = $plugin;
+                $pluginLicense['plugin'] = $plugin;
 
-                $pluginLicenses[] = $pluginLicenseArray;
+                $pluginLicenses[] = $pluginLicense;
             }
 
             $license['pluginLicenses'] = $pluginLicenses;

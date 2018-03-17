@@ -293,7 +293,8 @@ class PluginLicenseManager extends Component
             $plugin = null;
 
             if ($result->pluginId) {
-                $plugin = Plugin::find()->id($result->pluginId)->status(null)->one();
+                $pluginResult = Plugin::find()->id($result->pluginId)->status(null)->one();
+                $plugin = $pluginResult->getAttributes(['name']);
             }
 
             $license['plugin'] = $plugin;
@@ -301,21 +302,21 @@ class PluginLicenseManager extends Component
 
             // CMS License
 
-            $cmsLicenseArray = null;
+            $cmsLicense = null;
 
             if ($result->cmsLicenseId) {
-                $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
+                $cmsLicenseResult = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
 
-                if ($cmsLicense && $cmsLicense->ownerId === $owner->id) {
-                    $cmsLicenseArray = $cmsLicense->toArray();
+                if ($cmsLicenseResult && $cmsLicenseResult->ownerId === $owner->id) {
+                    $cmsLicense = $cmsLicenseResult->getAttributes(['key']);
                 } else {
-                    $cmsLicenseArray = [
-                        'shortKey' => substr($cmsLicense->key, 0, 10)
+                    $cmsLicense = [
+                        'shortKey' => substr($cmsLicenseResult->key, 0, 10)
                     ];
                 }
             }
 
-            $license['cmsLicense'] = $cmsLicenseArray;
+            $license['cmsLicense'] = $cmsLicense;
 
             $licenses[] = $license;
         }
