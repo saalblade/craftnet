@@ -4,8 +4,8 @@ import Profile from '../pages/Profile'
 import Billing from '../pages/Billing'
 import BillingInvoiceDetails from '../pages/BillingInvoiceDetails'
 import LicensesClaim from '../pages/LicensesClaim'
-import LicensesCraft from '../pages/LicensesCraft'
-import LicensesCraftDetails from '../pages/LicensesCraftDetails'
+import LicensesCms from '../pages/LicensesCms'
+import LicensesCmsDetails from '../pages/LicensesCmsDetails'
 import LicensesPlugins from '../pages/LicensesPlugins'
 import LicensesPluginsDetails from '../pages/LicensesPluginsDetails'
 import LicensesRenew from '../pages/LicensesRenew'
@@ -33,15 +33,15 @@ const router = new VueRouter({
         },
         {
             path: '/account/licenses',
-            redirect: '/account/licenses/craft',
+            redirect: '/account/licenses/cms',
         },
         {
-            path: '/account/licenses/craft',
-            component: LicensesCraft,
+            path: '/account/licenses/cms',
+            component: LicensesCms,
         },
         {
-            path: '/account/licenses/craft/:id',
-            component: LicensesCraftDetails
+            path: '/account/licenses/cms/:id',
+            component: LicensesCmsDetails
         },
         {
             path: '/account/licenses/plugins',

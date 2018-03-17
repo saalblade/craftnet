@@ -1,6 +1,6 @@
 <template>
     <div v-if="license">
-        <p><router-link class="nav-link" to="/account/licenses/craft" exact>← Craft CMS</router-link></p>
+        <p><router-link class="nav-link" to="/account/licenses/cms" exact>← Craft CMS</router-link></p>
         <h1><code>{{ license.key.substr(0, 10) }}</code></h1>
 
         <cms-license-details :license="license"></cms-license-details>
@@ -67,7 +67,7 @@
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
                         this.$root.displayNotice('CMS license released.');
-                        this.$router.push({path: '/account/licenses/craft'});
+                        this.$router.push({path: '/account/licenses/cms'});
                     })
                     .catch(response => {
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release CMS license.';

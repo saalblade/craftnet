@@ -31,7 +31,7 @@
 					<td v-if="!excludeCmsLicenseColumn">
 						<template v-if="license.cmsLicense">
 							<code>
-								<router-link v-if="license.cmsLicense.key" :to="'/account/licenses/craft/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
+								<router-link v-if="license.cmsLicense.key" :to="'/account/licenses/cms/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
 								<template v-else>{{ license.cmsLicense.shortKey }}</template>
 							</code>
 						</template>

@@ -18,7 +18,7 @@
 				<tr v-for="license in licenses">
 					<td>
 						<code>
-							<router-link :to="'/account/licenses/craft/'+license.id">
+							<router-link :to="'/account/licenses/cms/'+license.id">
 								{{ license.key.substr(0, 10) }}
 							</router-link>
 						</code>

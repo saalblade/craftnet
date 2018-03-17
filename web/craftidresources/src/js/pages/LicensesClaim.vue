@@ -109,7 +109,7 @@
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
                         this.$root.displayNotice('CMS license claimed.');
-                        this.$router.push({path: '/account/licenses/craft'});
+                        this.$router.push({path: '/account/licenses/cms'});
                     })
                     .catch(response => {
                         this.cmsLicenseLoading = false;
@@ -125,7 +125,7 @@
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
                         this.$root.displayNotice('CMS license claimed.');
-                        this.$router.push({path: '/account/licenses/craft'});
+                        this.$router.push({path: '/account/licenses/cms'});
                     })
                     .catch(response => {
                         this.cmsLicenseFileLoading = false;
