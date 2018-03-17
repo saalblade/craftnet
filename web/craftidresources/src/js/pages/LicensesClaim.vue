@@ -16,7 +16,7 @@
                     -->
 
                     <textarea-field id="cmsLicenseKey" class="mono" spellcheck="false" v-model="cmsLicenseKey" @input="cmsLicenseKeyChange" label="CMS License Key" rows="5" />
-                    <input type="submit" class="btn btn-primary" value="Claim License">
+                    <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !cmsLicenseValidates }" :disabled="!cmsLicenseValidates" />
                     <div class="spinner" v-if="cmsLicenseLoading"></div>
                 </form>
             </div>
@@ -29,7 +29,7 @@
 
                 <form @submit.prevent="claimPluginLicense()">
                     <text-field id="pluginLicenseKey" class="mono" spellcheck="false" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" :mask="{mask: '****-****-****-****-****-****', placeholder: ' '}" />
-                    <input type="submit" class="btn btn-primary" value="Claim License">
+                    <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !pluginLicenseValidates }" :disabled="!pluginLicenseValidates" />
                     <div class="spinner" v-if="pluginLicenseLoading"></div>
                 </form>
             </div>
@@ -59,8 +59,10 @@
             return {
                 cmsLicenseKey: '',
                 cmsLicenseLoading: false,
+                cmsLicenseValidates: false,
                 pluginLicenseKey: '',
                 pluginLicenseLoading: false,
+                pluginLicenseValidates: false,
             }
         },
 
@@ -70,6 +72,23 @@
         },
 
         methods: {
+            checkCmsLicense() {
+                if(this.cmsLicenseKey.length === 258) {
+                    return true;
+                }
+
+                return false;
+            },
+
+            checkPluginLicense() {
+                const normalizedValue = this.pluginLicenseKey.replace(/(\-\ )/gm, "").trim();
+
+                if(normalizedValue.length === 29) {
+                    return true;
+                }
+
+                return false;
+            },
 
             claimCmsLicense() {
                 this.cmsLicenseLoading = true;
@@ -114,6 +133,18 @@
             }
 
         },
+
+        watch: {
+
+            cmsLicenseKey(key) {
+                this.cmsLicenseValidates = this.checkCmsLicense();
+            },
+
+            pluginLicenseKey(key) {
+                this.pluginLicenseValidates = this.checkPluginLicense();
+            }
+
+        }
 
     }
 </script>
