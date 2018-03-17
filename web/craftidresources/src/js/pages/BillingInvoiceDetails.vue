@@ -10,7 +10,7 @@
 					<dd>{{ invoice.number }}</dd>
 
 					<dt>Date Paid</dt>
-					<dd>{{ invoice.datePaid }}</dd>
+					<dd>{{ invoice.datePaid.date|moment("LLL") }}</dd>
 				</dl>
 
 				<billing-address :address="invoice.billingAddress" class="mb-4"></billing-address>
@@ -70,7 +70,7 @@
 						<td>{{ transaction.amount|currency }}</td>
 						<td>{{ transaction.paymentAmount|currency }}</td>
 						<td>Gateway {{ transaction.gatewayId }}</td>
-						<td>{{ transaction.dateCreated }}</td>
+						<td>{{ transaction.dateCreated|moment("L") }}</td>
 					</tr>
 					</tbody>
 				</table>

@@ -14,7 +14,7 @@
                 <td v-if="!upcoming"><router-link :to="'/account/billing/invoices/' + invoice.number">{{ invoice.shortNumber }}</router-link></td>
                 <td v-else>—</td>
                 <td>{{ invoice.totalPrice|currency }}</td>
-                <td>{{ invoice.datePaid }}</td>
+                <td><template v-if="invoice.datePaid">{{ invoice.datePaid.date|moment("L") }}</template></td>
                 <td v-if="!upcoming"><a href="#">Receipt</a></td>
             </tr>
             </tbody>

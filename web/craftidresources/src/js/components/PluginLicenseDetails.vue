@@ -45,7 +45,7 @@
 							</template>
 
 							<dt>Created</dt>
-							<dd>{{ license.dateCreated.date }}</dd>
+							<dd>{{ license.dateCreated.date|moment("L") }}</dd>
 						</dl>
 					</div>
 				</div>

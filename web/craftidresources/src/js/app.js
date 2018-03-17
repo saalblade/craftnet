@@ -11,6 +11,7 @@ Vue.filter('currency', currency);
 Vue.filter('formatCmsLicense', formatCmsLicense);
 Vue.filter('formatPluginLicense', formatPluginLicense);
 Vue.use(VueInputMask);
+Vue.use(require('vue-moment'));
 
 window.craftIdApp = new Vue({
 
