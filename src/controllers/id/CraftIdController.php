@@ -228,26 +228,7 @@ class CraftIdController extends BaseController
         $orders = [];
 
         foreach ($results as $result) {
-            $order = $result->toArray();
-            $order['shortNumber'] = $result->getShortNumber();
-            $order['itemTotal'] = $result->getItemTotal();
-            $order['totalPrice'] = $result->getTotalPrice();
-            $order['billingAddress'] = $result->getBillingAddress();
-
-
-            // Payment source
-
-            $paymentSource = $result->getPaymentSource();
-
-            if ($paymentSource) {
-                $order['paymentSource'] = $paymentSource->toArray();
-
-                $response = Json::decode($paymentSource->response);
-
-                if (isset($response['object']) && $response['object'] === 'card') {
-                    $order['card'] = $response;
-                }
-            }
+            $order = $result->getAttributes(['number', 'datePaid', 'shortNumber', 'itemTotal', 'totalPrice', 'billingAddress']);
 
 
             // Line Items
@@ -255,10 +236,12 @@ class CraftIdController extends BaseController
             $lineItems = [];
 
             foreach ($result->lineItems as $lineItem) {
-                $row = $lineItem->toArray();
-                $row['description'] = $lineItem->getDescription();
-                $row['subtotal'] = $lineItem->getSubtotal();
-                $lineItems[] = $row;
+                $lineItems[] = $lineItem->getAttributes([
+                    'description',
+                    'salePrice',
+                    'qty',
+                    'subtotal',
+                ]);
             }
 
             $order['lineItems'] = $lineItems;
