@@ -67,8 +67,8 @@
 									</template>
 
 									<form v-if="notesEditing" @submit.prevent="saveNotes()">
-										<textarea-field id="notes" v-model="licenseDraft.notes"></textarea-field>
-										<input type="submit" class="btn btn-primary" value="Save" />
+										<textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
+										<input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
 										<input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
 										<div class="spinner" v-if="notesLoading"></div>
 									</form>
@@ -105,12 +105,13 @@
 
         data() {
             return {
-                errors: {},
-                licenseDraft: {},
-                domainEditing: false,
+				errors: {},
+				licenseDraft: {},
+				domainEditing: false,
 				domainLoading: false,
-                notesEditing: false,
-                notesLoading: false,
+				notesEditing: false,
+				notesLoading: false,
+				notesValidates: false,
             }
         },
 
@@ -229,7 +230,14 @@
             cancelEditNotes() {
                 this.licenseDraft.notes = this.license.notes;
                 this.notesEditing = false;
-            }
+            },
+
+            notesChange() {
+                this.notesValidates = false;
+                if(this.licenseDraft.notes !== this.license.notes) {
+                    this.notesValidates = true;
+                }
+			}
 
         },
 
