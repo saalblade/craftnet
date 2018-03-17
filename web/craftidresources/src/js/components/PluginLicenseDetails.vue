@@ -45,7 +45,7 @@
 							</template>
 
 							<dt>Created</dt>
-							<dd>{{ license.dateCreated }}</dd>
+							<dd>{{ license.dateCreated.date }}</dd>
 						</dl>
 					</div>
 				</div>
