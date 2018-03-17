@@ -1,12 +1,31 @@
 export function formatCmsLicense(value) {
+    const normalizedValue = value.replace(/(\r\n|\n|\r)/gm, "");
+
     let parts = [];
 
-    parts.push(value.substr(0, 50));
-    parts.push(value.substr(50, 50));
-    parts.push(value.substr(100, 50));
-    parts.push(value.substr(150, 50));
-    parts.push(value.substr(200, 50));
-    parts.push(value.substr(250));
+    if(normalizedValue.length > 0) {
+        parts.push(normalizedValue.substr(0, 50));
+    }
+
+    if(normalizedValue.length > 50) {
+        parts.push(normalizedValue.substr(50, 50));
+    }
+
+    if(normalizedValue.length > 100) {
+        parts.push(normalizedValue.substr(100, 50));
+    }
+
+    if(normalizedValue.length > 150) {
+        parts.push(normalizedValue.substr(150, 50));
+    }
+
+    if(normalizedValue.length > 200) {
+        parts.push(normalizedValue.substr(200, 50));
+    }
+
+    if(normalizedValue.length > 250) {
+        parts.push(normalizedValue.substr(250));
+    }
 
     let formattedValue = '';
 
@@ -14,7 +33,7 @@ export function formatCmsLicense(value) {
         formattedValue += parts[i];
 
         if(i < parts.length - 1) {
-            formattedValue += '\r';
+            formattedValue += '\r\n';
         }
     }
 

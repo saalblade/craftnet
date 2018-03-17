@@ -6,6 +6,8 @@
 			:placeholder="placeholder"
 			:value="value"
 			@input="$emit('input', $event.target.value)"
+			:autocapitalize="autocapitalize"
+			:spellcheck="spellcheck"
 			autocomplete="off"
 			class="form-control"
 			type="text">
@@ -15,7 +17,7 @@
 <script>
     export default {
 
-        props: ['id', 'placeholder', 'value', 'cols', 'disabled'],
+        props: ['id', 'placeholder', 'value', 'cols', 'disabled', 'autocapitalize', 'spellcheck'],
 
     }
 </script>

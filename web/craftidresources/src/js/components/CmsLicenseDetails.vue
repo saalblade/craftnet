@@ -11,8 +11,7 @@
 								<dd>{{ license.edition }}</dd>
 
 								<dt>License Key</dt>
-								<dd>{{ license.key.slice(0, 10) }}… <a
-										href="#license-key">View license key</a></dd>
+								<dd>{{ license.key.slice(0, 10) }}… <a href="#license-key">View license key</a></dd>
 
 								<dt>Domain Name</dt>
 								<dd>
@@ -85,7 +84,7 @@
 			<div class="card-body">
 				<h4>License Key</h4>
 				<div v-if="license">
-					<textarea-field id="notes" v-model="formattedLicense" :disabled="true" rows="6"></textarea-field>
+					<textarea-field id="notes" class="mono" v-model="formattedLicense" :disabled="true" rows="6"></textarea-field>
 					<a :href="downloadLicenseUrl" class="btn btn-secondary" target="_blank">Download License Key</a>
 				</div>
 			</div>
@@ -231,6 +230,20 @@
             cancelEditNotes() {
                 this.licenseDraft.notes = this.license.notes;
                 this.notesEditing = false;
+            }
+
+        },
+
+
+        watch: {
+
+            /**
+             * Validate password when the password value changes.
+             */
+            licenseDraft(license) {
+                console.log('license', license);
+
+                return license;
             }
 
         },

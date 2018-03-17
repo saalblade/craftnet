@@ -289,8 +289,9 @@ th {
   margin-bottom: 1rem;
 }
 
-.form-group.mono input {
-  font-family: monospace;
+.form-group.mono input,
+.form-group.mono textarea {
+  @apply .font-mono;
 }
 
 .alert {
