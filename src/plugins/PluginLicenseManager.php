@@ -285,7 +285,7 @@ class PluginLicenseManager extends Component
         $licenses = [];
 
         foreach ($results as $result) {
-            $license = $result->toArray();
+            $license = $result->getAttributes(['id', 'key', 'cmsLicenseId', 'email', 'dateCreated']);
 
 
             // Plugin
@@ -308,7 +308,7 @@ class PluginLicenseManager extends Component
                 $cmsLicenseResult = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
 
                 if ($cmsLicenseResult && $cmsLicenseResult->ownerId === $owner->id) {
-                    $cmsLicense = $cmsLicenseResult->getAttributes(['key']);
+                    $cmsLicense = $cmsLicenseResult->getAttributes(['key', 'edition']);
                 } else {
                     $cmsLicense = [
                         'shortKey' => substr($cmsLicenseResult->key, 0, 10)
