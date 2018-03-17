@@ -33,6 +33,7 @@ return [
         'POST   v1/developer/<userId:\d+>' => 'craftcom/api/v1/developer',
         'POST   v1/optimize-composer-reqs' => 'craftcom/api/v1/optimize-composer-reqs',
         'POST   v1/payments' => 'craftcom/api/v1/payments/pay',
+        'POST   v1/plugin-licenses' => 'craftcom/api/v1/plugin-licenses/create',
         'POST   v1/plugin-store' => 'craftcom/api/v1/plugin-store',
         'POST   v1/plugin/<pluginId:\d+>' => 'craftcom/api/v1/plugin',
         'GET    v1/updates' => 'craftcom/api/v1/updates',
