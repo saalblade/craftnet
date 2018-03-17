@@ -2,12 +2,12 @@
 
 namespace craftcom\controllers\api\v1;
 
+use craft\commerce\Plugin as Commerce;
 use craft\elements\User;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\oauthserver\Module as OauthServer;
 use yii\helpers\Json;
 use yii\web\Response;
-use craft\commerce\Plugin as Commerce;
 
 /**
  * Class AccountController
@@ -66,7 +66,7 @@ class AccountController extends BaseApiController
                                 $paymentSource = $paymentSources[0];
                                 $response = Json::decode($paymentSource->response);
 
-                                if(isset($response['object']) && $response['object'] === 'card') {
+                                if (isset($response['object']) && $response['object'] === 'card') {
                                     $card = $response;
                                 }
                             }

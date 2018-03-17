@@ -40,8 +40,8 @@ class m180227_232204_create_license_tables extends Migration
     {
         // fix plugins table ---------------------------------------------------
 
-        $this->alterColumn('craftcom_plugins', 'price',  $this->decimal(14, 4)->unsigned());
-        $this->alterColumn('craftcom_plugins', 'renewalPrice',  $this->decimal(14, 4)->unsigned());
+        $this->alterColumn('craftcom_plugins', 'price', $this->decimal(14, 4)->unsigned());
+        $this->alterColumn('craftcom_plugins', 'renewalPrice', $this->decimal(14, 4)->unsigned());
 
         // cmseditions ---------------------------------------------------------
 

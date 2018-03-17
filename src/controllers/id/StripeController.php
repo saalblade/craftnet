@@ -7,18 +7,14 @@ use Craft;
 use craft\commerce\base\Gateway;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\User;
-use craft\helpers\Db;
 use craft\helpers\UrlHelper;
 use craftcom\developers\Developer;
-use craftcom\records\StripeCustomer as StripeCustomerRecord;
-use craftcom\records\VcsToken;
 use League\OAuth2\Client\Token\AccessToken;
 use Stripe\Account;
 use Stripe\Stripe;
 use yii\helpers\Json;
 use yii\web\HttpException;
 use yii\web\Response;
-
 
 
 /**
@@ -117,7 +113,7 @@ class StripeController extends BaseController
     {
         $user = Craft::$app->getUser()->getIdentity();
 
-        if($user->stripeAccessToken) {
+        if ($user->stripeAccessToken) {
             Stripe::setApiKey($user->stripeAccessToken);
             $account = Account::retrieve();
             return $this->asJson($account);
@@ -140,13 +136,13 @@ class StripeController extends BaseController
         $card = null;
         $paymentSources = \craft\commerce\Plugin::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
 
-        if(count($paymentSources)) {
+        if (count($paymentSources)) {
             $paymentSource = $paymentSources[0];
             $response = Json::decode($paymentSource->response);
 
-            if(isset($response['card'])) {
+            if (isset($response['card'])) {
                 $card = $response['card'];
-            } elseif(isset($response['object']) && $response['object'] === 'card') {
+            } elseif (isset($response['object']) && $response['object'] === 'card') {
                 $card = $response;
             }
         }
@@ -192,7 +188,7 @@ class StripeController extends BaseController
         // Remove existing payment sources
         $existingPaymentSources = $paymentSources->getAllPaymentSourcesByUserId($userId);
 
-        foreach($existingPaymentSources as $paymentSource) {
+        foreach ($existingPaymentSources as $paymentSource) {
             $paymentSources->deletePaymentSourceById($paymentSource->id);
         }
 
@@ -207,7 +203,7 @@ class StripeController extends BaseController
             $paymentSource = $paymentSources->createPaymentSource($userId, $gateway, $paymentForm, $description);
 
             if ($paymentSource) {
-               $card = $paymentSource->response;
+                $card = $paymentSource->response;
 
                 return $this->asJson([
                     'success' => true,

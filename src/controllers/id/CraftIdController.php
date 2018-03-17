@@ -3,14 +3,13 @@
 namespace craftcom\controllers\id;
 
 use Craft;
+use craft\commerce\elements\Order;
+use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
 use craftcom\Module;
 use yii\helpers\Json;
 use yii\web\Response;
-use craft\commerce\Plugin as Commerce;
-use craftcom\plugins\Plugin;
-use craft\commerce\elements\Order;
 
 /**
  * Class CraftIdController
@@ -240,7 +239,7 @@ class CraftIdController extends BaseController
 
             $paymentSource = $result->getPaymentSource();
 
-            if($paymentSource) {
+            if ($paymentSource) {
                 $order['paymentSource'] = $paymentSource->toArray();
 
                 $response = Json::decode($paymentSource->response);
@@ -255,7 +254,7 @@ class CraftIdController extends BaseController
 
             $lineItems = [];
 
-            foreach($result->lineItems as $lineItem) {
+            foreach ($result->lineItems as $lineItem) {
                 $row = $lineItem->toArray();
                 $row['description'] = $lineItem->getDescription();
                 $row['subtotal'] = $lineItem->getSubtotal();

@@ -14,7 +14,6 @@ use craft\elements\User;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Json;
 use craftcom\cms\CmsEdition;
-use craftcom\cms\CmsLicense;
 use craftcom\composer\Package;
 use craftcom\Module;
 use craftcom\plugins\Plugin;

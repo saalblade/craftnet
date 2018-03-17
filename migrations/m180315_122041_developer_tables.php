@@ -2,10 +2,8 @@
 
 namespace craft\contentmigrations;
 
-use Craft;
 use craft\db\Migration;
 use craft\elements\User;
-use craft\helpers\Db;
 
 /**
  * m180315_122041_developer_table migration.
@@ -53,7 +51,7 @@ class m180315_122041_developer_tables extends Migration
         $developerValues = [];
 
         foreach ($developerIds as $id) {
-           $developerValues[] = [$id];
+            $developerValues[] = [$id];
         }
 
         $this->batchInsert('craftcom_developers', ['id'], $developerValues, false);

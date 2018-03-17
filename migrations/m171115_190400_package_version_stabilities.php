@@ -3,7 +3,6 @@
 namespace craft\contentmigrations;
 
 use Composer\Semver\VersionParser;
-use Craft;
 use craft\db\Migration;
 use craft\db\Query;
 

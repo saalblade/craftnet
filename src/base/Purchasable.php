@@ -11,6 +11,7 @@ abstract class Purchasable extends CommercePurchasable
 {
     /**
      * Returns the "type" value that should be included in toArray().
+     *
      * @return string
      */
     abstract public function getType(): string;

@@ -6,7 +6,6 @@ use Craft;
 use craftcom\cms\CmsLicense;
 use craftcom\cms\CmsLicenseManager;
 use craftcom\controllers\api\BaseApiController;
-use craftcom\errors\LicenseNotFoundException;
 use craftcom\helpers\KeyHelper;
 use yii\base\Exception;
 use yii\validators\EmailValidator;

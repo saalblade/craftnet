@@ -295,14 +295,14 @@ class CmsLicenseManager extends Component
 
         $licenses = [];
 
-        foreach($results as $result) {
+        foreach ($results as $result) {
             $license = $result->toArray();
             $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
 
             $pluginLicenses = [];
 
             foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
-                if($pluginLicensesResult->ownerId === $owner->id) {
+                if ($pluginLicensesResult->ownerId === $owner->id) {
                     $pluginLicenseArray = $pluginLicensesResult->toArray();
                 } else {
                     $pluginLicenseArray = [
@@ -312,7 +312,7 @@ class CmsLicenseManager extends Component
 
                 $plugin = null;
 
-                if($pluginLicensesResult->pluginId) {
+                if ($pluginLicensesResult->pluginId) {
                     $plugin = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
                 }
 
