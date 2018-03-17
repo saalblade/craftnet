@@ -26,14 +26,6 @@ use yii\web\Response;
  */
 class StripeController extends BaseController
 {
-    // Properties
-    // =========================================================================
-
-    /**
-     * @var int
-     */
-    private $gatewayId = 2;
-
     // Public Methods
     // =========================================================================
 
@@ -134,7 +126,7 @@ class StripeController extends BaseController
     public function actionCustomer(): Response
     {
         $user = Craft::$app->getUser()->getIdentity();
-        $customer = \craft\commerce\stripe\Plugin::getInstance()->getCustomers()->getCustomer($this->gatewayId, $user->id);
+        $customer = \craft\commerce\stripe\Plugin::getInstance()->getCustomers()->getCustomer(getenv('STRIPE_GATEWAY_ID'), $user->id);
 
         $paymentSource = null;
         $card = null;
@@ -182,7 +174,7 @@ class StripeController extends BaseController
         }
 
         /** @var Gateway $gateway */
-        $gateway = $plugin->getGateways()->getGatewayById($this->gatewayId);
+        $gateway = $plugin->getGateways()->getGatewayById(getenv('STRIPE_GATEWAY_ID'));
 
         if (!$gateway || !$gateway->supportsPaymentSources()) {
             $error = Craft::t('commerce', 'There is no gateway selected that supports payment sources.');
