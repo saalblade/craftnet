@@ -2,7 +2,7 @@
 
 namespace craftcom\helpers;
 
-class LicenseHelper
+class KeyHelper
 {
     /**
      * Generates a new Craft license key.
@@ -22,6 +22,16 @@ class LicenseHelper
     public static function generatePluginKey(): string
     {
         return static::key(24);
+    }
+
+    /**
+     * Generates a new API token.
+     *
+     * @return string
+     */
+    public static function generateApiToken(): string
+    {
+        return strtolower(static::key(40));
     }
 
     /**

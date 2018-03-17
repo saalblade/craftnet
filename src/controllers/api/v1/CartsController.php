@@ -14,7 +14,7 @@ use craftcom\cms\CmsLicenseManager;
 use craftcom\controllers\api\BaseApiController;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\errors\ValidationException;
-use craftcom\helpers\LicenseHelper;
+use craftcom\helpers\KeyHelper;
 use craftcom\plugins\Plugin;
 use Ddeboer\Vatin\Validator;
 use Moccalotto\Eu\CountryInfo;
@@ -553,7 +553,7 @@ class CartsController extends BaseApiController
         } else {
             // generate a license key now to ensure that the line item options are unique
             $options = [
-                'licenseKey' => 'new:'.LicenseHelper::generateCmsKey(),
+                'licenseKey' => 'new:'.KeyHelper::generateCmsKey(),
             ];
         }
 
@@ -637,7 +637,7 @@ class CartsController extends BaseApiController
 
             // generate a license key now to ensure that the line item options are unique
             $options = [
-                'licenseKey' => 'new:'.LicenseHelper::generatePluginKey(),
+                'licenseKey' => 'new:'.KeyHelper::generatePluginKey(),
                 'cmsLicenseKey' => $cmsLicense->key ?? null,
             ];
         }

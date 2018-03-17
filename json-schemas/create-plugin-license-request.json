@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "plugin": {"type": "string"},
+    "edition": {"type": "string"},
+    "expirable": {"type": "boolean"},
+    "expiresOn": {"type": ["string", "null"]},
+    "email": {"type": "string", "format": "email"},
+    "notes": {"type": ["string", "null"]},
+    "privateNotes": {"type": ["string", "null"]}
+  },
+  "required": ["plugin", "edition", "email"]
+}

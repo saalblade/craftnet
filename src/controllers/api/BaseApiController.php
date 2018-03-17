@@ -3,12 +3,14 @@
 namespace craftcom\controllers\api;
 
 use Craft;
+use craft\elements\User;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftcom\cms\CmsLicense;
+use craftcom\developers\Developer;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\errors\ValidationException;
 use craftcom\Module;
@@ -23,6 +25,7 @@ use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller as YiiController;
 use yii\web\HttpException;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * Class BaseController
@@ -516,5 +519,34 @@ abstract class BaseApiController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * Authorizes the request and returns the authorized user.
+     *
+     * @return User|Developer
+     * @throws UnauthorizedHttpException if the request is not authorized
+     */
+    protected function getAuthUser(): User
+    {
+        list ($username, $password) = Craft::$app->getRequest()->getAuthCredentials();
+
+        if (!$username || !$password) {
+            throw new UnauthorizedHttpException('Not Authorized');
+        }
+
+        /** @var User|Developer|null $user */
+        $user = Craft::$app->getUsers()->getUserByUsernameOrEmail($username);
+
+        if (
+            $user === null ||
+            $user->apiToken === null ||
+            $user->getStatus() !== User::STATUS_ACTIVE ||
+            Craft::$app->getSecurity()->validatePassword($password, $user->apiToken) === false
+        ) {
+            throw new UnauthorizedHttpException('Not Authorized');
+        }
+
+        return $user;
     }
 }

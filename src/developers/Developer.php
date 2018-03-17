@@ -2,10 +2,12 @@
 
 namespace craftcom\developers;
 
+use Craft;
+use craft\base\Element;
 use craft\elements\User;
+use craftcom\helpers\KeyHelper;
 use craftcom\plugins\Plugin;
 use yii\base\Behavior;
-use yii\base\InvalidArgumentException;
 
 /**
  * The Developer behavior extends users with plugin developer-related features.
@@ -37,9 +39,24 @@ class Developer extends Behavior
     public $payPalEmail;
 
     /**
+     * @var string|null
+     */
+    public $apiToken;
+
+    /**
      * @var Plugin[]|null
      */
     private $_plugins;
+
+    /**
+     * @inheritdoc
+     */
+    public function events()
+    {
+        return [
+            Element::EVENT_AFTER_SAVE => [$this, 'afterSave'],
+        ];
+    }
 
     /**
      * @return string
@@ -70,5 +87,80 @@ class Developer extends Behavior
     public function getFundsManager(): FundsManager
     {
         return new FundsManager($this->owner);
+    }
+
+    /**
+     * Generates a new API token for the developer.
+     *
+     * @return string the new API token
+     */
+    public function generateApiToken(): string
+    {
+        $token = KeyHelper::generateApiToken();
+        $this->apiToken = Craft::$app->getSecurity()->generatePasswordHash($token, 4);
+
+        $this->_updateDeveloperData([
+            'apiToken' => $this->apiToken,
+        ]);
+
+        return $token;
+    }
+
+    /**
+     * Handles post-user-save stuff
+     */
+    public function afterSave()
+    {
+        $isDeveloper = $this->owner->isInGroup('developers');
+        $request = Craft::$app->getRequest();
+        $currentUser = Craft::$app->getUser()->getIdentity();
+
+        // If it's a front-end site POST request and they're not currently a developer, check to see if they've opted into developer features.
+        if (
+            $currentUser &&
+            $currentUser->id == $this->owner->id &&
+            $request->getIsSiteRequest() &&
+            $request->getIsPost() &&
+            $request->getBodyParam('fields.enablePluginDeveloperFeatures') &&
+            !$isDeveloper
+        ) {
+            // Get any existing group IDs.
+            $userGroupsService = Craft::$app->getUserGroups();
+            $existingGroups = $userGroupsService->getGroupsByUserId($currentUser->id);
+            $groupIds = [];
+
+            foreach ($existingGroups as $existingGroup) {
+                $groupIds[] = $existingGroup->id;
+            }
+
+            // Add the developer group.
+            $groupIds[] = $userGroupsService->getGroupByHandle('developers')->id;
+
+            Craft::$app->getUsers()->assignUserToGroups($currentUser->id, $groupIds);
+            $isDeveloper = true;
+        }
+
+        if ($isDeveloper) {
+            $this->_updateDeveloperData([
+                'country' => $this->country,
+                'stripeAccessToken' => $this->stripeAccessToken,
+                'stripeAccount' => $this->stripeAccount,
+                'payPalEmail' => $this->payPalEmail,
+            ]);
+        }
+    }
+
+    /**
+     * Updates the developer data.
+     *
+     * @param array $data
+     */
+    private function _updateDeveloperData(array $data)
+    {
+        Craft::$app->getDb()->createCommand()
+            ->upsert('craftcom_developers', [
+                'id' => $this->owner->id,
+            ], $data, [], false)
+            ->execute();
     }
 }
