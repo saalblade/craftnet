@@ -6,8 +6,10 @@ use AdamPaterson\OAuth2\Client\Provider\Stripe as StripeOauthProvider;
 use Craft;
 use craft\commerce\base\Gateway;
 use craft\commerce\Plugin as Commerce;
+use craft\elements\User;
 use craft\helpers\Db;
 use craft\helpers\UrlHelper;
+use craftcom\developers\Developer;
 use craftcom\records\StripeCustomer as StripeCustomerRecord;
 use craftcom\records\VcsToken;
 use League\OAuth2\Client\Token\AccessToken;
@@ -52,6 +54,7 @@ class StripeController extends BaseController
      */
     public function actionCallback(): Response
     {
+        /** @var User|Developer $user */
         $user = Craft::$app->getUser()->getIdentity();
         $provider = $this->_getStripeProvider();
         $code = Craft::$app->getRequest()->getParam('code');
@@ -65,7 +68,12 @@ class StripeController extends BaseController
         $user->stripeAccessToken = $accessToken->getToken();
         $user->stripeAccount = $resourceOwner->getId();
 
-        Craft::$app->getElements()->saveElement($user, false);
+        // set their country
+        Stripe::setApiKey($user->stripeAccessToken);
+        $account = Account::retrieve();
+        $user->country = $account->country;
+
+        $user->saveDeveloperInfo();
 
         $referrer = Craft::$app->getSession()->get('stripe.referrer');
 
