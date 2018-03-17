@@ -8,7 +8,6 @@ use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
 use craftcom\Module;
-use yii\helpers\Json;
 use yii\web\Response;
 
 /**
