@@ -22,6 +22,9 @@ const router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
     canReuse: false,
+    scrollBehavior (to, from, savedPosition) {
+        return savedPosition || { x: 0, y: 0 };
+    },
     routes: [
         {
             path: '/',
