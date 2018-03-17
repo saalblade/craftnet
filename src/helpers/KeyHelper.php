@@ -25,6 +25,16 @@ class KeyHelper
     }
 
     /**
+     * Generates a new API token.
+     *
+     * @return string
+     */
+    public static function generateApiToken(): string
+    {
+        return strtolower(static::key(40));
+    }
+
+    /**
      * Generates a new license key.
      *
      * @param int $length

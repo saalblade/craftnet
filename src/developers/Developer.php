@@ -5,6 +5,7 @@ namespace craftcom\developers;
 use Craft;
 use craft\base\Element;
 use craft\elements\User;
+use craftcom\helpers\KeyHelper;
 use craftcom\plugins\Plugin;
 use yii\base\Behavior;
 
@@ -36,6 +37,11 @@ class Developer extends Behavior
      * @var string|null
      */
     public $payPalEmail;
+
+    /**
+     * @var string|null
+     */
+    public $apiToken;
 
     /**
      * @var Plugin[]|null
@@ -84,6 +90,23 @@ class Developer extends Behavior
     }
 
     /**
+     * Generates a new API token for the developer.
+     *
+     * @return string the new API token
+     */
+    public function generateApiToken(): string
+    {
+        $token = KeyHelper::generateApiToken();
+        $this->apiToken = Craft::$app->getSecurity()->generatePasswordHash($token, 4);
+
+        $this->_updateDeveloperData([
+            'apiToken' => $this->apiToken,
+        ]);
+
+        return $token;
+    }
+
+    /**
      * Handles post-user-save stuff
      */
     public function afterSave()
@@ -117,19 +140,27 @@ class Developer extends Behavior
             $isDeveloper = true;
         }
 
-        $db = Craft::$app->getDb();
-
-        if ($isDeveloper && $db->tableExists('craftcom_developers')) {
-            $db->createCommand()
-                ->upsert('craftcom_developers', [
-                    'id' => $this->owner->id,
-                ], [
-                    'country' => $this->owner->country,
-                    'stripeAccessToken' => $this->owner->stripeAccessToken,
-                    'stripeAccount' => $this->owner->stripeAccount,
-                    'payPalEmail' => $this->owner->payPalEmail,
-                ], [], false)
-                ->execute();
+        if ($isDeveloper) {
+            $this->_updateDeveloperData([
+                'country' => $this->country,
+                'stripeAccessToken' => $this->stripeAccessToken,
+                'stripeAccount' => $this->stripeAccount,
+                'payPalEmail' => $this->payPalEmail,
+            ]);
         }
+    }
+
+    /**
+     * Updates the developer data.
+     *
+     * @param array $data
+     */
+    private function _updateDeveloperData(array $data)
+    {
+        Craft::$app->getDb()->createCommand()
+            ->upsert('craftcom_developers', [
+                'id' => $this->owner->id,
+            ], $data, [], false)
+            ->execute();
     }
 }

@@ -31,6 +31,7 @@ class UserQueryBehavior extends Behavior
             'developers.stripeAccessToken',
             'developers.stripeAccount',
             'developers.payPalEmail',
+            'developers.apiToken',
         ]);
 
         $this->owner->query->leftJoin('craftcom_developers developers', '[[developers.id]] = [[users.id]]');
