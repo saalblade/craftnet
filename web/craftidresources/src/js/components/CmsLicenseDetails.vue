@@ -101,7 +101,7 @@
 
     export default {
 
-        props: ['license', 'type'],
+        props: ['license'],
 
         data() {
             return {
@@ -158,7 +158,6 @@
             saveAutoRenew() {
                 this.$store.dispatch('saveCmsLicense', {
                     id: this.license.id,
-                    type: this.type,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then((data) => {
                     if (this.licenseDraft.autoRenew) {
