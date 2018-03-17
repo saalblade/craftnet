@@ -25,13 +25,13 @@ class MixHelper
             $manifestDirectory = "/{$manifestDirectory}";
         }
 
-        if (file_exists(self::public_path($manifestDirectory . '/hot'))) {
+        if (file_exists(self::public_path($manifestDirectory.'/hot'))) {
             return "//localhost:8080{$path}";
         }
 
         if (!$manifest) {
-            if (!file_exists($manifestPath = self::public_path($manifestDirectory . '/mix-manifest.json'))) {
-                throw new \Exception('The Mix manifest does not exist at: '.self::public_path($manifestDirectory . '/mix-manifest.json'));
+            if (!file_exists($manifestPath = self::public_path($manifestDirectory.'/mix-manifest.json'))) {
+                throw new \Exception('The Mix manifest does not exist at: '.self::public_path($manifestDirectory.'/mix-manifest.json'));
             }
 
             $manifest = json_decode(file_get_contents($manifestPath), true);
@@ -39,12 +39,12 @@ class MixHelper
 
         if (!array_key_exists($path, $manifest)) {
             throw new \Exception(
-                "Unable to locate Mix file: {$path}. Please check your " .
+                "Unable to locate Mix file: {$path}. Please check your ".
                 'webpack.mix.js output paths and try again.'
             );
         }
 
-        return $manifestDirectory . $manifest[$path];
+        return $manifestDirectory.$manifest[$path];
     }
 
     /**

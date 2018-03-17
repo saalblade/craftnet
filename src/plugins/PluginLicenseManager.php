@@ -198,7 +198,7 @@ class PluginLicenseManager extends Component
     /**
      * Finds unclaimed license by key and assigns it to the user.
      *
-     * @param User   $user
+     * @param User $user
      * @param string $key
      *
      * @return bool
@@ -222,8 +222,8 @@ class PluginLicenseManager extends Component
 
         $license = new PluginLicense($result);
 
-        if($user) {
-            if(!$license->ownerId) {
+        if ($user) {
+            if (!$license->ownerId) {
                 $license->ownerId = $user->id;
 
                 if ($this->saveLicense($license)) {
@@ -284,7 +284,7 @@ class PluginLicenseManager extends Component
 
         $licenses = [];
 
-        foreach($results as $result) {
+        foreach ($results as $result) {
             $license = $result->toArray();
 
 
@@ -292,7 +292,7 @@ class PluginLicenseManager extends Component
 
             $plugin = null;
 
-            if($result->pluginId) {
+            if ($result->pluginId) {
                 $plugin = Plugin::find()->id($result->pluginId)->status(null)->one();
             }
 
@@ -303,10 +303,10 @@ class PluginLicenseManager extends Component
 
             $cmsLicenseArray = null;
 
-            if($result->cmsLicenseId) {
+            if ($result->cmsLicenseId) {
                 $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
 
-                if($cmsLicense && $cmsLicense->ownerId === $owner->id) {
+                if ($cmsLicense && $cmsLicense->ownerId === $owner->id) {
                     $cmsLicenseArray = $cmsLicense->toArray();
                 } else {
                     $cmsLicenseArray = [

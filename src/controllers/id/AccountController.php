@@ -6,11 +6,9 @@ use Craft;
 use craft\elements\Asset;
 use craft\errors\UploadFailedException;
 use craft\helpers\Assets;
-use craft\helpers\Db;
 use craft\helpers\FileHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use craftcom\records\VcsToken;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 

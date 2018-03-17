@@ -49,11 +49,11 @@ class CmsLicensesController extends Controller
                 $key = file_get_contents($licenseFilePath);
             }
 
-            if($key) {
+            if ($key) {
                 $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
 
-                if($license && $user) {
-                    if(!$license->ownerId) {
+                if ($license && $user) {
+                    if (!$license->ownerId) {
                         $license->ownerId = $user->id;
 
                         if ($this->module->getCmsLicenseManager()->saveLicense($license)) {
@@ -70,7 +70,7 @@ class CmsLicensesController extends Controller
             }
 
             throw new Exception("No license key provided.");
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
     }
@@ -88,7 +88,7 @@ class CmsLicensesController extends Controller
         $licenseId = Craft::$app->getRequest()->getParam('id');
         $license = $this->module->getCmsLicenseManager()->getLicenseById($licenseId);
 
-        if($license->ownerId === $user->id) {
+        if ($license->ownerId === $user->id) {
             return Craft::$app->getResponse()->sendContentAsFile($license->key, 'license.key');
         }
 
@@ -107,8 +107,9 @@ class CmsLicensesController extends Controller
 
         try {
             $licenses = Module::getInstance()->getCmsLicenseManager()->getLicensesArrayByOwner($user);
+
             return $this->asJson($licenses);
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
     }
@@ -126,7 +127,7 @@ class CmsLicensesController extends Controller
         $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
 
         try {
-            if($license && $user && $license->ownerId === $user->id) {
+            if ($license && $user && $license->ownerId === $user->id) {
                 $license->ownerId = null;
 
                 if ($this->module->getCmsLicenseManager()->saveLicense($license)) {
@@ -137,7 +138,7 @@ class CmsLicensesController extends Controller
             }
 
             throw new LicenseNotFoundException($key);
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
     }
@@ -155,7 +156,7 @@ class CmsLicensesController extends Controller
         $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
 
         try {
-            if($license && $user && $license->ownerId === $user->id) {
+            if ($license && $user && $license->ownerId === $user->id) {
                 $license->domain = Craft::$app->getRequest()->getParam('domain');
                 $license->notes = Craft::$app->getRequest()->getParam('notes');
 
@@ -167,7 +168,7 @@ class CmsLicensesController extends Controller
             }
 
             throw new LicenseNotFoundException($key);
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
     }

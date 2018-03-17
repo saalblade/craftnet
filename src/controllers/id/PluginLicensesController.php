@@ -6,10 +6,9 @@ use Craft;
 use craft\web\Controller;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\Module;
-use craftcom\plugins\Plugin;
-use yii\web\Response;
 use Exception;
 use Throwable;
+use yii\web\Response;
 
 /**
  * Class PluginLicensesController
@@ -37,7 +36,7 @@ class PluginLicensesController extends Controller
         try {
             $this->module->getPluginLicenseManager()->claimLicense($user, $key);
             return $this->asJson(['success' => true]);
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
     }
@@ -55,7 +54,7 @@ class PluginLicensesController extends Controller
         try {
             $licenses = Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
             return $this->asJson($licenses);
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
     }
@@ -74,7 +73,7 @@ class PluginLicensesController extends Controller
         $license = $this->module->getPluginLicenseManager()->getLicenseByKey($pluginHandle, $key);
 
         try {
-            if($license && $user && $license->ownerId === $user->id) {
+            if ($license && $user && $license->ownerId === $user->id) {
                 $license->ownerId = null;
 
                 if ($this->module->getPluginLicenseManager()->saveLicense($license)) {
@@ -85,7 +84,7 @@ class PluginLicensesController extends Controller
             }
 
             throw new LicenseNotFoundException($key);
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
     }

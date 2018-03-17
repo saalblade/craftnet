@@ -3,7 +3,6 @@
 namespace craftcom\twigextensions;
 
 use craftcom\helpers\MixHelper;
-
 use Twig_Extension;
 use Twig_SimpleFunction;
 
