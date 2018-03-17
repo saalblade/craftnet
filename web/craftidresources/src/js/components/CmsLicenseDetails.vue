@@ -11,7 +11,7 @@
 								<dd>{{ license.edition }}</dd>
 
 								<dt>License Key</dt>
-								<dd>{{ license.key.slice(0, 10) }}… <a href="#license-key">View license key</a></dd>
+								<dd><code>{{ license.key.slice(0, 10) }}…</code> <a href="#license-key">View license key</a></dd>
 
 								<dt>Domain Name</dt>
 								<dd>
