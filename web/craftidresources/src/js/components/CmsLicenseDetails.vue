@@ -234,21 +234,7 @@
 
         },
 
-
-        watch: {
-
-            /**
-             * Validate password when the password value changes.
-             */
-            licenseDraft(license) {
-                console.log('license', license);
-
-                return license;
-            }
-
-        },
-
-        mounted() {
+		mounted() {
             this.licenseDraft = {
                 autoRenew: (this.license.autoRenew == 1 ? true : false),
                 domain: this.license.domain,

@@ -7,17 +7,24 @@
                 <h3>Claim CMS license</h3>
                 <p class="text-secondary">Attach a Craft CMS license to your Craft ID account.</p>
 
-                <form @submit.prevent="claimCmsLicense()">
-                    <!--
-                    <div class="form-group">
-                        <label for="licenseFile" class="block">Craft License Key File</label>
-                        <input class="form-control" type="file" id="licenseFile" name="licenseFile" />
-                    </div>
-                    -->
-
-                    <textarea-field id="cmsLicenseKey" class="mono" spellcheck="false" v-model="cmsLicenseKey" @input="cmsLicenseKeyChange" label="CMS License Key" rows="5" />
+                <h5>By license key</h5>
+                <form class="mb-6" @submit.prevent="claimCmsLicense()">
+                    <textarea-field id="cmsLicenseKey" class="mono" spellcheck="false" v-model="cmsLicenseKey" @input="cmsLicenseKeyChange" label="Craft CMS License Key" rows="5" />
                     <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !cmsLicenseValidates }" :disabled="!cmsLicenseValidates" />
                     <div class="spinner" v-if="cmsLicenseLoading"></div>
+                </form>
+
+                <hr>
+
+                <h5>By license file</h5>
+                <form @submit.prevent="claimCmsLicenseFile()">
+                    <div class="form-group">
+                        <label for="licenseFile" class="block">Craft CMS License File</label>
+                        <input class="form-control" type="file" id="licenseFile" name="licenseFile" ref="licenseFile" @change="cmsLicenseFileChange" />
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !cmsLicenseFileValidates }" :disabled="!cmsLicenseFileValidates" />
+                    <div class="spinner" v-if="cmsLicenseFileLoading"></div>
                 </form>
             </div>
         </div>
@@ -60,6 +67,9 @@
                 cmsLicenseKey: '',
                 cmsLicenseLoading: false,
                 cmsLicenseValidates: false,
+                cmsLicenseFile: '',
+                cmsLicenseFileLoading: false,
+                cmsLicenseFileValidates: false,
                 pluginLicenseKey: '',
                 pluginLicenseLoading: false,
                 pluginLicenseValidates: false,
@@ -108,6 +118,22 @@
                     });
             },
 
+            claimCmsLicenseFile() {
+                this.$store.dispatch('claimCmsLicenseFile', this.$refs.licenseFile.files[0])
+                    .then(response => {
+                        this.cmsLicenseFileLoading = false;
+                        this.$store.dispatch('getCmsLicenses');
+                        this.$store.dispatch('getPluginLicenses');
+                        this.$root.displayNotice('CMS license claimed.');
+                        this.$router.push({path: '/account/licenses/craft'});
+                    })
+                    .catch(response => {
+                        this.cmsLicenseFileLoading = false;
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim CMS license.';
+                        this.$root.displayError(errorMessage);
+                    });
+            },
+
             claimPluginLicense() {
                 this.pluginLicenseLoading = true;
 
@@ -130,6 +156,10 @@
                 this.$nextTick(() => {
                     this.cmsLicenseKey = this.$options.filters.formatCmsLicense(value);
                 });
+            },
+
+            cmsLicenseFileChange() {
+                this.cmsLicenseFileValidates = this.$refs.licenseFile.files.length > 0;
             }
 
         },

@@ -58,6 +58,9 @@ export const UPLOAD_USER_PHOTO = (state, {response}) => {
 export const CLAIM_CMS_LICENSE = (state, {licenseKey}) => {
 };
 
+export const CLAIM_CMS_LICENSE_FILE = (state, {licenseFile}) => {
+};
+
 export const CLAIM_PLUGIN_LICENSE = (state, {licenseKey}) => {
 };
 

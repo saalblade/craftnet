@@ -3,10 +3,11 @@
 namespace craftcom\controllers\id;
 
 use Craft;
+use craft\errors\UploadFailedException;
 use craft\web\Controller;
+use craft\web\UploadedFile;
 use craftcom\errors\LicenseNotFoundException;
 use craftcom\Module;
-use craftcom\plugins\Plugin;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use Exception;
@@ -33,25 +34,42 @@ class CmsLicensesController extends Controller
     public function actionClaim(): Response
     {
         $key = Craft::$app->getRequest()->getParam('key');
-        $user = Craft::$app->getUser()->getIdentity();
-        $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
+        $licenseFile = UploadedFile::getInstanceByName('licenseFile');
 
         try {
-            if($license && $user) {
-                if(!$license->ownerId) {
-                    $license->ownerId = $user->id;
+            $user = Craft::$app->getUser()->getIdentity();
 
-                    if ($this->module->getCmsLicenseManager()->saveLicense($license)) {
-                        return $this->asJson(['success' => true]);
-                    }
-
-                    throw new Exception("Couldn't save license.");
+            if ($licenseFile) {
+                if ($licenseFile->getHasError()) {
+                    throw new UploadFailedException($licenseFile->error);
                 }
 
-                throw new Exception("License has already been claimed.");
+                $licenseFilePath = $licenseFile->tempName;
+
+                $key = file_get_contents($licenseFilePath);
             }
 
-            throw new LicenseNotFoundException($key);
+            if($key) {
+                $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
+
+                if($license && $user) {
+                    if(!$license->ownerId) {
+                        $license->ownerId = $user->id;
+
+                        if ($this->module->getCmsLicenseManager()->saveLicense($license)) {
+                            return $this->asJson(['success' => true]);
+                        }
+
+                        throw new Exception("Couldn't save license.");
+                    }
+
+                    throw new Exception("License has already been claimed.");
+                }
+
+                throw new LicenseNotFoundException($key);
+            }
+
+            throw new Exception("No license key provided.");
         } catch(Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }

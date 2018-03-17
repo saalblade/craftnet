@@ -158,6 +158,16 @@ export default {
             .catch(error => cbError(error.response));
     },
 
+    claimCmsLicenseFile(licenseFile, cb, cbError) {
+        let formData = new FormData();
+        formData.append('licenseFile', licenseFile);
+        formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
+
+        axios.post(Craft.actionUrl + '/craftcom/id/cms-licenses/claim', formData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
     claimPluginLicense(licenseKey, cb, cbError) {
         let data = {
             key: licenseKey,

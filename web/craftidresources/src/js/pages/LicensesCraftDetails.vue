@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="license">
         <p><router-link class="nav-link" to="/account/licenses/craft" exact>← Craft CMS</router-link></p>
         <h1><code>{{ license.key.substr(0, 10) }}</code></h1>
 
