@@ -16,22 +16,22 @@
 
 								<dt>Domain Name</dt>
 								<dd>
-									<template v-if="!editingDomain">
+									<template v-if="!domainEditing">
 										<p>{{ license.domain }}</p>
 
 										<div class="buttons">
-											<button @click="editingDomain = true" type="button" class="btn btn-secondary btn-sm">
+											<button @click="domainEditing = true" type="button" class="btn btn-secondary btn-sm">
 												<i class="fas fa-pencil-alt"></i>
 												Change Domain
 											</button>
 										</div>
 									</template>
 
-									<form v-if="editingDomain" @submit.prevent="saveDomain()">
+									<form v-if="domainEditing" @submit.prevent="saveDomain()">
 										<text-field id="domain" v-model="licenseDraft.domain"></text-field>
-
 										<input type="submit" class="btn btn-primary" value="Save" />
 										<input @click="cancelEditDomain()" type="button" class="btn btn-secondary" value="Cancel" />
+										<div class="spinner" v-if="domainLoading"></div>
 									</form>
 								</dd>
 							</dl>
@@ -56,22 +56,22 @@
 
 								<dt>Notes</dt>
 								<dd>
-									<template v-if="!editingNotes">
+									<template v-if="!notesEditing">
 										<p>{{ license.notes }}</p>
 
 										<div class="buttons">
-											<button @click="editingNotes = true" type="button" class="btn btn-secondary btn-sm">
+											<button @click="notesEditing = true" type="button" class="btn btn-secondary btn-sm">
 												<i class="fas fa-pencil-alt"></i>
 												Edit
 											</button>
 										</div>
 									</template>
 
-									<form v-if="editingNotes" @submit.prevent="saveNotes()">
+									<form v-if="notesEditing" @submit.prevent="saveNotes()">
 										<textarea-field id="notes" v-model="licenseDraft.notes"></textarea-field>
-
 										<input type="submit" class="btn btn-primary" value="Save" />
 										<input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
+										<div class="spinner" v-if="notesLoading"></div>
 									</form>
 								</dd>
 							</dl>
@@ -108,8 +108,10 @@
             return {
                 errors: {},
                 licenseDraft: {},
-                editingDomain: false,
-                editingNotes: false,
+                domainEditing: false,
+				domainLoading: false,
+                notesEditing: false,
+                notesLoading: false,
             }
         },
 
@@ -176,8 +178,11 @@
              * Save domain.
              */
             saveDomain() {
+                this.domainLoading = true;
+
                 this.saveCmsLicense(() => {
-                    this.editingDomain = false;
+                    this.domainLoading = false;
+                    this.domainEditing = false;
                 });
             },
 
@@ -185,8 +190,11 @@
              * Save notes.
              */
             saveNotes() {
+                this.notesLoading = true;
+
                 this.saveCmsLicense(() => {
-                    this.editingNotes = false;
+                    this.notesLoading = false;
+                    this.notesEditing = false;
                 });
             },
 
@@ -214,7 +222,7 @@
              */
             cancelEditDomain() {
                 this.licenseDraft.domain = this.license.domain;
-                this.editingDomain = false;
+                this.domainEditing = false;
             },
 
             /**
@@ -222,7 +230,7 @@
              */
             cancelEditNotes() {
                 this.licenseDraft.notes = this.license.notes;
-                this.editingNotes = false;
+                this.notesEditing = false;
             }
 
         },

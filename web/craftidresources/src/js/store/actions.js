@@ -97,7 +97,7 @@ export const claimCmsLicense = ({commit}, licenseKey) => {
 export const claimPluginLicense = ({commit}, licenseKey) => {
     return new Promise((resolve, reject) => {
         api.claimPluginLicense(licenseKey, response => {
-            if (response.data && !response.data.errors) {
+            if (response.data && !response.data.error) {
                 commit(types.CLAIM_PLUGIN_LICENSE, {licenseKey});
                 resolve(response);
             } else {
