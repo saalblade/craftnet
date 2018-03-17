@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "web/craftidresources/src/js/**/*"
+  ]
+}

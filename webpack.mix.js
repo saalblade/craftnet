@@ -21,6 +21,25 @@ mix.js(sourcePath + '/js/app.js', 'js')
     .copy(sourcePath + '/images', distPath + '/images/')
     .sourceMaps();
 
+
+// https://sebastiandedeyne.com/posts/2017/typescript-with-laravel-mix/
+
+mix.webpackConfig({
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+                options: { appendTsSuffixTo: [/\.vue$/] },
+                exclude: /node_modules/,
+            },
+        ],
+    },
+    resolve: {
+        extensions: ['*', '.js', '.jsx', '.vue', '.ts', '.tsx'],
+    },
+});
+
 // Run versioning on production only.
 if (mix.inProduction()) {
     mix.version();
