@@ -59,6 +59,7 @@ class CraftIdController extends BaseController
                 'photoId' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null),
                 // 'photoUrl' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getUrl() : null),
                 'photoUrl' => $currentUser->getThumbUrl(200),
+                'hasApiToken' => ($currentUser->apiToken !== null),
             ],
             'apps' => Module::getInstance()->getOauth()->getApps(),
             'plugins' => $this->_plugins($currentUser),

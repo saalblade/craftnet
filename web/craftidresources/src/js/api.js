@@ -181,6 +181,18 @@ export default {
             .catch(error => cbError(error.response));
     },
 
+    generateApiToken(cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftcom/id/account/generate-api-token', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
     getCmsLicenses(cb, cbError) {
         let data = {
             [Craft.csrfTokenName]: Craft.csrfTokenValue

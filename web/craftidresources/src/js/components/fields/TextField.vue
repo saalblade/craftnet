@@ -17,6 +17,7 @@
 			@input="$emit('input', $event)"
 			:autocapitalize="autocapitalize"
 			:spellcheck="spellcheck"
+			:readonly="readonly"
 			ref="input"/>
 
 		<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
@@ -28,7 +29,7 @@
 
     export default {
 
-        props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors', 'disabled', 'instructions', 'mask', 'autocapitalize', 'spellcheck'],
+        props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors', 'disabled', 'instructions', 'mask', 'autocapitalize', 'spellcheck', 'readonly'],
 
         components: {
             TextInput,

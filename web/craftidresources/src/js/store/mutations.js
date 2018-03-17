@@ -64,6 +64,10 @@ export const CLAIM_CMS_LICENSE_FILE = (state, {licenseFile}) => {
 export const CLAIM_PLUGIN_LICENSE = (state, {licenseKey}) => {
 };
 
+export const GENERATE_API_TOKEN = (state, {response}) => {
+
+};
+
 export const GET_CMS_LICENSES = (state, {response}) => {
     state.craftId.cmsLicenses = response.data;
 };

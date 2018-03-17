@@ -124,6 +124,22 @@ export const claimPluginLicense = ({commit}, licenseKey) => {
     })
 };
 
+export const generateApiToken = ({commit}) => {
+    return new Promise((resolve, reject) => {
+        api.generateApiToken(response => {
+            if (response.data && !response.data.errors) {
+                commit(types.GENERATE_API_TOKEN, {response});
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
+
 export const getCmsLicenses = ({commit}) => {
     return new Promise((resolve, reject) => {
         api.getCmsLicenses(response => {

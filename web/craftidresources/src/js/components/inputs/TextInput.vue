@@ -12,13 +12,14 @@
 		v-mask="mask"
 		:autocapitalize="autocapitalize"
 		:spellcheck="spellcheck"
+		:readonly="readonly"
 		type="text"/>
 </template>
 
 <script>
     export default {
 
-        props: ['id', 'placeholder', 'value', 'autofocus', 'disabled', 'mask', 'autocapitalize', 'spellcheck'],
+        props: ['id', 'placeholder', 'value', 'autofocus', 'disabled', 'mask', 'autocapitalize', 'spellcheck', "readonly"],
 
         created() {
             this.$on('focus', function () {

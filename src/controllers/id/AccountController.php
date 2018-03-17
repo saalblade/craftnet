@@ -11,6 +11,7 @@ use craft\web\Controller;
 use craft\web\UploadedFile;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
+use Throwable;
 
 /**
  * Class AccountController
@@ -115,5 +116,31 @@ class AccountController extends Controller
             'photoId' => $user->photoId,
             'photoUrl' => $user->getThumbUrl(200),
         ]);
+    }
+
+    /**
+     * Generate API token.
+     *
+     * @return Response
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionGenerateApiToken(): Response
+    {
+        $this->requirePostRequest();
+        $this->requireLogin();
+
+        $user = Craft::$app->getUser()->getIdentity();
+
+        if(!$user->isInGroup('developers')) {
+            throw new ForbiddenHttpException('User is not permitted to perform this action');
+        }
+
+        try {
+            $apiToken = $user->generateApiToken();
+
+            return $this->asJson(['apiToken' => $apiToken]);
+        } catch (Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
     }
 }
