@@ -98,11 +98,7 @@ class Developer extends Behavior
     {
         $token = KeyHelper::generateApiToken();
         $this->apiToken = Craft::$app->getSecurity()->generatePasswordHash($token, 4);
-
-        $this->_updateDeveloperData([
-            'apiToken' => $this->apiToken,
-        ]);
-
+        $this->saveDeveloperInfo();
         return $token;
     }
 
@@ -141,26 +137,25 @@ class Developer extends Behavior
         }
 
         if ($isDeveloper) {
-            $this->_updateDeveloperData([
-                'country' => $this->country,
-                'stripeAccessToken' => $this->stripeAccessToken,
-                'stripeAccount' => $this->stripeAccount,
-                'payPalEmail' => $this->payPalEmail,
-            ]);
+            $this->saveDeveloperInfo();
         }
     }
 
     /**
      * Updates the developer data.
-     *
-     * @param array $data
      */
-    private function _updateDeveloperData(array $data)
+    public function saveDeveloperInfo()
     {
         Craft::$app->getDb()->createCommand()
             ->upsert('craftcom_developers', [
                 'id' => $this->owner->id,
-            ], $data, [], false)
+            ], [
+                'country' => $this->country,
+                'stripeAccessToken' => $this->stripeAccessToken,
+                'stripeAccount' => $this->stripeAccount,
+                'payPalEmail' => $this->payPalEmail,
+                'apiToken' => $this->apiToken,
+            ], [], false)
             ->execute();
     }
 }
