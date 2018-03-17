@@ -27,8 +27,8 @@
 									</template>
 
 									<form v-if="domainEditing" @submit.prevent="saveDomain()">
-										<text-field id="domain" v-model="licenseDraft.domain"></text-field>
-										<input type="submit" class="btn btn-primary" value="Save" />
+										<text-field id="domain" v-model="licenseDraft.domain" @input="domainChange"></text-field>
+										<input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !domainValidates}" :disabled="!domainValidates" />
 										<input @click="cancelEditDomain()" type="button" class="btn btn-secondary" value="Cancel" />
 										<div class="spinner" v-if="domainLoading"></div>
 									</form>
@@ -109,6 +109,7 @@
 				licenseDraft: {},
 				domainEditing: false,
 				domainLoading: false,
+				domainValidates: false,
 				notesEditing: false,
 				notesLoading: false,
 				notesValidates: false,
@@ -232,11 +233,37 @@
                 this.notesEditing = false;
             },
 
+            /**
+             * Notes change.
+             */
             notesChange() {
                 this.notesValidates = false;
                 if(this.licenseDraft.notes !== this.license.notes) {
                     this.notesValidates = true;
                 }
+			},
+
+            /**
+             * Domain changes.
+             */
+            domainChange() {
+                this.domainValidates = false;
+                if(this.licenseDraft.domain !== this.license.domain) {
+                    if(this.checkDomainName(this.licenseDraft.domain)) {
+                        this.domainValidates = true;
+					}
+                }
+			},
+
+            /**
+             * Checks if a domain name is valid.
+             */
+			checkDomainName(domainName) {
+				if (/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(domainName)) {
+					return true;
+				}
+
+				return false;
 			}
 
         },
