@@ -11,9 +11,26 @@ use craftcom\errors\LicenseNotFoundException;
 use craftcom\Module;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\base\InvalidArgumentException;
 
 class PluginLicenseManager extends Component
 {
+    /**
+     * Normalizes a license key by trimming whitespace and removing dashes.
+     *
+     * @param string $key
+     * @return string
+     * @throws InvalidArgumentException if $key is invalid
+     */
+    public function normalizeKey(string $key): string
+    {
+        $normalized = trim(preg_replace('/[\-]+/', '', $key));
+        if (strlen($normalized) !== 24) {
+            throw new InvalidArgumentException('Invalid license key: '.$key);
+        }
+        return $normalized;
+    }
+
     /**
      * Returns licenses owned by a user.
      *
@@ -62,6 +79,8 @@ class PluginLicenseManager extends Component
      */
     public function getLicenseByKey(string $handle, string $key): PluginLicense
     {
+        $key = $this->normalizeKey($key);
+
         $result = $this->_createLicenseQuery()
             ->innerJoin('craftcom_plugins p', '[[p.id]] = [[l.pluginId]]')
             ->where([
@@ -188,6 +207,8 @@ class PluginLicenseManager extends Component
      */
     public function claimLicense(User $user, string $key)
     {
+        $key = $this->normalizeKey($key);
+
         $result = $this->_createLicenseQuery()
             ->innerJoin('craftcom_plugins p', '[[p.id]] = [[l.pluginId]]')
             ->where([
