@@ -23,6 +23,7 @@ class m180315_122041_developer_tables extends Migration
             'stripeAccessToken' => $this->text()->null(),
             'stripeAccount' => $this->string()->null(),
             'payPalEmail' => $this->string()->null(),
+            'apiToken' => $this->char(60)->null(),
             'PRIMARY KEY([[id]])',
         ]);
 

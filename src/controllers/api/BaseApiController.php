@@ -147,6 +147,7 @@ abstract class BaseApiController extends Controller
         $requestHeaders = $request->getHeaders();
         $response = Craft::$app->getResponse();
         $responseHeaders = $response->getHeaders();
+        $identity = $requestHeaders->get('X-Craft-User-Email') ?: 'anonymous';
         $db = Craft::$app->getDb();
 
         // was system info provided?
@@ -183,7 +184,7 @@ abstract class BaseApiController extends Controller
                     $cmsLicenseManager = $this->module->getCmsLicenseManager();
                     $cmsLicense = $this->cmsLicenses[] = $cmsLicenseManager->getLicenseByKey($cmsLicenseKey);
                     $cmsLicenseStatus = self::LICENSE_STATUS_VALID;
-                    $cmsLicenseDomain = $cmsLicense->domain ? $cmsLicenseManager->normalizeDomain($cmsLicense->domain) : null;
+                    $cmsLicenseDomain = $oldCmsLicenseDomain = $cmsLicense->domain ? $cmsLicenseManager->normalizeDomain($cmsLicense->domain) : null;
 
                     // was a host provided with the request?
                     if (($host = $requestHeaders->get('X-Craft-Host')) !== null) {
@@ -215,6 +216,11 @@ abstract class BaseApiController extends Controller
                         $cmsLicense->lastEdition = $this->cmsEdition;
                     }
                     $cmsLicenseManager->saveLicense($cmsLicense, false);
+
+                    // update the history
+                    if ($cmsLicenseDomain !== $oldCmsLicenseDomain) {
+                        $cmsLicenseManager->addHistory($cmsLicense->id, "tied to domain {$cmsLicenseDomain} by {$identity}");
+                    }
                 } catch (LicenseNotFoundException $e) {
                     $responseHeaders->set('X-Craft-License-Status', self::LICENSE_STATUS_INVALID);
                 } catch (\Throwable $e) {
@@ -229,6 +235,7 @@ abstract class BaseApiController extends Controller
                     try {
                         $pluginLicense = $this->pluginLicenses[$pluginHandle] = $pluginLicenseManager->getLicenseByKey($pluginHandle, $pluginLicenseKey);
                         $pluginLicenseStatus = self::LICENSE_STATUS_VALID;
+                        $oldCmsLicenseId = $pluginLicense->cmsLicenseId;
 
                         if ($cmsLicense !== null) {
                             if ($pluginLicense->cmsLicenseId) {
@@ -247,6 +254,11 @@ abstract class BaseApiController extends Controller
                             $pluginLicense->lastVersion = $this->pluginVersions[$pluginHandle];
                         }
                         $pluginLicenseManager->saveLicense($pluginLicense, false);
+
+                        // update the history
+                        if ($pluginLicense->cmsLicenseId !== $oldCmsLicenseId) {
+                            $pluginLicenseManager->addHistory($pluginLicense->id, "tied to Craft license {$cmsLicense->shortKey} by {$identity}");
+                        }
                     } catch (LicenseNotFoundException $e) {
                         $pluginLicenseStatus = self::LICENSE_STATUS_INVALID;
                     } catch (\Throwable $e) {

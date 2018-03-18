@@ -26,7 +26,6 @@ class PluginLicensesController extends Controller
      * Claims a license.
      *
      * @return Response
-     * @throws LicenseNotFoundException
      */
     public function actionClaim(): Response
     {
@@ -70,13 +69,15 @@ class PluginLicensesController extends Controller
         $pluginHandle = Craft::$app->getRequest()->getParam('handle');
         $key = Craft::$app->getRequest()->getParam('key');
         $user = Craft::$app->getUser()->getIdentity();
-        $license = $this->module->getPluginLicenseManager()->getLicenseByKey($pluginHandle, $key);
+        $manager = $this->module->getPluginLicenseManager();
+        $license = $manager->getLicenseByKey($pluginHandle, $key);
 
         try {
             if ($license && $user && $license->ownerId === $user->id) {
                 $license->ownerId = null;
 
-                if ($this->module->getPluginLicenseManager()->saveLicense($license)) {
+                if ($manager->saveLicense($license)) {
+                    $manager->addHistory($license->id, "released by {$user->email}");
                     return $this->asJson(['success' => true]);
                 }
 

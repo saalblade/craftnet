@@ -16,6 +16,7 @@ use LayerShifter\TLDExtract\Extract;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
+use yii\db\Expression;
 
 class CmsLicenseManager extends Component
 {
@@ -170,7 +171,16 @@ class CmsLicenseManager extends Component
                 throw new LicenseNotFoundException($key);
             }
 
-            $license = new CmsLicense(Json::decode($data));
+            $data = Json::decode($data);
+            $license = new CmsLicense($data);
+
+            if (!$license->ownerId) {
+                $license->ownerId = User::find()
+                    ->select('elements.id')
+                    ->email($license->email)
+                    ->scalar() ?: null;
+            }
+
             $this->saveLicense($license, false);
 
             Craft::$app->getDb()->createCommand()
@@ -178,6 +188,12 @@ class CmsLicenseManager extends Component
                     'key' => $key
                 ])
                 ->execute();
+
+            $note = "created by {$license->email}";
+            if ($license->domain) {
+                $note .= " for domain {$license->domain}";
+            }
+            $this->addHistory($license->id, $note, $data['dateCreated']);
 
             return $license;
         }
@@ -253,35 +269,67 @@ class CmsLicenseManager extends Component
     }
 
     /**
-     * Finds unclaimed licenses that are associated with orders placed by the given user's email,
+     * Adds a new record to a Craft license’s history.
+     *
+     * @param int $licenseId
+     * @param string $note
+     * @param string|null $timestamp
+     */
+    public function addHistory(int $licenseId, string $note, string $timestamp = null)
+    {
+        Craft::$app->getDb()->createCommand()
+            ->insert('craftcom_cmslicensehistory', [
+                'licenseId' => $licenseId,
+                'note' => $note,
+                'timestamp' => $timestamp ?? Db::prepareDateForDb(new \DateTime()),
+            ], false)
+            ->execute();
+    }
+
+    /**
+     * Claims a license for a user.
+     *
+     * @param User $user
+     * @param string $key
+     * @throws LicenseNotFoundException
+     * @throws Exception
+     */
+    public function claimLicense(User $user, string $key)
+    {
+        $license = $this->getLicenseByKey($key);
+
+        // make sure the license doesn't already have an owner
+        if ($license->ownerId) {
+            throw new Exception('License has already been claimed.');
+        }
+
+        $license->ownerId = $user->id;
+        $license->email = $user->email;
+
+        if (!$this->saveLicense($license)) {
+            throw new Exception('Could not save Craft license: '.implode(', ', $license->getErrorSummary(true)));
+        }
+
+        $this->addHistory($license->id, "claimed by {$user->email}");
+    }
+
+    /**
+     * Finds unclaimed licenses that are associated the given user's email,
      * and and assigns them to the user.
      *
      * @param User $user
      */
     public function claimLicenses(User $user)
     {
-        $orderIds = Order::find()
-            ->email($user->email)
-            ->isCompleted(true)
-            ->ids();
-
-        if (!empty($orderIds)) {
-            $cmsLicenseIds = (new Query())
-                ->select(['l.id'])
-                ->from(['craftcom_cmslicenses l'])
-                ->innerJoin('craftcom_cmslicenses_lineitems l_li', '[[l_li.licenseId]] = [[l.id]]')
-                ->innerJoin('commerce_lineitems li', '[[li.id]] = [[l_li.lineItemId]]')
-                ->where(['l.ownerId' => null, 'li.orderId' => $orderIds])
-                ->column();
-
-            if (!empty($cmsLicenseIds)) {
-                Craft::$app->getDb()->createCommand()
-                    ->update('craftcom_cmslicenses', [
-                        'ownerId' => $user->id,
-                    ], ['id' => $cmsLicenseIds])
-                    ->execute();
-            }
-        }
+        Craft::$app->getDb()->createCommand()
+            ->update('craftcom_cmslicenses', [
+                'ownerId' => $user->id,
+            ], [
+                'and',
+                ['ownerId' => null],
+                new Expression('lower([[email]]) = :email', [':email' => strtolower($user->email)]),
+            ], [], false)
+            ->execute();
     }
 
     /**

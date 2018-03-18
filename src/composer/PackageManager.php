@@ -929,7 +929,7 @@ class PackageManager extends Component
                 'valid' => $release->valid,
             ])
             ->execute();
-        $release->id = $db->getLastInsertID();
+        $release->id = $db->getLastInsertID('craftcom_packageversions');
     }
 
     /**

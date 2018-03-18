@@ -329,7 +329,8 @@ class PluginEdition extends PluginPurchasable
         $manager = Module::getInstance()->getPluginLicenseManager();
 
         // is this for an existing plugin license?
-        if (strncmp($lineItem->options['licenseKey'], 'new:', 4) !== 0) {
+        $isNew = (strncmp($lineItem->options['licenseKey'], 'new:', 4) === 0);
+        if (!$isNew) {
             try {
                 $license = $manager->getLicenseByKey($this->getPlugin()->handle, $lineItem->options['licenseKey']);
             } catch (LicenseNotFoundException $e) {
@@ -357,10 +358,12 @@ class PluginEdition extends PluginPurchasable
                 'pluginId' => $this->pluginId,
                 'cmsLicenseId' => $cmsLicense->id ?? null,
                 'plugin' => $this->getPlugin()->handle,
-                'email' => $order->email,
                 'key' => $key,
             ]);
         }
+
+        $oldEmail = $license->email;
+        $oldEdition = $license->edition;
 
         $license->editionId = $this->id;
         $license->edition = $this->handle;
@@ -380,8 +383,9 @@ class PluginEdition extends PluginPurchasable
             $license->autoRenew = $lineItem->options['autoRenew'];
         }
 
-        // if the license doesn't have an owner yet and the customer has a Craft ID, go ahead and assign it to them
-        if (!$license->ownerId && $order->getCustomer()->userId) {
+        // if the license doesn't have an owner yet, reassign it to the order's customer
+        if (!$license->ownerId) {
+            $license->email = $order->getEmail();
             $license->ownerId = $order->getCustomer()->userId;
         }
 
@@ -399,6 +403,21 @@ class PluginEdition extends PluginPurchasable
                     'lineItemId' => $lineItem->id,
                 ], false)
                 ->execute();
+
+            // update the license history
+            if ($isNew) {
+                $manager->addHistory($license->id, "created by {$license->email} per order {$order->number}");
+            } else {
+                $note = [];
+                if ($license->email !== $oldEmail) {
+                    $note[] = "reassigned to {$license->email}";
+                }
+                if ($license->edition !== $oldEdition) {
+                    $note[] = "upgraded to {$license->edition}";
+                }
+                $note = implode('and', $note)." per order {$order->number}";
+                $manager->addHistory($license->id, $note);
+            }
         } catch (Exception $e) {
             Craft::error("Could not save plugin license {$license->key} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);

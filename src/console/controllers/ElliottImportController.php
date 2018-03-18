@@ -12,6 +12,7 @@ use craft\db\Connection;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
+use craft\helpers\DateTimeHelper;
 use craft\helpers\Json;
 use craftcom\cms\CmsEdition;
 use craftcom\composer\Package;
@@ -138,13 +139,14 @@ class ElliottImportController extends Controller
         $result = $this->import('cmsLicenses', function(array $item) use ($manager, $editionIds) {
             $data = [
                 'editionId' => $editionIds[$item['edition']],
+                'ownerId' => $this->userId($item['email']),
                 'expirable' => $item['edition'] === 'personal',
                 'expired' => false,
                 'autoRenew' => false,
                 'edition' => $item['edition'],
                 'email' => $item['email'],
                 'domain' => $item['domain'] ? $manager->normalizeDomain($item['domain']) : null,
-                'key' => $item['licenseKey'],
+                'key' => $manager->normalizeKey($item['licenseKey']),
                 'privateNotes' => $item['notes'],
                 'lastVersion' => $item['lastVersion'],
                 'lastAllowedVersion' => $item['lastVersion'],
@@ -158,6 +160,12 @@ class ElliottImportController extends Controller
                 $this->db->createCommand()
                     ->insert('craftcom_cmslicenses', $data)
                     ->execute();
+
+                $note = "created by {$item['email']}";
+                if ($data['domain']) {
+                    $note .= " for domain {$data['domain']}";
+                }
+                $manager->addHistory($this->db->getLastInsertID('craftcom_cmslicenses'), $note, $item['dateCreated']);
             } else {
                 $this->stdout("    > Saving Craft license {$keySample} ");
                 $this->stdout('(inactive)', Console::FG_YELLOW);
@@ -210,13 +218,14 @@ class ElliottImportController extends Controller
                 'pluginId' => $plugin->id,
                 'editionId' => $edition->id,
                 'cmsLicenseId' => $cmsLicense->id ?? null,
+                'ownerId' => $this->userId($item['email']),
                 'plugin' => $plugin->handle,
                 'edition' => $edition->handle,
                 'expirable' => false,
                 'expired' => false,
                 'autoRenew' => false,
                 'email' => $item['email'],
-                'key' => $item['licenseKey'],
+                'key' => $pluginLicenseManager->normalizeKey($item['licenseKey']),
                 'privateNotes' => $item['notes'],
                 'lastActivityOn' => $item['dateUpdated'],
                 'dateCreated' => $item['dateCreated'],
@@ -224,6 +233,7 @@ class ElliottImportController extends Controller
 
             $this->stdout("    > Saving Commerce license {$item['licenseKey']} ... ");
             $pluginLicenseManager->saveLicense($license, false);
+            $pluginLicenseManager->addHistory($license->id, "created by {$license->email}", $item['dateCreated']);
             $this->stdout('done'.PHP_EOL);
         });
 
@@ -559,10 +569,12 @@ class ElliottImportController extends Controller
                         ], false)
                         ->execute();
 
-                    // if the order was placed by an existing user, assign the license to them
-                    if (($userId = $this->userId($item['email'])) !== null) {
-                        $license->ownerId = $userId;
+                    // update the license's email and ownerId
+                    if (strcasecmp($license->email, $item['email']) !== 0) {
+                        $license->email = $item['email'];
+                        $license->ownerId = $this->userId($item['email']);
                         $cmsLicenseManager->saveLicense($license);
+                        $cmsLicenseManager->addHistory($license->id, "reassigned to {$item['email']} per order {$item['number']}");
                     }
                 }
             }
@@ -582,10 +594,12 @@ class ElliottImportController extends Controller
                         ], false)
                         ->execute();
 
-                    // if the order was placed by an existing user, assign the license to them
-                    if (($userId = $this->userId($item['email'])) !== null) {
-                        $license->ownerId = $userId;
+                    // update the license's email and ownerId
+                    if (strcasecmp($license->email, $item['email']) !== 0) {
+                        $license->email = $item['email'];
+                        $license->ownerId = $this->userId($item['email']);
                         $pluginLicenseManager->saveLicense($license);
+                        $pluginLicenseManager->addHistory($license->id, "reassigned to {$item['email']} per order {$item['number']}");
                     }
                 }
             }

@@ -196,21 +196,36 @@ class PluginLicenseManager extends Component
     }
 
     /**
-     * Finds unclaimed license by key and assigns it to the user.
+     * Adds a new record to a Craft license’s history.
+     *
+     * @param int $licenseId
+     * @param string $note
+     * @param string|null $timestamp
+     */
+    public function addHistory(int $licenseId, string $note, string $timestamp = null)
+    {
+        Craft::$app->getDb()->createCommand()
+            ->insert('craftcom_pluginlicensehistory', [
+                'licenseId' => $licenseId,
+                'note' => $note,
+                'timestamp' => $timestamp ?? Db::prepareDateForDb(new \DateTime()),
+            ], false)
+            ->execute();
+    }
+
+    /**
+     * Claims a license for a user.
      *
      * @param User $user
      * @param string $key
-     *
-     * @return bool
-     * @throws Exception
      * @throws LicenseNotFoundException
+     * @throws Exception
      */
     public function claimLicense(User $user, string $key)
     {
         $key = $this->normalizeKey($key);
 
         $result = $this->_createLicenseQuery()
-            ->innerJoin('craftcom_plugins p', '[[p.id]] = [[l.pluginId]]')
             ->where([
                 'l.key' => $key,
             ])
@@ -222,21 +237,19 @@ class PluginLicenseManager extends Component
 
         $license = new PluginLicense($result);
 
-        if ($user) {
-            if (!$license->ownerId) {
-                $license->ownerId = $user->id;
-
-                if ($this->saveLicense($license)) {
-                    return true;
-                }
-
-                throw new Exception("Couldn't save license.");
-            }
-
-            throw new Exception("License has already been claimed.");
+        // make sure the license doesn't already have an owner
+        if ($license->ownerId) {
+            throw new Exception('License has already been claimed.');
         }
 
-        throw new LicenseNotFoundException($key);
+        $license->ownerId = $user->id;
+        $license->email = $user->email;
+
+        if (!$this->saveLicense($license)) {
+            throw new Exception('Could not save plugin license: '.implode(', ', $license->getErrorSummary(true)));
+        }
+
+        $this->addHistory($license->id, "claimed by {$user->email}");
     }
 
     /**
@@ -247,28 +260,15 @@ class PluginLicenseManager extends Component
      */
     public function claimLicenses(User $user)
     {
-        $orderIds = Order::find()
-            ->email($user->email)
-            ->isCompleted(true)
-            ->ids();
-
-        if (!empty($orderIds)) {
-            $cmsLicenseIds = (new Query())
-                ->select(['l.id'])
-                ->from(['craftcom_pluginlicenses l'])
-                ->innerJoin('craftcom_pluginlicenses_lineitems l_li', '[[l_li.licenseId]] = [[l.id]]')
-                ->innerJoin('commerce_lineitems li', '[[li.id]] = [[l_li.lineItemId]]')
-                ->where(['l.ownerId' => null, 'li.orderId' => $orderIds])
-                ->column();
-
-            if (!empty($cmsLicenseIds)) {
-                Craft::$app->getDb()->createCommand()
-                    ->update('craftcom_pluginlicenses', [
-                        'ownerId' => $user->id,
-                    ], ['id' => $cmsLicenseIds])
-                    ->execute();
-            }
-        }
+        Craft::$app->getDb()->createCommand()
+            ->update('craftcom_pluginlicenses', [
+                'ownerId' => $user->id,
+            ], [
+                'and',
+                ['ownerId' => null],
+                new Expression('lower([[email]]) = :email', [':email' => strtolower($user->email)]),
+            ], [], false)
+            ->execute();
     }
 
     /**

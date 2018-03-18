@@ -59,6 +59,12 @@ class CmsLicensesController extends BaseApiController
             throw new Exception('Could not create CMS license: '.implode(', ', $license->getErrorSummary(true)));
         }
 
+        $note = "created by {$license->email}";
+        if ($license->domain) {
+            $note .= " for domain {$license->domain}";
+        }
+        $this->module->getCmsLicenseManager()->addHistory($license->id, $note);
+
         Craft::$app->getResponse()->getHeaders()
             ->set('X-Craft-License-Status', self::LICENSE_STATUS_VALID)
             ->set('X-Craft-License-Domain', $license->domain)

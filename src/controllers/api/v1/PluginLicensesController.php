@@ -114,9 +114,13 @@ class PluginLicensesController extends BaseApiController
             'expiresOn' => $expiresOn ?? null,
         ]);
 
-        if (!$this->module->getPluginLicenseManager()->saveLicense($license)) {
+        $manager = $this->module->getPluginLicenseManager();
+
+        if (!$manager->saveLicense($license)) {
             throw new Exception('Could not create plugin license: '.implode(', ', $license->getErrorSummary(true)));
         }
+
+        $manager->addHistory($license->id, "created for {$license->email} by {$user->email}");
 
         return $this->asJson([
             'license' => $license,

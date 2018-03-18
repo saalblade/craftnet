@@ -223,7 +223,8 @@ class CmsEdition extends Purchasable
         $manager = Module::getInstance()->getCmsLicenseManager();
 
         // is this for an existing Craft license?
-        if (strncmp($lineItem->options['licenseKey'], 'new:', 4) !== 0) {
+        $isNew = (strncmp($lineItem->options['licenseKey'], 'new:', 4) === 0);
+        if (!$isNew) {
             try {
                 $license = $manager->getLicenseByKey($lineItem->options['licenseKey']);
             } catch (LicenseNotFoundException $e) {
@@ -237,10 +238,12 @@ class CmsEdition extends Purchasable
 
             // create the new license
             $license = new CmsLicense([
-                'email' => $order->email,
                 'key' => $key,
             ]);
         }
+
+        $oldEmail = $license->email;
+        $oldEdition = $license->edition;
 
         $license->editionId = $this->id;
         $license->edition = $this->handle;
@@ -260,8 +263,9 @@ class CmsEdition extends Purchasable
             $license->autoRenew = $lineItem->options['autoRenew'];
         }
 
-        // if the license doesn't have an owner yet and the customer has a Craft ID, go ahead and assign it to them
-        if (!$license->ownerId && $order->getCustomer()->userId) {
+        // if the license doesn't have an owner yet, reassign it to the order's customer
+        if (!$license->ownerId) {
+            $license->email = $order->getEmail();
             $license->ownerId = $order->getCustomer()->userId;
         }
 
@@ -279,6 +283,21 @@ class CmsEdition extends Purchasable
                     'lineItemId' => $lineItem->id,
                 ], false)
                 ->execute();
+
+            // update the license history
+            if ($isNew) {
+                $manager->addHistory($license->id, "created by {$license->email} per order {$order->number}");
+            } else {
+                $note = [];
+                if ($license->email !== $oldEmail) {
+                    $note[] = "reassigned to {$license->email}";
+                }
+                if ($license->edition !== $oldEdition) {
+                    $note[] = "upgraded to {$license->edition}";
+                }
+                $note = implode('and', $note)." per order {$order->number}";
+                $manager->addHistory($license->id, $note);
+            }
         } catch (Exception $e) {
             Craft::error("Could not save Craft license {$license->key} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);

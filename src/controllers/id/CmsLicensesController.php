@@ -29,7 +29,6 @@ class CmsLicensesController extends Controller
      * Claims a license.
      *
      * @return Response
-     * @throws LicenseNotFoundException
      */
     public function actionClaim(): Response
     {
@@ -50,23 +49,8 @@ class CmsLicensesController extends Controller
             }
 
             if ($key) {
-                $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
-
-                if ($license && $user) {
-                    if (!$license->ownerId) {
-                        $license->ownerId = $user->id;
-
-                        if ($this->module->getCmsLicenseManager()->saveLicense($license)) {
-                            return $this->asJson(['success' => true]);
-                        }
-
-                        throw new Exception("Couldn't save license.");
-                    }
-
-                    throw new Exception("License has already been claimed.");
-                }
-
-                throw new LicenseNotFoundException($key);
+                $this->module->getCmsLicenseManager()->claimLicense($user, $key);
+                return $this->asJson(['success' => true]);
             }
 
             throw new Exception("No license key provided.");
@@ -124,13 +108,15 @@ class CmsLicensesController extends Controller
     {
         $key = Craft::$app->getRequest()->getParam('key');
         $user = Craft::$app->getUser()->getIdentity();
-        $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
+        $manager = $this->module->getCmsLicenseManager();
+        $license = $manager->getLicenseByKey($key);
 
         try {
-            if ($license && $user && $license->ownerId === $user->id) {
+            if ($user && $license->ownerId === $user->id) {
                 $license->ownerId = null;
 
-                if ($this->module->getCmsLicenseManager()->saveLicense($license)) {
+                if ($manager->saveLicense($license)) {
+                    $manager->addHistory($license->id, "released by {$user->email}");
                     return $this->asJson(['success' => true]);
                 }
 
@@ -153,14 +139,20 @@ class CmsLicensesController extends Controller
     {
         $key = Craft::$app->getRequest()->getParam('key');
         $user = Craft::$app->getUser()->getIdentity();
-        $license = $this->module->getCmsLicenseManager()->getLicenseByKey($key);
+        $manager = $this->module->getCmsLicenseManager();
+        $license = $manager->getLicenseByKey($key);
 
         try {
-            if ($license && $user && $license->ownerId === $user->id) {
-                $license->domain = Craft::$app->getRequest()->getParam('domain');
+            if ($user && $license->ownerId === $user->id) {
+                $oldDomain = $license->domain;
+                $license->domain = Craft::$app->getRequest()->getParam('domain') ?: null;
                 $license->notes = Craft::$app->getRequest()->getParam('notes');
 
-                if ($this->module->getCmsLicenseManager()->saveLicense($license)) {
+                if ($manager->saveLicense($license)) {
+                    if ($license->domain !== $oldDomain) {
+                        $note = $license->domain ? "tied to domain {$license->domain}" : "untied from domain {$oldDomain}";
+                        $manager->addHistory($license->id, "{$note} by {$user->email}");
+                    }
                     return $this->asJson(['success' => true]);
                 }
 

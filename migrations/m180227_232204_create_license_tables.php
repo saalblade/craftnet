@@ -99,9 +99,21 @@ class m180227_232204_create_license_tables extends Migration
         ]);
 
         $this->createIndex(null, 'craftcom_cmslicenses', ['key'], true);
+        $this->createIndex($this->db->getIndexName('craftcom_cmslicenses', ['ownerId', 'email']), 'craftcom_cmslicenses', ['ownerId', 'lower([[email]])']);
 
         $this->addForeignKey(null, 'craftcom_cmslicenses', ['editionId'], 'craftcom_cmseditions', ['id']);
         $this->addForeignKey(null, 'craftcom_cmslicenses', ['ownerId'], 'users', ['id'], 'SET NULL');
+
+        // cmslicensehistory ---------------------------------------------------
+
+        $this->createTable('craftcom_cmslicensehistory', [
+            'id' => $this->bigPrimaryKey(),
+            'licenseId' => $this->integer(),
+            'note' => $this->string()->notNull(),
+            'timestamp' => $this->dateTime()->notNull(),
+        ]);
+
+        $this->addForeignKey(null, 'craftcom_cmslicensehistory', ['licenseId'], 'craftcom_cmslicenses', ['id'], 'CASCADE');
 
         // cmslicenses_lineitems -----------------------------------------------
 
@@ -186,11 +198,23 @@ class m180227_232204_create_license_tables extends Migration
         ]);
 
         $this->createIndex(null, 'craftcom_pluginlicenses', ['key'], true);
+        $this->createIndex($this->db->getIndexName('craftcom_pluginlicenses', ['ownerId', 'email']), 'craftcom_pluginlicenses', ['ownerId', 'lower([[email]])']);
 
         $this->addForeignKey(null, 'craftcom_pluginlicenses', ['pluginId'], 'craftcom_plugins', ['id']);
         $this->addForeignKey(null, 'craftcom_pluginlicenses', ['editionId'], 'craftcom_plugineditions', ['id']);
         $this->addForeignKey(null, 'craftcom_pluginlicenses', ['cmsLicenseId'], 'craftcom_cmslicenses', ['id'], 'SET NULL');
         $this->addForeignKey(null, 'craftcom_pluginlicenses', ['ownerId'], 'users', ['id'], 'SET NULL');
+
+        // pluginlicensehistory ------------------------------------------------
+
+        $this->createTable('craftcom_pluginlicensehistory', [
+            'id' => $this->bigPrimaryKey(),
+            'licenseId' => $this->integer(),
+            'note' => $this->string()->notNull(),
+            'timestamp' => $this->dateTime()->notNull(),
+        ]);
+
+        $this->addForeignKey(null, 'craftcom_pluginlicensehistory', ['licenseId'], 'craftcom_pluginlicenses', ['id'], 'CASCADE');
 
         // pluginlicenses_lineitems --------------------------------------------
 
