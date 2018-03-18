@@ -50,6 +50,7 @@
                                     <ul>
                                         <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
                                         <li v-if="userIsInGroup('staff') && enableCommercialFeatures"><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
                                     </ul>
                                 </template>
@@ -66,7 +67,6 @@
                                 <h5><router-link @click.native="closeSidebar()" to="/account"><i class="fas fa-user"></i> Account</router-link></h5>
                                 <ul>
                                     <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
-                                    <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
                                     <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
                                 </ul>
                             </div>
