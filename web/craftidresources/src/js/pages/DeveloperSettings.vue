@@ -2,8 +2,6 @@
 	<div>
 		<h1>Developer Settings</h1>
 
-		<stripe-account></stripe-account>
-		
 		<connected-apps title="Connected Apps"></connected-apps>
 
 		<div class="card mb-4">
@@ -28,7 +26,6 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import StripeAccount from '../components/StripeAccount'
     import TextField from '../components/fields/TextField'
     import ConnectedApps from '../components/ConnectedApps'
 
@@ -43,7 +40,6 @@
         },
 
         components: {
-            StripeAccount,
             TextField,
             ConnectedApps
         },
@@ -77,7 +73,7 @@
 
         },
 
-        created() {
+        mounted() {
             if (this.currentUser.hasApiToken) {
                 this.apiToken = '****************************************'
             }

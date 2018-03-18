@@ -1,49 +1,36 @@
 <template>
-    <div class="card mb-3">
-        <div class="card-body">
-            <h4>Stripe Account</h4>
+    <div class="list-group-item">
+        <template v-if="loading">
+            <div class="spinner"></div>
+        </template>
+        <template v-else>
+            <div class="flex items-start">
+                <img class="flex mr-3" :src="'/craftidresources/dist/images/stripe.svg'" height="48" />
+                <div class="flex-1">
+                    <template v-if="stripeAccount">
+                        <h5>{{ stripeAccount.display_name }}</h5>
+                        <p class="mb-0">
+                            <span class="text-secondary">Stripe</span>
+                        </p>
+                    </template>
 
-            <div class="spinner" v-if="loading"></div>
+                    <template v-else>
+                        <h5>Stripe</h5>
+                        <p class="mb-0">Connect your Stripe account to receive money on your bank account.</p>
+                    </template>
+                </div>
+                <div>
+                    <template v-if="stripeAccount">
+                        <button type="button" class="btn btn-danger btn-sm" @click="disconnect()">Disconnect</button>
+                    </template>
+                    <a v-else class="btn btn-primary" :href="stripeConnectUrl">Connect</a>
 
-            <template v-else>
-                <template v-if="stripeAccount">
-
-                    <div class="flex">
-                        <dl class="w-1/2">
-                            <dt>Stripe Account</dt>
-                            <dd><template v-if="stripeAccount.display_name">{{ stripeAccount.display_name }}</template><em v-else class="text-secondary">Not provided</em></dd>
-                            <dt>ID</dt>
-                            <dd>{{ stripeAccount.id }}</dd>
-                            <dt>Payouts enabled</dt>
-                            <dd v-if="stripeAccount.payouts_enabled" class="text-green">Yes</dd>
-                            <dd v-else class="text-green">No</dd>
-                            <dt>Details Submitted</dt>
-                            <dd v-if="stripeAccount.details_submitted" class="text-green">Yes</dd>
-                            <dd v-else class="text-green">No</dd>
-                        </dl>
-                        <dl class="w-1/2">
-                            <dt>Email</dt>
-                            <dd>{{ stripeAccount.email }}</dd>
-                            <dt>Business name</dt>
-                            <dd><template v-if="stripeAccount.business_name">{{ stripeAccount.business_name }}</template><em v-else class="text-secondary">Not provided</em></dd>
-                            <dt>Country</dt>
-                            <dd>{{ stripeAccount.country }}</dd>
-                            <dt>Statement descriptor</dt>
-                            <dd><template v-if="stripeAccount.statement_descriptor">{{ stripeAccount.statement_descriptor }}</template><em v-else class="text-secondary">Not provided</em></dd>
-                        </dl>
+                    <div v-if="disconnectLoading" class="mt-2 text-right">
+                        <div class="spinner"></div>
                     </div>
-
-                    <button type="button" class="btn btn-danger btn-sm" @click="disconnect()">Remove Stripe account</button> <div v-if="disconnectLoading" class="spinner"></div>
-
-                </template>
-
-                <template v-else>
-                    <p class="text-secondary">Connect your Stripe account to receive money on your bank account.</p>
-
-                    <a class="btn btn-primary" :href="stripeConnectUrl">Connect to Stripe</a>
-                </template>
-            </template>
-        </div>
+                </div>
+            </div>
+        </template>
     </div>
 </template>
 

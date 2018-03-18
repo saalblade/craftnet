@@ -7,6 +7,8 @@
 				</template>
 
 				<div class="list-group">
+					<stripe-account></stripe-account>
+
 					<div v-for="appType, index in appTypes" class="list-group-item">
 						<div class="flex items-start">
 							<img class="flex mr-3" :src="'/craftidresources/dist/images/' + appType.handle + '.svg'" height="48" />
@@ -43,6 +45,7 @@
 
 <script>
     import {mapGetters} from 'vuex'
+    import StripeAccount from '../components/StripeAccount'
 
     export default {
 
@@ -66,6 +69,10 @@
                 },
             };
         },
+
+		components: {
+            StripeAccount,
+		},
 
         computed: {
 
