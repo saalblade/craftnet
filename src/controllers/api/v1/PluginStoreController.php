@@ -46,7 +46,6 @@ class PluginStoreController extends BaseApiController
                 'categories' => $this->_categories(),
                 'featuredPlugins' => $this->_featuredPlugins(),
                 'plugins' => $this->_plugins($enableCommercialFeatures),
-                'enableCommercialFeatures' => $enableCommercialFeatures
             ];
 
             if ($enablePluginStoreCache) {
