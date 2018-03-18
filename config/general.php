@@ -30,6 +30,18 @@ return [
         'baseCpUrl' => 'https://id.craftcms.com/',
         'runQueueAutomatically' => false,
     ],
+    'stage' => [
+        'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
+        'allowUpdates' => false,
+        'siteUrl' => [
+            'api' => 'https://staging.api.craftcms.com/',
+            'composer' => 'https://composer.craftcms.com/',
+            'craftId' => 'https://staging.id.craftcms.com/',
+            'plugins' => 'https://plugins.craftcms.com/',
+        ],
+        'defaultCookieDomain' => '.craftcms.com',
+        'baseCpUrl' => 'http://staging.id.craftcms.com/',
+    ],
     'dev' => [
         'devMode' => true,
         'allowUpdates' => true,
