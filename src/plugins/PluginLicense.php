@@ -5,6 +5,9 @@ namespace craftcom\plugins;
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
 
+/**
+ * @property string $shortKey
+ */
 class PluginLicense extends Model
 {
     public $id;
@@ -57,6 +60,16 @@ class PluginLicense extends Model
         return [
             'plugin',
         ];
+    }
+
+    /**
+     * Returns a shortened version of the license key.
+     *
+     * @return string
+     */
+    public function getShortKey(): string
+    {
+        return substr($this->key, 0, 4);
     }
 
     /**

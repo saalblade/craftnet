@@ -308,7 +308,7 @@ class CmsLicenseManager extends Component
                     $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key']);
                 } else {
                     $pluginLicense = [
-                        'shortKey' => substr($pluginLicensesResult->key, 0, 4)
+                        'shortKey' => $pluginLicensesResult->getShortKey(),
                     ];
                 }
 
