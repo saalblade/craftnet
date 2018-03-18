@@ -8,24 +8,24 @@ use yii\base\Exception;
 class LicenseNotFoundException extends Exception
 {
     /**
-     * @var string Missing license key
+     * @var string Missing license ID or key
      */
-    public $key;
+    public $identifier;
 
     /**
      * Constructor
      *
-     * @param string $key
+     * @param mixed $identifier
      * @param string|null $message
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct(string $key, string $message = null, int $code = 0, Throwable $previous = null)
+    public function __construct($identifier, string $message = null, int $code = 0, Throwable $previous = null)
     {
-        $this->key = $key;
+        $this->identifier = $identifier;
 
         if ($message === null) {
-            $message = 'License key not found: '.$key;
+            $message = 'License not found: '.$identifier;
         }
 
         parent::__construct($message, $code, $previous);

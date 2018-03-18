@@ -307,7 +307,7 @@ class PluginLicenseManager extends Component
             if ($result->cmsLicenseId) {
                 $cmsLicenseResult = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
 
-                if ($cmsLicenseResult && $cmsLicenseResult->ownerId === $owner->id) {
+                if ($cmsLicenseResult->ownerId === $owner->id) {
                     $cmsLicense = $cmsLicenseResult->getAttributes(['key', 'edition']);
                 } else {
                     $cmsLicense = [
