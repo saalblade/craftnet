@@ -114,7 +114,7 @@ class CmsRenewal extends Purchasable
      */
     public function getIsAvailable(): bool
     {
-        return parent::getIsAvailable() && $this->price;
+        return $this->price;
     }
 
     /**

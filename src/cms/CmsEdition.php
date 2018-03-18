@@ -142,6 +142,14 @@ class CmsEdition extends Purchasable
     /**
      * @inheritdoc
      */
+    public function getIsAvailable(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getDescription(): string
     {
         return 'Craft '.$this->name;

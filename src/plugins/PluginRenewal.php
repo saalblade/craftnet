@@ -114,7 +114,7 @@ class PluginRenewal extends PluginPurchasable
      */
     public function getIsAvailable(): bool
     {
-        return parent::getIsAvailable() && $this->price;
+        return $this->price;
     }
 
     /**

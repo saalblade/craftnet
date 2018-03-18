@@ -229,6 +229,14 @@ class PluginEdition extends PluginPurchasable
     /**
      * @inheritdoc
      */
+    public function getIsAvailable(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getDescription(): string
     {
         // todo: include $this->name when we start supporting editions
