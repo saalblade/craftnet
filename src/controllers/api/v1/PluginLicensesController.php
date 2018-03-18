@@ -66,12 +66,7 @@ class PluginLicensesController extends BaseApiController
             ]);
         }
 
-        // see if there's a Craft ID account for the email
-        $ownerId = User::find()
-            ->select(['elements.id'])
-            ->email($payload->email)
-            ->scalar();
-
+        // validation
         $errors = [];
 
         if ((new EmailValidator())->validate($payload->email, $error) === false) {
@@ -97,6 +92,12 @@ class PluginLicensesController extends BaseApiController
         if (!empty($errors)) {
             throw new ValidationException($errors);
         }
+
+        // see if there's a Craft ID account for the email
+        $ownerId = User::find()
+            ->select(['elements.id'])
+            ->email($payload->email)
+            ->scalar();
 
         $license = new PluginLicense([
             'pluginId' => $plugin->id,
