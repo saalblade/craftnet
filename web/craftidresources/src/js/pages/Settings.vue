@@ -1,7 +1,6 @@
 <template>
     <form v-if="userDraft" @submit.prevent="save()">
         <h1>Settings</h1>
-        <connected-apps title="Connected Apps"></connected-apps>
 
         <div class="card mb-3">
             <div class="card-body">
@@ -41,14 +40,12 @@
     import {mapGetters} from 'vuex'
     import TextField from '../components/fields/TextField'
     import PasswordField from '../components/fields/PasswordField'
-    import ConnectedApps from '../components/ConnectedApps'
 
     export default {
 
         components: {
             TextField,
             PasswordField,
-            ConnectedApps,
         },
 
         data() {

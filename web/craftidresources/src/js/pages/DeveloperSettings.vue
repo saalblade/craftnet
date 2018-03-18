@@ -1,7 +1,10 @@
 <template>
 	<div>
 		<h1>Developer Settings</h1>
+
 		<stripe-account></stripe-account>
+		
+		<connected-apps title="Connected Apps"></connected-apps>
 
 		<div class="card mb-4">
 			<div class="card-body">
@@ -27,6 +30,7 @@
     import {mapGetters} from 'vuex'
     import StripeAccount from '../components/StripeAccount'
     import TextField from '../components/fields/TextField'
+    import ConnectedApps from '../components/ConnectedApps'
 
     export default {
 
@@ -40,7 +44,8 @@
 
         components: {
             StripeAccount,
-            TextField
+            TextField,
+            ConnectedApps
         },
 
         computed: {
