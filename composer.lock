@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.27",
+            "version": "3.52.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "2ff982460d5c5eb0a57b7c38bd9ad4e9c2f05c86"
+                "reference": "4b8286d243ad9eeaaa1fccf312c1d9f920ef7cd0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2ff982460d5c5eb0a57b7c38bd9ad4e9c2f05c86",
-                "reference": "2ff982460d5c5eb0a57b7c38bd9ad4e9c2f05c86",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4b8286d243ad9eeaaa1fccf312c1d9f920ef7cd0",
+                "reference": "4b8286d243ad9eeaaa1fccf312c1d9f920ef7cd0",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-15T19:43:26+00:00"
+            "time": "2018-03-16T20:40:34+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -566,12 +566,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "ee25f9d1f6d6165f5482a5e2378fcbf9bb433f76"
+                "reference": "2190cd77fc4c185494b7900587ac1b1961c14e71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/ee25f9d1f6d6165f5482a5e2378fcbf9bb433f76",
-                "reference": "ee25f9d1f6d6165f5482a5e2378fcbf9bb433f76",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/2190cd77fc4c185494b7900587ac1b1961c14e71",
+                "reference": "2190cd77fc4c185494b7900587ac1b1961c14e71",
                 "shasum": ""
             },
             "require": {
@@ -640,7 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-03-16T14:27:47+00:00"
+            "time": "2018-03-18T11:48:21+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -648,12 +648,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "81c98afe648841e10a1ffcc9c218b4b82e9d1d87"
+                "reference": "952918b58e6008dd9a61fcc80ad9f0cbb906b288"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/81c98afe648841e10a1ffcc9c218b4b82e9d1d87",
-                "reference": "81c98afe648841e10a1ffcc9c218b4b82e9d1d87",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/952918b58e6008dd9a61fcc80ad9f0cbb906b288",
+                "reference": "952918b58e6008dd9a61fcc80ad9f0cbb906b288",
                 "shasum": ""
             },
             "require": {
@@ -694,7 +694,7 @@
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-03-16T00:45:52+00:00"
+            "time": "2018-03-18T10:23:24+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
@@ -1841,16 +1841,16 @@
         },
         {
             "name": "layershifter/tld-database",
-            "version": "1.0.55",
+            "version": "1.0.56",
             "source": {
                 "type": "git",
                 "url": "https://github.com/layershifter/TLDDatabase.git",
-                "reference": "cb5df36b4750aced85a792aed80b2a493c421d6f"
+                "reference": "5798fa9a29a013f0ca4ef391d081639007b0c6ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/layershifter/TLDDatabase/zipball/cb5df36b4750aced85a792aed80b2a493c421d6f",
-                "reference": "cb5df36b4750aced85a792aed80b2a493c421d6f",
+                "url": "https://api.github.com/repos/layershifter/TLDDatabase/zipball/5798fa9a29a013f0ca4ef391d081639007b0c6ae",
+                "reference": "5798fa9a29a013f0ca4ef391d081639007b0c6ae",
                 "shasum": ""
             },
             "require": {
@@ -1888,7 +1888,7 @@
                 "domain database",
                 "tld database"
             ],
-            "time": "2018-03-11T11:29:33+00:00"
+            "time": "2018-03-17T22:10:15+00:00"
         },
         {
             "name": "layershifter/tld-extract",
@@ -3917,16 +3917,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.4.1",
+            "version": "v6.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "e3b39607a2eb0f5c7010bb3f81dc1ff5eed218e0"
+                "reference": "d38739b67bfe601e5ef3193567b0016f8989be65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/e3b39607a2eb0f5c7010bb3f81dc1ff5eed218e0",
-                "reference": "e3b39607a2eb0f5c7010bb3f81dc1ff5eed218e0",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/d38739b67bfe601e5ef3193567b0016f8989be65",
+                "reference": "d38739b67bfe601e5ef3193567b0016f8989be65",
                 "shasum": ""
             },
             "require": {
@@ -3968,7 +3968,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2018-03-02T13:36:28+00:00"
+            "time": "2018-03-17T21:35:08+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
