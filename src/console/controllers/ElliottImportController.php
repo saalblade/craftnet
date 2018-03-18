@@ -64,6 +64,11 @@ class ElliottImportController extends Controller
     protected $client;
 
     /**
+     * @var int[]|null
+     */
+    private $_userIds;
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -319,11 +324,6 @@ class ElliottImportController extends Controller
 
         $shippingCategoryId = $commerce->getShippingCategories()->getDefaultShippingCategory()->id;
 
-        $userIds = User::find()
-            ->select(['email', 'elements.id'])
-            ->asArray()
-            ->pairs();
-
         $cmsLicenseManager = $this->module->getCmsLicenseManager();
         $pluginLicenseManager = $this->module->getPluginLicenseManager();
 
@@ -338,7 +338,6 @@ class ElliottImportController extends Controller
             $purchasableIds,
             $taxCategoryId,
             $shippingCategoryId,
-            $userIds,
             $cmsLicenseManager,
             $pluginLicenseManager
         ) {
@@ -553,8 +552,8 @@ class ElliottImportController extends Controller
                         ->execute();
 
                     // if the order was placed by an existing user, assign the license to them
-                    if (isset($userIds[$item['email']])) {
-                        $license->ownerId = $userIds[$item['email']];
+                    if (($userId = $this->userId($item['email'])) !== null) {
+                        $license->ownerId = $userId;
                         $cmsLicenseManager->saveLicense($license);
                     }
                 }
@@ -576,8 +575,8 @@ class ElliottImportController extends Controller
                         ->execute();
 
                     // if the order was placed by an existing user, assign the license to them
-                    if (isset($userIds[$item['email']])) {
-                        $license->ownerId = $userIds[$item['email']];
+                    if (($userId = $this->userId($item['email'])) !== null) {
+                        $license->ownerId = $userId;
                         $pluginLicenseManager->saveLicense($license);
                     }
                 }
@@ -835,5 +834,21 @@ class ElliottImportController extends Controller
         ]);
 
         return Json::decode((string)$response->getBody());
+    }
+
+    /**
+     * @param string $email
+     * @return int|null
+     */
+    protected function userId(string $email)
+    {
+        if ($this->_userIds === null) {
+            $this->_userIds = User::find()
+                ->select([new Expression('lower([[email]])'), 'elements.id'])
+                ->asArray()
+                ->pairs();
+        }
+
+        return $this->_userIds[strtolower($email)] ?? null;
     }
 }
