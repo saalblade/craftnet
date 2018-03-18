@@ -37,6 +37,9 @@ mix.webpackConfig({
     },
     resolve: {
         extensions: ['*', '.js', '.jsx', '.vue', '.ts', '.tsx'],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
     },
 });
 

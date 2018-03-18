@@ -1,17 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "es2015"
-    ],
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
     "module": "es2015",
     "moduleResolution": "node",
-    "noImplicitAny": false,
-    "sourceMap": false,
-    "experimentalDecorators": true
+    "target": "es5"
   },
   "include": [
-    "web/craftidresources/src/js/**/*"
+    "./web/craftidresources/src/**/*"
   ]
 }
