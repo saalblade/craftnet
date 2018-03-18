@@ -107,13 +107,17 @@ class ElliottImportController extends Controller
     public function actionAll()
     {
         $startTime = microtime(true);
-        $this->runAction('cms-licenses');
-        $this->stdout(PHP_EOL);
-        $this->runAction('commerce-licenses');
-        $this->stdout(PHP_EOL);
-        $this->runAction('orders');
-        $this->stdout(PHP_EOL);
-        $this->runAction('discounts');
+        if ($this->runAction('cms-licenses') == 0) {
+            $this->stdout(PHP_EOL);
+            if ($this->runAction('commerce-licenses') == 0) {
+                $this->stdout(PHP_EOL);
+                if ($this->runAction('orders') == 0) {
+                    $this->stdout(PHP_EOL);
+                    $this->runAction('discounts');
+                }
+            }
+        }
+
         $this->stdout(PHP_EOL);
         $this->stdout('All done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL.PHP_EOL, Console::FG_GREEN);
     }
@@ -131,7 +135,7 @@ class ElliottImportController extends Controller
             ->select(['handle', 'elements.id'])
             ->pairs();
 
-        $this->import('cmsLicenses', function(array $item) use ($manager, $editionIds) {
+        $result = $this->import('cmsLicenses', function(array $item) use ($manager, $editionIds) {
             $data = [
                 'editionId' => $editionIds[$item['edition']],
                 'expirable' => $item['edition'] === 'personal',
@@ -171,6 +175,8 @@ class ElliottImportController extends Controller
         });
 
         $this->stdout('done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL);
+
+        return $result;
     }
 
     /**
@@ -190,7 +196,7 @@ class ElliottImportController extends Controller
         $plugin = $this->getCommerce();
         $edition = $plugin->getEdition('standard');
 
-        $this->import('commerceLicenses', function(array $item) use (
+        $result = $this->import('commerceLicenses', function(array $item) use (
             $cmsLicenseManager,
             $pluginLicenseManager,
             $plugin,
@@ -222,6 +228,8 @@ class ElliottImportController extends Controller
         });
 
         $this->stdout('done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL);
+
+        return $result;
     }
 
     /**
@@ -327,7 +335,7 @@ class ElliottImportController extends Controller
         $cmsLicenseManager = $this->module->getCmsLicenseManager();
         $pluginLicenseManager = $this->module->getPluginLicenseManager();
 
-        $this->import('orders', function(array $item) use (
+        $result = $this->import('orders', function(array $item) use (
             $fieldLayoutId,
             $siteId,
             $orderStatusIds,
@@ -586,6 +594,8 @@ class ElliottImportController extends Controller
         });
 
         $this->stdout('done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL);
+
+        return $result;
     }
 
     /**
@@ -604,7 +614,7 @@ class ElliottImportController extends Controller
             ->andWhere(['craftcom_cmseditions.handle' => ['client', 'pro']])
             ->pairs();
 
-        $this->import('discounts', function(array $item) use ($editionIds) {
+        $result = $this->import('discounts', function(array $item) use ($editionIds) {
             $this->stdout("    > Saving discount \"{$item['name']}\" ({$item['code']}) ... ");
 
             $this->db->createCommand()
@@ -662,6 +672,8 @@ class ElliottImportController extends Controller
         });
 
         $this->stdout('done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL);
+
+        return $result;
     }
 
     // Protected Methods
@@ -766,7 +778,7 @@ class ElliottImportController extends Controller
         }
     }
 
-    protected function import(string $uri, callable $callback)
+    protected function import(string $uri, callable $callback): int
     {
         $fetched = 0;
 
@@ -811,7 +823,7 @@ class ElliottImportController extends Controller
             if (!$success) {
                 $transaction->rollBack();
                 $this->stderr('    > Aborting import due to error.'.PHP_EOL, Console::FG_YELLOW);
-                return;
+                return 1;
             }
 
             $transaction->commit();
@@ -821,6 +833,8 @@ class ElliottImportController extends Controller
             (!$this->totalPages || $fetched < $this->totalPages) &&
             $page < $response['pagination']['totalPages']
         );
+
+        return 0;
     }
 
     protected function get(string $uri, int $page, int $perPage): array
