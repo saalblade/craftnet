@@ -9,6 +9,7 @@ use craftcom\plugins\PluginLicense;
 
 /**
  * @property PluginLicense[] $pluginLicenses
+ * @property string $shortKey
  */
 class CmsLicense extends Model
 {
@@ -74,6 +75,16 @@ class CmsLicense extends Model
         return [
             'pluginLicenses',
         ];
+    }
+
+    /**
+     * Returns a shortened version of the license key.
+     *
+     * @return string
+     */
+    public function getShortKey(): string
+    {
+        return substr($this->key, 0, 10);
     }
 
     /**
