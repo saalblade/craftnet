@@ -378,12 +378,13 @@ class PluginEdition extends PluginPurchasable
         }
 
         try {
+            // save the license
             if (!$manager->saveLicense($license)) {
                 Craft::error("Could not save plugin license {$license->key} for order {$order->number}: ".implode(', ', $license->getErrorSummary(true)));
                 return;
             }
 
-            // Relate the license to the line item
+            // relate the license to the line item
             Craft::$app->getDb()->createCommand()
                 ->insert('craftcom_pluginlicenses_lineitems', [
                     'licenseId' => $license->id,

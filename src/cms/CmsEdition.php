@@ -234,8 +234,8 @@ class CmsEdition extends Purchasable
             ]);
         }
 
-        $license->edition = $this->handle;
         $license->editionId = $this->id;
+        $license->edition = $this->handle;
         $license->expired = false;
 
         // If this was placed before April 4, or it was bought with a coupon created before April 4, set the license to non-expirable
@@ -258,12 +258,13 @@ class CmsEdition extends Purchasable
         }
 
         try {
+            // save the license
             if (!$manager->saveLicense($license, false)) {
                 Craft::error("Could not save Craft license {$license->key} for order {$order->number}: ".implode(', ', $license->getErrorSummary(true)));
                 return;
             }
 
-            // Relate the license to the line item
+            // relate the license to the line item
             Craft::$app->getDb()->createCommand()
                 ->insert('craftcom_cmslicenses_lineitems', [
                     'licenseId' => $license->id,
