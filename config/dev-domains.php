@@ -33,6 +33,7 @@ return [
     'manual.casa',
     'mcipreview.com',
     'microserve-staging.ca',
+    'mldev.net',
     'mock-up.ca',
     'modlabdev.com',
     'mstesting.com.au',
