@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\cms;
+namespace craftnet\cms;
 
 use Craft;
 use craft\commerce\elements\Order;
@@ -9,9 +9,9 @@ use craft\elements\User;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
 use craft\helpers\Json;
-use craftcom\errors\LicenseNotFoundException;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
+use craftnet\errors\LicenseNotFoundException;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
 use LayerShifter\TLDExtract\Extract;
 use yii\base\Component;
 use yii\base\Exception;
@@ -163,7 +163,7 @@ class CmsLicenseManager extends Component
             // try the inactive licenses table
             $data = (new Query())
                 ->select(['data'])
-                ->from(['craftcom_inactivecmslicenses'])
+                ->from(['craftnet_inactivecmslicenses'])
                 ->where(['key' => $key])
                 ->scalar();
 
@@ -184,7 +184,7 @@ class CmsLicenseManager extends Component
             $this->saveLicense($license, false);
 
             Craft::$app->getDb()->createCommand()
-                ->delete('craftcom_inactivecmslicenses', [
+                ->delete('craftnet_inactivecmslicenses', [
                     'key' => $key
                 ])
                 ->execute();
@@ -250,14 +250,14 @@ class CmsLicenseManager extends Component
 
         if (!$license->id) {
             $success = (bool)Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_cmslicenses', $data)
+                ->insert('craftnet_cmslicenses', $data)
                 ->execute();
 
             // set the ID an UID on the model
-            $license->id = Craft::$app->getDb()->getLastInsertID('craftcom_cmslicenses');
+            $license->id = Craft::$app->getDb()->getLastInsertID('craftnet_cmslicenses');
         } else {
             $success = (bool)Craft::$app->getDb()->createCommand()
-                ->update('craftcom_cmslicenses', $data, ['id' => $license->id])
+                ->update('craftnet_cmslicenses', $data, ['id' => $license->id])
                 ->execute();
         }
 
@@ -278,7 +278,7 @@ class CmsLicenseManager extends Component
     public function addHistory(int $licenseId, string $note, string $timestamp = null)
     {
         Craft::$app->getDb()->createCommand()
-            ->insert('craftcom_cmslicensehistory', [
+            ->insert('craftnet_cmslicensehistory', [
                 'licenseId' => $licenseId,
                 'note' => $note,
                 'timestamp' => $timestamp ?? Db::prepareDateForDb(new \DateTime()),
@@ -322,7 +322,7 @@ class CmsLicenseManager extends Component
     public function claimLicenses(User $user)
     {
         Craft::$app->getDb()->createCommand()
-            ->update('craftcom_cmslicenses', [
+            ->update('craftnet_cmslicenses', [
                 'ownerId' => $user->id,
             ], [
                 'and',
@@ -409,6 +409,6 @@ class CmsLicenseManager extends Component
                 'dateUpdated',
                 'uid',
             ])
-            ->from(['craftcom_cmslicenses']);
+            ->from(['craftnet_cmslicenses']);
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace craftcom\cms;
+namespace craftnet\cms;
 
 use Craft;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\db\ElementQueryInterface;
-use craftcom\base\Purchasable;
-use craftcom\errors\LicenseNotFoundException;
-use craftcom\Module;
+use craftnet\base\Purchasable;
+use craftnet\errors\LicenseNotFoundException;
+use craftnet\Module;
 use yii\base\Exception;
 
 
@@ -128,11 +128,11 @@ class CmsEdition extends Purchasable
 
         if ($isNew) {
             Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_cmseditions', $data, false)
+                ->insert('craftnet_cmseditions', $data, false)
                 ->execute();
         } else {
             Craft::$app->getDb()->createCommand()
-                ->update('craftcom_cmseditions', $data, ['id' => $this->id], [], false)
+                ->update('craftnet_cmseditions', $data, ['id' => $this->id], [], false)
                 ->execute();
         }
 
@@ -278,7 +278,7 @@ class CmsEdition extends Purchasable
 
             // relate the license to the line item
             Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_cmslicenses_lineitems', [
+                ->insert('craftnet_cmslicenses_lineitems', [
                     'licenseId' => $license->id,
                     'lineItemId' => $lineItem->id,
                 ], false)
@@ -286,18 +286,14 @@ class CmsEdition extends Purchasable
 
             // update the license history
             if ($isNew) {
-                $manager->addHistory($license->id, "created by {$license->email} per order {$order->number}");
+                $note = "created by {$license->email}";
             } else {
-                $note = [];
+                $note = "upgraded to {$license->edition}";
                 if ($license->email !== $oldEmail) {
-                    $note[] = "reassigned to {$license->email}";
+                    $note .= " and reassigned to {$license->email}";
                 }
-                if ($license->edition !== $oldEdition) {
-                    $note[] = "upgraded to {$license->edition}";
-                }
-                $note = implode('and', $note)." per order {$order->number}";
-                $manager->addHistory($license->id, $note);
             }
+            $manager->addHistory($license->id, "{$note} per order {$order->number}");
         } catch (Exception $e) {
             Craft::error("Could not save Craft license {$license->key} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);

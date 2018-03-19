@@ -1,14 +1,14 @@
 <?php
 
-namespace craftcom\developers;
+namespace craftnet\developers;
 
 use Craft;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\Db;
-use craftcom\errors\InaccessibleFundsException;
-use craftcom\errors\InsufficientFundsException;
-use craftcom\errors\MissingStripeAccountException;
+use craftnet\errors\InaccessibleFundsException;
+use craftnet\errors\InsufficientFundsException;
+use craftnet\errors\MissingStripeAccountException;
 use Stripe\Error\Base as StripeError;
 use Stripe\Stripe;
 use Stripe\Transfer;
@@ -52,7 +52,7 @@ class FundsManager extends BaseObject
     {
         return (new Query())
             ->select(['balance'])
-            ->from('craftcom_developers')
+            ->from('craftnet_developers')
             ->where(['id' => $this->developer->id])
             ->scalar();
     }
@@ -259,7 +259,7 @@ class FundsManager extends BaseObject
 
         if ($adjustment !== false) {
             $db->createCommand()
-                ->update('craftcom_developers',
+                ->update('craftnet_developers',
                     [
                         'balance' => new Expression("[[balance]] {$operator} :adjustment", [':adjustment' => $adjustment])
                     ],
@@ -270,7 +270,7 @@ class FundsManager extends BaseObject
         }
 
         $ledgerSql = <<<SQL
-insert into {{craftcom_developerledger}} (
+insert into {{craftnet_developerledger}} (
     [[developerId]],
     [[note]],
     [[credit]],
@@ -286,7 +286,7 @@ insert into {{craftcom_developerledger}} (
     :fee,
     (
         select [[balance]]
-        from {{craftcom_developers}}
+        from {{craftnet_developers}}
         where [[id]] = :developerId
     ),
     :dateCreated

@@ -1,8 +1,8 @@
 <?php
 
-namespace craftcom\errors;
+namespace craftnet\errors;
 
-use craftcom\plugins\Plugin;
+use craftnet\plugins\Plugin;
 use Throwable;
 use yii\base\Exception;
 

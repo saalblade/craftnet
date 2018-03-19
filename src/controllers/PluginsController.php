@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\controllers;
+namespace craftnet\controllers;
 
 use Craft;
 use craft\base\Element;
@@ -15,8 +15,8 @@ use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
 use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
@@ -171,7 +171,7 @@ class PluginsController extends Controller
                     throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
                 }
 
-                if (!Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+                if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                     throw new ForbiddenHttpException('User is not permitted to perform this action');
                 }
             } else {
@@ -185,7 +185,7 @@ class PluginsController extends Controller
 
         $title = $plugin->id ? $plugin->name : 'Add a new plugin';
 
-        return $this->renderTemplate('craftcom/plugins/_edit', compact('plugin', 'title'));
+        return $this->renderTemplate('craftnet/plugins/_edit', compact('plugin', 'title'));
     }
 
     /**
@@ -204,7 +204,7 @@ class PluginsController extends Controller
                 throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
             }
 
-            if (!Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+            if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                 throw new ForbiddenHttpException('User is not permitted to perform this action');
             }
         } else {
@@ -226,7 +226,7 @@ class PluginsController extends Controller
         }
 
         // Only plugin managers are able to change developer for a plugin
-        if (Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && isset($request->getBodyParam('developerId')[0])) {
+        if (Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && isset($request->getBodyParam('developerId')[0])) {
             $plugin->developerId = $request->getBodyParam('developerId')[0];
         }
 

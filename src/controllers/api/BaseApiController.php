@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\controllers\api;
+namespace craftnet\controllers\api;
 
 use Craft;
 use craft\elements\User;
@@ -9,13 +9,13 @@ use craft\helpers\Db;
 use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\web\Controller;
-use craftcom\cms\CmsLicense;
-use craftcom\developers\Developer;
-use craftcom\errors\LicenseNotFoundException;
-use craftcom\errors\ValidationException;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
-use craftcom\plugins\PluginLicense;
+use craftnet\cms\CmsLicense;
+use craftnet\developers\Developer;
+use craftnet\errors\LicenseNotFoundException;
+use craftnet\errors\ValidationException;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginLicense;
 use JsonSchema\Validator;
 use stdClass;
 use yii\base\Model;
@@ -29,8 +29,6 @@ use yii\web\UnauthorizedHttpException;
 
 /**
  * Class BaseController
- *
- * @package craftcom\controllers\api
  *
  * @property Module $module
  */
@@ -292,7 +290,7 @@ abstract class BaseApiController extends Controller
         if ($this->cmsVersion !== null && $cmsLicense !== null) {
             // delete any installedplugins rows where lastActivity > 30 days ago
             $db->createCommand()
-                ->delete('craftcom_installedplugins', [
+                ->delete('craftnet_installedplugins', [
                     'and',
                     ['craftLicenseKey' => $cmsLicense->key],
                     ['<', 'lastActivity', Db::prepareDateForDb(new \DateTime('-30 days'))],
@@ -301,7 +299,7 @@ abstract class BaseApiController extends Controller
 
             foreach ($this->plugins as $plugin) {
                 $db->createCommand()
-                    ->upsert('craftcom_installedplugins', [
+                    ->upsert('craftnet_installedplugins', [
                         'craftLicenseKey' => $cmsLicense->key,
                         'pluginId' => $plugin->id,
                     ], [
@@ -311,8 +309,8 @@ abstract class BaseApiController extends Controller
 
                 // Update the plugin's active installs count
                 $db->createCommand()
-                    ->update('craftcom_plugins', [
-                        'activeInstalls' => new Expression('(select count(*) from [[craftcom_installedplugins]] where [[pluginId]] = :pluginId)', ['pluginId' => $plugin->id]),
+                    ->update('craftnet_plugins', [
+                        'activeInstalls' => new Expression('(select count(*) from [[craftnet_installedplugins]] where [[pluginId]] = :pluginId)', ['pluginId' => $plugin->id]),
                     ], [
                         'id' => $plugin->id,
                     ])

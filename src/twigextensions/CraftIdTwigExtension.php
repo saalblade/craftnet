@@ -1,8 +1,8 @@
 <?php
 
-namespace craftcom\twigextensions;
+namespace craftnet\twigextensions;
 
-use craftcom\helpers\MixHelper;
+use craftnet\helpers\MixHelper;
 use Twig_Extension;
 use Twig_SimpleFunction;
 

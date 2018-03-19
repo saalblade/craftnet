@@ -1,12 +1,12 @@
 <?php
 
-namespace craftcom\developers;
+namespace craftnet\developers;
 
 use Craft;
 use craft\base\Element;
 use craft\elements\User;
-use craftcom\helpers\KeyHelper;
-use craftcom\plugins\Plugin;
+use craftnet\helpers\KeyHelper;
+use craftnet\plugins\Plugin;
 use yii\base\Behavior;
 
 /**
@@ -147,7 +147,7 @@ class Developer extends Behavior
     public function saveDeveloperInfo()
     {
         Craft::$app->getDb()->createCommand()
-            ->upsert('craftcom_developers', [
+            ->upsert('craftnet_developers', [
                 'id' => $this->owner->id,
             ], [
                 'country' => $this->country,

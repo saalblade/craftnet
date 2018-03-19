@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use Craft;
 use craft\db\Query;
@@ -46,7 +46,7 @@ class PluginHistory extends BaseObject implements \IteratorAggregate, \ArrayAcce
     public function push(string $note, string $devComments = null)
     {
         Craft::$app->getDb()->createCommand()
-            ->insert('craftcom_pluginhistory', [
+            ->insert('craftnet_pluginhistory', [
                 'pluginId' => $this->_plugin->id,
                 'note' => $note,
                 'devComments' => $devComments,
@@ -125,7 +125,7 @@ class PluginHistory extends BaseObject implements \IteratorAggregate, \ArrayAcce
 
         return $this->_history = (new Query())
             ->select(['note', 'devComments', 'dateCreated'])
-            ->from(['craftcom_pluginhistory'])
+            ->from(['craftnet_pluginhistory'])
             ->where(['pluginId' => $this->_plugin->id])
             ->orderBy(['dateCreated' => SORT_DESC])
             ->all();

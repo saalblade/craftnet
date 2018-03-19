@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\controllers\id;
+namespace craftnet\controllers\id;
 
 use Craft;
 use craft\elements\Asset;
@@ -15,8 +15,6 @@ use Throwable;
 
 /**
  * Class AccountController
- *
- * @package craftcom\controllers\id
  */
 class AccountController extends Controller
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\controllers\api;
+namespace craftnet\controllers\api;
 
 use Craft;
 use yii\web\BadRequestHttpException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\cms;
+namespace craftnet\cms;
 
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -43,17 +43,17 @@ class CmsEditionQuery extends ElementQuery
 
     protected function beforePrepare(): bool
     {
-        $this->joinElementTable('craftcom_cmseditions');
+        $this->joinElementTable('craftnet_cmseditions');
 
         $this->query->select([
-            'craftcom_cmseditions.name',
-            'craftcom_cmseditions.handle',
-            'craftcom_cmseditions.price',
-            'craftcom_cmseditions.renewalPrice',
+            'craftnet_cmseditions.name',
+            'craftnet_cmseditions.handle',
+            'craftnet_cmseditions.price',
+            'craftnet_cmseditions.renewalPrice',
         ]);
 
         if ($this->handle) {
-            $this->subQuery->andWhere(Db::parseParam('craftcom_cmseditions.handle', $this->handle));
+            $this->subQuery->andWhere(Db::parseParam('craftnet_cmseditions.handle', $this->handle));
         }
 
         return parent::beforePrepare();

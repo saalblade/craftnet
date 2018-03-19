@@ -1,10 +1,10 @@
 <?php
 
-namespace craftcom\cms;
+namespace craftnet\cms;
 
 use Craft;
 use craft\elements\db\ElementQueryInterface;
-use craftcom\base\Purchasable;
+use craftnet\base\Purchasable;
 use yii\base\InvalidConfigException;
 
 
@@ -81,11 +81,11 @@ class CmsRenewal extends Purchasable
 
         if ($isNew) {
             Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_cmsrenewals', $data, false)
+                ->insert('craftnet_cmsrenewals', $data, false)
                 ->execute();
         } else {
             Craft::$app->getDb()->createCommand()
-                ->update('craftcom_cmsrenewals', $data, ['id' => $this->id], [], false)
+                ->update('craftnet_cmsrenewals', $data, ['id' => $this->id], [], false)
                 ->execute();
         }
 

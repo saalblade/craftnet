@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\oauthserver\server;
+namespace craftnet\oauthserver\server;
 
 class Response extends \GuzzleHttp\Psr7\Response
 {

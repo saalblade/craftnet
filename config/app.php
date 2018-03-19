@@ -1,21 +1,21 @@
 <?php
 
 use craft\config\DbConfig;
-use craftcom\services\Oauth;
+use craftnet\services\Oauth;
 
 return [
     '*' => [
         'bootstrap' => [
-            'craftcom',
+            'craftnet',
             'oauth-server',
             'queue',
         ],
         'modules' => [
-            'craftcom' => [
-                'class' => \craftcom\Module::class,
+            'craftnet' => [
+                'class' => \craftnet\Module::class,
                 'components' => [
                     'cmsLicenseManager' => [
-                        'class' => craftcom\cms\CmsLicenseManager::class,
+                        'class' => craftnet\cms\CmsLicenseManager::class,
                         'devDomains' => require __DIR__.'/dev-domains.php',
                         'devTlds' => ['dev'],
                         'devSubdomainWords' => [
@@ -33,15 +33,15 @@ return [
                         ]
                     ],
                     'pluginLicenseManager' => [
-                        'class' => craftcom\plugins\PluginLicenseManager::class,
+                        'class' => craftnet\plugins\PluginLicenseManager::class,
                     ],
                     'packageManager' => [
-                        'class' => craftcom\composer\PackageManager::class,
+                        'class' => craftnet\composer\PackageManager::class,
                         'githubFallbackTokens' => getenv('GITHUB_FALLBACK_TOKENS'),
                         'requirePluginVcsTokens' => false,
                     ],
                     'jsonDumper' => [
-                        'class' => \craftcom\composer\JsonDumper::class,
+                        'class' => craftnet\composer\JsonDumper::class,
                         'composerWebroot' => getenv('COMPOSER_WEBROOT'),
                     ],
                     'oauth' => [
@@ -66,7 +66,7 @@ return [
                 ]
             ],
             'oauth-server' => [
-                'class' => craftcom\oauthserver\Module::class,
+                'class' => craftnet\oauthserver\Module::class,
             ],
         ],
         'components' => [
@@ -121,9 +121,9 @@ return [
                 'class' => yii\log\Dispatcher::class,
                 'targets' => [
                     [
-                        'class' => craftcom\logs\DbTarget::class,
+                        'class' => craftnet\logs\DbTarget::class,
                         'logTable' => 'apilog.logs',
-                        'categories' => ['craftcom\\*'],
+                        'categories' => ['craftnet\\*'],
                     ],
                 ],
             ],

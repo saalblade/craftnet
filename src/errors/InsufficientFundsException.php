@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\errors;
+namespace craftnet\errors;
 
 use Craft;
 use Throwable;

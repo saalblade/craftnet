@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\composer\jobs;
+namespace craftnet\composer\jobs;
 
 use craft\helpers\FileHelper;
 use craft\queue\BaseJob;

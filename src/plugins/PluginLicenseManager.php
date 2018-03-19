@@ -1,14 +1,14 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use Craft;
 use craft\commerce\elements\Order;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\Db;
-use craftcom\errors\LicenseNotFoundException;
-use craftcom\Module;
+use craftnet\errors\LicenseNotFoundException;
+use craftnet\Module;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
@@ -82,7 +82,7 @@ class PluginLicenseManager extends Component
         $key = $this->normalizeKey($key);
 
         $result = $this->_createLicenseQuery()
-            ->innerJoin('craftcom_plugins p', '[[p.id]] = [[l.pluginId]]')
+            ->innerJoin('craftnet_plugins p', '[[p.id]] = [[l.pluginId]]')
             ->where([
                 'p.handle' => $handle,
                 'l.key' => $key,
@@ -177,14 +177,14 @@ class PluginLicenseManager extends Component
 
         if (!$license->id) {
             $success = (bool)Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_pluginlicenses', $data)
+                ->insert('craftnet_pluginlicenses', $data)
                 ->execute();
 
             // set the ID on the model
-            $license->id = Craft::$app->getDb()->getLastInsertID('craftcom_pluginlicenses');
+            $license->id = Craft::$app->getDb()->getLastInsertID('craftnet_pluginlicenses');
         } else {
             $success = (bool)Craft::$app->getDb()->createCommand()
-                ->update('craftcom_pluginlicenses', $data, ['id' => $license->id])
+                ->update('craftnet_pluginlicenses', $data, ['id' => $license->id])
                 ->execute();
         }
 
@@ -205,7 +205,7 @@ class PluginLicenseManager extends Component
     public function addHistory(int $licenseId, string $note, string $timestamp = null)
     {
         Craft::$app->getDb()->createCommand()
-            ->insert('craftcom_pluginlicensehistory', [
+            ->insert('craftnet_pluginlicensehistory', [
                 'licenseId' => $licenseId,
                 'note' => $note,
                 'timestamp' => $timestamp ?? Db::prepareDateForDb(new \DateTime()),
@@ -261,7 +261,7 @@ class PluginLicenseManager extends Component
     public function claimLicenses(User $user)
     {
         Craft::$app->getDb()->createCommand()
-            ->update('craftcom_pluginlicenses', [
+            ->update('craftnet_pluginlicenses', [
                 'ownerId' => $user->id,
             ], [
                 'and',
@@ -354,6 +354,6 @@ class PluginLicenseManager extends Component
                 'l.dateUpdated',
                 'l.uid',
             ])
-            ->from(['craftcom_pluginlicenses l']);
+            ->from(['craftnet_pluginlicenses l']);
     }
 }

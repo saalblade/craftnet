@@ -1,13 +1,13 @@
 <?php
 
-namespace craftcom\controllers\id;
+namespace craftnet\controllers\id;
 
 use Craft;
 use craft\errors\UploadFailedException;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use craftcom\errors\LicenseNotFoundException;
-use craftcom\Module;
+use craftnet\errors\LicenseNotFoundException;
+use craftnet\Module;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use Exception;
@@ -15,8 +15,6 @@ use Throwable;
 
 /**
  * Class CmsLicensesController
- *
- * @package craftcom\controllers\id
  *
  * @property Module $module
  */

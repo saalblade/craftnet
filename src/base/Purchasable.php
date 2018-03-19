@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\base;
+namespace craftnet\base;
 
 use craft\commerce\base\Purchasable as CommercePurchasable;
 

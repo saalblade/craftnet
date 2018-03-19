@@ -4,22 +4,33 @@ namespace craft\contentmigrations;
 
 use Craft;
 use craft\commerce\gateways\Dummy;
+use craft\commerce\Plugin;
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\stripe\gateways\Gateway as StripeGateway;
 use craft\db\Migration;
 use yii\base\Exception;
 
 /**
- * m180227_232137_install_commerce_stripe migration.
+ * m180318_222142_install_commerce migration.
  */
-class m180227_232137_install_commerce_stripe extends Migration
+class m180318_222142_install_commerce extends Migration
 {
     /**
      * @inheritdoc
      */
     public function safeUp()
     {
-        // Install the plugin
+        // Install Commerce
+        Craft::$app->getPlugins()->installPlugin('commerce');
+
+        // Delete the default product type
+        $productTypesService = Plugin::getInstance()->productTypes;
+        $productType = $productTypesService->getProductTypeByHandle('clothing');
+        if ($productType) {
+            $productTypesService->deleteProductTypeById($productType->id);
+        }
+
+        // Install the Stripe plugin
         $this->dropTableIfExists('stripe_customers');
         Craft::$app->getPlugins()->installPlugin('commerce-stripe');
 
@@ -50,7 +61,7 @@ class m180227_232137_install_commerce_stripe extends Migration
      */
     public function safeDown()
     {
-        echo "m180227_232137_install_commerce_stripe cannot be reverted.\n";
+        echo "m180318_222142_install_commerce cannot be reverted.\n";
         return false;
     }
 }

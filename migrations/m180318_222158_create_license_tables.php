@@ -5,16 +5,16 @@ namespace craft\contentmigrations;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use craftcom\cms\CmsEdition;
-use craftcom\cms\CmsRenewal;
-use craftcom\plugins\PluginEdition;
-use craftcom\plugins\PluginRenewal;
+use craftnet\cms\CmsEdition;
+use craftnet\cms\CmsRenewal;
+use craftnet\plugins\PluginEdition;
+use craftnet\plugins\PluginRenewal;
 use yii\console\Exception;
 
 /**
- * m180227_232204_create_license_tables migration.
+ * m180318_222158_create_license_tables migration.
  */
-class m180227_232204_create_license_tables extends Migration
+class m180318_222158_create_license_tables extends Migration
 {
     /**
      * @inheritdoc
@@ -32,7 +32,7 @@ class m180227_232204_create_license_tables extends Migration
      */
     public function safeDown()
     {
-        echo "m180227_232204_create_license_tables cannot be reverted.\n";
+        echo "m180318_222158_create_license_tables cannot be reverted.\n";
         return false;
     }
 
@@ -40,12 +40,12 @@ class m180227_232204_create_license_tables extends Migration
     {
         // fix plugins table ---------------------------------------------------
 
-        $this->alterColumn('craftcom_plugins', 'price', $this->decimal(14, 4)->unsigned());
-        $this->alterColumn('craftcom_plugins', 'renewalPrice', $this->decimal(14, 4)->unsigned());
+        $this->alterColumn('craftnet_plugins', 'price', $this->decimal(14, 4)->unsigned());
+        $this->alterColumn('craftnet_plugins', 'renewalPrice', $this->decimal(14, 4)->unsigned());
 
         // cmseditions ---------------------------------------------------------
 
-        $this->createTable('craftcom_cmseditions', [
+        $this->createTable('craftnet_cmseditions', [
             'id' => $this->integer()->notNull(),
             'name' => $this->string()->notNull(),
             'handle' => $this->string()->notNull(),
@@ -54,27 +54,27 @@ class m180227_232204_create_license_tables extends Migration
             'PRIMARY KEY([[id]])',
         ]);
 
-        $this->createIndex(null, 'craftcom_cmseditions', ['name'], true);
-        $this->createIndex(null, 'craftcom_cmseditions', ['handle'], true);
-        $this->createIndex(null, 'craftcom_cmseditions', ['price']);
+        $this->createIndex(null, 'craftnet_cmseditions', ['name'], true);
+        $this->createIndex(null, 'craftnet_cmseditions', ['handle'], true);
+        $this->createIndex(null, 'craftnet_cmseditions', ['price']);
 
-        $this->addForeignKey(null, 'craftcom_cmseditions', ['id'], 'elements', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_cmseditions', ['id'], 'elements', ['id'], 'CASCADE');
 
         // cmsrenewals ---------------------------------------------------------
 
-        $this->createTable('craftcom_cmsrenewals', [
+        $this->createTable('craftnet_cmsrenewals', [
             'id' => $this->integer()->notNull(),
             'editionId' => $this->integer()->notNull(),
             'price' => $this->decimal(14, 4)->unsigned()->notNull(),
             'PRIMARY KEY([[id]])',
         ]);
 
-        $this->addForeignKey(null, 'craftcom_cmsrenewals', ['id'], 'elements', ['id'], 'CASCADE');
-        $this->addForeignKey(null, 'craftcom_cmsrenewals', ['editionId'], 'craftcom_cmseditions', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_cmsrenewals', ['id'], 'elements', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_cmsrenewals', ['editionId'], 'craftnet_cmseditions', ['id'], 'CASCADE');
 
         // cmslicenses ---------------------------------------------------------
 
-        $this->createTable('craftcom_cmslicenses', [
+        $this->createTable('craftnet_cmslicenses', [
             'id' => $this->primaryKey(),
             'editionId' => $this->integer()->notNull(),
             'ownerId' => $this->integer()->null(),
@@ -98,37 +98,37 @@ class m180227_232204_create_license_tables extends Migration
             'uid' => $this->uid(),
         ]);
 
-        $this->createIndex(null, 'craftcom_cmslicenses', ['key'], true);
-        $this->createIndex($this->db->getIndexName('craftcom_cmslicenses', ['ownerId', 'email']), 'craftcom_cmslicenses', ['ownerId', 'lower([[email]])']);
+        $this->createIndex(null, 'craftnet_cmslicenses', ['key'], true);
+        $this->createIndex($this->db->getIndexName('craftnet_cmslicenses', ['ownerId', 'email']), 'craftnet_cmslicenses', ['ownerId', 'lower([[email]])']);
 
-        $this->addForeignKey(null, 'craftcom_cmslicenses', ['editionId'], 'craftcom_cmseditions', ['id']);
-        $this->addForeignKey(null, 'craftcom_cmslicenses', ['ownerId'], 'users', ['id'], 'SET NULL');
+        $this->addForeignKey(null, 'craftnet_cmslicenses', ['editionId'], 'craftnet_cmseditions', ['id']);
+        $this->addForeignKey(null, 'craftnet_cmslicenses', ['ownerId'], 'users', ['id'], 'SET NULL');
 
         // cmslicensehistory ---------------------------------------------------
 
-        $this->createTable('craftcom_cmslicensehistory', [
+        $this->createTable('craftnet_cmslicensehistory', [
             'id' => $this->bigPrimaryKey(),
             'licenseId' => $this->integer(),
             'note' => $this->string()->notNull(),
             'timestamp' => $this->dateTime()->notNull(),
         ]);
 
-        $this->addForeignKey(null, 'craftcom_cmslicensehistory', ['licenseId'], 'craftcom_cmslicenses', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_cmslicensehistory', ['licenseId'], 'craftnet_cmslicenses', ['id'], 'CASCADE');
 
         // cmslicenses_lineitems -----------------------------------------------
 
-        $this->createTable('craftcom_cmslicenses_lineitems', [
+        $this->createTable('craftnet_cmslicenses_lineitems', [
             'licenseId' => $this->integer()->notNull(),
             'lineItemId' => $this->integer()->notNull(),
             'PRIMARY KEY([[licenseId]], [[lineItemId]])',
         ]);
 
-        $this->addForeignKey(null, 'craftcom_cmslicenses_lineitems', ['licenseId'], 'craftcom_cmslicenses', ['id'], 'CASCADE');
-        $this->addForeignKey(null, 'craftcom_cmslicenses_lineitems', ['lineItemId'], 'commerce_lineitems', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_cmslicenses_lineitems', ['licenseId'], 'craftnet_cmslicenses', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_cmslicenses_lineitems', ['lineItemId'], 'commerce_lineitems', ['id'], 'CASCADE');
 
         // inactivecmslicenses -------------------------------------------------
 
-        $this->createTable('craftcom_inactivecmslicenses', [
+        $this->createTable('craftnet_inactivecmslicenses', [
             'key' => $this->string(250)->notNull(),
             'data' => $this->text(),
             'PRIMARY KEY([[key]])',
@@ -139,7 +139,7 @@ class m180227_232204_create_license_tables extends Migration
     {
         // plugineditions ------------------------------------------------------
 
-        $this->createTable('craftcom_plugineditions', [
+        $this->createTable('craftnet_plugineditions', [
             'id' => $this->integer()->notNull(),
             'pluginId' => $this->integer()->notNull(),
             'name' => $this->string()->notNull(),
@@ -149,16 +149,16 @@ class m180227_232204_create_license_tables extends Migration
             'PRIMARY KEY([[id]])',
         ]);
 
-        $this->createIndex(null, 'craftcom_plugineditions', ['pluginId', 'name'], true);
-        $this->createIndex(null, 'craftcom_plugineditions', ['pluginId', 'handle'], true);
-        $this->createIndex(null, 'craftcom_plugineditions', ['pluginId', 'price']);
+        $this->createIndex(null, 'craftnet_plugineditions', ['pluginId', 'name'], true);
+        $this->createIndex(null, 'craftnet_plugineditions', ['pluginId', 'handle'], true);
+        $this->createIndex(null, 'craftnet_plugineditions', ['pluginId', 'price']);
 
-        $this->addForeignKey(null, 'craftcom_plugineditions', ['id'], 'elements', ['id'], 'CASCADE');
-        $this->addForeignKey(null, 'craftcom_plugineditions', ['pluginId'], 'craftcom_plugins', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_plugineditions', ['id'], 'elements', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_plugineditions', ['pluginId'], 'craftnet_plugins', ['id'], 'CASCADE');
 
         // cmsrenewals ---------------------------------------------------------
 
-        $this->createTable('craftcom_pluginrenewals', [
+        $this->createTable('craftnet_pluginrenewals', [
             'id' => $this->integer()->notNull(),
             'pluginId' => $this->integer()->notNull(),
             'editionId' => $this->integer()->notNull(),
@@ -166,13 +166,13 @@ class m180227_232204_create_license_tables extends Migration
             'PRIMARY KEY([[id]])',
         ]);
 
-        $this->addForeignKey(null, 'craftcom_pluginrenewals', ['id'], 'elements', ['id'], 'CASCADE');
-        $this->addForeignKey(null, 'craftcom_pluginrenewals', ['pluginId'], 'craftcom_plugins', ['id'], 'CASCADE');
-        $this->addForeignKey(null, 'craftcom_pluginrenewals', ['editionId'], 'craftcom_plugineditions', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_pluginrenewals', ['id'], 'elements', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_pluginrenewals', ['pluginId'], 'craftnet_plugins', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_pluginrenewals', ['editionId'], 'craftnet_plugineditions', ['id'], 'CASCADE');
 
         // pluginlicenses ------------------------------------------------------
 
-        $this->createTable('craftcom_pluginlicenses', [
+        $this->createTable('craftnet_pluginlicenses', [
             'id' => $this->primaryKey(),
             'pluginId' => $this->integer()->notNull(),
             'editionId' => $this->integer()->notNull(),
@@ -197,35 +197,35 @@ class m180227_232204_create_license_tables extends Migration
             'uid' => $this->uid(),
         ]);
 
-        $this->createIndex(null, 'craftcom_pluginlicenses', ['key'], true);
-        $this->createIndex($this->db->getIndexName('craftcom_pluginlicenses', ['ownerId', 'email']), 'craftcom_pluginlicenses', ['ownerId', 'lower([[email]])']);
+        $this->createIndex(null, 'craftnet_pluginlicenses', ['key'], true);
+        $this->createIndex($this->db->getIndexName('craftnet_pluginlicenses', ['ownerId', 'email']), 'craftnet_pluginlicenses', ['ownerId', 'lower([[email]])']);
 
-        $this->addForeignKey(null, 'craftcom_pluginlicenses', ['pluginId'], 'craftcom_plugins', ['id']);
-        $this->addForeignKey(null, 'craftcom_pluginlicenses', ['editionId'], 'craftcom_plugineditions', ['id']);
-        $this->addForeignKey(null, 'craftcom_pluginlicenses', ['cmsLicenseId'], 'craftcom_cmslicenses', ['id'], 'SET NULL');
-        $this->addForeignKey(null, 'craftcom_pluginlicenses', ['ownerId'], 'users', ['id'], 'SET NULL');
+        $this->addForeignKey(null, 'craftnet_pluginlicenses', ['pluginId'], 'craftnet_plugins', ['id']);
+        $this->addForeignKey(null, 'craftnet_pluginlicenses', ['editionId'], 'craftnet_plugineditions', ['id']);
+        $this->addForeignKey(null, 'craftnet_pluginlicenses', ['cmsLicenseId'], 'craftnet_cmslicenses', ['id'], 'SET NULL');
+        $this->addForeignKey(null, 'craftnet_pluginlicenses', ['ownerId'], 'users', ['id'], 'SET NULL');
 
         // pluginlicensehistory ------------------------------------------------
 
-        $this->createTable('craftcom_pluginlicensehistory', [
+        $this->createTable('craftnet_pluginlicensehistory', [
             'id' => $this->bigPrimaryKey(),
             'licenseId' => $this->integer(),
             'note' => $this->string()->notNull(),
             'timestamp' => $this->dateTime()->notNull(),
         ]);
 
-        $this->addForeignKey(null, 'craftcom_pluginlicensehistory', ['licenseId'], 'craftcom_pluginlicenses', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_pluginlicensehistory', ['licenseId'], 'craftnet_pluginlicenses', ['id'], 'CASCADE');
 
         // pluginlicenses_lineitems --------------------------------------------
 
-        $this->createTable('craftcom_pluginlicenses_lineitems', [
+        $this->createTable('craftnet_pluginlicenses_lineitems', [
             'licenseId' => $this->integer()->notNull(),
             'lineItemId' => $this->integer()->notNull(),
             'PRIMARY KEY([[licenseId]], [[lineItemId]])',
         ]);
 
-        $this->addForeignKey(null, 'craftcom_pluginlicenses_lineitems', ['licenseId'], 'craftcom_pluginlicenses', ['id'], 'CASCADE');
-        $this->addForeignKey(null, 'craftcom_pluginlicenses_lineitems', ['lineItemId'], 'commerce_lineitems', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_pluginlicenses_lineitems', ['licenseId'], 'craftnet_pluginlicenses', ['id'], 'CASCADE');
+        $this->addForeignKey(null, 'craftnet_pluginlicenses_lineitems', ['lineItemId'], 'commerce_lineitems', ['id'], 'CASCADE');
     }
 
     private function _createCmsEditions()
@@ -278,7 +278,7 @@ class m180227_232204_create_license_tables extends Migration
 
         $plugins = (new Query())
             ->select(['id', 'name', 'price', 'renewalPrice'])
-            ->from('craftcom_plugins')
+            ->from('craftnet_plugins')
             ->all();
 
         foreach ($plugins as $plugin) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use craft\base\Model;
 use craft\helpers\ArrayHelper;

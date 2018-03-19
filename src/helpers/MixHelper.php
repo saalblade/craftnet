@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\helpers;
+namespace craftnet\helpers;
 
 class MixHelper
 {

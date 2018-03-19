@@ -6,9 +6,9 @@ use craft\db\Migration;
 use craft\elements\User;
 
 /**
- * m180315_122041_developer_table migration.
+ * m180318_222228_developer_tables migration.
  */
-class m180315_122041_developer_tables extends Migration
+class m180318_222228_developer_tables extends Migration
 {
     /**
      * @inheritdoc
@@ -16,7 +16,7 @@ class m180315_122041_developer_tables extends Migration
     public function safeUp()
     {
         // developers table
-        $this->createTable('craftcom_developers', [
+        $this->createTable('craftnet_developers', [
             'id' => $this->integer()->notNull(),
             'country' => $this->char(2)->null(),
             'balance' => $this->decimal(14, 4)->notNull()->defaultValue(0),
@@ -27,10 +27,10 @@ class m180315_122041_developer_tables extends Migration
             'PRIMARY KEY([[id]])',
         ]);
 
-        $this->addForeignKey(null, 'craftcom_developers', ['id'], '{{%users}}', ['id'], 'CASCADE', null);
+        $this->addForeignKey(null, 'craftnet_developers', ['id'], '{{%users}}', ['id'], 'CASCADE', null);
 
         // developerledger
-        $this->createTable('craftcom_developerledger', [
+        $this->createTable('craftnet_developerledger', [
             'id' => $this->bigPrimaryKey(),
             'developerId' => $this->integer(),
             'note' => $this->string(),
@@ -41,7 +41,7 @@ class m180315_122041_developer_tables extends Migration
             'dateCreated' => $this->dateTime()->notNull(),
         ]);
 
-        $this->addForeignKey(null, 'craftcom_developerledger', ['developerId'], 'craftcom_developers', ['id'], 'CASCADE', null);
+        $this->addForeignKey(null, 'craftnet_developerledger', ['developerId'], 'craftnet_developers', ['id'], 'CASCADE', null);
 
         // add initial rows
         $developerIds = User::find()
@@ -55,7 +55,7 @@ class m180315_122041_developer_tables extends Migration
             $developerValues[] = [$id];
         }
 
-        $this->batchInsert('craftcom_developers', ['id'], $developerValues, false);
+        $this->batchInsert('craftnet_developers', ['id'], $developerValues, false);
     }
 
     /**
@@ -63,7 +63,7 @@ class m180315_122041_developer_tables extends Migration
      */
     public function safeDown()
     {
-        echo "m180315_122041_developer_table cannot be reverted.\n";
+        echo "m180318_222228_developer_tables cannot be reverted.\n";
         return false;
     }
 }

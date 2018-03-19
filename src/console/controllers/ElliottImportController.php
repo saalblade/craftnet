@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\console\controllers;
+namespace craftnet\console\controllers;
 
 use Craft;
 use craft\commerce\elements\Order;
@@ -14,11 +14,11 @@ use craft\elements\User;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Json;
-use craftcom\cms\CmsEdition;
-use craftcom\composer\Package;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
-use craftcom\plugins\PluginLicense;
+use craftnet\cms\CmsEdition;
+use craftnet\composer\Package;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginLicense;
 use GuzzleHttp\Client;
 use yii\base\Exception;
 use yii\caching\FileCache;
@@ -158,21 +158,21 @@ class ElliottImportController extends Controller
             if ($item['active']) {
                 $this->stdout("    > Saving Craft license {$keySample} ... ");
                 $this->db->createCommand()
-                    ->insert('craftcom_cmslicenses', $data)
+                    ->insert('craftnet_cmslicenses', $data)
                     ->execute();
 
                 $note = "created by {$item['email']}";
                 if ($data['domain']) {
                     $note .= " for domain {$data['domain']}";
                 }
-                $manager->addHistory($this->db->getLastInsertID('craftcom_cmslicenses'), $note, $item['dateCreated']);
+                $manager->addHistory($this->db->getLastInsertID('craftnet_cmslicenses'), $note, $item['dateCreated']);
             } else {
                 $this->stdout("    > Saving Craft license {$keySample} ");
                 $this->stdout('(inactive)', Console::FG_YELLOW);
                 $this->stdout(' ... ');
 
                 $this->db->createCommand()
-                    ->insert('craftcom_inactivecmslicenses', [
+                    ->insert('craftnet_inactivecmslicenses', [
                         'key' => $item['licenseKey'],
                         'data' => Json::encode($data),
                     ], false)
@@ -563,19 +563,25 @@ class ElliottImportController extends Controller
                 foreach ($item['cmsLicenses'] as $key) {
                     $license = $cmsLicenseManager->getLicenseByKey($key);
                     $this->db->createCommand()
-                        ->insert('craftcom_cmslicenses_lineitems', [
+                        ->insert('craftnet_cmslicenses_lineitems', [
                             'licenseId' => $license->id,
                             'lineItemId' => $cmsLineItemId,
                         ], false)
                         ->execute();
 
                     // update the license's email and ownerId
-                    if (strcasecmp($license->email, $item['email']) !== 0) {
+                    if ($newEmail = (strcasecmp($license->email, $item['email']) !== 0)) {
                         $license->email = $item['email'];
                         $license->ownerId = $this->userId($item['email']);
                         $cmsLicenseManager->saveLicense($license);
-                        $cmsLicenseManager->addHistory($license->id, "reassigned to {$item['email']} per order {$item['number']}");
                     }
+
+                    // update the license history
+                    $note = "upgraded to {$license->edition}";
+                    if ($newEmail) {
+                        $note .= " and reassigned to {$license->email}";
+                    }
+                    $cmsLicenseManager->addHistory($license->id, "{$note} per order {$item['number']}");
                 }
             }
 
@@ -588,19 +594,25 @@ class ElliottImportController extends Controller
                 foreach ($item['commerceLicenses'] as $key) {
                     $license = $pluginLicenseManager->getLicenseByKey('commerce', $key);
                     $this->db->createCommand()
-                        ->insert('craftcom_pluginlicenses_lineitems', [
+                        ->insert('craftnet_pluginlicenses_lineitems', [
                             'licenseId' => $license->id,
                             'lineItemId' => $commerceLineItemId,
                         ], false)
                         ->execute();
 
                     // update the license's email and ownerId
-                    if (strcasecmp($license->email, $item['email']) !== 0) {
+                    if ($newEmail = (strcasecmp($license->email, $item['email']) !== 0)) {
                         $license->email = $item['email'];
                         $license->ownerId = $this->userId($item['email']);
                         $pluginLicenseManager->saveLicense($license);
-                        $pluginLicenseManager->addHistory($license->id, "reassigned to {$item['email']} per order {$item['number']}");
                     }
+
+                    // update the license history
+                    $note = "upgraded to {$license->edition}";
+                    if ($newEmail) {
+                        $note .= " and reassigned to {$license->email}";
+                    }
+                    $pluginLicenseManager->addHistory($license->id, "{$note} per order {$item['number']}");
                 }
             }
 
@@ -625,7 +637,7 @@ class ElliottImportController extends Controller
 
         $editionIds = CmsEdition::find()
             ->select(['handle', 'elements.id'])
-            ->andWhere(['craftcom_cmseditions.handle' => ['client', 'pro']])
+            ->andWhere(['craftnet_cmseditions.handle' => ['client', 'pro']])
             ->pairs();
 
         $result = $this->import('discounts', function(array $item) use ($editionIds) {

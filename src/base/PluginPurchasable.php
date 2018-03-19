@@ -1,8 +1,8 @@
 <?php
 
-namespace craftcom\base;
+namespace craftnet\base;
 
-use craftcom\plugins\Plugin;
+use craftnet\plugins\Plugin;
 use yii\base\InvalidConfigException;
 
 /**

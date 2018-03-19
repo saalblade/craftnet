@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
 use Craft;
 use craft\commerce\elements\Order;
@@ -9,13 +9,13 @@ use craft\commerce\models\Customer;
 use craft\commerce\models\LineItem;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\User;
-use craftcom\cms\CmsEdition;
-use craftcom\cms\CmsLicenseManager;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\errors\LicenseNotFoundException;
-use craftcom\errors\ValidationException;
-use craftcom\helpers\KeyHelper;
-use craftcom\plugins\Plugin;
+use craftnet\cms\CmsEdition;
+use craftnet\cms\CmsLicenseManager;
+use craftnet\controllers\api\BaseApiController;
+use craftnet\errors\LicenseNotFoundException;
+use craftnet\errors\ValidationException;
+use craftnet\helpers\KeyHelper;
+use craftnet\plugins\Plugin;
 use Ddeboer\Vatin\Validator;
 use Moccalotto\Eu\CountryInfo;
 use yii\base\Exception;

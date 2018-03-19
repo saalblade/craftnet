@@ -5,7 +5,7 @@ namespace craft\contentmigrations;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use craftcom\composer\jobs\UpdatePackage;
+use craftnet\composer\jobs\UpdatePackage;
 
 /**
  * m171203_131337_valid_releases migration.

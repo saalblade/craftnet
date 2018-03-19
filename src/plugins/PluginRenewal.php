@@ -1,10 +1,10 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use Craft;
 use craft\elements\db\ElementQueryInterface;
-use craftcom\base\PluginPurchasable;
+use craftnet\base\PluginPurchasable;
 use yii\base\InvalidConfigException;
 
 /**
@@ -81,11 +81,11 @@ class PluginRenewal extends PluginPurchasable
 
         if ($isNew) {
             Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_pluginrenewals', $data, false)
+                ->insert('craftnet_pluginrenewals', $data, false)
                 ->execute();
         } else {
             Craft::$app->getDb()->createCommand()
-                ->update('craftcom_pluginrenewals', $data, ['id' => $this->id], [], false)
+                ->update('craftnet_pluginrenewals', $data, ['id' => $this->id], [], false)
                 ->execute();
         }
 

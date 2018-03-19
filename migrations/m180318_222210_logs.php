@@ -5,9 +5,9 @@ namespace craft\contentmigrations;
 use craft\db\Migration;
 
 /**
- * m180305_110134_logs migration.
+ * m180318_222210_logs migration.
  */
-class m180305_110134_logs extends Migration
+class m180318_222210_logs extends Migration
 {
     /**
      * @inheritdoc
@@ -38,14 +38,14 @@ class m180305_110134_logs extends Migration
             'licenseId' => $this->integer()->notNull(),
         ]);
         $this->addForeignKey('request_cmslicenses_requestId_fk', 'apilog.request_cmslicenses', ['requestId'], 'apilog.requests', ['id'], 'CASCADE');
-        $this->addForeignKey('request_cmslicenses_licenseId_fk', 'apilog.request_cmslicenses', ['licenseId'], 'public.craftcom_cmslicenses', ['id'], 'CASCADE');
+        $this->addForeignKey('request_cmslicenses_licenseId_fk', 'apilog.request_cmslicenses', ['licenseId'], 'public.craftnet_cmslicenses', ['id'], 'CASCADE');
 
         $this->createTable('apilog.request_pluginlicenses', [
             'requestId' => $this->bigInteger()->notNull(),
             'licenseId' => $this->integer()->notNull(),
         ]);
         $this->addForeignKey('request_pluginlicenses_requestId_fk', 'apilog.request_pluginlicenses', ['requestId'], 'apilog.requests', ['id'], 'CASCADE');
-        $this->addForeignKey('request_pluginlicenses_licenseId_fk', 'apilog.request_pluginlicenses', ['licenseId'], 'public.craftcom_pluginlicenses', ['id'], 'CASCADE');
+        $this->addForeignKey('request_pluginlicenses_licenseId_fk', 'apilog.request_pluginlicenses', ['licenseId'], 'public.craftnet_pluginlicenses', ['id'], 'CASCADE');
 
         $this->createTable('apilog.request_errors', [
             'requestId' => $this->bigInteger()->notNull(),
@@ -74,7 +74,7 @@ class m180305_110134_logs extends Migration
      */
     public function safeDown()
     {
-        echo "m180305_110134_logs cannot be reverted.\n";
+        echo "m180318_222210_logs cannot be reverted.\n";
         return false;
     }
 }

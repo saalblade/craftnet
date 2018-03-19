@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
 use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
@@ -9,16 +9,14 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
 use craft\models\Update;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\errors\ValidationException;
+use craftnet\controllers\api\BaseApiController;
+use craftnet\errors\ValidationException;
 use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 /**
  * Class UpdatesController
- *
- * @package craftcom\controllers\api\v1
  */
 class UpdatesController extends BaseApiController
 {

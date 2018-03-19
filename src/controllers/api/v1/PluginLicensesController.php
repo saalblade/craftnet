@@ -1,14 +1,14 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
 use craft\elements\User;
 use craft\helpers\DateTimeHelper;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\errors\ValidationException;
-use craftcom\helpers\KeyHelper;
-use craftcom\plugins\Plugin;
-use craftcom\plugins\PluginLicense;
+use craftnet\controllers\api\BaseApiController;
+use craftnet\errors\ValidationException;
+use craftnet\helpers\KeyHelper;
+use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginLicense;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
 use yii\validators\EmailValidator;

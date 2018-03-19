@@ -1,19 +1,17 @@
 <?php
 
-namespace craftcom\controllers\id;
+namespace craftnet\controllers\id;
 
 use Craft;
 use craft\commerce\elements\Order;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
-use craftcom\Module;
+use craftnet\Module;
 use yii\web\Response;
 
 /**
  * Class CraftIdController
- *
- * @package craftcom\controllers\id
  */
 class CraftIdController extends BaseController
 {

@@ -147,7 +147,7 @@
 			},
 
 			downloadLicenseUrl() {
-                return Craft.actionUrl + '/craftcom/id/cms-licenses/download&id=' + this.license.id;
+                return Craft.actionUrl + '/craftnet/id/cms-licenses/download&id=' + this.license.id;
 			}
 
         },

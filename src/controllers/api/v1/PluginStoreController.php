@@ -1,21 +1,19 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
 use Craft;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\Entry;
 use craft\helpers\ArrayHelper;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\plugins\Plugin;
+use craftnet\controllers\api\BaseApiController;
+use craftnet\plugins\Plugin;
 use yii\caching\FileDependency;
 use yii\web\Response;
 
 /**
  * Class PluginStoreController
- *
- * @package craftcom\controllers\api\v1
  */
 class PluginStoreController extends BaseApiController
 {
@@ -89,7 +87,7 @@ class PluginStoreController extends BaseApiController
         $ret = [];
 
         $recents = Plugin::find()
-            ->orderBy(['craftcom_plugins.dateApproved' => SORT_DESC])
+            ->orderBy(['craftnet_plugins.dateApproved' => SORT_DESC])
             ->limit(10)
             ->hasLatestVersion()
             ->ids();
@@ -130,7 +128,7 @@ class PluginStoreController extends BaseApiController
         $ret = [];
 
         $plugins = Plugin::find()
-            ->andWhere(['not', ['craftcom_plugins.latestVersion' => null]])
+            ->andWhere(['not', ['craftnet_plugins.latestVersion' => null]])
             ->with(['developer', 'categories', 'icon'])
             ->all();
 

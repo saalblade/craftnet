@@ -1,11 +1,11 @@
 <?php
 
-namespace craftcom\cms;
+namespace craftnet\cms;
 
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
-use craftcom\Module;
-use craftcom\plugins\PluginLicense;
+use craftnet\Module;
+use craftnet\plugins\PluginLicense;
 
 /**
  * @property PluginLicense[] $pluginLicenses

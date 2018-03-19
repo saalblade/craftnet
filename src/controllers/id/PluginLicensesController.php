@@ -1,19 +1,17 @@
 <?php
 
-namespace craftcom\controllers\id;
+namespace craftnet\controllers\id;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\errors\LicenseNotFoundException;
-use craftcom\Module;
+use craftnet\errors\LicenseNotFoundException;
+use craftnet\Module;
 use Exception;
 use Throwable;
 use yii\web\Response;
 
 /**
  * Class PluginLicensesController
- *
- * @package craftcom\controllers\id
  *
  * @property Module $module
  */

@@ -1,13 +1,13 @@
 <?php
 
-namespace craftcom;
+namespace craftnet;
 
 use craft\commerce\adjusters\Discount;
 use craft\commerce\base\AdjusterInterface;
 use craft\commerce\elements\Order;
 use craft\commerce\models\OrderAdjustment;
-use craftcom\cms\CmsEdition;
-use craftcom\cms\CmsLicenseManager;
+use craftnet\cms\CmsEdition;
+use craftnet\cms\CmsLicenseManager;
 
 class EditionUpgradeDiscount implements AdjusterInterface
 {

@@ -5,7 +5,7 @@
  * @license https://craftcms.github.io/license/
  */
 
-namespace craftcom\records;
+namespace craftnet\records;
 
 use craft\db\ActiveRecord;
 use craft\records\Asset;
@@ -47,7 +47,7 @@ class Plugin extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'craftcom_plugins';
+        return 'craftnet_plugins';
     }
 
     /**

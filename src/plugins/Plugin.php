@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use Craft;
 use craft\base\Element;
@@ -13,10 +13,10 @@ use craft\elements\User;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craft\validators\UniqueValidator;
-use craftcom\behaviors\Developer;
-use craftcom\composer\Package;
-use craftcom\Module;
-use craftcom\records\Plugin as PluginRecord;
+use craftnet\behaviors\Developer;
+use craftnet\composer\Package;
+use craftnet\Module;
+use craftnet\records\Plugin as PluginRecord;
 use DateTime;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
@@ -100,21 +100,21 @@ class Plugin extends Element
             case 'editions':
                 $query = (new Query())
                     ->select(['pluginId as source', 'id as target'])
-                    ->from(['craftcom_plugineditions'])
+                    ->from(['craftnet_plugineditions'])
                     ->where(['pluginId' => ArrayHelper::getColumn($sourceElements, 'id')]);
                 return ['elementType' => PluginEdition::class, 'map' => $query->all()];
 
             case 'developer':
                 $query = (new Query())
                     ->select(['id as source', 'developerId as target'])
-                    ->from(['craftcom_plugins'])
+                    ->from(['craftnet_plugins'])
                     ->where(['id' => ArrayHelper::getColumn($sourceElements, 'id')]);
                 return ['elementType' => User::class, 'map' => $query->all()];
 
             case 'icon':
                 $query = (new Query())
                     ->select(['id as source', 'iconId as target'])
-                    ->from(['craftcom_plugins'])
+                    ->from(['craftnet_plugins'])
                     ->where(['id' => ArrayHelper::getColumn($sourceElements, 'id')])
                     ->andWhere(['not', ['iconId' => null]]);
                 return ['elementType' => Asset::class, 'map' => $query->all()];
@@ -123,8 +123,8 @@ class Plugin extends Element
             case 'primaryCategory':
                 $query = (new Query())
                     ->select(['p.id as source', 'pc.categoryId as target'])
-                    ->from(['craftcom_plugins p'])
-                    ->innerJoin(['craftcom_plugincategories pc'], '[[pc.pluginId]] = [[p.id]]')
+                    ->from(['craftnet_plugins p'])
+                    ->innerJoin(['craftnet_plugincategories pc'], '[[pc.pluginId]] = [[p.id]]')
                     ->where(['p.id' => ArrayHelper::getColumn($sourceElements, 'id')])
                     ->orderBy(['pc.sortOrder' => SORT_ASC]);
                 if ($handle === 'primaryCategory') {
@@ -135,8 +135,8 @@ class Plugin extends Element
             case 'screenshots':
                 $query = (new Query())
                     ->select(['p.id as source', 'ps.assetId as target'])
-                    ->from(['craftcom_plugins p'])
-                    ->innerJoin(['craftcom_pluginscreenshots ps'], '[[ps.pluginId]] = [[p.id]]')
+                    ->from(['craftnet_plugins p'])
+                    ->innerJoin(['craftnet_pluginscreenshots ps'], '[[ps.pluginId]] = [[p.id]]')
                     ->where(['p.id' => ArrayHelper::getColumn($sourceElements, 'id')])
                     ->orderBy(['ps.sortOrder' => SORT_ASC]);
                 return ['elementType' => Asset::class, 'map' => $query->all()];
@@ -566,7 +566,7 @@ class Plugin extends Element
             return $this->_categories;
         }
         return $this->_categories = Category::find()
-            ->innerJoin(['craftcom_plugincategories pc'], [
+            ->innerJoin(['craftnet_plugincategories pc'], [
                 'and',
                 '[[pc.categoryId]] = [[categories.id]]',
                 ['pc.pluginId' => $this->id]
@@ -592,7 +592,7 @@ class Plugin extends Element
             return $this->_screenshots;
         }
         return $this->_screenshots = Asset::find()
-            ->innerJoin(['craftcom_pluginscreenshots ps'], [
+            ->innerJoin(['craftnet_pluginscreenshots ps'], [
                 'and',
                 '[[ps.assetId]] = [[assets.id]]',
                 ['ps.pluginId' => $this->id]
@@ -801,7 +801,7 @@ class Plugin extends Element
         if ($isNew) {
             // Save a new row in the plugins table
             $db->createCommand()
-                ->insert('craftcom_plugins', $pluginData)
+                ->insert('craftnet_plugins', $pluginData)
                 ->execute();
 
             // Create a new edition/renewal
@@ -817,15 +817,15 @@ class Plugin extends Element
         } else {
             // Update the plugins table row
             $db->createCommand()
-                ->update('craftcom_plugins', $pluginData, ['id' => $this->id])
+                ->update('craftnet_plugins', $pluginData, ['id' => $this->id])
                 ->execute();
 
             // Also delete any existing category/screenshot relations
             $db->createCommand()
-                ->delete('craftcom_plugincategories', ['pluginId' => $this->id])
+                ->delete('craftnet_plugincategories', ['pluginId' => $this->id])
                 ->execute();
             $db->createCommand()
-                ->delete('craftcom_pluginscreenshots', ['pluginId' => $this->id])
+                ->delete('craftnet_pluginscreenshots', ['pluginId' => $this->id])
                 ->execute();
 
             // Fetch the current edition/renewal
@@ -840,10 +840,10 @@ class Plugin extends Element
 
         // Save the new category/screenshot relations
         $db->createCommand()
-            ->batchInsert('craftcom_plugincategories', ['pluginId', 'categoryId', 'sortOrder'], $categoryData)
+            ->batchInsert('craftnet_plugincategories', ['pluginId', 'categoryId', 'sortOrder'], $categoryData)
             ->execute();
         $db->createCommand()
-            ->batchInsert('craftcom_pluginscreenshots', ['pluginId', 'assetId', 'sortOrder'], $screenshotData)
+            ->batchInsert('craftnet_pluginscreenshots', ['pluginId', 'assetId', 'sortOrder'], $screenshotData)
             ->execute();
 
         // Save the edition/renewal

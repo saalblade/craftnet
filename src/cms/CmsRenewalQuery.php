@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\cms;
+namespace craftnet\cms;
 
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -33,14 +33,14 @@ class CmsRenewalQuery extends ElementQuery
 
     protected function beforePrepare(): bool
     {
-        $this->joinElementTable('craftcom_cmsrenewals');
+        $this->joinElementTable('craftnet_cmsrenewals');
 
         $this->query->select([
-            'craftcom_cmsrenewals.editionId',
+            'craftnet_cmsrenewals.editionId',
         ]);
 
         if ($this->editionId) {
-            $this->subQuery->andWhere(Db::parseParam('craftcom_cmsrenewals.editionId', $this->editionId));
+            $this->subQuery->andWhere(Db::parseParam('craftnet_cmsrenewals.editionId', $this->editionId));
         }
 
         return parent::beforePrepare();

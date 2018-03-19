@@ -1,15 +1,13 @@
 <?php
 
-namespace craftcom\controllers\plugins;
+namespace craftnet\controllers\plugins;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\plugins\Plugin;
+use craftnet\plugins\Plugin;
 
 /**
  * Class IndexController
- *
- * @package craftcom\controllers\plugins
  */
 class IndexController extends Controller
 {

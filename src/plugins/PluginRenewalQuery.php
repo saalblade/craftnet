@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -33,15 +33,15 @@ class PluginRenewalQuery extends ElementQuery
 
     protected function beforePrepare(): bool
     {
-        $this->joinElementTable('craftcom_pluginrenewals');
+        $this->joinElementTable('craftnet_pluginrenewals');
 
         $this->query->select([
-            'craftcom_pluginrenewals.pluginId',
-            'craftcom_pluginrenewals.editionId',
+            'craftnet_pluginrenewals.pluginId',
+            'craftnet_pluginrenewals.editionId',
         ]);
 
         if ($this->editionId) {
-            $this->subQuery->andWhere(Db::parseParam('craftcom_pluginrenewals.editionId', $this->editionId));
+            $this->subQuery->andWhere(Db::parseParam('craftnet_pluginrenewals.editionId', $this->editionId));
         }
 
         return parent::beforePrepare();

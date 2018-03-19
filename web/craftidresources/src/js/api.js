@@ -8,7 +8,7 @@ export default {
             userId: userId
         });
 
-        axios.post(Craft.actionUrl + '/craftcom/id/craft-id', params)
+        axios.post(Craft.actionUrl + '/craftnet/id/craft-id', params)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -20,7 +20,7 @@ export default {
 
         let params = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/apps/disconnect', params)
+        axios.post(Craft.actionUrl + '/craftnet/id/apps/disconnect', params)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -63,7 +63,7 @@ export default {
 
         formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/account/upload-user-photo', formData)
+        axios.post(Craft.actionUrl + '/craftnet/id/account/upload-user-photo', formData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -73,7 +73,7 @@ export default {
             [Craft.csrfTokenName]: Craft.csrfTokenValue
         });
 
-        axios.post(Craft.actionUrl + '/craftcom/id/account/delete-user-photo', data)
+        axios.post(Craft.actionUrl + '/craftnet/id/account/delete-user-photo', data)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -153,7 +153,7 @@ export default {
 
         let qsData = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/cms-licenses/claim', qsData)
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/claim', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -163,7 +163,7 @@ export default {
         formData.append('licenseFile', licenseFile);
         formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/cms-licenses/claim', formData)
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/claim', formData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -176,7 +176,7 @@ export default {
 
         let qsData = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/plugin-licenses/claim', qsData)
+        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/claim', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -188,7 +188,7 @@ export default {
 
         let qsData = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/account/generate-api-token', qsData)
+        axios.post(Craft.actionUrl + '/craftnet/id/account/generate-api-token', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -200,7 +200,7 @@ export default {
 
         let qsData = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/cms-licenses/get-licenses', qsData)
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/get-licenses', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -212,7 +212,7 @@ export default {
 
         let qsData = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/plugin-licenses/get-licenses', qsData)
+        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/get-licenses', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -225,7 +225,7 @@ export default {
 
         let qsData = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/cms-licenses/release', qsData)
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/release', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -239,7 +239,7 @@ export default {
 
         let qsData = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/plugin-licenses/release', qsData)
+        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/release', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -255,7 +255,7 @@ export default {
 
         let qsData = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/id/cms-licenses/save', qsData)
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/save', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -284,7 +284,7 @@ export default {
 
         formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(Craft.actionUrl + '/craftcom/plugins/save', formData)
+        axios.post(Craft.actionUrl + '/craftnet/plugins/save', formData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -298,7 +298,7 @@ export default {
 
         let params = qs.stringify(data);
 
-        axios.post(Craft.actionUrl + '/craftcom/plugins/submit', params)
+        axios.post(Craft.actionUrl + '/craftnet/plugins/submit', params)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     }

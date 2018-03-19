@@ -1,10 +1,10 @@
 <?php
 
-namespace craftcom\controllers\id;
+namespace craftnet\controllers\id;
 
 use craft\helpers\ArrayHelper;
 use craft\web\Controller;
-use craftcom\plugins\Plugin;
+use craftnet\plugins\Plugin;
 use yii\helpers\Markdown;
 
 /**

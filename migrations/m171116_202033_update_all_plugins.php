@@ -5,7 +5,7 @@ namespace craft\contentmigrations;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use craftcom\composer\jobs\UpdatePackage;
+use craftnet\composer\jobs\UpdatePackage;
 
 /**
  * m171116_202033_update_all_plugins migration.

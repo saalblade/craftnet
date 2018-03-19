@@ -1,16 +1,16 @@
 <?php
 
-namespace craftcom\composer;
+namespace craftnet\composer;
 
 use Craft;
 use craft\base\Model;
-use craftcom\composer\vcs\BaseVcs;
-use craftcom\composer\vcs\GitHub;
-use craftcom\composer\vcs\Packagist;
-use craftcom\composer\vcs\VcsInterface;
-use craftcom\errors\MissingTokenException;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
+use craftnet\composer\vcs\BaseVcs;
+use craftnet\composer\vcs\GitHub;
+use craftnet\composer\vcs\Packagist;
+use craftnet\composer\vcs\VcsInterface;
+use craftnet\errors\MissingTokenException;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
 use Github\Client as GithubClient;
 
 /**

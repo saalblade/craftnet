@@ -373,13 +373,13 @@
                 let body = {
                     repository: encodeURIComponent(url)
                 };
-                body['action'] = 'craftcom/plugins/load-details';
+                body['action'] = 'craftnet/plugins/load-details';
                 body[Craft.csrfTokenName] = Craft.csrfTokenValue;
 
                 let params = qs.stringify(body);
                 let url = repositoryUrl;
 
-                axios.post(Craft.actionUrl + '/craftcom/plugins/load-details&repository=' + encodeURIComponent(url), params)
+                axios.post(Craft.actionUrl + '/craftnet/plugins/load-details&repository=' + encodeURIComponent(url), params)
                     .then(response => {
                         this.repositoryLoading = false;
                         this.loadingRepository = null;

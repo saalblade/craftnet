@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use Craft;
 use craft\commerce\elements\Order;
@@ -9,9 +9,9 @@ use craft\commerce\Plugin as Commerce;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
-use craftcom\base\PluginPurchasable;
-use craftcom\errors\LicenseNotFoundException;
-use craftcom\Module;
+use craftnet\base\PluginPurchasable;
+use craftnet\errors\LicenseNotFoundException;
+use craftnet\Module;
 use yii\base\Exception;
 
 /**
@@ -50,7 +50,7 @@ class PluginEdition extends PluginPurchasable
         if ($handle === 'plugin') {
             $query = (new Query())
                 ->select(['id as source', 'pluginId as target'])
-                ->from(['craftcom_plugineditions'])
+                ->from(['craftnet_plugineditions'])
                 ->where(['id' => ArrayHelper::getColumn($sourceElements, 'id')]);
             return ['elementType' => Plugin::class, 'map' => $query->all()];
         }
@@ -215,11 +215,11 @@ class PluginEdition extends PluginPurchasable
 
         if ($isNew) {
             Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_plugineditions', $data, false)
+                ->insert('craftnet_plugineditions', $data, false)
                 ->execute();
         } else {
             Craft::$app->getDb()->createCommand()
-                ->update('craftcom_plugineditions', $data, ['id' => $this->id], [], false)
+                ->update('craftnet_plugineditions', $data, ['id' => $this->id], [], false)
                 ->execute();
         }
 
@@ -398,7 +398,7 @@ class PluginEdition extends PluginPurchasable
 
             // relate the license to the line item
             Craft::$app->getDb()->createCommand()
-                ->insert('craftcom_pluginlicenses_lineitems', [
+                ->insert('craftnet_pluginlicenses_lineitems', [
                     'licenseId' => $license->id,
                     'lineItemId' => $lineItem->id,
                 ], false)
@@ -406,18 +406,14 @@ class PluginEdition extends PluginPurchasable
 
             // update the license history
             if ($isNew) {
-                $manager->addHistory($license->id, "created by {$license->email} per order {$order->number}");
+                $note = "created by {$license->email}";
             } else {
-                $note = [];
+                $note = "upgraded to {$license->edition}";
                 if ($license->email !== $oldEmail) {
-                    $note[] = "reassigned to {$license->email}";
+                    $note .= " and reassigned to {$license->email}";
                 }
-                if ($license->edition !== $oldEdition) {
-                    $note[] = "upgraded to {$license->edition}";
-                }
-                $note = implode('and', $note)." per order {$order->number}";
-                $manager->addHistory($license->id, $note);
             }
+            $manager->addHistory($license->id, "{$note} per order {$order->number}");
         } catch (Exception $e) {
             Craft::error("Could not save plugin license {$license->key} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);

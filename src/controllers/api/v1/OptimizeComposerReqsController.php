@@ -1,17 +1,15 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
 use craft\db\Query;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\Module;
+use craftnet\controllers\api\BaseApiController;
+use craftnet\Module;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 /**
  * Class UpdatesController
- *
- * @package craftcom\controllers\api\v1
  */
 class OptimizeComposerReqsController extends BaseApiController
 {
@@ -85,7 +83,7 @@ class OptimizeComposerReqsController extends BaseApiController
             //->select(['pd.name', 'pd.constraints'])
             ->select(['pd.name'])
             ->distinct()
-            ->from(['craftcom_packagedeps pd'])
+            ->from(['craftnet_packagedeps pd'])
             ->where([
                 'and',
                 [
@@ -126,7 +124,7 @@ class OptimizeComposerReqsController extends BaseApiController
         // Get their package IDs
         $packageIds = (new Query())
             ->select(['id'])
-            ->from(['craftcom_packages'])
+            ->from(['craftnet_packages'])
             ->where(['name' => $deps])
             ->column();
 

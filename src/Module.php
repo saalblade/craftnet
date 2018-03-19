@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom;
+namespace craftnet;
 
 use Craft;
 use craft\commerce\elements\Order;
@@ -23,19 +23,19 @@ use craft\services\Utilities;
 use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
-use craftcom\base\PluginPurchasable;
-use craftcom\cms\CmsEdition;
-use craftcom\cms\CmsLicenseManager;
-use craftcom\composer\JsonDumper;
-use craftcom\composer\PackageManager;
-use craftcom\developers\Developer;
-use craftcom\developers\UserQueryBehavior;
-use craftcom\fields\Plugins;
-use craftcom\plugins\PluginEdition;
-use craftcom\plugins\PluginLicenseManager;
-use craftcom\services\Oauth;
-use craftcom\twigextensions\CraftIdTwigExtension;
-use craftcom\utilities\UnavailablePlugins;
+use craftnet\base\PluginPurchasable;
+use craftnet\cms\CmsEdition;
+use craftnet\cms\CmsLicenseManager;
+use craftnet\composer\JsonDumper;
+use craftnet\composer\PackageManager;
+use craftnet\developers\Developer;
+use craftnet\developers\UserQueryBehavior;
+use craftnet\fields\Plugins;
+use craftnet\plugins\PluginEdition;
+use craftnet\plugins\PluginLicenseManager;
+use craftnet\services\Oauth;
+use craftnet\twigextensions\CraftIdTwigExtension;
+use craftnet\utilities\UnavailablePlugins;
 use yii\base\Event;
 
 /**
@@ -49,7 +49,7 @@ class Module extends \yii\base\Module
 {
     public function init()
     {
-        Craft::setAlias('@craftcom', __DIR__);
+        Craft::setAlias('@craftnet', __DIR__);
 
         $request = Craft::$app->getRequest();
         if ($request->getIsConsoleRequest()) {
@@ -190,19 +190,19 @@ class Module extends \yii\base\Module
 
     private function _initConsoleRequest()
     {
-        $this->controllerNamespace = 'craftcom\\console\\controllers';
+        $this->controllerNamespace = 'craftnet\\console\\controllers';
     }
 
     private function _initWebRequest()
     {
-        $this->controllerNamespace = 'craftcom\\controllers';
+        $this->controllerNamespace = 'craftnet\\controllers';
 
         Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
     }
 
     private function _initCpRequest()
     {
-        $this->controllerNamespace = 'craftcom\\controllers';
+        $this->controllerNamespace = 'craftnet\\controllers';
 
         Event::on(Cp::class, Cp::EVENT_REGISTER_CP_NAV_ITEMS, function(RegisterCpNavItemsEvent $e) {
             $e->navItems[] = [
@@ -214,14 +214,14 @@ class Module extends \yii\base\Module
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $e) {
             $e->rules = array_merge($e->rules, [
-                'plugins' => ['template' => 'craftcom/plugins/_index'],
-                'plugins/new' => 'craftcom/plugins/edit',
-                'plugins/<pluginId:\d+><slug:(?:-[^\/]*)?>' => 'craftcom/plugins/edit',
+                'plugins' => ['template' => 'craftnet/plugins/_index'],
+                'plugins/new' => 'craftnet/plugins/edit',
+                'plugins/<pluginId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/plugins/edit',
             ]);
         });
 
         Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
-            $e->roots['craftcom'] = __DIR__.'/templates';
+            $e->roots['craftnet'] = __DIR__.'/templates';
         });
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $e) {
@@ -234,7 +234,7 @@ class Module extends \yii\base\Module
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $e) {
             $e->permissions['Craftcom'] = [
-                'craftcom:managePlugins' => [
+                'craftnet:managePlugins' => [
                     'label' => 'Manage plugins',
                 ],
             ];

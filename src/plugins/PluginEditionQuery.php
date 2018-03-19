@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -79,28 +79,28 @@ class PluginEditionQuery extends ElementQuery
 
     protected function beforePrepare(): bool
     {
-        $this->joinElementTable('craftcom_plugineditions');
+        $this->joinElementTable('craftnet_plugineditions');
 
         $this->query->select([
-            'craftcom_plugineditions.pluginId',
-            'craftcom_plugineditions.name',
-            'craftcom_plugineditions.handle',
-            'craftcom_plugineditions.price',
-            'craftcom_plugineditions.renewalPrice',
+            'craftnet_plugineditions.pluginId',
+            'craftnet_plugineditions.name',
+            'craftnet_plugineditions.handle',
+            'craftnet_plugineditions.price',
+            'craftnet_plugineditions.renewalPrice',
         ]);
 
         if ($this->pluginId) {
-            $this->subQuery->andWhere(Db::parseParam('craftcom_plugineditions.pluginId', $this->pluginId));
+            $this->subQuery->andWhere(Db::parseParam('craftnet_plugineditions.pluginId', $this->pluginId));
         }
 
         if ($this->handle) {
-            $this->subQuery->andWhere(Db::parseParam('craftcom_plugineditions.handle', $this->handle));
+            $this->subQuery->andWhere(Db::parseParam('craftnet_plugineditions.handle', $this->handle));
         }
 
         if ($this->commercial === true) {
-            $this->subQuery->andWhere(['not', ['craftcom_plugineditions.price' => 0]]);
+            $this->subQuery->andWhere(['not', ['craftnet_plugineditions.price' => 0]]);
         } else if ($this->commercial === false) {
-            $this->subQuery->andWhere(['craftcom_plugineditions.price' => 0]);
+            $this->subQuery->andWhere(['craftnet_plugineditions.price' => 0]);
         }
 
         return parent::beforePrepare();

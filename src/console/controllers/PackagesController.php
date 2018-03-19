@@ -1,9 +1,9 @@
 <?php
 
-namespace craftcom\console\controllers;
+namespace craftnet\console\controllers;
 
-use craftcom\composer\Package;
-use craftcom\Module;
+use craftnet\composer\Package;
+use craftnet\Module;
 use yii\base\Exception;
 use yii\console\Controller;
 use yii\helpers\Console;

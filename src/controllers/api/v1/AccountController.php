@@ -1,18 +1,16 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
 use craft\commerce\Plugin as Commerce;
 use craft\elements\User;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\oauthserver\Module as OauthServer;
+use craftnet\controllers\api\BaseApiController;
+use craftnet\oauthserver\Module as OauthServer;
 use yii\helpers\Json;
 use yii\web\Response;
 
 /**
  * Class AccountController
- *
- * @package craftcom\controllers\api\v1
  */
 class AccountController extends BaseApiController
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace craftcom\composer\vcs;
+namespace craftnet\composer\vcs;
 
-use craftcom\composer\PackageRelease;
-use craftcom\errors\VcsException;
+use craftnet\composer\PackageRelease;
+use craftnet\errors\VcsException;
 
 interface VcsInterface
 {

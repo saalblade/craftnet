@@ -1,12 +1,12 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
 use Craft;
 use craft\commerce\models\Transaction;
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\stripe\gateways\Gateway as StripeGateway;
-use craftcom\errors\ValidationException;
+use craftnet\errors\ValidationException;
 use Stripe\Error\InvalidRequest;
 use yii\base\Exception;
 use yii\base\UserException;

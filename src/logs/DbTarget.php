@@ -1,9 +1,9 @@
 <?php
 
-namespace craftcom\logs;
+namespace craftnet\logs;
 
 use Craft;
-use craftcom\controllers\api\BaseApiController;
+use craftnet\controllers\api\BaseApiController;
 use yii\helpers\VarDumper;
 use yii\log\LogRuntimeException;
 
