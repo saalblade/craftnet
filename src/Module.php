@@ -26,7 +26,7 @@ use craftnet\cms\CmsEdition;
 use craftnet\cms\CmsLicenseManager;
 use craftnet\composer\JsonDumper;
 use craftnet\composer\PackageManager;
-use craftnet\developers\Developer;
+use craftnet\developers\UserBehavior;
 use craftnet\developers\UserQueryBehavior;
 use craftnet\fields\Plugins;
 use craftnet\orders\OrderBehavior;
@@ -66,7 +66,7 @@ class Module extends \yii\base\Module
         });
 
         Event::on(User::class, User::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
-            $e->behaviors[] = Developer::class;
+            $e->behaviors[] = UserBehavior::class;
         });
 
         Event::on(Users::class, Users::EVENT_AFTER_ACTIVATE_USER, function(UserEvent $e) {

@@ -16,7 +16,7 @@ use yii\base\Behavior;
  * @property User $owner
  * @property Plugin[] $plugins
  */
-class Developer extends Behavior
+class UserBehavior extends Behavior
 {
     /**
      * @var string|null

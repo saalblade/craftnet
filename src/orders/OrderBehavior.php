@@ -6,7 +6,7 @@ use craft\commerce\elements\Order;
 use craft\commerce\records\Transaction as TransactionRecord;
 use craft\elements\User;
 use craftnet\base\PluginPurchasable;
-use craftnet\developers\Developer;
+use craftnet\developers\UserBehavior;
 use yii\base\Behavior;
 
 /**
@@ -35,7 +35,7 @@ class OrderBehavior extends Behavior
         }
 
         // See if any plugin licenses were purchased/renewed
-        /** @var User[]|Developer[] $developers */
+        /** @var User[]|UserBehavior[] $developers */
         $developers = [];
         $developerTotals = [];
         foreach ($this->owner->getLineItems() as $lineItem) {

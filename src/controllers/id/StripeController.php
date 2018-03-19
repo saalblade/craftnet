@@ -8,7 +8,7 @@ use craft\commerce\base\Gateway;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\User;
 use craft\helpers\UrlHelper;
-use craftnet\developers\Developer;
+use craftnet\developers\UserBehavior;
 use League\OAuth2\Client\Token\AccessToken;
 use Stripe\Account;
 use Stripe\Stripe;
@@ -48,7 +48,7 @@ class StripeController extends BaseController
      */
     public function actionCallback(): Response
     {
-        /** @var User|Developer $user */
+        /** @var User|UserBehavior $user */
         $user = Craft::$app->getUser()->getIdentity();
         $provider = $this->_getStripeProvider();
         $code = Craft::$app->getRequest()->getParam('code');

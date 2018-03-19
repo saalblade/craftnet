@@ -10,7 +10,7 @@ use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftnet\cms\CmsLicense;
-use craftnet\developers\Developer;
+use craftnet\developers\UserBehavior;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\errors\ValidationException;
 use craftnet\Module;
@@ -534,7 +534,7 @@ abstract class BaseApiController extends Controller
     /**
      * Authorizes the request and returns the authorized user.
      *
-     * @return User|Developer
+     * @return User|UserBehavior
      * @throws UnauthorizedHttpException if the request is not authorized
      */
     protected function getAuthUser(): User
@@ -545,7 +545,7 @@ abstract class BaseApiController extends Controller
             throw new UnauthorizedHttpException('Not Authorized');
         }
 
-        /** @var User|Developer|null $user */
+        /** @var User|UserBehavior|null $user */
         $user = Craft::$app->getUsers()->getUserByUsernameOrEmail($username);
 
         if (

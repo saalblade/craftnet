@@ -19,7 +19,7 @@ use yii\db\Expression;
 class FundsManager extends BaseObject
 {
     /**
-     * @var User|Developer
+     * @var User|UserBehavior
      */
     public $developer;
 
