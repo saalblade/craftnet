@@ -3,10 +3,8 @@
 namespace craftnet\cms;
 
 use Craft;
-use craft\commerce\elements\Order;
 use craft\db\Query;
 use craft\elements\User;
-use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craftnet\errors\LicenseNotFoundException;
@@ -46,6 +44,7 @@ class CmsLicenseManager extends Component
      * Normalizes a license key by trimming whitespace and removing newlines.
      *
      * @param string $key
+     *
      * @return string
      * @throws InvalidArgumentException if $key is invalid
      */
@@ -55,6 +54,7 @@ class CmsLicenseManager extends Component
         if (strlen($normalized) !== 250) {
             throw new InvalidArgumentException('Invalid license key: '.$key);
         }
+
         return $normalized;
     }
 
@@ -62,6 +62,7 @@ class CmsLicenseManager extends Component
      * Normalizes a public domain.
      *
      * @param string $url
+     *
      * @return string|null
      */
     public function normalizeDomain(string $url)
@@ -105,6 +106,7 @@ class CmsLicenseManager extends Component
      * Returns licenses owned by a user.
      *
      * @param int $ownerId
+     *
      * @return CmsLicense[]
      */
     public function getLicensesByOwner(int $ownerId): array
@@ -117,6 +119,7 @@ class CmsLicenseManager extends Component
         foreach ($results as $result) {
             $licenses[] = new CmsLicense($result);
         }
+
         return $licenses;
     }
 
@@ -124,6 +127,7 @@ class CmsLicenseManager extends Component
      * Returns a license by its ID.
      *
      * @param int $id
+     *
      * @return CmsLicense
      * @throws LicenseNotFoundException if $id is missing
      */
@@ -144,6 +148,7 @@ class CmsLicenseManager extends Component
      * Returns a license by its key.
      *
      * @param string $key
+     *
      * @return CmsLicense
      * @throws LicenseNotFoundException if $key is missing
      */
@@ -205,7 +210,8 @@ class CmsLicenseManager extends Component
      * Saves a license.
      *
      * @param CmsLicense $license
-     * @param bool $runValidation
+     * @param bool       $runValidation
+     *
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
      */
@@ -213,6 +219,7 @@ class CmsLicenseManager extends Component
     {
         if ($runValidation && !$license->validate()) {
             Craft::info('License not saved due to validation error.', __METHOD__);
+
             return false;
         }
 
@@ -271,8 +278,8 @@ class CmsLicenseManager extends Component
     /**
      * Adds a new record to a Craft license’s history.
      *
-     * @param int $licenseId
-     * @param string $note
+     * @param int         $licenseId
+     * @param string      $note
      * @param string|null $timestamp
      */
     public function addHistory(int $licenseId, string $note, string $timestamp = null)
@@ -290,6 +297,7 @@ class CmsLicenseManager extends Component
      * Returns a license's history in chronological order.
      *
      * @param int $licenseId
+     *
      * @return array
      */
     public function getHistory(int $licenseId): array
@@ -305,8 +313,9 @@ class CmsLicenseManager extends Component
     /**
      * Claims a license for a user.
      *
-     * @param User $user
+     * @param User   $user
      * @param string $key
+     *
      * @throws LicenseNotFoundException
      * @throws Exception
      */
@@ -357,7 +366,7 @@ class CmsLicenseManager extends Component
      */
     public function getLicensesArrayByOwner(User $owner)
     {
-        $results = Module::getInstance()->getCmsLicenseManager()->getLicensesByOwner($owner->id);
+        $results = $this->getLicensesByOwner($owner->id);
 
         $licenses = [];
 
