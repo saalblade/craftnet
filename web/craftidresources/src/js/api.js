@@ -260,6 +260,22 @@ export default {
             .catch(error => cbError(error.response));
     },
 
+    savePluginLicense(license, cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        };
+
+        for (let attribute in license) {
+            data[attribute] = license[attribute];
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/save', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
     savePlugin({plugin}, cb, cbError) {
         let formData = new FormData();
 

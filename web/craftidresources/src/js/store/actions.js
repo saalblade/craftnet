@@ -127,7 +127,7 @@ export const claimPluginLicense = ({commit}, licenseKey) => {
 export const generateApiToken = ({commit}) => {
     return new Promise((resolve, reject) => {
         api.generateApiToken(response => {
-            if (response.data && !response.data.errors) {
+            if (response.data && !response.data.error) {
                 commit(types.GENERATE_API_TOKEN, {response});
                 resolve(response);
             } else {
@@ -143,7 +143,7 @@ export const generateApiToken = ({commit}) => {
 export const getCmsLicenses = ({commit}) => {
     return new Promise((resolve, reject) => {
         api.getCmsLicenses(response => {
-            if (response.data && !response.data.errors) {
+            if (response.data && !response.data.error) {
                 commit(types.GET_CMS_LICENSES, {response});
                 resolve(response);
             } else {
@@ -158,7 +158,7 @@ export const getCmsLicenses = ({commit}) => {
 export const getPluginLicenses = ({commit}) => {
     return new Promise((resolve, reject) => {
         api.getPluginLicenses(response => {
-            if (response.data && !response.data.errors) {
+            if (response.data && !response.data.error) {
                 commit(types.GET_PLUGIN_LICENSES, {response});
                 resolve(response);
             } else {
@@ -173,7 +173,7 @@ export const getPluginLicenses = ({commit}) => {
 export const releaseCmsLicense = ({commit}, licenseKey) => {
     return new Promise((resolve, reject) => {
         api.releaseCmsLicense(licenseKey, response => {
-            if (response.data && !response.data.errors) {
+            if (response.data && !response.data.error) {
                 commit(types.RELEASE_CMS_LICENSE, {licenseKey});
                 resolve(response);
             } else {
@@ -188,7 +188,7 @@ export const releaseCmsLicense = ({commit}, licenseKey) => {
 export const releasePluginLicense = ({commit}, {pluginHandle, licenseKey}) => {
     return new Promise((resolve, reject) => {
         api.releasePluginLicense({pluginHandle, licenseKey}, response => {
-            if (response.data && !response.data.errors) {
+            if (response.data && !response.data.error) {
                 commit(types.RELEASE_PLUGIN_LICENSE, {licenseKey});
                 resolve(response);
             } else {
@@ -203,8 +203,23 @@ export const releasePluginLicense = ({commit}, {pluginHandle, licenseKey}) => {
 export const saveCmsLicense = ({commit}, license) => {
     return new Promise((resolve, reject) => {
         api.saveCmsLicense(license, response => {
-            if (response.data && !response.data.errors) {
+            if (response.data && !response.data.error) {
                 commit(types.SAVE_CMS_LICENSE, {license});
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
+export const savePluginLicense = ({commit}, license) => {
+    return new Promise((resolve, reject) => {
+        api.savePluginLicense(license, response => {
+            if (response.data && !response.data.error) {
+                commit(types.SAVE_PLUGIN_LICENSE, {license});
                 resolve(response);
             } else {
                 reject(response);

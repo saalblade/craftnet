@@ -183,6 +183,8 @@
                 this.saveCmsLicense(() => {
                     this.domainLoading = false;
                     this.domainEditing = false;
+                }, () => {
+                    this.domainLoading = false;
                 });
             },
 
@@ -195,25 +197,28 @@
                 this.saveCmsLicense(() => {
                     this.notesLoading = false;
                     this.notesEditing = false;
-                });
+                }, () => {
+                    this.notesLoading = false;
+				});
             },
 
             /**
              * Save CMS license.
              *
              * @param cb
+             * @param cbError
              */
-            saveCmsLicense(cb) {
+            saveCmsLicense(cb, cbError) {
                 this.$store.dispatch('saveCmsLicense', {
                     key: this.license.key,
                     domain: this.licenseDraft.domain,
                     notes: this.licenseDraft.notes,
-                }).then((data) => {
+                }).then(response => {
                     cb();
                     this.$root.displayNotice('License saved.');
-                }).catch((data) => {
+                }).catch(response => {
+                    cbError();
                     this.$root.displayError('Couldn’t save license.');
-                    this.errors = data.errors;
                 });
             },
 

@@ -313,7 +313,7 @@ class PluginLicenseManager extends Component
         $licenses = [];
 
         foreach ($results as $result) {
-            $license = $result->getAttributes(['id', 'key', 'cmsLicenseId', 'email', 'dateCreated']);
+            $license = $result->getAttributes(['id', 'key', 'cmsLicenseId', 'email', 'notes', 'dateCreated']);
 
 
             // History
