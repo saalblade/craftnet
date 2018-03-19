@@ -70,8 +70,8 @@ class PdfRenderer extends BaseObject
         // Set some content to print
         $view = Craft::$app->getView();
         $oldTemplatesPath = $view->getTemplatesPath();
-        $view->setTemplatesPath(__DIR__.'/receipt/template');
-        $html = $view->renderTemplate('receipt', [
+        $view->setTemplatesPath(__DIR__.'/receipt/templates');
+        $html = $view->renderTemplate('pdf', [
             'order' => $order,
             'imagesPath' => $imagesPath,
         ]);
