@@ -19,6 +19,8 @@
             </div>
         </div>
 
+        <license-history :history="license.history" />
+
         <div class="card card-danger mb-3">
             <div class="card-header">Danger Zone</div>
             <div class="card-body">
@@ -34,12 +36,14 @@
     import {mapGetters} from 'vuex'
     import CmsLicenseDetails from '../components/CmsLicenseDetails'
     import PluginLicensesTable from '../components/PluginLicensesTable';
+    import LicenseHistory from '../components/LicenseHistory';
 
     export default {
 
         components: {
             CmsLicenseDetails,
             PluginLicensesTable,
+            LicenseHistory,
         },
 
         computed: {

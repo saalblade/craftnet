@@ -246,7 +246,25 @@ class CraftIdController extends BaseController
 
 
             // Transactions
-            $order['transactions'] = $result->getTransactions();
+
+            $transactionResults = $result->getTransactions();
+
+            $transactions = [];
+
+            foreach($transactionResults as $transactionResult) {
+                $transactionGateway = $transactionResult->getGateway();
+
+                $transactions[] = [
+                    'type' => $transactionResult->type,
+                    'status' => $transactionResult->status,
+                    'amount' => $transactionResult->amount,
+                    'paymentAmount' => $transactionResult->paymentAmount,
+                    'gatewayName' => ($transactionGateway ? $transactionGateway->name : null),
+                    'dateCreated' => $transactionResult->dateCreated,
+                ];
+            }
+
+            $order['transactions'] = $transactions;
 
             $orders[] = $order;
         }
