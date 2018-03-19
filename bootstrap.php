@@ -6,6 +6,7 @@
 switch($_SERVER['HTTP_HOST']) {
     case 'api.craftcms.com':
     case 'api.craftcms.test':
+    case 'staging.api.craftcms.com':
         define('CRAFT_SITE', 'api');
         break;
     case 'composer.craftcms.com':
@@ -14,6 +15,7 @@ switch($_SERVER['HTTP_HOST']) {
         break;
     case 'id.craftcms.com':
     case 'id.craftcms.test':
+    case 'staging.id.craftcms.com':
         define('CRAFT_SITE', 'craftId');
         break;
     case 'plugins.craftcms.com':
