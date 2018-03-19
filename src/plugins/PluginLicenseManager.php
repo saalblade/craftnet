@@ -214,6 +214,22 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns a license's history in chronological order.
+     *
+     * @param int $licenseId
+     * @return array
+     */
+    public function getHistory(int $licenseId): array
+    {
+        return (new Query())
+            ->select(['note', 'timestamp'])
+            ->from('craftnet_pluginlicensehistory')
+            ->where(['licenseId' => $licenseId])
+            ->orderBy(['timestamp' => SORT_ASC])
+            ->all();
+    }
+
+    /**
      * Claims a license for a user.
      *
      * @param User $user
