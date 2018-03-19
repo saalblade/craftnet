@@ -69,8 +69,8 @@
 						<td>{{ transaction.status }}</td>
 						<td>{{ transaction.amount|currency }}</td>
 						<td>{{ transaction.paymentAmount|currency }}</td>
-						<td>Gateway {{ transaction.gatewayId }}</td>
-						<td>{{ transaction.dateCreated|moment("L") }}</td>
+						<td>{{ transaction.gatewayName }}</td>
+						<td>{{ transaction.dateCreated.date|moment("LLL") }}</td>
 					</tr>
 					</tbody>
 				</table>
