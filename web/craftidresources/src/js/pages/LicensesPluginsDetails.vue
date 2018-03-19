@@ -5,16 +5,16 @@
 
         <plugin-license-details :license="license"></plugin-license-details>
 
+        <license-history :history="license.history" />
+
         <div class="card card-danger mb-3">
-            <div class="card-header">Danger Zone</div>
+            <div class="card-header">Dangaer Zone</div>
             <div class="card-body">
                 <h5>Release license</h5>
                 <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
                 <div><button class="btn btn-danger" @click="releasePluginLicense()">Release License</button></div>
             </div>
-
         </div>
-
     </div>
 </template>
 
@@ -23,6 +23,7 @@
     import CmsLicensesTable from '../components/CmsLicensesTable';
     import LicenseDetails from '../components/LicenseDetails'
     import PluginLicenseDetails from '../components/PluginLicenseDetails';
+    import LicenseHistory from '../components/LicenseHistory';
 
     export default {
 
@@ -30,6 +31,7 @@
             CmsLicensesTable,
             LicenseDetails,
             PluginLicenseDetails,
+            LicenseHistory,
         },
 
         computed: {

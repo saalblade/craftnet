@@ -366,6 +366,14 @@ class CmsLicenseManager extends Component
 
             $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
 
+
+            // History
+
+            $license['history'] = $this->getHistory($result->id);
+
+
+            // Plugin licenses
+
             $pluginLicenses = [];
 
             foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
@@ -390,6 +398,7 @@ class CmsLicenseManager extends Component
             }
 
             $license['pluginLicenses'] = $pluginLicenses;
+
             $licenses[] = $license;
         }
 

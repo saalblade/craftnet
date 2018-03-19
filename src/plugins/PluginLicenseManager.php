@@ -304,13 +304,18 @@ class PluginLicenseManager extends Component
             $license = $result->getAttributes(['id', 'key', 'cmsLicenseId', 'email', 'dateCreated']);
 
 
+            // History
+
+            $license['history'] = $this->getHistory($result->id);
+
+
             // Plugin
 
             $plugin = null;
 
             if ($result->pluginId) {
                 $pluginResult = Plugin::find()->id($result->pluginId)->status(null)->one();
-                $plugin = $pluginResult->getAttributes(['name']);
+                $plugin = $pluginResult->getAttributes(['name', 'handle']);
             }
 
             $license['plugin'] = $plugin;
