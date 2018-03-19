@@ -37,7 +37,8 @@ class m180318_222142_install_commerce extends Migration
 
         // Set the order PDF
         $settings = $commerce->getSettings();
-        $settings->orderPdfPath = '_order-pdf/pdf';
+        $settings->orderPdfPath = '1';
+        $settings->orderPdfFilenameFormat = 'Order-{shortNumber|upper}';
         $pluginsService->savePluginSettings($commerce, $settings->toArray());
 
         // Archive the Dummy gateway
