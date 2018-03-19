@@ -32,7 +32,8 @@
             <div class="card-body">
                 <h4>Invoices</h4>
 
-                <invoices-table :invoices="invoices"></invoices-table>
+                <invoices-table v-if="invoices.length > 0" :invoices="invoices"></invoices-table>
+                <p v-else class="text-secondary">No invoices.</p>
             </div>
         </div>
     </div>
