@@ -4,7 +4,6 @@ namespace craft\contentmigrations;
 
 use Craft;
 use craft\commerce\gateways\Dummy;
-use craft\commerce\Plugin;
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\stripe\gateways\Gateway as StripeGateway;
 use craft\db\Migration;
@@ -21,10 +20,12 @@ class m180318_222142_install_commerce extends Migration
     public function safeUp()
     {
         // Install Commerce
-        Craft::$app->getPlugins()->installPlugin('commerce');
+        $pluginsService = Craft::$app->getPlugins();
+        $pluginsService->installPlugin('commerce');
+        $commerce = Commerce::getInstance();
 
         // Delete the default product type
-        $productTypesService = Plugin::getInstance()->productTypes;
+        $productTypesService = $commerce->productTypes;
         $productType = $productTypesService->getProductTypeByHandle('clothing');
         if ($productType) {
             $productTypesService->deleteProductTypeById($productType->id);
@@ -32,10 +33,10 @@ class m180318_222142_install_commerce extends Migration
 
         // Install the Stripe plugin
         $this->dropTableIfExists('stripe_customers');
-        Craft::$app->getPlugins()->installPlugin('commerce-stripe');
+        $pluginsService->installPlugin('commerce-stripe');
 
         // Archive the Dummy gateway
-        $gatewaysService = Commerce::getInstance()->getGateways();
+        $gatewaysService = $commerce->getGateways();
         /** @var Dummy $gateway */
         $gateway = $gatewaysService->getGatewayByHandle('dummy');
         $gatewaysService->archiveGatewayById($gateway->id);
