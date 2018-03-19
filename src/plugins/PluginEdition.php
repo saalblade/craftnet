@@ -240,8 +240,7 @@ class PluginEdition extends PluginPurchasable
     public function getDescription(): string
     {
         // todo: include $this->name when we start supporting editions
-        $plugin = $this->getPlugin();
-        return $plugin->getDeveloperName().' '.$plugin->name;
+        return $this->getPlugin()->name;
     }
 
     /**

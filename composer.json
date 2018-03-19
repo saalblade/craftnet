@@ -20,7 +20,8 @@
     "craftcms/commerce-stripe": "dev-master as 1.0.0-alpha.99",
     "layershifter/tld-extract": "^1.2",
     "ddeboer/vatin": "^2.1",
-    "moccalotto/eu": "^0.3.0"
+    "moccalotto/eu": "^0.3.0",
+    "tecnickcom/tcpdf": "^6.2"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"

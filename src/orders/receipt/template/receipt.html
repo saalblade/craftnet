@@ -1,0 +1,112 @@
+{% macro line(text) %}
+	{%- if text %}{{ text }}<br>{% endif %}
+{%- endmacro %}
+{%- from _self import line -%}
+
+<style>
+	body { font-size: 13px; }
+	h1 { margin: 0; padding: 0; font-size: 40px; line-height: 40px; }
+	table { border-collapse: collapse; }
+	th { font-weight: bold; }
+</style>
+<body>
+
+<table cellspacing="0" cellpadding="0">
+	<tr>
+		<td align="right">
+			<img src="{{ imagesPath }}/pt.png" width="150">
+		</td>
+	</tr>
+</table>
+
+<h1>Receipt</h1>
+
+&nbsp;<br>
+&nbsp;<br>
+
+{% set paymentMethod = order.transactions[0].gateway.name %}
+
+{% if paymentMethod == 'Stripe' %}
+	{% set paymentMethod = 'Credit Card' %}
+{% endif %}
+
+{% set billingAddress = order.getBillingAddress() %}
+
+<table cellspacing="0" cellpadding="0">
+	<tr>
+		<td>
+			Order {{ order.shortNumber|upper }}<br>
+			{{ order.datePaid|date('d F, Y') }}<br>
+			Paid via {{ paymentMethod }}<br>
+			&nbsp;<br>
+
+			<strong>Sold to</strong><br>
+
+			{{ line(billingAddress.firstName ~ ' ' ~ billingAddress.lastName) }}
+			{{ line(order.email) }}
+			&nbsp;<br>
+			{{ line(billingAddress.businessName) }}
+			{{ line(billingAddress.address1) }}
+			{{ line(billingAddress.address2) }}
+			{{ line(billingAddress.city) }}
+			{{ line(billingAddress.getStateText()) }}
+			{{ line(billingAddress.zipCode) }}
+			{% set countryText = billingAddress.getCountryText() %}
+			{% if countryText != 'Unknown' %}
+				{{ line(billingAddress.getCountryText()) }}
+			{% endif %}
+			{{ line(billingAddress.businessTaxId) }}
+			{{ line(order.lineItems[0].note) }}
+		</td>
+		<td>
+			<strong>Pixel &amp; Tonic</strong><br>
+
+			5042 Wilshire Blvd #27701<br>
+			Los Angeles CA 90036-4305, USA<br>
+			support@pixelandtonic.com<br>
+			+1 408-907-5732<br>
+			&nbsp;<br>
+			Fed. Tax ID: 27-2602795<br>
+			CA Tax ID: 309-1989<br>
+		</td>
+	</tr>
+</table>
+
+&nbsp;<br>
+&nbsp;<br>
+
+<table id="items" cellspacing="0" cellpadding="0">
+	<tr>
+		<th>Item</th>
+		<th>Developer</th>
+		<th align="right">Price</th>
+	</tr>
+	<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
+	<tr><td style="background-color:#e9ebed; height:1px; font-size: 0px;" colspan="3">&nbps;</td></tr>
+	<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
+	{% for lineItem in order.getLineItems() %}
+		{% set purchasable = lineItem.getPurchasable() %}
+		<tr>
+			<td>{{ lineItem.getDescription() }}</td>
+			<td>{{ purchasable and className(purchasable) matches '/^craftnet\\\\cms\\\\/' ? 'Pixel & Tonic' : (purchasable.getPlugin().getDeveloperName() ?? '') }}</td>
+			<td align="right">${{ lineItem.total|number_format(2, '.', ',') }}</td>
+		</tr>
+		<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
+		<tr><td style="background-color:#e9ebed; height:1px; font-size: 0px;" colspan="3">&nbps;</td></tr>
+		<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
+	{% endfor %}
+	<tr>
+		<td colspan="3">&nbsp;</td>
+	</tr>
+	<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
+	<tr><td style="background-color:#e9ebed; height:1px; font-size: 0px;" colspan="3">&nbps;</td></tr>
+	<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
+	<tr>
+		<td align="right" colspan="3"><strong>Total:</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ order.totalPrice|currency('USD') }}</td>
+	</tr>
+</table>
+
+&nbsp;<br>
+&nbsp;<br>
+
+<p style="text-align: center;"><img src="{{ imagesPath }}/thankyou.jpg" width="200" height="119"></p>

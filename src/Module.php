@@ -4,7 +4,9 @@ namespace craftnet;
 
 use Craft;
 use craft\commerce\elements\Order;
+use craft\commerce\events\PdfEvent;
 use craft\commerce\services\OrderAdjustments;
+use craft\commerce\services\Pdf;
 use craft\commerce\services\Purchasables;
 use craft\elements\db\UserQuery;
 use craft\elements\User;
@@ -30,6 +32,7 @@ use craftnet\developers\UserBehavior;
 use craftnet\developers\UserQueryBehavior;
 use craftnet\fields\Plugins;
 use craftnet\orders\OrderBehavior;
+use craftnet\orders\PdfRenderer;
 use craftnet\plugins\PluginEdition;
 use craftnet\plugins\PluginLicenseManager;
 use craftnet\services\Oauth;
@@ -80,6 +83,11 @@ class Module extends \yii\base\Module
         Event::on(Users::class, Users::EVENT_AFTER_ACTIVATE_USER, function(UserEvent $e) {
             $this->getCmsLicenseManager()->claimLicenses($e->user);
             $this->getPluginLicenseManager()->claimLicenses($e->user);
+        });
+
+        // provide custom order receipt PDF generation
+        Event::on(Pdf::class, Pdf::EVENT_BEFORE_RENDER_PDF, function(PdfEvent $e) {
+            $e->pdf = (new PdfRenderer())->render($e->order);
         });
 
         // request type-specific stuff
