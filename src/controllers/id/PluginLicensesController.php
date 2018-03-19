@@ -87,4 +87,36 @@ class PluginLicensesController extends Controller
             return $this->asErrorJson($e->getMessage());
         }
     }
+
+    /**
+     * Saves a license.
+     *
+     * @return Response
+     * @throws LicenseNotFoundException
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionSave(): Response
+    {
+        $pluginHandle = Craft::$app->getRequest()->getRequiredParam('pluginHandle');
+        $key = Craft::$app->getRequest()->getRequiredParam('key');
+        $user = Craft::$app->getUser()->getIdentity();
+        $manager = $this->module->getPluginLicenseManager();
+        $license = $manager->getLicenseByKey($pluginHandle, $key);
+
+        try {
+            if ($user && $license->ownerId === $user->id) {
+                $license->notes = Craft::$app->getRequest()->getParam('notes');
+
+                if ($manager->saveLicense($license)) {
+                    return $this->asJson(['success' => true]);
+                }
+
+                throw new Exception("Couldn't save license.");
+            }
+
+            throw new LicenseNotFoundException($key);
+        } catch (Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
+    }
 }

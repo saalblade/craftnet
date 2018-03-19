@@ -46,6 +46,27 @@
 
 							<dt>Created</dt>
 							<dd>{{ license.dateCreated.date|moment("L") }}</dd>
+
+							<dt>Notes</dt>
+							<dd>
+								<template v-if="!notesEditing">
+									<p>{{ license.notes }}</p>
+
+									<div class="buttons">
+										<button @click="notesEditing = true" type="button" class="btn btn-secondary btn-sm">
+											<i class="fas fa-pencil-alt"></i>
+											Edit
+										</button>
+									</div>
+								</template>
+
+								<form v-if="notesEditing" @submit.prevent="saveNotes()">
+									<textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
+									<input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
+									<input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
+									<div class="spinner" v-if="notesLoading"></div>
+								</form>
+							</dd>
 						</dl>
 					</div>
 				</div>
@@ -57,6 +78,7 @@
 <script>
     import {mapGetters} from 'vuex'
     import LightswitchInput from '../components/inputs/LightswitchInput'
+    import TextareaField from '../components/fields/TextareaField'
 
     export default {
 
@@ -66,11 +88,15 @@
             return {
                 errors: {},
                 licenseDraft: {},
+                notesEditing: false,
+                notesLoading: false,
+                notesValidates: false,
             }
         },
 
         components: {
             LightswitchInput,
+            TextareaField,
         },
 
         computed: {
@@ -82,6 +108,67 @@
         },
 
         methods: {
+
+            /**
+             * Can save
+             */
+            canSave() {
+                if (this.license.notes !== this.licenseDraft.notes) {
+                    return true;
+                }
+
+                return false;
+            },
+
+            /**
+             * Save notes.
+             */
+            saveNotes() {
+                this.notesLoading = true;
+
+                this.savePluginLicense(() => {
+                    this.notesLoading = false;
+                    this.notesEditing = false;
+                });
+            },
+
+            /**
+             * Cancel edit notes.
+             */
+            cancelEditNotes() {
+                this.licenseDraft.notes = this.license.notes;
+                this.notesEditing = false;
+            },
+
+            /**
+             * Notes change.
+             */
+            notesChange() {
+                this.notesValidates = false;
+
+                if(this.licenseDraft.notes !== this.license.notes) {
+                    this.notesValidates = true;
+                }
+            },
+
+            /**
+             * Save plugin license.
+             *
+             * @param cb
+             */
+            savePluginLicense(cb) {
+                this.$store.dispatch('savePluginLicense', {
+                    pluginHandle: this.license.plugin.handle,
+                    key: this.license.key,
+                    notes: this.licenseDraft.notes,
+                }).then((data) => {
+                    cb();
+                    this.$root.displayNotice('License saved.');
+                }).catch((data) => {
+                    this.$root.displayError('Couldn’t save license.');
+                    this.errors = data.errors;
+                });
+            },
 
             /**
              * Save auto renew

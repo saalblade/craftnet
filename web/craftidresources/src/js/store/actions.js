@@ -215,6 +215,21 @@ export const saveCmsLicense = ({commit}, license) => {
     })
 };
 
+export const savePluginLicense = ({commit}, license) => {
+    return new Promise((resolve, reject) => {
+        api.savePluginLicense(license, response => {
+            if (response.data && !response.data.errors) {
+                commit(types.SAVE_PLUGIN_LICENSE, {license});
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
 export const saveLicense = ({commit}, license) => {
     return new Promise((resolve, reject) => {
         api.saveLicense(license, response => {
