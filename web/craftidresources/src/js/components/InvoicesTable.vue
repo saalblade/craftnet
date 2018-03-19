@@ -15,7 +15,7 @@
                 <td v-else>—</td>
                 <td>{{ invoice.totalPrice|currency }}</td>
                 <td><template v-if="invoice.datePaid">{{ invoice.datePaid.date|moment("L") }}</template></td>
-                <td v-if="!upcoming"><a href="#">Receipt</a></td>
+                <td v-if="!upcoming"><a :href="invoice.pdfUrl">Download Receipt</a></td>
             </tr>
             </tbody>
         </table>
