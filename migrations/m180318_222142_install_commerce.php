@@ -35,6 +35,11 @@ class m180318_222142_install_commerce extends Migration
         $this->dropTableIfExists('stripe_customers');
         $pluginsService->installPlugin('commerce-stripe');
 
+        // Set the order PDF
+        $settings = $commerce->getSettings();
+        $settings->orderPdfPath = '_order-pdf/pdf';
+        $pluginsService->savePluginSettings($commerce, $settings->toArray());
+
         // Archive the Dummy gateway
         $gatewaysService = $commerce->getGateways();
         /** @var Dummy $gateway */
