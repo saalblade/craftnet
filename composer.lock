@@ -566,12 +566,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "2190cd77fc4c185494b7900587ac1b1961c14e71"
+                "reference": "cca152a24cb286351298620a4d3e4a151432a2c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/2190cd77fc4c185494b7900587ac1b1961c14e71",
-                "reference": "2190cd77fc4c185494b7900587ac1b1961c14e71",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/cca152a24cb286351298620a4d3e4a151432a2c5",
+                "reference": "cca152a24cb286351298620a4d3e4a151432a2c5",
                 "shasum": ""
             },
             "require": {
@@ -640,7 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-03-18T11:48:21+00:00"
+            "time": "2018-03-19T22:46:05+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -648,12 +648,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "a30c8d174869bd3c9fdf725a12639a92455f86aa"
+                "reference": "38793d68d53f3e7ec2d86172ef75798bd9243b70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/a30c8d174869bd3c9fdf725a12639a92455f86aa",
-                "reference": "a30c8d174869bd3c9fdf725a12639a92455f86aa",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/38793d68d53f3e7ec2d86172ef75798bd9243b70",
+                "reference": "38793d68d53f3e7ec2d86172ef75798bd9243b70",
                 "shasum": ""
             },
             "require": {
@@ -694,7 +694,7 @@
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-03-19T12:57:43+00:00"
+            "time": "2018-03-19T19:28:22+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",

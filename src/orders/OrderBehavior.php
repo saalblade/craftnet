@@ -2,12 +2,16 @@
 
 namespace craftnet\orders;
 
+use Craft;
 use craft\commerce\elements\Order;
 use craft\commerce\records\Transaction as TransactionRecord;
 use craft\elements\User;
+use craft\helpers\Template;
+use craft\web\View;
 use craftnet\base\PluginPurchasable;
 use craftnet\developers\UserBehavior;
 use yii\base\Behavior;
+use yii\helpers\Markdown;
 
 /**
  * @property Order $owner
@@ -34,6 +38,15 @@ class OrderBehavior extends Behavior
             return;
         }
 
+        $this->_updateDeveloperFunds();
+        $this->_sendReceipt();
+    }
+
+    /**
+     * Updates developers' accounts and attempts to transfer $$ to them after an order has completed.
+     */
+    private function _updateDeveloperFunds()
+    {
         // See if any plugin licenses were purchased/renewed
         /** @var User[]|UserBehavior[] $developers */
         $developers = [];
@@ -57,7 +70,7 @@ class OrderBehavior extends Behavior
         }
 
         // find the first successful transaction on the order
-        // todo: if we change the event here, then we will need to be more careful about which transaction we're looking for
+        // todo: if we change the event that triggers this, then we will need to be more careful about which transaction we're looking for
         $transaction = null;
         foreach ($this->owner->getTransactions() as $t) {
             if ($t->status === TransactionRecord::STATUS_SUCCESS) {
@@ -81,5 +94,49 @@ class OrderBehavior extends Behavior
             $fee = floor($total * 20) / 100;
             $developer->getFundsManager()->processOrder($this->owner->number, $transaction->reference, $total, $fee);
         }
+    }
+
+    /**
+     * Sends the customer a receipt email after an order has completed.
+     */
+    private function _sendReceipt()
+    {
+        // render the PDF
+        $pdf = (new PdfRenderer())->render($this->owner);
+
+        $view = Craft::$app->getView();
+        $templateMode = $view->getTemplateMode();
+        $twig = $view->getTwig();
+
+        // render the text body
+        $view->setTemplateMode(View::TEMPLATE_MODE_SITE);
+        $view->setTemplatesPath(__DIR__.'/receipt/templates');
+        $twig->setDefaultEscaperStrategy(false);
+        $textBody = $view->renderTemplate('email.txt', [
+            'order' => $this->owner,
+        ]);
+
+        // render the HTML body
+        $view->setTemplateMode(View::TEMPLATE_MODE_CP);
+        $twig->setDefaultEscaperStrategy();
+        $htmlBody = $view->renderTemplate('_special/email', [
+            'order' => $this->owner,
+            'body' => Template::raw(Markdown::process($textBody)),
+        ]);
+
+        $view->setTemplateMode($templateMode);
+
+        $mailer = Craft::$app->getMailer();
+        $mailer->compose()
+            ->setFrom($mailer->from)
+            ->setTo($this->owner->getEmail())
+            ->setSubject('Your receipt from Pixel & Tonic')
+            ->setTextBody($textBody)
+            ->setHtmlBody($htmlBody)
+            ->attachContent($pdf, [
+                'fileName' => 'Order-'.strtoupper($this->owner->getShortNumber()).'.pdf',
+                'contentType' => 'application/pdf',
+            ])
+            ->send();
     }
 }
