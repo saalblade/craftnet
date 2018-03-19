@@ -129,7 +129,9 @@
                 this.savePluginLicense(() => {
                     this.notesLoading = false;
                     this.notesEditing = false;
-                });
+                }, () => {
+                    this.notesLoading = false;
+				});
             },
 
             /**
@@ -155,18 +157,19 @@
              * Save plugin license.
              *
              * @param cb
+             * @param cbError
              */
-            savePluginLicense(cb) {
+            savePluginLicense(cb, cbError) {
                 this.$store.dispatch('savePluginLicense', {
                     pluginHandle: this.license.plugin.handle,
                     key: this.license.key,
                     notes: this.licenseDraft.notes,
-                }).then((data) => {
+                }).then(data => {
                     cb();
                     this.$root.displayNotice('License saved.');
-                }).catch((data) => {
+                }).catch(response => {
+                    cbError();
                     this.$root.displayError('Couldn’t save license.');
-                    this.errors = data.errors;
                 });
             },
 

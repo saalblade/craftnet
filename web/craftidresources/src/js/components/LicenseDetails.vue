@@ -128,7 +128,6 @@
                     this.$root.displayNotice('License saved.');
                 }).catch((data) => {
                     this.$root.displayError('Couldn’t save license.');
-                    this.errors = data.errors;
                 });
             },
 
