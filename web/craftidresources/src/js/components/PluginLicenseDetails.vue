@@ -140,6 +140,7 @@
             cancelEditNotes() {
                 this.licenseDraft.notes = this.license.notes;
                 this.notesEditing = false;
+                this.notesValidates = false;
             },
 
             /**
@@ -169,7 +170,8 @@
                     this.$root.displayNotice('License saved.');
                 }).catch(response => {
                     cbError();
-                    this.$root.displayError('Couldn’t save license.');
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
+                    this.$root.displayError(errorMessage)
                 });
             },
 
