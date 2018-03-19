@@ -50,45 +50,51 @@ class Module extends \yii\base\Module
     {
         Craft::setAlias('@craftnet', __DIR__);
 
-        $request = Craft::$app->getRequest();
-        if ($request->getIsConsoleRequest()) {
-            $this->_initConsoleRequest();
-        } else {
-            $this->_initWebRequest();
-
-            if ($request->getIsCpRequest()) {
-                $this->_initCpRequest();
-            }
-        }
-
+        // define custom behaviors
         Event::on(UserQuery::class, UserQuery::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
             $e->behaviors[] = UserQueryBehavior::class;
         });
-
         Event::on(User::class, User::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
             $e->behaviors[] = UserBehavior::class;
         });
-
-        Event::on(Users::class, Users::EVENT_AFTER_ACTIVATE_USER, function(UserEvent $e) {
-            // any unclaimed Craft/plugin licenses that were paid for with this email?
-            $this->getCmsLicenseManager()->claimLicenses($e->user);
-            $this->getPluginLicenseManager()->claimLicenses($e->user);
-        });
-
-        Event::on(Purchasables::class, Purchasables::EVENT_REGISTER_PURCHASABLE_ELEMENT_TYPES, function(RegisterComponentTypesEvent $e) {
-            $e->types[] = CmsEdition::class;
-            $e->types[] = PluginEdition::class;
-        });
-
-        Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
-            $e->types[] = EditionUpgradeDiscount::class;
-        });
-
         Event::on(Order::class, Order::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
             $e->behaviors[] = OrderBehavior::class;
         });
 
-        Craft::$app->view->twig->addExtension(new CraftIdTwigExtension());
+        // register custom component types
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $e) {
+            $e->types[] = Plugins::class;
+        });
+        Event::on(Utilities::class, Utilities::EVENT_REGISTER_UTILITY_TYPES, function(RegisterComponentTypesEvent $e) {
+            $e->types[] = UnavailablePlugins::class;
+        });
+        Event::on(Purchasables::class, Purchasables::EVENT_REGISTER_PURCHASABLE_ELEMENT_TYPES, function(RegisterComponentTypesEvent $e) {
+            $e->types[] = CmsEdition::class;
+            $e->types[] = PluginEdition::class;
+        });
+        Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
+            $e->types[] = EditionUpgradeDiscount::class;
+        });
+
+        // claim Craft/plugin licenses after user activation
+        Event::on(Users::class, Users::EVENT_AFTER_ACTIVATE_USER, function(UserEvent $e) {
+            $this->getCmsLicenseManager()->claimLicenses($e->user);
+            $this->getPluginLicenseManager()->claimLicenses($e->user);
+        });
+
+        // request type-specific stuff
+        $request = Craft::$app->getRequest();
+        if ($request->getIsConsoleRequest()) {
+            $this->controllerNamespace = 'craftnet\\console\\controllers';
+        } else {
+            $this->controllerNamespace = 'craftnet\\controllers';
+
+            if ($request->getIsCpRequest()) {
+                $this->_initCpRequest();
+            } else {
+                $this->_initSiteRequest();
+            }
+        }
 
         parent::init();
     }
@@ -133,18 +139,6 @@ class Module extends \yii\base\Module
         return $this->get('oauth');
     }
 
-    private function _initConsoleRequest()
-    {
-        $this->controllerNamespace = 'craftnet\\console\\controllers';
-    }
-
-    private function _initWebRequest()
-    {
-        $this->controllerNamespace = 'craftnet\\controllers';
-
-        Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
-    }
-
     private function _initCpRequest()
     {
         $this->controllerNamespace = 'craftnet\\controllers';
@@ -169,14 +163,6 @@ class Module extends \yii\base\Module
             $e->roots['craftnet'] = __DIR__.'/templates';
         });
 
-        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $e) {
-            $e->types[] = Plugins::class;
-        });
-
-        Event::on(Utilities::class, Utilities::EVENT_REGISTER_UTILITY_TYPES, function(RegisterComponentTypesEvent $e) {
-            $e->types[] = UnavailablePlugins::class;
-        });
-
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $e) {
             $e->permissions['Craftcom'] = [
                 'craftnet:managePlugins' => [
@@ -184,5 +170,11 @@ class Module extends \yii\base\Module
                 ],
             ];
         });
+    }
+
+    private function _initSiteRequest()
+    {
+        Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
+        Craft::$app->getView()->registerTwigExtension(new CraftIdTwigExtension());
     }
 }
