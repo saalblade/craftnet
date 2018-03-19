@@ -226,8 +226,8 @@ class CraftIdController extends BaseController
         $orders = [];
 
         foreach ($results as $result) {
-            $order = $result->getAttributes(['number', 'datePaid', 'shortNumber', 'itemTotal', 'totalPrice', 'billingAddress']);
-
+            $order = $result->getAttributes(['number', 'datePaid', 'shortNumber', 'itemTotal', 'totalPrice', 'billingAddress', 'pdfUrl']);
+            $order['pdfUrl'] = $result->getPdfUrl();
 
             // Line Items
 
