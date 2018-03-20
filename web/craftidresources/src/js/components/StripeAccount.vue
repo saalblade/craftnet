@@ -16,7 +16,7 @@
 
                     <template v-else>
                         <h5>Stripe</h5>
-                        <p class="mb-0">Connect your Stripe account to receive money on your bank account.</p>
+                        <p class="mb-0">Connect your Stripe account so you can receive payouts for plugin purchases.</p>
                     </template>
                 </div>
                 <div>
