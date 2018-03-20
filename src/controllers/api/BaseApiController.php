@@ -22,7 +22,6 @@ use yii\base\Model;
 use yii\base\UserException;
 use yii\db\Expression;
 use yii\helpers\Markdown;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller as YiiController;
 use yii\web\HttpException;
 use yii\web\UnauthorizedHttpException;
@@ -221,7 +220,7 @@ abstract class BaseApiController extends Controller
                     }
                 } catch (LicenseNotFoundException $e) {
                     $responseHeaders->set('X-Craft-License-Status', self::LICENSE_STATUS_INVALID);
-                } catch (\Throwable $e) {
+                    $e = null;
                 }
             }
 
@@ -259,9 +258,7 @@ abstract class BaseApiController extends Controller
                         }
                     } catch (LicenseNotFoundException $e) {
                         $pluginLicenseStatus = self::LICENSE_STATUS_INVALID;
-                    } catch (\Throwable $e) {
-                        // inconclusive so skip this plugin
-                        continue;
+                        $e = null;
                     }
 
                     $pluginLicenseStatuses[] = "{$pluginHandle}:{$pluginLicenseStatus}";
@@ -270,11 +267,6 @@ abstract class BaseApiController extends Controller
                 if (!empty($pluginLicenseStatuses)) {
                     $responseHeaders->set('X-Craft-Plugin-License-Statuses', implode(',', $pluginLicenseStatuses));
                 }
-            }
-
-            // any exceptions getting the licenses?
-            if ($e !== null) {
-                throw new BadRequestHttpException('Bad Request', 0, $e);
             }
 
             $response = YiiController::runAction($id, $params);
