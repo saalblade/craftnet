@@ -264,14 +264,14 @@ class PluginEdition extends PluginPurchasable
      */
     public function getLineItemRules(LineItem $lineItem): array
     {
-        // todo: this isn't getting called
         return [
             [
-                ['options'],
-                function() use ($lineItem) {
-                    return isset($lineItem->options['licenseKey']);
-                },
-                'skipOnEmpty' => false,
+                'options', function($attribute, $params, $validator) use ($lineItem) {
+                if (!isset($lineItem->options['licenseKey'])) {
+                    $validator->addError($lineItem, $attribute, 'License key required');
+                }
+            },
+                'skipOnEmpty' => false
             ]
         ];
     }
