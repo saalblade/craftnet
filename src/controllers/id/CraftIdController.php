@@ -7,6 +7,7 @@ use craft\commerce\elements\Order;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
+use craft\helpers\UrlHelper;
 use craftnet\Module;
 use yii\web\Response;
 
@@ -227,7 +228,7 @@ class CraftIdController extends BaseController
 
         foreach ($results as $result) {
             $order = $result->getAttributes(['number', 'datePaid', 'shortNumber', 'itemTotal', 'totalPrice', 'billingAddress', 'pdfUrl']);
-            $order['pdfUrl'] = $result->getPdfUrl();
+            $order['pdfUrl'] = UrlHelper::actionUrl("commerce/downloads/pdf?number={$result->number}");
 
             // Line Items
 
