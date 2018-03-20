@@ -343,10 +343,11 @@ class CmsLicenseManager extends Component
      * and and assigns them to the user.
      *
      * @param User $user
+     * @return int the total number of affected licenses
      */
-    public function claimLicenses(User $user)
+    public function claimLicenses(User $user): int
     {
-        Craft::$app->getDb()->createCommand()
+        return Craft::$app->getDb()->createCommand()
             ->update('craftnet_cmslicenses', [
                 'ownerId' => $user->id,
             ], [
