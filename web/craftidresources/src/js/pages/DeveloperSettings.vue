@@ -13,8 +13,7 @@
 
 				<form @submit.prevent="generateToken()">
 					<p v-if="notice">This is your new API token, <strong>keep it someplace safe</strong>.</p>
-					<text-field id="apiToken" class="mono" spellcheck="false"
-								v-model="apiToken" :disabled="true"/>
+					<text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
 
 					<input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
 					<input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
@@ -61,17 +60,24 @@
 
                 this.$store.dispatch('generateApiToken')
                     .then(response => {
-                        this.apiToken = response.data.apiToken
-                        this.notice = true
-                        this.loading = false
-                        this.$root.displayNotice('API token generated.')
+						this.apiToken = response.data.apiToken
+
+						const apiTokenInput = this.$refs.apiTokenField.$el.querySelector('input')
+
+						this.$nextTick(() => {
+							apiTokenInput.select();
+						})
+
+						this.notice = true
+						this.loading = false
+						this.$root.displayNotice('API token generated.')
                     })
                     .catch(response => {
                         this.loading = false
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t generate API token.'
                         this.$root.displayError(errorMessage)
                     });
-            }
+            },
 
         },
 
