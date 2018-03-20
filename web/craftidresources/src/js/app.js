@@ -5,12 +5,10 @@ import store from './store'
 import {currency} from './filters/currency';
 import {formatCmsLicense, formatPluginLicense} from './filters/licenses';
 import App from './App.vue';
-const VueInputMask = require('vue-inputmask').default;
 
 Vue.filter('currency', currency);
 Vue.filter('formatCmsLicense', formatCmsLicense);
 Vue.filter('formatPluginLicense', formatPluginLicense);
-Vue.use(VueInputMask);
 Vue.use(require('vue-moment'));
 
 window.craftIdApp = new Vue({
