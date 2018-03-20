@@ -35,7 +35,9 @@ class PdfRenderer extends BaseObject
         $keywords = 'Pixel & Tonic, Receipt, Invoice, Craft CMS, Plugin Store';
 
         foreach ($order->getLineItems() as $lineItem) {
-            $keywords .= ', '.$lineItem->getPurchasable()->getDescription();
+            if ($purchasable = $lineItem->getPurchasable()) {
+                $keywords .= ', '.$purchasable->getDescription();
+            }
         }
 
         $pdf->SetKeywords($keywords);
