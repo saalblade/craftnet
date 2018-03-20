@@ -18,8 +18,10 @@ class PdfRenderer extends BaseObject
     {
         // TCPDF config
         $imagesPath = __DIR__.'/receipt/images';
-        define('K_PATH_IMAGES', $imagesPath);
-        require_once __DIR__.'/receipt/tcpdf_config.php';
+        if (!defined('K_PATH_IMAGES')) {
+            define('K_PATH_IMAGES', $imagesPath);
+            require_once __DIR__.'/receipt/tcpdf_config.php';
+        }
 
         // Create a new PDF document
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
