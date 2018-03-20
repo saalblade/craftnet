@@ -19,7 +19,7 @@
                     </template>
                     <template v-else>
                         <h2>Connect</h2>
-                        <p>Connect to GitHub or Bitbucket to retrieve your repositories.</p>
+                        <p>Connect to GitHub to retrieve your repositories.</p>
 
                         <connected-apps></connected-apps>
                     </template>
