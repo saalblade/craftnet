@@ -96,7 +96,7 @@ class UpdatesController extends BaseApiController
                 $status = Update::STATUS_ELIGIBLE;
             }
         } else {
-            $status = Update::STATUS_UNKNOWN;
+            $status = 'unknown';
         }
 
         return [
@@ -125,7 +125,7 @@ class UpdatesController extends BaseApiController
                     $status = Update::STATUS_ELIGIBLE;
                 }
             } else {
-                $status = Update::STATUS_UNKNOWN;
+                $status = 'unknown';
             }
 
             $releases = $this->_releases($plugin->packageName, $this->pluginVersions[$handle]);

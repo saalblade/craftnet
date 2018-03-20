@@ -11,6 +11,7 @@ use craftnet\Module;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
+use yii\db\Expression;
 
 class PluginLicenseManager extends Component
 {
