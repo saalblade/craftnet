@@ -8,7 +8,7 @@
         <license-history :history="license.history" />
 
         <div class="card card-danger mb-3">
-            <div class="card-header">Dangaer Zone</div>
+            <div class="card-header">Danger Zone</div>
             <div class="card-body">
                 <h5>Release license</h5>
                 <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
