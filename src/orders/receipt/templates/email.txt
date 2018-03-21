@@ -32,6 +32,6 @@ Purchase Date: {{ order.datePaid|date('medium') }}
 
 ---
 
-You can view your order details, and any licenses associated with the order, from your Craft ID account:
+You can access your licenses from your Craft ID account:
 
 https://id.craftcms.com/account/billing/invoices/{{ order.number }}
