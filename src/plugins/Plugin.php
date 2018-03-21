@@ -973,7 +973,8 @@ EOD;
                 return "<a href='http://packagist.org/packages/{$this->packageName}' target='_blank'>{$this->packageName}</a>";
             case 'repository':
             case 'documentationUrl':
-                return $this->$attribute ? "<a href='{$this->$attribute}' target='_blank'>{$this->$attribute}</a>" : '';
+                $url = $this->$attribute;
+                return $url ? "<a href='{$url}' target='_blank'>".preg_replace('/^https?:\/\/(?:www\.)?github\.com\//', '', $url).'</a>' : '';
             case 'price':
             case 'renewalPrice':
                 return $this->$attribute ? Craft::$app->getFormatter()->asCurrency($this->$attribute, 'USD') : 'Free';
