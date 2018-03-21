@@ -128,7 +128,7 @@ class PluginLicenseManager extends Component
      * Saves a license.
      *
      * @param PluginLicense $license
-     * @param bool          $runValidation
+     * @param bool $runValidation
      *
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
@@ -209,8 +209,8 @@ class PluginLicenseManager extends Component
     /**
      * Adds a new record to a Craft license’s history.
      *
-     * @param int         $licenseId
-     * @param string      $note
+     * @param int $licenseId
+     * @param string $note
      * @param string|null $timestamp
      */
     public function addHistory(int $licenseId, string $note, string $timestamp = null)
@@ -244,7 +244,7 @@ class PluginLicenseManager extends Component
     /**
      * Claims a license for a user.
      *
-     * @param User   $user
+     * @param User $user
      * @param string $key
      *
      * @throws LicenseNotFoundException

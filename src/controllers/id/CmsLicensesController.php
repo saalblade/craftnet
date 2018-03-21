@@ -8,10 +8,10 @@ use craft\web\Controller;
 use craft\web\UploadedFile;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
-use yii\web\ForbiddenHttpException;
-use yii\web\Response;
 use Exception;
 use Throwable;
+use yii\web\ForbiddenHttpException;
+use yii\web\Response;
 
 /**
  * Class CmsLicensesController

@@ -106,7 +106,6 @@ class CmsLicenseManager extends Component
      * Returns licenses owned by a user.
      *
      * @param int $ownerId
-     *
      * @return CmsLicense[]
      */
     public function getLicensesByOwner(int $ownerId): array
@@ -210,7 +209,7 @@ class CmsLicenseManager extends Component
      * Saves a license.
      *
      * @param CmsLicense $license
-     * @param bool       $runValidation
+     * @param bool $runValidation
      *
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
@@ -278,8 +277,8 @@ class CmsLicenseManager extends Component
     /**
      * Adds a new record to a Craft license’s history.
      *
-     * @param int         $licenseId
-     * @param string      $note
+     * @param int $licenseId
+     * @param string $note
      * @param string|null $timestamp
      */
     public function addHistory(int $licenseId, string $note, string $timestamp = null)
@@ -313,7 +312,7 @@ class CmsLicenseManager extends Component
     /**
      * Claims a license for a user.
      *
-     * @param User   $user
+     * @param User $user
      * @param string $key
      *
      * @throws LicenseNotFoundException

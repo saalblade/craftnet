@@ -252,7 +252,7 @@ class CraftIdController extends BaseController
 
             $transactions = [];
 
-            foreach($transactionResults as $transactionResult) {
+            foreach ($transactionResults as $transactionResult) {
                 $transactionGateway = $transactionResult->getGateway();
 
                 $transactions[] = [

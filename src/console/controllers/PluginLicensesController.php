@@ -2,10 +2,8 @@
 
 namespace craftnet\console\controllers;
 
-use Craft;
 use craft\elements\User;
 use craft\helpers\DateTimeHelper;
-use craftnet\developers\UserBehavior;
 use craftnet\helpers\KeyHelper;
 use craftnet\Module;
 use craftnet\plugins\Plugin;
@@ -50,8 +48,8 @@ class PluginLicensesController extends Controller
             'required' => true,
             'validator' => function(string $input, string &$error = null) use ($plugin) {
                 if (PluginEdition::find()->pluginId($plugin->id)->handle($input)->one() === null) {
-                    $validEditions =  PluginEdition::find()->pluginId($plugin->id)->select(['craftnet_plugineditions.handle'])->column();
-                    $error = 'Invalid edition handle. Valid options are: '.implode(', ',$validEditions);
+                    $validEditions = PluginEdition::find()->pluginId($plugin->id)->select(['craftnet_plugineditions.handle'])->column();
+                    $error = 'Invalid edition handle. Valid options are: '.implode(', ', $validEditions);
                     return false;
                 }
                 return true;

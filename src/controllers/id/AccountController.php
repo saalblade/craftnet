@@ -9,9 +9,9 @@ use craft\helpers\Assets;
 use craft\helpers\FileHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
+use Throwable;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
-use Throwable;
 
 /**
  * Class AccountController
@@ -129,7 +129,7 @@ class AccountController extends Controller
 
         $user = Craft::$app->getUser()->getIdentity();
 
-        if(!$user->isInGroup('developers')) {
+        if (!$user->isInGroup('developers')) {
             throw new ForbiddenHttpException('User is not permitted to perform this action');
         }
 
