@@ -126,38 +126,17 @@ class OrderBehavior extends Behavior
     {
         // render the PDF
         $pdf = (new PdfRenderer())->render($this->owner);
-
-        $view = Craft::$app->getView();
-        $templateMode = $view->getTemplateMode();
-        $twig = $view->getTwig();
-
-        // render the text body
-        $view->setTemplateMode(View::TEMPLATE_MODE_SITE);
-        $view->setTemplatesPath(__DIR__.'/receipt/templates');
-        $twig->setDefaultEscaperStrategy(false);
-        $textBody = $view->renderTemplate('email.txt', [
-            'order' => $this->owner,
-        ]);
-
-        // render the HTML body
-        $view->setTemplateMode(View::TEMPLATE_MODE_CP);
-        $twig->setDefaultEscaperStrategy();
-        $htmlBody = $view->renderTemplate('_special/email', [
-            'order' => $this->owner,
-            'body' => Template::raw(Markdown::process($textBody)),
-        ]);
-
-        $view->setTemplateMode($templateMode);
+        $filename = 'Order-'.strtoupper($this->owner->getShortNumber()).'.pdf';
 
         $mailer = Craft::$app->getMailer();
-        $mailer->compose()
+        $mailer
+            ->composeFromKey(Module::RECEIPT_MESSAGE_KEY, [
+                'order' => $this->owner,
+            ])
             ->setFrom($mailer->from)
             ->setTo($this->owner->getEmail())
-            ->setSubject('Your receipt from Pixel & Tonic')
-            ->setTextBody($textBody)
-            ->setHtmlBody($htmlBody)
             ->attachContent($pdf, [
-                'fileName' => 'Order-'.strtoupper($this->owner->getShortNumber()).'.pdf',
+                'fileName' => $filename,
                 'contentType' => 'application/pdf',
             ])
             ->send();

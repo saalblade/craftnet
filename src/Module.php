@@ -13,11 +13,14 @@ use craft\elements\User;
 use craft\events\DefineBehaviorsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterCpNavItemsEvent;
+use craft\events\RegisterEmailMessagesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\events\UserEvent;
+use craft\models\SystemMessage;
 use craft\services\Fields;
+use craft\services\SystemMessages;
 use craft\services\UserPermissions;
 use craft\services\Users;
 use craft\services\Utilities;
@@ -49,6 +52,11 @@ use yii\base\Event;
  */
 class Module extends \yii\base\Module
 {
+    const RECEIPT_MESSAGE_KEY = 'craftnet_receipt';
+
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         Craft::setAlias('@craftnet', __DIR__);
@@ -77,6 +85,16 @@ class Module extends \yii\base\Module
         });
         Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
             $e->types[] = EditionUpgradeDiscount::class;
+        });
+
+        // register our custom receipt system message
+        Event::on(SystemMessages::class, SystemMessages::EVENT_REGISTER_MESSAGES, function(RegisterEmailMessagesEvent $e) {
+            $e->messages[] = new SystemMessage([
+                'key' => self::RECEIPT_MESSAGE_KEY,
+                'heading' => 'When someone places an order:',
+                'subject' => 'Your receipt from Pixel & Tonic',
+                'body' => file_get_contents(__DIR__.'/orders/receipt/templates/email.txt'),
+            ]);
         });
 
         // claim Craft/plugin licenses after user activation
