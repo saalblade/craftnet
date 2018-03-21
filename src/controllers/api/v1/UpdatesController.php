@@ -22,7 +22,7 @@ class UpdatesController extends BaseApiController
 {
     public $defaultAction = 'get';
 
-    public function runAction($id, $params = [])
+    public function runAction($id, $params = []): Response
     {
         // BC support for old POST /v1/updates requests
         if ($id === 'old') {

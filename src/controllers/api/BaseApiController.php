@@ -24,6 +24,7 @@ use yii\db\Expression;
 use yii\helpers\Markdown;
 use yii\web\Controller as YiiController;
 use yii\web\HttpException;
+use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
 
 /**
@@ -138,7 +139,7 @@ abstract class BaseApiController extends Controller
     /**
      * @inheritdoc
      */
-    public function runAction($id, $params = [])
+    public function runAction($id, $params = []): Response
     {
         $request = Craft::$app->getRequest();
         $requestHeaders = $request->getHeaders();
@@ -269,7 +270,9 @@ abstract class BaseApiController extends Controller
                 }
             }
 
-            $response = YiiController::runAction($id, $params);
+            if (($result = YiiController::runAction($id, $params)) instanceof Response) {
+                $response = $result;
+            }
         } catch (\Throwable $e) {
             // log it and keep going
             Craft::$app->getErrorHandler()->logException($e);
