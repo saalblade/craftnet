@@ -937,8 +937,9 @@ class PackageManager extends Component
      *
      * @param bool $force Whether to update package releases even if their SHA hasn't changed
      * @param bool $queue Whether to queue the updates
+     * @param array $errors Any errors that occur when updating
      */
-    public function updateDeps(bool $force = false, bool $queue = false)
+    public function updateDeps(bool $force = false, bool $queue = false, array &$errors = null)
     {
         Craft::info('Starting to update package dependencies.', __METHOD__);
 
@@ -947,8 +948,16 @@ class PackageManager extends Component
             ->where(['managed' => false])
             ->column();
 
+        $errors = [];
         foreach ($names as $name) {
-            $this->updatePackage($name, $force, $queue);
+            try {
+                $this->updatePackage($name, $force, $queue);
+            } catch (\Throwable $e) {
+                // log and keep going
+                Craft::warning("Error updating package {$name}: {$e->getMessage()}", __METHOD__);
+                Craft::$app->getErrorHandler()->logException($e);
+                $errors[$name][] = $e->getMessage();
+            }
         }
 
         Craft::info('Done updating package dependencies.', __METHOD__);
