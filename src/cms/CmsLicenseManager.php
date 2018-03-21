@@ -123,6 +123,28 @@ class CmsLicenseManager extends Component
     }
 
     /**
+     * Returns licenses purchased by an order.
+     *
+     * @param int $orderId
+     * @return CmsLicense[]]
+     */
+    public function getLicensesByOrder(int $orderId): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->innerJoin('craftnet_cmslicenses_lineitems l_li', '[[l_li.licenseId]] = [[l.id]]')
+            ->innerJoin('commerce_lineitems li', '[[li.id]] = [[l_li.lineItemId]]')
+            ->where(['li.orderId' => $orderId])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new CmsLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
      * Returns a license by its ID.
      *
      * @param int $id

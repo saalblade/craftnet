@@ -9,7 +9,10 @@ use craft\elements\User;
 use craft\helpers\Template;
 use craft\web\View;
 use craftnet\base\PluginPurchasable;
+use craftnet\cms\CmsLicense;
 use craftnet\developers\UserBehavior;
+use craftnet\Module;
+use craftnet\plugins\PluginLicense;
 use yii\base\Behavior;
 use yii\helpers\Markdown;
 
@@ -27,6 +30,26 @@ class OrderBehavior extends Behavior
         return [
             Order::EVENT_AFTER_COMPLETE_ORDER => [$this, 'afterComplete'],
         ];
+    }
+
+    /**
+     * Returns any Craft licenses that were purchased by this order.
+     *
+     * @return CmsLicense[]
+     */
+    public function getCmsLicenses(): array
+    {
+        return Module::getInstance()->getCmsLicenseManager()->getLicensesByOrder($this->owner->id);
+    }
+
+    /**
+     * Returns any plugin licenses that were purchased by this order.
+     *
+     * @return PluginLicense[]
+     */
+    public function getPluginLicenses(): array
+    {
+        return Module::getInstance()->getPluginLicenseManager()->getLicensesByOrder($this->owner->id);
     }
 
     /**
