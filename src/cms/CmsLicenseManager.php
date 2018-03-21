@@ -111,7 +111,7 @@ class CmsLicenseManager extends Component
     public function getLicensesByOwner(int $ownerId): array
     {
         $results = $this->_createLicenseQuery()
-            ->where(['ownerId' => $ownerId])
+            ->where(['l.ownerId' => $ownerId])
             ->all();
 
         $licenses = [];
@@ -133,7 +133,7 @@ class CmsLicenseManager extends Component
     public function getLicenseById(int $id): CmsLicense
     {
         $result = $this->_createLicenseQuery()
-            ->where(['id' => $id])
+            ->where(['l.id' => $id])
             ->one();
 
         if (!$result) {
@@ -160,7 +160,7 @@ class CmsLicenseManager extends Component
         }
 
         $result = $this->_createLicenseQuery()
-            ->where(['key' => $key])
+            ->where(['l.key' => $key])
             ->one();
 
         if ($result === null) {
@@ -421,28 +421,28 @@ class CmsLicenseManager extends Component
     {
         return (new Query())
             ->select([
-                'id',
-                'editionId',
-                'ownerId',
-                'expirable',
-                'expired',
-                'autoRenew',
-                'edition',
-                'email',
-                'domain',
-                'key',
-                'notes',
-                'privateNotes',
-                'lastEdition',
-                'lastVersion',
-                'lastAllowedVersion',
-                'lastActivityOn',
-                'lastRenewedOn',
-                'expiresOn',
-                'dateCreated',
-                'dateUpdated',
-                'uid',
+                'l.id',
+                'l.editionId',
+                'l.ownerId',
+                'l.expirable',
+                'l.expired',
+                'l.autoRenew',
+                'l.edition',
+                'l.email',
+                'l.domain',
+                'l.key',
+                'l.notes',
+                'l.privateNotes',
+                'l.lastEdition',
+                'l.lastVersion',
+                'l.lastAllowedVersion',
+                'l.lastActivityOn',
+                'l.lastRenewedOn',
+                'l.expiresOn',
+                'l.dateCreated',
+                'l.dateUpdated',
+                'l.uid',
             ])
-            ->from(['craftnet_cmslicenses']);
+            ->from(['craftnet_cmslicenses l']);
     }
 }
