@@ -332,7 +332,7 @@ abstract class BaseApiController extends Controller
             ->execute();
 
         // get the request ID
-        $this->requestId = $db->getLastInsertID('apilog.requests');
+        $this->requestId = (int)$db->getLastInsertID('apilog.requests');
 
         // log any licenses associated with the request
         foreach ($this->cmsLicenses as $cmsLicense) {

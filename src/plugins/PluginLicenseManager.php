@@ -192,7 +192,7 @@ class PluginLicenseManager extends Component
                 ->execute();
 
             // set the ID on the model
-            $license->id = Craft::$app->getDb()->getLastInsertID('craftnet_pluginlicenses');
+            $license->id = (int)Craft::$app->getDb()->getLastInsertID('craftnet_pluginlicenses');
         } else {
             $success = (bool)Craft::$app->getDb()->createCommand()
                 ->update('craftnet_pluginlicenses', $data, ['id' => $license->id])

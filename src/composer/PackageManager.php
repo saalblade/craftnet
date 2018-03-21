@@ -369,7 +369,7 @@ class PackageManager extends Component
             $db->createCommand()
                 ->insert('craftnet_packages', $data)
                 ->execute();
-            $package->id = $db->getLastInsertID('craftnet_packages');
+            $package->id = (int)$db->getLastInsertID('craftnet_packages');
         } else {
             $db->createCommand()
                 ->update('craftnet_packages', $data, ['id' => $package->id])
@@ -929,7 +929,7 @@ class PackageManager extends Component
                 'valid' => $release->valid,
             ])
             ->execute();
-        $release->id = $db->getLastInsertID('craftnet_packageversions');
+        $release->id = (int)$db->getLastInsertID('craftnet_packageversions');
     }
 
     /**
