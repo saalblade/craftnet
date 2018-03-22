@@ -30,9 +30,10 @@
       "items": {
         "type": "object",
         "properties": {
-          "note": {"type": "string"},
-          "type": {"enum": ["cms-edition", "cms-renewal", "plugin-edition", "plugin-renewal"]}
-        }
+          "type": {"enum": ["cms-edition", "cms-renewal", "plugin-edition", "plugin-renewal"]},
+          "note": {"type": ["string", "null"]}
+        },
+        "required": ["type"]
       }
     },
     "couponCode": {"type": ["string", "null"]}
