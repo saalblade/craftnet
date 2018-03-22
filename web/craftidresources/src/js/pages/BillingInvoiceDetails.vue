@@ -77,6 +77,20 @@
 			</div>
 		</div>
 
+		<div v-if="invoice.cmsLicenses.length" class="card mb-4">
+			<div class="card-body">
+				<h3 class="mb-2">CMS Licenses</h3>
+				<cms-licenses-table :licenses="invoice.cmsLicenses"></cms-licenses-table>
+			</div>
+		</div>
+
+		<div v-if="invoice.pluginLicenses.length" class="card mb-4">
+			<div class="card-body">
+				<h3 class="mb-2">Plugin Licenses</h3>
+				<plugin-licenses-table :licenses="invoice.pluginLicenses"></plugin-licenses-table>
+			</div>
+		</div>
+
 	</div>
 </template>
 
@@ -84,12 +98,16 @@
     import {mapGetters} from 'vuex'
     import BillingAddress from '../components/BillingAddress'
     import CardIcon from '../components/CardIcon'
+    import CmsLicensesTable from '../components/CmsLicensesTable'
+    import PluginLicensesTable from '../components/PluginLicensesTable'
 
     export default {
 
         components: {
             BillingAddress,
             CardIcon,
+            CmsLicensesTable,
+            PluginLicensesTable,
         },
 
         computed: {

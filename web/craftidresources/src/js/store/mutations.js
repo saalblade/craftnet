@@ -138,6 +138,15 @@ export const SAVE_LICENSE = (state, {license}) => {
 
 
 /**
+ * Invoices
+ */
+
+export const RECEIVE_INVOICES = (state, {response}) => {
+    state.invoices = response.data;
+};
+
+
+/**
  * Plugins
  */
 

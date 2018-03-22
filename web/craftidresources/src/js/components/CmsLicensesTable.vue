@@ -18,15 +18,19 @@
 				<tr v-for="license in licenses">
 					<td>
 						<code>
-							<router-link :to="'/account/licenses/cms/'+license.id">
+							<router-link v-if="license.key" :to="'/account/licenses/cms/'+license.id">
 								{{ license.key.substr(0, 10) }}
 							</router-link>
+
+							<template v-else>
+								{{ license.shortKey }}
+							</template>
 						</code>
 					</td>
 
-					<td>{{license.edition}}</td>
-
+					<td>{{ license.edition }}</td>
 					<td>{{ license.domain }}</td>
+
 
 					<template v-if="enableCommercialFeatures">
 						<td>{{ license.dateCreated }}</td>

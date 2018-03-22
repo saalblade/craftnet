@@ -32,8 +32,12 @@
             <div class="card-body">
                 <h4>Invoices</h4>
 
-                <invoices-table v-if="invoices.length > 0" :invoices="invoices"></invoices-table>
-                <p v-else class="text-secondary">No invoices.</p>
+                <div v-if="$root.invoicesLoading" class="spinner"></div>
+
+                <template v-else>
+                    <invoices-table v-if="invoices && invoices.length > 0" :invoices="invoices"></invoices-table>
+                    <p v-else class="text-secondary">No invoices.</p>
+                </template>
             </div>
         </div>
     </div>

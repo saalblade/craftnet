@@ -276,6 +276,18 @@ export default {
             .catch(error => cbError(error.response));
     },
 
+    getInvoices(cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/account/get-invoices', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
     savePlugin({plugin}, cb, cbError) {
         let formData = new FormData();
 

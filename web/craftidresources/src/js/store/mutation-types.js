@@ -19,6 +19,9 @@ export const SAVE_CMS_LICENSE = 'SAVE_CMS_LICENSE'
 export const SAVE_PLUGIN_LICENSE = 'SAVE_PLUGIN_LICENSE'
 export const SAVE_LICENSE = 'SAVE_LICENSE'
 
+// Invoices
+export const RECEIVE_INVOICES = 'RECEIVE_INVOICES'
+
 // Plugins
 export const SAVE_PLUGIN = 'SAVE_PLUGIN'
 export const SUBMIT_PLUGIN = 'SUBMIT_PLUGIN'
