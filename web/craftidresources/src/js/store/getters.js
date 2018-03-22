@@ -123,8 +123,8 @@ export const getInvoiceById = state => {
 
 export const getInvoiceByNumber = state => {
     return number => {
-        if (state.craftId.invoices) {
-            return state.craftId.invoices.find(inv => inv.number == number);
+        if (state.invoices) {
+            return state.invoices.find(inv => inv.number == number);
         }
     }
 };
