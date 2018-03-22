@@ -184,7 +184,7 @@ abstract class BaseApiController extends Controller
         try {
             $cmsLicenseKey = $requestHeaders->get('X-Craft-License');
             if ($cmsLicenseKey === '🙏') {
-                $cmsLicense = $this->cmsLicenses[] = $this->_createCmsLicense();
+                $cmsLicense = $this->cmsLicenses[] = $this->createCmsLicense();
                 $responseHeaders
                     ->set('X-Craft-License', $cmsLicense->key)
                     ->set('X-Craft-License-Status', self::LICENSE_STATUS_VALID)
@@ -579,7 +579,7 @@ abstract class BaseApiController extends Controller
      * @throws BadRequestHttpException
      * @throws Exception
      */
-    private function _createCmsLicense(): CmsLicense
+    protected function createCmsLicense(): CmsLicense
     {
         $headers = Craft::$app->getRequest()->getHeaders();
         if (($email = $headers->get('X-Craft-User-Email')) === null) {
