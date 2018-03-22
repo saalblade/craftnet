@@ -71,7 +71,7 @@ class CmsLicensesController extends Controller
         $license = $this->module->getCmsLicenseManager()->getLicenseById($licenseId);
 
         if ($license->ownerId === $user->id) {
-            return Craft::$app->getResponse()->sendContentAsFile($license->key, 'license.key');
+            return Craft::$app->getResponse()->sendContentAsFile(chunk_split($license->key, 50), 'license.key');
         }
 
         throw new ForbiddenHttpException('User is not authorized to perform this action');
