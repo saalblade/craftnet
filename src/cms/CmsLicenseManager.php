@@ -390,50 +390,82 @@ class CmsLicenseManager extends Component
     {
         $results = $this->getLicensesByOwner($owner->id);
 
+        return $this->transformLicensesForOwner($results, $owner);
+    }
+
+    /**
+     * Transforms licenses for the given owner.
+     *
+     * @param array $results
+     * @param User  $owner
+     *
+     * @return array
+     */
+    public function transformLicensesForOwner(array $results, User $owner)
+    {
         $licenses = [];
 
         foreach ($results as $result) {
-            $license = $result->getAttributes(['id', 'key', 'edition', 'domain', 'notes', 'email', 'dateCreated']);
-
-            $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
-
-
-            // History
-
-            $license['history'] = $this->getHistory($result->id);
-
-
-            // Plugin licenses
-
-            $pluginLicenses = [];
-
-            foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
-                if ($pluginLicensesResult->ownerId === $owner->id) {
-                    $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key']);
-                } else {
-                    $pluginLicense = [
-                        'shortKey' => $pluginLicensesResult->getShortKey(),
-                    ];
-                }
-
-                $plugin = null;
-
-                if ($pluginLicensesResult->pluginId) {
-                    $pluginResult = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
-                    $plugin = $pluginResult->getAttributes(['name']);
-                }
-
-                $pluginLicense['plugin'] = $plugin;
-
-                $pluginLicenses[] = $pluginLicense;
-            }
-
-            $license['pluginLicenses'] = $pluginLicenses;
-
-            $licenses[] = $license;
+            $licenses[] = $this->transformLicenseForOwner($result, $owner);
         }
 
         return $licenses;
+    }
+
+    /**
+     * Transforms a license for the given owner.
+     *
+     * @param CmsLicense $result
+     * @param User       $owner
+     *
+     * @return array
+     */
+    public function transformLicenseForOwner(CmsLicense $result, User $owner)
+    {
+        if ($result->ownerId === $owner->id) {
+            $license = $result->getAttributes(['id', 'key', 'edition', 'domain', 'notes', 'email', 'dateCreated']);
+        } else {
+            $license = [
+                'shortKey' => $result->getShortKey()
+            ];
+        }
+
+        $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
+
+
+        // History
+
+        $license['history'] = $this->getHistory($result->id);
+
+
+        // Plugin licenses
+
+        $pluginLicenses = [];
+
+        foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
+            if ($pluginLicensesResult->ownerId === $owner->id) {
+                $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key']);
+            } else {
+                $pluginLicense = [
+                    'shortKey' => $pluginLicensesResult->getShortKey(),
+                ];
+            }
+
+            $plugin = null;
+
+            if ($pluginLicensesResult->pluginId) {
+                $pluginResult = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
+                $plugin = $pluginResult->getAttributes(['name']);
+            }
+
+            $pluginLicense['plugin'] = $plugin;
+
+            $pluginLicenses[] = $pluginLicense;
+        }
+
+        $license['pluginLicenses'] = $pluginLicenses;
+
+        return $license;
     }
 
     /**

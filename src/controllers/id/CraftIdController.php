@@ -3,11 +3,8 @@
 namespace craftnet\controllers\id;
 
 use Craft;
-use craft\commerce\elements\Order;
-use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
-use craft\helpers\UrlHelper;
 use craftnet\Module;
 use yii\web\Response;
 
@@ -67,7 +64,6 @@ class CraftIdController extends BaseController
             'customers' => $this->_customers($currentUser),
             'sales' => $this->_sales(),
             'upcomingInvoice' => $this->_upcomingInvoice(),
-            'invoices' => $this->_invoices(),
             'categories' => $this->_pluginCategories(),
             'enableCommercialFeatures' => $enableCommercialFeatures
         ];
@@ -207,70 +203,6 @@ class CraftIdController extends BaseController
                 'email' => 'ben@pixelandtonic.com',
             ],
         ];
-    }
-
-    /**
-     * @return array
-     */
-    private function _invoices(): array
-    {
-        $customer = Commerce::getInstance()->getCustomers()->getCustomer();
-
-        $query = Order::find();
-        $query->customer($customer);
-        $query->isCompleted(true);
-        $query->limit(null);
-        $query->orderBy('dateOrdered desc');
-
-        $results = $query->all();
-
-        $orders = [];
-
-        foreach ($results as $result) {
-            $order = $result->getAttributes(['number', 'datePaid', 'shortNumber', 'itemTotal', 'totalPrice', 'billingAddress', 'pdfUrl']);
-            $order['pdfUrl'] = UrlHelper::actionUrl("commerce/downloads/pdf?number={$result->number}");
-
-            // Line Items
-
-            $lineItems = [];
-
-            foreach ($result->lineItems as $lineItem) {
-                $lineItems[] = $lineItem->getAttributes([
-                    'description',
-                    'salePrice',
-                    'qty',
-                    'subtotal',
-                ]);
-            }
-
-            $order['lineItems'] = $lineItems;
-
-
-            // Transactions
-
-            $transactionResults = $result->getTransactions();
-
-            $transactions = [];
-
-            foreach ($transactionResults as $transactionResult) {
-                $transactionGateway = $transactionResult->getGateway();
-
-                $transactions[] = [
-                    'type' => $transactionResult->type,
-                    'status' => $transactionResult->status,
-                    'amount' => $transactionResult->amount,
-                    'paymentAmount' => $transactionResult->paymentAmount,
-                    'gatewayName' => ($transactionGateway ? $transactionGateway->name : null),
-                    'dateCreated' => $transactionResult->dateCreated,
-                ];
-            }
-
-            $order['transactions'] = $transactions;
-
-            $orders[] = $order;
-        }
-
-        return $orders;
     }
 
     /**

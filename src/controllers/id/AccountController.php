@@ -3,14 +3,17 @@
 namespace craftnet\controllers\id;
 
 use Craft;
+use craft\commerce\Plugin as Commerce;
 use craft\elements\Asset;
 use craft\errors\UploadFailedException;
 use craft\helpers\Assets;
 use craft\helpers\FileHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
+use craftnet\Module;
 use Throwable;
 use yii\web\BadRequestHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 /**
@@ -137,6 +140,31 @@ class AccountController extends Controller
             $apiToken = $user->generateApiToken();
 
             return $this->asJson(['apiToken' => $apiToken]);
+        } catch (Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Get invoices.
+     *
+     * @return Response
+     */
+    public function actionGetInvoices(): Response
+    {
+        $this->requireLogin();
+        $user = Craft::$app->getUser()->getIdentity();
+
+        try {
+            $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
+
+            $invoices = [];
+            
+            if ($customer) {
+                $invoices = Module::getInstance()->getInvoiceManager()->getInvoices($customer);
+            }
+
+            return $this->asJson($invoices);
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }

@@ -23,6 +23,7 @@ window.craftIdApp = new Vue({
 
     data() {
         return {
+            invoicesLoading: true,
             stripeCustomerLoading: true,
             stripeAccountLoading: true,
             loading: true,
@@ -100,6 +101,14 @@ window.craftIdApp = new Vue({
         } else {
             this.stripeAccountLoading = false;
         }
+
+        this.$store.dispatch('getInvoices')
+            .then(response => {
+                this.invoicesLoading = false;
+            })
+            .catch(response => {
+                this.invoicesLoading = false;
+            });
     }
 
 });

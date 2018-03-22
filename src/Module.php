@@ -34,6 +34,7 @@ use craftnet\composer\PackageManager;
 use craftnet\developers\UserBehavior;
 use craftnet\developers\UserQueryBehavior;
 use craftnet\fields\Plugins;
+use craftnet\invoices\InvoiceManager;
 use craftnet\orders\OrderBehavior;
 use craftnet\orders\PdfRenderer;
 use craftnet\plugins\PluginEdition;
@@ -45,6 +46,7 @@ use yii\base\Event;
 
 /**
  * @property CmsLicenseManager $cmsLicenseManager
+ * @property InvoiceManager $invoiceManager
  * @property JsonDumper $jsonDumper
  * @property Oauth $oauth
  * @property PackageManager $packageManager
@@ -131,6 +133,14 @@ class Module extends \yii\base\Module
     public function getCmsLicenseManager(): CmsLicenseManager
     {
         return $this->get('cmsLicenseManager');
+    }
+
+    /**
+     * @return InvoiceManager
+     */
+    public function getInvoiceManager(): InvoiceManager
+    {
+        return $this->get('invoiceManager');
     }
 
     /**

@@ -60,6 +60,7 @@
                     .then(response => {
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
+                        this.$store.dispatch('getInvoices');
                         this.$root.displayNotice('Plugin license released.');
                         this.$router.push({path: '/account/licenses/plugins'});
                     })
