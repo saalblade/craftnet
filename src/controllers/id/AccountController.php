@@ -154,10 +154,15 @@ class AccountController extends Controller
     {
         $this->requireLogin();
         $user = Craft::$app->getUser()->getIdentity();
-        $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
 
         try {
-            $invoices = Module::getInstance()->getInvoiceManager()->getInvoices($customer);
+            $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
+
+            $invoices = [];
+            
+            if ($customer) {
+                $invoices = Module::getInstance()->getInvoiceManager()->getInvoices($customer);
+            }
 
             return $this->asJson($invoices);
         } catch (Throwable $e) {
