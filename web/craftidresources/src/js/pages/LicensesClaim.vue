@@ -108,6 +108,7 @@
                         this.cmsLicenseLoading = false;
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
+                        this.$store.dispatch('getInvoices');
                         this.$root.displayNotice('CMS license claimed.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })
@@ -124,6 +125,7 @@
                         this.cmsLicenseFileLoading = false;
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
+                        this.$store.dispatch('getInvoices');
                         this.$root.displayNotice('CMS license claimed.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })
@@ -142,6 +144,7 @@
                         this.pluginLicenseLoading = false;
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
+                        this.$store.dispatch('getInvoices');
                         this.$root.displayNotice('Plugin license claimed.');
                         this.$router.push({path: '/account/licenses/plugins'});
                     })
