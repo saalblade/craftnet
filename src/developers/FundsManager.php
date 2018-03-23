@@ -9,6 +9,7 @@ use craft\helpers\Db;
 use craftnet\errors\InaccessibleFundsException;
 use craftnet\errors\InsufficientFundsException;
 use craftnet\errors\MissingStripeAccountException;
+use Moccalotto\Eu\CountryInfo;
 use Stripe\Error\Base as StripeError;
 use Stripe\Stripe;
 use Stripe\Transfer;
@@ -18,6 +19,9 @@ use yii\db\Expression;
 
 class FundsManager extends BaseObject
 {
+    const TXN_TYPE_PLUGIN_PAYMENT =  'plugin_payment';
+    const TXN_TYPE_STRIPE_TRANSFER = 'stripe_transfer';
+
     /**
      * @var User|UserBehavior
      */
@@ -63,9 +67,10 @@ class FundsManager extends BaseObject
      * @param string $note the transaction note
      * @param float $credit the credit amount (not including any fees that need to be removed)
      * @param float|null $fee the total fees that should be deducted from the credit amount
+     * @param string|null $txnType the transaction type (e.g. `plugin_payment`)
      * @throws InvalidArgumentException if $credit or $fee are negative or 0
      */
-    public function credit(string $note, float $credit, float $fee = null)
+    public function credit(string $note, float $credit, float $fee = null, string $txnType = null)
     {
         if ($credit <= 0) {
             throw new InvalidArgumentException('Invalid credit amount: '.$credit);
@@ -75,7 +80,7 @@ class FundsManager extends BaseObject
             throw new InvalidArgumentException('Invalid fee amount: '.$credit);
         }
 
-        $this->_addTransaction($note, $credit, null, $fee);
+        $this->_addTransaction($note, $credit, null, $fee, $txnType);
     }
 
     /**
@@ -83,10 +88,11 @@ class FundsManager extends BaseObject
      *
      * @param string $note the transaction note
      * @param float $debit the credit amount (not including any fees that need to be removed)
+     * @param string|null $txnType the transaction type (e.g. `stripe_transfer`)
      * @throws InvalidArgumentException if $debit is negative or 0
      * @throws InaccessibleFundsException if the developer's funds could not be locked
      */
-    public function debit(string $note, float $debit)
+    public function debit(string $note, float $debit, string $txnType = null)
     {
         if ($debit <= 0) {
             throw new InvalidArgumentException('Invalid debit amount: '.$debit);
@@ -97,7 +103,7 @@ class FundsManager extends BaseObject
             throw new InaccessibleFundsException();
         }
 
-        $this->_addTransaction($note, null, $debit);
+        $this->_addTransaction($note, null, $debit, null, $txnType);
         $this->_unlockFunds();
     }
 
@@ -121,7 +127,7 @@ class FundsManager extends BaseObject
         }
 
         // credit the account
-        $this->credit("Payment received for order {$orderNumber}", $credit, $fee);
+        $this->credit("Payment received for order {$orderNumber}", $credit, $fee, self::TXN_TYPE_PLUGIN_PAYMENT);
 
         // only attempt the transfer if we could get a lock
         if (!$e) {
@@ -231,7 +237,7 @@ class FundsManager extends BaseObject
             throw $e;
         }
 
-        $this->debit($note, $amount);
+        $this->debit($note, $amount, self::TXN_TYPE_STRIPE_TRANSFER);
         $this->_unlockFunds();
     }
 
@@ -242,8 +248,9 @@ class FundsManager extends BaseObject
      * @param float|null $credit
      * @param float|null $debit
      * @param float|null $fee
+     * @param string|null $type
      */
-    private function _addTransaction(string $note, float $credit = null, float $debit = null, float $fee = null)
+    private function _addTransaction(string $note, float $credit = null, float $debit = null, float $fee = null, string $type = null)
     {
         $db = Craft::$app->getDb();
 
@@ -277,6 +284,9 @@ insert into {{craftnet_developerledger}} (
     [[debit]],
     [[fee]],
     [[balance]],
+    [[type]],
+    [[country]],
+    [[isEuMember]],
     [[dateCreated]]
 ) values (
     :developerId,
@@ -289,6 +299,9 @@ insert into {{craftnet_developerledger}} (
         from {{craftnet_developers}}
         where [[id]] = :developerId
     ),
+    :type,
+    :country,
+    :isEuMember,
     :dateCreated
 )
 SQL;
@@ -299,6 +312,9 @@ SQL;
             'credit' => $credit,
             'debit' => $debit,
             'fee' => $fee,
+            'type' => $type,
+            'country' => $this->developer->country,
+            'isEuMember' => $this->developer->country ? (new CountryInfo())->isEuMember($this->developer->country) : null,
             'dateCreated' => Db::prepareDateForDb(new \DateTime()),
         ])->execute();
     }
