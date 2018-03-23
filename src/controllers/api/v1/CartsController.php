@@ -403,19 +403,19 @@ class CartsController extends BaseApiController
             }
 
             // get the state
-            if (!empty($billingAddress->state)) {
-                if (($state = $commerce->getStates()->getStateByAbbreviation($country->id, $billingAddress->state)) === null) {
-                    $addressErrors[] = [
-                        'param' => 'billingAddress.state',
-                        'message' => 'Invalid state',
-                        'code' => self::ERROR_CODE_INVALID,
-                    ];
-                }
-            } else if ($country !== null && $country->isStateRequired) {
+            if ($country !== null && !empty($billingAddress->state)) {
+                // see if it's a valid state abbreviation
+                $state = $commerce->getStates()->getStateByAbbreviation($country->id, $billingAddress->state);
+            } else {
+                $state = null;
+            }
+
+            // if the country requires a state, make sure they submitted a valid state
+            if ($country !== null && $country->isStateRequired && $state === null) {
                 $addressErrors[] = [
                     'param' => 'billingAddress.state',
-                    'message' => "{$country->name} addresses must specify a state.",
-                    'code' => self::ERROR_CODE_MISSING_FIELD,
+                    'message' => "{$country->name} addresses must specify a valid state.",
+                    'code' => empty($billingAddress->state) ? self::ERROR_CODE_MISSING_FIELD : self::ERROR_CODE_INVALID,
                 ];
             }
         }
@@ -468,7 +468,8 @@ class CartsController extends BaseApiController
 
         $address->countryId = $country->id ?? null;
         $address->stateId = $state->id ?? null;
-        $address->stateName = $state->abbreviation ?? null; // todo: verify this is right
+        $address->stateName = $state->abbreviation ?? $billingAddress->state ?? null;
+        $address->setStateValue(null);
 
         // save the address
         if (!$commerce->getAddresses()->saveAddress($address)) {
