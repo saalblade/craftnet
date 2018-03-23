@@ -94,7 +94,7 @@ class Module extends \yii\base\Module
             $e->messages[] = new SystemMessage([
                 'key' => self::RECEIPT_MESSAGE_KEY,
                 'heading' => 'When someone places an order:',
-                'subject' => 'Your receipt from Pixel & Tonic',
+                'subject' => 'Your receipt from {{ fromName }}',
                 'body' => file_get_contents(__DIR__.'/orders/receipt/templates/email.txt'),
             ]);
         });
