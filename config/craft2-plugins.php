@@ -164,6 +164,9 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
+    'SuperSort' => [
+        'handle' => 'supersort',
+    ],
     'Upvote' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
