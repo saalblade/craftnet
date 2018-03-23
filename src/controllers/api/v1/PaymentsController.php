@@ -89,23 +89,31 @@ class PaymentsController extends CartsController
             throw new ValidationException($errors);
         }
 
-        // get the gateway
-        /** @var StripeGateway $gateway */
-        $gateway = $commerce->getGateways()->getGatewayById(getenv('STRIPE_GATEWAY_ID'));
+        // only process a payment if
+        if ($totalPrice) {
+            // get the gateway
+            /** @var StripeGateway $gateway */
+            $gateway = $commerce->getGateways()->getGatewayById(getenv('STRIPE_GATEWAY_ID'));
 
-        // pay
-        $paymentForm = $gateway->getPaymentFormModel();
-        $paymentForm->token = $payload->token;
+            // pay
+            $paymentForm = $gateway->getPaymentFormModel();
+            $paymentForm->token = $payload->token;
 
-        try {
-            $commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction);
-        } catch (PaymentException $e) {
-            throw new BadRequestHttpException($e->getMessage(), $e->getCode(), $e->getPrevious());
+            try {
+                $commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction);
+            } catch (PaymentException $e) {
+                throw new BadRequestHttpException($e->getMessage(), $e->getCode(), $e->getPrevious());
+            }
+        } else {
+            // just mark it as complete since it's a free order
+            $cart->markAsComplete();
         }
 
         /** @var Transaction $transaction */
-        return $this->asJson([
-            'transaction' => $transaction->toArray(),
-        ]);
+        $response = ['completed' => true];
+        if (isset($transaction)) {
+            $response['transaction'] = $transaction->toArray();
+        }
+        return $this->asJson($response);
     }
 }
