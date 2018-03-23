@@ -147,14 +147,14 @@ return [
     'SimpleMap' => [
         'handle' => 'simplemap',
     ],
-    'SmartMap' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
     'Sitemap' => [
         'handle' => 'sitemap-tmp',
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) could be used instead',
+    ],
+    'SmartMap' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
     ],
     'SproutFields' => [
         'statusColor' => 'orange',
