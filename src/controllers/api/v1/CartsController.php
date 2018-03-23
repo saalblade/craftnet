@@ -44,10 +44,18 @@ class CartsController extends BaseApiController
      * Creates a cart.
      *
      * @return Response
+     * @throws ValidationException
      */
     public function actionCreate(): Response
     {
-        $payload = $this->getPayload('create-cart-request');
+        $payload = $this->getPayload();
+
+        $errors = [];
+        $this->validatePayload($payload, 'create-cart-request', $errors);
+        $this->validatePayload($payload, 'update-cart-request', $errors);
+        if (!empty($errors)) {
+            throw new ValidationException($errors);
+        }
 
         $cart = new Order([
             'number' => Commerce::getInstance()->getCarts()->generateCartNumber(),
