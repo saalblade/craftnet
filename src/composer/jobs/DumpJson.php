@@ -1,10 +1,10 @@
 <?php
 
-namespace craftcom\composer\jobs;
+namespace craftnet\composer\jobs;
 
-use craft\queue\BaseJob;
-use craftcom\Module;
 use Craft;
+use craft\queue\BaseJob;
+use craftnet\Module;
 
 class DumpJson extends BaseJob
 {

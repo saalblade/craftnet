@@ -15,8 +15,30 @@ return [
         'securityKey' => getenv('CRAFT_SECURITY_KEY'),
         'csrfTokenName' => 'CRAFTCOM_CSRF_TOKEN',
         'phpSessionName' => 'CraftComSessionId',
-        'runQueueAutomatically' => false,
         'generateTransformsBeforePageLoad' => true,
+        'backupCommand' => 'PGPASSWORD="{password}" ' .
+            'pg_dump ' .
+            '--dbname={database} '.
+            '--host={server} '.
+            '--port={port} '.
+            '--username={user} '.
+            '--if-exists '.
+            '--clean '.
+            '--file="{file}" '.
+            '--schema={schema} '.
+            '--schema=apilog '.
+            '--exclude-table-data \'{schema}.assetindexdata\' '.
+            '--exclude-table-data \'{schema}.assettransformindex\' '.
+            '--exclude-table-data \'{schema}.cache\' '.
+            '--exclude-table-data \'{schema}.sessions\' '.
+            '--exclude-table-data \'{schema}.templatecaches\' '.
+            '--exclude-table-data \'{schema}.templatecachecriteria\' '.
+            '--exclude-table-data \'{schema}.templatecacheelements\' ' .
+            '--exclude-table-data \'apilog.logs\' ' .
+            '--exclude-table-data \'apilog.request_cmslicenses\' ' .
+            '--exclude-table-data \'apilog.request_errors\' ' .
+            '--exclude-table-data \'apilog.request_pluginlicenses\' ' .
+            '--exclude-table-data \'apilog.requests\'',
     ],
     'prod' => [
         'allowUpdates' => false,
@@ -29,6 +51,19 @@ return [
         ],
         'defaultCookieDomain' => '.craftcms.com',
         'baseCpUrl' => 'https://id.craftcms.com/',
+        'runQueueAutomatically' => false,
+    ],
+    'stage' => [
+        'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
+        'allowUpdates' => false,
+        'siteUrl' => [
+            'api' => 'https://staging.api.craftcms.com/',
+            'composer' => 'https://composer.craftcms.com/',
+            'craftId' => 'https://staging.id.craftcms.com/',
+            'plugins' => 'https://plugins.craftcms.com/',
+        ],
+        'defaultCookieDomain' => '.craftcms.com',
+        'baseCpUrl' => 'http://staging.id.craftcms.com/',
     ],
     'dev' => [
         'devMode' => true,
@@ -40,6 +75,6 @@ return [
             'plugins' => 'https://plugins.craftcms.test/',
         ],
         'defaultCookieDomain' => '.craftcms.test',
-        'baseCpUrl' => 'http://id.craftcms.test/',
+        'baseCpUrl' => 'https://id.craftcms.test/',
     ]
 ];

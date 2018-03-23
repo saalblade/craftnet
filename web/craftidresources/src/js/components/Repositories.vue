@@ -7,8 +7,8 @@
 
 		<div v-if="filteredRepositories.length > 0" class="list-group">
 			<div v-for="repository in filteredRepositories" class="list-group-item">
-				<div class="d-flex">
-					<div class="media-body">
+				<div class="flex items-center">
+					<div class="flex-1">
 						{{ repository.full_name }}
 					</div>
 					<div>
@@ -24,11 +24,10 @@
 	</div>
 </template>
 
-
 <script>
     import filter from 'lodash/filter';
     import includes from 'lodash/includes';
-    import { mapGetters } from 'vuex';
+    import {mapGetters} from 'vuex';
     import TextField from '../components/fields/TextField';
 
     export default {
@@ -42,7 +41,7 @@
         data() {
             return {
                 q: ''
-			};
+            };
         },
 
         computed: {
@@ -52,40 +51,46 @@
                 repositoryIsInUse: 'repositoryIsInUse',
             }),
 
-			app() {
+            app() {
                 return this.apps[this.appHandle];
-			},
+            },
 
-			repositories() {
+            repositories() {
                 let unusedRepos = this.app.repositories.filter(r => !this.repositoryIsInUse(r.html_url));
                 let inUseRepos = this.app.repositories.filter(r => this.repositoryIsInUse(r.html_url));
 
-              	return unusedRepos.concat(inUseRepos);
-			},
+                return unusedRepos.concat(inUseRepos);
+            },
 
-			filteredRepositories() {
-				let searchQuery = this.q;
+            filteredRepositories() {
+                let searchQuery = this.q;
 
-				if(!searchQuery) {
-					return this.repositories;
-				}
+                if (!searchQuery) {
+                    return this.repositories;
+                }
 
-				return filter(this.repositories, r => {
-					if(r.full_name && includes(r.full_name.toLowerCase(), searchQuery.toLowerCase())) {
-						return true;
-					}
-				});
-			}
+                return filter(this.repositories, r => {
+                    if (r.full_name && includes(r.full_name.toLowerCase(), searchQuery.toLowerCase())) {
+                        return true;
+                    }
+                });
+            }
 
         },
 
         methods: {
 
-          	isLoading(repositoryUrl) {
-          	    return this.loadingRepository === repositoryUrl;
-			}
+            /**
+             * Is repository loading?
+             *
+             * @param repositoryUrl
+             * @returns {boolean}
+             */
+            isLoading(repositoryUrl) {
+                return this.loadingRepository === repositoryUrl;
+            }
 
-		}
+        }
 
     }
 </script>

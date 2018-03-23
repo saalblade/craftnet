@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\controllers;
+namespace craftnet\controllers;
 
 use Craft;
 use craft\base\Element;
@@ -15,8 +15,8 @@ use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
 use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
@@ -75,8 +75,7 @@ class PluginsController extends Controller
             $client->authenticate($token, null, Client::AUTH_HTTP_TOKEN);
         }
 
-        /** @var Repo $api */
-        $api = $client->api('repo');
+        $api = $client->repos();
 
         // Get the composer.json contents
         try {
@@ -133,7 +132,7 @@ class PluginsController extends Controller
         }
 
         // Get the keywords
-        if(isset($config['keywords']) && is_array($config['keywords'])) {
+        if (isset($config['keywords']) && is_array($config['keywords'])) {
             $keywords = $config['keywords'];
         } else {
             $keywords = [];
@@ -156,7 +155,7 @@ class PluginsController extends Controller
     }
 
     /**
-     * @param int|null    $pluginId
+     * @param int|null $pluginId
      * @param Plugin|null $plugin
      *
      * @return Response
@@ -172,7 +171,7 @@ class PluginsController extends Controller
                     throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
                 }
 
-                if (!Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+                if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                     throw new ForbiddenHttpException('User is not permitted to perform this action');
                 }
             } else {
@@ -186,7 +185,7 @@ class PluginsController extends Controller
 
         $title = $plugin->id ? $plugin->name : 'Add a new plugin';
 
-        return $this->renderTemplate('craftcom/plugins/_edit', compact('plugin', 'title'));
+        return $this->renderTemplate('craftnet/plugins/_edit', compact('plugin', 'title'));
     }
 
     /**
@@ -205,7 +204,7 @@ class PluginsController extends Controller
                 throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
             }
 
-            if (!Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+            if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                 throw new ForbiddenHttpException('User is not permitted to perform this action');
             }
         } else {
@@ -227,7 +226,7 @@ class PluginsController extends Controller
         }
 
         // Only plugin managers are able to change developer for a plugin
-        if (Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && isset($request->getBodyParam('developerId')[0])) {
+        if (Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && isset($request->getBodyParam('developerId')[0])) {
             $plugin->developerId = $request->getBodyParam('developerId')[0];
         }
 
@@ -292,14 +291,14 @@ class PluginsController extends Controller
 
             if ($iconFile) {
                 if ($iconFile->error != UPLOAD_ERR_OK) {
-                    if($iconFile->error == UPLOAD_ERR_INI_SIZE) {
+                    if ($iconFile->error == UPLOAD_ERR_INI_SIZE) {
                         throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                     }
 
                     throw new Exception('Couldn’t upload icon. (Error '.$iconFile->error.')');
                 }
 
-                if($iconFile->size > $maxUpload) {
+                if ($iconFile->size > $maxUpload) {
                     throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                 }
 
@@ -338,7 +337,7 @@ class PluginsController extends Controller
                     ]);
 
                     if (!Craft::$app->getElements()->saveElement($icon, false)) {
-                        throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+                        throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
                     }
 
                     $plugin->iconId = $icon->id;
@@ -375,14 +374,14 @@ class PluginsController extends Controller
             if (count($screenshotFiles) > 0) {
                 foreach ($screenshotFiles as $screenshotFile) {
                     if ($screenshotFile->error != UPLOAD_ERR_OK) {
-                        if($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
+                        if ($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
                             throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                         }
 
                         throw new Exception('Couldn’t upload screenshot. (Error '.$screenshotFile->error.')');
                     }
 
-                    if($screenshotFile->size > $maxUpload) {
+                    if ($screenshotFile->size > $maxUpload) {
                         throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
                     }
 
@@ -435,7 +434,7 @@ class PluginsController extends Controller
                     $screenshot->validate(['newLocation']);
 
                     if ($screenshot->hasErrors() || !Craft::$app->getElements()->saveElement($screenshot, false)) {
-                        throw new Exception('Unable to save icon asset: '.implode(',', $screenshot->getFirstErrors()));
+                        throw new Exception('Could not save icon asset: '.implode(', ', $screenshot->getErrorSummary(true)));
                     }
 
                     $screenshotIds[] = $screenshot->id;
@@ -485,7 +484,7 @@ class PluginsController extends Controller
                 }
 
                 if (!Craft::$app->getElements()->saveElement($icon, false)) {
-                    throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+                    throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
                 }
             }
 
@@ -510,7 +509,7 @@ class PluginsController extends Controller
 
                 foreach ($plugin->screenshots as $screenshot) {
                     if (!$assetsService->moveAsset($screenshot, $folder)) {
-                        throw new Exception('Unable to save icon asset: '.implode(',', $screenshot->getFirstErrors()));
+                        throw new Exception('Could not save icon asset: '.implode(', ', $screenshot->getErrorSummary(true)));
                     }
                 }
             }
@@ -524,8 +523,8 @@ class PluginsController extends Controller
 
             $return['success'] = true;
             $return['id'] = $plugin->id;
-            $return['iconId'] = $plugin->icon->id;
-            $return['iconUrl'] = $plugin->icon->getUrl();
+            $return['iconId'] = $plugin->iconId;
+            $return['iconUrl'] = $plugin->iconId ? $plugin->getIcon()->getUrl() : null;
             $return['name'] = $plugin->name;
 
             $return['screenshots'] = [];
@@ -655,11 +654,11 @@ class PluginsController extends Controller
     /**
      * Returns a plugin’s icon.
      *
-     * @param Repo        $api
-     * @param string      $owner
-     * @param string      $repo
+     * @param Repo $api
+     * @param string $owner
+     * @param string $repo
      * @param string|null $ref
-     * @param array       $config
+     * @param array $config
      * @param string|null $handle
      * @param string|null $name
      *
@@ -728,14 +727,14 @@ class PluginsController extends Controller
     /**
      * Looks for a plugin’s icon within a specific path
      *
-     * @param Repo        $api
-     * @param string      $owner
-     * @param string      $repo
+     * @param Repo $api
+     * @param string $owner
+     * @param string $repo
      * @param string|null $ref
-     * @param string      $handle
+     * @param string $handle
      * @param string|null $name
      *
-     * @param string      $testPath
+     * @param string $testPath
      *
      * @return Asset|null
      * @throws Exception if the icon asset can't be saved
@@ -765,7 +764,7 @@ class PluginsController extends Controller
         ]);
 
         if (!Craft::$app->getElements()->saveElement($icon, false)) {
-            throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+            throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
         }
 
         return $icon;

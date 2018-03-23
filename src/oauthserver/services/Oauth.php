@@ -1,15 +1,13 @@
 <?php
 
-namespace craftcom\oauthserver\services;
+namespace craftnet\oauthserver\services;
 
 use Craft;
-use craftcom\oauthserver\Module;
+use craftnet\oauthserver\Module;
 use yii\base\Component;
 
 /**
  * Class Oauth
- *
- * @package craftcom\oauthserver\services
  */
 class Oauth extends Component
 {
@@ -145,7 +143,7 @@ class Oauth extends Component
     }
 
     /**
-     * @param      $grantClass
+     * @param $grantClass
      * @param bool $enabledOnly
      *
      * @return mixed

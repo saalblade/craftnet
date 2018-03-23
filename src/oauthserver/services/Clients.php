@@ -1,16 +1,14 @@
 <?php
 
-namespace craftcom\oauthserver\services;
+namespace craftnet\oauthserver\services;
 
 use Craft;
-use craftcom\oauthserver\models\Client;
-use craftcom\oauthserver\records\Client as ClientRecord;
+use craftnet\oauthserver\models\Client;
+use craftnet\oauthserver\records\Client as ClientRecord;
 use yii\base\Component;
 
 /**
  * Class Clients
- *
- * @package craftcom\oauthserver\services
  */
 class Clients extends Component
 {
@@ -65,7 +63,7 @@ class Clients extends Component
 
     /**
      * @param Client $client
-     * @param bool   $runValidation
+     * @param bool $runValidation
      *
      * @return bool
      */

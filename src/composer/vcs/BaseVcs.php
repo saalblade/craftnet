@@ -1,11 +1,11 @@
 <?php
 
-namespace craftcom\composer\vcs;
+namespace craftnet\composer\vcs;
 
 use Composer\Semver\VersionParser;
 use Craft;
-use craftcom\composer\Package;
-use craftcom\composer\PackageRelease;
+use craftnet\composer\Package;
+use craftnet\composer\PackageRelease;
 use yii\base\BaseObject;
 
 abstract class BaseVcs extends BaseObject implements VcsInterface
@@ -19,7 +19,7 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
      * BaseVcs constructor.
      *
      * @param Package $package
-     * @param array   $config
+     * @param array $config
      */
     public function __construct(Package $package, array $config = [])
     {
@@ -36,8 +36,21 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
     }
 
     /**
+     * Cleans up a given version tag.
+     *
+     * @param string $tag
+     *
+     * @return string
+     */
+    protected function cleanTag(string $tag): string
+    {
+        // Strip the 'release-' prefix from the version if present
+        return preg_replace('/^release-/', '', $tag);
+    }
+
+    /**
      * @param PackageRelease $release
-     * @param array          $config
+     * @param array $config
      *
      * @return bool
      */
@@ -51,6 +64,9 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
                 $release->invalidate("version mismatch -- config says {$config['version']}; tag says {$release->version}");
                 return false;
             }
+
+            // Use the composer.json version value, in case it differs from the tag name
+            $release->version = $config['version'];
         }
 
         if (isset($config['description'])) {

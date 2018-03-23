@@ -1,21 +1,20 @@
 <?php
 
-namespace craftcom\composer;
+namespace craftnet\composer;
 
 use Craft;
 use craft\base\Model;
-use craftcom\composer\vcs\BaseVcs;
-use craftcom\composer\vcs\GitHub;
-use craftcom\composer\vcs\Packagist;
-use craftcom\composer\vcs\VcsInterface;
-use craftcom\errors\MissingTokenException;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
-use craftcom\services\Oauth;
-use Github\Client;
+use craftnet\composer\vcs\BaseVcs;
+use craftnet\composer\vcs\GitHub;
+use craftnet\composer\vcs\Packagist;
+use craftnet\composer\vcs\VcsInterface;
+use craftnet\errors\MissingTokenException;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
+use Github\Client as GithubClient;
 
 /**
- * @property Plugin|null  $plugin
+ * @property Plugin|null $plugin
  * @property VcsInterface $vcs
  */
 class Package extends Model
@@ -109,9 +108,9 @@ class Package extends Model
 
         if ($this->_plugin === null) {
             $this->_plugin = Plugin::find()
-                ->packageId($this->id)
-                ->status(null)
-                ->one()
+                    ->packageId($this->id)
+                    ->status(null)
+                    ->one()
                 ?? false;
         }
 
@@ -130,7 +129,7 @@ class Package extends Model
             list($owner, $repo) = explode('/', trim($parsed['path'], '/'), 2);
 
             // Create an authenticated GitHub API client
-            $client = new Client();
+            $client = new GithubClient();
 
             $token = null;
             if ($plugin = $this->getPlugin()) {
@@ -151,7 +150,7 @@ class Package extends Model
             }
 
             if ($token) {
-                $client->authenticate($token, null, Client::AUTH_HTTP_TOKEN);
+                $client->authenticate($token, null, GithubClient::AUTH_HTTP_TOKEN);
             }
 
             return new GitHub($this, [

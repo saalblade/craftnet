@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use Craft;
 use craft\base\Element;
@@ -11,16 +11,21 @@ use craft\elements\Category;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
-use craftcom\behaviors\Developer;
-use craftcom\composer\Package;
-use craftcom\Module;
+use craft\helpers\Db;
+use craft\validators\UniqueValidator;
+use craftnet\behaviors\Developer;
+use craftnet\composer\Package;
+use craftnet\Module;
+use craftnet\records\Plugin as PluginRecord;
+use DateTime;
+use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\helpers\Markdown;
 
 /**
- * @property User       $developer
- * @property Package    $package
- * @property string     $eagerLoadedElements
+ * @property User $developer
+ * @property Package $package
+ * @property string $eagerLoadedElements
  * @property Asset|null $icon
  */
 class Plugin extends Element
@@ -68,12 +73,12 @@ class Plugin extends Element
 
     /**
      * @param ElementQueryInterface $elementQuery
-     * @param array|null            $disabledElementIds
-     * @param array                 $viewState
-     * @param string|null           $sourceKey
-     * @param string|null           $context
-     * @param bool                  $includeContainer
-     * @param bool                  $showCheckboxes
+     * @param array|null $disabledElementIds
+     * @param array $viewState
+     * @param string|null $sourceKey
+     * @param string|null $context
+     * @param bool $includeContainer
+     * @param bool $showCheckboxes
      *
      * @return string
      */
@@ -84,7 +89,7 @@ class Plugin extends Element
     }
 
     /**
-     * @param array  $sourceElements
+     * @param array $sourceElements
      * @param string $handle
      *
      * @return array|bool|false
@@ -92,17 +97,24 @@ class Plugin extends Element
     public static function eagerLoadingMap(array $sourceElements, string $handle)
     {
         switch ($handle) {
+            case 'editions':
+                $query = (new Query())
+                    ->select(['pluginId as source', 'id as target'])
+                    ->from(['craftnet_plugineditions'])
+                    ->where(['pluginId' => ArrayHelper::getColumn($sourceElements, 'id')]);
+                return ['elementType' => PluginEdition::class, 'map' => $query->all()];
+
             case 'developer':
                 $query = (new Query())
                     ->select(['id as source', 'developerId as target'])
-                    ->from(['craftcom_plugins'])
+                    ->from(['craftnet_plugins'])
                     ->where(['id' => ArrayHelper::getColumn($sourceElements, 'id')]);
                 return ['elementType' => User::class, 'map' => $query->all()];
 
             case 'icon':
                 $query = (new Query())
                     ->select(['id as source', 'iconId as target'])
-                    ->from(['craftcom_plugins'])
+                    ->from(['craftnet_plugins'])
                     ->where(['id' => ArrayHelper::getColumn($sourceElements, 'id')])
                     ->andWhere(['not', ['iconId' => null]]);
                 return ['elementType' => Asset::class, 'map' => $query->all()];
@@ -111,8 +123,8 @@ class Plugin extends Element
             case 'primaryCategory':
                 $query = (new Query())
                     ->select(['p.id as source', 'pc.categoryId as target'])
-                    ->from(['craftcom_plugins p'])
-                    ->innerJoin(['craftcom_plugincategories pc'], '[[pc.pluginId]] = [[p.id]]')
+                    ->from(['craftnet_plugins p'])
+                    ->innerJoin(['craftnet_plugincategories pc'], '[[pc.pluginId]] = [[p.id]]')
                     ->where(['p.id' => ArrayHelper::getColumn($sourceElements, 'id')])
                     ->orderBy(['pc.sortOrder' => SORT_ASC]);
                 if ($handle === 'primaryCategory') {
@@ -123,8 +135,8 @@ class Plugin extends Element
             case 'screenshots':
                 $query = (new Query())
                     ->select(['p.id as source', 'ps.assetId as target'])
-                    ->from(['craftcom_plugins p'])
-                    ->innerJoin(['craftcom_pluginscreenshots ps'], '[[ps.pluginId]] = [[p.id]]')
+                    ->from(['craftnet_plugins p'])
+                    ->innerJoin(['craftnet_pluginscreenshots ps'], '[[ps.pluginId]] = [[p.id]]')
                     ->where(['p.id' => ArrayHelper::getColumn($sourceElements, 'id')])
                     ->orderBy(['ps.sortOrder' => SORT_ASC]);
                 return ['elementType' => Asset::class, 'map' => $query->all()];
@@ -269,12 +281,12 @@ class Plugin extends Element
     public $handle;
 
     /**
-     * @var int|null The plugin license price
+     * @var float|null The plugin license price
      */
     public $price;
 
     /**
-     * @var int|null The plugin license renewal price
+     * @var float|null The plugin license renewal price
      */
     public $renewalPrice;
 
@@ -329,6 +341,16 @@ class Plugin extends Element
     public $keywords;
 
     /**
+     * @var DateTime|null The date that the plugin was approved
+     */
+    public $dateApproved;
+
+    /**
+     * @var PluginEdition[]|null
+     */
+    private $_editions;
+
+    /**
      * @var User|null
      */
     private $_developer;
@@ -356,7 +378,7 @@ class Plugin extends Element
     /**
      * @var bool Whether the plugin was just submitted for approval
      */
-    public $_submittedForApproval = false;
+    private $_submittedForApproval = false;
 
     /**
      * @var bool Whether the plugin was just approved
@@ -375,6 +397,9 @@ class Plugin extends Element
      */
     private $_history;
 
+    // Public Methods
+    // =========================================================================
+
     /**
      * @return string
      */
@@ -383,16 +408,36 @@ class Plugin extends Element
         return $this->name;
     }
 
-    // Public Methods
-    // =========================================================================
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
+        $names = parent::attributes();
+        ArrayHelper::removeValue($names, 'activeInstalls');
+        ArrayHelper::removeValue($names, 'devComments');
+        return $names;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function datetimeAttributes(): array
+    {
+        $attributes = parent::datetimeAttributes();
+        $attributes[] = 'dateApproved';
+        return $attributes;
+    }
 
     /**
      * @param string $handle
-     * @param array  $elements
+     * @param array $elements
      */
     public function setEagerLoadedElements(string $handle, array $elements)
     {
         switch ($handle) {
+            case 'editions':
+                $this->_editions = $elements;
             case 'developer':
                 $this->_developer = $elements[0] ?? null;
                 break;
@@ -412,6 +457,48 @@ class Plugin extends Element
     }
 
     /**
+     * @return PluginEdition[]
+     * @throws InvalidConfigException
+     */
+    public function getEditions(): array
+    {
+        if ($this->_editions !== null) {
+            return $this->_editions;
+        }
+        if ($this->id === null) {
+            throw new InvalidConfigException('Plugin is missing its ID.');
+        }
+
+        return $this->_editions = PluginEdition::find()
+            ->pluginId($this->id)
+            ->all();
+    }
+
+    /**
+     * @param string $handle
+     * @return PluginEdition
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     */
+    public function getEdition(string $handle): PluginEdition
+    {
+        if ($this->id === null) {
+            throw new InvalidConfigException('Plugin is missing its ID.');
+        }
+
+        $edition = PluginEdition::find()
+            ->pluginId($this->id)
+            ->handle($handle)
+            ->one();
+
+        if (!$edition) {
+            throw new InvalidArgumentException("Invalid plugin edition: {$handle}");
+        }
+
+        return $edition;
+    }
+
+    /**
      * @return User|Developer
      * @throws InvalidConfigException
      */
@@ -423,7 +510,7 @@ class Plugin extends Element
         if ($this->developerId === null) {
             throw new InvalidConfigException('Plugin is missing its developer ID');
         }
-        if (($user = User::find()->id($this->developerId)->status(null)->one()) === false) {
+        if (($user = User::find()->id($this->developerId)->status(null)->one()) === null) {
             throw new InvalidConfigException('Invalid developer ID: '.$this->developerId);
         }
         return $this->_developer = $user;
@@ -464,7 +551,7 @@ class Plugin extends Element
         if ($this->iconId === null) {
             return null;
         }
-        if (($asset = Asset::find()->id($this->iconId)->one()) === false) {
+        if (($asset = Asset::find()->id($this->iconId)->one()) === null) {
             throw new InvalidConfigException('Invalid asset ID: '.$this->iconId);
         }
         return $this->_icon = $asset;
@@ -479,7 +566,7 @@ class Plugin extends Element
             return $this->_categories;
         }
         return $this->_categories = Category::find()
-            ->innerJoin(['craftcom_plugincategories pc'], [
+            ->innerJoin(['craftnet_plugincategories pc'], [
                 'and',
                 '[[pc.categoryId]] = [[categories.id]]',
                 ['pc.pluginId' => $this->id]
@@ -505,7 +592,7 @@ class Plugin extends Element
             return $this->_screenshots;
         }
         return $this->_screenshots = Asset::find()
-            ->innerJoin(['craftcom_pluginscreenshots ps'], [
+            ->innerJoin(['craftnet_pluginscreenshots ps'], [
                 'and',
                 '[[ps.assetId]] = [[assets.id]]',
                 ['ps.pluginId' => $this->id]
@@ -612,6 +699,16 @@ class Plugin extends Element
             'on' => self::SCENARIO_LIVE,
         ];
 
+        $rules[] = [
+            [
+                'handle',
+            ],
+            UniqueValidator::class,
+            'targetClass' => PluginRecord::class,
+            'targetAttribute' => ['handle'],
+            'message' => Craft::t('yii', '{attribute} "{value}" has already been taken.'),
+        ];
+
         return $rules;
     }
 
@@ -685,6 +782,10 @@ class Plugin extends Element
             'keywords' => $this->keywords,
         ];
 
+        if ($this->_approved) {
+            $pluginData['dateApproved'] = Db::prepareDateForDb(new DateTime());
+        }
+
         $categoryData = [];
         foreach ($this->getCategories() as $i => $category) {
             $categoryData[] = [$this->id, $category->id, $i + 1];
@@ -698,29 +799,66 @@ class Plugin extends Element
         $db = Craft::$app->getDb();
 
         if ($isNew) {
+            // Save a new row in the plugins table
             $db->createCommand()
-                ->insert('craftcom_plugins', $pluginData)
+                ->insert('craftnet_plugins', $pluginData)
                 ->execute();
+
+            // Create a new edition/renewal
+            // todo: create multiple editions when we start supporting editions
+            $edition = new PluginEdition([
+                'pluginId' => $this->id,
+                'name' => 'Standard',
+                'handle' => 'standard',
+            ]);
+            $renewal = new PluginRenewal([
+                'pluginId' => $this->id,
+            ]);
         } else {
+            // Update the plugins table row
             $db->createCommand()
-                ->update('craftcom_plugins', $pluginData, ['id' => $this->id])
+                ->update('craftnet_plugins', $pluginData, ['id' => $this->id])
                 ->execute();
 
             // Also delete any existing category/screenshot relations
             $db->createCommand()
-                ->delete('craftcom_plugincategories', ['pluginId' => $this->id])
+                ->delete('craftnet_plugincategories', ['pluginId' => $this->id])
                 ->execute();
             $db->createCommand()
-                ->delete('craftcom_pluginscreenshots', ['pluginId' => $this->id])
+                ->delete('craftnet_pluginscreenshots', ['pluginId' => $this->id])
                 ->execute();
+
+            // Fetch the current edition/renewal
+            // todo: fetch multiple editions when we start supporting editions
+            $edition = PluginEdition::find()
+                ->pluginId($this->id)
+                ->one();
+            $renewal = PluginEdition::find()
+                ->pluginId($this->id)
+                ->one();
         }
 
+        // Save the new category/screenshot relations
         $db->createCommand()
-            ->batchInsert('craftcom_plugincategories', ['pluginId', 'categoryId', 'sortOrder'], $categoryData)
+            ->batchInsert('craftnet_plugincategories', ['pluginId', 'categoryId', 'sortOrder'], $categoryData)
             ->execute();
         $db->createCommand()
-            ->batchInsert('craftcom_pluginscreenshots', ['pluginId', 'assetId', 'sortOrder'], $screenshotData)
+            ->batchInsert('craftnet_pluginscreenshots', ['pluginId', 'assetId', 'sortOrder'], $screenshotData)
             ->execute();
+
+        // Save the edition/renewal
+        // todo: save all editions when we start supporting editions
+        if ($isNew || $edition->price != $this->price || $edition->renewalPrice != $this->renewalPrice) {
+            $edition->price = $this->price;
+            $edition->renewalPrice = $this->price;
+            Craft::$app->getElements()->saveElement($edition);
+
+            if ($isNew) {
+                $renewal->editionId = $edition->id;
+            }
+            $renewal->price = $edition->renewalPrice;
+            Craft::$app->getElements()->saveElement($renewal);
+        }
 
         // If this is enabled, clear the plugin store cache.
         if ($this->enabled) {
@@ -835,7 +973,8 @@ EOD;
                 return "<a href='http://packagist.org/packages/{$this->packageName}' target='_blank'>{$this->packageName}</a>";
             case 'repository':
             case 'documentationUrl':
-                return $this->$attribute ? "<a href='{$this->$attribute}' target='_blank'>{$this->$attribute}</a>" : '';
+                $url = $this->$attribute;
+                return $url ? "<a href='{$url}' target='_blank'>".preg_replace('/^https?:\/\/(?:www\.)?github\.com\//', '', $url).'</a>' : '';
             case 'price':
             case 'renewalPrice':
                 return $this->$attribute ? Craft::$app->getFormatter()->asCurrency($this->$attribute, 'USD') : 'Free';

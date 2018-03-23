@@ -1,13 +1,13 @@
 <?php
 
-namespace craftcom\oauthserver\models;
+namespace craftnet\oauthserver\models;
 
 use craft\base\Model;
 
 /**
  * Class Settings
  *
- * @package namespace craftcom\oauthserver\models
+ * @package namespace craftnet\oauthserver\models
  */
 class Settings extends Model
 {

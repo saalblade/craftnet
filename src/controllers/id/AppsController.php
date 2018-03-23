@@ -1,12 +1,12 @@
 <?php
 
-namespace craftcom\controllers\id;
+namespace craftnet\controllers\id;
 
 use Craft;
 use craft\helpers\Db;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
-use craftcom\records\VcsToken;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
+use craftnet\records\VcsToken;
 use Exception;
 use yii\web\Response;
 
@@ -14,8 +14,6 @@ use yii\web\Response;
  * Class AppsController
  *
  * @property Module $module
- *
- * @package craftcom\controllers\id
  */
 class AppsController extends BaseController
 {

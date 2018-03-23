@@ -1,11 +1,12 @@
 <?php
 
-namespace craftcom\services;
+namespace craftnet\services;
 
 use Craft;
 use craft\db\Query;
-use craft\helpers\Json;
-use craftcom\Module;
+use Github\Client as GithubClient;
+use Github\Exception\RuntimeException;
+use Github\ResultPager;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\GithubIdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
@@ -41,42 +42,36 @@ class Oauth extends Component
             $token = $this->getOauthTokenByUserId($config['class'], $currentUser->id);
 
             if ($token) {
-
+                $accessToken = $this->createAccessToken($token);
                 try {
-                    $accessToken = $this->createAccessToken($token);
                     $resourceOwner = $oauthProvider->getResourceOwner($accessToken);
-                    $account = $resourceOwner->toArray();
-
-                    $repositories = [];
-
-                    if ($handle === self::PROVIDER_GITHUB) {
-                        $page = 1;
-                        do {
-                            $response = Craft::createGuzzleClient()->request('GET', 'https://api.github.com/user/repos', [
-                                'headers' => [
-                                    'Accept' => 'application/vnd.github.v3+json',
-                                    'Authorization' => 'token '.$accessToken->getToken(),
-                                ],
-                                'query' => [
-                                    'per_page' => 100,
-                                    'page' => $page++
-                                ]
-                            ]);
-                            $body = $response->getBody();
-                            $contents = $body->getContents();
-                            $repos = Json::decode($contents);
-                            $repositories = array_merge($repositories, $repos);
-                        } while (count($repos) === 100);
-                    }
-                }
-                // Something happened with oAuth
-                catch (GithubIdentityProviderException $e) {
+                } catch (GithubIdentityProviderException $e) {
                     // Bad credentials. Likely our oAuth app has been revoked.
                     // Remove the token locally.
-                    if ($e->getCode() == 401) {
+                    if ($e->getCode() === 401) {
                         $this->deleteAccessToken($currentUser->id, $config['class']);
                         Craft::warning('Got a 401 bad credentials response when attempting to validate a GitHub oAuth token for user ID: '.$currentUser->id.'. Likely our Github oAuth app has been removed or permissions revoked.', __METHOD__);
-                        continue;
+                    }
+                    continue;
+                }
+                $account = $resourceOwner->toArray();
+
+                $client = new GithubClient();
+                $client->authenticate($accessToken->getToken(), null, GithubClient::AUTH_HTTP_TOKEN);
+                $api = $client->currentUser();
+                $paginator = new ResultPager($client);
+                try {
+                    $repos = $paginator->fetchAll($api, 'repositories', ['public']);
+                } catch (RuntimeException $e) {
+                    Craft::error('Error fetching user repos: '.$e->getMessage());
+                    Craft::$app->getErrorHandler()->logException($e);
+                    continue;
+                }
+
+                foreach ($repos as $repo) {
+                    // Make sure they have administrative privileges on the repo
+                    if ($repo['permissions']['admin']) {
+                        $repositories[] = $repo;
                     }
                 }
 
@@ -123,7 +118,7 @@ class Oauth extends Component
 
     /**
      * @param string $providerClass
-     * @param int    $userId
+     * @param int $userId
      *
      * @return string|null|false
      */
@@ -131,14 +126,14 @@ class Oauth extends Component
     {
         return (new Query())
             ->select(['accessToken'])
-            ->from(['craftcom_vcstokens'])
+            ->from(['craftnet_vcstokens'])
             ->where(['userId' => $userId, 'provider' => $providerClass])
             ->scalar();
     }
 
     /**
      * @param string $providerClass
-     * @param int    $userId
+     * @param int $userId
      *
      * @return array|null
      */
@@ -155,7 +150,7 @@ class Oauth extends Component
                 'expiryDate',
                 'refreshToken',
             ])
-            ->from(['craftcom_vcstokens'])
+            ->from(['craftnet_vcstokens'])
             ->where(['userId' => $userId, 'provider' => $providerClass])
             ->one();
     }
@@ -189,7 +184,7 @@ class Oauth extends Component
     public function deleteAccessToken($userId, $provider)
     {
         Craft::$app->getDb()->createCommand()
-            ->delete('craftcom_vcstokens', ['userId' => $userId, 'provider' => $provider])
+            ->delete('craftnet_vcstokens', ['userId' => $userId, 'provider' => $provider])
             ->execute();
     }
 }

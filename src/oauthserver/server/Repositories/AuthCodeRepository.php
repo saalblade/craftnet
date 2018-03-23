@@ -1,11 +1,11 @@
 <?php
 
-namespace craftcom\oauthserver\server\Repositories;
+namespace craftnet\oauthserver\server\Repositories;
 
 
-use craftcom\oauthserver\models\AuthCode;
-use craftcom\oauthserver\Module as OauthServer;
-use craftcom\oauthserver\server\Entities\AuthCodeEntity;
+use craftnet\oauthserver\models\AuthCode;
+use craftnet\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\server\Entities\AuthCodeEntity;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AuthCodeTrait;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;

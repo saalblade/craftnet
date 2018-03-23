@@ -1,26 +1,50 @@
 <?php
 
 use craft\config\DbConfig;
-use craftcom\services\Oauth;
+use craftnet\services\Oauth;
 
 return [
     '*' => [
         'bootstrap' => [
-            'craftcom',
+            'craftnet',
             'oauth-server',
             'queue',
         ],
         'modules' => [
-            'craftcom' => [
-                'class' => \craftcom\Module::class,
+            'craftnet' => [
+                'class' => \craftnet\Module::class,
                 'components' => [
+                    'cmsLicenseManager' => [
+                        'class' => craftnet\cms\CmsLicenseManager::class,
+                        'devDomains' => require __DIR__.'/dev-domains.php',
+                        'devTlds' => ['dev'],
+                        'devSubdomainWords' => [
+                            'acc',
+                            'acceptance',
+                            'craftdemo',
+                            'dev',
+                            'loc',
+                            'local',
+                            'sandbox',
+                            'stage',
+                            'staging',
+                            'test',
+                            'testing',
+                        ]
+                    ],
+                    'invoiceManager' => [
+                        'class' => craftnet\invoices\InvoiceManager::class,
+                    ],
+                    'pluginLicenseManager' => [
+                        'class' => craftnet\plugins\PluginLicenseManager::class,
+                    ],
                     'packageManager' => [
-                        'class' => craftcom\composer\PackageManager::class,
+                        'class' => craftnet\composer\PackageManager::class,
                         'githubFallbackTokens' => getenv('GITHUB_FALLBACK_TOKENS'),
                         'requirePluginVcsTokens' => false,
                     ],
                     'jsonDumper' => [
-                        'class' => \craftcom\composer\JsonDumper::class,
+                        'class' => craftnet\composer\JsonDumper::class,
                         'composerWebroot' => getenv('COMPOSER_WEBROOT'),
                     ],
                     'oauth' => [
@@ -45,8 +69,13 @@ return [
                 ]
             ],
             'oauth-server' => [
-                'class' => craftcom\oauthserver\Module::class,
+                'class' => craftnet\oauthserver\Module::class,
             ],
+        ],
+        'components' => [
+            'errorHandler' => [
+                'memoryReserveSize' => 1024000
+            ]
         ],
     ],
     'prod' => [
@@ -64,6 +93,9 @@ return [
                     'port' => getenv('ELASTICACHE_PORT'),
                     'database' => 0,
                 ],
+            ],
+            'mutex' => [
+                'class' => \yii\redis\Mutex::class,
             ],
             'queue' => [
                 'class' => pixelandtonic\yii\queue\sqs\Queue::class,
@@ -88,19 +120,13 @@ return [
                 $session->authAccessParam = $stateKeyPrefix.'__auth_access';
                 return $session;
             },
-            'logDb' => function() {
-                $logDbConfig = Craft::$app->getConfig()->getConfigFromFile('logdb');
-                return craft\db\Connection::createFromConfig(new DbConfig($logDbConfig));
-            },
             'log' => [
+                'class' => yii\log\Dispatcher::class,
                 'targets' => [
                     [
-                        'class' => craftcom\logs\DbTarget::class,
-                    ],
-                    [
-                        'class' => craft\log\FileTarget::class,
-                        'levels' => !YII_DEBUG ? yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING : yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING | yii\log\Logger::LEVEL_INFO | yii\log\Logger::LEVEL_TRACE | yii\log\Logger::LEVEL_PROFILE,
-                        'logFile' => '@storage/logs/web.log',
+                        'class' => craftnet\logs\DbTarget::class,
+                        'logTable' => 'apilog.logs',
+                        'categories' => ['craftnet\\*'],
                     ],
                 ],
             ],

@@ -1,1 +1,1 @@
-{"version":3,"file":"web/craftidresources/dist/css/plugins.css","sources":[],"mappings":"","sourceRoot":""}
+{"version":3,"sources":["webpack:///./web/craftidresources/src/sass/plugins.scss"],"names":[],"mappings":"AAAA,aACE,eACA,eAAgB","file":"css/plugins.css","sourcesContent":[".plugin-icon {\n  max-width: 40px;\n  max-height: 40px;\n}\n\n\n// WEBPACK FOOTER //\n// ./web/craftidresources/src/sass/plugins.scss"],"sourceRoot":""}

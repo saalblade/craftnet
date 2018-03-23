@@ -39,12 +39,19 @@ return [
     'AmCommand' => [
         'handle' => 'command-palette',
     ],
+    'TheArchitect' => [
+        'handle' => 'architect',
+    ],
     'AssetRev' => [
         'handle' => 'assetrev',
     ],
     'BusinessLogic' => [
         'statusColor' => 'red',
         'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
+    ],
+    'CacheFlag' => [
+        'statusColor' => 'orange',
+        'status' => 'Coming soon'
     ],
     'Calendars' => [
         'statusColor' => 'orange',
@@ -128,6 +135,10 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
     ],
+    'Oauth' => [
+        'statusColor' => 'red',
+        'status' => 'Unnecessary thanks to Craft 3’s inclusion of an OAuth 2 client library'
+    ],
     'PhpTweak' => [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
@@ -148,6 +159,11 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (use [Redactor](https://github.com/craftcms/redactor) instead)'
     ],
+    'RetconHtml' => [
+        'handle' => 'retcon',
+        'statusColor' => 'orange',
+        'status' => 'Coming soon'
+    ],
     'Retour' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Redirect Manager](https://github.com/Dolphiq/craft3-plugin-redirect) could be used instead'
@@ -164,9 +180,6 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development.'
     ],
-    'SimpleMap' => [
-        'handle' => 'simplemap',
-    ],
     'SmartMap' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
@@ -175,10 +188,17 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/typography.html#smartypants) could be used instead.'
     ],
+    'SimpleMap' => [
+        'handle' => 'simplemap',
+    ],
     'Sitemap' => [
         'handle' => 'sitemap-tmp',
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) could be used instead',
+    ],
+    'SmartMap' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
     ],
     'SproutFields' => [
         'statusColor' => 'orange',
@@ -191,6 +211,9 @@ return [
     'StarRatings' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
+    ],
+    'SuperSort' => [
+        'handle' => 'supersort',
     ],
     'Upvote' => [
         'statusColor' => 'orange',

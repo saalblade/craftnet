@@ -1,9 +1,9 @@
 <?php
 
-namespace craftcom\oauthserver\server\Repositories;
+namespace craftnet\oauthserver\server\Repositories;
 
-use craftcom\oauthserver\Module;
-use craftcom\oauthserver\server\Entities\ClientEntity;
+use craftnet\oauthserver\Module;
+use craftnet\oauthserver\server\Entities\ClientEntity;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
@@ -15,10 +15,10 @@ class ClientRepository implements ClientRepositoryInterface
     /**
      * Get a client.
      *
-     * @param string      $clientIdentifier   The client's identifier
-     * @param string      $grantType          The grant type used
-     * @param null|string $clientSecret       The client's secret (if sent)
-     * @param bool        $mustValidateSecret If true the client must attempt to validate the secret if the client
+     * @param string $clientIdentifier The client's identifier
+     * @param string $grantType The grant type used
+     * @param null|string $clientSecret The client's secret (if sent)
+     * @param bool $mustValidateSecret If true the client must attempt to validate the secret if the client
      *                                        is confidential
      *
      * @return ClientEntityInterface

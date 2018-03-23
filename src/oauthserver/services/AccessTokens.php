@@ -1,17 +1,15 @@
 <?php
 
-namespace craftcom\oauthserver\services;
+namespace craftnet\oauthserver\services;
 
 use Craft;
-use craftcom\oauthserver\models\AccessToken;
-use craftcom\oauthserver\Module;
-use craftcom\oauthserver\records\AccessToken as AccessTokenRecord;
+use craftnet\oauthserver\models\AccessToken;
+use craftnet\oauthserver\Module;
+use craftnet\oauthserver\records\AccessToken as AccessTokenRecord;
 use yii\base\Component;
 
 /**
  * Class AccessTokens
- *
- * @package craftcom\oauthserver\services
  */
 class AccessTokens extends Component
 {
@@ -77,7 +75,7 @@ class AccessTokens extends Component
     }
 
     /**
-     * @param      $identifier
+     * @param $identifier
      * @param bool $isRevoked
      *
      * @return AccessToken

@@ -1,26 +1,15 @@
 <?php
 
-namespace craftcom\controllers\id;
+namespace craftnet\controllers\id;
 
 use Craft;
 use craft\elements\Category;
-use craft\elements\Entry;
 use craft\elements\User;
-use craft\helpers\Json;
-use craftcom\behaviors\Developer;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
-use League\OAuth2\Client\Token\AccessToken;
+use craftnet\Module;
 use yii\web\Response;
-use craft\db\Query;
-use League\OAuth2\Client\Provider\Github;
-
 
 /**
  * Class CraftIdController
- *
- * @package craftcom\controllers\id
  */
 class CraftIdController extends BaseController
 {
@@ -35,8 +24,11 @@ class CraftIdController extends BaseController
     public function actionIndex(): Response
     {
         // Current user
-        $currentUserId = Craft::$app->getRequest()->getParam('userId');
-        $currentUser = Craft::$app->getUsers()->getUserById($currentUserId);
+        $currentUser = Craft::$app->getUser()->getIdentity();
+
+        // Craft ID config
+        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+        $enableCommercialFeatures = $craftIdConfig['enableCommercialFeatures'];
 
         // Data
         $data = [
@@ -63,16 +55,17 @@ class CraftIdController extends BaseController
                 'photoId' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null),
                 // 'photoUrl' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getUrl() : null),
                 'photoUrl' => $currentUser->getThumbUrl(200),
+                'hasApiToken' => ($currentUser->apiToken !== null),
             ],
             'apps' => Module::getInstance()->getOauth()->getApps(),
             'plugins' => $this->_plugins($currentUser),
-            'craftLicenses' => $this->_craftLicenses($currentUser),
+            'cmsLicenses' => $this->_cmsLicenses($currentUser),
             'pluginLicenses' => $this->_pluginLicenses($currentUser),
             'customers' => $this->_customers($currentUser),
-            'payouts' => $this->_payouts(),
-            'payoutsScheduled' => $this->_scheduledPayouts(),
-            'payments' => $this->_payments(),
+            'sales' => $this->_sales(),
+            'upcomingInvoice' => $this->_upcomingInvoice(),
             'categories' => $this->_pluginCategories(),
+            'enableCommercialFeatures' => $enableCommercialFeatures
         ];
 
         return $this->asJson($data);
@@ -82,15 +75,15 @@ class CraftIdController extends BaseController
     // =========================================================================
 
     /**
-     * @param User|Developer $currentUser
+     * @param User $user
      *
      * @return array
      */
-    private function _plugins(User $currentUser): array
+    private function _plugins(User $user): array
     {
         $ret = [];
 
-        foreach ($currentUser->getPlugins() as $plugin) {
+        foreach ($user->getPlugins() as $plugin) {
             $ret[] = $this->pluginTransformer($plugin);
         }
 
@@ -98,199 +91,116 @@ class CraftIdController extends BaseController
     }
 
     /**
-     * @param User|Developer $currentUser
+     * @param User $user
      *
-     * @return array
+     * @return array CMS licenses.
      */
-    private function _craftLicenses(User $currentUser): array
+    private function _cmsLicenses(User $user): array
     {
-        $ret = [];
-        $craftLicenseEntries = Entry::find()->section('licenses')->type('craftLicense')->authorId($currentUser->id)->all();
-
-        foreach ($craftLicenseEntries as $craftLicenseEntry) {
-            $craftLicense = $craftLicenseEntry->toArray();
-
-            $plugin = null;
-
-            if ($craftLicenseEntry->plugin) {
-                $plugin = $craftLicenseEntry->plugin->toArray();
-            }
-
-            $craftLicense['plugin'] = $plugin;
-            $craftLicense['author'] = $craftLicenseEntry->getAuthor()->toArray();
-            $craftLicense['type'] = $craftLicenseEntry->getType()->handle;
-            $ret[] = $craftLicense;
-        }
-
-        return $ret;
+        return Module::getInstance()->getCmsLicenseManager()->getLicensesArrayByOwner($user);
     }
 
     /**
-     * @param User|Developer $currentUser
+     * @param User $user
      *
-     * @return array
+     * @return array Plugin licenses.
      */
-    private function _pluginLicenses(User $currentUser): array
+    private function _pluginLicenses(User $user): array
     {
-        $ret = [];
-        $pluginLicenseEntries = Entry::find()
-            ->section('licenses')
-            ->type('pluginLicense')
-            ->authorId($currentUser->id)
-            ->all();
-
-        foreach ($pluginLicenseEntries as $pluginLicenseEntry) {
-            $pluginLicense = $pluginLicenseEntry->toArray();
-            $plugin = $pluginLicenseEntry->plugin;
-            $pluginLicense['plugin'] = $plugin->toArray();
-            $craftLicense = $pluginLicenseEntry->craftLicense->one();
-
-            if ($craftLicense) {
-                $pluginLicense['craftLicense'] = $craftLicense->toArray();
-            } else {
-                $pluginLicense['craftLicense'] = null;
-            }
-            $pluginLicense['type'] = $pluginLicenseEntry->getType()->handle;
-            $pluginLicense['author'] = $pluginLicenseEntry->getAuthor()->toArray();
-
-            $ret[] = $pluginLicense;
-        }
-
-        return $ret;
+        return Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
     }
 
     /**
-     * @param User|Developer $currentUser
+     * @param User $user
      *
      * @return array
      */
-    private function _customers(User $currentUser): array
-    {
-        $ret = [];
-
-        foreach ($currentUser->getPlugins() as $pluginElement) {
-            $entries = Entry::find()->section('licenses')->relatedTo($pluginElement)->all();
-
-            foreach ($entries as $entry) {
-                $found = false;
-
-                foreach ($ret as $c) {
-                    if ($c['id'] == $entry->getAuthor()->id) {
-                        $found = true;
-                    }
-                }
-
-                if (!$found) {
-                    $customer = [
-                        'id' => $entry->getAuthor()->id,
-                        'email' => $entry->getAuthor()->email,
-                        'username' => $entry->getAuthor()->username,
-                        'fullName' => $entry->getAuthor()->fullName
-                    ];
-
-                    $ret[] = $customer;
-                }
-            }
-        }
-
-        return $ret;
-    }
-
-    /**
-     * @return array
-     */
-    private function _payouts(): array
+    private function _customers(User $user): array
     {
         return [
             [
                 'id' => 1,
-                'amount' => 99.00,
-                'date' => '1 year ago',
-                'bank' => [
-                    'name' => 'BNP Parisbas',
-                    'accountNumber' => '2345678923456783456',
-                ]
+                'email' => 'ben@pixelandtonic.com',
+                'username' => 'benjamin',
+                'fullName' => 'Benjamin David',
             ],
             [
                 'id' => 2,
-                'amount' => 99.00,
-                'date' => '1 year ago',
-                'bank' => [
-                    'name' => 'BNP Parisbas',
-                    'accountNumber' => '2345678923456783456',
-                ]
-            ],
+                'email' => 'brandon@pixelandtonic.com',
+                'username' => 'brandon',
+                'fullName' => 'Brandon Kelly',
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function _sales(): array
+    {
+        return [
             [
                 'id' => 3,
-                'amount' => 298.00,
-                'date' => '1 year ago',
-                'bank' => [
-                    'name' => 'BNP Parisbas',
-                    'accountNumber' => '2345678923456783456',
-                ]
+                'plugin' => ['id' => 6, 'name' => 'Analytics'],
+                'type' => 'license',
+                'grossAmount' => 99.00,
+                'netAmount' => 79.20,
+                'customer' => [
+                    'id' => 2,
+                    'name' => 'Brandon Kelly',
+                    'email' => 'brandon@pixelandtonic.com',
+                ],
+                'date' => date('Y-m-d'),
             ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function _scheduledPayouts(): array
-    {
-        return [
             [
-                'id' => 8,
-                'amount' => 116.00,
-                'date' => 'Tomorrow',
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function _payments(): array
-    {
-        return [
-            [
-                'items' => [['id' => 6, 'name' => 'Analytics']],
-                'amount' => 99.00,
+                'id' => 2,
+                'plugin' => ['id' => 6, 'name' => 'Analytics'],
+                'type' => 'renewal',
+                'grossAmount' => 29.00,
+                'netAmount' => 23.20,
                 'customer' => [
                     'id' => 1,
                     'name' => 'Benjamin David',
                     'email' => 'ben@pixelandtonic.com',
                 ],
-                'date' => '3 days ago',
+                'date' => date('Y-m-d'),
             ],
             [
-                'items' => [['id' => 6, 'name' => 'Analytics']],
-                'amount' => 99.00,
+                'id' => 1,
+                'plugin' => ['id' => 6, 'name' => 'Analytics'],
+                'type' => 'license',
+                'grossAmount' => 99.00,
+                'netAmount' => 79.20,
                 'customer' => [
-                    'id' => 15,
-                    'name' => 'Andrew Welsh',
-                    'email' => 'andrew@nystudio107.com',
+                    'id' => 1,
+                    'name' => 'Benjamin David',
+                    'email' => 'ben@pixelandtonic.com',
                 ],
-                'date' => '1 year ago',
+                'date' => date('Y-m-d', strtotime('-1 year')),
             ],
-            [
-                'items' => [['id' => 7, 'name' => 'Videos']],
-                'amount' => 99.00,
-                'customer' => [
-                    'id' => 15,
-                    'name' => 'Andrew Welsh',
-                    'email' => 'andrew@nystudio107.com',
-                ],
-                'date' => '1 year ago',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function _upcomingInvoice(): array
+    {
+        return [
+            'datePaid' => date('Y-m-d'),
+            'paymentMethod' => [
+                'type' => 'visa',
+                'last4' => '2424',
             ],
-            [
-                'items' => [['id' => 6, 'name' => 'Analytics'], ['id' => 7, 'name' => 'Videos']],
-                'amount' => 298.00,
-                'customer' => [
-                    'id' => 15,
-                    'name' => 'Andrew Welsh',
-                    'email' => 'andrew@nystudio107.com',
-                ],
-                'date' => '1 year ago',
+            'items' => [
+                ['id' => 6, 'name' => 'Analytics', 'amount' => 29, 'type' => 'renewal'],
+                ['id' => 8, 'name' => 'Social', 'amount' => 99, 'type' => 'license']
+            ],
+            'totalPrice' => 128,
+            'customer' => [
+                'id' => 1,
+                'name' => 'Benjamin David',
+                'email' => 'ben@pixelandtonic.com',
             ],
         ];
     }

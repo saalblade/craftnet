@@ -1,11 +1,23 @@
 <template>
-    <textarea class="form-control" type="text" :id="id" :placeholder="placeholder" autocomplete="off" :value="value" :cols="cols" @input="$emit('input', $event.target.value)"></textarea>
+	<textarea
+			:cols="cols"
+			:disabled="disabled"
+			:id="id"
+			:placeholder="placeholder"
+			:value="value"
+			@input="$emit('input', $event.target.value)"
+			:autocapitalize="autocapitalize"
+			:spellcheck="spellcheck"
+			autocomplete="off"
+			class="form-control"
+			type="text">
+	</textarea>
 </template>
 
 <script>
     export default {
 
-        props: ['id', 'placeholder', 'value', 'cols'],
+        props: ['id', 'placeholder', 'value', 'cols', 'disabled', 'autocapitalize', 'spellcheck'],
 
     }
 </script>

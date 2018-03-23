@@ -1,13 +1,11 @@
 <?php
 
-namespace craftcom\oauthserver\models;
+namespace craftnet\oauthserver\models;
 
 use craft\base\Model;
 
 /**
  * Class RefreshToken
- *
- * @package craftcom\oauthserver\models
  */
 class RefreshToken extends Model
 {

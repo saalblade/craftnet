@@ -5,80 +5,75 @@
         <template v-if="notification">
             <div id="notifications-wrapper" :class="{'hide': !notification }">
                 <div id="notifications">
-                    <div class="notification bg-success" :class="'bg-'+notification.type">{{ notification.message }}</div>
-
+                    <div class="notification" :class="notification.type">{{ notification.message }}</div>
                 </div>
             </div>
         </template>
 
-        <nav class="navbar navbar-expand navbar-light bg-light mb-5">
-            <div class="container">
-                <router-link class="navbar-brand ml-3" to="/">
-                    Craft ID
-                </router-link>
-
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/logout">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
         <template v-if="loading">
             <div class="text-center">
-                <div class="spinner big mt-5"></div>
+                <div class="spinner big mt-8"></div>
             </div>
         </template>
 
         <template v-else>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <template v-if="userIsInGroup('staff')">
-                            <h5>Account</h5>
-                            <ul class="nav nav-pills flex-column">
-                                <li class="nav-item"><router-link class="nav-link" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></li>
-                                <li class="nav-item"><router-link class="nav-link" to="/account/billing"><i class="fa fa-file-text-o"></i> Billing</router-link></li>
-                                <li class="nav-item"><router-link class="nav-link" to="/account/profile"><i class="fa fa-link"></i> Profile</router-link></li>
-                                <li class="nav-item"><router-link class="nav-link" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
+            <div class="app">
+                <div class="header-container">
+                    <div class="header">
+                        <div class="actions-left">
+                            <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()"><i class="fas fa-bars"></i></a>
+                        </div>
+                        <router-link class="navbar-brand" to="/">Craft ID</router-link>
+
+                        <div class="actions-right">
+                            <ul>
+                                <li><a href="/logout">Logout</a></li>
                             </ul>
-
-                            <template v-if="userIsInGroup('developers')">
-                                <h5 class="mt-3">Developer</h5>
-                                <ul class="nav nav-pills flex-column">
-                                    <li class="nav-item"><router-link class="nav-link" to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
-                                    <li class="nav-item"><router-link class="nav-link" to="/developer/customers"><i class="fa fa-group"></i> Customers</router-link></li>
-                                    <li class="nav-item"><router-link class="nav-link" to="/developer/payments"><i class="fa fa-credit-card"></i> Payments</router-link></li>
-                                    <li class="nav-item"><router-link class="nav-link" to="/developer/payouts"><i class="fa fa-dollar"></i> Payouts</router-link></li>
-                                </ul>
-                            </template>
-
-                            <template v-if="currentUser.enableShowcaseFeatures">
-                                <h5 class="mt-3">Showcase</h5>
-                                <ul class="nav nav-pills flex-column">
-                                    <li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-heart"></i> Activity</a></li>
-                                    <li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-image"></i> Projects</a></li>
-                                    <li class="nav-item"><a class="nav-link disabled" href="#"><i class="fa fa-industry"></i> Agency Profile</a></li>
-                                </ul>
-                            </template>
-                        </template>
-
-                        <template v-else>
-                            <h5>Account</h5>
-                            <ul class="nav nav-pills flex-column">
-                                <li v-if="userIsInGroup('developers')" class="nav-item"><router-link class="nav-link" to="/developer/plugins"><i class="fa fa-plug"></i> Plugins</router-link></li>
-                                <li v-if="userIsInGroup('developers')" class="nav-item"><router-link class="nav-link" to="/account/profile"><i class="fa fa-link"></i> Profile</router-link></li>
-                                <li class="nav-item"><router-link class="nav-link" to="/account/settings"><i class="fa fa-cog"></i> Settings</router-link></li>
-                            </ul>
-                        </template>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="col-md-9">
-                        <div class="content">
-                            <router-view></router-view>
+                <div class="content-container">
+                    <div class="content">
+                        <div id="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
+                            <div class="sidenav">
+                                <h5><router-link @click.native="closeSidebar()" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></h5>
+                                <ul>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/licenses/cms">Craft CMS</router-link></li>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
+                                    <li v-if="enableCommercialFeatures"><router-link @click.native="closeSidebar()" to="/account/licenses/renew">Renew Licenses ({{licenses.length}})</router-link></li>
+                                </ul>
+
+                                <template v-if="userIsInGroup('developers')">
+                                    <h5><router-link @click.native="closeSidebar()" to="/developer"><i class="fa fa-plug"></i> Developer</router-link></h5>
+                                    <ul>
+                                        <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
+                                        <li v-if="userIsInGroup('staff') && enableCommercialFeatures"><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
+                                    </ul>
+                                </template>
+
+                                <template v-if="userIsInGroup('staff') && currentUser.enableShowcaseFeatures">
+                                    <h5><a class="disabled" href="#"><i class="fa fa-image"></i> Showcase</a></h5>
+                                    <ul>
+                                        <li><a class="disabled" href="#">Activity</a></li>
+                                        <li><a class="disabled" href="#">Projects</a></li>
+                                        <li><a class="disabled" href="#">Agency Profile</a></li>
+                                    </ul>
+                                </template>
+
+                                <h5><router-link @click.native="closeSidebar()" to="/account"><i class="fas fa-user"></i> Account</router-link></h5>
+                                <ul>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
+                                    <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="main">
+                            <router-view :key="$route.path"></router-view>
                         </div>
                     </div>
                 </div>
@@ -90,7 +85,7 @@
 <script>
     import AuthManager from './components/AuthManager';
     import router from './router';
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
 
     export default {
 
@@ -102,14 +97,44 @@
 
         props: ['notification', 'loading'],
 
+        data() {
+            return {
+                showingSidebar: false,
+            }
+        },
+
         computed: {
 
             ...mapGetters({
                 currentUser: 'currentUser',
                 userIsInGroup: 'userIsInGroup',
+                licenses: 'licenses',
+                enableCommercialFeatures: 'enableCommercialFeatures',
             }),
 
-        }
+        },
+
+        methods: {
+
+            /**
+             * Toggles the sidebar.
+             */
+            toggleSidebar() {
+                this.showingSidebar = !this.showingSidebar;
+            },
+
+            /**
+             * Closes the sidebar.
+             */
+            closeSidebar() {
+                this.showingSidebar = false;
+            }
+
+        },
 
     }
 </script>
+
+<style lang="scss">
+    @import './../sass/app.scss';
+</style>

@@ -1,27 +1,49 @@
 let mix = require('laravel-mix');
-
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for your application, as well as bundling up your JS files.
- |
- */
+let tailwindcss = require('tailwindcss');
 const sourcePath = 'web/craftidresources/src';
 const distPath = 'web/craftidresources/dist';
 
-mix.setPublicPath("./");
+// Set a prefix for all generated asset paths.
+mix.setResourceRoot("/craftidresources/dist/");
 
-mix.js(sourcePath + '/js/app.js', distPath + '/js/')
-    .js(sourcePath + '/js/site.js', distPath + '/js/')
-    .sass(sourcePath + '/sass/app.scss', distPath + '/css/')
-    .sass(sourcePath + '/sass/site.scss', distPath + '/css/')
-    .sass(sourcePath + '/sass/plugins.scss', distPath + '/css/')
+// Override the default path to your project's public directory.
+mix.setPublicPath(distPath);
+
+mix.js(sourcePath + '/js/app.js', 'js')
+    .js(sourcePath + '/js/site.js', 'js')
+    .sass(sourcePath + '/sass/app.scss', 'css')
+    .sass(sourcePath + '/sass/site.scss', 'css')
+    .sass(sourcePath + '/sass/plugins.scss', 'css')
     .options({
-        processCssUrls: false
+        processCssUrls: false,
+        postCss: [ tailwindcss('./tailwind-config.js') ],
     })
     .copy(sourcePath + '/images', distPath + '/images/')
     .sourceMaps();
+
+
+// https://sebastiandedeyne.com/posts/2017/typescript-with-laravel-mix/
+
+mix.webpackConfig({
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+                options: { appendTsSuffixTo: [/\.vue$/] },
+                exclude: /node_modules/,
+            },
+        ],
+    },
+    resolve: {
+        extensions: ['*', '.js', '.jsx', '.vue', '.ts', '.tsx'],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
+    },
+});
+
+// Run versioning on production only.
+if (mix.inProduction()) {
+    mix.version();
+}

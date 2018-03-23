@@ -1,10 +1,10 @@
 <?php
 
-namespace craftcom\composer\vcs;
+namespace craftnet\composer\vcs;
 
 use Craft;
 use craft\helpers\Json;
-use craftcom\composer\PackageRelease;
+use craftnet\composer\PackageRelease;
 use GuzzleHttp\Exception\ClientException;
 use yii\base\Exception;
 use yii\base\NotSupportedException;
@@ -26,7 +26,7 @@ class Packagist extends BaseVcs
 
     /**
      * @param string $uri
-     * @param null   $cacheDuration
+     * @param null $cacheDuration
      *
      * @return array
      */

@@ -1,12 +1,10 @@
 <?php
 
-namespace craftcom\controllers\id;
+namespace craftnet\controllers\id;
 
 use craft\helpers\ArrayHelper;
-use craft\helpers\Json;
 use craft\web\Controller;
-use craftcom\plugins\Plugin;
-use GuzzleHttp\Client;
+use craftnet\plugins\Plugin;
 use yii\helpers\Markdown;
 
 /**
@@ -50,10 +48,10 @@ abstract class BaseController extends Controller
         $lastHistoryNote = null;
         $history = $plugin->getHistory();
 
-        if(count($history) > 0) {
+        if (count($history) > 0) {
             $lastHistoryNote = $history[0];
 
-            if($lastHistoryNote['devComments']) {
+            if ($lastHistoryNote['devComments']) {
                 $lastHistoryNote['devComments'] = Markdown::process($lastHistoryNote['devComments']);
             }
         }

@@ -1,6 +1,6 @@
 <template>
     <form v-if="userDraft" @submit.prevent="save()">
-        <connected-apps title="Connected Apps"></connected-apps>
+        <h1>Settings</h1>
 
         <div class="card mb-3">
             <div class="card-body">
@@ -37,17 +37,15 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import TextField from '../components/fields/TextField'
     import PasswordField from '../components/fields/PasswordField'
-    import ConnectedApps from '../components/ConnectedApps'
 
     export default {
 
         components: {
             TextField,
             PasswordField,
-            ConnectedApps,
         },
 
         data() {
@@ -72,12 +70,15 @@
 
         methods: {
 
+            /**
+             * Save the settings.
+             */
             save() {
                 this.loading = true;
 
                 let newEmail = false;
 
-                if(this.currentUser.email !== this.userDraft.email) {
+                if (this.currentUser.email !== this.userDraft.email) {
                     newEmail = true;
                 }
 
@@ -92,7 +93,7 @@
                 }).then(response => {
                     this.loading = false;
 
-                    if(newEmail) {
+                    if (newEmail) {
                         this.userDraft.email = this.currentUser.email;
                         this.$root.displayNotice('You’ve been sent an email to verify your new email address.');
                     } else {

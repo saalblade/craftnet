@@ -1,24 +1,24 @@
 <?php
 
-namespace craftcom\oauthserver\base;
+namespace craftnet\oauthserver\base;
 
-use craftcom\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\Module as OauthServer;
 
 /**
  * ModuleTrait implements the common methods and properties for plugin classes.
  *
- * @property \craftcom\oauthserver\services\AccessTokens  $accessTokens       The accessTokens service
- * @property \craftcom\oauthserver\services\AuthCodes     $authCodes          The authCodes service
- * @property \craftcom\oauthserver\services\clients       $clients            The clients service
- * @property \craftcom\oauthserver\services\Oauth         $oauth              The oauth service
- * @property \craftcom\oauthserver\services\RefreshTokens $refreshTokens      The tokens service
+ * @property \craftnet\oauthserver\services\AccessTokens $accessTokens The accessTokens service
+ * @property \craftnet\oauthserver\services\AuthCodes $authCodes The authCodes service
+ * @property \craftnet\oauthserver\services\clients $clients The clients service
+ * @property \craftnet\oauthserver\services\Oauth $oauth The oauth service
+ * @property \craftnet\oauthserver\services\RefreshTokens $refreshTokens The tokens service
  */
 trait ModuleTrait
 {
     /**
      * Returns the accessTokens service.
      *
-     * @return \craftcom\oauthserver\services\AccessTokens The accessTokens service
+     * @return \craftnet\oauthserver\services\AccessTokens The accessTokens service
      */
     public function getAccessTokens()
     {
@@ -29,7 +29,7 @@ trait ModuleTrait
     /**
      * Returns the authCodes service.
      *
-     * @return \craftcom\oauthserver\services\AuthCodes The authCodes service
+     * @return \craftnet\oauthserver\services\AuthCodes The authCodes service
      */
     public function getAuthCodes()
     {
@@ -40,7 +40,7 @@ trait ModuleTrait
     /**
      * Returns the clients service.
      *
-     * @return \craftcom\oauthserver\services\Clients The clients service
+     * @return \craftnet\oauthserver\services\Clients The clients service
      */
     public function getClients()
     {
@@ -51,7 +51,7 @@ trait ModuleTrait
     /**
      * Returns the oauth service.
      *
-     * @return \craftcom\oauthserver\services\Oauth The oauth service
+     * @return \craftnet\oauthserver\services\Oauth The oauth service
      */
     public function getOauth()
     {
@@ -62,7 +62,7 @@ trait ModuleTrait
     /**
      * Returns the refreshTokens service.
      *
-     * @return \craftcom\oauthserver\services\RefreshTokens The refreshTokens service
+     * @return \craftnet\oauthserver\services\RefreshTokens The refreshTokens service
      */
     public function getRefreshTokens()
     {

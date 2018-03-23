@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "price": {"type": "number", "minimum": 0},
+  "cmsLicenseKey": {
+    "type": "string",
+    "minLength": 250,
+    "maxLength": 250
+  },
+  "pluginLicenseKey": {
+    "type": "string",
+    "minLength": 24,
+    "maxLength": 24
+  }
+}

@@ -1,16 +1,14 @@
 <?php
 
-namespace craftcom\oauthserver\controllers;
+namespace craftnet\oauthserver\controllers;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\Module as OauthServer;
 use yii\web\Response;
 
 /**
  * Class AuthCodesController
- *
- * @package craftcom\oauthserver\controllers
  */
 class AuthCodesController extends Controller
 {

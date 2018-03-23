@@ -1,15 +1,13 @@
 <?php
 
-namespace craftcom\fields;
+namespace craftnet\fields;
 
 use Craft;
 use craft\fields\BaseRelationField;
-use craftcom\plugins\Plugin;
+use craftnet\plugins\Plugin;
 
 /**
  * Plugins represents a Plugins field.
- *
- * @package craftcom\fields
  */
 class Plugins extends BaseRelationField
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace craftcom\oauthserver\server\Repositories;
+namespace craftnet\oauthserver\server\Repositories;
 
-use craftcom\oauthserver\server\Entities\UserEntity;
+use craftnet\oauthserver\server\Entities\UserEntity;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
@@ -15,9 +15,9 @@ class UserRepository implements UserRepositoryInterface
     /**
      * Get a user entity.
      *
-     * @param string                $username
-     * @param string                $password
-     * @param string                $grantType The grant type used
+     * @param string $username
+     * @param string $password
+     * @param string $grantType The grant type used
      * @param ClientEntityInterface $clientEntity
      *
      * @return UserEntityInterface

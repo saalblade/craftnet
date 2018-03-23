@@ -1,19 +1,17 @@
 <?php
 
-namespace craftcom\controllers\api\v1\utils;
+namespace craftnet\controllers\api\v1\utils;
 
 use Composer\Semver\Comparator;
+use Composer\Semver\VersionParser;
 use Craft;
-use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Json;
-use craftcom\controllers\api\BaseApiController;
+use craftnet\controllers\api\BaseApiController;
 use yii\web\Response;
 
 /**
  * Class AccountController
- *
- * @package craftcom\controllers\api\v1
  */
 class Releases2ChangelogController extends BaseApiController
 {
@@ -38,11 +36,15 @@ class Releases2ChangelogController extends BaseApiController
         });
 
         // Sort latest => oldest
-        usort($releases, function($a, $b) {
-            if (Comparator::equalTo($a['version'], $b['version'])) {
+        $vp = new VersionParser();
+        usort($releases, function($a, $b) use ($vp) {
+            $a = $vp->normalize($a['version']);
+            $b = $vp->normalize($b['version']);
+
+            if (Comparator::equalTo($a, $b)) {
                 return 0;
             }
-            return Comparator::greaterThan($a['version'], $b['version']) ? -1 : 1;
+            return Comparator::greaterThan($a, $b) ? -1 : 1;
         });
 
         foreach ($releases as $release) {

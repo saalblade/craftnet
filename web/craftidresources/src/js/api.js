@@ -8,7 +8,7 @@ export default {
             userId: userId
         });
 
-        axios.post(Craft.actionUrl+'/craftcom/id/craft-id', params)
+        axios.post(Craft.actionUrl + '/craftnet/id/craft-id', params)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -20,7 +20,7 @@ export default {
 
         let params = qs.stringify(data);
 
-        axios.post(Craft.actionUrl+'/craftcom/id/apps/disconnect', params)
+        axios.post(Craft.actionUrl + '/craftnet/id/apps/disconnect', params)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -43,13 +43,13 @@ export default {
                     formData.append(attribute, user[attribute]);
                     break;
                 default:
-                    formData.append('fields['+attribute+']', user[attribute]);
+                    formData.append('fields[' + attribute + ']', user[attribute]);
             }
         }
 
         formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(Craft.actionUrl+'/users/save-user', formData)
+        axios.post(Craft.actionUrl + '/users/save-user', formData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -57,60 +57,59 @@ export default {
     uploadUserPhoto(data, cb, cbError) {
         let formData = new FormData();
 
-        for(let dataKey in data) {
+        for (let dataKey in data) {
             formData.append(dataKey, data[dataKey]);
         }
 
         formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(Craft.actionUrl+'/craftcom/id/account/upload-user-photo', formData)
+        axios.post(Craft.actionUrl + '/craftnet/id/account/upload-user-photo', formData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
 
-    deleteUserPhoto(data, cb, cbError) {
-        data['action'] = 'craftcom/id/account/delete-user-photo';
-        data[Craft.csrfTokenName] = Craft.csrfTokenValue;
+    deleteUserPhoto(cb, cbError) {
+        const data = qs.stringify({
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        });
 
-        let params = qs.stringify(data);
-
-        axios.post(Craft.actionUrl+'/craftcom/id/account/delete-user-photo', params)
+        axios.post(Craft.actionUrl + '/craftnet/id/account/delete-user-photo', data)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
 
     getStripeAccount(cb, cbError) {
-        axios.get(window.craftIdUrl+'/stripe/account')
+        axios.get(window.craftIdUrl + '/stripe/account')
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
 
     getStripeCustomer(cb, cbError) {
-        axios.get(window.craftIdUrl+'/stripe/customer')
+        axios.get(window.craftIdUrl + '/stripe/customer')
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
 
     disconnectStripeAccount(cb, cbError) {
-        axios.post(window.craftIdUrl+'/stripe/disconnect')
+        axios.post(window.craftIdUrl + '/stripe/disconnect')
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
 
-    saveCard(token, cb, cbError) {
+    saveCard(source, cb, cbError) {
         let data = {
-            token: token.id
+            token: source.id
         };
 
-        let params = qs.stringify(data);
+        let qsData = qs.stringify(data);
 
-        axios.post(window.craftIdUrl+'/stripe/save-card', params)
+        axios.post(window.craftIdUrl + '/stripe/save-card', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
 
     removeCard(cb, cbError) {
-        axios.post(window.craftIdUrl+'/stripe/remove-card')
+        axios.post(window.craftIdUrl + '/stripe/remove-card')
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -141,7 +140,150 @@ export default {
         body[Craft.csrfTokenName] = Craft.csrfTokenValue;
 
         let params = qs.stringify(body);
-        axios.post(Craft.actionUrl+'/entries/save-entry', params)
+        axios.post(Craft.actionUrl + '/entries/save-entry', params)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    claimCmsLicense(licenseKey, cb, cbError) {
+        let data = {
+            key: licenseKey,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/claim', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    claimCmsLicenseFile(licenseFile, cb, cbError) {
+        let formData = new FormData();
+        formData.append('licenseFile', licenseFile);
+        formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/claim', formData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    claimPluginLicense(licenseKey, cb, cbError) {
+        let data = {
+            key: licenseKey,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/claim', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    generateApiToken(cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/account/generate-api-token', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    getCmsLicenses(cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/get-licenses', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    getPluginLicenses(cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/get-licenses', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    releaseCmsLicense(licenseKey, cb, cbError) {
+        let data = {
+            key: licenseKey,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/release', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    releasePluginLicense({pluginHandle, licenseKey}, cb, cbError) {
+        let data = {
+            handle: pluginHandle,
+            key: licenseKey,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/release', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    saveCmsLicense(license, cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        };
+
+        for (let attribute in license) {
+            data[attribute] = license[attribute];
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/save', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    savePluginLicense(license, cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        };
+
+        for (let attribute in license) {
+            data[attribute] = license[attribute];
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/save', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    getInvoices(cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/account/get-invoices', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -149,28 +291,28 @@ export default {
     savePlugin({plugin}, cb, cbError) {
         let formData = new FormData();
 
-        for(let pluginKey in plugin) {
-            if(plugin[pluginKey] !== null && plugin[pluginKey] !== undefined) {
-                switch(pluginKey) {
+        for (let pluginKey in plugin) {
+            if (plugin[pluginKey] !== null && plugin[pluginKey] !== undefined) {
+                switch (pluginKey) {
                     case 'iconId':
                     case 'categoryIds':
                     case 'screenshots':
                     case 'screenshotUrls':
                     case 'screenshotIds':
-                        for(let i = 0; i < plugin[pluginKey].length; i++) {
-                            formData.append(pluginKey+'[]', plugin[pluginKey][i]);
+                        for (let i = 0; i < plugin[pluginKey].length; i++) {
+                            formData.append(pluginKey + '[]', plugin[pluginKey][i]);
                         }
                         break;
 
                     default:
-                            formData.append(pluginKey, plugin[pluginKey]);
+                        formData.append(pluginKey, plugin[pluginKey]);
                 }
             }
         }
 
         formData.append(Craft.csrfTokenName, Craft.csrfTokenValue);
 
-        axios.post(Craft.actionUrl+'/craftcom/plugins/save', formData)
+        axios.post(Craft.actionUrl + '/craftnet/plugins/save', formData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
@@ -184,7 +326,7 @@ export default {
 
         let params = qs.stringify(data);
 
-        axios.post(Craft.actionUrl+'/craftcom/plugins/submit', params)
+        axios.post(Craft.actionUrl + '/craftnet/plugins/submit', params)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     }

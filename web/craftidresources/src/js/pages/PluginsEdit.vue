@@ -1,10 +1,12 @@
 <template>
     <div class="mb-3">
         <template v-if="!pluginId && !this.pluginDraft.repository">
+            <p><router-link class="nav-link" to="/developer/plugins" exact>← Plugins</router-link></p>
+            <h1>Add a plugin</h1>
+
             <div class="card">
                 <div class="card-body">
                     <template v-if="connectedAppsCount > 0">
-                        <h2>Add a new plugin</h2>
                         <p>To get started, select a repository for your plugin.</p>
 
                         <div v-for="app, appHandle in apps" class="mb-3">
@@ -17,7 +19,7 @@
                     </template>
                     <template v-else>
                         <h2>Connect</h2>
-                        <p>Connect to GitHub or Bitbucket to retrieve your repositories.</p>
+                        <p>Connect to GitHub to retrieve your repositories.</p>
 
                         <connected-apps></connected-apps>
                     </template>
@@ -26,7 +28,11 @@
         </template>
 
         <template v-else>
-            <div v-if="plugin && !plugin.enabled" role="alert" class="alert alert-secondary">
+            <p><router-link class="nav-link" to="/developer/plugins" exact>← Plugins</router-link></p>
+
+            <h1>{{ plugin.name }}</h1>
+
+            <div v-if="plugin && !plugin.enabled" role="alert" class="alert alert-info">
                 <template v-if="plugin.pendingApproval">
                     Your plugin is being reviewed, it will be automatically published once it’s approved.
                 </template>
@@ -49,25 +55,21 @@
                 <div class="card mb-3">
                     <div class="card-header">GitHub Repository</div>
                     <div class="card-body">
-                        <div class="d-flex flex-row">
-                            <div class="flex-grow">
-                                <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
-                            </div>
-                        </div>
+                        <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
                     </div>
                 </div>
 
                 <div class="card mb-3">
                     <div class="card-header">Plugin Icon</div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-2">
+                        <div class="flex">
+                            <div class="mr-6">
 
                                 <div class="form-group">
                                     <img :src="pluginDraft.iconUrl" height="80" />
                                 </div>
                             </div>
-                            <div class="col-sm-10">
+                            <div class="flex-1">
                                 <div class="form-group">
                                     <div class="instructions">
                                         <p>Plugin icons must be square SVG files, and should not exceed {{ maxUploadSize }}.</p>
@@ -83,24 +85,24 @@
                 <div class="card mb-3">
                     <div class="card-header">Plugin Details</div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6">
+                        <div class="flex flex-wrap -mx-4">
+                            <div class="w-1/2 px-4">
                                 <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
                             </div>
-                            <div class="col-sm-6">
+                            <div class="w-1/2 px-4">
                                 <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" disabled="true" />
                             </div>
-                            <div class="col-sm-6">
+                            <div class="w-1/2 px-4">
                                 <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" disabled="true" />
                             </div>
-                            <div class="col-sm-6">
+                            <div class="w-1/2 px-4">
                                 <div class="form-group">
                                     <label for="license">License</label>
 
-                                    <select id="license" class="form-control" v-model="pluginDraft.license">
-                                        <option value="craft">Craft</option>
-                                        <option value="mit">MIT</option>
-                                    </select>
+                                   <select id="license" class="form-control w-full" v-model="pluginDraft.license">
+                                       <option value="craft">Craft</option>
+                                       <option value="mit">MIT</option>
+                                   </select>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +164,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import TextField from '../components/fields/TextField'
     import TextareaField from '../components/fields/TextareaField'
     import ConnectedApps from '../components/ConnectedApps'
@@ -268,7 +270,7 @@
             },
 
             showPriceFields() {
-                if(!this.plugin) {
+                if (!this.plugin) {
                     return true;
                 }
 
@@ -283,17 +285,32 @@
 
         methods: {
 
+            /**
+             * On input name.
+             *
+             * @param name
+             */
             onInputName(name) {
-                if(!this.pluginId) {
+                if (!this.pluginId) {
                     const handle = slug(name);
                     this.pluginDraft.handle = handle;
                 }
             },
 
+            /**
+             * On select repository.
+             *
+             * @param repository
+             */
             onSelectRepository(repository) {
                 this.loadDetails(repository.html_url);
             },
 
+            /**
+             * Remove screenshot.
+             *
+             * @param key
+             */
             removeScreenshot(key) {
                 this.pluginDraft.screenshotUrls.splice(key, 1);
                 this.pluginDraft.screenshotIds.splice(key, 1);
@@ -305,15 +322,20 @@
                 }
             },
 
+            /**
+             * Change screenshots.
+             *
+             * @param ev
+             */
             changeScreenshots(ev) {
                 this.pluginDraft.screenshotUrls = [];
 
                 let files = this.$refs.screenshotFiles.files;
 
-                for(let i = 0; i < files.length; i++) {
+                for (let i = 0; i < files.length; i++) {
                     let reader = new FileReader();
 
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         let screenshotUrl = e.target.result;
                         this.pluginDraft.screenshotUrls.push(screenshotUrl)
                     }.bind(this);
@@ -322,18 +344,28 @@
                 }
             },
 
+            /**
+             * Change icon.
+             *
+             * @param ev
+             */
             changeIcon(ev) {
                 this.pluginDraft.icon = ev.target.value;
 
                 let reader = new FileReader();
 
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     this.pluginDraft.iconUrl = e.target.result
                 }.bind(this);
 
                 reader.readAsDataURL(this.$refs.iconFile.files[0]);
             },
 
+            /**
+             * Load details.
+             *
+             * @param repositoryUrl
+             */
             loadDetails(repositoryUrl) {
                 this.repositoryLoading = true;
                 this.loadingRepository = repositoryUrl;
@@ -341,59 +373,59 @@
                 let body = {
                     repository: encodeURIComponent(url)
                 };
-                body['action'] = 'craftcom/plugins/load-details';
+                body['action'] = 'craftnet/plugins/load-details';
                 body[Craft.csrfTokenName] = Craft.csrfTokenValue;
 
                 let params = qs.stringify(body);
                 let url = repositoryUrl;
 
-                axios.post(Craft.actionUrl+'/craftcom/plugins/load-details&repository='+encodeURIComponent(url), params)
+                axios.post(Craft.actionUrl + '/craftnet/plugins/load-details&repository=' + encodeURIComponent(url), params)
                     .then(response => {
                         this.repositoryLoading = false;
                         this.loadingRepository = null;
 
-                        if(response.data.error) {
+                        if (response.data.error) {
                             this.$root.displayError(response.data.error);
                         } else {
                             this.pluginDraft.repository = repositoryUrl;
 
-                            if(response.data.changelogPath) {
+                            if (response.data.changelogPath) {
                                 this.pluginDraft.changelogPath = response.data.changelogPath;
                             }
 
-                            if(response.data.documentationUrl) {
+                            if (response.data.documentationUrl) {
                                 this.pluginDraft.documentationUrl = response.data.documentationUrl;
                             }
 
-                            if(response.data.name) {
+                            if (response.data.name) {
                                 this.pluginDraft.name = response.data.name;
                             }
 
-                            if(response.data.handle) {
+                            if (response.data.handle) {
                                 this.pluginDraft.handle = response.data.handle;
                             }
 
-                            if(response.data.shortDescription) {
+                            if (response.data.shortDescription) {
                                 this.pluginDraft.shortDescription = response.data.shortDescription;
                             }
 
-                            if(response.data.packageName) {
+                            if (response.data.packageName) {
                                 this.pluginDraft.packageName = response.data.packageName;
                             }
 
-                            if(response.data.iconId) {
+                            if (response.data.iconId) {
                                 this.pluginDraft.iconId = response.data.iconId;
                             }
 
-                            if(response.data.iconUrl) {
+                            if (response.data.iconUrl) {
                                 this.pluginDraft.iconUrl = response.data.iconUrl;
                             }
 
-                            if(response.data.license) {
+                            if (response.data.license) {
                                 this.pluginDraft.license = response.data.license;
                             }
 
-                            if(response.data.keywords) {
+                            if (response.data.keywords) {
                                 this.pluginDraft.keywords = response.data.keywords.join(', ');
                             }
                         }
@@ -404,6 +436,9 @@
                     });
             },
 
+            /**
+             * Save the plugin.
+             */
             save() {
                 this.loading = true;
 
@@ -425,27 +460,27 @@
                     screenshotIds: [],
                 };
 
-                if(this.pluginDraft.iconId) {
+                if (this.pluginDraft.iconId) {
                     plugin.iconId = [parseInt(this.pluginDraft.iconId)];
                 }
 
-                if(this.pluginDraft.id) {
+                if (this.pluginDraft.id) {
                     plugin.pluginId = this.pluginDraft.id;
                 }
 
-                if(this.pluginDraft.categoryIds.length > 0) {
+                if (this.pluginDraft.categoryIds.length > 0) {
                     plugin.categoryIds = this.pluginDraft.categoryIds;
                 }
 
-                if(this.$refs.screenshotFiles.files.length > 0) {
+                if (this.$refs.screenshotFiles.files.length > 0) {
                     plugin.screenshots = this.$refs.screenshotFiles.files;
                 }
 
-                if(this.pluginDraft.screenshotUrls.length > 0) {
+                if (this.pluginDraft.screenshotUrls.length > 0) {
                     plugin.screenshotUrls = this.pluginDraft.screenshotUrls;
                 }
 
-                if(this.pluginDraft.screenshotIds.length > 0) {
+                if (this.pluginDraft.screenshotIds.length > 0) {
                     plugin.screenshotIds = this.pluginDraft.screenshotIds;
                 }
 
@@ -463,6 +498,9 @@
                 });
             },
 
+            /**
+             * Submit plugin for approval.
+             */
             submit() {
                 this.pluginSubmitLoading = true;
                 this.$store.dispatch('submitPlugin', this.plugin.id).then(response => {
@@ -478,7 +516,12 @@
                 })
             },
 
-
+            /**
+             * Human file size.
+             *
+             * @param bytes
+             * @returns {string}
+             */
             humanFileSize(bytes) {
                 const threshold = 1024;
 
@@ -490,8 +533,7 @@
 
                 let u = -1;
 
-                do
-                {
+                do {
                     bytes = bytes / threshold;
                     ++u;
                 }
@@ -502,18 +544,18 @@
         },
 
         mounted() {
-            if(this.plugin) {
+            if (this.plugin) {
                 this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
 
-                if(!this.pluginDraft.price) {
+                if (!this.pluginDraft.price) {
                     this.pluginDraft.price = 0;
                 }
 
-                if(!this.pluginDraft.renewalPrice) {
+                if (!this.pluginDraft.renewalPrice) {
                     this.pluginDraft.renewalPrice = 0;
                 }
             } else {
-                if(this.pluginId) {
+                if (this.pluginId) {
                     this.$router.push({path: '/developer/plugins'});
                 }
             }
@@ -523,10 +565,6 @@
 </script>
 
 <style scoped>
-    .d-flex { position: relative; }
-
-    .repository-spinner { position: absolute; top: 36px; right: -24px; }
-
     .screenshot { position: relative; display: inline-block; width: 230px; margin-right:24px; margin-top: 14px; }
     .screenshot .remove { position: absolute; top: -10px; right: -10px; }
     .screenshot img {  }

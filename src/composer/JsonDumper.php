@@ -1,13 +1,13 @@
 <?php
 
-namespace craftcom\composer;
+namespace craftnet\composer;
 
 use Craft;
 use craft\db\Query;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
-use craftcom\composer\jobs\DeletePaths;
-use craftcom\composer\jobs\DumpJson;
+use craftnet\composer\jobs\DeletePaths;
+use craftnet\composer\jobs\DumpJson;
 use yii\base\Component;
 
 /**
@@ -38,7 +38,7 @@ class JsonDumper extends Component
         // Fetch all the data
         $packages = (new Query())
             ->select(['id', 'name', 'abandoned', 'replacementPackage'])
-            ->from(['craftcom_packages'])
+            ->from(['craftnet_packages'])
             ->where(['not', ['latestVersion' => null]])
             ->indexBy('id')
             ->all();
@@ -69,14 +69,14 @@ class JsonDumper extends Component
                 //'source',
                 'dist',
             ])
-            ->from(['craftcom_packageversions'])
+            ->from(['craftnet_packageversions'])
             ->where(['packageId' => array_keys($packages)])
             ->indexBy('id')
             ->all();
 
         $deps = (new Query())
             ->select(['versionId', 'name', 'constraints'])
-            ->from(['craftcom_packagedeps'])
+            ->from(['craftnet_packagedeps'])
             ->all();
 
         // Assemble the data
@@ -196,9 +196,9 @@ class JsonDumper extends Component
     /**
      * Writes a new JSON file and returns its hash.
      *
-     * @param array  $data     The data to write
-     * @param string $path     The path to save the content (can contain a %hash% tag)
-     * @param array  $oldPaths Array of existing files that should be deleted
+     * @param array $data The data to write
+     * @param string $path The path to save the content (can contain a %hash% tag)
+     * @param array $oldPaths Array of existing files that should be deleted
      *
      * @return string
      */

@@ -1,58 +1,65 @@
 <template>
     <div>
-        <h4>Payment</h4>
+        <div class="flex">
+            <div class="flex-1">
+                <h4>Payment</h4>
 
-        <div v-if="stripeCustomerLoading" class="spinner"></div>
+                <div v-if="stripeCustomerLoading" class="spinner"></div>
 
-        <div v-if="!stripeCustomerLoading">
-            <div v-if="!editing">
-                <div class="float-right">
-                    <p>
-                        <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
-                            <i class="fa fa-plus"></i>
-                            New Card
-                        </button>
-                    </p>
+                <div v-if="!stripeCustomerLoading">
+                    <div v-if="!editing">
+                        <div v-if="stripeCard" class="credit-card">
+                            <card-icon :brand="stripeCard.brand"></card-icon>
+                            <ul class="list-reset">
+                                <li>Number: •••• •••• •••• {{ stripeCard.last4 }}</li>
+                                <li>Expiry: {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}</li>
+                            </ul>
+                        </div>
 
-                    <p v-if="stripeCard">
-                        <button @click="removeCard()" class="btn btn-sm btn-outline-danger">
-                            <i class="fa fa-remove"></i>
-                            Remove
-                        </button>
+                        <p v-else class="text-secondary">Credit card not defined.</p>
+                    </div>
 
-                        <div v-if="removeCardLoading" class="spinner"></div>
-                    </p>
+                    <div :class="{'hidden': !editing}">
+                        <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard" @cancel="cancel"></card-form>
+                    </div>
+
+                    <div class="mt-3">
+                        <img src="/craftidresources/dist/images/powered_by_stripe.svg" height="18" />
+                    </div>
                 </div>
+            </div>
 
-                <p v-if="stripeCard">
-                    {{ stripeCard.brand }} •••• •••• •••• {{ stripeCard.last4 }} — {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}
+            <div v-if="!editing" class="pl-4">
+                <p>
+                    <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
+                        <i class="fa fa-plus"></i>
+                        New Card
+                    </button>
                 </p>
 
-                <p v-else>No credit card.</p>
-            </div>
+                <p v-if="stripeCard">
+                    <button @click="removeCard()" class="btn btn-sm btn-danger">
+                        <i class="fas fa-times"></i>
+                        Remove
+                    </button>
 
-            <div :class="{'d-none': !editing}">
-
-                <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="save" @cancel="cancel"></card-form>
-
-            </div>
-
-            <div class="mt-3">
-                <img src="/craftidresources/dist/images/powered_by_stripe.svg" height="18" />
+                    <div v-if="removeCardLoading" class="spinner"></div>
+                </p>
             </div>
         </div>
     </div>
 </template>
 
-
 <script>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     import CardForm from './CardForm'
+    import CardIcon from './CardIcon'
 
     export default {
 
         components: {
-            CardForm
+            CardForm,
+            CardIcon,
         },
 
         data() {
@@ -81,16 +88,14 @@
 
         methods: {
 
-            error() {
-                this.cardFormloading = false;
-            },
-
-            beforeSave() {
-                this.cardFormloading = true;
-            },
-
-            save(card, token) {
-                this.$store.dispatch('saveCard', token).then(response => {
+            /**
+             * Saves a credit card.
+             *
+             * @param card
+             * @param source
+             */
+            saveCard(card, source) {
+                this.$store.dispatch('saveCard', source).then(response => {
                     card.clear();
                     this.cardFormloading = false;
                     this.editing = false;
@@ -98,18 +103,39 @@
                 });
             },
 
-            cancel() {
-                this.editing = false;
-            },
-
+            /**
+             * Removes a credit card.
+             */
             removeCard() {
                 this.removeCardLoading = true;
                 this.$store.dispatch('removeCard').then(response => {
                     this.removeCardLoading = false;
                     this.$root.displayNotice('Card removed.')
                 })
-            }
+            },
+
+            /**
+             * Before save.
+             */
+            beforeSave() {
+                this.cardFormloading = true;
+            },
+
+            /**
+             * Cancel changes.
+             */
+            cancel() {
+                this.editing = false;
+            },
+
+            /**
+             * Error.
+             */
+            error() {
+                this.cardFormloading = false;
+            },
 
         },
+
     }
 </script>

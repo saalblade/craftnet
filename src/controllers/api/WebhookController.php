@@ -1,14 +1,14 @@
 <?php
 
-namespace craftcom\controllers\api;
+namespace craftnet\controllers\api;
 
 use Craft;
-use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 /**
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @since  3.0
+ * @since 3.0
  */
 class WebhookController extends BaseApiController
 {
