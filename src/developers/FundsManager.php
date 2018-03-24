@@ -5,6 +5,7 @@ namespace craftnet\developers;
 use Craft;
 use craft\db\Query;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craftnet\errors\InaccessibleFundsException;
 use craftnet\errors\InsufficientFundsException;
@@ -68,9 +69,10 @@ class FundsManager extends BaseObject
      * @param float $credit the credit amount (not including any fees that need to be removed)
      * @param float|null $fee the total fees that should be deducted from the credit amount
      * @param string|null $txnType the transaction type (e.g. `plugin_payment`)
+     * @return int the transaction ID
      * @throws InvalidArgumentException if $credit or $fee are negative or 0
      */
-    public function credit(string $note, float $credit, float $fee = null, string $txnType = null)
+    public function credit(string $note, float $credit, float $fee = null, string $txnType = null): int
     {
         if ($credit <= 0) {
             throw new InvalidArgumentException('Invalid credit amount: '.$credit);
@@ -80,7 +82,7 @@ class FundsManager extends BaseObject
             throw new InvalidArgumentException('Invalid fee amount: '.$credit);
         }
 
-        $this->_addTransaction($note, $credit, null, $fee, $txnType);
+        return $this->_addTransaction($note, $credit, null, $fee, $txnType);
     }
 
     /**
@@ -89,10 +91,11 @@ class FundsManager extends BaseObject
      * @param string $note the transaction note
      * @param float $debit the credit amount (not including any fees that need to be removed)
      * @param string|null $txnType the transaction type (e.g. `stripe_transfer`)
+     * @return int the transaction ID
      * @throws InvalidArgumentException if $debit is negative or 0
      * @throws InaccessibleFundsException if the developer's funds could not be locked
      */
-    public function debit(string $note, float $debit, string $txnType = null)
+    public function debit(string $note, float $debit, string $txnType = null): int
     {
         if ($debit <= 0) {
             throw new InvalidArgumentException('Invalid debit amount: '.$debit);
@@ -103,8 +106,9 @@ class FundsManager extends BaseObject
             throw new InaccessibleFundsException();
         }
 
-        $this->_addTransaction($note, null, $debit, null, $txnType);
+        $txnId = $this->_addTransaction($note, null, $debit, null, $txnType);
         $this->_unlockFunds();
+        return $txnId;
     }
 
     /**
@@ -127,20 +131,28 @@ class FundsManager extends BaseObject
         }
 
         // credit the account
-        $this->credit("Payment received for order {$orderNumber}", $credit, $fee, self::TXN_TYPE_PLUGIN_PAYMENT);
+        $txnId = $this->credit("Payment received for order {$orderNumber}", $credit, $fee, self::TXN_TYPE_PLUGIN_PAYMENT);
 
         // only attempt the transfer if we could get a lock
         if (!$e) {
             // figure out how much we're going to transfer (credit amount minus fee, but no more than whatever they actually have in their account)
             $balance = $this->getBalance();
-            $transferAmount = min($credit - $fee, $balance);
+            $transferAmount = min($credit - ($fee ?? 0), $balance);
 
             // don't transfer if they're in the red
             if ($transferAmount <= 0) {
                 $e = new InsufficientFundsException($balance);
             } else {
                 try {
-                    $this->_transferFunds("Funds transferred for order {$orderNumber}", $transferAmount, ['source_transaction' => $chargeId]);
+                    $this->_transferFunds("Funds transferred for order {$orderNumber}", $transferAmount, [
+                        'source_transaction' => $chargeId,
+                        'metadata' => [
+                            'order_number' => $orderNumber,
+                            'credit_id' => $txnId,
+                            'credit_amount' => $credit,
+                            'credit_fee' => $fee ?? 0,
+                        ],
+                    ]);
                 } catch (StripeError $e) {
                     // Something unexpected happened on Stripe's end
                     Craft::$app->getErrorHandler()->logException($e);
@@ -224,11 +236,16 @@ class FundsManager extends BaseObject
 
         Stripe::setApiKey(getenv('STRIPE_API_KEY'));
 
-        $params += [
+        $params = ArrayHelper::merge([
             'amount' => round($amount * 100),
             'currency' => 'usd',
             'destination' => $stripeAccount,
-        ];
+            'metadata' => [
+                'developer_id' => $this->developer->id,
+                'developer_name' => $this->developer->getDeveloperName(),
+                'developer_email' => $this->developer->email,
+            ],
+        ], $params);
 
         try {
             Transfer::create($params);
@@ -249,8 +266,9 @@ class FundsManager extends BaseObject
      * @param float|null $debit
      * @param float|null $fee
      * @param string|null $type
+     * @return int the transaction ID
      */
-    private function _addTransaction(string $note, float $credit = null, float $debit = null, float $fee = null, string $type = null)
+    private function _addTransaction(string $note, float $credit = null, float $debit = null, float $fee = null, string $type = null): int
     {
         $db = Craft::$app->getDb();
 
@@ -317,5 +335,7 @@ SQL;
             'isEuMember' => $this->developer->country ? (new CountryInfo())->isEuMember($this->developer->country) : null,
             'dateCreated' => Db::prepareDateForDb(new \DateTime()),
         ])->execute();
+
+        return $db->getLastInsertID('craftnet_developerledger');
     }
 }
