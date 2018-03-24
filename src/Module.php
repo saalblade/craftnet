@@ -95,7 +95,7 @@ class Module extends \yii\base\Module
                 'key' => self::MESSAGE_KEY_RECEIPT,
                 'heading' => 'When someone places an order:',
                 'subject' => 'Your receipt from {{ fromName }}',
-                'body' => file_get_contents(__DIR__.'/orders/receipt/templates/email.txt'),
+                'body' => file_get_contents(__DIR__.'/emails/receipt.txt'),
             ]);
         });
 
