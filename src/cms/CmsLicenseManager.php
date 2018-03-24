@@ -364,9 +364,10 @@ class CmsLicenseManager extends Component
      * and and assigns them to the user.
      *
      * @param User $user
+     * @param string|null $email the email to look for (defaults to the user's email)
      * @return int the total number of affected licenses
      */
-    public function claimLicenses(User $user): int
+    public function claimLicenses(User $user, string $email = null): int
     {
         return Craft::$app->getDb()->createCommand()
             ->update('craftnet_cmslicenses', [
@@ -374,7 +375,7 @@ class CmsLicenseManager extends Component
             ], [
                 'and',
                 ['ownerId' => null],
-                new Expression('lower([[email]]) = :email', [':email' => strtolower($user->email)]),
+                new Expression('lower([[email]]) = :email', [':email' => strtolower($email ?? $user->email)]),
             ], [], false)
             ->execute();
     }
