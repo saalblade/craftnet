@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
-  "properties": {"$ref": "update-cart-request.json#/properties"},
   "required": ["email"]
 }
