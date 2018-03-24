@@ -33,7 +33,9 @@ class StripeController extends BaseController
     public function actionConnect(): Response
     {
         $provider = $this->_getStripeProvider();
-        $options = [];
+        $options = [
+            'scope' => 'read_write'
+        ];
 
         Craft::$app->getSession()->set('stripe.referrer', Craft::$app->getRequest()->getReferrer());
         $authorizationUrl = $provider->getAuthorizationUrl($options);
