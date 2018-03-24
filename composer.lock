@@ -702,12 +702,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce-stripe.git",
-                "reference": "d2da8fc287368463e21aacba61e2c2ed0bca963f"
+                "reference": "2b1d011aa5e8b775f499f22973cc4041f834e3b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/d2da8fc287368463e21aacba61e2c2ed0bca963f",
-                "reference": "d2da8fc287368463e21aacba61e2c2ed0bca963f",
+                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/2b1d011aa5e8b775f499f22973cc4041f834e3b4",
+                "reference": "2b1d011aa5e8b775f499f22973cc4041f834e3b4",
                 "shasum": ""
             },
             "require": {
@@ -749,7 +749,7 @@
                 "docs": "https://github.com/craftcms/commerce-stripe",
                 "rss": "https://github.com/craftcms/commerce-stripe/commits/master.atom"
             },
-            "time": "2018-03-14T16:02:21+00:00"
+            "time": "2018-03-24T12:35:18+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
