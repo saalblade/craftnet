@@ -13,6 +13,7 @@ use craftnet\Module;
 use yii\base\BaseObject;
 use yii\base\InvalidArgumentException;
 use yii\validators\EmailValidator;
+use craft\commerce\Plugin as Commerce;
 
 class EmailVerifier extends BaseObject
 {
@@ -79,7 +80,7 @@ class EmailVerifier extends BaseObject
 
     /**
      * Verifies an email with the given verification code, and claims any licenses
-     * associated with that email.
+     * and guest orders associated with that email.
      *
      * @param string $email
      * @param string $code
@@ -126,6 +127,12 @@ class EmailVerifier extends BaseObject
         $module = Module::getInstance();
         $num = $module->getCmsLicenseManager()->claimLicenses($this->user, $email);
         $num += $module->getPluginLicenseManager()->claimLicenses($this->user, $email);
+
+        // claim guest orders
+        $commerce = Commerce::getInstance();
+        if (!empty($orders = $commerce->getOrders()->getOrdersByEmail($email))) {
+            $commerce->getCustomers()->consolidateOrdersToUser($this->user, $orders);
+        }
 
         // remove all verification codes for this user + email
         $db->createCommand()
