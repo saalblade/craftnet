@@ -98,10 +98,11 @@ class EmailVerifier extends BaseObject
             ->execute();
 
         // get all the codes for this user and email
+        $condition = ['userId' => $this->user->id, 'email' => $email];
         $codes = (new Query())
             ->select(['code'])
             ->from(['craftnet_emailcodes'])
-            ->where(['userId' => $this->user->id, 'email' => $email])
+            ->where($condition)
             ->column();
 
         // see if any of them are valid
@@ -121,9 +122,16 @@ class EmailVerifier extends BaseObject
             throw new InvalidArgumentException("Unable to verify the email {$email}");
         }
 
+        // claim unowned licenses with that email
         $module = Module::getInstance();
         $num = $module->getCmsLicenseManager()->claimLicenses($this->user, $email);
         $num += $module->getPluginLicenseManager()->claimLicenses($this->user, $email);
+
+        // remove all verification codes for this user + email
+        $db->createCommand()
+            ->delete('craftnet_emailcodes', $condition)
+            ->execute();
+
         return $num;
     }
 }
