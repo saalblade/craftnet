@@ -54,7 +54,7 @@ use yii\base\Event;
  */
 class Module extends \yii\base\Module
 {
-    const RECEIPT_MESSAGE_KEY = 'craftnet_receipt';
+    const MESSAGE_KEY_RECEIPT = 'craftnet_receipt';
 
     /**
      * @inheritdoc
@@ -92,7 +92,7 @@ class Module extends \yii\base\Module
         // register our custom receipt system message
         Event::on(SystemMessages::class, SystemMessages::EVENT_REGISTER_MESSAGES, function(RegisterEmailMessagesEvent $e) {
             $e->messages[] = new SystemMessage([
-                'key' => self::RECEIPT_MESSAGE_KEY,
+                'key' => self::MESSAGE_KEY_RECEIPT,
                 'heading' => 'When someone places an order:',
                 'subject' => 'Your receipt from {{ fromName }}',
                 'body' => file_get_contents(__DIR__.'/orders/receipt/templates/email.txt'),
