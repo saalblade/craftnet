@@ -545,17 +545,16 @@ abstract class BaseApiController extends Controller
     }
 
     /**
-     * Authorizes the request and returns the authorized user.
+     * Returns the authorized user, if any.
      *
-     * @return User|UserBehavior
-     * @throws UnauthorizedHttpException if the request is not authorized
+     * @return User|UserBehavior|null
      */
-    protected function getAuthUser(): User
+    protected function getAuthUser()
     {
         list ($username, $password) = Craft::$app->getRequest()->getAuthCredentials();
 
         if (!$username || !$password) {
-            throw new UnauthorizedHttpException('Not Authorized');
+            return null;
         }
 
         /** @var User|UserBehavior|null $user */
@@ -567,7 +566,7 @@ abstract class BaseApiController extends Controller
             $user->getStatus() !== User::STATUS_ACTIVE ||
             Craft::$app->getSecurity()->validatePassword($password, $user->apiToken) === false
         ) {
-            throw new UnauthorizedHttpException('Not Authorized');
+            return null;
         }
 
         return $user;
