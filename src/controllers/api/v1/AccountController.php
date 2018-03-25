@@ -66,6 +66,8 @@ class AccountController extends BaseApiController
 
                                 if (isset($response['object']) && $response['object'] === 'card') {
                                     $card = $response;
+                                } elseif (isset($response['object']) && $response['object'] === 'source') {
+                                    $card = $response['card'];
                                 }
                             }
 
