@@ -142,7 +142,7 @@
             claimLicensesByEmail() {
                 this.emailLoading = true;
 
-                this.$store.dispatch('claimLicensesByEmail', this.pluginLicenseKey)
+                this.$store.dispatch('claimLicensesByEmail', this.email)
                     .then(response => {
                         this.emailLoading = false;
                         this.$store.dispatch('getCmsLicenses');
