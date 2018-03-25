@@ -3,7 +3,6 @@
   "type": "object",
   "properties": {
     "email": {"type": "string", "format": "email"},
-    "billingAddressId": {"type": "integer"},
     "billingAddress": {
       "type": "object",
       "properties": {
