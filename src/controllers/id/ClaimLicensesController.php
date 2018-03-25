@@ -38,12 +38,14 @@ class ClaimLicensesController extends Controller
      * @param string $email
      * @return Response
      */
-    public function actionRequest(string $email): Response
+    public function actionRequest(): Response
     {
         /** @var User|UserBehavior $user */
         $user = Craft::$app->getUser()->getIdentity();
 
         try {
+            $email = Craft::$app->getRequest()->getRequiredParam('email');
+
             $user->getEmailVerifier()->sendVerificationEmail($email);
         } catch (InvalidArgumentException $e) {
             return $this->asErrorJson($e->getMessage());
