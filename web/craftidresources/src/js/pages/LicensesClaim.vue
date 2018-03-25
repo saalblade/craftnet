@@ -148,7 +148,7 @@
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
                         this.$store.dispatch('getInvoices');
-                        this.$root.displayNotice('Licenses claimed.');
+                        this.$root.displayNotice('Verification email sent to ' + this.email + '.');
                     })
                     .catch(response => {
                         this.emailLoading = false;
