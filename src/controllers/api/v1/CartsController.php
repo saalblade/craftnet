@@ -197,9 +197,7 @@ class CartsController extends BaseApiController
             }
 
             // billing address
-            if (isset($payload->billingAddressId)) {
-                $this->_updateCartBillingAddressId($cart, $payload->billingAddressId, $errors);
-            } else if (isset($payload->billingAddress)) {
+            if (isset($payload->billingAddress)) {
                 $this->_updateCartBillingAddress($cart, $payload->billingAddress, $errors);
             }
 
