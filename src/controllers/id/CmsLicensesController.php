@@ -146,6 +146,10 @@ class CmsLicensesController extends Controller
                 $license->domain = Craft::$app->getRequest()->getParam('domain') ?: null;
                 $license->notes = Craft::$app->getRequest()->getParam('notes');
 
+                if (!$this->module->getCmsLicenseManager()->normalizeDomain($license->domain)) {
+                    throw new Exception('Invalid domain name.');
+                }
+
                 if ($manager->saveLicense($license)) {
                     if ($license->domain !== $oldDomain) {
                         $note = $license->domain ? "tied to domain {$license->domain}" : "untied from domain {$oldDomain}";
