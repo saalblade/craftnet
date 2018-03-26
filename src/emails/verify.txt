@@ -1,7 +1,6 @@
 Hey {{user.friendlyName}},
 
-To claim your Craft and plugin licenses assigned to {{ email }},
-please verify that you own the email address by clicking on this link:
+Please verify that you own the email {{ email }} by clicking on this link:
 
 {{ link }}
 
