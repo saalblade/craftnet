@@ -35,7 +35,7 @@
                 <p class="text-secondary">Attach a plugin license to your Craft ID account.</p>
 
                 <form @submit.prevent="claimPluginLicense()">
-                    <text-field id="pluginLicenseKey" class="mono" spellcheck="false" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" :mask="{mask: '****-****-****-****-****-****', placeholder: ' '}" />
+                    <text-field id="pluginLicenseKey" class="mono" spellcheck="false" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" :mask="{ mask: '****-****-****-****-****-****', placeholder: ' ', showMaskOnHover: false, showMaskOnFocus: false }" />
                     <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !pluginLicenseValidates }" :disabled="!pluginLicenseValidates" />
                     <div class="spinner" v-if="pluginLicenseLoading"></div>
                 </form>
