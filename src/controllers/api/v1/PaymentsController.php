@@ -3,13 +3,14 @@
 namespace craftnet\controllers\api\v1;
 
 use Craft;
+use craft\commerce\errors\PaymentException;
 use craft\commerce\models\Transaction;
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\stripe\gateways\Gateway as StripeGateway;
 use craftnet\errors\ValidationException;
-use Stripe\Error\InvalidRequest;
 use yii\base\Exception;
 use yii\base\UserException;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 /**
@@ -30,10 +31,8 @@ class PaymentsController extends CartsController
      *
      * @return Response
      * @throws Exception
-     * @throws InvalidRequest
-     * @throws ValidationException
-     * @throws \Exception
-     * @throws \yii\base\InvalidConfigException
+     * @throws ValidationException if the order number isn't valid or isn't ready to be purchased
+     * @throws BadRequestHttpException if there was an issue with the payment
      */
     public function actionPay(): Response
     {
@@ -90,21 +89,31 @@ class PaymentsController extends CartsController
             throw new ValidationException($errors);
         }
 
-        // get the gateway
-        /** @var StripeGateway $gateway */
-        $gateway = $commerce->getGateways()->getGatewayById(getenv('STRIPE_GATEWAY_ID'));
+        // only process a payment if
+        if ($totalPrice) {
+            // get the gateway
+            /** @var StripeGateway $gateway */
+            $gateway = $commerce->getGateways()->getGatewayById(getenv('STRIPE_GATEWAY_ID'));
 
-        // pay
-        $paymentForm = $gateway->getPaymentFormModel();
-        $paymentForm->token = $payload->token;
+            // pay
+            $paymentForm = $gateway->getPaymentFormModel();
+            $paymentForm->token = $payload->token;
 
-        if (!$commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction)) {
-            throw new Exception('Payment not processed.');
+            try {
+                $commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction);
+            } catch (PaymentException $e) {
+                throw new BadRequestHttpException($e->getMessage(), $e->getCode(), $e->getPrevious());
+            }
+        } else {
+            // just mark it as complete since it's a free order
+            $cart->markAsComplete();
         }
 
         /** @var Transaction $transaction */
-        return $this->asJson([
-            'transaction' => $transaction->toArray(),
-        ]);
+        $response = ['completed' => true];
+        if (isset($transaction)) {
+            $response['transaction'] = $transaction->toArray();
+        }
+        return $this->asJson($response);
     }
 }

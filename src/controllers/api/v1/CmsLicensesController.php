@@ -34,41 +34,17 @@ class CmsLicensesController extends BaseApiController
      */
     public function actionCreate(): Response
     {
-        $headers = Craft::$app->getRequest()->getHeaders();
-        if (($email = $headers->get('X-Craft-User-Email')) === null) {
-            throw new BadRequestHttpException('Missing X-Craft-User-Email Header');
-        }
-        if ((new EmailValidator())->validate($email, $error) === false) {
-            throw new BadRequestHttpException($error);
-        }
+        $license = $this->createCmsLicense();
 
-        $license = new CmsLicense([
-            'expirable' => true,
-            'expired' => false,
-            'autoRenew' => false,
-            'edition' => CmsLicenseManager::EDITION_PERSONAL,
-            'email' => $email,
-            'domain' => $headers->get('X-Craft-Host'),
-            'key' => KeyHelper::generateCmsKey(),
-            'lastEdition' => $this->cmsEdition,
-            'lastVersion' => $this->cmsVersion,
-            'lastActivityOn' => new \DateTime(),
-        ]);
-
-        if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
-            throw new Exception('Could not create CMS license: '.implode(', ', $license->getErrorSummary(true)));
-        }
-
-        $note = "created by {$license->email}";
-        if ($license->domain) {
-            $note .= " for domain {$license->domain}";
-        }
-        $this->module->getCmsLicenseManager()->addHistory($license->id, $note);
-
-        Craft::$app->getResponse()->getHeaders()
+        $responseHeaders = Craft::$app->getResponse()->getHeaders()
             ->set('X-Craft-License-Status', self::LICENSE_STATUS_VALID)
             ->set('X-Craft-License-Domain', $license->domain)
             ->set('X-Craft-License-Edition', $license->edition);
+
+        // was a host provided with the request?
+        if (Craft::$app->getRequest()->getHeaders()->has('X-Craft-Host')) {
+            $responseHeaders->set('X-Craft-Allow-Trials', (string)($license->domain === null));
+        }
 
         // include this license in the request log
         $this->cmsLicenses[] = $license;

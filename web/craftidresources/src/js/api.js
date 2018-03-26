@@ -168,6 +168,19 @@ export default {
             .catch(error => cbError(error.response));
     },
 
+    claimLicensesByEmail(email, cb, cbError) {
+        let data = {
+            email: email,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/claim-licenses', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
     claimPluginLicense(licenseKey, cb, cbError) {
         let data = {
             key: licenseKey,
@@ -272,6 +285,18 @@ export default {
         let qsData = qs.stringify(data);
 
         axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/save', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
+    getInvoices(cb, cbError) {
+        let data = {
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/account/get-invoices', qsData)
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },

@@ -257,22 +257,9 @@
             domainChange() {
                 this.domainValidates = false;
                 if(this.licenseDraft.domain !== this.license.domain) {
-                    if(this.checkDomainName(this.licenseDraft.domain)) {
-                        this.domainValidates = true;
-					}
+                    this.domainValidates = true;
                 }
 			},
-
-            /**
-             * Checks if a domain name is valid.
-             */
-			checkDomainName(domainName) {
-				if (/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(domainName)) {
-					return true;
-				}
-
-				return false;
-			}
 
         },
 

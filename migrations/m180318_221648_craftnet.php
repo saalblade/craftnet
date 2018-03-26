@@ -3,7 +3,6 @@
 namespace craft\contentmigrations;
 
 use craft\db\Migration;
-use craft\helpers\MigrationHelper;
 use craftnet\fields\Plugins;
 
 /**

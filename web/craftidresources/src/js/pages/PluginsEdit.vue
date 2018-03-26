@@ -1,9 +1,11 @@
 <template>
     <div class="mb-3">
-        <template v-if="!pluginId && !this.pluginDraft.repository">
-            <p><router-link class="nav-link" to="/developer/plugins" exact>← Plugins</router-link></p>
-            <h1>Add a plugin</h1>
+        <p><router-link class="nav-link" to="/developer/plugins" exact>← Plugins</router-link></p>
 
+        <h1 v-if="plugin">{{ plugin.name }}</h1>
+        <h1 v-else>Add a plugin</h1>
+
+        <template v-if="!pluginId && !this.pluginDraft.repository">
             <div class="card">
                 <div class="card-body">
                     <template v-if="connectedAppsCount > 0">
@@ -19,7 +21,7 @@
                     </template>
                     <template v-else>
                         <h2>Connect</h2>
-                        <p>Connect to GitHub or Bitbucket to retrieve your repositories.</p>
+                        <p>Connect to GitHub to retrieve your repositories.</p>
 
                         <connected-apps></connected-apps>
                     </template>
@@ -28,11 +30,8 @@
         </template>
 
         <template v-else>
-            <p><router-link class="nav-link" to="/developer/plugins" exact>← Plugins</router-link></p>
-
-            <h1>{{ plugin.name }}</h1>
-
             <div v-if="plugin && !plugin.enabled" role="alert" class="alert alert-info">
+
                 <template v-if="plugin.pendingApproval">
                     Your plugin is being reviewed, it will be automatically published once it’s approved.
                 </template>

@@ -8,10 +8,10 @@ use craft\web\Controller;
 use craft\web\UploadedFile;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
-use yii\web\ForbiddenHttpException;
-use yii\web\Response;
 use Exception;
 use Throwable;
+use yii\web\ForbiddenHttpException;
+use yii\web\Response;
 
 /**
  * Class CmsLicensesController
@@ -71,7 +71,7 @@ class CmsLicensesController extends Controller
         $license = $this->module->getCmsLicenseManager()->getLicenseById($licenseId);
 
         if ($license->ownerId === $user->id) {
-            return Craft::$app->getResponse()->sendContentAsFile($license->key, 'license.key');
+            return Craft::$app->getResponse()->sendContentAsFile(chunk_split($license->key, 50), 'license.key');
         }
 
         throw new ForbiddenHttpException('User is not authorized to perform this action');
@@ -145,6 +145,10 @@ class CmsLicensesController extends Controller
                 $oldDomain = $license->domain;
                 $license->domain = Craft::$app->getRequest()->getParam('domain') ?: null;
                 $license->notes = Craft::$app->getRequest()->getParam('notes');
+
+                if (!$this->module->getCmsLicenseManager()->normalizeDomain($license->domain)) {
+                    throw new Exception('Invalid domain name.');
+                }
 
                 if ($manager->saveLicense($license)) {
                     if ($license->domain !== $oldDomain) {

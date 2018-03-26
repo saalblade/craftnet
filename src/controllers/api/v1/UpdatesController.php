@@ -22,7 +22,7 @@ class UpdatesController extends BaseApiController
 {
     public $defaultAction = 'get';
 
-    public function runAction($id, $params = [])
+    public function runAction($id, $params = []): Response
     {
         // BC support for old POST /v1/updates requests
         if ($id === 'old') {
@@ -88,15 +88,12 @@ class UpdatesController extends BaseApiController
      */
     private function _getCmsUpdateInfo(): array
     {
+        $status = Update::STATUS_ELIGIBLE;
         if (!empty($this->cmsLicenses)) {
             $cmsLicense = reset($this->cmsLicenses);
             if ($cmsLicense->expired) {
                 $status = Update::STATUS_EXPIRED;
-            } else {
-                $status = Update::STATUS_ELIGIBLE;
             }
-        } else {
-            $status = Update::STATUS_UNKNOWN;
         }
 
         return [
@@ -118,14 +115,9 @@ class UpdatesController extends BaseApiController
         $updateInfo = [];
 
         foreach ($this->plugins as $handle => $plugin) {
-            if (isset($this->pluginLicenses[$handle])) {
-                if ($this->pluginLicenses[$handle]->expired) {
-                    $status = Update::STATUS_EXPIRED;
-                } else {
-                    $status = Update::STATUS_ELIGIBLE;
-                }
-            } else {
-                $status = Update::STATUS_UNKNOWN;
+            $status = Update::STATUS_ELIGIBLE;
+            if (isset($this->pluginLicenses[$handle]) && $this->pluginLicenses[$handle]->expired) {
+                $status = Update::STATUS_EXPIRED;
             }
 
             $releases = $this->_releases($plugin->packageName, $this->pluginVersions[$handle]);

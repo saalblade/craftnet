@@ -1,0 +1,7 @@
+Hey {{user.friendlyName}},
+
+Please verify that you own the email {{ email }} by clicking on this link:
+
+{{ link }}
+
+If you were not expecting this email, just ignore it.

@@ -4,7 +4,7 @@
   "properties": {
     "orderNumber": {"type": "string"},
     "expectedPrice": {"$ref": "definitions.json#/price"},
-    "token": {"type": "string"}
+    "token": {"type": ["string", "null"]}
   },
-  "required": ["orderNumber", "expectedPrice", "token"]
+  "required": ["orderNumber", "expectedPrice"]
 }

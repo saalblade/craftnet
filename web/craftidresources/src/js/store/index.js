@@ -14,6 +14,7 @@ export default new Vuex.Store({
         stripeAccount: null,
         stripeCustomer: null,
         stripeCard: null,
+        invoices: [],
     },
     getters,
     actions,

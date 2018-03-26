@@ -11,6 +11,7 @@ use craftnet\Module;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
+use yii\db\Expression;
 
 class PluginLicenseManager extends Component
 {
@@ -43,6 +44,28 @@ class PluginLicenseManager extends Component
     {
         $results = $this->_createLicenseQuery()
             ->where(['l.ownerId' => $ownerId])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
+     * Returns licenses purchased by an order.
+     *
+     * @param int $orderId
+     * @return PluginLicense[]]
+     */
+    public function getLicensesByOrder(int $orderId): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->innerJoin('craftnet_pluginlicenses_lineitems l_li', '[[l_li.licenseId]] = [[l.id]]')
+            ->innerJoin('commerce_lineitems li', '[[li.id]] = [[l_li.lineItemId]]')
+            ->where(['li.orderId' => $orderId])
             ->all();
 
         $licenses = [];
@@ -127,7 +150,7 @@ class PluginLicenseManager extends Component
      * Saves a license.
      *
      * @param PluginLicense $license
-     * @param bool          $runValidation
+     * @param bool $runValidation
      *
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
@@ -191,7 +214,7 @@ class PluginLicenseManager extends Component
                 ->execute();
 
             // set the ID on the model
-            $license->id = Craft::$app->getDb()->getLastInsertID('craftnet_pluginlicenses');
+            $license->id = (int)Craft::$app->getDb()->getLastInsertID('craftnet_pluginlicenses');
         } else {
             $success = (bool)Craft::$app->getDb()->createCommand()
                 ->update('craftnet_pluginlicenses', $data, ['id' => $license->id])
@@ -208,8 +231,8 @@ class PluginLicenseManager extends Component
     /**
      * Adds a new record to a Craft license’s history.
      *
-     * @param int         $licenseId
-     * @param string      $note
+     * @param int $licenseId
+     * @param string $note
      * @param string|null $timestamp
      */
     public function addHistory(int $licenseId, string $note, string $timestamp = null)
@@ -243,7 +266,7 @@ class PluginLicenseManager extends Component
     /**
      * Claims a license for a user.
      *
-     * @param User   $user
+     * @param User $user
      * @param string $key
      *
      * @throws LicenseNotFoundException
@@ -285,16 +308,18 @@ class PluginLicenseManager extends Component
      * and and assigns them to the user.
      *
      * @param User $user
+     * @param string|null $email the email to look for (defaults to the user's email)
+     * @return int the total number of affected licenses
      */
-    public function claimLicenses(User $user)
+    public function claimLicenses(User $user, string $email = null): int
     {
-        Craft::$app->getDb()->createCommand()
+        return Craft::$app->getDb()->createCommand()
             ->update('craftnet_pluginlicenses', [
                 'ownerId' => $user->id,
             ], [
                 'and',
                 ['ownerId' => null],
-                new Expression('lower([[email]]) = :email', [':email' => strtolower($user->email)]),
+                new Expression('lower([[email]]) = :email', [':email' => strtolower($email ?? $user->email)]),
             ], [], false)
             ->execute();
     }
@@ -310,51 +335,83 @@ class PluginLicenseManager extends Component
     {
         $results = $this->getLicensesByOwner($owner->id);
 
+        return $this->transformLicensesForOwner($results, $owner);
+    }
+
+    /**
+     * Transforms licenses for the given owner.
+     *
+     * @param array $results
+     * @param User  $owner
+     *
+     * @return array
+     */
+    public function transformLicensesForOwner(array $results, User $owner)
+    {
         $licenses = [];
 
         foreach ($results as $result) {
-            $license = $result->getAttributes(['id', 'key', 'cmsLicenseId', 'email', 'notes', 'dateCreated']);
-
-
-            // History
-
-            $license['history'] = $this->getHistory($result->id);
-
-
-            // Plugin
-
-            $plugin = null;
-
-            if ($result->pluginId) {
-                $pluginResult = Plugin::find()->id($result->pluginId)->status(null)->one();
-                $plugin = $pluginResult->getAttributes(['name', 'handle']);
-            }
-
-            $license['plugin'] = $plugin;
-
-
-            // CMS License
-
-            $cmsLicense = null;
-
-            if ($result->cmsLicenseId) {
-                $cmsLicenseResult = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
-
-                if ($cmsLicenseResult->ownerId === $owner->id) {
-                    $cmsLicense = $cmsLicenseResult->getAttributes(['key', 'edition']);
-                } else {
-                    $cmsLicense = [
-                        'shortKey' => substr($cmsLicenseResult->key, 0, 10)
-                    ];
-                }
-            }
-
-            $license['cmsLicense'] = $cmsLicense;
-
-            $licenses[] = $license;
+            $licenses[] = $this->transformLicenseForOwner($result, $owner);
         }
 
         return $licenses;
+    }
+
+    /**
+     * Transforms a license for the given owner.
+     *
+     * @param CmsLicense $result
+     * @param User       $owner
+     *
+     * @return array
+     */
+    public function transformLicenseForOwner(PluginLicense $result, User $owner)
+    {
+        if ($result->ownerId === $owner->id) {
+            $license = $result->getAttributes(['id', 'key', 'cmsLicenseId', 'email', 'notes', 'dateCreated']);
+        } else {
+            $license = [
+                'shortKey' => $result->getShortKey()
+            ];
+        }
+
+
+        // History
+
+        $license['history'] = $this->getHistory($result->id);
+
+
+        // Plugin
+
+        $plugin = null;
+
+        if ($result->pluginId) {
+            $pluginResult = Plugin::find()->id($result->pluginId)->status(null)->one();
+            $plugin = $pluginResult->getAttributes(['name', 'handle']);
+        }
+
+        $license['plugin'] = $plugin;
+
+
+        // CMS License
+
+        $cmsLicense = null;
+
+        if ($result->cmsLicenseId) {
+            $cmsLicenseResult = Module::getInstance()->getCmsLicenseManager()->getLicenseById($result->cmsLicenseId);
+
+            if ($cmsLicenseResult->ownerId === $owner->id) {
+                $cmsLicense = $cmsLicenseResult->getAttributes(['key', 'edition']);
+            } else {
+                $cmsLicense = [
+                    'shortKey' => substr($cmsLicenseResult->key, 0, 10)
+                ];
+            }
+        }
+
+        $license['cmsLicense'] = $cmsLicense;
+
+        return $license;
     }
 
     /**

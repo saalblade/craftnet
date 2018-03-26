@@ -106,13 +106,34 @@ class CmsLicenseManager extends Component
      * Returns licenses owned by a user.
      *
      * @param int $ownerId
-     *
      * @return CmsLicense[]
      */
     public function getLicensesByOwner(int $ownerId): array
     {
         $results = $this->_createLicenseQuery()
-            ->where(['ownerId' => $ownerId])
+            ->where(['l.ownerId' => $ownerId])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new CmsLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
+     * Returns licenses purchased by an order.
+     *
+     * @param int $orderId
+     * @return CmsLicense[]]
+     */
+    public function getLicensesByOrder(int $orderId): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->innerJoin('craftnet_cmslicenses_lineitems l_li', '[[l_li.licenseId]] = [[l.id]]')
+            ->innerJoin('commerce_lineitems li', '[[li.id]] = [[l_li.lineItemId]]')
+            ->where(['li.orderId' => $orderId])
             ->all();
 
         $licenses = [];
@@ -134,7 +155,7 @@ class CmsLicenseManager extends Component
     public function getLicenseById(int $id): CmsLicense
     {
         $result = $this->_createLicenseQuery()
-            ->where(['id' => $id])
+            ->where(['l.id' => $id])
             ->one();
 
         if (!$result) {
@@ -161,7 +182,7 @@ class CmsLicenseManager extends Component
         }
 
         $result = $this->_createLicenseQuery()
-            ->where(['key' => $key])
+            ->where(['l.key' => $key])
             ->one();
 
         if ($result === null) {
@@ -210,7 +231,7 @@ class CmsLicenseManager extends Component
      * Saves a license.
      *
      * @param CmsLicense $license
-     * @param bool       $runValidation
+     * @param bool $runValidation
      *
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
@@ -261,7 +282,7 @@ class CmsLicenseManager extends Component
                 ->execute();
 
             // set the ID an UID on the model
-            $license->id = Craft::$app->getDb()->getLastInsertID('craftnet_cmslicenses');
+            $license->id = (int)Craft::$app->getDb()->getLastInsertID('craftnet_cmslicenses');
         } else {
             $success = (bool)Craft::$app->getDb()->createCommand()
                 ->update('craftnet_cmslicenses', $data, ['id' => $license->id])
@@ -278,8 +299,8 @@ class CmsLicenseManager extends Component
     /**
      * Adds a new record to a Craft license’s history.
      *
-     * @param int         $licenseId
-     * @param string      $note
+     * @param int $licenseId
+     * @param string $note
      * @param string|null $timestamp
      */
     public function addHistory(int $licenseId, string $note, string $timestamp = null)
@@ -313,7 +334,7 @@ class CmsLicenseManager extends Component
     /**
      * Claims a license for a user.
      *
-     * @param User   $user
+     * @param User $user
      * @param string $key
      *
      * @throws LicenseNotFoundException
@@ -343,16 +364,18 @@ class CmsLicenseManager extends Component
      * and and assigns them to the user.
      *
      * @param User $user
+     * @param string|null $email the email to look for (defaults to the user's email)
+     * @return int the total number of affected licenses
      */
-    public function claimLicenses(User $user)
+    public function claimLicenses(User $user, string $email = null): int
     {
-        Craft::$app->getDb()->createCommand()
+        return Craft::$app->getDb()->createCommand()
             ->update('craftnet_cmslicenses', [
                 'ownerId' => $user->id,
             ], [
                 'and',
                 ['ownerId' => null],
-                new Expression('lower([[email]]) = :email', [':email' => strtolower($user->email)]),
+                new Expression('lower([[email]]) = :email', [':email' => strtolower($email ?? $user->email)]),
             ], [], false)
             ->execute();
     }
@@ -368,50 +391,82 @@ class CmsLicenseManager extends Component
     {
         $results = $this->getLicensesByOwner($owner->id);
 
+        return $this->transformLicensesForOwner($results, $owner);
+    }
+
+    /**
+     * Transforms licenses for the given owner.
+     *
+     * @param array $results
+     * @param User  $owner
+     *
+     * @return array
+     */
+    public function transformLicensesForOwner(array $results, User $owner)
+    {
         $licenses = [];
 
         foreach ($results as $result) {
-            $license = $result->getAttributes(['id', 'key', 'edition', 'domain', 'notes', 'email', 'dateCreated']);
-
-            $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
-
-
-            // History
-
-            $license['history'] = $this->getHistory($result->id);
-
-
-            // Plugin licenses
-
-            $pluginLicenses = [];
-
-            foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
-                if ($pluginLicensesResult->ownerId === $owner->id) {
-                    $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key']);
-                } else {
-                    $pluginLicense = [
-                        'shortKey' => $pluginLicensesResult->getShortKey(),
-                    ];
-                }
-
-                $plugin = null;
-
-                if ($pluginLicensesResult->pluginId) {
-                    $pluginResult = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
-                    $plugin = $pluginResult->getAttributes(['name']);
-                }
-
-                $pluginLicense['plugin'] = $plugin;
-
-                $pluginLicenses[] = $pluginLicense;
-            }
-
-            $license['pluginLicenses'] = $pluginLicenses;
-
-            $licenses[] = $license;
+            $licenses[] = $this->transformLicenseForOwner($result, $owner);
         }
 
         return $licenses;
+    }
+
+    /**
+     * Transforms a license for the given owner.
+     *
+     * @param CmsLicense $result
+     * @param User       $owner
+     *
+     * @return array
+     */
+    public function transformLicenseForOwner(CmsLicense $result, User $owner)
+    {
+        if ($result->ownerId === $owner->id) {
+            $license = $result->getAttributes(['id', 'key', 'edition', 'domain', 'notes', 'email', 'dateCreated']);
+        } else {
+            $license = [
+                'shortKey' => $result->getShortKey()
+            ];
+        }
+
+        $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
+
+
+        // History
+
+        $license['history'] = $this->getHistory($result->id);
+
+
+        // Plugin licenses
+
+        $pluginLicenses = [];
+
+        foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
+            if ($pluginLicensesResult->ownerId === $owner->id) {
+                $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key']);
+            } else {
+                $pluginLicense = [
+                    'shortKey' => $pluginLicensesResult->getShortKey(),
+                ];
+            }
+
+            $plugin = null;
+
+            if ($pluginLicensesResult->pluginId) {
+                $pluginResult = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
+                $plugin = $pluginResult->getAttributes(['name']);
+            }
+
+            $pluginLicense['plugin'] = $plugin;
+
+            $pluginLicenses[] = $pluginLicense;
+        }
+
+        $license['pluginLicenses'] = $pluginLicenses;
+
+        return $license;
     }
 
     /**
@@ -421,28 +476,28 @@ class CmsLicenseManager extends Component
     {
         return (new Query())
             ->select([
-                'id',
-                'editionId',
-                'ownerId',
-                'expirable',
-                'expired',
-                'autoRenew',
-                'edition',
-                'email',
-                'domain',
-                'key',
-                'notes',
-                'privateNotes',
-                'lastEdition',
-                'lastVersion',
-                'lastAllowedVersion',
-                'lastActivityOn',
-                'lastRenewedOn',
-                'expiresOn',
-                'dateCreated',
-                'dateUpdated',
-                'uid',
+                'l.id',
+                'l.editionId',
+                'l.ownerId',
+                'l.expirable',
+                'l.expired',
+                'l.autoRenew',
+                'l.edition',
+                'l.email',
+                'l.domain',
+                'l.key',
+                'l.notes',
+                'l.privateNotes',
+                'l.lastEdition',
+                'l.lastVersion',
+                'l.lastAllowedVersion',
+                'l.lastActivityOn',
+                'l.lastRenewedOn',
+                'l.expiresOn',
+                'l.dateCreated',
+                'l.dateUpdated',
+                'l.uid',
             ])
-            ->from(['craftnet_cmslicenses']);
+            ->from(['craftnet_cmslicenses l']);
     }
 }

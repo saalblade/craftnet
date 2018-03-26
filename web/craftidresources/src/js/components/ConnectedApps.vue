@@ -1,44 +1,34 @@
 <template>
-	<div>
-		<div class="card mb-3">
-			<div class="card-body">
-				<template v-if="title">
-					<h4>{{ title }}</h4>
-				</template>
+	<div class="list-group">
+		<stripe-account v-if="showStripe"></stripe-account>
 
-				<div class="list-group">
-					<stripe-account></stripe-account>
+		<div v-for="appType, index in appTypes" class="list-group-item">
+			<div class="flex items-start">
+				<img class="flex mr-3" :src="'/craftidresources/dist/images/' + appType.handle + '.svg'" height="48" />
+				<div class="flex-1">
+					<template v-if="apps[appType.handle]">
+						<h5>{{ accountName(appType.handle) }}</h5>
+						<p class="mb-0">
+							<span class="text-secondary">{{ appType.name }}</span>
+						</p>
+					</template>
 
-					<div v-for="appType, index in appTypes" class="list-group-item">
-						<div class="flex items-start">
-							<img class="flex mr-3" :src="'/craftidresources/dist/images/' + appType.handle + '.svg'" height="48" />
-							<div class="flex-1">
-								<template v-if="apps[appType.handle]">
-									<h5>{{ accountName(appType.handle) }}</h5>
-									<p class="mb-0">
-										<span class="text-secondary">{{ appType.name }}</span>
-									</p>
-								</template>
+					<template v-else>
+						<h5>{{ appType.name }}</h5>
+						<p class="mb-0">Connect to your {{ appType.name }} account.</p>
+					</template>
+				</div>
+				<div>
+					<a v-if="apps[appType.handle]" href="#" class="btn btn-danger" @click.prevent="disconnect(appType.handle)">Disconnect</a>
+					<a v-else="" href="#" class="btn btn-primary" @click.prevent="connect(appType.handle)">Connect</a>
 
-								<template v-else>
-									<h5>{{ appType.name }}</h5>
-									<p class="mb-0">Connect to your {{ appType.name }} account.</p>
-								</template>
-							</div>
-							<div>
-								<a v-if="apps[appType.handle]" href="#" class="btn btn-danger" @click.prevent="disconnect(appType.handle)">Disconnect</a>
-								<a v-else="" href="#" class="btn btn-primary" @click.prevent="connect(appType.handle)">Connect</a>
-
-								<div v-if="loading && loading[appType.handle]" class="mt-2 text-right">
-									<div class="spinner"></div>
-								</div>
-							</div>
-						</div>
-
-						<hr v-if="index != (appTypes.length - 1)">
+					<div v-if="loading && loading[appType.handle]" class="mt-2 text-right">
+						<div class="spinner"></div>
 					</div>
 				</div>
 			</div>
+
+			<hr v-if="index != (appTypes.length - 1)">
 		</div>
 	</div>
 </template>
@@ -49,7 +39,7 @@
 
     export default {
 
-        props: ['title'],
+        props: ['title', 'showStripe'],
 
         data() {
             return {

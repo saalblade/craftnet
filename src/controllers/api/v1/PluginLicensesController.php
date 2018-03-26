@@ -33,7 +33,10 @@ class PluginLicensesController extends BaseApiController
      */
     public function actionCreate(): Response
     {
-        $user = $this->getAuthUser();
+        if (($user = $this->getAuthUser()) === null) {
+            throw new UnauthorizedHttpException('Not Authorized');
+        }
+
         $payload = $this->getPayload('create-plugin-license-request');
 
         $plugin = Plugin::find()

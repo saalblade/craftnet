@@ -109,6 +109,20 @@ export const claimCmsLicenseFile = ({commit}, licenseFile) => {
     })
 };
 
+export const claimLicensesByEmail = ({commit}, email) => {
+    return new Promise((resolve, reject) => {
+        api.claimLicensesByEmail(email, response => {
+            if (response.data && !response.data.error) {
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
+
 export const claimPluginLicense = ({commit}, licenseKey) => {
     return new Promise((resolve, reject) => {
         api.claimPluginLicense(licenseKey, response => {
@@ -245,6 +259,25 @@ export const saveLicense = ({commit}, license) => {
     })
 };
 
+
+/**
+ * Invoices
+ */
+
+export const getInvoices = ({commit}) => {
+    return new Promise((resolve, reject) => {
+        api.getInvoices(response => {
+            if (response.data && !response.data.error) {
+                commit(types.RECEIVE_INVOICES, {response});
+                resolve(response);
+            } else {
+                reject(response);
+            }
+        }, response => {
+            reject(response);
+        })
+    })
+};
 
 /**
  * Plugins
