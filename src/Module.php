@@ -13,11 +13,14 @@ use craft\elements\User;
 use craft\events\DefineBehaviorsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterCpNavItemsEvent;
+use craft\events\RegisterEmailMessagesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\events\UserEvent;
+use craft\models\SystemMessage;
 use craft\services\Fields;
+use craft\services\SystemMessages;
 use craft\services\UserPermissions;
 use craft\services\Users;
 use craft\services\Utilities;
@@ -31,6 +34,7 @@ use craftnet\composer\PackageManager;
 use craftnet\developers\UserBehavior;
 use craftnet\developers\UserQueryBehavior;
 use craftnet\fields\Plugins;
+use craftnet\invoices\InvoiceManager;
 use craftnet\orders\OrderBehavior;
 use craftnet\orders\PdfRenderer;
 use craftnet\plugins\PluginEdition;
@@ -42,6 +46,7 @@ use yii\base\Event;
 
 /**
  * @property CmsLicenseManager $cmsLicenseManager
+ * @property InvoiceManager $invoiceManager
  * @property JsonDumper $jsonDumper
  * @property Oauth $oauth
  * @property PackageManager $packageManager
@@ -49,6 +54,12 @@ use yii\base\Event;
  */
 class Module extends \yii\base\Module
 {
+    const MESSAGE_KEY_RECEIPT = 'craftnet_receipt';
+    const MESSAGE_KEY_VERIFY = 'verify_email';
+
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         Craft::setAlias('@craftnet', __DIR__);
@@ -77,6 +88,22 @@ class Module extends \yii\base\Module
         });
         Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
             $e->types[] = EditionUpgradeDiscount::class;
+        });
+
+        // register our custom receipt system message
+        Event::on(SystemMessages::class, SystemMessages::EVENT_REGISTER_MESSAGES, function(RegisterEmailMessagesEvent $e) {
+            $e->messages[] = new SystemMessage([
+                'key' => self::MESSAGE_KEY_RECEIPT,
+                'heading' => 'When someone places an order:',
+                'subject' => 'Your receipt from {{ fromName }}',
+                'body' => file_get_contents(__DIR__.'/emails/receipt.txt'),
+            ]);
+            $e->messages[] = new SystemMessage([
+                'key' => self::MESSAGE_KEY_VERIFY,
+                'heading' => 'When someone wants to claim licenses by an email address:',
+                'subject' => 'Verify your email',
+                'body' => file_get_contents(__DIR__.'/emails/verify.txt'),
+            ]);
         });
 
         // claim Craft/plugin licenses after user activation
@@ -113,6 +140,14 @@ class Module extends \yii\base\Module
     public function getCmsLicenseManager(): CmsLicenseManager
     {
         return $this->get('cmsLicenseManager');
+    }
+
+    /**
+     * @return InvoiceManager
+     */
+    public function getInvoiceManager(): InvoiceManager
+    {
+        return $this->get('invoiceManager');
     }
 
     /**

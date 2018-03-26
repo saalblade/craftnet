@@ -33,7 +33,9 @@ class StripeController extends BaseController
     public function actionConnect(): Response
     {
         $provider = $this->_getStripeProvider();
-        $options = [];
+        $options = [
+            'scope' => 'read_write'
+        ];
 
         Craft::$app->getSession()->set('stripe.referrer', Craft::$app->getRequest()->getReferrer());
         $authorizationUrl = $provider->getAuthorizationUrl($options);
@@ -81,6 +83,7 @@ class StripeController extends BaseController
      */
     public function actionDisconnect(): Response
     {
+        /** @var User|UserBehavior $user */
         $user = Craft::$app->getUser()->getIdentity();
 
         $provider = $this->_getStripeProvider();
@@ -98,6 +101,7 @@ class StripeController extends BaseController
 
         $user->stripeAccessToken = null;
         $user->stripeAccount = null;
+        $user->saveDeveloperInfo();
 
         return $this->asJson(['success' => true]);
     }

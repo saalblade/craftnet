@@ -110,9 +110,7 @@ export const upcomingInvoice = state => {
 };
 
 export const invoices = state => {
-    if (state.craftId) {
-        return state.craftId.invoices;
-    }
+    return state.invoices;
 };
 
 export const getInvoiceById = state => {
@@ -125,8 +123,8 @@ export const getInvoiceById = state => {
 
 export const getInvoiceByNumber = state => {
     return number => {
-        if (state.craftId.invoices) {
-            return state.craftId.invoices.find(inv => inv.number == number);
+        if (state.invoices) {
+            return state.invoices.find(inv => inv.number == number);
         }
     }
 };

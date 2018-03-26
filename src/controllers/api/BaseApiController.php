@@ -10,21 +10,26 @@ use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftnet\cms\CmsLicense;
+use craftnet\cms\CmsLicenseManager;
 use craftnet\developers\UserBehavior;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\errors\ValidationException;
+use craftnet\helpers\KeyHelper;
 use craftnet\Module;
 use craftnet\plugins\Plugin;
 use craftnet\plugins\PluginLicense;
 use JsonSchema\Validator;
 use stdClass;
+use yii\base\Exception;
 use yii\base\Model;
 use yii\base\UserException;
 use yii\db\Expression;
 use yii\helpers\Markdown;
+use yii\validators\EmailValidator;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller as YiiController;
 use yii\web\HttpException;
+use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
 
 /**
@@ -139,7 +144,7 @@ abstract class BaseApiController extends Controller
     /**
      * @inheritdoc
      */
-    public function runAction($id, $params = [])
+    public function runAction($id, $params = []): Response
     {
         $request = Craft::$app->getRequest();
         $requestHeaders = $request->getHeaders();
@@ -177,7 +182,20 @@ abstract class BaseApiController extends Controller
         $cmsLicense = null;
 
         try {
-            if (($cmsLicenseKey = $requestHeaders->get('X-Craft-License')) !== null) {
+            $cmsLicenseKey = $requestHeaders->get('X-Craft-License');
+            if ($cmsLicenseKey === '🙏') {
+                $cmsLicense = $this->cmsLicenses[] = $this->createCmsLicense();
+                $responseHeaders
+                    ->set('X-Craft-License', $cmsLicense->key)
+                    ->set('X-Craft-License-Status', self::LICENSE_STATUS_VALID)
+                    ->set('X-Craft-License-Domain', $cmsLicense->domain)
+                    ->set('X-Craft-License-Edition', $cmsLicense->edition);
+
+                // was a host provided with the request?
+                if ($requestHeaders->has('X-Craft-Host')) {
+                    $responseHeaders->set('X-Craft-Allow-Trials', (string)($cmsLicense->domain === null));
+                }
+            } else if ($cmsLicenseKey !== null) {
                 try {
                     $cmsLicenseManager = $this->module->getCmsLicenseManager();
                     $cmsLicense = $this->cmsLicenses[] = $cmsLicenseManager->getLicenseByKey($cmsLicenseKey);
@@ -221,7 +239,7 @@ abstract class BaseApiController extends Controller
                     }
                 } catch (LicenseNotFoundException $e) {
                     $responseHeaders->set('X-Craft-License-Status', self::LICENSE_STATUS_INVALID);
-                } catch (\Throwable $e) {
+                    $e = null;
                 }
             }
 
@@ -259,9 +277,7 @@ abstract class BaseApiController extends Controller
                         }
                     } catch (LicenseNotFoundException $e) {
                         $pluginLicenseStatus = self::LICENSE_STATUS_INVALID;
-                    } catch (\Throwable $e) {
-                        // inconclusive so skip this plugin
-                        continue;
+                        $e = null;
                     }
 
                     $pluginLicenseStatuses[] = "{$pluginHandle}:{$pluginLicenseStatus}";
@@ -272,12 +288,9 @@ abstract class BaseApiController extends Controller
                 }
             }
 
-            // any exceptions getting the licenses?
-            if ($e !== null) {
-                throw new BadRequestHttpException('Bad Request', 0, $e);
+            if (($result = YiiController::runAction($id, $params)) instanceof Response) {
+                $response = $result;
             }
-
-            $response = YiiController::runAction($id, $params);
         } catch (\Throwable $e) {
             // log it and keep going
             Craft::$app->getErrorHandler()->logException($e);
@@ -337,7 +350,7 @@ abstract class BaseApiController extends Controller
             ->execute();
 
         // get the request ID
-        $this->requestId = $db->getLastInsertID('apilog.requests');
+        $this->requestId = (int)$db->getLastInsertID('apilog.requests');
 
         // log any licenses associated with the request
         foreach ($this->cmsLicenses as $cmsLicense) {
@@ -530,17 +543,16 @@ abstract class BaseApiController extends Controller
     }
 
     /**
-     * Authorizes the request and returns the authorized user.
+     * Returns the authorized user, if any.
      *
-     * @return User|UserBehavior
-     * @throws UnauthorizedHttpException if the request is not authorized
+     * @return User|UserBehavior|null
      */
-    protected function getAuthUser(): User
+    protected function getAuthUser()
     {
         list ($username, $password) = Craft::$app->getRequest()->getAuthCredentials();
 
         if (!$username || !$password) {
-            throw new UnauthorizedHttpException('Not Authorized');
+            return null;
         }
 
         /** @var User|UserBehavior|null $user */
@@ -552,9 +564,52 @@ abstract class BaseApiController extends Controller
             $user->getStatus() !== User::STATUS_ACTIVE ||
             Craft::$app->getSecurity()->validatePassword($password, $user->apiToken) === false
         ) {
-            throw new UnauthorizedHttpException('Not Authorized');
+            return null;
         }
 
         return $user;
+    }
+
+    /**
+     * Creates a new CMS license.
+     *
+     * @throws BadRequestHttpException
+     * @throws Exception
+     */
+    protected function createCmsLicense(): CmsLicense
+    {
+        $headers = Craft::$app->getRequest()->getHeaders();
+        if (($email = $headers->get('X-Craft-User-Email')) === null) {
+            throw new BadRequestHttpException('Missing X-Craft-User-Email Header');
+        }
+        if ((new EmailValidator())->validate($email, $error) === false) {
+            throw new BadRequestHttpException($error);
+        }
+
+        $license = new CmsLicense([
+            'expirable' => true,
+            'expired' => false,
+            'autoRenew' => false,
+            'edition' => CmsLicenseManager::EDITION_PERSONAL,
+            'email' => $email,
+            'domain' => $headers->get('X-Craft-Host'),
+            'key' => KeyHelper::generateCmsKey(),
+            'lastEdition' => $this->cmsEdition,
+            'lastVersion' => $this->cmsVersion,
+            'lastActivityOn' => new \DateTime(),
+        ]);
+
+        $manager = $this->module->getCmsLicenseManager();
+        if (!$manager->saveLicense($license)) {
+            throw new Exception('Could not create CMS license: '.implode(', ', $license->getErrorSummary(true)));
+        }
+
+        $note = "created by {$license->email}";
+        if ($license->domain !== null) {
+            $note .= " for domain {$license->domain}";
+        }
+        $this->module->getCmsLicenseManager()->addHistory($license->id, $note);
+
+        return $license;
     }
 }

@@ -17,6 +17,8 @@
 </template>
 
 <script>
+    import Inputmask from 'inputmask'
+
     export default {
 
         props: ['id', 'placeholder', 'value', 'autofocus', 'disabled', 'mask', 'autocapitalize', 'spellcheck', "readonly"],
@@ -25,6 +27,16 @@
             this.$on('focus', function () {
 				this.$refs.input.focus()
             })
+        },
+
+        directives: {
+            mask: {
+                bind: function(el, binding) {
+                    if(binding.value) {
+                        Inputmask(binding.value).mask(el);
+					}
+                }
+            }
         }
 
     }

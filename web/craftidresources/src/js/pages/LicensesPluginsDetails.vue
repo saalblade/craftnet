@@ -8,7 +8,7 @@
         <license-history :history="license.history" />
 
         <div class="card card-danger mb-3">
-            <div class="card-header">Dangaer Zone</div>
+            <div class="card-header">Danger Zone</div>
             <div class="card-body">
                 <h5>Release license</h5>
                 <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
@@ -60,6 +60,7 @@
                     .then(response => {
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
+                        this.$store.dispatch('getInvoices');
                         this.$root.displayNotice('Plugin license released.');
                         this.$router.push({path: '/account/licenses/plugins'});
                     })

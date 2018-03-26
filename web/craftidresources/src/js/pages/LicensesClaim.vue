@@ -35,24 +35,25 @@
                 <p class="text-secondary">Attach a plugin license to your Craft ID account.</p>
 
                 <form @submit.prevent="claimPluginLicense()">
-                    <text-field id="pluginLicenseKey" class="mono" spellcheck="false" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" :mask="{mask: '****-****-****-****-****-****', placeholder: ' '}" />
+                    <text-field id="pluginLicenseKey" class="mono" spellcheck="false" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" :mask="{ mask: '****-****-****-****-****-****', placeholder: ' ', showMaskOnHover: false, showMaskOnFocus: false }" />
                     <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !pluginLicenseValidates }" :disabled="!pluginLicenseValidates" />
                     <div class="spinner" v-if="pluginLicenseLoading"></div>
                 </form>
             </div>
         </div>
 
-        <!--
         <div class="card">
             <div class="card-body">
-                <h3>By email address</h3>
+                <h3>Claim licenses by email address</h3>
                 <p class="text-secondary">Use an email address to attach Craft CMS and plugin licenses to your Craft ID account.</p>
 
-                <text-field id="email" label="Email Address" placeholder="user@example.com" />
-                <input type="submit" class="btn btn-primary" value="Claim Licenses">
+                <form @submit.prevent="claimLicensesByEmail()">
+                    <text-field id="email" label="Email Address" v-model="email" placeholder="user@example.com" />
+                    <input type="submit" class="btn btn-primary" value="Claim Licenses">
+                    <div class="spinner" v-if="emailLoading"></div>
+                </form>
             </div>
         </div>
-        -->
     </div>
 </template>
 
@@ -73,6 +74,8 @@
                 pluginLicenseKey: '',
                 pluginLicenseLoading: false,
                 pluginLicenseValidates: false,
+                email: '',
+                emailLoading: false,
             }
         },
 
@@ -108,6 +111,7 @@
                         this.cmsLicenseLoading = false;
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
+                        this.$store.dispatch('getInvoices');
                         this.$root.displayNotice('CMS license claimed.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })
@@ -124,12 +128,31 @@
                         this.cmsLicenseFileLoading = false;
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
+                        this.$store.dispatch('getInvoices');
                         this.$root.displayNotice('CMS license claimed.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })
                     .catch(response => {
                         this.cmsLicenseFileLoading = false;
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim CMS license.';
+                        this.$root.displayError(errorMessage);
+                    });
+            },
+
+            claimLicensesByEmail() {
+                this.emailLoading = true;
+
+                this.$store.dispatch('claimLicensesByEmail', this.email)
+                    .then(response => {
+                        this.emailLoading = false;
+                        this.$store.dispatch('getCmsLicenses');
+                        this.$store.dispatch('getPluginLicenses');
+                        this.$store.dispatch('getInvoices');
+                        this.$root.displayNotice('Verification email sent to ' + this.email + '.');
+                    })
+                    .catch(response => {
+                        this.emailLoading = false;
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim licenses.';
                         this.$root.displayError(errorMessage);
                     });
             },
@@ -142,6 +165,7 @@
                         this.pluginLicenseLoading = false;
                         this.$store.dispatch('getCmsLicenses');
                         this.$store.dispatch('getPluginLicenses');
+                        this.$store.dispatch('getInvoices');
                         this.$root.displayNotice('Plugin license claimed.');
                         this.$router.push({path: '/account/licenses/plugins'});
                     })

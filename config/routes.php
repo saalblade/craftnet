@@ -30,6 +30,7 @@ return [
         'POST    v1/checkout' => 'craftnet/api/v1/checkout',
         'GET     v1/cms-licenses' => 'craftnet/api/v1/cms-licenses/get',
         'POST    v1/cms-licenses' => 'craftnet/api/v1/cms-licenses/create',
+        'GET     v1/countries' => 'craftnet/api/v1/countries',
         'POST    v1/developer/<userId:\d+>' => 'craftnet/api/v1/developer',
         'POST    v1/optimize-composer-reqs' => 'craftnet/api/v1/optimize-composer-reqs',
         'POST    v1/payments' => 'craftnet/api/v1/payments/pay',

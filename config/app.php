@@ -32,6 +32,9 @@ return [
                             'testing',
                         ]
                     ],
+                    'invoiceManager' => [
+                        'class' => craftnet\invoices\InvoiceManager::class,
+                    ],
                     'pluginLicenseManager' => [
                         'class' => craftnet\plugins\PluginLicenseManager::class,
                     ],

@@ -44,10 +44,11 @@ class CartsController extends BaseApiController
      * Creates a cart.
      *
      * @return Response
+     * @throws ValidationException
      */
     public function actionCreate(): Response
     {
-        $payload = $this->getPayload('create-cart-request');
+        $payload = $this->getPayload('update-cart-request');
 
         $cart = new Order([
             'number' => Commerce::getInstance()->getCarts()->generateCartNumber(),
@@ -173,8 +174,21 @@ class CartsController extends BaseApiController
             $cart->lastIp = Craft::$app->getRequest()->getUserIP();
 
             // set the email/customer before saving the cart, so the cart doesn't create its own customer record
-            if (isset($payload->email)) {
-                $this->_updateCartEmailAndCustomer($cart, $payload->email, $errors);
+            if (($user = $this->getAuthUser()) !== null) {
+                $this->_updateCartEmailAndCustomer($cart, $user, null, $errors);
+            } else if (isset($payload->email)) {
+                $this->_updateCartEmailAndCustomer($cart, null, $payload->email, $errors);
+            }
+
+            // make sure we have an email on the cart
+            if (!$cart->getEmail()) {
+                throw new ValidationException([
+                    [
+                        'param' => 'email',
+                        'message' => 'Email is required',
+                        'code' => self::ERROR_CODE_MISSING_FIELD,
+                    ],
+                ]);
             }
 
             // save the cart if it's new so it gets an ID
@@ -183,9 +197,7 @@ class CartsController extends BaseApiController
             }
 
             // billing address
-            if (isset($payload->billingAddressId)) {
-                $this->_updateCartBillingAddressId($cart, $payload->billingAddressId, $errors);
-            } else if (isset($payload->billingAddress)) {
+            if (isset($payload->billingAddress)) {
                 $this->_updateCartBillingAddress($cart, $payload->billingAddress, $errors);
             }
 
@@ -260,14 +272,15 @@ class CartsController extends BaseApiController
 
     /**
      * @param Order $cart
-     * @param string $email
+     * @param User|null $user
+     * @param string|null $email
      * @param array $errors
      * @throws Exception
      */
-    private function _updateCartEmailAndCustomer(Order $cart, string $email, array &$errors)
+    private function _updateCartEmailAndCustomer(Order $cart, User $user = null, string $email = null, array &$errors)
     {
         // validate first
-        if (!(new EmailValidator())->validate($email, $error)) {
+        if ($email !== null && !(new EmailValidator())->validate($email, $error)) {
             $errors[] = [
                 'param' => 'email',
                 'message' => $error,
@@ -283,16 +296,18 @@ class CartsController extends BaseApiController
             $currentCustomer = $customersService->getCustomerById($cart->customerId);
         }
 
-        // is this a user account's email?
-        $userId = User::find()
-            ->select(['elements.id'])
-            ->where(['email' => $email])
-            ->status(null)
-            ->scalar() ?: null;
+        // if we don't know the user yet, see if we can find one with the given email
+        if ($user === null && $email !== null) {
+            $user = User::find()
+                ->select(['elements.id'])
+                ->where(['email' => $email])
+                ->one();
+        }
 
-        if ($userId) {
+
+        if ($user) {
             // see if we have a customer record for them
-            $customer = $customersService->getCustomerByUserId($userId);
+            $customer = $customersService->getCustomerByUserId($user->id);
         }
 
         // if the cart is already set to the user's customer, then just leave it alone
@@ -302,8 +317,8 @@ class CartsController extends BaseApiController
 
         // is the cart currently set to an anonymous customer?
         if (isset($currentCustomer) && !$currentCustomer->userId) {
-            // if we still don't have a user ID, keep using it
-            if (!$userId) {
+            // if we still don't have a user, keep using it
+            if ($user === null) {
                 $customer = $currentCustomer;
             } else {
                 // safe to delete it
@@ -314,7 +329,7 @@ class CartsController extends BaseApiController
         // do we need to create a new customer?
         if (!isset($customer)) {
             $customer = new Customer([
-                'userId' => $userId,
+                'userId' => $user->id ?? null,
             ]);
             if (!$customersService->saveCustomer($customer)) {
                 throw new Exception('Could not save the customer: '.implode(' ', $customer->getErrorSummary(true)));
@@ -322,7 +337,10 @@ class CartsController extends BaseApiController
         }
 
         $cart->customerId = $customer->id;
-        $cart->setEmail($email);
+
+        if ($email !== null) {
+            $cart->setEmail($email);
+        }
     }
 
     /**
@@ -395,19 +413,19 @@ class CartsController extends BaseApiController
             }
 
             // get the state
-            if (!empty($billingAddress->state)) {
-                if (($state = $commerce->getStates()->getStateByAbbreviation($country->id, $billingAddress->state)) === null) {
-                    $addressErrors[] = [
-                        'param' => 'billingAddress.state',
-                        'message' => 'Invalid state',
-                        'code' => self::ERROR_CODE_INVALID,
-                    ];
-                }
-            } else if ($country !== null && $country->isStateRequired) {
+            if ($country !== null && !empty($billingAddress->state)) {
+                // see if it's a valid state abbreviation
+                $state = $commerce->getStates()->getStateByAbbreviation($country->id, $billingAddress->state);
+            } else {
+                $state = null;
+            }
+
+            // if the country requires a state, make sure they submitted a valid state
+            if ($country !== null && $country->isStateRequired && $state === null) {
                 $addressErrors[] = [
                     'param' => 'billingAddress.state',
-                    'message' => "{$country->name} addresses must specify a state.",
-                    'code' => self::ERROR_CODE_MISSING_FIELD,
+                    'message' => "{$country->name} addresses must specify a valid state.",
+                    'code' => empty($billingAddress->state) ? self::ERROR_CODE_MISSING_FIELD : self::ERROR_CODE_INVALID,
                 ];
             }
         }
@@ -460,7 +478,8 @@ class CartsController extends BaseApiController
 
         $address->countryId = $country->id ?? null;
         $address->stateId = $state->id ?? null;
-        $address->stateName = $state->abbreviation ?? null; // todo: verify this is right
+        $address->stateName = $state->abbreviation ?? $billingAddress->state ?? null;
+        $address->setStateValue(null);
 
         // save the address
         if (!$commerce->getAddresses()->saveAddress($address)) {

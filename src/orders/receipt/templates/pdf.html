@@ -24,7 +24,7 @@
 &nbsp;<br>
 &nbsp;<br>
 
-{% set paymentMethod = order.transactions[0].gateway.name %}
+{% set paymentMethod = order.transactions[0].gateway.name ?? null %}
 
 {% if paymentMethod == 'Stripe' %}
 	{% set paymentMethod = 'Credit Card' %}
@@ -37,7 +37,7 @@
 		<td>
 			Order {{ order.shortNumber|upper }}<br>
 			{{ order.datePaid|date('d F, Y') }}<br>
-			Paid via {{ paymentMethod }}<br>
+			{% if paymentMethod %}Paid via {{ paymentMethod }}<br>{% endif %}
 			&nbsp;<br>
 
 			<strong>Sold to</strong><br>

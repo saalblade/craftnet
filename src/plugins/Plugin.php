@@ -803,17 +803,6 @@ class Plugin extends Element
             $db->createCommand()
                 ->insert('craftnet_plugins', $pluginData)
                 ->execute();
-
-            // Create a new edition/renewal
-            // todo: create multiple editions when we start supporting editions
-            $edition = new PluginEdition([
-                'pluginId' => $this->id,
-                'name' => 'Standard',
-                'handle' => 'standard',
-            ]);
-            $renewal = new PluginRenewal([
-                'pluginId' => $this->id,
-            ]);
         } else {
             // Update the plugins table row
             $db->createCommand()
@@ -827,15 +816,6 @@ class Plugin extends Element
             $db->createCommand()
                 ->delete('craftnet_pluginscreenshots', ['pluginId' => $this->id])
                 ->execute();
-
-            // Fetch the current edition/renewal
-            // todo: fetch multiple editions when we start supporting editions
-            $edition = PluginEdition::find()
-                ->pluginId($this->id)
-                ->one();
-            $renewal = PluginEdition::find()
-                ->pluginId($this->id)
-                ->one();
         }
 
         // Save the new category/screenshot relations
@@ -846,16 +826,42 @@ class Plugin extends Element
             ->batchInsert('craftnet_pluginscreenshots', ['pluginId', 'assetId', 'sortOrder'], $screenshotData)
             ->execute();
 
-        // Save the edition/renewal
+        // Save the edition
         // todo: save all editions when we start supporting editions
-        if ($isNew || $edition->price != $this->price || $edition->renewalPrice != $this->renewalPrice) {
+        $edition = null;
+        if (!$isNew) {
+            $edition = PluginEdition::find()
+                ->pluginId($this->id)
+                ->one();
+        }
+        if (!$edition) {
+            $edition = new PluginEdition([
+                'pluginId' => $this->id,
+                'name' => 'Standard',
+                'handle' => 'standard',
+            ]);
+        }
+        if (!$edition->id || $edition->price != $this->price || $edition->renewalPrice != $this->renewalPrice) {
             $edition->price = $this->price;
             $edition->renewalPrice = $this->price;
             Craft::$app->getElements()->saveElement($edition);
+        }
 
-            if ($isNew) {
-                $renewal->editionId = $edition->id;
-            }
+        // Save the edition
+        // todo: save all renewals when we start supporting editions
+        $renewal = null;
+        if (!$isNew) {
+            $renewal = PluginRenewal::find()
+                ->editionId($edition->id)
+                ->one();
+        }
+        if (!$renewal) {
+            $renewal = new PluginRenewal([
+                'pluginId' => $this->id,
+            ]);
+        }
+        if (!$renewal->id || $renewal->price !== $this->renewalPrice) {
+            $renewal->editionId = $edition->id;
             $renewal->price = $edition->renewalPrice;
             Craft::$app->getElements()->saveElement($renewal);
         }
@@ -973,7 +979,8 @@ EOD;
                 return "<a href='http://packagist.org/packages/{$this->packageName}' target='_blank'>{$this->packageName}</a>";
             case 'repository':
             case 'documentationUrl':
-                return $this->$attribute ? "<a href='{$this->$attribute}' target='_blank'>{$this->$attribute}</a>" : '';
+                $url = $this->$attribute;
+                return $url ? "<a href='{$url}' target='_blank'>".preg_replace('/^https?:\/\/(?:www\.)?github\.com\//', '', $url).'</a>' : '';
             case 'price':
             case 'renewalPrice':
                 return $this->$attribute ? Craft::$app->getFormatter()->asCurrency($this->$attribute, 'USD') : 'Free';
