@@ -28,8 +28,6 @@ class PluginController extends BaseApiController
             return $this->asErrorJson("Couldn't find plugin");
         }
 
-        $enableCraftId = (bool)Craft::$app->getRequest()->getParam('enableCraftId', false);
-
-        return $this->asJson($this->transformPlugin($plugin, true, $enableCraftId));
+        return $this->asJson($this->transformPlugin($plugin, true));
     }
 }

@@ -464,11 +464,10 @@ abstract class BaseApiController extends Controller
     /**
      * @param Plugin $plugin
      * @param bool $fullDetails
-     * @param bool $includePrices
      *
      * @return array
      */
-    protected function transformPlugin(Plugin $plugin, bool $fullDetails = true, bool $includePrices = true): array
+    protected function transformPlugin(Plugin $plugin, bool $fullDetails = true): array
     {
         $icon = $plugin->getIcon();
         $developer = $plugin->getDeveloper();
@@ -482,8 +481,6 @@ abstract class BaseApiController extends Controller
             'handle' => $plugin->handle,
             'name' => strip_tags($plugin->name),
             'shortDescription' => $plugin->shortDescription,
-            'price' => $includePrices ? $plugin->price : null,
-            'renewalPrice' => $includePrices ? $plugin->renewalPrice : null,
             'currency' => 'USD',
             'developerId' => $developer->id,
             'developerName' => strip_tags($developer->getDeveloperName()),
@@ -493,6 +490,14 @@ abstract class BaseApiController extends Controller
             'activeInstalls' => $plugin->activeInstalls,
             'packageName' => $plugin->packageName,
             'lastUpdate' => $latestRelease->time ?? $plugin->dateUpdated->format(\DateTime::ATOM),
+            'editions' => [
+                [
+                    'name' => 'Standard',
+                    'handle' => 'standard',
+                    'price' => $plugin->price,
+                    'renewalPrice' => $plugin->renewalPrice,
+                ],
+            ],
         ];
 
         if ($fullDetails) {
@@ -505,14 +510,7 @@ abstract class BaseApiController extends Controller
                 $screenshotIds[] = $screenshot->getId();
             }
 
-            // todo: remove this when $includePrices goes away
-            $longDescription = $plugin->longDescription;
-            if (!$includePrices && $plugin->price) {
-                $price = Craft::$app->getFormatter()->asCurrency($plugin->price, 'USD');
-                $longDescription = "_This plugin will cost {$price} once Craft 3 GA is released._\n\n{$longDescription}";
-            }
-
-            $longDescription = Markdown::process($longDescription, 'gfm');
+            $longDescription = Markdown::process($plugin->longDescription, 'gfm');
             $longDescription = HtmlPurifier::process($longDescription);
 
             $data['compatibility'] = 'Craft 3';

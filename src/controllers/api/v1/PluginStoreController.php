@@ -31,9 +31,7 @@ class PluginStoreController extends BaseApiController
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
         $enablePluginStoreCache = $craftIdConfig['enablePluginStoreCache'];
-        $enableCommercialFeatures = $craftIdConfig['enableCommercialFeatures'];
-
-        $cacheKey = $enableCommercialFeatures ? 'pluginStoreDataCraftId' : 'pluginStoreData';
+        $cacheKey = 'pluginStoreData';
 
         if ($enablePluginStoreCache) {
             $pluginStoreData = Craft::$app->getCache()->get($cacheKey);
@@ -43,7 +41,7 @@ class PluginStoreController extends BaseApiController
             $pluginStoreData = [
                 'categories' => $this->_categories(),
                 'featuredPlugins' => $this->_featuredPlugins(),
-                'plugins' => $this->_plugins($enableCommercialFeatures),
+                'plugins' => $this->_plugins(),
             ];
 
             if ($enablePluginStoreCache) {
@@ -123,7 +121,7 @@ class PluginStoreController extends BaseApiController
      *
      * @return array
      */
-    private function _plugins(bool $includePrices): array
+    private function _plugins(): array
     {
         $ret = [];
 
@@ -133,7 +131,7 @@ class PluginStoreController extends BaseApiController
             ->all();
 
         foreach ($plugins as $plugin) {
-            $ret[] = $this->transformPlugin($plugin, false, $includePrices);
+            $ret[] = $this->transformPlugin($plugin, false);
         }
 
         return $ret;
