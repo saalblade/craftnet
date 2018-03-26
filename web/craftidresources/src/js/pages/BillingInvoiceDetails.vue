@@ -120,7 +120,14 @@
             }),
 
             invoice() {
-                return this.getInvoiceByNumber(this.$route.params.number);
+                const invoice = this.getInvoiceByNumber(this.$route.params.number)
+
+                if(!invoice) {
+                    this.$root.displayError("Couldn’t find invoice.")
+                    this.$router.push({path: '/account/billing'})
+				}
+
+				return invoice;
             },
 
         }
