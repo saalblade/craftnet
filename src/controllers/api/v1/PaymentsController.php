@@ -89,7 +89,7 @@ class PaymentsController extends CartsController
             throw new ValidationException($errors);
         }
 
-        // only process a payment if
+        // only process a payment if there's a price
         if ($totalPrice) {
             // get the gateway
             /** @var StripeGateway $gateway */
