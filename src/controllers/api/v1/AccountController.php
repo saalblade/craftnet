@@ -58,10 +58,12 @@ class AccountController extends BaseApiController
                             }
 
                             $card = null;
+                            $cardToken = null;
                             $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
 
                             if (count($paymentSources) > 0) {
                                 $paymentSource = $paymentSources[0];
+                                $cardToken = $paymentSource->token;
                                 $response = Json::decode($paymentSource->response);
 
                                 if (isset($response['object']) && $response['object'] === 'card') {
@@ -86,6 +88,7 @@ class AccountController extends BaseApiController
                                 'businessZipCode' => $user->businessZipCode,
                                 'businessCountry' => $user->businessCountry,
                                 'card' => $card,
+                                'cardToken' => $cardToken,
                             ]);
                         }
 
