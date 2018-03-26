@@ -16,6 +16,7 @@ class CountriesController extends BaseApiController
 {
 
     const COUNTRY_CACHE_KEY = 'countryListData';
+    const COUNTRY_CACHE_DURATION = 60 * 60 * 24 * 7;
 
     /**
      * Handles /v1/countries requests.
@@ -76,7 +77,7 @@ class CountriesController extends BaseApiController
             $countryList[$country->iso] = $countryData;
         }
 
-        $cache->set(self::COUNTRY_CACHE_KEY, $countryList);
+        $cache->set(self::COUNTRY_CACHE_KEY, $countryList, self::COUNTRY_CACHE_DURATION);
 
         return $countryList;
     }
