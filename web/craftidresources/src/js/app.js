@@ -109,6 +109,14 @@ window.craftIdApp = new Vue({
             .catch(response => {
                 this.invoicesLoading = false;
             });
+
+        if(window.sessionNotice) {
+            this.$root.displayNotice(window.sessionNotice);
+        }
+
+        if(window.sessionError) {
+            this.$root.displayError(window.sessionError);
+        }
     }
 
 });

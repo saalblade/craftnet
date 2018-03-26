@@ -130,7 +130,7 @@ class OrderBehavior extends Behavior
 
         $mailer = Craft::$app->getMailer();
         $mailer
-            ->composeFromKey(Module::RECEIPT_MESSAGE_KEY, [
+            ->composeFromKey(Module::MESSAGE_KEY_RECEIPT, [
                 'order' => $this->owner,
             ])
             ->setFrom($mailer->from)

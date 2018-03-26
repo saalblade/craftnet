@@ -14,6 +14,8 @@
 	window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken|json_encode|raw : 'false' }};
 	window.stripePublicKey = {{ stripePublicKey|json_encode|raw }};
 	window.stripeConnectUrl = {{ url('stripe/connect')|json_encode|raw }};
+	window.sessionNotice = {{ craft.app.session.getFlash('notice')|json_encode|raw }};
+	window.sessionError = {{ craft.app.session.getFlash('error')|json_encode|raw }};
 
 	window.Craft = {
 	actionUrl:             "{{ actionUrl()|e('js') }}",
@@ -30,11 +32,6 @@
 
 
 {% block body %}
-
-	{# Silent session message #}
-	{% for type in ['notice', 'error'] %}
-		{% set message = craft.app.session.getFlash(type) %}
-	{% endfor %}
 
 	<div id="app">
 		<app ref="app" :loading="loading" :notification="notification"></app>

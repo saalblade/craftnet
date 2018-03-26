@@ -12,6 +12,7 @@ use yii\base\Behavior;
 /**
  * The Developer behavior extends users with plugin developer-related features.
  *
+ * @property EmailVerifier $emailVerifier
  * @property FundsManager $fundsManager
  * @property User $owner
  * @property Plugin[] $plugins
@@ -79,6 +80,14 @@ class UserBehavior extends Behavior
             ->developerId($this->owner->id)
             ->status(null)
             ->all();
+    }
+
+    /**
+     * @return EmailVerifier
+     */
+    public function getEmailVerifier(): EmailVerifier
+    {
+        return new EmailVerifier($this->owner);
     }
 
     /**

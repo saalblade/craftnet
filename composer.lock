@@ -648,16 +648,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "82fee3bd51f1c5455f0d26b8ea447b34e18eacb3"
+                "reference": "29d12ee7dcc7fa49aa44967d4f88343981506889"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/82fee3bd51f1c5455f0d26b8ea447b34e18eacb3",
-                "reference": "82fee3bd51f1c5455f0d26b8ea447b34e18eacb3",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/29d12ee7dcc7fa49aa44967d4f88343981506889",
+                "reference": "29d12ee7dcc7fa49aa44967d4f88343981506889",
                 "shasum": ""
             },
             "require": {
-                "craftcms/cms": "^3.0.0-RC10",
+                "craftcms/cms": "^3.0.0-RC16",
                 "dannyvankooten/vat.php": "~1.1.2",
                 "dompdf/dompdf": "~0.8",
                 "moneyphp/money": "~3.0",
@@ -694,7 +694,7 @@
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-03-23T23:57:04+00:00"
+            "time": "2018-03-24T23:28:49+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
