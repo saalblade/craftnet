@@ -337,7 +337,10 @@ class CartsController extends BaseApiController
         }
 
         $cart->customerId = $customer->id;
-        $cart->setEmail($email);
+
+        if ($email !== null) {
+            $cart->setEmail($email);
+        }
     }
 
     /**
