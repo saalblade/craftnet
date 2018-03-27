@@ -138,7 +138,7 @@ class PaymentsController extends CartsController
         $paymentForm->token = $payload->token;
 
         // if the request is anonymous, we're done
-        if (($user = $this->getAuthUser()) === null) {
+        if (($user = Craft::$app->getUser()->getIdentity(false)) === null) {
             return;
         }
 

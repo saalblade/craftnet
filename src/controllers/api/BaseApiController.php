@@ -144,6 +144,19 @@ abstract class BaseApiController extends Controller
     /**
      * @inheritdoc
      */
+    public function beforeAction($action)
+    {
+        // if the request is authenticated, set their identity
+        if (($user = $this->getAuthUser()) !== null) {
+            Craft::$app->getUser()->setIdentity($user);
+        }
+
+        return parent::beforeAction($action);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function runAction($id, $params = []): Response
     {
         $request = Craft::$app->getRequest();
