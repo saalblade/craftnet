@@ -4,9 +4,13 @@ namespace craftnet\controllers\api\v1;
 
 use Craft;
 use craft\commerce\errors\PaymentException;
+use craft\commerce\errors\PaymentSourceException;
 use craft\commerce\models\Transaction;
 use craft\commerce\Plugin as Commerce;
+use craft\commerce\stripe\gateways\Gateway;
 use craft\commerce\stripe\gateways\Gateway as StripeGateway;
+use craft\commerce\stripe\models\forms\Payment;
+use craft\commerce\stripe\Plugin as Stripe;
 use craftnet\errors\ValidationException;
 use yii\base\Exception;
 use yii\base\UserException;
@@ -96,8 +100,9 @@ class PaymentsController extends CartsController
             $gateway = $commerce->getGateways()->getGatewayById(getenv('STRIPE_GATEWAY_ID'));
 
             // pay
+            /** @var Payment $paymentForm */
             $paymentForm = $gateway->getPaymentFormModel();
-            $paymentForm->token = $payload->token;
+            $this->_populatePaymentForm($payload, $gateway, $paymentForm);
 
             try {
                 $commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction);
@@ -115,5 +120,39 @@ class PaymentsController extends CartsController
             $response['transaction'] = $transaction->toArray();
         }
         return $this->asJson($response);
+    }
+
+    /**
+     * Populates a Stripe payment form from the payload.
+     *
+     * @param \stdClass $payload
+     * @param Gateway $gateway
+     * @param Payment $paymentForm
+     * @throws PaymentSourceException
+     */
+    private function _populatePaymentForm(\stdClass $payload, Gateway $gateway, Payment $paymentForm)
+    {
+        // use the payload's token by default
+        $paymentForm->token = $payload->token;
+
+        // if the request is anonymous, we're done
+        if (($user = $this->getAuthUser()) === null) {
+            return;
+        }
+
+        $commerce = Commerce::getInstance();
+        $stripe = Stripe::getInstance();
+        $paymentSourcesService = $commerce->getPaymentSources();
+        $customersService = $stripe->getCustomers();
+
+        // see if the token is for an existing Stripe source
+        $existingPaymentSources = $paymentSourcesService->getAllGatewayPaymentSourcesByUserId($gateway->id, $user->id);
+        foreach ($existingPaymentSources as $paymentSource) {
+            if ($paymentSource->token === $payload->token) {
+                $customer = $customersService->getCustomer($gateway->id, $user);
+                $paymentForm->customer = $customer->reference;
+                return;
+            }
+        }
     }
 }
