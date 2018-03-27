@@ -7,6 +7,7 @@ use craft\commerce\models\Country;
 use craft\commerce\models\State;
 use craft\commerce\Plugin as Commerce;
 use craftnet\controllers\api\BaseApiController;
+use Moccalotto\Eu\CountryInfo;
 use yii\web\Response;
 
 /**
@@ -63,10 +64,13 @@ class CountriesController extends BaseApiController
 
         $countryList = [];
 
+        $countryInfo = new CountryInfo();
+
         /** @var Country $country */
         foreach ($countries as $country) {
             $countryData = [
                 'name' => $country->name,
+                'euMember' => $countryInfo->isEuMember($country->iso),
                 'stateRequired' => (bool)$country->isStateRequired
             ];
 
