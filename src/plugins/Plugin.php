@@ -681,6 +681,27 @@ class Plugin extends Element
                 'renewalPrice'
             ],
             'number',
+            'min' => 5,
+            'isEmpty' => [$this, 'isPriceEmpty'],
+        ];
+
+        $rules[] = [
+            [
+                'renewalPrice'
+            ],
+            'required',
+            'when' => [$this, 'isRenewalPriceRequired'],
+            'isEmpty' => [$this, 'isPriceEmpty']
+        ];
+
+        $rules[] = [
+            [
+                'renewalPrice'
+            ],
+            'number',
+            'min' => 0,
+            'max' => 0,
+            'when' => [$this, 'isRenewalPriceForbidden']
         ];
 
         $rules[] = [
@@ -732,7 +753,34 @@ class Plugin extends Element
     }
 
     /**
-     * @inheritdoc
+     * Returns whether a given price attribute should be validated.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function isPriceEmpty($value): bool
+    {
+        return $value === null || $value === [] || $value === '' || $value == 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRenewalPriceRequired(): bool
+    {
+        return $this->price != 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRenewalPriceForbidden(): bool
+    {
+        return $this->price == 0;
+    }
+
+    /**
+     * @inheritdoc}
      */
     public function afterSave(bool $isNew)
     {
