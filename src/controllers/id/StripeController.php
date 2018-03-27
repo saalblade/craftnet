@@ -188,8 +188,7 @@ class StripeController extends BaseController
         }
 
         // Remove existing payment sources
-        $existingPaymentSources = $paymentSources->getAllPaymentSourcesByUserId($userId);
-
+        $existingPaymentSources = $paymentSources->getAllGatewayPaymentSourcesByUserId($gateway->id, $userId);
         foreach ($existingPaymentSources as $paymentSource) {
             $paymentSources->deletePaymentSourceById($paymentSource->id);
         }
