@@ -132,7 +132,7 @@ class StripeController extends BaseController
     public function actionCustomer(): Response
     {
         $user = Craft::$app->getUser()->getIdentity();
-        $customer = \craft\commerce\stripe\Plugin::getInstance()->getCustomers()->getCustomer(getenv('STRIPE_GATEWAY_ID'), $user->id);
+        $customer = \craft\commerce\stripe\Plugin::getInstance()->getCustomers()->getCustomer(getenv('STRIPE_GATEWAY_ID'), $user);
 
         $paymentSource = null;
         $card = null;
