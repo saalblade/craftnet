@@ -17,7 +17,7 @@ class AccessTokens extends Component
     // =========================================================================
 
     /**
-     * @return AccessToken
+     * @return AccessToken|null
      * @throws \Exception
      */
     public function getAccessTokenFromRequest($request = null)
@@ -29,17 +29,19 @@ class AccessTokens extends Component
         $headers = $request->getHeaders();
         $jwt = substr($headers['Authorization'], 7);
 
-        if ($jwt) {
-            $token = Module::getInstance()->getOauth()->parseJwt($jwt);
-
-            if ($token->isExpired()) {
-                throw new \Exception("Token has expired.");
-            }
-
-            $tokenClaims = $token->getClaims();
-
-            return $this->getAccessTokenByIdentifier($tokenClaims['jti']);
+        if (!$jwt) {
+            return null;
         }
+
+        $token = Module::getInstance()->getOauth()->parseJwt($jwt);
+
+        if ($token->isExpired()) {
+            throw new \Exception("Token has expired.");
+        }
+
+        $tokenClaims = $token->getClaims();
+
+        return $this->getAccessTokenByIdentifier($tokenClaims['jti']);
     }
 
     /**
@@ -78,15 +80,17 @@ class AccessTokens extends Component
      * @param $identifier
      * @param bool $isRevoked
      *
-     * @return AccessToken
+     * @return AccessToken|null
      */
     public function getAccessTokenByIdentifier($identifier, $isRevoked = false)
     {
         $record = AccessTokenRecord::findOne(['identifier' => $identifier, 'isRevoked' => $isRevoked]);
 
-        if ($record) {
-            return new AccessToken($record->getAttributes());
+        if (!$record) {
+            return null;
         }
+
+        return new AccessToken($record->getAttributes());
     }
 
     /**

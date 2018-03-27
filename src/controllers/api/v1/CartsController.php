@@ -174,7 +174,7 @@ class CartsController extends BaseApiController
             $cart->lastIp = Craft::$app->getRequest()->getUserIP();
 
             // set the email/customer before saving the cart, so the cart doesn't create its own customer record
-            if (($user = $this->getAuthUser()) !== null) {
+            if (($user = Craft::$app->getUser()->getIdentity(false)) !== null) {
                 $this->_updateCartEmailAndCustomer($cart, $user, null, $errors);
             } else if (isset($payload->email)) {
                 $this->_updateCartEmailAndCustomer($cart, null, $payload->email, $errors);

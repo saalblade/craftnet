@@ -2,6 +2,7 @@
 
 namespace craftnet\controllers\api\v1;
 
+use Craft;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\User;
 use craftnet\controllers\api\BaseApiController;
@@ -24,86 +25,52 @@ class AccountController extends BaseApiController
      */
     public function actionIndex(): Response
     {
-        try {
-            // Retrieve access token
-            $accessToken = OauthServer::getInstance()->getAccessTokens()->getAccessTokenFromRequest();
-
-            if ($accessToken) {
-                // Check that this access token is associated with a user
-                if ($accessToken->userId) {
-                    // Check that the user has sufficient permissions to access the resource
-                    $scopes = $accessToken->scopes;
-                    $requiredScopes = ['purchasePlugins', 'existingPlugins', 'transferPluginLicense', 'deassociatePluginLicense'];
-
-                    $hasSufficientPermissions = true;
-
-                    foreach ($requiredScopes as $requiredScope) {
-                        if (!in_array($requiredScope, $scopes)) {
-                            $hasSufficientPermissions = false;
-                        }
-                    }
-
-                    if ($hasSufficientPermissions) {
-                        $user = User::find()->id($accessToken->userId)->one();
-
-                        if ($user) {
-                            $purchasedPlugins = [];
-
-                            foreach ($user->purchasedPlugins->all() as $purchasedPlugin) {
-                                $purchasedPlugins[] = [
-                                    'name' => $purchasedPlugin->title,
-                                    'developerName' => $purchasedPlugin->getAuthor()->developerName,
-                                    'developerUrl' => $purchasedPlugin->getAuthor()->developerUrl,
-                                ];
-                            }
-
-                            $card = null;
-                            $cardToken = null;
-                            $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
-
-                            if (count($paymentSources) > 0) {
-                                $paymentSource = $paymentSources[0];
-                                $cardToken = $paymentSource->token;
-                                $response = Json::decode($paymentSource->response);
-
-                                if (isset($response['object']) && $response['object'] === 'card') {
-                                    $card = $response;
-                                } elseif (isset($response['object']) && $response['object'] === 'source') {
-                                    $card = $response['card'];
-                                }
-                            }
-
-                            return $this->asJson([
-                                'id' => $user->getId(),
-                                'name' => $user->getFullName(),
-                                'email' => $user->email,
-                                'username' => $user->username,
-                                'purchasedPlugins' => $purchasedPlugins,
-                                'businessName' => $user->businessName,
-                                'businessVatId' => $user->businessVatId,
-                                'businessAddressLine1' => $user->businessAddressLine1,
-                                'businessAddressLine2' => $user->businessAddressLine2,
-                                'businessCity' => $user->businessCity,
-                                'businessState' => $user->businessState,
-                                'businessZipCode' => $user->businessZipCode,
-                                'businessCountry' => $user->businessCountry,
-                                'card' => $card,
-                                'cardToken' => $cardToken,
-                            ]);
-                        }
-
-                        throw new \Exception("Couldn’t retrieve user.");
-                    }
-
-                    throw new \Exception("Insufficient permissions.");
-                }
-
-                throw new \Exception("Couldn’t get user identifier.");
-            }
-
-            throw new \Exception("Couldn’t get access token.");
-        } catch (\Throwable $e) {
-            return $this->asErrorJson($e->getMessage());
+        if (($user = Craft::$app->getUser()->getIdentity(false)) === null) {
+            throw new UnauthorizedHttpException('Not Authorized');
         }
+
+        $purchasedPlugins = [];
+
+        foreach ($user->purchasedPlugins->all() as $purchasedPlugin) {
+            $purchasedPlugins[] = [
+                'name' => $purchasedPlugin->title,
+                'developerName' => $purchasedPlugin->getAuthor()->developerName,
+                'developerUrl' => $purchasedPlugin->getAuthor()->developerUrl,
+            ];
+        }
+
+        $card = null;
+        $cardToken = null;
+        $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
+
+        if (count($paymentSources) > 0) {
+            $paymentSource = $paymentSources[0];
+            $cardToken = $paymentSource->token;
+            $response = Json::decode($paymentSource->response);
+
+            if (isset($response['object']) && $response['object'] === 'card') {
+                $card = $response;
+            } elseif (isset($response['object']) && $response['object'] === 'source') {
+                $card = $response['card'];
+            }
+        }
+
+        return $this->asJson([
+            'id' => $user->getId(),
+            'name' => $user->getFullName(),
+            'email' => $user->email,
+            'username' => $user->username,
+            'purchasedPlugins' => $purchasedPlugins,
+            'businessName' => $user->businessName,
+            'businessVatId' => $user->businessVatId,
+            'businessAddressLine1' => $user->businessAddressLine1,
+            'businessAddressLine2' => $user->businessAddressLine2,
+            'businessCity' => $user->businessCity,
+            'businessState' => $user->businessState,
+            'businessZipCode' => $user->businessZipCode,
+            'businessCountry' => $user->businessCountry,
+            'card' => $card,
+            'cardToken' => $cardToken,
+        ]);
     }
 }

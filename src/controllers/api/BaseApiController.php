@@ -31,6 +31,7 @@ use yii\web\Controller as YiiController;
 use yii\web\HttpException;
 use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
+use craftnet\oauthserver\Module as OauthServer;
 
 /**
  * Class BaseController
@@ -52,7 +53,7 @@ abstract class BaseApiController extends Controller
     /**
      * @inheritdoc
      */
-    public $allowAnonymous = true;
+    protected $allowAnonymous = true;
 
     /**
      * @inheritdoc
@@ -139,6 +140,19 @@ abstract class BaseApiController extends Controller
         }
 
         $this->_logRequestKeys[$pluginHandle] = $key;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeAction($action)
+    {
+        // if the request is authenticated, set their identity
+        if (($user = $this->getAuthUser()) !== null) {
+            Craft::$app->getUser()->setIdentity($user);
+        }
+
+        return parent::beforeAction($action);
     }
 
     /**
@@ -549,6 +563,14 @@ abstract class BaseApiController extends Controller
      */
     protected function getAuthUser()
     {
+        if (
+            ($accessToken = OauthServer::getInstance()->getAccessTokens()->getAccessTokenFromRequest()) &&
+            $accessToken->userId &&
+            $user = User::findOne($accessToken->userId)
+        ) {
+            return $user;
+        }
+
         list ($username, $password) = Craft::$app->getRequest()->getAuthCredentials();
 
         if (!$username || !$password) {

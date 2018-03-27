@@ -132,7 +132,7 @@ class StripeController extends BaseController
     public function actionCustomer(): Response
     {
         $user = Craft::$app->getUser()->getIdentity();
-        $customer = \craft\commerce\stripe\Plugin::getInstance()->getCustomers()->getCustomer(getenv('STRIPE_GATEWAY_ID'), $user->id);
+        $customer = \craft\commerce\stripe\Plugin::getInstance()->getCustomers()->getCustomer(getenv('STRIPE_GATEWAY_ID'), $user);
 
         $paymentSource = null;
         $card = null;
@@ -188,8 +188,7 @@ class StripeController extends BaseController
         }
 
         // Remove existing payment sources
-        $existingPaymentSources = $paymentSources->getAllPaymentSourcesByUserId($userId);
-
+        $existingPaymentSources = $paymentSources->getAllGatewayPaymentSourcesByUserId($gateway->id, $userId);
         foreach ($existingPaymentSources as $paymentSource) {
             $paymentSources->deletePaymentSourceById($paymentSource->id);
         }
