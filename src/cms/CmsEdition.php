@@ -243,7 +243,6 @@ class CmsEdition extends Purchasable
         }
 
         $oldEmail = $license->email;
-        $oldEdition = $license->edition;
 
         $license->editionId = $this->id;
         $license->edition = $this->handle;
