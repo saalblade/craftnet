@@ -5,6 +5,7 @@ namespace craftnet\controllers\api\v1;
 use Craft;
 use craft\commerce\errors\PaymentException;
 use craft\commerce\errors\PaymentSourceException;
+use craft\commerce\models\PaymentSource;
 use craft\commerce\models\Transaction;
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\stripe\gateways\Gateway;
@@ -12,6 +13,7 @@ use craft\commerce\stripe\gateways\Gateway as StripeGateway;
 use craft\commerce\stripe\models\forms\Payment;
 use craft\commerce\stripe\Plugin as Stripe;
 use craftnet\errors\ValidationException;
+use Stripe\Customer as StripeCustomer;
 use yii\base\Exception;
 use yii\base\UserException;
 use yii\web\BadRequestHttpException;
@@ -154,5 +156,47 @@ class PaymentsController extends CartsController
                 return;
             }
         }
+
+        // if they don't want to make this their new primary card, then just checkout as a guest
+        if (empty($payload->makePrimary)) {
+            return;
+        }
+
+        // delete any existing payment sources
+        // todo: remove this if we ever add support for multiple cards
+        foreach ($existingPaymentSources as $paymentSource) {
+            $paymentSourcesService->deletePaymentSourceById($paymentSource->id);
+        }
+
+        // get the Stripe customer
+        $customer = $customersService->getCustomer($gateway->id, $user);
+        /** @var StripeCustomer $stripeCustomer */
+        $stripeCustomer = StripeCustomer::retrieve($customer->reference);
+
+        // create a new source
+        $stripeResponse = $stripeCustomer->sources->create([
+            'source' => $payload->token
+        ]);
+
+        // set it as the customer default
+        $stripeCustomer->default_source = $stripeResponse->id;
+        $stripeCustomer->save();
+
+        // save it for Commerce
+        $paymentSource = new PaymentSource([
+            'userId' => $user->id,
+            'gatewayId' => $gateway->id,
+            'token' => $stripeResponse->id,
+            'response' => $stripeResponse->jsonSerialize(),
+            'description' => 'Default Source',
+        ]);
+
+        if (!$paymentSourcesService->savePaymentSource($paymentSource)) {
+            throw new PaymentSourceException('Could not create the payment source: '.implode(', ', $paymentSource->getErrorSummary(true)));
+        }
+
+        // update the payment token and customer
+        $paymentForm->token = $stripeResponse->id;
+        $paymentForm->customer = $customer->reference;
     }
 }
