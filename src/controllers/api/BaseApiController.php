@@ -625,12 +625,15 @@ abstract class BaseApiController extends Controller
      */
     protected function getAuthUser()
     {
-        if (
-            ($accessToken = OauthServer::getInstance()->getAccessTokens()->getAccessTokenFromRequest()) &&
-            $accessToken->userId &&
-            $user = User::findOne($accessToken->userId)
-        ) {
-            return $user;
+        try {
+            if (
+                ($accessToken = OauthServer::getInstance()->getAccessTokens()->getAccessTokenFromRequest()) &&
+                $accessToken->userId &&
+                $user = User::findOne($accessToken->userId)
+            ) {
+                return $user;
+            }
+        } catch (\InvalidArgumentException $e) {
         }
 
         list ($username, $password) = Craft::$app->getRequest()->getAuthCredentials();
