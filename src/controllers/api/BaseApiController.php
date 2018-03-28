@@ -622,6 +622,7 @@ abstract class BaseApiController extends Controller
      * Returns the authorized user, if any.
      *
      * @return User|UserBehavior|null
+     * @throws BadRequestHttpException
      */
     protected function getAuthUser()
     {
@@ -638,8 +639,12 @@ abstract class BaseApiController extends Controller
 
         list ($username, $password) = Craft::$app->getRequest()->getAuthCredentials();
 
-        if (!$username || !$password) {
+        if (!$username) {
             return null;
+        }
+
+        if (!$password) {
+            throw new BadRequestHttpException('Invalid Credentials');
         }
 
         /** @var User|UserBehavior|null $user */
@@ -651,7 +656,7 @@ abstract class BaseApiController extends Controller
             $user->getStatus() !== User::STATUS_ACTIVE ||
             Craft::$app->getSecurity()->validatePassword($password, $user->apiToken) === false
         ) {
-            return null;
+            throw new BadRequestHttpException('Invalid Credentials');
         }
 
         return $user;
