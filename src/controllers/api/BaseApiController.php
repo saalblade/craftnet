@@ -48,7 +48,6 @@ abstract class BaseApiController extends Controller
 
     const LICENSE_STATUS_VALID = 'valid';
     const LICENSE_STATUS_INVALID = 'invalid';
-    const LICENSE_STATUS_MISSING = 'missing';
     const LICENSE_STATUS_MISMATCHED = 'mismatched';
     const LICENSE_STATUS_ASTRAY = 'astray';
 
@@ -306,7 +305,7 @@ abstract class BaseApiController extends Controller
                 if (!isset($this->pluginLicenses[$pluginHandle])) {
                     // should there be?
                     if ($plugin->price != 0) {
-                        $this->pluginLicenseStatuses[$pluginHandle] = self::LICENSE_STATUS_MISSING;
+                        $this->pluginLicenseStatuses[$pluginHandle] = self::LICENSE_STATUS_INVALID;
                     }
                     continue;
                 }
