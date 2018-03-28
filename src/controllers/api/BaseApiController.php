@@ -178,17 +178,21 @@ abstract class BaseApiController extends Controller
         // was system info provided?
         if ($requestHeaders->has('X-Craft-System')) {
             foreach (explode(',', $requestHeaders->get('X-Craft-System')) as $info) {
-                list($name, $installed) = explode(':', $info, 2);
-                list($version, $edition) = array_pad(explode(';', $installed, 2), 2, null);
+                list($name, $installed) = array_pad(explode(':', $info, 2), 2, null);
+                if ($installed !== null) {
+                    list($version, $edition) = array_pad(explode(';', $installed, 2), 2, null);
+                } else {
+                    $version = null;
+                    $edition = null;
+                }
+
                 if ($name === 'craft') {
                     $this->cmsVersion = $version;
                     $this->cmsEdition = $edition;
                 } else if (strncmp($name, 'plugin-', 7) === 0) {
                     $pluginHandle = substr($name, 7);
                     $this->pluginVersions[$pluginHandle] = $version;
-                    if ($edition !== null) {
-                        $this->pluginEditions[$pluginHandle] = $edition;
-                    }
+                    $this->pluginEditions[$pluginHandle] = $edition;
                 }
             }
 
@@ -328,6 +332,7 @@ abstract class BaseApiController extends Controller
 
                 // has the plugin gone past its current allowed version?
                 if (
+                    $pluginVersion !== null &&
                     $pluginLicense->expirable &&
                     $pluginLicenseStatus === self::LICENSE_STATUS_VALID &&
                     Comparator::greaterThan($pluginVersion, $pluginLicense->lastAllowedVersion)
@@ -344,7 +349,9 @@ abstract class BaseApiController extends Controller
 
                 // update the license
                 $pluginLicense->lastActivityOn = new \DateTime();
-                $pluginLicense->lastVersion = $pluginVersion;
+                if ($pluginVersion !== null) {
+                    $pluginLicense->lastVersion = $pluginVersion;
+                }
                 $pluginLicenseManager->saveLicense($pluginLicense, false);
 
                 // update the history
