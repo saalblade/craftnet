@@ -39,6 +39,7 @@ return [
     'mstesting.com.au',
     'mystagingsite.org',
     'mystagingsite.us',
+    'nanoapp.io',
     'nerderylabs.com',
     'nextmp.net',
     'ngrok.com',
