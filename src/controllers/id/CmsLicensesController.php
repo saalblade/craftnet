@@ -151,7 +151,10 @@ class CmsLicensesController extends Controller
                         $note = $license->domain ? "tied to domain {$license->domain}" : "untied from domain {$oldDomain}";
                         $manager->addHistory($license->id, "{$note} by {$user->email}");
                     }
-                    return $this->asJson(['success' => true]);
+                    return $this->asJson([
+                        'success' => true,
+                        'license' => $license->toArray(),
+                    ]);
                 }
 
                 throw new Exception("Couldn't save license.");
