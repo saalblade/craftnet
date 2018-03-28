@@ -218,7 +218,7 @@ export const saveCmsLicense = ({commit}, license) => {
     return new Promise((resolve, reject) => {
         api.saveCmsLicense(license, response => {
             if (response.data && !response.data.error) {
-                commit(types.SAVE_CMS_LICENSE, {license});
+                commit(types.SAVE_CMS_LICENSE, { license: response.data.license });
                 resolve(response);
             } else {
                 reject(response);

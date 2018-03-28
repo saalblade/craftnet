@@ -167,7 +167,6 @@
                     } else {
                         this.$root.displayNotice('Auto renew disabled.');
                     }
-
                 }).catch((data) => {
                     this.$root.displayError('Couldn’t save license.');
                     this.errors = data.errors;
@@ -179,8 +178,23 @@
              */
             saveDomain() {
                 this.domainLoading = true;
+				const oldDomain = this.licenseDraft.domain;
 
-                this.saveCmsLicense(() => {
+                this.saveCmsLicense(response => {
+                    const newDomain = response.data.license.domain
+
+                    if (oldDomain && oldDomain !== newDomain) {
+                        this.licenseDraft.domain = newDomain
+
+						if(!newDomain) {
+                            this.$root.displayNotice(oldDomain + ' is not a public domain.');
+						} else {
+                            this.$root.displayNotice('Domain changed to ' + newDomain + '.')
+                        }
+					} else {
+                        this.$root.displayNotice('Domain saved.');
+					}
+
                     this.domainLoading = false;
                     this.domainEditing = false;
                 }, () => {
@@ -197,6 +211,7 @@
                 this.saveCmsLicense(() => {
                     this.notesLoading = false;
                     this.notesEditing = false;
+                    this.$root.displayNotice('Notes saved.');
                 }, () => {
                     this.notesLoading = false;
 				});
@@ -214,8 +229,7 @@
                     domain: this.licenseDraft.domain,
                     notes: this.licenseDraft.notes,
                 }).then(response => {
-                    cb();
-                    this.$root.displayNotice('License saved.');
+                    cb(response);
                 }).catch(response => {
                     cbError();
                     const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
