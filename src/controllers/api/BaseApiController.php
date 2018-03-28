@@ -2,6 +2,7 @@
 
 namespace craftnet\controllers\api;
 
+use Composer\Semver\Comparator;
 use Craft;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
@@ -47,6 +48,7 @@ abstract class BaseApiController extends Controller
 
     const LICENSE_STATUS_VALID = 'valid';
     const LICENSE_STATUS_INVALID = 'invalid';
+    const LICENSE_STATUS_MISSING = 'missing';
     const LICENSE_STATUS_MISMATCHED = 'mismatched';
     const LICENSE_STATUS_ASTRAY = 'astray';
 
@@ -115,6 +117,13 @@ abstract class BaseApiController extends Controller
      * @var PluginLicense[]
      */
     public $pluginLicenses = [];
+
+    /**
+     * The plugin license statuses.
+     *
+     * @var string[]
+     */
+    public $pluginLicenseStatuses = [];
 
     /**
      * @var array
@@ -233,6 +242,21 @@ abstract class BaseApiController extends Controller
                         $responseHeaders->set('X-Craft-Allow-Trials', (string)($domain === null));
                     }
 
+                    // has Craft gone past its current allowed version?
+                    if (
+                        $this->cmsVersion !== null &&
+                        $cmsLicense->expirable &&
+                        $cmsLicenseStatus === self::LICENSE_STATUS_VALID &&
+                        Comparator::greaterThan($this->cmsVersion, $cmsLicense->lastAllowedVersion)
+                    ) {
+                        // we only have a problem with that if the license is expired
+                        if ($cmsLicense->expired) {
+                            $cmsLicenseStatus = self::LICENSE_STATUS_ASTRAY;
+                        } else {
+                            $cmsLicense->lastAllowedVersion = $this->cmsVersion;
+                        }
+                    }
+
                     $responseHeaders->set('X-Craft-License-Status', $cmsLicenseStatus);
                     $responseHeaders->set('X-Craft-License-Domain', $cmsLicenseDomain);
                     $responseHeaders->set('X-Craft-License-Edition', $cmsLicense->edition);
@@ -257,49 +281,86 @@ abstract class BaseApiController extends Controller
                 }
             }
 
+            // collect the plugin licenses
             if (($pluginLicenseKeys = $requestHeaders->get('X-Craft-Plugin-Licenses')) !== null) {
-                $pluginLicenseStatuses = [];
                 $pluginLicenseManager = $this->module->getPluginLicenseManager();
                 foreach (explode(',', $pluginLicenseKeys) as $pluginLicenseInfo) {
                     list($pluginHandle, $pluginLicenseKey) = explode(':', $pluginLicenseInfo);
                     try {
-                        $pluginLicense = $this->pluginLicenses[$pluginHandle] = $pluginLicenseManager->getLicenseByKey($pluginHandle, $pluginLicenseKey);
-                        $pluginLicenseStatus = self::LICENSE_STATUS_VALID;
-                        $oldCmsLicenseId = $pluginLicense->cmsLicenseId;
-
-                        if ($cmsLicense !== null) {
-                            if ($pluginLicense->cmsLicenseId) {
-                                if ($pluginLicense->cmsLicenseId != $cmsLicense->id) {
-                                    $pluginLicenseStatus = self::LICENSE_STATUS_MISMATCHED;
-                                }
-                            } else {
-                                // tie the license to this Craft license
-                                $pluginLicense->cmsLicenseId = $cmsLicense->id;
-                            }
-                        }
-
-                        // update the license
-                        $pluginLicense->lastActivityOn = new \DateTime();
-                        if (isset($this->pluginVersions[$pluginHandle])) {
-                            $pluginLicense->lastVersion = $this->pluginVersions[$pluginHandle];
-                        }
-                        $pluginLicenseManager->saveLicense($pluginLicense, false);
-
-                        // update the history
-                        if ($pluginLicense->cmsLicenseId !== $oldCmsLicenseId) {
-                            $pluginLicenseManager->addHistory($pluginLicense->id, "tied to Craft license {$cmsLicense->shortKey} by {$identity}");
-                        }
+                        $this->pluginLicenses[$pluginHandle] = $pluginLicenseManager->getLicenseByKey($pluginHandle, $pluginLicenseKey);
                     } catch (LicenseNotFoundException $e) {
-                        $pluginLicenseStatus = self::LICENSE_STATUS_INVALID;
+                        $this->pluginLicenseStatuses[$pluginHandle] = self::LICENSE_STATUS_INVALID;
                         $e = null;
                     }
+                }
+            }
 
+            // set the plugin license statuses
+            foreach ($this->plugins as $pluginHandle => $plugin) {
+                // ignore if they're using an invalid license key
+                if (isset($this->pluginLicenseStatuses[$pluginHandle]) && $this->pluginLicenseStatuses[$pluginHandle] === self::LICENSE_STATUS_INVALID) {
+                    continue;
+                }
+
+                // no license key yet?
+                if (!isset($this->pluginLicenses[$pluginHandle])) {
+                    // should there be?
+                    if ($plugin->price != 0) {
+                        $this->pluginLicenseStatuses[$pluginHandle] = self::LICENSE_STATUS_MISSING;
+                    }
+                    continue;
+                }
+
+                $pluginLicense = $this->pluginLicenses[$pluginHandle];
+                $pluginVersion = $this->pluginVersions[$pluginHandle];
+                $pluginLicenseStatus = self::LICENSE_STATUS_VALID;
+                $oldCmsLicenseId = $pluginLicense->cmsLicenseId;
+
+                if ($cmsLicense !== null) {
+                    if ($pluginLicense->cmsLicenseId) {
+                        if ($pluginLicense->cmsLicenseId != $cmsLicense->id) {
+                            $pluginLicenseStatus = self::LICENSE_STATUS_MISMATCHED;
+                        }
+                    } else {
+                        // tie the license to this Craft license
+                        $pluginLicense->cmsLicenseId = $cmsLicense->id;
+                    }
+                }
+
+                // has the plugin gone past its current allowed version?
+                if (
+                    $pluginLicense->expirable &&
+                    $pluginLicenseStatus === self::LICENSE_STATUS_VALID &&
+                    Comparator::greaterThan($pluginVersion, $pluginLicense->lastAllowedVersion)
+                ) {
+                    // we only have a problem with that if the license is expired
+                    if ($pluginLicense->expired) {
+                        $pluginLicenseStatus = self::LICENSE_STATUS_ASTRAY;
+                    } else {
+                        $pluginLicense->lastAllowedVersion = $pluginVersion;
+                    }
+                }
+
+                $this->pluginLicenseStatuses[$pluginHandle] = $pluginLicenseStatus;
+
+                // update the license
+                $pluginLicense->lastActivityOn = new \DateTime();
+                $pluginLicense->lastVersion = $pluginVersion;
+                $pluginLicenseManager->saveLicense($pluginLicense, false);
+
+                // update the history
+                if ($pluginLicense->cmsLicenseId !== $oldCmsLicenseId) {
+                    $pluginLicenseManager->addHistory($pluginLicense->id, "tied to Craft license {$cmsLicense->shortKey} by {$identity}");
+                }
+            }
+
+            // set the X-Craft-Plugin-License-Statuses header
+            if (!empty($this->pluginLicenseStatuses)) {
+                $pluginLicenseStatuses = [];
+                foreach ($this->pluginLicenseStatuses as $pluginHandle => $pluginLicenseStatus) {
                     $pluginLicenseStatuses[] = "{$pluginHandle}:{$pluginLicenseStatus}";
                 }
-
-                if (!empty($pluginLicenseStatuses)) {
-                    $responseHeaders->set('X-Craft-Plugin-License-Statuses', implode(',', $pluginLicenseStatuses));
-                }
+                $responseHeaders->set('X-Craft-Plugin-License-Statuses', implode(',', $pluginLicenseStatuses));
             }
 
             if (($result = YiiController::runAction($id, $params)) instanceof Response) {
