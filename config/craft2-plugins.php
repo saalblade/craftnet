@@ -87,8 +87,7 @@ return [
         'handle' => 'entriessubset'
     ],
     'FruitLinkIt' => [
-        'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Typed Link Field](https://github.com/sebastian-lenz/craft-linkfield) could be used instead'
+        'handle' => 'linkit',
     ],
     'Hacksaw' => [
         'statusColor' => 'orange',

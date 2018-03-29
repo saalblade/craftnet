@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ee4fe955f8f4b7fbb6c82023fbcf287",
+    "content-hash": "401b7514013b54b1d4b27fa2aadec868",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.33",
+            "version": "3.52.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d8e6d52af2517360c2146ed6c0d43156284a4b84"
+                "reference": "c414752f2f88a036958438a3d973475c6786a387"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d8e6d52af2517360c2146ed6c0d43156284a4b84",
-                "reference": "d8e6d52af2517360c2146ed6c0d43156284a4b84",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c414752f2f88a036958438a3d973475c6786a387",
+                "reference": "c414752f2f88a036958438a3d973475c6786a387",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-26T21:49:03+00:00"
+            "time": "2018-03-27T19:13:06+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -562,16 +562,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "dev-develop",
+            "version": "3.0.0-RC17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "0ea80d185e92e874bdf66b06249df90beebe3aff"
+                "reference": "bcce9c47fe2449128253d89cb390162deb7c80c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/0ea80d185e92e874bdf66b06249df90beebe3aff",
-                "reference": "0ea80d185e92e874bdf66b06249df90beebe3aff",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/bcce9c47fe2449128253d89cb390162deb7c80c2",
+                "reference": "bcce9c47fe2449128253d89cb390162deb7c80c2",
                 "shasum": ""
             },
             "require": {
@@ -640,7 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-03-24T11:32:48+00:00"
+            "time": "2018-03-28T18:16:57+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -648,12 +648,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "b113d5164348a848fbadc7018470b99dd18e3de1"
+                "reference": "93503c31651529c4baa3854593aa4512e0705b39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/b113d5164348a848fbadc7018470b99dd18e3de1",
-                "reference": "b113d5164348a848fbadc7018470b99dd18e3de1",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/93503c31651529c4baa3854593aa4512e0705b39",
+                "reference": "93503c31651529c4baa3854593aa4512e0705b39",
                 "shasum": ""
             },
             "require": {
@@ -694,7 +694,7 @@
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-03-26T22:25:12+00:00"
+            "time": "2018-03-28T17:57:55+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
@@ -2178,16 +2178,16 @@
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "1.0.18",
+            "version": "1.0.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "dc09b19f455750663b922ed52dcc0ff215bed284"
+                "reference": "f135691ef6761542af301b7c9880f140fb12dc74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/dc09b19f455750663b922ed52dcc0ff215bed284",
-                "reference": "dc09b19f455750663b922ed52dcc0ff215bed284",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/f135691ef6761542af301b7c9880f140fb12dc74",
+                "reference": "f135691ef6761542af301b7c9880f140fb12dc74",
                 "shasum": ""
             },
             "require": {
@@ -2221,7 +2221,7 @@
                 }
             ],
             "description": "Flysystem adapter for the AWS S3 SDK v3.x",
-            "time": "2017-06-30T06:29:25+00:00"
+            "time": "2018-03-27T20:33:59+00:00"
         },
         {
             "name": "league/oauth2-client",
@@ -5233,12 +5233,6 @@
     ],
     "aliases": [
         {
-            "alias": "3.0.0-RC16",
-            "alias_normalized": "3.0.0.0-RC16",
-            "version": "dev-develop",
-            "package": "craftcms/cms"
-        },
-        {
             "alias": "2.0.0-alpha.99",
             "alias_normalized": "2.0.0.0-alpha99",
             "version": "dev-develop",
@@ -5253,7 +5247,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "craftcms/cms": 20,
+        "craftcms/cms": 5,
         "roave/security-advisories": 20,
         "flipboxfactory/craft-postmark": 5,
         "craftcms/commerce": 20,

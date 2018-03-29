@@ -88,21 +88,20 @@ class UpdatesController extends BaseApiController
      */
     private function _getCmsUpdateInfo(): array
     {
-        $status = Update::STATUS_ELIGIBLE;
+        $info = [
+            'status' => Update::STATUS_ELIGIBLE,
+            'releases' => $this->_releases('craftcms/cms', $this->cmsVersion),
+        ];
+
         if (!empty($this->cmsLicenses)) {
             $cmsLicense = reset($this->cmsLicenses);
             if ($cmsLicense->expired) {
-                $status = Update::STATUS_EXPIRED;
+                $info['status'] = Update::STATUS_EXPIRED;
+                $info['renewalUrl'] = 'https://id.craftcms.com/';
             }
         }
 
-        return [
-            'status' => $status,
-            'releases' => $this->_releases('craftcms/cms', $this->cmsVersion),
-            //'renewalPrice' => '59',
-            //'renewalCurrency' => 'USD',
-            //'renewalUrl' => 'dashboard',
-        ];
+        return $info;
     }
 
     /**
@@ -115,17 +114,17 @@ class UpdatesController extends BaseApiController
         $updateInfo = [];
 
         foreach ($this->plugins as $handle => $plugin) {
-            $status = Update::STATUS_ELIGIBLE;
+            $info = [
+                'status' => Update::STATUS_ELIGIBLE,
+                'releases' => $this->_releases($plugin->packageName, $this->pluginVersions[$handle]),
+            ];
+
             if (isset($this->pluginLicenses[$handle]) && $this->pluginLicenses[$handle]->expired) {
-                $status = Update::STATUS_EXPIRED;
+                $info['status'] = Update::STATUS_EXPIRED;
+                $info['renewalUrl'] = 'https://id.craftcms.com';
             }
 
-            $releases = $this->_releases($plugin->packageName, $this->pluginVersions[$handle]);
-
-            $updateInfo[$handle] = [
-                'status' => $status,
-                'releases' => $releases,
-            ];
+            $updateInfo[$handle] = $info;
         }
 
         return $updateInfo;
