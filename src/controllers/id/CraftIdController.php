@@ -3,6 +3,7 @@
 namespace craftnet\controllers\id;
 
 use Craft;
+use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
 use craftnet\Module;
@@ -23,14 +24,50 @@ class CraftIdController extends BaseController
      */
     public function actionIndex(): Response
     {
+        $this->requireLogin();
+
+
         // Current user
+
         $currentUser = Craft::$app->getUser()->getIdentity();
 
+
         // Craft ID config
+
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
         $enableCommercialFeatures = $craftIdConfig['enableCommercialFeatures'];
 
+
+        // Billing address
+
+        $billingAddress = null;
+
+        $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($currentUser->id);
+
+        if ($customer) {
+            $customerAddresses = $customer->getAddresses();
+
+            if (count($customerAddresses)) {
+                $billingAddress = end($customerAddresses);
+                $billingAddressArray = $billingAddress->toArray();
+
+                $country = $billingAddress->getCountry();
+
+                if($country) {
+                    $billingAddressArray['country'] = $country->iso;
+                }
+
+                $state = $billingAddress->getState();
+
+                if($state) {
+                    $billingAddressArray['state'] = $state->abbreviation;
+                }
+            }
+        }
+
+
         // Data
+
         $data = [
             'currentUser' => [
                 'id' => $currentUser->id,
@@ -57,6 +94,8 @@ class CraftIdController extends BaseController
                 'photoUrl' => $currentUser->getThumbUrl(200),
                 'hasApiToken' => ($currentUser->apiToken !== null),
             ],
+            'billingAddress' => $billingAddressArray,
+            'countries' => Craft::$app->getApi()->getCountries(),
             'apps' => Module::getInstance()->getOauth()->getApps(),
             'plugins' => $this->_plugins($currentUser),
             'cmsLicenses' => $this->_cmsLicenses($currentUser),

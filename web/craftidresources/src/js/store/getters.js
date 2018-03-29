@@ -18,6 +18,10 @@ export const apps = state => {
     }
 };
 
+export const countries = state => {
+    return state.craftId.countries;
+};
+
 
 /**
  * User
@@ -35,6 +39,9 @@ export const userIsInGroup = state => {
     }
 };
 
+export const billingAddress = state => {
+    return state.craftId.billingAddress
+}
 
 /**
  * Licenses

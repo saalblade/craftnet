@@ -51,6 +51,11 @@ export const UPLOAD_USER_PHOTO = (state, {response}) => {
 };
 
 
+export const SAVE_BILLING_INFO = (state, {response}) => {
+    state.craftId.billingAddress = response.data.address
+};
+
+
 /**
  * Licenses
  */
