@@ -16,6 +16,7 @@ use craftnet\errors\LicenseNotFoundException;
 use craftnet\errors\ValidationException;
 use craftnet\helpers\KeyHelper;
 use craftnet\plugins\Plugin;
+use Ddeboer\Vatin\Validator;
 use Moccalotto\Eu\CountryInfo;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
@@ -408,12 +409,28 @@ class CartsController extends BaseApiController
                     'message' => 'Invalid country',
                     'code' => self::ERROR_CODE_INVALID,
                 ];
-            } else if ((new CountryInfo())->isEuMember($country->iso) && empty($billingAddress->businessTaxId)) {
-                $addressErrors[] = [
-                    'param' => 'billingAddress.businessTaxId',
-                    'message' => 'A valid VAT ID is required for European orders.',
-                    'code' => self::ERROR_CODE_MISSING_FIELD,
-                ];
+            } else {
+                // If we have a country, is it an EU country?
+                $isEuMember = (new CountryInfo())->isEuMember($country->iso);
+                if ($isEuMember) {
+                    if (empty($billingAddress->businessTaxId)) {
+                        $addressErrors[] = [
+                            'param' => 'billingAddress.businessTaxId',
+                            'message' => 'A VAT ID is required for European orders.',
+                            'code' => self::ERROR_CODE_MISSING_FIELD,
+                        ];
+                    } else {
+                        $validator = new Validator;
+                        $isValid = $validator->isValid(preg_replace("/[^A-Za-z0-9]/", '', $billingAddress->businessTaxId));
+                        if (!$isValid) {
+                            $addressErrors[] = [
+                                'param' => 'billingAddress.businessTaxId',
+                                'message' => 'A valid VAT ID is required for European orders.',
+                                'code' => self::ERROR_CODE_INVALID,
+                            ];
+                        }
+                    }
+                }
             }
 
             // get the state
