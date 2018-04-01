@@ -54,6 +54,7 @@ class CartsController extends BaseApiController
             'currency' => 'USD',
             'paymentCurrency' => 'USD',
             'gatewayId' => getenv('STRIPE_GATEWAY_ID'),
+            'orderLocale' => Craft::$app->language
         ]);
 
         $this->_updateCart($cart, $payload);
@@ -172,11 +173,24 @@ class CartsController extends BaseApiController
             // update the IP
             $cart->lastIp = Craft::$app->getRequest()->getUserIP();
 
+            // Remember the current customerId before determining the possible new one
+            $customerId = $cart->customerId;
+
             // set the email/customer before saving the cart, so the cart doesn't create its own customer record
             if (($user = Craft::$app->getUser()->getIdentity(false)) !== null) {
                 $this->_updateCartEmailAndCustomer($cart, $user, null, $errors);
             } else if (isset($payload->email)) {
                 $this->_updateCartEmailAndCustomer($cart, null, $payload->email, $errors);
+            }
+
+            // If the customer has changed, they do not have permissions to the old address ID on the cart.
+            if ($cart->billingAddressId && $cart->customerId != $customerId) {
+                $address = $commerce->getAddresses()->getAddressById($cart->billingAddressId);
+                // Don't lose the data from the address, just drop the ID
+                if ($address) {
+                    $address->id = null;
+                    $cart->setBillingAddress($address);
+                }
             }
 
             // make sure we have an email on the cart
@@ -209,7 +223,7 @@ class CartsController extends BaseApiController
             if (isset($payload->items)) {
                 if ($cart->id) {
                     // first clear the cart
-                    $commerce->getCarts()->clearCart($cart);
+                    $cart->setLineItems([]);
                 }
 
                 foreach ($payload->items as $i => $item) {
@@ -247,7 +261,7 @@ class CartsController extends BaseApiController
                             $lineItem->note = $item->note;
                         }
 
-                        $commerce->getCarts()->addToCart($cart, $lineItem);
+                        $cart->addLineItem($lineItem);
                     }
                 }
             }
@@ -420,23 +434,7 @@ class CartsController extends BaseApiController
             }
         }
 
-        // is a billing address already set on the order?
-        if ($cart->billingAddressId) {
-            $address = $commerce->getAddresses()->getAddressById($cart->billingAddressId);
-
-            // make sure it isn't associated with the customer yet
-            if ($address && $cart->customerId) {
-                $addresses = $commerce->getAddresses()->getAddressesByCustomerId($cart->customerId);
-                $addressIds = ArrayHelper::getColumn($addresses, 'id');
-                if (in_array($address->id, $addressIds, false)) {
-                    $address = null;
-                }
-            }
-        }
-
-        if (empty($address)) {
-            $address = new Address();
-        }
+        $address = new Address();
 
         // populate the address
         $addressConfig = [
@@ -472,7 +470,7 @@ class CartsController extends BaseApiController
         $address->setStateValue(null);
 
         // save the address
-        if (!$commerce->getAddresses()->saveAddress($address)) {
+        if (!$commerce->getCustomers()->saveAddress($address, $cart->getCustomer(), false)) {
             throw new Exception('Could not save address: '.implode(', ', $address->getErrorSummary(true)));
         }
 
@@ -570,7 +568,7 @@ class CartsController extends BaseApiController
             $options['autoRenew'] = $item->autoRenew;
         }
 
-        return Commerce::getInstance()->getLineItems()->resolveLineItem($cart, $edition->id, $options);
+        return Commerce::getInstance()->getLineItems()->resolveLineItem($cart->id, $edition->id, $options);
     }
 
     /**
@@ -655,6 +653,6 @@ class CartsController extends BaseApiController
             $options['autoRenew'] = $item->autoRenew;
         }
 
-        return Commerce::getInstance()->getLineItems()->resolveLineItem($cart, $edition->id, $options);
+        return Commerce::getInstance()->getLineItems()->resolveLineItem($cart->id, $edition->id, $options);
     }
 }
