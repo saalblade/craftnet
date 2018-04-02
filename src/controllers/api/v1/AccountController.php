@@ -29,6 +29,9 @@ class AccountController extends BaseApiController
             throw new UnauthorizedHttpException('Not Authorized');
         }
 
+
+        // Purchased plugins
+
         $purchasedPlugins = [];
 
         foreach ($user->purchasedPlugins->all() as $purchasedPlugin) {
@@ -38,6 +41,9 @@ class AccountController extends BaseApiController
                 'developerUrl' => $purchasedPlugin->getAuthor()->developerUrl,
             ];
         }
+
+
+        // Credit cards
 
         $card = null;
         $cardToken = null;
@@ -52,6 +58,34 @@ class AccountController extends BaseApiController
                 $card = $response;
             } elseif (isset($response['object']) && $response['object'] === 'source') {
                 $card = $response['card'];
+            }
+        }
+
+
+        // Billing address
+
+        $billingAddressArray = null;
+
+        $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
+
+        if ($customer) {
+            $customerAddresses = $customer->getAddresses();
+
+            if (count($customerAddresses)) {
+                $billingAddress = end($customerAddresses);
+                $billingAddressArray = $billingAddress->toArray();
+
+                $country = $billingAddress->getCountry();
+
+                if($country) {
+                    $billingAddressArray['country'] = $country->iso;
+                }
+
+                $state = $billingAddress->getState();
+
+                if($state) {
+                    $billingAddressArray['state'] = $state->abbreviation;
+                }
             }
         }
 
@@ -71,6 +105,7 @@ class AccountController extends BaseApiController
             'businessCountry' => $user->businessCountry,
             'card' => $card,
             'cardToken' => $cardToken,
+            'billingAddress' => $billingAddressArray
         ]);
     }
 }

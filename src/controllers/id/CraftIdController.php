@@ -40,7 +40,7 @@ class CraftIdController extends BaseController
 
         // Billing address
 
-        $billingAddress = null;
+        $billingAddressArray = null;
 
         $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($currentUser->id);
 
