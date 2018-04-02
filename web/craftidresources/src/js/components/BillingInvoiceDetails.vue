@@ -7,7 +7,7 @@
 				<dl v-if="!showForm">
 					<dt>VAT ID</dt>
 					<dd>
-						<template v-if="billingAddress.businessTaxId">
+						<template v-if="billingAddress && billingAddress.businessTaxId">
 							{{ billingAddress.businessTaxId }}
 						</template>
 						<template v-else>
@@ -76,19 +76,26 @@
              * Saves the user’s invoice details.
              */
             save() {
-                this.$store.dispatch('saveBillingInfo', {
-                    id: this.billingAddress.id,
+                let data = {
                     businessTaxId: this.invoiceDetailsDraft.businessTaxId,
-                    firstName: this.billingAddress.firstName,
-                    lastName: this.billingAddress.lastName,
-                    businessName: this.billingAddress.businessName,
-                    address1: this.billingAddress.address1,
-                    address2: this.billingAddress.address2,
-                    city: this.billingAddress.city,
-                    state: this.billingAddress.state,
-                    zipCode: this.billingAddress.zipCode,
-                    country: this.billingAddress.country,
-                }).then(response => {
+                }
+
+                if(this.billingAddress) {
+                    data = Object.assign({}, data, {
+                        id: this.billingAddress.id,
+                        firstName: this.billingAddress.firstName,
+                        lastName: this.billingAddress.lastName,
+                        businessName: this.billingAddress.businessName,
+                        address1: this.billingAddress.address1,
+                        address2: this.billingAddress.address2,
+                        city: this.billingAddress.city,
+                        state: this.billingAddress.state,
+                        zipCode: this.billingAddress.zipCode,
+                        country: this.billingAddress.country,
+                    });
+				}
+
+                this.$store.dispatch('saveBillingInfo', data).then(response => {
                     this.$root.displayNotice('Invoice details saved.');
                     this.showForm = false;
                     this.errors = {};

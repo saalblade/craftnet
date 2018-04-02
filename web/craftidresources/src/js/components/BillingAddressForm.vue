@@ -4,7 +4,7 @@
 			<div class="flex-1">
 				<h4>Billing Address</h4>
 
-				<template v-if="!showForm">
+				<template v-if="!showForm && billingAddress">
 					<ul v-if="billingAddress.firstName || billingAddress.lastName || billingAddress.address1 || billingAddress.address2 || billingAddress.city || billingAddress.country || billingAddress.businessName || billingAddress.state || billingAddress.zipCode" class="list-reset">
 						<li v-if="billingAddress.firstName || billingAddress.lastName">{{ billingAddress.firstName }} {{ billingAddress.lastName }}</li>
 						<li v-if="billingAddress.businessName">{{ billingAddress.businessName }}</li>
@@ -124,16 +124,17 @@
              */
             edit() {
                 this.showForm = true;
-                this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress));
+
+                if(this.billingAddress) {
+                    this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress));
+                }
             },
 
             /**
              * Save the billing address.
              */
             save() {
-                this.$store.dispatch('saveBillingInfo', {
-                    id: this.billingAddress.id,
-                    businessTaxId: this.billingAddress.businessTaxId,
+                let data = {
                     firstName: this.invoiceDetailsDraft.firstName,
                     lastName: this.invoiceDetailsDraft.lastName,
                     businessName: this.invoiceDetailsDraft.businessName,
@@ -143,7 +144,16 @@
                     state: this.invoiceDetailsDraft.state,
                     zipCode: this.invoiceDetailsDraft.zipCode,
                     country: this.invoiceDetailsDraft.country,
-                }).then(response => {
+                }
+
+                if(this.billingAddress) {
+                    data = Object.assign({}, data, {
+                        id: this.billingAddress.id,
+                        businessTaxId: this.billingAddress.businessTaxId,
+                    });
+                }
+
+                this.$store.dispatch('saveBillingInfo', data).then(response => {
                     this.$root.displayNotice('Billing address saved.');
                     this.showForm = false;
                     this.errors = {};

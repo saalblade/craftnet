@@ -195,14 +195,16 @@ class AccountController extends Controller
         $address->city = $payload['city'] ?? null;
         $address->zipCode = $payload['zipCode'] ?? null;
 
-        $country = Commerce::getInstance()->getCountries()->getCountryByIso($payload['country']);
+        if(isset($payload['country'])) {
+            $country = Commerce::getInstance()->getCountries()->getCountryByIso($payload['country']);
 
-        if($country) {
-            $address->countryId = $country->id;
+            if($country) {
+                $address->countryId = $country->id;
 
-            if($payload['state']) {
-                $state = Commerce::getInstance()->getStates()->getStateByAbbreviation($country->id, $payload['state']);
-                $address->stateId = $state ? $state->id : null;
+                if($payload['state']) {
+                    $state = Commerce::getInstance()->getStates()->getStateByAbbreviation($country->id, $payload['state']);
+                    $address->stateId = $state ? $state->id : null;
+                }
             }
         }
 
@@ -210,8 +212,14 @@ class AccountController extends Controller
             Commerce::getInstance()->getCustomers()->saveAddress($address);
 
             $addressArray = $address->toArray();
-            $addressArray['country'] = $payload['country'];
-            $addressArray['state'] = $payload['state'];
+
+            if(isset($payload['country'])) {
+                $addressArray['country'] = $payload['country'];
+            }
+
+            if(isset($payload['state'])) {
+                $addressArray['state'] = $payload['state'];
+            }
 
             return $this->asJson(['success' => true, 'address' => $addressArray]);
         } catch (Throwable $e) {
