@@ -95,7 +95,7 @@ class CraftIdController extends BaseController
                 'hasApiToken' => ($currentUser->apiToken !== null),
             ],
             'billingAddress' => $billingAddressArray,
-            'countries' => Craft::$app->getApi()->getCountries(),
+            'countries' => Craft::$app->getApi()->getCountries()['countries'],
             'apps' => Module::getInstance()->getOauth()->getApps(),
             'plugins' => $this->_plugins($currentUser),
             'cmsLicenses' => $this->_cmsLicenses($currentUser),
