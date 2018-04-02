@@ -105,12 +105,7 @@ class PaymentsController extends CartsController
             /** @var Payment $paymentForm */
             $paymentForm = $gateway->getPaymentFormModel();
             $this->_populatePaymentForm($payload, $gateway, $paymentForm);
-
-            try {
-                $commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction);
-            } catch (PaymentException $e) {
-                throw new BadRequestHttpException($e->getMessage(), $e->getCode(), $e->getPrevious());
-            }
+            $commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction);
         } else {
             // just mark it as complete since it's a free order
             $cart->markAsComplete();
