@@ -20,7 +20,8 @@
         "alternativePhone": {"type": ["string", "null"]},
         "businessName": {"type": ["string", "null"]},
         "businessId": {"type": ["string", "null"]},
-        "businessTaxId": {"type": ["string", "null"]}
+        "businessTaxId": {"type": ["string", "null"]},
+        "makePrimary": {"type": "boolean"}
       },
       "required": ["firstName", "lastName"]
     },

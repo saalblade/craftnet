@@ -491,6 +491,10 @@ class CartsController extends BaseApiController
             throw new Exception('Could not save address: '.implode(', ', $address->getErrorSummary(true)));
         }
 
+        if (!empty($billingAddress->makePrimary) && $address->id) {
+            $cart->makePrimaryBillingAddress = true;
+        }
+
         // update the cart
         $cart->setBillingAddress($address);
         $cart->billingAddressId = $address->id;
