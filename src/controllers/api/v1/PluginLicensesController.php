@@ -107,7 +107,7 @@ class PluginLicensesController extends BaseApiController
             'pluginId' => $plugin->id,
             'editionId' => $edition->id,
             'ownerId' => $ownerId ?: null,
-            'plugin' => $plugin->handle,
+            'pluginHandle' => $plugin->handle,
             'edition' => $edition->handle,
             'expirable' => $expirable,
             'expired' => isset($expiresOn) ? $expiresOn->getTimestamp() < time() : false,
