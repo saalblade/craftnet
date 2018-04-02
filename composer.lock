@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.34",
+            "version": "3.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "c414752f2f88a036958438a3d973475c6786a387"
+                "reference": "225593974bb6f6b1c13ddf946d3736d3e39119e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c414752f2f88a036958438a3d973475c6786a387",
-                "reference": "c414752f2f88a036958438a3d973475c6786a387",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/225593974bb6f6b1c13ddf946d3736d3e39119e5",
+                "reference": "225593974bb6f6b1c13ddf946d3736d3e39119e5",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-27T19:13:06+00:00"
+            "time": "2018-03-30T20:22:38+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -255,16 +255,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288"
+                "reference": "d2c0a83b7533d6912e8d516756ebd34f893e9169"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/943b2c4fcad1ef178d16a713c2468bf7e579c288",
-                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/d2c0a83b7533d6912e8d516756ebd34f893e9169",
+                "reference": "d2c0a83b7533d6912e8d516756ebd34f893e9169",
                 "shasum": ""
             },
             "require": {
@@ -273,7 +273,7 @@
                 "php": "^5.3.2 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35",
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5",
                 "psr/log": "^1.0",
                 "symfony/process": "^2.5 || ^3.0 || ^4.0"
             },
@@ -307,7 +307,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2017-11-29T09:37:33+00:00"
+            "time": "2018-03-29T19:57:20+00:00"
         },
         {
             "name": "composer/composer",
@@ -562,16 +562,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0-RC17",
+            "version": "3.0.0-RC17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "bcce9c47fe2449128253d89cb390162deb7c80c2"
+                "reference": "c638b66f752656ac56706a514d0e945319bd70ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/bcce9c47fe2449128253d89cb390162deb7c80c2",
-                "reference": "bcce9c47fe2449128253d89cb390162deb7c80c2",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/c638b66f752656ac56706a514d0e945319bd70ba",
+                "reference": "c638b66f752656ac56706a514d0e945319bd70ba",
                 "shasum": ""
             },
             "require": {
@@ -640,7 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-03-28T18:16:57+00:00"
+            "time": "2018-03-29T22:24:07+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -648,20 +648,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "93503c31651529c4baa3854593aa4512e0705b39"
+                "reference": "6c1eee510ae8717730a76ca421521de5404f8e35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/93503c31651529c4baa3854593aa4512e0705b39",
-                "reference": "93503c31651529c4baa3854593aa4512e0705b39",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/6c1eee510ae8717730a76ca421521de5404f8e35",
+                "reference": "6c1eee510ae8717730a76ca421521de5404f8e35",
                 "shasum": ""
             },
             "require": {
-                "craftcms/cms": "^3.0.0-RC16",
-                "dannyvankooten/vat.php": "~1.1.2",
-                "dompdf/dompdf": "~0.8",
-                "moneyphp/money": "~3.0",
-                "php-units-of-measure/php-units-of-measure": "~2.1"
+                "craftcms/cms": "^3.0.0-RC17",
+                "dannyvankooten/vat.php": "^1.1.2",
+                "dompdf/dompdf": "~0.8.2",
+                "moneyphp/money": "^3.1.3"
             },
             "type": "craft-plugin",
             "extra": {
@@ -694,7 +693,7 @@
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-03-28T17:57:55+00:00"
+            "time": "2018-04-02T05:12:43+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
@@ -702,12 +701,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce-stripe.git",
-                "reference": "5306501b67e9b903c41c1a67a43956aaf8103029"
+                "reference": "2c2add25430d0934c71e9004ac6e38ac8946895c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/5306501b67e9b903c41c1a67a43956aaf8103029",
-                "reference": "5306501b67e9b903c41c1a67a43956aaf8103029",
+                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/2c2add25430d0934c71e9004ac6e38ac8946895c",
+                "reference": "2c2add25430d0934c71e9004ac6e38ac8946895c",
                 "shasum": ""
             },
             "require": {
@@ -749,7 +748,7 @@
                 "docs": "https://github.com/craftcms/commerce-stripe",
                 "rss": "https://github.com/craftcms/commerce-stripe/commits/master.atom"
             },
-            "time": "2018-03-27T12:08:17+00:00"
+            "time": "2018-04-01T21:57:43+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -3219,57 +3218,6 @@
             "time": "2016-01-26T13:27:02+00:00"
         },
         {
-            "name": "php-units-of-measure/php-units-of-measure",
-            "version": "v2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PhpUnitsOfMeasure/php-units-of-measure.git",
-                "reference": "25f476e9c50e11af8cf044d22ffc271c96aa5248"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PhpUnitsOfMeasure/php-units-of-measure/zipball/25f476e9c50e11af8cf044d22ffc271c96aa5248",
-                "reference": "25f476e9c50e11af8cf044d22ffc271c96aa5248",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "replace": {
-                "triplepoint/php-units-of-measure": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.8.*",
-                "squizlabs/php_codesniffer": "2.2.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PhpUnitsOfMeasure\\": "source/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jonathan Hanson",
-                    "email": "jonathan@jonathan-hanson.org",
-                    "homepage": "http://www.jonathan-hanson.org/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A PHP library for converting between standard units of measure.",
-            "homepage": "https://github.com/PhpUnitsOfMeasure/php-units-of-measure",
-            "keywords": [
-                "conversion",
-                "data",
-                "measurements"
-            ],
-            "time": "2016-07-24T22:36:00+00:00"
-        },
-        {
             "name": "pixelandtonic/imagine",
             "version": "v0.7.1.3",
             "source": {
@@ -3524,12 +3472,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "4a272b63452f4d8ff0d48a759e59db9359a9b5b7"
+                "reference": "c83f6aa0ed08f680c012656d411d1b7c94003012"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4a272b63452f4d8ff0d48a759e59db9359a9b5b7",
-                "reference": "4a272b63452f4d8ff0d48a759e59db9359a9b5b7",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c83f6aa0ed08f680c012656d411d1b7c94003012",
+                "reference": "c83f6aa0ed08f680c012656d411d1b7c94003012",
                 "shasum": ""
             },
             "conflict": {
@@ -3560,8 +3508,8 @@
                 "doctrine/mongodb-odm-bundle": ">=2,<3.0.1",
                 "doctrine/orm": ">=2,<2.4.8|>=2.5,<2.5.1",
                 "dompdf/dompdf": ">=0.6,<0.6.2",
-                "drupal/core": ">=8,<8.4.5",
-                "drupal/drupal": ">=8,<8.4.5",
+                "drupal/core": ">=7,<7.58|>=8,<8.4.6|>=8.5,<8.5.1",
+                "drupal/drupal": ">=7,<7.58|>=8,<8.4.6|>=8.5,<8.5.1",
                 "erusev/parsedown": "<1.7",
                 "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.3|>=5.4,<5.4.11.3|>=2017.8,<2017.8.1.1|>=2017.12,<2017.12.2.1",
                 "firebase/php-jwt": "<2",
@@ -3570,10 +3518,11 @@
                 "gree/jose": "<=2.2",
                 "gregwar/rst": "<1.0.3",
                 "guzzlehttp/guzzle": ">=6,<6.2.1|>=4.0.0-rc2,<4.2.4|>=5,<5.3.1",
-                "illuminate/auth": ">=4,<4.0.99|>=4.1,<4.1.26",
+                "illuminate/auth": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.10",
                 "illuminate/database": ">=4,<4.0.99|>=4.1,<4.1.29",
+                "illuminate/encryption": ">=4,<=4.0.11|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.40|>=5.6,<5.6.15",
                 "joomla/session": "<1.3.1",
-                "laravel/framework": ">=4,<4.0.99|>=4.1,<4.1.29",
+                "laravel/framework": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.40|>=5.6,<5.6.15",
                 "laravel/socialite": ">=1,<1.0.99|>=2,<2.0.10",
                 "magento/magento1ce": ">=1.5.0.1,<1.9.3.2",
                 "magento/magento1ee": ">=1.9,<1.14.3.2",
@@ -3675,7 +3624,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-03-22T21:16:54+00:00"
+            "time": "2018-04-02T06:47:13+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -4522,16 +4471,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.4.7",
+            "version": "v2.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "69aacd44dbbaa3199d5afb68605c996d577896fc"
+                "reference": "7b604c89da162034bdf4bb66310f358d313dd16d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/69aacd44dbbaa3199d5afb68605c996d577896fc",
-                "reference": "69aacd44dbbaa3199d5afb68605c996d577896fc",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/7b604c89da162034bdf4bb66310f358d313dd16d",
+                "reference": "7b604c89da162034bdf4bb66310f358d313dd16d",
                 "shasum": ""
             },
             "require": {
@@ -4584,7 +4533,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2018-03-20T04:31:17+00:00"
+            "time": "2018-04-02T09:24:19+00:00"
         },
         {
             "name": "yiisoft/yii2",
