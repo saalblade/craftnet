@@ -6,9 +6,9 @@ export const craftId = state => {
     return state.craftId;
 };
 
-export const enableCommercialFeatures = state => {
+export const enableRenewalFeatures = state => {
     if (state.craftId) {
-        return state.craftId.enableCommercialFeatures;
+        return state.craftId.enableRenewalFeatures;
     }
 };
 

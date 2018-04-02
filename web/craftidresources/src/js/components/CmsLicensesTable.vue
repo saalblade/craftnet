@@ -7,7 +7,7 @@
 				<th>Edition</th>
 				<th>Domain</th>
 
-				<template v-if="enableCommercialFeatures">
+				<template v-if="enableRenewalFeatures">
 					<th>Next Payment</th>
 					<th>Auto Renew</th>
 				</template>
@@ -32,7 +32,7 @@
 					<td>{{ license.domain }}</td>
 
 
-					<template v-if="enableCommercialFeatures">
+					<template v-if="enableRenewalFeatures">
 						<td>{{ license.dateCreated }}</td>
 						<td>
 							<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
@@ -56,7 +56,7 @@
         computed: {
 
             ...mapGetters({
-                enableCommercialFeatures: 'enableCommercialFeatures',
+                enableRenewalFeatures: 'enableRenewalFeatures',
             }),
 
         }

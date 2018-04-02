@@ -38,11 +38,11 @@ return [
     'prod' => [
         'craftIdUrl' => 'https://id.craftcms.com',
         'enablePluginStoreCache' => true,
-        'enableCommercialFeatures' => false,
+        'enableRenewalFeatures' => false,
     ],
     'dev' => [
         'craftIdUrl' => 'https://id.craftcms.test',
         'enablePluginStoreCache' => false,
-        'enableCommercialFeatures' => false,
+        'enableRenewalFeatures' => false,
     ]
 ];

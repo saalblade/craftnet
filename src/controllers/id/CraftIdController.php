@@ -35,7 +35,7 @@ class CraftIdController extends BaseController
         // Craft ID config
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
-        $enableCommercialFeatures = $craftIdConfig['enableCommercialFeatures'];
+        $enableRenewalFeatures = $craftIdConfig['enableRenewalFeatures'];
 
 
         // Billing address
@@ -104,7 +104,7 @@ class CraftIdController extends BaseController
             'sales' => $this->_sales(),
             'upcomingInvoice' => $this->_upcomingInvoice(),
             'categories' => $this->_pluginCategories(),
-            'enableCommercialFeatures' => $enableCommercialFeatures
+            'enableRenewalFeatures' => $enableRenewalFeatures
         ];
 
         return $this->asJson($data);

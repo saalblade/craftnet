@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <div v-if="enableCommercialFeatures" class="card mb-3">
+        <div v-if="enableRenewalFeatures" class="card mb-3">
             <div class="card-body">
                 <h4>Upcoming Invoice</h4>
 
@@ -63,7 +63,7 @@
         computed: {
 
             ...mapGetters({
-                enableCommercialFeatures: 'enableCommercialFeatures',
+                enableRenewalFeatures: 'enableRenewalFeatures',
                 invoices: 'invoices',
                 upcomingInvoice: 'upcomingInvoice',
             }),
