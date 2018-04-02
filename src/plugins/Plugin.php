@@ -422,6 +422,16 @@ class Plugin extends Element
     /**
      * @inheritdoc
      */
+    public function extraFields()
+    {
+        $fields = parent::extraFields();
+        $fields[] = 'icon';
+        return $fields;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function datetimeAttributes(): array
     {
         $attributes = parent::datetimeAttributes();

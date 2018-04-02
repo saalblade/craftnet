@@ -166,11 +166,11 @@ class PluginLicenseManager extends Component
         if (!$license->pluginId) {
             $license->pluginId = (int)Plugin::find()
                 ->select('elements.id')
-                ->handle($license->plugin)
+                ->handle($license->pluginHandle)
                 ->scalar();
 
             if ($license->pluginId === false) {
-                throw new Exception("Invalid plugin handle: {$license->plugin}");
+                throw new Exception("Invalid plugin handle: {$license->pluginHandle}");
             }
         }
 
@@ -191,7 +191,7 @@ class PluginLicenseManager extends Component
             'editionId' => $license->editionId,
             'ownerId' => $license->ownerId,
             'cmsLicenseId' => $license->cmsLicenseId,
-            'plugin' => $license->plugin,
+            'pluginHandle' => $license->pluginHandle,
             'edition' => $license->edition,
             'expirable' => $license->expirable,
             'expired' => $license->expired,
@@ -426,7 +426,7 @@ class PluginLicenseManager extends Component
                 'l.editionId',
                 'l.ownerId',
                 'l.cmsLicenseId',
-                'l.plugin',
+                'l.pluginHandle',
                 'l.edition',
                 'l.expirable',
                 'l.expired',

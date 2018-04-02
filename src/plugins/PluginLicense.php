@@ -15,7 +15,7 @@ class PluginLicense extends Model
     public $editionId;
     public $ownerId;
     public $cmsLicenseId;
-    public $plugin;
+    public $pluginHandle;
     public $edition;
     public $expirable = true;
     public $expired = false;
@@ -33,6 +33,9 @@ class PluginLicense extends Model
     public $dateUpdated;
     public $uid;
 
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [

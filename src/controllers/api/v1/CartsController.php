@@ -216,7 +216,7 @@ class CartsController extends BaseApiController
             }
 
             // coupon code
-            if (isset($payload->couponCode)) {
+            if (property_exists($payload, 'couponCode')) {
                 $this->_updateCartCouponCode($cart, $payload->couponCode, $errors);
             }
 
@@ -498,12 +498,12 @@ class CartsController extends BaseApiController
 
     /**
      * @param Order $cart
-     * @param string $couponCode
+     * @param string|null $couponCode
      * @param array $errors
      */
-    private function _updateCartCouponCode(Order $cart, string $couponCode, array &$errors)
+    private function _updateCartCouponCode(Order $cart, string $couponCode = null, array &$errors)
     {
-        if (!Commerce::getInstance()->getDiscounts()->matchCode($couponCode, $cart->customerId, $explanation)) {
+        if ($couponCode !== null && !Commerce::getInstance()->getDiscounts()->matchCode($couponCode, $cart->customerId, $explanation)) {
             $errors[] = [
                 'param' => 'couponCode',
                 'message' => $explanation,
@@ -551,7 +551,7 @@ class CartsController extends BaseApiController
             }
 
             // Make sure this is actually an upgrade
-            switch ($license->edition) {
+            switch ($license->editionHandle) {
                 case CmsLicenseManager::EDITION_PERSONAL:
                     $validUpgrades = [CmsLicenseManager::EDITION_CLIENT, CmsLicenseManager::EDITION_PRO];
                     break;

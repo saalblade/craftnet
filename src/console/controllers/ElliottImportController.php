@@ -576,7 +576,7 @@ class ElliottImportController extends Controller
                     }
 
                     // update the license history
-                    $note = "upgraded to {$license->edition}";
+                    $note = "upgraded to {$license->editionHandle}";
                     if ($newEmail) {
                         $note .= " and reassigned to {$license->email}";
                     }

@@ -39,7 +39,7 @@ class CmsLicensesController extends BaseApiController
         $responseHeaders = Craft::$app->getResponse()->getHeaders()
             ->set('X-Craft-License-Status', self::LICENSE_STATUS_VALID)
             ->set('X-Craft-License-Domain', $license->domain)
-            ->set('X-Craft-License-Edition', $license->edition);
+            ->set('X-Craft-License-Edition', $license->editionHandle);
 
         // was a host provided with the request?
         if (Craft::$app->getRequest()->getHeaders()->has('X-Craft-Host')) {
@@ -57,18 +57,29 @@ class CmsLicensesController extends BaseApiController
     /**
      * Retrieves a CMS license.
      *
+     * @param string|null $include
      * @return Response
      * @throws BadRequestHttpException
      */
-    public function actionGet(): Response
+    public function actionGet(string $include = null): Response
     {
         if (empty($this->cmsLicenses)) {
             throw new BadRequestHttpException('Missing X-Craft-License Header');
         }
 
         $license = reset($this->cmsLicenses);
+        $fields = [];
+        $expand = [];
+
+        if ($include !== null) {
+            $include = explode(',', $include);
+            if (in_array('plugins', $include, true)) {
+                $expand[] = 'pluginLicenses.plugin.icon';
+            }
+        }
+
         return $this->asJson([
-            'license' => $license->toArray([], ['pluginLicenses']),
+            'license' => $license->toArray($fields, $expand),
         ]);
     }
 }

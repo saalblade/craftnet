@@ -247,11 +247,11 @@ class CmsLicenseManager extends Component
         if (!$license->editionId) {
             $license->editionId = (int)CmsEdition::find()
                 ->select('elements.id')
-                ->handle($license->edition)
+                ->handle($license->editionHandle)
                 ->scalar();
 
             if ($license->editionId === false) {
-                throw new Exception("Invalid Craft edition: {$license->edition}");
+                throw new Exception("Invalid Craft edition: {$license->editionHandle}");
             }
         }
 
@@ -261,7 +261,7 @@ class CmsLicenseManager extends Component
             'expirable' => $license->expirable,
             'expired' => $license->expired,
             'autoRenew' => $license->autoRenew,
-            'edition' => $license->edition,
+            'editionHandle' => $license->editionHandle,
             'email' => $license->email,
             'domain' => $license->domain,
             'key' => $license->key,
@@ -424,7 +424,8 @@ class CmsLicenseManager extends Component
     public function transformLicenseForOwner(CmsLicense $result, User $owner)
     {
         if ($result->ownerId === $owner->id) {
-            $license = $result->getAttributes(['id', 'key', 'edition', 'domain', 'notes', 'email', 'dateCreated']);
+            $license = $result->getAttributes(['id', 'key', 'domain', 'notes', 'email', 'dateCreated']);
+            $license['edition'] = $result->editionHandle;
         } else {
             $license = [
                 'shortKey' => $result->getShortKey()
@@ -482,7 +483,7 @@ class CmsLicenseManager extends Component
                 'l.expirable',
                 'l.expired',
                 'l.autoRenew',
-                'l.edition',
+                'l.editionHandle',
                 'l.email',
                 'l.domain',
                 'l.key',
