@@ -7,8 +7,8 @@
 				<dl v-if="!showForm">
 					<dt>VAT ID</dt>
 					<dd>
-						<template v-if="companyInfos.businessVatId">
-							{{ companyInfos.businessVatId }}
+						<template v-if="billingAddress && billingAddress.businessTaxId">
+							{{ billingAddress.businessTaxId }}
 						</template>
 						<template v-else>
 							<span class="text-secondary">VAT ID not defined.</span>
@@ -28,7 +28,7 @@
 		</div>
 
 		<form v-if="showForm" @submit.prevent="save()">
-			<text-field id="businessVatId" label="Vat ID" v-model="invoiceDetailsDraft.businessVatId" :errors="errors.businessVatId" />
+			<text-field id="businessTaxId" label="Tax ID" v-model="invoiceDetailsDraft.businessTaxId" :errors="errors.businessTaxId" />
 			<input type="submit" class="btn btn-primary" value="Save" />
 			<input type="button" class="btn btn-secondary" value="Cancel" @click="cancel()" />
 		</form>
@@ -48,7 +48,6 @@
         data() {
             return {
                 errors: {},
-                userId: 1,
                 showForm: false,
                 invoiceDetailsDraft: {},
             }
@@ -58,20 +57,8 @@
 
             ...mapGetters({
                 currentUser: 'currentUser',
+                billingAddress: 'billingAddress',
             }),
-
-            companyInfos() {
-                return {
-                    businessName: this.currentUser.businessName,
-                    businessVatId: this.currentUser.businessVatId,
-                    businessAddressLine1: this.currentUser.businessAddressLine1,
-                    businessAddressLine2: this.currentUser.businessAddressLine2,
-                    businessCity: this.currentUser.businessCity,
-                    businessState: this.currentUser.businessState,
-                    businessZipCode: this.currentUser.businessZipCode,
-                    businessCountry: this.currentUser.businessCountry,
-                };
-            },
 
         },
 
@@ -82,29 +69,38 @@
              */
             editInvoiceDetails() {
                 this.showForm = true;
-                this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.companyInfos));
+                this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress));
             },
 
             /**
              * Saves the user’s invoice details.
              */
             save() {
-                this.$store.dispatch('saveUser', {
-                    id: this.currentUser.id,
-                    businessName: this.invoiceDetailsDraft.businessName,
-                    businessVatId: this.invoiceDetailsDraft.businessVatId,
-                    businessAddressLine1: this.invoiceDetailsDraft.businessAddressLine1,
-                    businessAddressLine2: this.invoiceDetailsDraft.businessAddressLine2,
-                    businessCity: this.invoiceDetailsDraft.businessCity,
-                    businessState: this.invoiceDetailsDraft.businessState,
-                    businessZipCode: this.invoiceDetailsDraft.businessZipCode,
-                    businessCountry: this.invoiceDetailsDraft.businessCountry,
-                }).then(response => {
-                    this.$root.displayNotice('Company infos saved.');
+                let data = {
+                    businessTaxId: this.invoiceDetailsDraft.businessTaxId,
+                }
+
+                if(this.billingAddress) {
+                    data = Object.assign({}, data, {
+                        id: this.billingAddress.id,
+                        firstName: this.billingAddress.firstName,
+                        lastName: this.billingAddress.lastName,
+                        businessName: this.billingAddress.businessName,
+                        address1: this.billingAddress.address1,
+                        address2: this.billingAddress.address2,
+                        city: this.billingAddress.city,
+                        state: this.billingAddress.state,
+                        zipCode: this.billingAddress.zipCode,
+                        country: this.billingAddress.country,
+                    });
+				}
+
+                this.$store.dispatch('saveBillingInfo', data).then(response => {
+                    this.$root.displayNotice('Invoice details saved.');
                     this.showForm = false;
                     this.errors = {};
                 }).catch(response => {
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save company infos.';
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.';
                     this.$root.displayError(errorMessage);
 
                     this.errors = response.data && response.data.errors ? response.data.errors : {};

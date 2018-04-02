@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="enableCommercialFeatures" class="card mb-3">
+        <div v-if="enableRenewalFeatures" class="card mb-3">
             <div class="card-header">Upcoming Invoice</div>
             <div class="card-body">
                 <invoices-table :invoices="[upcomingInvoice]" :upcoming="true"></invoices-table>
@@ -30,7 +30,7 @@
         computed: {
 
             ...mapGetters({
-                enableCommercialFeatures: 'enableCommercialFeatures',
+                enableRenewalFeatures: 'enableRenewalFeatures',
                 invoices: 'invoices',
                 upcomingInvoice: 'upcomingInvoice',
             }),

@@ -54,6 +54,16 @@ export default {
             .catch(error => cbError(error.response));
     },
 
+    saveBillingInfo(data, cb, cbError) {
+        axios.post(Craft.actionUrl + '/craftnet/id/account/save-billing-info', data, {
+                headers: {
+                    'X-CSRF-Token':  Craft.csrfTokenValue,
+                }
+            })
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
     uploadUserPhoto(data, cb, cbError) {
         let formData = new FormData();
 

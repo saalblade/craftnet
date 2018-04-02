@@ -34,7 +34,7 @@
 							<dt>Email</dt>
 							<dd>{{ license.email }}</dd>
 
-							<template v-if="enableCommercialFeatures">
+							<template v-if="enableRenewalFeatures">
 								<dt>Update Period</dt>
 								<dd>2017/05/11 to 2018/05/11</dd>
 
@@ -102,7 +102,7 @@
         computed: {
 
             ...mapGetters({
-                enableCommercialFeatures: 'enableCommercialFeatures',
+                enableRenewalFeatures: 'enableRenewalFeatures',
             }),
 
         },

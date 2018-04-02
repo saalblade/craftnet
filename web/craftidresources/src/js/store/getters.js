@@ -6,9 +6,9 @@ export const craftId = state => {
     return state.craftId;
 };
 
-export const enableCommercialFeatures = state => {
+export const enableRenewalFeatures = state => {
     if (state.craftId) {
-        return state.craftId.enableCommercialFeatures;
+        return state.craftId.enableRenewalFeatures;
     }
 };
 
@@ -16,6 +16,10 @@ export const apps = state => {
     if (state.craftId) {
         return state.craftId.apps;
     }
+};
+
+export const countries = state => {
+    return state.craftId.countries;
 };
 
 
@@ -35,6 +39,9 @@ export const userIsInGroup = state => {
     }
 };
 
+export const billingAddress = state => {
+    return state.craftId.billingAddress
+}
 
 /**
  * Licenses

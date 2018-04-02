@@ -3,11 +3,13 @@
 namespace craftnet\controllers\id;
 
 use Craft;
+use craft\commerce\models\Address;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Asset;
 use craft\errors\UploadFailedException;
 use craft\helpers\Assets;
 use craft\helpers\FileHelper;
+use craft\helpers\Json;
 use craft\web\Controller;
 use craft\web\UploadedFile;
 use craftnet\Module;
@@ -165,6 +167,61 @@ class AccountController extends Controller
             }
 
             return $this->asJson($invoices);
+        } catch (Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Save billing info.
+     *
+     * @return Response
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionSaveBillingInfo(): Response
+    {
+        $this->requireLogin();
+
+        $payload = Json::decode(Craft::$app->getRequest()->getRawBody(), true);
+
+        $address = new Address();
+        $address->id = $payload['id'] ?? null;
+        $address->firstName = $payload['firstName'] ?? null;
+        $address->lastName = $payload['lastName'] ?? null;
+        $address->businessName = $payload['businessName'] ?? null;
+        $address->businessTaxId = $payload['businessTaxId'] ?? null;
+        $address->address1 = $payload['address1'] ?? null;
+        $address->address2 = $payload['address2'] ?? null;
+        $address->city = $payload['city'] ?? null;
+        $address->zipCode = $payload['zipCode'] ?? null;
+
+        if(isset($payload['country'])) {
+            $country = Commerce::getInstance()->getCountries()->getCountryByIso($payload['country']);
+
+            if($country) {
+                $address->countryId = $country->id;
+
+                if($payload['state']) {
+                    $state = Commerce::getInstance()->getStates()->getStateByAbbreviation($country->id, $payload['state']);
+                    $address->stateId = $state ? $state->id : null;
+                }
+            }
+        }
+
+        try {
+            Commerce::getInstance()->getCustomers()->saveAddress($address);
+
+            $addressArray = $address->toArray();
+
+            if(isset($payload['country'])) {
+                $addressArray['country'] = $payload['country'];
+            }
+
+            if(isset($payload['state'])) {
+                $addressArray['state'] = $payload['state'];
+            }
+
+            return $this->asJson(['success' => true, 'address' => $addressArray]);
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }

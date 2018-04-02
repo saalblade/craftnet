@@ -74,6 +74,21 @@ export const uploadUserPhoto = ({commit}, data) => {
     })
 };
 
+export const saveBillingInfo = ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+        api.saveBillingInfo(data, response => {
+                if (!response.data.errors) {
+                    commit(types.SAVE_BILLING_INFO, {response});
+                    resolve(response);
+                } else {
+                    reject(response);
+                }
+            },
+            response => {
+                reject(response);
+            })
+    })
+};
 
 /**
  * Licenses
