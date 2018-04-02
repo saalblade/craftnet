@@ -30,7 +30,7 @@ class PluginLicensesController extends Controller
         $plugin = null;
         $edition = null;
 
-        $license->plugin = $this->prompt('Plugin:', [
+        $license->pluginHandle = $this->prompt('Plugin:', [
             'required' => true,
             'validator' => function(string $input, string &$error = null) {
                 if (Plugin::find()->handle($input)->one() === null) {
@@ -42,7 +42,7 @@ class PluginLicensesController extends Controller
         ]);
 
         /** @var Plugin $plugin */
-        $plugin = Plugin::find()->handle($license->plugin)->one();
+        $plugin = Plugin::find()->handle($license->pluginHandle)->one();
 
         $license->edition = $this->prompt('Edition:', [
             'required' => true,

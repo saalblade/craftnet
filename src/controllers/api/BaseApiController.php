@@ -215,7 +215,7 @@ abstract class BaseApiController extends Controller
                     ->set('X-Craft-License', $cmsLicense->key)
                     ->set('X-Craft-License-Status', self::LICENSE_STATUS_VALID)
                     ->set('X-Craft-License-Domain', $cmsLicense->domain)
-                    ->set('X-Craft-License-Edition', $cmsLicense->edition);
+                    ->set('X-Craft-License-Edition', $cmsLicense->editionHandle);
 
                 // was a host provided with the request?
                 if ($requestHeaders->has('X-Craft-Host')) {
@@ -262,7 +262,7 @@ abstract class BaseApiController extends Controller
 
                     $responseHeaders->set('X-Craft-License-Status', $cmsLicenseStatus);
                     $responseHeaders->set('X-Craft-License-Domain', $cmsLicenseDomain);
-                    $responseHeaders->set('X-Craft-License-Edition', $cmsLicense->edition);
+                    $responseHeaders->set('X-Craft-License-Edition', $cmsLicense->editionHandle);
 
                     // update the license
                     $cmsLicense->lastActivityOn = new \DateTime();

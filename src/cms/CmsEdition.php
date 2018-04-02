@@ -245,7 +245,7 @@ class CmsEdition extends Purchasable
         $oldEmail = $license->email;
 
         $license->editionId = $this->id;
-        $license->edition = $this->handle;
+        $license->editionHandle = $this->handle;
         $license->expired = false;
 
         // If this was placed before April 4, or it was bought with a coupon created before April 4, set the license to non-expirable
@@ -287,7 +287,7 @@ class CmsEdition extends Purchasable
             if ($isNew) {
                 $note = "created by {$license->email}";
             } else {
-                $note = "upgraded to {$license->edition}";
+                $note = "upgraded to {$license->editionHandle}";
                 if ($license->email !== $oldEmail) {
                     $note .= " and reassigned to {$license->email}";
                 }

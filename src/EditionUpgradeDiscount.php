@@ -35,7 +35,7 @@ class EditionUpgradeDiscount implements AdjusterInterface
                 $licenseKey = $lineItem->options['licenseKey'];
                 if (strncmp($licenseKey, 'new:', 4) !== 0) {
                     $license = Module::getInstance()->getCmsLicenseManager()->getLicenseByKey($licenseKey);
-                    if ($license->edition === CmsLicenseManager::EDITION_CLIENT && $purchasable->handle === CmsLicenseManager::EDITION_PRO) {
+                    if ($license->editionHandle === CmsLicenseManager::EDITION_CLIENT && $purchasable->handle === CmsLicenseManager::EDITION_PRO) {
                         $adjustments[] = new OrderAdjustment([
                             'orderId' => $order->id,
                             'lineItemId' => $lineItem->id,
