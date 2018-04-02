@@ -3,6 +3,7 @@
 namespace craftnet\controllers\id;
 
 use Craft;
+use craft\commerce\models\Address;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
@@ -45,23 +46,20 @@ class CraftIdController extends BaseController
         $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($currentUser->id);
 
         if ($customer) {
-            $customerAddresses = $customer->getAddresses();
+            $billingAddress = $customer->getPrimaryBillingAddress() ?? new Address();
 
-            if (count($customerAddresses)) {
-                $billingAddress = end($customerAddresses);
-                $billingAddressArray = $billingAddress->toArray();
+            $billingAddressArray = $billingAddress->toArray();
 
-                $country = $billingAddress->getCountry();
+            $country = $billingAddress->getCountry();
 
-                if($country) {
-                    $billingAddressArray['country'] = $country->iso;
-                }
+            if($country) {
+                $billingAddressArray['country'] = $country->iso;
+            }
 
-                $state = $billingAddress->getState();
+            $state = $billingAddress->getState();
 
-                if($state) {
-                    $billingAddressArray['state'] = $state->abbreviation;
-                }
+            if($state) {
+                $billingAddressArray['state'] = $state->abbreviation;
             }
         }
 
