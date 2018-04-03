@@ -492,7 +492,7 @@ abstract class BaseApiController extends Controller
      */
     protected function getPayload(string $schema = null)
     {
-        $payload = Json::decode(Craft::$app->getRequest()->getRawBody(), false);
+        $payload = (object)Json::decode(Craft::$app->getRequest()->getRawBody(), false);
 
         if ($schema !== null && !$this->validatePayload($payload, $schema, $errors)) {
             throw new ValidationException($errors);
