@@ -507,7 +507,9 @@ class CartsController extends BaseApiController
      */
     private function _updateCartCouponCode(Order $cart, string $couponCode = null, array &$errors)
     {
-        if ($couponCode !== null && !Commerce::getInstance()->getDiscounts()->matchCode($couponCode, $cart->customerId, $explanation)) {
+        $cart->couponCode = $couponCode;
+
+        if ($couponCode !== null && !Commerce::getInstance()->getDiscounts()->orderCouponAvailable($cart, $explanation)) {
             $errors[] = [
                 'param' => 'couponCode',
                 'message' => $explanation,
@@ -515,8 +517,6 @@ class CartsController extends BaseApiController
             ];
             return;
         }
-
-        $cart->couponCode = $couponCode;
     }
 
     /**
