@@ -209,7 +209,13 @@ class AccountController extends Controller
         }
 
         try {
-            Commerce::getInstance()->getCustomers()->saveAddress($address);
+            $customerService = Commerce::getInstance()->getCustomers();
+
+            $customerService->saveAddress($address);
+            $customer = $customerService->getCustomer();
+            $customer->primaryBillingAddressId = $address->id;
+
+            $customerService->saveCustomer($customer);
 
             $addressArray = $address->toArray();
 
