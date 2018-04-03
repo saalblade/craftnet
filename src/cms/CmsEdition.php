@@ -69,7 +69,7 @@ class CmsEdition extends Purchasable
     public $name;
 
     /**
-     * @var string The edition handle (personal, client, pro)
+     * @var string The edition handle ('solo' or 'pro')
      */
     public $handle;
 

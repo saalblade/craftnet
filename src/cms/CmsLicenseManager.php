@@ -18,8 +18,7 @@ use yii\db\Expression;
 
 class CmsLicenseManager extends Component
 {
-    const EDITION_PERSONAL = 'personal';
-    const EDITION_CLIENT = 'client';
+    const EDITION_SOLO = 'solo';
     const EDITION_PRO = 'pro';
 
     /**

@@ -29,26 +29,6 @@ class EditionUpgradeDiscount implements AdjusterInterface
     {
         $adjustments = [];
 
-        foreach ($order->getLineItems() as $lineItem) {
-            $purchasable = $lineItem->getPurchasable();
-            if ($purchasable instanceof CmsEdition) {
-                $licenseKey = $lineItem->options['licenseKey'];
-                if (strncmp($licenseKey, 'new:', 4) !== 0) {
-                    $license = Module::getInstance()->getCmsLicenseManager()->getLicenseByKey($licenseKey);
-                    if ($license->editionHandle === CmsLicenseManager::EDITION_CLIENT && $purchasable->handle === CmsLicenseManager::EDITION_PRO) {
-                        $adjustments[] = new OrderAdjustment([
-                            'orderId' => $order->id,
-                            'lineItemId' => $lineItem->id,
-                            'type' => Discount::ADJUSTMENT_TYPE,
-                            'name' => 'Upgrade Discount',
-                            'description' => 'Craft Pro Upgrade Discount',
-                            'amount' => -199,
-                        ]);
-                    }
-                }
-            }
-        }
-
         // todo: add plugin upgrade adjustments
 
         return $adjustments;

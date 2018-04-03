@@ -687,7 +687,7 @@ abstract class BaseApiController extends Controller
             'expirable' => true,
             'expired' => false,
             'autoRenew' => false,
-            'editionHandle' => CmsLicenseManager::EDITION_PERSONAL,
+            'editionHandle' => CmsLicenseManager::EDITION_SOLO,
             'email' => $email,
             'domain' => $headers->get('X-Craft-Host'),
             'key' => KeyHelper::generateCmsKey(),

@@ -1,0 +1,76 @@
+<?php
+
+namespace craft\contentmigrations;
+
+use Craft;
+use craft\db\Migration;
+use craft\db\Query;
+use craftnet\cms\CmsEdition;
+use craftnet\cms\CmsLicenseManager;
+use craftnet\Module;
+
+/**
+ * m180403_023338_edition_changes migration.
+ */
+class m180403_023338_edition_changes extends Migration
+{
+    /**
+     * @inheritdoc
+     */
+    public function safeUp()
+    {
+        $elementsService = Craft::$app->getElements();
+        $db = Craft::$app->getDb();
+        $licenseManager = Module::getInstance()->getCmsLicenseManager();
+
+        /** @var CmsEdition[] $editions */
+        $editions = CmsEdition::find()
+            ->indexBy('handle')
+            ->all();
+
+        echo '    > renaming Personal edition to Solo ...';
+        $editions['personal']->name = 'Solo';
+        $editions['personal']->handle = 'solo';
+        $elementsService->saveElement($editions['personal']);
+        echo "done\n";
+
+        echo "    > updating Solo licenses' edition handles ...";
+        $db->createCommand()->update('craftnet_cmslicenses', [
+            'editionHandle' => 'solo'
+        ], [
+            'editionId' => $editions['personal']->id
+        ], [], false);
+        echo "done\n";
+
+        $clientLicenseQuery = (new Query())
+            ->select(['id'])
+            ->from(['craftnet_cmslicenses'])
+            ->where(['editionId' => $editions['client']->id]);
+        echo "    > upgrading {$clientLicenseQuery->count()} Client licenses ...\n";
+
+        foreach ($clientLicenseQuery->each() as $result) {
+            $license = $licenseManager->getLicenseById($result['id']);
+            echo "        > updating {$license->getShortKey()} ...";
+            $license->editionId = $editions['pro']->id;
+            $license->editionHandle = $editions['pro']->handle;
+            $licenseManager->saveLicense($license, false);
+            $licenseManager->addHistory($license->id, 'complimentary upgrade to Pro edition');
+            echo "done\n";
+        }
+
+        echo "    > All licenses upgraded\n";
+
+        echo '    > deleting Client edition ...';
+        $elementsService->deleteElement($editions['client']);
+        echo "done\n";
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown()
+    {
+        echo "m180403_023338_edition_changes cannot be reverted.\n";
+        return false;
+    }
+}

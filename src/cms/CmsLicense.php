@@ -42,8 +42,7 @@ class CmsLicense extends Model
             [['id', 'editionId', 'ownerId'], 'number', 'integerOnly' => true, 'min' => 1],
             [
                 ['edition'], 'in', 'range' => [
-                CmsLicenseManager::EDITION_PERSONAL,
-                CmsLicenseManager::EDITION_CLIENT,
+                CmsLicenseManager::EDITION_SOLO,
                 CmsLicenseManager::EDITION_PRO,
             ]
             ],

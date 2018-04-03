@@ -555,15 +555,9 @@ class CartsController extends BaseApiController
             }
 
             // Make sure this is actually an upgrade
-            switch ($license->editionHandle) {
-                case CmsLicenseManager::EDITION_PERSONAL:
-                    $validUpgrades = [CmsLicenseManager::EDITION_CLIENT, CmsLicenseManager::EDITION_PRO];
-                    break;
-                case CmsLicenseManager::EDITION_CLIENT:
-                    $validUpgrades = [CmsLicenseManager::EDITION_PRO];
-                    break;
-                default:
-                    $validUpgrades = [];
+            $validUpgrades = [];
+            if ($license->editionHandle === CmsLicenseManager::EDITION_SOLO) {
+                $validUpgrades[] = CmsLicenseManager::EDITION_PRO;
             }
 
             if (!in_array($item->edition, $validUpgrades, true)) {
