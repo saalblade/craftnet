@@ -266,11 +266,12 @@ class PluginEdition extends PluginPurchasable
     {
         return [
             [
-                'options', function($attribute, $params, $validator) use ($lineItem) {
-                if (!isset($lineItem->options['licenseKey'])) {
-                    $validator->addError($lineItem, $attribute, 'License key required');
-                }
-            },
+                'options',
+                function($attribute, $params, $validator) use ($lineItem) {
+                    if (!isset($lineItem->options['licenseKey'])) {
+                        $validator->addError($lineItem, $attribute, 'License key required');
+                    }
+                },
                 'skipOnEmpty' => false
             ]
         ];
