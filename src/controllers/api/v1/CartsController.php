@@ -225,9 +225,6 @@ class CartsController extends BaseApiController
                 if ($cart->id) {
                     // first clear the cart
                     $cart->setLineItems([]);
-                    // We need to delete the line items in the database since we might get a unique validation error before order save.
-                    // Since we are replacing all line items (not updating) we could be breaking uniqueness validation.
-                    $commerce->getLineItems()->deleteAllLineItemsByOrderId($cart->id);
                 }
 
                 foreach ($payload->items as $i => $item) {
@@ -274,6 +271,10 @@ class CartsController extends BaseApiController
             if (!empty($errors)) {
                 throw new ValidationException($errors);
             }
+
+            // Since we are replacing all line items (not updating) we could be breaking uniqueness validation on the orders line items.
+            // We need to delete the line items in the database to stop the error.
+            $commerce->getLineItems()->deleteAllLineItemsByOrderId($cart->id);
 
             // save the cart
             if (!Craft::$app->getElements()->saveElement($cart)) {
