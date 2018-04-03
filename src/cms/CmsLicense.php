@@ -38,10 +38,10 @@ class CmsLicense extends Model
     public function rules()
     {
         return [
-            [['expirable', 'expired', 'edition', 'email', 'key'], 'required'],
+            [['expirable', 'expired', 'editionHandle', 'email', 'key'], 'required'],
             [['id', 'editionId', 'ownerId'], 'number', 'integerOnly' => true, 'min' => 1],
             [
-                ['edition'], 'in', 'range' => [
+                ['editionHandle'], 'in', 'range' => [
                 CmsLicenseManager::EDITION_SOLO,
                 CmsLicenseManager::EDITION_PRO,
             ]
