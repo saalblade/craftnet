@@ -6,7 +6,6 @@ use Craft;
 use craft\db\Migration;
 use craft\db\Query;
 use craftnet\cms\CmsEdition;
-use craftnet\cms\CmsLicenseManager;
 use craftnet\Module;
 
 /**
@@ -20,7 +19,6 @@ class m180403_023338_edition_changes extends Migration
     public function safeUp()
     {
         $elementsService = Craft::$app->getElements();
-        $db = Craft::$app->getDb();
         $licenseManager = Module::getInstance()->getCmsLicenseManager();
 
         /** @var CmsEdition[] $editions */
@@ -35,11 +33,13 @@ class m180403_023338_edition_changes extends Migration
         echo "done\n";
 
         echo "    > updating Solo licenses' edition handles ...";
-        $db->createCommand()->update('craftnet_cmslicenses', [
-            'editionHandle' => 'solo'
-        ], [
-            'editionId' => $editions['personal']->id
-        ], [], false);
+        Craft::$app->getDb()->createCommand()
+            ->update('craftnet_cmslicenses', [
+                'editionHandle' => 'solo'
+            ], [
+                'editionId' => $editions['personal']->id
+            ], [], false)
+            ->execute();
         echo "done\n";
 
         $clientLicenseQuery = (new Query())
