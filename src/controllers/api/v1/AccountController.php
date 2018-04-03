@@ -69,21 +69,20 @@ class AccountController extends BaseApiController
         $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
 
         if ($customer) {
-            $customerAddresses = $customer->getAddresses();
+            $billingAddress = $customer->getPrimaryBillingAddress();
 
-            if (count($customerAddresses)) {
-                $billingAddress = end($customerAddresses);
+            if ($billingAddress) {
                 $billingAddressArray = $billingAddress->toArray();
 
                 $country = $billingAddress->getCountry();
 
-                if($country) {
+                if ($country) {
                     $billingAddressArray['country'] = $country->iso;
                 }
 
                 $state = $billingAddress->getState();
 
-                if($state) {
+                if ($state) {
                     $billingAddressArray['state'] = $state->abbreviation;
                 }
             }
