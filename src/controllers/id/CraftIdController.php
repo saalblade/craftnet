@@ -45,9 +45,7 @@ class CraftIdController extends BaseController
 
         $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($currentUser->id);
 
-        if ($customer) {
-            $billingAddress = $customer->getPrimaryBillingAddress() ?? new Address();
-
+        if ($customer && $billingAddress = $customer->getPrimaryBillingAddress()) {
             $billingAddressArray = $billingAddress->toArray();
 
             $country = $billingAddress->getCountry();
