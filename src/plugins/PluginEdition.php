@@ -103,7 +103,7 @@ class PluginEdition extends PluginPurchasable
     public $name;
 
     /**
-     * @var string The edition handle (personal, client, pro)
+     * @var string The edition handle ('standard', etc.)
      */
     public $handle;
 
