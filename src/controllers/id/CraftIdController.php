@@ -97,7 +97,7 @@ class CraftIdController extends BaseController
             'cmsLicenses' => $this->_cmsLicenses($currentUser),
             'pluginLicenses' => $this->_pluginLicenses($currentUser),
             'customers' => $this->_customers($currentUser),
-            'sales' => $this->_sales(),
+            'sales' => $this->_sales($currentUser),
             'upcomingInvoice' => $this->_upcomingInvoice(),
             'categories' => $this->_pluginCategories(),
             'enableRenewalFeatures' => $enableRenewalFeatures
@@ -171,49 +171,9 @@ class CraftIdController extends BaseController
     /**
      * @return array
      */
-    private function _sales(): array
+    private function _sales(User $user): array
     {
-        return [
-            [
-                'id' => 3,
-                'plugin' => ['id' => 6, 'name' => 'Analytics'],
-                'type' => 'license',
-                'grossAmount' => 99.00,
-                'netAmount' => 79.20,
-                'customer' => [
-                    'id' => 2,
-                    'name' => 'Brandon Kelly',
-                    'email' => 'brandon@pixelandtonic.com',
-                ],
-                'date' => date('Y-m-d'),
-            ],
-            [
-                'id' => 2,
-                'plugin' => ['id' => 6, 'name' => 'Analytics'],
-                'type' => 'renewal',
-                'grossAmount' => 29.00,
-                'netAmount' => 23.20,
-                'customer' => [
-                    'id' => 1,
-                    'name' => 'Benjamin David',
-                    'email' => 'ben@pixelandtonic.com',
-                ],
-                'date' => date('Y-m-d'),
-            ],
-            [
-                'id' => 1,
-                'plugin' => ['id' => 6, 'name' => 'Analytics'],
-                'type' => 'license',
-                'grossAmount' => 99.00,
-                'netAmount' => 79.20,
-                'customer' => [
-                    'id' => 1,
-                    'name' => 'Benjamin David',
-                    'email' => 'ben@pixelandtonic.com',
-                ],
-                'date' => date('Y-m-d', strtotime('-1 year')),
-            ],
-        ];
+        return Module::getInstance()->getPluginLicenseManager()->getSalesArrayByPluginOwner($user);
     }
 
     /**

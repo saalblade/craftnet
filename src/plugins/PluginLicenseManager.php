@@ -55,6 +55,36 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns sales for a plugin developer
+     *
+     * @param int $ownerId
+     *
+     * @return array
+     */
+    public function getSalesByPluginOwner(int $ownerId): array
+    {
+        $results = (new Query())
+            ->select([
+                '[[lineitems.id]] AS id',
+                '[[plugins.id]] AS pluginId',
+                '[[plugins.name]] AS pluginName',
+                '[[lineitems.salePrice]] AS grossAmount',
+                '[[users.id]] AS ownerId',
+                '[[users.firstName]] AS ownerFirstName',
+                '[[users.lastName]] AS ownerLastName',
+                '[[users.email]] AS ownerEmail',
+                '[[lineitems.dateCreated]] AS saleTime'])
+            ->from('{{%craftnet_pluginlicenses_lineitems}} AS licenses_items')
+            ->innerJoin(['{{%commerce_lineitems}} AS lineitems'], '[[licenses_items.lineItemId]] = lineitems.id')
+            ->innerJoin(['{{%craftnet_pluginlicenses}} AS licenses'], '[[licenses_items.licenseId]] = licenses.id')
+            ->innerJoin(['{{%craftnet_plugins}} AS plugins'], '[[licenses.pluginId]] = plugins.id')
+            ->innerJoin(['{{%users}}'], '[[licenses.ownerId]] = users.id')
+            ->all();
+
+        return $results;
+    }
+
+    /**
      * Returns licenses purchased by an order.
      *
      * @param int $orderId
@@ -336,6 +366,28 @@ class PluginLicenseManager extends Component
         $results = $this->getLicensesByOwner($owner->id);
 
         return $this->transformLicensesForOwner($results, $owner);
+    }
+
+    public function getSalesArrayByPluginOwner(User $owner)
+    {
+        $results = $this->getSalesByPluginOwner($owner->id);
+
+        foreach ($results as &$row) {
+            $row['netAmount'] = number_format($row['grossAmount'] * 0.8, 2);
+            $row['plugin'] = [
+                'id' => $row['pluginId'],
+                'name' => $row['pluginName']
+            ];
+            $row['customer'] = [
+                'id' => $row['ownerId'],
+                'name' => $row['ownerFirstName'].' '.$row['ownerLastName'],
+                'email' => $row['ownerEmail']
+            ];
+
+            unset($row['pluginId'], $row['pluginName'], $row['ownerId'], $row['ownerFirstName'], $row['ownerLastName'], $row['ownerEmail']);
+        }
+
+        return $results;
     }
 
     /**
