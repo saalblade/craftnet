@@ -225,6 +225,9 @@ class CartsController extends BaseApiController
                 if ($cart->id) {
                     // first clear the cart
                     $cart->setLineItems([]);
+                    // We need to delete the line items in the database since we might get a unique validation error before order save.
+                    // Since we are replacing all line items (not updating) we could be breaking uniqueness validation.
+                    $commerce->getLineItems()->deleteAllLineItemsByOrderId($cart->id);
                 }
 
                 foreach ($payload->items as $i => $item) {
