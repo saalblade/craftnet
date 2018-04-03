@@ -201,7 +201,7 @@ class AccountController extends Controller
             if($country) {
                 $address->countryId = $country->id;
 
-                if($payload['state']) {
+                if(!empty($payload['state'])) {
                     $state = Commerce::getInstance()->getStates()->getStateByAbbreviation($country->id, $payload['state']);
                     $address->stateId = $state ? $state->id : null;
                 }
