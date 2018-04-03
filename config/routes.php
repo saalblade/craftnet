@@ -28,6 +28,7 @@ return [
         'POST    v1/carts/<orderNumber:.*>' => 'craftnet/api/v1/carts/update',
         'DELETE  v1/carts/<orderNumber:.*>' => 'craftnet/api/v1/carts/delete',
         'POST    v1/checkout' => 'craftnet/api/v1/checkout',
+        'GET     v1/cms-editions' => 'craftnet/api/v1/cms-editions/get',
         'GET     v1/cms-licenses' => 'craftnet/api/v1/cms-licenses/get',
         'POST    v1/cms-licenses' => 'craftnet/api/v1/cms-licenses/create',
         'GET     v1/countries' => 'craftnet/api/v1/countries',
