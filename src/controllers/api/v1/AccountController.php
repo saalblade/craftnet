@@ -9,6 +9,7 @@ use craftnet\controllers\api\BaseApiController;
 use craftnet\oauthserver\Module as OauthServer;
 use yii\helpers\Json;
 use yii\web\Response;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * Class AccountController
