@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "401b7514013b54b1d4b27fa2aadec868",
+    "content-hash": "d532fa3027b9a46e011b10dedaf130c5",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.53.2",
+            "version": "3.54.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7c6d71204696443f7b5631016e41e46b3ebf00b9"
+                "reference": "86d1892b41381b77070acb199a57097c71b0f124"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7c6d71204696443f7b5631016e41e46b3ebf00b9",
-                "reference": "7c6d71204696443f7b5631016e41e46b3ebf00b9",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/86d1892b41381b77070acb199a57097c71b0f124",
+                "reference": "86d1892b41381b77070acb199a57097c71b0f124",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-04-03T20:30:29+00:00"
+            "time": "2018-04-04T18:22:54+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -562,16 +562,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0-RC17.1",
+            "version": "3.0.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "c638b66f752656ac56706a514d0e945319bd70ba"
+                "reference": "a37a8d0e50a6b8d27c6627bb3c7ae4d1812dad1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/c638b66f752656ac56706a514d0e945319bd70ba",
-                "reference": "c638b66f752656ac56706a514d0e945319bd70ba",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/a37a8d0e50a6b8d27c6627bb3c7ae4d1812dad1c",
+                "reference": "a37a8d0e50a6b8d27c6627bb3c7ae4d1812dad1c",
                 "shasum": ""
             },
             "require": {
@@ -640,20 +640,20 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-03-29T22:24:07+00:00"
+            "time": "2018-04-04T18:29:33+00:00"
         },
         {
             "name": "craftcms/commerce",
-            "version": "dev-develop",
+            "version": "2.0.0-beta.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "19ac9a3c3b49b827b16ebca639361c656efa4448"
+                "reference": "b8b7251309779af1252b437f7616542fd463d165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/19ac9a3c3b49b827b16ebca639361c656efa4448",
-                "reference": "19ac9a3c3b49b827b16ebca639361c656efa4448",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/b8b7251309779af1252b437f7616542fd463d165",
+                "reference": "b8b7251309779af1252b437f7616542fd463d165",
                 "shasum": ""
             },
             "require": {
@@ -693,20 +693,20 @@
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-04-03T21:54:13+00:00"
+            "time": "2018-04-04T16:01:22+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
-            "version": "dev-master",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce-stripe.git",
-                "reference": "278da023b53be29292e22433eecc935af28c3e56"
+                "reference": "2240d09d10e65d81a94a9e4179daf27b0331234c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/278da023b53be29292e22433eecc935af28c3e56",
-                "reference": "278da023b53be29292e22433eecc935af28c3e56",
+                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/2240d09d10e65d81a94a9e4179daf27b0331234c",
+                "reference": "2240d09d10e65d81a94a9e4179daf27b0331234c",
                 "shasum": ""
             },
             "require": {
@@ -748,7 +748,7 @@
                 "docs": "https://github.com/craftcms/commerce-stripe",
                 "rss": "https://github.com/craftcms/commerce-stripe/commits/master.atom"
             },
-            "time": "2018-04-02T23:40:44+00:00"
+            "time": "2018-04-04T17:23:46+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -5180,27 +5180,12 @@
             "time": "2016-09-01T10:05:43+00:00"
         }
     ],
-    "aliases": [
-        {
-            "alias": "2.0.0-alpha.99",
-            "alias_normalized": "2.0.0.0-alpha99",
-            "version": "dev-develop",
-            "package": "craftcms/commerce"
-        },
-        {
-            "alias": "1.0.0-alpha.99",
-            "alias_normalized": "1.0.0.0-alpha99",
-            "version": "9999999-dev",
-            "package": "craftcms/commerce-stripe"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "craftcms/cms": 5,
         "roave/security-advisories": 20,
         "flipboxfactory/craft-postmark": 5,
-        "craftcms/commerce": 20,
-        "craftcms/commerce-stripe": 20
+        "craftcms/commerce": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,

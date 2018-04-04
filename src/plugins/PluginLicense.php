@@ -39,7 +39,7 @@ class PluginLicense extends Model
     public function rules()
     {
         return [
-            [['expirable', 'expired', 'plugin', 'editionHandle', 'email', 'key'], 'required'],
+            [['expirable', 'expired', 'plugin', 'edition', 'email', 'key'], 'required'],
             [['id', 'pluginId', 'editionId', 'ownerId', 'cmsLicenseId'], 'number', 'integerOnly' => true, 'min' => 1],
             [['email'], 'email'],
         ];

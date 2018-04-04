@@ -220,7 +220,7 @@ class UpdatesController extends BaseApiController
 
             // If we're in the middle of getting a release's notes, finish it off
             if ($currentReleaseInfo !== null) {
-                $this->_parseReleaseNotes($currentNotes);
+                $currentReleaseInfo->notes = $this->_parseReleaseNotes($currentNotes);
             }
         }
 
