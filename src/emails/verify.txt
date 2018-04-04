@@ -1,6 +1,6 @@
 Hey {{user.friendlyName}},
 
-Please verify that you own the email {{ email }} by clicking on this link:
+To claim your Craft and plugin licenses, please click the following link, so we can be sure that you're the owner of {{ email }}:
 
 {{ link }}
 
