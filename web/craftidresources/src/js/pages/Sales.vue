@@ -15,7 +15,7 @@
                         <thead>
                         <tr>
                             <th>Item</th>
-                            <th>Type</th>
+                            <th v-if="enableRenewalFeatures">Type</th>
                             <th>Customer</th>
                             <th>Gross Amount</th>
                             <th>Net Amount</th>
@@ -25,7 +25,7 @@
                         <tbody>
                         <tr v-for="sale in salesToRender">
                             <td>{{ sale.plugin.name }}</td>
-                            <td class="text-secondary">{{ sale.type }}</td>
+                            <td v-if="enableRenewalFeatures" class="text-secondary">{{ sale.type }}</td>
                             <td><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></td>
                             <td>{{ sale.grossAmount|currency }}</td>
                             <td>{{ sale.netAmount|currency }}</td>
@@ -59,6 +59,7 @@
 
             ...mapGetters({
                 sales: 'sales',
+                enableRenewalFeatures: 'enableRenewalFeatures',
             }),
 
             salesToRender() {
