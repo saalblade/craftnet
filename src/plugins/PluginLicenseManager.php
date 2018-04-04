@@ -80,6 +80,7 @@ class PluginLicenseManager extends Component
             ->innerJoin(['{{%craftnet_plugins}} AS plugins'], '[[licenses.pluginId]] = plugins.id')
             ->innerJoin(['{{%users}}'], '[[licenses.ownerId]] = users.id')
             ->where(['[[plugins.developerId]]' => $ownerId])
+            ->orderBy(['lineitems.dateCreated' => SORT_DESC])
             ->all();
 
         return $results;
