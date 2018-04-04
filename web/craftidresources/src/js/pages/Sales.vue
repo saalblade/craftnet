@@ -14,9 +14,8 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Item</th>
-                            <th>Type</th>
+                            <th v-if="enableRenewalFeatures">Type</th>
                             <th>Customer</th>
                             <th>Gross Amount</th>
                             <th>Net Amount</th>
@@ -25,13 +24,12 @@
                         </thead>
                         <tbody>
                         <tr v-for="sale in salesToRender">
-                            <td><router-link :to="'/developer/sales/'+sale.id">SAL000{{ sale.id }}</router-link></td>
                             <td>{{ sale.plugin.name }}</td>
-                            <td class="text-secondary">{{ sale.type }}</td>
+                            <td v-if="enableRenewalFeatures" class="text-secondary">{{ sale.type }}</td>
                             <td><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></td>
                             <td>{{ sale.grossAmount|currency }}</td>
                             <td>{{ sale.netAmount|currency }}</td>
-                            <td>{{ sale.date }}</td>
+                            <td>{{ sale.saleTime|moment("LLL") }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -61,6 +59,7 @@
 
             ...mapGetters({
                 sales: 'sales',
+                enableRenewalFeatures: 'enableRenewalFeatures',
             }),
 
             salesToRender() {
