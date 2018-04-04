@@ -74,6 +74,8 @@ class OrderBehavior extends Behavior
         /** @var User[]|UserBehavior[] $developers */
         $developers = [];
         $developerTotals = [];
+        $developersByLineItem = [];
+
         foreach ($this->owner->getLineItems() as $lineItem) {
             $purchasable = $lineItem->getPurchasable();
             if ($purchasable instanceof PluginPurchasable) {
@@ -85,6 +87,8 @@ class OrderBehavior extends Behavior
                 } else {
                     $developerTotals[$developerId] += $lineItem->total;
                 }
+
+                $developersByLineItem[$developerId][] = $lineItem;
             }
         }
 
@@ -117,6 +121,31 @@ class OrderBehavior extends Behavior
             $fee = floor($total * 20) / 100;
             $developer->getFundsManager()->processOrder($this->owner->number, $transaction->reference, $total, $fee);
         }
+
+        // Now send developer notification emails
+        foreach ($developersByLineItem as $developerId => $lineItems) {
+            $developer = $developers[$developerId];
+            $this->_sendDeveloperSaleEmail($developer, $lineItems);
+        }
+    }
+
+    /**
+     * @param $developer
+     * @param $lineItems
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function _sendDeveloperSaleEmail($developer, $lineItems)
+    {
+        $mailer = Craft::$app->getMailer();
+
+        $mailer
+            ->composeFromKey(Module::MESSAGE_KEY_DEVELOPER_SALE, [
+                'developer' => $developer,
+                'lineItems' => $lineItems,
+            ])
+            ->setFrom($mailer->from)
+            ->setTo($developer->email)
+            ->send();
     }
 
     /**

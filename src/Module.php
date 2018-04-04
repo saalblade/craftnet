@@ -56,6 +56,7 @@ class Module extends \yii\base\Module
 {
     const MESSAGE_KEY_RECEIPT = 'craftnet_receipt';
     const MESSAGE_KEY_VERIFY = 'verify_email';
+    const MESSAGE_KEY_DEVELOPER_SALE = 'developer_sale';
 
     /**
      * @inheritdoc
@@ -103,6 +104,12 @@ class Module extends \yii\base\Module
                 'heading' => 'When someone wants to claim licenses by an email address:',
                 'subject' => 'Verify your email',
                 'body' => file_get_contents(__DIR__.'/emails/verify.txt'),
+            ]);
+            $e->messages[] = new SystemMessage([
+                'key' => self::MESSAGE_KEY_DEVELOPER_SALE,
+                'heading' => 'When a plugin developer makes a sale:',
+                'subject' => 'Craft Plugin Store Sale',
+                'body' => file_get_contents(__DIR__.'/emails/developer_sale.txt'),
             ]);
         });
 
