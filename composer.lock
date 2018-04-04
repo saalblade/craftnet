@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "401b7514013b54b1d4b27fa2aadec868",
+    "content-hash": "d532fa3027b9a46e011b10dedaf130c5",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -562,16 +562,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0",
+            "version": "3.0.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "18263261a5a70f0f84d78db6c4449b6fe304224e"
+                "reference": "5359837c8f0f565c447a57e7c64e956a4e999dce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/18263261a5a70f0f84d78db6c4449b6fe304224e",
-                "reference": "18263261a5a70f0f84d78db6c4449b6fe304224e",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/5359837c8f0f565c447a57e7c64e956a4e999dce",
+                "reference": "5359837c8f0f565c447a57e7c64e956a4e999dce",
                 "shasum": ""
             },
             "require": {
@@ -640,20 +640,20 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-04-04T16:12:24+00:00"
+            "time": "2018-04-04T17:48:42+00:00"
         },
         {
             "name": "craftcms/commerce",
-            "version": "dev-develop",
+            "version": "2.0.0-beta.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "7e98c6c745f1aabc77327cb24d0dcefa08aedd71"
+                "reference": "b8b7251309779af1252b437f7616542fd463d165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/7e98c6c745f1aabc77327cb24d0dcefa08aedd71",
-                "reference": "7e98c6c745f1aabc77327cb24d0dcefa08aedd71",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/b8b7251309779af1252b437f7616542fd463d165",
+                "reference": "b8b7251309779af1252b437f7616542fd463d165",
                 "shasum": ""
             },
             "require": {
@@ -693,20 +693,20 @@
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-04-04T15:33:00+00:00"
+            "time": "2018-04-04T16:01:22+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
-            "version": "dev-master",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce-stripe.git",
-                "reference": "339c3bea0d745a9dc2e8ecb2eaec5025a3e0f2dc"
+                "reference": "2240d09d10e65d81a94a9e4179daf27b0331234c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/339c3bea0d745a9dc2e8ecb2eaec5025a3e0f2dc",
-                "reference": "339c3bea0d745a9dc2e8ecb2eaec5025a3e0f2dc",
+                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/2240d09d10e65d81a94a9e4179daf27b0331234c",
+                "reference": "2240d09d10e65d81a94a9e4179daf27b0331234c",
                 "shasum": ""
             },
             "require": {
@@ -748,7 +748,7 @@
                 "docs": "https://github.com/craftcms/commerce-stripe",
                 "rss": "https://github.com/craftcms/commerce-stripe/commits/master.atom"
             },
-            "time": "2018-04-04T00:04:22+00:00"
+            "time": "2018-04-04T17:23:46+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -5180,27 +5180,12 @@
             "time": "2016-09-01T10:05:43+00:00"
         }
     ],
-    "aliases": [
-        {
-            "alias": "2.0.0-alpha.99",
-            "alias_normalized": "2.0.0.0-alpha99",
-            "version": "dev-develop",
-            "package": "craftcms/commerce"
-        },
-        {
-            "alias": "1.0.0-alpha.99",
-            "alias_normalized": "1.0.0.0-alpha99",
-            "version": "9999999-dev",
-            "package": "craftcms/commerce-stripe"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "craftcms/cms": 5,
         "roave/security-advisories": 20,
         "flipboxfactory/craft-postmark": 5,
-        "craftcms/commerce": 20,
-        "craftcms/commerce-stripe": 20
+        "craftcms/commerce": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
