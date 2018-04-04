@@ -648,12 +648,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "19ac9a3c3b49b827b16ebca639361c656efa4448"
+                "reference": "805367d38912986176e7a7141fd416d64c63287b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/19ac9a3c3b49b827b16ebca639361c656efa4448",
-                "reference": "19ac9a3c3b49b827b16ebca639361c656efa4448",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/805367d38912986176e7a7141fd416d64c63287b",
+                "reference": "805367d38912986176e7a7141fd416d64c63287b",
                 "shasum": ""
             },
             "require": {
@@ -693,7 +693,7 @@
                 "docs": "https://github.com/craftcms/docs",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-04-03T21:54:13+00:00"
+            "time": "2018-04-03T22:30:00+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
@@ -701,12 +701,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce-stripe.git",
-                "reference": "278da023b53be29292e22433eecc935af28c3e56"
+                "reference": "339c3bea0d745a9dc2e8ecb2eaec5025a3e0f2dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/278da023b53be29292e22433eecc935af28c3e56",
-                "reference": "278da023b53be29292e22433eecc935af28c3e56",
+                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/339c3bea0d745a9dc2e8ecb2eaec5025a3e0f2dc",
+                "reference": "339c3bea0d745a9dc2e8ecb2eaec5025a3e0f2dc",
                 "shasum": ""
             },
             "require": {
@@ -748,7 +748,7 @@
                 "docs": "https://github.com/craftcms/commerce-stripe",
                 "rss": "https://github.com/craftcms/commerce-stripe/commits/master.atom"
             },
-            "time": "2018-04-02T23:40:44+00:00"
+            "time": "2018-04-04T00:04:22+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
