@@ -49,7 +49,7 @@
                                     <h5><router-link @click.native="closeSidebar()" to="/developer"><i class="fa fa-plug"></i> Developer</router-link></h5>
                                     <ul>
                                         <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
-                                        <li v-if="userIsInGroup('staff')"><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
                                         <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
                                     </ul>
