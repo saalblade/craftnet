@@ -68,6 +68,7 @@ return [
     'dev' => [
         'devMode' => true,
         'allowUpdates' => true,
+        'testToEmailAddress' => getenv('TEST_EMAIL'),
         'siteUrl' => [
             'api' => 'https://api.craftcms.test/',
             'composer' => 'https://composer.craftcms.test/',
