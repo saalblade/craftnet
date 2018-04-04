@@ -14,7 +14,6 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Item</th>
                             <th>Type</th>
                             <th>Customer</th>
@@ -25,7 +24,6 @@
                         </thead>
                         <tbody>
                         <tr v-for="sale in salesToRender">
-                            <td><router-link :to="'/developer/sales/'+sale.id">SAL000{{ sale.id }}</router-link></td>
                             <td>{{ sale.plugin.name }}</td>
                             <td class="text-secondary">{{ sale.type }}</td>
                             <td><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></td>
