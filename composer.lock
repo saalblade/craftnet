@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.53.2",
+            "version": "3.54.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7c6d71204696443f7b5631016e41e46b3ebf00b9"
+                "reference": "86d1892b41381b77070acb199a57097c71b0f124"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7c6d71204696443f7b5631016e41e46b3ebf00b9",
-                "reference": "7c6d71204696443f7b5631016e41e46b3ebf00b9",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/86d1892b41381b77070acb199a57097c71b0f124",
+                "reference": "86d1892b41381b77070acb199a57097c71b0f124",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-04-03T20:30:29+00:00"
+            "time": "2018-04-04T18:22:54+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -562,16 +562,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.0.1",
+            "version": "3.0.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "5359837c8f0f565c447a57e7c64e956a4e999dce"
+                "reference": "a37a8d0e50a6b8d27c6627bb3c7ae4d1812dad1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/5359837c8f0f565c447a57e7c64e956a4e999dce",
-                "reference": "5359837c8f0f565c447a57e7c64e956a4e999dce",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/a37a8d0e50a6b8d27c6627bb3c7ae4d1812dad1c",
+                "reference": "a37a8d0e50a6b8d27c6627bb3c7ae4d1812dad1c",
                 "shasum": ""
             },
             "require": {
@@ -640,7 +640,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-04-04T17:48:42+00:00"
+            "time": "2018-04-04T18:29:33+00:00"
         },
         {
             "name": "craftcms/commerce",
