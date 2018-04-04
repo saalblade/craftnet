@@ -30,7 +30,7 @@
 
 		<div class="card">
 			<div class="card-body">
-				<form method="post" accept-charset="UTF-8">
+				<form method="post" accept-charset="UTF-8" @submit.prevent="register()" ref="registerform">
 					{{ csrfInput() }}
 					<input type="hidden" name="action" value="users/save-user">
 					<input type="hidden" name="redirect" value="{{ 'register/success'|hash }}">
@@ -62,7 +62,7 @@
 						{% endif %}
 					</div>
 
-					<input type="submit" class="btn btn-primary btn-block" value="Register">
+					<input type="submit" class="btn btn-primary btn-block" :class="{ disabled: registerFormLoading }" :disabled="registerFormLoading" value="Register">
 				</form>
 			</div>
 		</div>
