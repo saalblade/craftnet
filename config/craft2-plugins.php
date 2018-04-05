@@ -45,6 +45,10 @@ return [
     'AssetRev' => [
         'handle' => 'assetrev',
     ],
+    'AuditLog' => [
+        'statusColor' => 'red',
+        'status' => 'Discontinued (use [Audit](https://github.com/sjelfull/craft-audit) instead)'
+    ],
     'BusinessLogic' => [
         'statusColor' => 'red',
         'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
