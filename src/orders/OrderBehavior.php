@@ -74,7 +74,7 @@ class OrderBehavior extends Behavior
         /** @var User[]|UserBehavior[] $developers */
         $developers = [];
         $developerTotals = [];
-        $developersByLineItem = [];
+        $developerLineItems = [];
 
         foreach ($this->owner->getLineItems() as $lineItem) {
             $purchasable = $lineItem->getPurchasable();
@@ -88,7 +88,7 @@ class OrderBehavior extends Behavior
                     $developerTotals[$developerId] += $lineItem->total;
                 }
 
-                $developersByLineItem[$developerId][] = $lineItem;
+                $developerLineItems[$developerId][] = $lineItem;
             }
         }
 
@@ -123,7 +123,7 @@ class OrderBehavior extends Behavior
         }
 
         // Now send developer notification emails
-        foreach ($developersByLineItem as $developerId => $lineItems) {
+        foreach ($developerLineItems as $developerId => $lineItems) {
             $developer = $developers[$developerId];
             $this->_sendDeveloperSaleEmail($developer, $lineItems);
         }
