@@ -513,7 +513,7 @@ class PluginsController extends Controller
 
                 foreach ($plugin->screenshots as $screenshot) {
                     if (!$assetsService->moveAsset($screenshot, $folder)) {
-                        throw new Exception('Could not save icon asset: '.implode(', ', $screenshot->getErrorSummary(true)));
+                        throw new Exception('Could not save screenshot asset: '.implode(', ', $screenshot->getErrorSummary(true)));
                     }
                 }
             }
