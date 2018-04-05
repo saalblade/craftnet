@@ -14,7 +14,7 @@
 				<input class="form-control" id="password" type="password" name="password" v-model="password" ref="passwordInput" />
 			</div>
 
-			<div class="form-check">
+			<div class="form-check mb-2">
 				<label class="form-check-label">
 					<input type="checkbox" class="form-check-input" name="rememberMe" value="1">
 					Remember me
