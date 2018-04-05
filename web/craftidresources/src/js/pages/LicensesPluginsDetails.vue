@@ -10,6 +10,12 @@
         <div class="card card-danger mb-3">
             <div class="card-header">Danger Zone</div>
             <div class="card-body">
+                <template v-if="license.cmsLicense && license.cmsLicense.key">
+                    <h5>Unlink license</h5>
+                    <p>Unlink this plugin license from the CMS license it’s attached to.</p>
+                    <div><button class="btn btn-danger" @click="unlinkPluginLicense()">Unlink License</button></div>
+                    <hr>
+                </template>
                 <h5>Release license</h5>
                 <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
                 <div><button class="btn btn-danger" @click="releasePluginLicense()">Release License</button></div>
@@ -67,6 +73,34 @@
                     .catch(response => {
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release plugin license.';
                         this.$root.displayError(errorMessage);
+                    });
+            },
+
+            unlinkPluginLicense() {
+                if (!window.confirm("Are you sure you want to unlink this license from the CMS license it’s attached to?")) {
+                    return false
+                }
+
+                this.$store.dispatch('unlinkPluginLicense', {
+                        pluginHandle: this.license.plugin.handle,
+                        licenseKey: this.license.key,
+                    })
+                    .then(response => {
+                        this.$store.dispatch('getPluginLicenses')
+                            .then(response => {
+                                this.$root.displayNotice('Plugin license unlinked from CMS license.')
+                                this.$store.dispatch('getCmsLicenses')
+                                this.$store.dispatch('getInvoices')
+                                this.$router.push({path: '/account/licenses/plugins'})
+                            })
+                            .catch(response => {
+                                const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t unlink plugin license from CMS license.'
+                                this.$root.displayError(errorMessage)
+                            })
+                    })
+                    .catch(response => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t unlink plugin license from CMS license.'
+                        this.$root.displayError(errorMessage)
                     });
             }
 

@@ -299,6 +299,20 @@ export default {
             .catch(error => cbError(error.response));
     },
 
+    unlinkPluginLicense({pluginHandle, licenseKey}, cb, cbError) {
+        let data = {
+            handle: pluginHandle,
+            key: licenseKey,
+            [Craft.csrfTokenName]: Craft.csrfTokenValue
+        }
+
+        let qsData = qs.stringify(data);
+
+        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/unlink', qsData)
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
+    },
+
     getInvoices(cb, cbError) {
         let data = {
             [Craft.csrfTokenName]: Craft.csrfTokenValue
