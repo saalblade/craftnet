@@ -5,6 +5,7 @@ namespace craftnet\cms;
 use Craft;
 use craft\db\Query;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craftnet\errors\LicenseNotFoundException;
@@ -197,6 +198,8 @@ class CmsLicenseManager extends Component
             }
 
             $data = Json::decode($data);
+            $data['editionHandle'] = 'solo';
+            unset($data['edition']);
             $license = new CmsLicense($data);
 
             if (!$license->ownerId) {
