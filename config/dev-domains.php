@@ -28,6 +28,7 @@ return [
     'gw-staging.com',
     'herokuapp.com',
     'hpc3.hpconnected.com',
+    'hyperlane.co',
     'infomedia-dev.com',
     'mandarindev.no',
     'manual.casa',
