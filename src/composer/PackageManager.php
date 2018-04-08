@@ -827,6 +827,18 @@ class PackageManager extends Component
                 }
             }
 
+            // Ignore the new latest version if we already have another one that's better
+            if ($package->latestVersion !== null && !in_array($package->latestVersion, $deletedVersions, true)) {
+                if ($latestVersion === null) {
+                    $latestVersion = $package->latestVersion;
+                } else {
+                    $vp = new VersionParser();
+                    if (Comparator::greaterThan($vp->normalize($package->latestVersion), $vp->normalize($latestVersion))) {
+                        $latestVersion = $package->latestVersion;
+                    }
+                }
+            }
+
             // Update the package's latestVersion and dateUpdated
             $db->createCommand()
                 ->update('craftnet_packages', ['latestVersion' => $latestVersion], ['id' => $package->id])
