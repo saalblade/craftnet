@@ -55,6 +55,11 @@ class Package extends Model
     public $replacementPackage;
 
     /**
+     * @var string|null
+     */
+    public $latestVersion;
+
+    /**
      * @var
      */
     public $webhookId;
