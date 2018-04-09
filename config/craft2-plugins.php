@@ -138,6 +138,9 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
     ],
+    'NpEditMultipleElements' => [
+        'handle' => 'sequential-edit',
+    ],
     'Oauth' => [
         'statusColor' => 'red',
         'status' => 'Unnecessary thanks to Craft 3’s inclusion of an OAuth 2 client library'
