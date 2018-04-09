@@ -414,27 +414,15 @@ class CartsController extends BaseApiController
                     'message' => 'Invalid country',
                     'code' => self::ERROR_CODE_INVALID,
                 ];
-            } else {
-                // If we have a country, is it an EU country?
-                $isEuMember = (new CountryInfo())->isEuMember($country->iso);
-                if ($isEuMember) {
-                    if (empty($billingAddress->businessTaxId)) {
-                        $addressErrors[] = [
-                            'param' => 'billingAddress.businessTaxId',
-                            'message' => 'A VAT ID is required for European orders.',
-                            'code' => self::ERROR_CODE_MISSING_FIELD,
-                        ];
-                    } else {
-                        $validator = new Validator;
-                        $isValid = $validator->isValid(preg_replace("/[^A-Za-z0-9]/", '', $billingAddress->businessTaxId));
-                        if (!$isValid) {
-                            $addressErrors[] = [
-                                'param' => 'billingAddress.businessTaxId',
-                                'message' => 'A valid VAT ID is required for European orders.',
-                                'code' => self::ERROR_CODE_INVALID,
-                            ];
-                        }
-                    }
+            } else if (!empty($billingAddress->businessTaxId) && (new CountryInfo())->isEuMember($country->iso)) {
+                // Make sure it looks like a valid VAT ID
+                $vatId = preg_replace('/[^A-Za-z0-9]/', '', $billingAddress->businessTaxId);
+                if ($vatId && !(new Validator())->isValid($vatId)) {
+                    $addressErrors[] = [
+                        'param' => 'billingAddress.businessTaxId',
+                        'message' => 'A valid VAT ID is required for European orders.',
+                        'code' => self::ERROR_CODE_INVALID,
+                    ];
                 }
             }
 
