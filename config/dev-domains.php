@@ -11,6 +11,7 @@ return [
     'chiefstaging.com',
     'clearfiredev.net',
     'cloudwaysapps.com',
+    'clover.show',
     'cogclient.com',
     'craftcms.com',
     'crudecode.com',
