@@ -74,12 +74,14 @@ class PluginLicenseManager extends Component
                 'users.lastName AS ownerLastName',
                 'users.email AS ownerEmail',
                 'lineitems.dateCreated AS saleTime',
+                'orders.email AS orderEmail',
             ])
             ->from(['craftnet_pluginlicenses_lineitems licenses_items'])
             ->innerJoin('commerce_lineitems lineitems', '[[lineitems.id]] = [[licenses_items.lineItemId]]')
+            ->innerJoin('commerce_orders orders', '[[orders.id]] = [[lineitems.orderId]]')
             ->innerJoin('craftnet_pluginlicenses licenses', '[[licenses.id]] = [[licenses_items.licenseId]]')
             ->innerJoin('craftnet_plugins plugins', '[[plugins.id]] = [[licenses.pluginId]]')
-            ->innerJoin('users', '[[users.id]] = [[licenses.ownerId]]')
+            ->leftJoin('users', '[[users.id]] = [[licenses.ownerId]]')
             ->where(['plugins.developerId' => $ownerId])
             ->orderBy(['lineitems.dateCreated' => SORT_DESC])
             ->all();
@@ -383,8 +385,8 @@ class PluginLicenseManager extends Component
             ];
             $row['customer'] = [
                 'id' => $row['ownerId'],
-                'name' => $row['ownerFirstName'].' '.$row['ownerLastName'],
-                'email' => $row['ownerEmail']
+                'name' => implode(' ', array_filter([$row['ownerFirstName'], $row['ownerLastName']])),
+                'email' => $row['ownerEmail'] ?? $row['orderEmail'],
             ];
 
             unset($row['pluginId'], $row['pluginName'], $row['ownerId'], $row['ownerFirstName'], $row['ownerLastName'], $row['ownerEmail']);
