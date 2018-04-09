@@ -65,21 +65,22 @@ class PluginLicenseManager extends Component
     {
         $results = (new Query())
             ->select([
-                '[[lineitems.id]] AS id',
-                '[[plugins.id]] AS pluginId',
-                '[[plugins.name]] AS pluginName',
-                '[[lineitems.salePrice]] AS grossAmount',
-                '[[users.id]] AS ownerId',
-                '[[users.firstName]] AS ownerFirstName',
-                '[[users.lastName]] AS ownerLastName',
-                '[[users.email]] AS ownerEmail',
-                '[[lineitems.dateCreated]] AS saleTime'])
-            ->from('{{%craftnet_pluginlicenses_lineitems}} AS licenses_items')
-            ->innerJoin(['{{%commerce_lineitems}} AS lineitems'], '[[licenses_items.lineItemId]] = lineitems.id')
-            ->innerJoin(['{{%craftnet_pluginlicenses}} AS licenses'], '[[licenses_items.licenseId]] = licenses.id')
-            ->innerJoin(['{{%craftnet_plugins}} AS plugins'], '[[licenses.pluginId]] = plugins.id')
-            ->innerJoin(['{{%users}}'], '[[licenses.ownerId]] = users.id')
-            ->where(['[[plugins.developerId]]' => $ownerId])
+                'lineitems.id AS id',
+                'plugins.id AS pluginId',
+                'plugins.name AS pluginName',
+                'lineitems.salePrice AS grossAmount',
+                'users.id AS ownerId',
+                'users.firstName AS ownerFirstName',
+                'users.lastName AS ownerLastName',
+                'users.email AS ownerEmail',
+                'lineitems.dateCreated AS saleTime',
+            ])
+            ->from(['craftnet_pluginlicenses_lineitems licenses_items'])
+            ->innerJoin('commerce_lineitems lineitems', '[[lineitems.id]] = [[licenses_items.lineItemId]]')
+            ->innerJoin('craftnet_pluginlicenses licenses', '[[licenses.id]] = [[licenses_items.licenseId]]')
+            ->innerJoin('craftnet_plugins plugins', '[[plugins.id]] = [[licenses.pluginId]]')
+            ->innerJoin('users', '[[users.id]] = [[licenses.ownerId]]')
+            ->where(['plugins.developerId' => $ownerId])
             ->orderBy(['lineitems.dateCreated' => SORT_DESC])
             ->all();
 
