@@ -19,7 +19,7 @@ use yii\helpers\Console;
 use yii\validators\EmailValidator;
 
 /**
- * Manages Craft licenses.
+ * Manages plugin licenses.
  *
  * @property Module $module
  */
