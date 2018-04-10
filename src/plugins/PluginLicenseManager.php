@@ -189,6 +189,36 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns licenses by their developer.
+     *
+     * @param int $developerId
+     * @param int|null $offset
+     * @param int|null $limit
+     * @param int|null $total
+     *
+     * @return PluginLicense[]
+     */
+    public function getLicensesByDeveloper(int $developerId, int $offset = null, int $limit = null, int &$total = null): array
+    {
+        $query = $this->_createLicenseQuery()
+            ->innerJoin('craftnet_plugins p', '[[p.id]] = [[l.pluginId]]')
+            ->where(['p.developerId' => $developerId]);
+
+        $total = $query->count();
+        $results = $query
+            ->offset($offset)
+            ->limit($limit)
+            ->orderBy(['l.dateCreated' => SORT_ASC])
+            ->all();
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
      * Saves a license.
      *
      * @param PluginLicense $license

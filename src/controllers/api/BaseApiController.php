@@ -668,6 +668,21 @@ abstract class BaseApiController extends Controller
     }
 
     /**
+     * Returns the offset and limit that should be used for list requests.
+     *
+     * @param int $page
+     * @param int $perPage
+     * @return int[]
+     */
+    protected function page2offset(int $page, int $perPage): array
+    {
+        $page = max(1, $page);
+        $perPage = min(max(1, $perPage), 100);
+        $offset = ($page - 1) * $perPage;
+        return [$offset, $perPage];
+    }
+
+    /**
      * Creates a new CMS license.
      *
      * @throws BadRequestHttpException

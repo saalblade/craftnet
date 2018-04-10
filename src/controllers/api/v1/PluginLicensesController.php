@@ -4,8 +4,10 @@ namespace craftnet\controllers\api\v1;
 
 use Craft;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craftnet\controllers\api\BaseApiController;
+use craftnet\errors\LicenseNotFoundException;
 use craftnet\errors\ValidationException;
 use craftnet\helpers\KeyHelper;
 use craftnet\plugins\Plugin;
@@ -13,6 +15,7 @@ use craftnet\plugins\PluginLicense;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
 use yii\validators\EmailValidator;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
 
@@ -23,6 +26,29 @@ class PluginLicensesController extends BaseApiController
 {
     // Public Methods
     // =========================================================================
+
+    /**
+     * Lists licenses for a plugin developer’s plugins.
+     *
+     * @param int $page
+     * @param int $perPage
+     * @return Response
+     * @throws UnauthorizedHttpException
+     */
+    public function actionList(int $page = 1, int $perPage = 100): Response
+    {
+        if (($user = Craft::$app->getUser()->getIdentity(false)) === null) {
+            throw new UnauthorizedHttpException('Not Authorized');
+        }
+
+        list($offset, $limit) = $this->page2offset($page, $perPage);
+        $licenses = $this->module->getPluginLicenseManager()->getLicensesByDeveloper($user->id, $offset, $limit, $total);
+        return $this->asJson([
+            'total' => $total,
+            'totalPages' => ceil($total / $limit),
+            'licenses' => ArrayHelper::toArray($licenses),
+        ]);
+    }
 
     /**
      * Creates a new CMS license.
@@ -128,6 +154,34 @@ class PluginLicensesController extends BaseApiController
 
         return $this->asJson([
             'license' => $license,
+        ]);
+    }
+
+    /**
+     * Returns a CMS license.
+     *
+     * @param string $key
+     * @return Response
+     * @throws UnauthorizedHttpException
+     */
+    public function actionGet(string $key): Response
+    {
+        if (($user = Craft::$app->getUser()->getIdentity(false)) === null) {
+            throw new UnauthorizedHttpException('Not Authorized');
+        }
+
+        try {
+            $license = $this->module->getPluginLicenseManager()->getLicenseByKey($key);
+        } catch (LicenseNotFoundException $e) {
+            throw new NotFoundHttpException($e->getMessage(), 0, $e);
+        }
+
+        if ($license->getPlugin()->developerId != $user->id) {
+            throw new UnauthorizedHttpException('Not Authorized');
+        }
+
+        return $this->asJson([
+            'license' => $license->toArray(),
         ]);
     }
 }
