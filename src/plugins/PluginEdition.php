@@ -332,7 +332,7 @@ class PluginEdition extends PluginPurchasable
         $isNew = (strncmp($lineItem->options['licenseKey'], 'new:', 4) === 0);
         if (!$isNew) {
             try {
-                $license = $manager->getLicenseByKey($this->getPlugin()->handle, $lineItem->options['licenseKey']);
+                $license = $manager->getLicenseByKey($lineItem->options['licenseKey'], $this->getPlugin()->handle);
             } catch (LicenseNotFoundException $e) {
                 Craft::error("Could not upgrade plugin license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
                 Craft::$app->getErrorHandler()->logException($e);

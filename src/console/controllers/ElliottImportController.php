@@ -591,7 +591,7 @@ class ElliottImportController extends Controller
                 }
 
                 foreach ($item['commerceLicenses'] as $key) {
-                    $license = $pluginLicenseManager->getLicenseByKey('commerce', $key);
+                    $license = $pluginLicenseManager->getLicenseByKey($key, 'commerce');
                     $this->db->createCommand()
                         ->insert('craftnet_pluginlicenses_lineitems', [
                             'licenseId' => $license->id,

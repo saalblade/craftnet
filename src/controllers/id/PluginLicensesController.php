@@ -69,7 +69,7 @@ class PluginLicensesController extends Controller
         $key = Craft::$app->getRequest()->getParam('key');
         $user = Craft::$app->getUser()->getIdentity();
         $manager = $this->module->getPluginLicenseManager();
-        $license = $manager->getLicenseByKey($pluginHandle, $key);
+        $license = $manager->getLicenseByKey($key, $pluginHandle);
 
         try {
             if ($license && $user && $license->ownerId === $user->id) {
@@ -102,7 +102,7 @@ class PluginLicensesController extends Controller
         $key = Craft::$app->getRequest()->getRequiredParam('key');
         $user = Craft::$app->getUser()->getIdentity();
         $manager = $this->module->getPluginLicenseManager();
-        $license = $manager->getLicenseByKey($pluginHandle, $key);
+        $license = $manager->getLicenseByKey($key, $pluginHandle);
 
         try {
             if ($user && $license->ownerId === $user->id) {
@@ -139,7 +139,7 @@ class PluginLicensesController extends Controller
         $key = Craft::$app->getRequest()->getParam('key');
         $user = Craft::$app->getUser()->getIdentity();
         $manager = $this->module->getPluginLicenseManager();
-        $license = $manager->getLicenseByKey($pluginHandle, $key);
+        $license = $manager->getLicenseByKey($key, $pluginHandle);
 
         try {
             if (!$license) {

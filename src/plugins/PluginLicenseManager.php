@@ -135,23 +135,26 @@ class PluginLicenseManager extends Component
     /**
      * Returns a license by its key.
      *
-     * @param string $handle the plugin handle
      * @param string $key
+     * @param string|null $handle the plugin handle
      *
      * @return PluginLicense
      * @throws LicenseNotFoundException if $key is missing
      */
-    public function getLicenseByKey(string $handle, string $key): PluginLicense
+    public function getLicenseByKey(string $key, string $handle = null): PluginLicense
     {
         $key = $this->normalizeKey($key);
 
-        $result = $this->_createLicenseQuery()
-            ->innerJoin('craftnet_plugins p', '[[p.id]] = [[l.pluginId]]')
-            ->where([
-                'p.handle' => $handle,
-                'l.key' => $key,
-            ])
-            ->one();
+        $query = $this->_createLicenseQuery()
+            ->where(['l.key' => $key]);
+
+        if ($handle !== null) {
+            $query
+                ->innerJoin('craftnet_plugins p', '[[p.id]] = [[l.pluginId]]')
+                ->andWhere(['p.handle' => $handle]);
+        }
+
+        $result = $query->one();
 
         if ($result === null) {
             throw new LicenseNotFoundException($key);
