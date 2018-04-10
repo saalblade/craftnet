@@ -13,8 +13,8 @@ use craft\elements\User;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craft\validators\UniqueValidator;
-use craftnet\behaviors\Developer;
 use craftnet\composer\Package;
+use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use craftnet\records\Plugin as PluginRecord;
 use DateTime;
@@ -509,7 +509,7 @@ class Plugin extends Element
     }
 
     /**
-     * @return User|Developer
+     * @return User|UserBehavior
      * @throws InvalidConfigException
      */
     public function getDeveloper(): User
