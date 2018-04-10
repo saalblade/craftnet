@@ -96,6 +96,7 @@ class PluginLicensesController extends Controller
                 },
                 'default' => (new \DateTime())->modify('+1 year')->format(\DateTime::ATOM),
             ]));
+            $license->autoRenew = $this->confirm('Auto-renew?');
         }
 
         $license->notes = $this->prompt('Owner-facing notes:') ?: null;
@@ -151,7 +152,7 @@ class PluginLicensesController extends Controller
                 ->execute();
         }
 
-        if ($this->confirm('Create a history record for the license?')) {
+        if ($this->confirm('Create a history record for the license?', true)) {
             $note = $this->prompt('Note: ', [
                 'required' => true,
                 'default' => "created by {$license->email}".(isset($order) ? " per order {$order->number}" : '')
