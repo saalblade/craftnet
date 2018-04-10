@@ -88,6 +88,7 @@ class PluginStoreController extends BaseApiController
             ->orderBy(['craftnet_plugins.dateApproved' => SORT_DESC])
             ->limit(10)
             ->hasLatestVersion()
+            ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
             ->ids();
 
         $ret[] = [
