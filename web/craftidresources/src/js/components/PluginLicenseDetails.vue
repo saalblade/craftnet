@@ -14,17 +14,26 @@
 							<dt>License Key</dt>
 							<dd><code>{{ license.key|formatPluginLicense }}</code></dd>
 
-							<dt>CMS License</dt>
+							<dt>Craft License</dt>
 							<dd>
 								<template v-if="license.cmsLicense">
-									<code>
-										<router-link v-if="license.cmsLicense.key" :to="'/account/licenses/cms/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
-										<template v-else>{{ license.cmsLicense.shortKey }}</template>
-									</code>
-									<span v-if="license.cmsLicense.edition" class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
+									<p>
+										<code>
+											<router-link v-if="license.cmsLicense.key" :to="'/account/licenses/cms/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
+											<template v-else>{{ license.cmsLicense.shortKey }}</template>
+										</code>
+										<span v-if="license.cmsLicense.edition" class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
+									</p>
+									<div class="buttons">
+										<button @click="detachCmsLicense()" type="button" class="btn btn-secondary btn-sm">
+											Detach from this Craft license
+										</button>
+										<div class="spinner" v-if="detaching"></div>
+									</div>
 								</template>
 								<template v-else>
 									<span class="text-secondary">Not attached to a CMS license.</span>
+                                    <a v-if="originalCmsLicenseId" @click.prevent="reattachCmsLicense()" href="#">Undo</a>
 								</template>
 							</dd>
 						</dl>
@@ -88,6 +97,10 @@
             return {
                 errors: {},
                 licenseDraft: {},
+                originalCmsLicenseId: this.license.cmsLicenseId,
+                originalCmsLicense: this.license.cmsLicense,
+                detaching: false,
+                reattaching: false,
                 notesEditing: false,
                 notesLoading: false,
                 notesValidates: false,
@@ -108,6 +121,36 @@
         },
 
         methods: {
+
+            /**
+             * Detach the Craft license.
+             */
+            detachCmsLicense() {
+                this.detaching = true;
+                this.licenseDraft.cmsLicenseId = null;
+                this.licenseDraft.cmsLicense = null;
+
+                this.savePluginLicense(() => {
+                    this.detaching = false;
+                }, () => {
+                    this.detaching = false;
+                });
+            },
+
+            /**
+             * Reattach the Craft license.
+             */
+            reattachCmsLicense() {
+                this.reattaching = true;
+                this.licenseDraft.cmsLicenseId = this.originalCmsLicenseId;
+                this.licenseDraft.cmsLicense = this.originalCmsLicense;
+
+                this.savePluginLicense(() => {
+                    this.reattaching = false;
+                }, () => {
+                    this.reattaching = false;
+                });
+            },
 
             /**
              * Can save
@@ -131,7 +174,7 @@
                     this.notesEditing = false;
                 }, () => {
                     this.notesLoading = false;
-				});
+                });
             },
 
             /**
@@ -164,6 +207,8 @@
                 this.$store.dispatch('savePluginLicense', {
                     pluginHandle: this.license.plugin.handle,
                     key: this.license.key,
+                    cmsLicenseId: this.licenseDraft.cmsLicenseId,
+                    cmsLicense: this.licenseDraft.cmsLicense,
                     notes: this.licenseDraft.notes,
                 }).then(data => {
                     cb();
@@ -200,6 +245,8 @@
 
         mounted() {
             this.licenseDraft = {
+                cmsLicenseId: this.license.cmsLicenseId,
+                cmsLicense: this.license.cmsLicense,
                 autoRenew: (this.license.autoRenew == 1 ? true : false),
                 notes: this.license.notes,
             };

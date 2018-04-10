@@ -108,6 +108,10 @@ class PluginLicensesController extends Controller
             if ($user && $license->ownerId === $user->id) {
                 $license->notes = Craft::$app->getRequest()->getParam('notes');
 
+                if (($cmsLicenseId = Craft::$app->getRequest()->getParam('cmsLicenseId', false)) !== false) {
+                    $license->cmsLicenseId = $cmsLicenseId ?: null;
+                }
+
                 if ($manager->saveLicense($license)) {
                     return $this->asJson(['success' => true]);
                 }

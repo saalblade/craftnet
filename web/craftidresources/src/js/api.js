@@ -289,7 +289,9 @@ export default {
         };
 
         for (let attribute in license) {
-            data[attribute] = license[attribute];
+            if (attribute !== 'cmsLicense') {
+                data[attribute] = license[attribute];
+            }
         }
 
         let qsData = qs.stringify(data);
