@@ -143,7 +143,11 @@ class PluginLicenseManager extends Component
      */
     public function getLicenseByKey(string $key, string $handle = null): PluginLicense
     {
-        $key = $this->normalizeKey($key);
+        try {
+            $key = $this->normalizeKey($key);
+        } catch (InvalidArgumentException $e) {
+            throw new LicenseNotFoundException($key);
+        }
 
         $query = $this->_createLicenseQuery()
             ->where(['l.key' => $key]);
