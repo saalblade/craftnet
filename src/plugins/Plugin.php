@@ -740,6 +740,16 @@ class Plugin extends Element
             'message' => Craft::t('yii', '{attribute} "{value}" has already been taken.'),
         ];
 
+        $rules[] = [
+            [
+                'packageName',
+            ],
+            UniqueValidator::class,
+            'targetClass' => PluginRecord::class,
+            'targetAttribute' => ['packageName'],
+            'message' => Craft::t('yii', '{attribute} "{value}" has already been taken.'),
+        ];
+
         return $rules;
     }
 
