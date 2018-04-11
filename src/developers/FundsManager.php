@@ -3,6 +3,7 @@
 namespace craftnet\developers;
 
 use Craft;
+use craft\commerce\models\LineItem;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
@@ -116,12 +117,13 @@ class FundsManager extends BaseObject
      * and then attempts to transfer the funds to their Stripe account.
      *
      * @param string $orderNumber
+     * @param LineItem[] $lineItems
      * @param string $chargeId
      * @param float $credit the credit amount (not including any fees that need to be removed)
      * @param float|null $fee the total fees that should be deducted from the credit amount
      * @throws InvalidArgumentException if $credit or $fee are negative or 0
      */
-    public function processOrder(string $orderNumber, string $chargeId, float $credit, float $fee = null)
+    public function processOrder(string $orderNumber, array $lineItems, string $chargeId, float $credit, float $fee = null)
     {
         $e = null;
 
@@ -143,10 +145,15 @@ class FundsManager extends BaseObject
             if ($transferAmount <= 0) {
                 $e = new InsufficientFundsException($balance);
             } else {
+                $itemDescriptions = [];
+                foreach ($lineItems as $lineItem) {
+                    $itemDescriptions[] = $lineItem->getDescription();
+                }
                 try {
                     $this->_transferFunds("Funds transferred for order {$orderNumber}", $transferAmount, [
                         'source_transaction' => $chargeId,
                         'metadata' => [
+                            'items' => implode(', ', $itemDescriptions),
                             'order_number' => $orderNumber,
                             'credit_id' => $txnId,
                             'credit_amount' => $credit,

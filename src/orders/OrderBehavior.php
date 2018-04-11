@@ -117,9 +117,10 @@ class OrderBehavior extends Behavior
             }
 
             // figure out our 20% fee (up to 2 decimals)
+            $lineItems = $developerLineItems[$developerId];
             $total = $developerTotals[$developerId];
             $fee = floor($total * 20) / 100;
-            $developer->getFundsManager()->processOrder($this->owner->number, $transaction->reference, $total, $fee);
+            $developer->getFundsManager()->processOrder($this->owner->number, $lineItems, $transaction->reference, $total, $fee);
         }
 
         // Now send developer notification emails
