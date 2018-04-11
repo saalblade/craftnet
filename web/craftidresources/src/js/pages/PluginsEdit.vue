@@ -134,7 +134,7 @@
                                 <div v-for="(screenshot, key) in screenshots" class="screenshot">
                                     <img :src="screenshot.url" class="img-thumbnail mr-3 mb-3" />
                                     <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(key);">
-                                        <i class="fa fa-remove"></i>
+                                        <i class="fas fa-times"></i>
                                     </a>
                                 </div>
                             </draggable>
