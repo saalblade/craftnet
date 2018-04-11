@@ -259,21 +259,6 @@ export const savePluginLicense = ({commit}, license) => {
     })
 };
 
-export const saveLicense = ({commit}, license) => {
-    return new Promise((resolve, reject) => {
-        api.saveLicense(license, response => {
-            if (!response.data.errors) {
-                commit(types.SAVE_LICENSE, {license});
-                resolve(response);
-            } else {
-                reject(response);
-            }
-        }, response => {
-            reject(response);
-        })
-    })
-};
-
 export const unlinkPluginLicense = ({commit}, {pluginHandle, licenseKey}) => {
     return new Promise((resolve, reject) => {
         api.unlinkPluginLicense({pluginHandle, licenseKey}, response => {

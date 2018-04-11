@@ -124,37 +124,6 @@ export default {
             .catch(error => cbError(error.response));
     },
 
-    saveLicense(license, cb, cbError) {
-        let body = {
-            entryId: license.id,
-            siteId: 1,
-            sectionId: 2,
-            enabled: 1,
-            fields: {}
-        };
-
-        for (let attribute in license) {
-            switch (attribute) {
-                case 'entryId':
-                    // ignore
-                    break;
-                case 'title':
-                    body[attribute] = license[attribute];
-                    break;
-                default:
-                    body['fields'][attribute] = license[attribute];
-            }
-        }
-
-        body['action'] = 'entries/save-entry';
-        body[Craft.csrfTokenName] = Craft.csrfTokenValue;
-
-        let params = qs.stringify(body);
-        axios.post(Craft.actionUrl + '/entries/save-entry', params)
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
-    },
-
     claimCmsLicense(licenseKey, cb, cbError) {
         let data = {
             key: licenseKey,

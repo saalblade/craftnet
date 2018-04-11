@@ -224,7 +224,7 @@
              * Save auto renew
              */
             saveAutoRenew() {
-                this.$store.dispatch('saveLicense', {
+                this.$store.dispatch('savePluginLicense', {
                     id: this.license.id,
                     type: this.type,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
