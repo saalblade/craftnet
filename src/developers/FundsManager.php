@@ -12,6 +12,7 @@ use craftnet\errors\InaccessibleFundsException;
 use craftnet\errors\InsufficientFundsException;
 use craftnet\errors\MissingStripeAccountException;
 use Moccalotto\Eu\CountryInfo;
+use Stripe\Charge;
 use Stripe\Error\Base as StripeError;
 use Stripe\Stripe;
 use Stripe\Transfer;
@@ -150,7 +151,7 @@ class FundsManager extends BaseObject
                     $itemDescriptions[] = $lineItem->getDescription();
                 }
                 try {
-                    $this->_transferFunds("Funds transferred for order {$orderNumber}", $transferAmount, [
+                    $transfer = $this->_transferFunds("Funds transferred for order {$orderNumber}", $transferAmount, [
                         'source_transaction' => $chargeId,
                         'metadata' => [
                             'items' => implode(', ', $itemDescriptions),
@@ -160,6 +161,13 @@ class FundsManager extends BaseObject
                             'credit_fee' => $fee ?? 0,
                         ],
                     ]);
+
+                    // Update the charge description with the line items
+                    Stripe::setApiKey($this->developer->stripeAccessToken);
+                    /** @var Charge $charge */
+                    $charge = Charge::retrieve($transfer->destination_payment);
+                    $charge->description = implode(', ', $itemDescriptions);
+                    $charge->save();
                 } catch (StripeError $e) {
                     // Something unexpected happened on Stripe's end
                     Craft::$app->getErrorHandler()->logException($e);
@@ -213,13 +221,14 @@ class FundsManager extends BaseObject
      * @param string $note
      * @param float $amount
      * @param array $params
+     * @return Transfer
      * @throws InvalidArgumentException if $credit or $fee are negative or 0
      * @throws MissingStripeAccountException if the developer doesn't have a Stripe account
      * @throws InaccessibleFundsException if the developer's funds could not be locked
      * @throws InsufficientFundsException if the developer doesn't have enough funds for the transfer
      * @throws StripeError if anything goes wrong on Stripe's end
      */
-    private function _transferFunds(string $note, float $amount, array $params = [])
+    private function _transferFunds(string $note, float $amount, array $params = []): Transfer
     {
         if ($amount <= 0) {
             throw new InvalidArgumentException('Invalid transfer amount: '.$amount);
@@ -255,7 +264,7 @@ class FundsManager extends BaseObject
         ], $params);
 
         try {
-            Transfer::create($params);
+            $transfer = Transfer::create($params);
         } catch (StripeError $e) {
             $this->_unlockFunds();
             throw $e;
@@ -263,6 +272,8 @@ class FundsManager extends BaseObject
 
         $this->debit($note, $amount, self::TXN_TYPE_STRIPE_TRANSFER);
         $this->_unlockFunds();
+
+        return $transfer;
     }
 
     /**
