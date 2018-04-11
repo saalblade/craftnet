@@ -4,11 +4,7 @@ import qs from 'qs';
 export default {
 
     getCraftIdData(userId, cb, cbError) {
-        let params = qs.stringify({
-            userId: userId
-        });
-
-        axios.post(Craft.actionUrl + '/craftnet/id/craft-id', params)
+        axios.post(Craft.actionUrl + '/craftnet/id/craft-id')
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
