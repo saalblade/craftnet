@@ -27,7 +27,6 @@
 <script>
     import {mapGetters} from 'vuex'
     import CmsLicensesTable from '../components/CmsLicensesTable';
-    import LicenseDetails from '../components/LicenseDetails'
     import PluginLicenseDetails from '../components/PluginLicenseDetails';
     import LicenseHistory from '../components/LicenseHistory';
 
@@ -35,7 +34,6 @@
 
         components: {
             CmsLicensesTable,
-            LicenseDetails,
             PluginLicenseDetails,
             LicenseHistory,
         },
