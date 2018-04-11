@@ -356,7 +356,7 @@ abstract class BaseApiController extends Controller
 
                 // update the history
                 if ($pluginLicense->cmsLicenseId !== $oldCmsLicenseId) {
-                    $pluginLicenseManager->addHistory($pluginLicense->id, "tied to Craft license {$cmsLicense->shortKey} by {$identity}");
+                    $pluginLicenseManager->addHistory($pluginLicense->id, "attached to Craft license {$cmsLicense->shortKey} by {$identity}");
                 }
             }
 
