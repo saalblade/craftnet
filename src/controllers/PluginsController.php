@@ -592,7 +592,12 @@ class PluginsController extends Controller
      * Submits a plugin for approval.
      *
      * @return Response
+     * @throws Exception
+     * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSubmit(): Response
     {
@@ -602,6 +607,10 @@ class PluginsController extends Controller
 
         if (!$plugin) {
             throw new NotFoundHttpException('Plugin not found');
+        }
+
+        if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+            throw new ForbiddenHttpException('User is not permitted to perform this action');
         }
 
         if ($plugin->enabled) {
