@@ -68,6 +68,8 @@ class Oauth extends Component
                     continue;
                 }
 
+                $repositories = [];
+
                 foreach ($repos as $repo) {
                     // Make sure they have administrative privileges on the repo
                     if ($repo['permissions']['admin']) {
