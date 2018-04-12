@@ -108,11 +108,24 @@ class PluginLicensesController extends Controller
             if ($user && $license->ownerId === $user->id) {
                 $license->notes = Craft::$app->getRequest()->getParam('notes');
 
+                $oldCmsLicenseId = $license->cmsLicenseId;
                 if (($cmsLicenseId = Craft::$app->getRequest()->getParam('cmsLicenseId', false)) !== false) {
                     $license->cmsLicenseId = $cmsLicenseId ?: null;
                 }
 
                 if ($manager->saveLicense($license)) {
+                    if ($oldCmsLicenseId != $license->cmsLicenseId) {
+                        if ($oldCmsLicenseId) {
+                            $oldCmsLicense = $this->module->getCmsLicenseManager()->getLicenseById($oldCmsLicenseId);
+                            $manager->addHistory($license->id, "detached from Craft license {$oldCmsLicense->shortKey} by {$user->email}");
+                        }
+
+                        if ($license->cmsLicenseId) {
+                            $newCmsLicense = $this->module->getCmsLicenseManager()->getLicenseById($license->cmsLicenseId);
+                            $manager->addHistory($license->id, "attached to Craft license {$newCmsLicense->shortKey} by {$user->email}");
+                        }
+                    }
+
                     return $this->asJson(['success' => true]);
                 }
 
@@ -120,51 +133,6 @@ class PluginLicensesController extends Controller
             }
 
             throw new LicenseNotFoundException($key);
-        } catch (Throwable $e) {
-            return $this->asErrorJson($e->getMessage());
-        }
-    }
-
-    /**
-     * Unlink a plugin license from a CMS license.
-     *
-     * @return Response
-     * @throws LicenseNotFoundException
-     */
-    public function actionUnlink(): Response
-    {
-        $this->requireLogin();
-
-        $pluginHandle = Craft::$app->getRequest()->getParam('handle');
-        $key = Craft::$app->getRequest()->getParam('key');
-        $user = Craft::$app->getUser()->getIdentity();
-        $manager = $this->module->getPluginLicenseManager();
-        $license = $manager->getLicenseByKey($key, $pluginHandle);
-
-        try {
-            if (!$license) {
-                throw new LicenseNotFoundException($key);
-            }
-
-            if ($license->ownerId !== $user->id || !$license->cmsLicenseId) {
-                throw new ForbiddenHttpException('User is not authorized to perform this action');
-            }
-
-            $cmsLicense = $this->module->getCmsLicenseManager()->getLicenseById($license->cmsLicenseId);
-
-            if ($cmsLicense->ownerId !== $user->id) {
-                throw new ForbiddenHttpException('User is not authorized to perform this action');
-            }
-
-            $license->cmsLicenseId = null;
-
-            if ($manager->saveLicense($license)) {
-                $manager->addHistory($license->id, "unlinked by {$user->email}");
-
-                return $this->asJson(['success' => true]);
-            }
-
-            throw new Exception("Couldn't save license.");
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
