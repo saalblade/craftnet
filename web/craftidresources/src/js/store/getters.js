@@ -70,18 +70,6 @@ export const pluginLicenses = state => {
  * Plugins
  */
 
-export const repositoryIsInUse = state => {
-    return repositoryUrl => {
-        return state.craftId.plugins.find(plugin => plugin.repository === repositoryUrl)
-    }
-};
-
-export const plugins = state => {
-    if (state.craftId) {
-        return state.craftId.plugins;
-    }
-};
-
 export const categories = state => {
     if (state.craftId) {
         return state.craftId.categories;
@@ -103,37 +91,6 @@ export const stripeCard = state => {
 
 export const stripeCustomer = state => {
     return state.stripeCustomer;
-};
-
-
-/**
- * Invoices
- */
-
-export const upcomingInvoice = state => {
-    if (state.craftId) {
-        return state.craftId.upcomingInvoice;
-    }
-};
-
-export const invoices = state => {
-    return state.invoices;
-};
-
-export const getInvoiceById = state => {
-    return id => {
-        if (state.craftId.invoices) {
-            return state.craftId.invoices.find(inv => inv.id == id);
-        }
-    }
-};
-
-export const getInvoiceByNumber = state => {
-    return number => {
-        if (state.invoices) {
-            return state.invoices.find(inv => inv.number == number);
-        }
-    }
 };
 
 

@@ -22,10 +22,13 @@ class CraftIdController extends BaseController
      * Handles /v1/craft-id requests.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionIndex(): Response
     {
         $this->requireLogin();
+        $this->requirePostRequest();
 
 
         // Current user

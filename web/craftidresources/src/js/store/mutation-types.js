@@ -22,10 +22,12 @@ export const SAVE_LICENSE = 'SAVE_LICENSE'
 
 // Invoices
 export const RECEIVE_INVOICES = 'RECEIVE_INVOICES'
+export const RECEIVE_UPCOMING_INVOICE = 'RECEIVE_UPCOMING_INVOICE'
 
 // Plugins
 export const SAVE_PLUGIN = 'SAVE_PLUGIN'
 export const SUBMIT_PLUGIN = 'SUBMIT_PLUGIN'
+export const RECEIVE_PLUGINS = 'RECEIVE_PLUGINS'
 
 // Cards
 export const REMOVE_CARD = 'REMOVE_CARD'

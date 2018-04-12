@@ -30,7 +30,7 @@ class CmsLicensesController extends Controller
      */
     public function actionClaim(): Response
     {
-        $key = Craft::$app->getRequest()->getParam('key');
+        $key = Craft::$app->getRequest()->getBodyParam('key');
         $licenseFile = UploadedFile::getInstanceByName('licenseFile');
 
         try {

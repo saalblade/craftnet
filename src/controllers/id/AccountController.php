@@ -105,6 +105,7 @@ class AccountController extends Controller
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
+
         $user = Craft::$app->getUser()->getIdentity();
 
         if ($user->photoId) {
@@ -176,33 +177,35 @@ class AccountController extends Controller
      * Save billing info.
      *
      * @return Response
-     * @throws \yii\base\InvalidConfigException
+     * @throws BadRequestHttpException
      */
     public function actionSaveBillingInfo(): Response
     {
         $this->requireLogin();
-
-        $payload = Json::decode(Craft::$app->getRequest()->getRawBody(), true);
+        $this->requirePostRequest();
 
         $address = new Address();
-        $address->id = $payload['id'] ?? null;
-        $address->firstName = $payload['firstName'] ?? null;
-        $address->lastName = $payload['lastName'] ?? null;
-        $address->businessName = $payload['businessName'] ?? null;
-        $address->businessTaxId = $payload['businessTaxId'] ?? null;
-        $address->address1 = $payload['address1'] ?? null;
-        $address->address2 = $payload['address2'] ?? null;
-        $address->city = $payload['city'] ?? null;
-        $address->zipCode = $payload['zipCode'] ?? null;
+        $address->id = Craft::$app->getRequest()->getBodyParam('id');
+        $address->firstName = Craft::$app->getRequest()->getBodyParam('firstName');
+        $address->lastName = Craft::$app->getRequest()->getBodyParam('lastName');
+        $address->businessName = Craft::$app->getRequest()->getBodyParam('businessName');
+        $address->businessTaxId = Craft::$app->getRequest()->getBodyParam('businessTaxId');
+        $address->address1 = Craft::$app->getRequest()->getBodyParam('address1');
+        $address->address2 = Craft::$app->getRequest()->getBodyParam('address2');
+        $address->city = Craft::$app->getRequest()->getBodyParam('city');
+        $address->zipCode = Craft::$app->getRequest()->getBodyParam('zipCode');
 
-        if(isset($payload['country'])) {
-            $country = Commerce::getInstance()->getCountries()->getCountryByIso($payload['country']);
+        $countryIso = Craft::$app->getRequest()->getBodyParam('country');
+        $stateAbbr = Craft::$app->getRequest()->getBodyParam('state');
+
+        if($countryIso) {
+            $country = Commerce::getInstance()->getCountries()->getCountryByIso($countryIso);
 
             if($country) {
                 $address->countryId = $country->id;
 
-                if(!empty($payload['state'])) {
-                    $state = Commerce::getInstance()->getStates()->getStateByAbbreviation($country->id, $payload['state']);
+                if(!empty($stateAbbr)) {
+                    $state = Commerce::getInstance()->getStates()->getStateByAbbreviation($country->id, $stateAbbr);
                     $address->stateId = $state ? $state->id : null;
                 }
             }
@@ -219,12 +222,12 @@ class AccountController extends Controller
 
             $addressArray = $address->toArray();
 
-            if(isset($payload['country'])) {
-                $addressArray['country'] = $payload['country'];
+            if($countryIso) {
+                $addressArray['country'] = $countryIso;
             }
 
-            if(isset($payload['state'])) {
-                $addressArray['state'] = $payload['state'];
+            if($stateAbbr) {
+                $addressArray['state'] = $stateAbbr;
             }
 
             return $this->asJson(['success' => true, 'address' => $addressArray]);

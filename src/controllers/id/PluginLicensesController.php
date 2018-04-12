@@ -98,8 +98,8 @@ class PluginLicensesController extends Controller
      */
     public function actionSave(): Response
     {
-        $pluginHandle = Craft::$app->getRequest()->getRequiredParam('pluginHandle');
-        $key = Craft::$app->getRequest()->getRequiredParam('key');
+        $pluginHandle = Craft::$app->getRequest()->getRequiredBodyParam('pluginHandle');
+        $key = Craft::$app->getRequest()->getRequiredBodyParam('key');
         $user = Craft::$app->getUser()->getIdentity();
         $manager = $this->module->getPluginLicenseManager();
         $license = $manager->getLicenseByKey($key, $pluginHandle);

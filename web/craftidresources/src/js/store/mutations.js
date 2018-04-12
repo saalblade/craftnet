@@ -20,7 +20,18 @@ export const DISCONNECT_APP = (state, {appHandle}) => {
 };
 
 export const RECEIVE_CRAFT_ID_DATA = (state, {response}) => {
-    state.craftId = response.data
+    state.craftId = {
+        apps: response.data.apps,
+        billingAddress: response.data.billingAddress,
+        categories: response.data.categories,
+        cmsLicenses: response.data.cmsLicenses,
+        countries: response.data.countries,
+        currentUser: response.data.currentUser,
+        customers: response.data.customers,
+        enableRenewalFeatures: response.data.enableRenewalFeatures,
+        pluginLicenses: response.data.pluginLicenses,
+        sales: response.data.sales,
+    }
 };
 
 export const SAVE_USER = (state, {user, response}) => {
@@ -139,80 +150,6 @@ export const SAVE_LICENSE = (state, {license}) => {
                 stateLicense[attribute] = license[attribute];
         }
     }
-};
-
-
-/**
- * Invoices
- */
-
-export const RECEIVE_INVOICES = (state, {response}) => {
-    state.invoices = response.data;
-};
-
-
-/**
- * Plugins
- */
-
-export const SAVE_PLUGIN = (state, {plugin, response}) => {
-    let newPlugin = false;
-    let statePlugin = state.craftId.plugins.find(p => p.id == plugin.pluginId);
-
-    if (!statePlugin) {
-        statePlugin = {
-            id: response.data.id,
-        };
-        newPlugin = true;
-    }
-
-    statePlugin.siteId = plugin.siteId;
-    statePlugin.pluginId = response.data.id;
-    statePlugin.icon = plugin.icon;
-    statePlugin.iconUrl = response.data.iconUrl + '?' + Math.floor(Math.random() * 1000000);
-    statePlugin.iconId = response.data.iconId;
-    statePlugin.developerId = plugin.developerId;
-    statePlugin.developerName = plugin.developerName;
-    statePlugin.handle = plugin.handle;
-    statePlugin.packageName = plugin.packageName;
-    statePlugin.name = plugin.name;
-    statePlugin.shortDescription = plugin.shortDescription;
-    statePlugin.longDescription = plugin.longDescription;
-    statePlugin.documentationUrl = plugin.documentationUrl;
-    statePlugin.changelogPath = plugin.changelogPath;
-    statePlugin.repository = plugin.repository;
-    statePlugin.license = plugin.license;
-    statePlugin.keywords = plugin.keywords;
-
-    let price = parseFloat(plugin.price);
-    statePlugin.price = (price ? price : null);
-
-    let renewalPrice = parseFloat(plugin.renewalPrice);
-    statePlugin.renewalPrice = (renewalPrice ? renewalPrice : null);
-
-    statePlugin.categoryIds = plugin.categoryIds;
-
-    let screenshotIds = [];
-    let screenshotUrls = [];
-
-    if (response.data.screenshots.length > 0) {
-        for (let i = 0; i < response.data.screenshots.length; i++) {
-            screenshotIds.push(response.data.screenshots[i].id);
-            screenshotUrls.push(response.data.screenshots[i].url);
-        }
-    }
-
-    statePlugin.screenshotIds = screenshotIds;
-    statePlugin.screenshotUrls = screenshotUrls;
-
-    if (newPlugin) {
-        state.craftId.plugins.push(statePlugin);
-    }
-};
-
-export const SUBMIT_PLUGIN = (state, {pluginId}) => {
-    let statePlugin = state.craftId.plugins.find(p => p.id == pluginId);
-    statePlugin.pendingApproval = true;
 };
 
 

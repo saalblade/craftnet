@@ -1,6 +1,7 @@
-import api from '../api'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import developers from './modules/developers'
+import account from './modules/account'
 import * as actions from './actions'
 import * as mutations from './mutations'
 import * as getters from './getters'
@@ -14,9 +15,12 @@ export default new Vuex.Store({
         stripeAccount: null,
         stripeCustomer: null,
         stripeCard: null,
-        invoices: [],
     },
     getters,
     actions,
     mutations,
+    modules: {
+        developers,
+        account,
+    }
 })
