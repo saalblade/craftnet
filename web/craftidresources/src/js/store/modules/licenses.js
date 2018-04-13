@@ -18,14 +18,6 @@ const state = {
  */
 const getters = {
 
-    cmsLicenses(state) {
-        return state.cmsLicenses;
-    },
-
-    pluginLicenses(state) {
-        return state.pluginLicenses;
-    },
-
     licenses(state) {
         return state.pluginLicenses.concat(state.cmsLicenses);
     },

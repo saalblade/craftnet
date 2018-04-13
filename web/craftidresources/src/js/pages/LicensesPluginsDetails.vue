@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import CmsLicensesTable from '../components/CmsLicensesTable';
     import PluginLicenseDetails from '../components/PluginLicenseDetails';
     import LicenseHistory from '../components/LicenseHistory';
@@ -34,8 +34,8 @@
 
         computed: {
 
-            ...mapGetters({
-                pluginLicenses: 'pluginLicenses',
+            ...mapState({
+                pluginLicenses: state => state.licenses.pluginLicenses,
             }),
 
             license() {

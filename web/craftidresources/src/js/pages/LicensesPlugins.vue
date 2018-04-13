@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import LicenseRenewAlert from '../components/LicenseRenewAlert';
     import PluginLicensesTable from '../components/PluginLicensesTable';
 
@@ -31,8 +31,8 @@
 
         computed: {
 
-            ...mapGetters({
-                pluginLicenses: 'pluginLicenses',
+            ...mapState({
+                pluginLicenses: state => state.licenses.pluginLicenses,
             }),
 
         },
