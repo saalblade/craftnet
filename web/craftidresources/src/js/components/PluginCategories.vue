@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import draggable from 'vuedraggable'
 
     export default {
@@ -47,8 +47,8 @@
 
         computed: {
 
-            ...mapGetters({
-                categories: 'categories',
+            ...mapState({
+                categories: state => state.craftId.categories,
             }),
 
             selectedCategories() {

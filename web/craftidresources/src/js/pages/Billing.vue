@@ -44,7 +44,7 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import BillingPayment from '../components/BillingPayment'
     import BillingInvoiceDetails from '../components/BillingInvoiceDetails'
     import BillingAddressForm from '../components/BillingAddressForm'
@@ -65,10 +65,7 @@
             ...mapState({
                 invoices: state => state.account.invoices,
                 upcomingInvoice: state => state.account.upcomingInvoice,
-            }),
-
-            ...mapGetters({
-                enableRenewalFeatures: 'enableRenewalFeatures',
+                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
             }),
 
         },

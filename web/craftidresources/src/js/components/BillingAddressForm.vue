@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import TextField from './fields/TextField'
     import SelectField from './fields/SelectField'
 
@@ -75,10 +75,7 @@
             ...mapState({
                 currentUser: state => state.account.currentUser,
                 billingAddress: state => state.account.billingAddress,
-            }),
-
-            ...mapGetters({
-                countries: 'countries',
+                countries: state => state.craftId.countries,
             }),
 
             countryOptions() {

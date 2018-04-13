@@ -3,21 +3,14 @@ import Vuex from 'vuex'
 import developers from './modules/developers'
 import account from './modules/account'
 import licenses from './modules/licenses'
-import * as actions from './actions'
-import * as mutations from './mutations'
-import * as getters from './getters'
+import craftId from './modules/craftId'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     strict: true,
-    state: {
-        craftId: null,
-    },
-    getters,
-    actions,
-    mutations,
     modules: {
+        craftId,
         account,
         developers,
         licenses,

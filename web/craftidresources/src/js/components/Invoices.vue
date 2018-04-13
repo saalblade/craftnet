@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import InvoicesTable from './InvoicesTable';
 
     export default {
@@ -32,10 +32,7 @@
             ...mapState({
                 invoices: state => state.account.invoices,
                 upcomingInvoice: state => state.account.upcomingInvoice,
-            }),
-
-            ...mapGetters({
-                enableRenewalFeatures: 'enableRenewalFeatures',
+                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
             }),
 
         },

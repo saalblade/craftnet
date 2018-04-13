@@ -107,12 +107,12 @@
 
             ...mapState({
                 currentUser: state => state.account.currentUser,
+                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
             }),
 
             ...mapGetters({
                 userIsInGroup: 'userIsInGroup',
                 licenses: 'licenses',
-                enableRenewalFeatures: 'enableRenewalFeatures',
             }),
 
         },

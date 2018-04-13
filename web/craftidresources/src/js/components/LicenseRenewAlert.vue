@@ -8,14 +8,14 @@
 
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
 
     export default {
 
         computed: {
 
-            ...mapGetters({
-                enableRenewalFeatures: 'enableRenewalFeatures',
+            ...mapState({
+                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
             }),
 
         },

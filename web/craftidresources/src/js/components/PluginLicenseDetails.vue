@@ -85,7 +85,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import LightswitchInput from '../components/inputs/LightswitchInput'
     import TextareaField from '../components/fields/TextareaField'
 
@@ -114,8 +114,8 @@
 
         computed: {
 
-            ...mapGetters({
-                enableRenewalFeatures: 'enableRenewalFeatures',
+            ...mapState({
+                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
             }),
 
         },
