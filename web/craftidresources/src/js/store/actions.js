@@ -3,9 +3,7 @@ import accountApi from '../api/account'
 
 export const getCraftIdData = ({commit}) => {
     return new Promise((resolve, reject) => {
-        let userId = window.currentUserId;
-
-        accountApi.getCraftIdData(userId, response => {
+        accountApi.getCraftIdData(response => {
                 commit(types.RECEIVE_CRAFT_ID_DATA, {response});
                 commit(types.RECEIVE_PLUGINS, {plugins: response.data.plugins});
                 commit(types.RECEIVE_UPCOMING_INVOICE, {upcomingInvoice: response.data.upcomingInvoice});
