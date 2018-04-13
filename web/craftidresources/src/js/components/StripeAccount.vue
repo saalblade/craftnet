@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import TextField from '../components/fields/TextField'
 
     export default {
@@ -52,8 +52,8 @@
 
         computed: {
 
-            ...mapGetters({
-                stripeAccount: 'stripeAccount',
+            ...mapState({
+                stripeAccount: state => state.account.stripeAccount,
             }),
 
             loading() {

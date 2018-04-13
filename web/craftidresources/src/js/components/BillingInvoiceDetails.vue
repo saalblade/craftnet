@@ -36,7 +36,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import TextField from './fields/TextField'
 
     export default {
@@ -55,9 +55,9 @@
 
         computed: {
 
-            ...mapGetters({
-                currentUser: 'currentUser',
-                billingAddress: 'billingAddress',
+            ...mapState({
+                currentUser: state => state.account.currentUser,
+                billingAddress: state => state.account.billingAddress,
             }),
 
         },

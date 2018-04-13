@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import TextField from '../components/fields/TextField'
     import ConnectedApps from '../components/ConnectedApps'
 
@@ -48,12 +48,9 @@
         computed: {
 
 			...mapState({
-                hasApiToken: state => state.developers.hasApiToken
+                hasApiToken: state => state.developers.hasApiToken,
+				currentUser: state => state.account.currentUser,
 			}),
-
-            ...mapGetters({
-                currentUser: 'currentUser',
-            }),
 
         },
 

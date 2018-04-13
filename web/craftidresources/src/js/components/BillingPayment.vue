@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import CardForm from './CardForm'
     import CardIcon from './CardIcon'
 
@@ -75,9 +75,9 @@
 
         computed: {
 
-            ...mapGetters({
-                stripeCustomer: 'stripeCustomer',
-                stripeCard: 'stripeCard',
+            ...mapState({
+                stripeCustomer: state => state.account.stripeCustomer,
+                stripeCard: state => state.account.stripeCard,
             }),
 
             stripeCustomerLoading() {

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import StripeAccount from '../components/StripeAccount'
 
     export default {
@@ -66,9 +66,12 @@
 
         computed: {
 
+            ...mapState({
+                apps: state => state.account.apps,
+                currentUser: state => state.account.currentUser,
+            }),
+
             ...mapGetters({
-                apps: 'apps',
-                currentUser: 'currentUser',
                 userIsInGroup: 'userIsInGroup',
             }),
 

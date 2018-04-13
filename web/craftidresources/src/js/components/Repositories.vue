@@ -27,7 +27,7 @@
 <script>
     import filter from 'lodash/filter';
     import includes from 'lodash/includes';
-    import {mapGetters} from 'vuex';
+    import {mapState, mapGetters} from 'vuex';
     import TextField from '../components/fields/TextField';
 
     export default {
@@ -46,8 +46,11 @@
 
         computed: {
 
+            ...mapState({
+                apps: state => state.account.apps,
+            }),
+
             ...mapGetters({
-                apps: 'apps',
                 repositoryIsInUse: 'repositoryIsInUse',
             }),
 

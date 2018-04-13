@@ -163,7 +163,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import TextField from '../components/fields/TextField'
     import TextareaField from '../components/fields/TextareaField'
     import ConnectedApps from '../components/ConnectedApps'
@@ -221,8 +221,11 @@
 
         computed: {
 
+            ...mapState({
+                apps: state => state.account.apps,
+            }),
+
             ...mapGetters({
-                apps: 'apps',
                 plugins: 'plugins',
                 userIsInGroup: 'userIsInGroup',
             }),

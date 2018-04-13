@@ -24,60 +24,10 @@ const state = {
  */
 const getters = {
 
-    /**
-     * Apps
-     */
-
-    apps(state) {
-        return state.apps;
-    },
-
-
-    /**
-     * User
-     */
-
-    currentUser(state) {
-        return state.currentUser;
-    },
-
     userIsInGroup(state) {
         return handle => {
             return state.currentUser.groups.find(g => g.handle === handle)
         }
-    },
-
-    billingAddress(state) {
-        return state.billingAddress
-    },
-
-
-    /**
-     * Credit card
-     */
-
-    stripeCard(state) {
-        return state.stripeCard;
-    },
-
-    stripeCustomer(state) {
-        return state.stripeCustomer;
-    },
-
-    /**
-     * Stripe account
-     */
-
-    stripeAccount(state) {
-        return state.stripeAccount;
-    },
-
-    /**
-     * Invoices
-     */
-
-    invoices(state) {
-        return state.invoices;
     },
 
     getInvoiceById(state) {
@@ -93,10 +43,6 @@ const getters = {
             }
         }
     },
-
-    upcomingInvoice(state) {
-        return state.upcomingInvoice;
-    }
 
 }
 

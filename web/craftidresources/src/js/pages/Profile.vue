@@ -49,7 +49,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import TextField from '../components/fields/TextField'
     import UrlField from '../components/fields/UrlField'
     import PasswordField from '../components/fields/PasswordField'
@@ -77,8 +77,11 @@
 
         computed: {
 
+            ...mapState({
+                currentUser: state => state.account.currentUser,
+            }),
+
             ...mapGetters({
-                currentUser: 'currentUser',
                 userIsInGroup: 'userIsInGroup',
             }),
 

@@ -6,14 +6,17 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
 
     export default {
 
         computed: {
 
+            ...mapState({
+                stripeAccount: state => state.account.stripeAccount,
+            }),
+
             ...mapGetters({
-                stripeAccount: 'stripeAccount',
                 enableRenewalFeatures: 'enableRenewalFeatures',
             }),
 

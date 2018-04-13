@@ -85,7 +85,7 @@
 <script>
     import AuthManager from './components/AuthManager';
     import router from './router';
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
 
     export default {
 
@@ -105,8 +105,11 @@
 
         computed: {
 
+            ...mapState({
+                currentUser: state => state.account.currentUser,
+            }),
+
             ...mapGetters({
-                currentUser: 'currentUser',
                 userIsInGroup: 'userIsInGroup',
                 licenses: 'licenses',
                 enableRenewalFeatures: 'enableRenewalFeatures',
