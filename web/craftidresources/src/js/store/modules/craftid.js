@@ -11,7 +11,6 @@ Vue.use(Vuex)
 const state = {
     categories: [],
     countries: [],
-    customers: [],
     enableRenewalFeatures: false,
 }
 
@@ -47,7 +46,6 @@ const actions = {
             craftIdApi.getCraftIdData(response => {
                     commit(types.RECEIVE_CATEGORIES, {categories: response.data.categories});
                     commit(types.RECEIVE_COUNTRIES, {countries: response.data.countries});
-                    commit(types.RECEIVE_CUSTOMERS, {customers: response.data.customers});
                     commit(types.RECEIVE_ENABLE_RENEWAL_FEATURES, {enableRenewalFeatures: response.data.enableRenewalFeatures});
 
                     commit(types.RECEIVE_PLUGINS, {plugins: response.data.plugins});
@@ -80,10 +78,6 @@ const mutations = {
 
     [types.RECEIVE_COUNTRIES](state, {countries}) {
         state.countries = countries;
-    },
-
-    [types.RECEIVE_CUSTOMERS](state, {customers}) {
-        state.customers = customers;
     },
 
     [types.RECEIVE_ENABLE_RENEWAL_FEATURES](state, {enableRenewalFeatures}) {
