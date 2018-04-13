@@ -20,13 +20,11 @@ const state = {
 const getters = {
 
     enableRenewalFeatures(state) {
-        if (state.craftId) {
-            return state.craftId.enableRenewalFeatures;
-        }
+        return state.enableRenewalFeatures;
     },
 
     countries(state) {
-        return state.craftId.countries;
+        return state.countries;
     },
 
 
