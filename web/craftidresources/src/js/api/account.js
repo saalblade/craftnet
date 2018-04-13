@@ -3,12 +3,6 @@ import qs from 'qs';
 
 export default {
 
-    getCraftIdData(cb, cbError) {
-        axios.post(Craft.actionUrl + '/craftnet/id/craft-id')
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
-    },
-
     disconnectApp(appHandle, cb, cbError) {
         const data = {
             appTypeHandle: appHandle

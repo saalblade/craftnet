@@ -1,9 +1,9 @@
 import * as types from './mutation-types'
-import accountApi from '../api/account'
+import craftIdApi from '../api/craftid'
 
 export const getCraftIdData = ({commit}) => {
     return new Promise((resolve, reject) => {
-        accountApi.getCraftIdData(response => {
+        craftIdApi.getCraftIdData(response => {
                 commit(types.RECEIVE_CRAFT_ID_DATA, {response});
                 commit(types.RECEIVE_PLUGINS, {plugins: response.data.plugins});
                 commit(types.RECEIVE_UPCOMING_INVOICE, {upcomingInvoice: response.data.upcomingInvoice});
