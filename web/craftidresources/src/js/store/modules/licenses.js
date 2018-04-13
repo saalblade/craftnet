@@ -89,7 +89,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.getCmsLicenses(response => {
                 if (response.data && !response.data.error) {
-                    commit(types.GET_CMS_LICENSES, {response});
+                    commit(types.RECEIVE_CMS_LICENSES, {cmsLicenses: response.data});
                     resolve(response);
                 } else {
                     reject(response);
@@ -104,7 +104,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.getPluginLicenses(response => {
                 if (response.data && !response.data.error) {
-                    commit(types.GET_PLUGIN_LICENSES, {response});
+                    commit(types.RECEIVE_PLUGIN_LICENSES, {pluginLicenses: response.data});
                     resolve(response);
                 } else {
                     reject(response);
@@ -188,15 +188,6 @@ const mutations = {
 
     [types.RECEIVE_PLUGIN_LICENSES](state, {pluginLicenses}) {
         state.pluginLicenses = pluginLicenses;
-    },
-
-    [types.GET_CMS_LICENSES](state, {response}) {
-        state.cmsLicenses = response.data;
-    },
-
-
-    [types.GET_PLUGIN_LICENSES](state, {response}) {
-        state.pluginLicenses = response.data;
     },
 
     [types.RELEASE_CMS_LICENSE](state, {licenseKey}) {
