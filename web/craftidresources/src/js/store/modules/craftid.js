@@ -9,8 +9,6 @@ Vue.use(Vuex)
  * State
  */
 const state = {
-    craftId: null,
-
     categories: [],
     countries: [],
     customers: [],
