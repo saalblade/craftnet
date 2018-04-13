@@ -9,7 +9,9 @@ Vue.use(Vuex)
  * State
  */
 const state = {
-    plugins: []
+    hasApiToken: false,
+    plugins: [],
+    sales: []
 }
 
 /**
@@ -25,7 +27,19 @@ const getters = {
         return repositoryUrl => {
             return state.plugins.find(plugin => plugin.repository === repositoryUrl)
         }
-    }
+    },
+
+    sales(state) {
+        return state.sales;
+    },
+
+    getSaleById(state) {
+        return id => {
+            if (state.sales) {
+                return state.sales.find(sale => sale.id == id);
+            }
+        }
+    },
 
 }
 
@@ -62,7 +76,22 @@ const actions = {
                 reject(response);
             })
         })
-    }
+    },
+
+    generateApiToken({commit}) {
+        return new Promise((resolve, reject) => {
+            developerApi.generateApiToken(response => {
+                if (response.data && !response.data.error) {
+                    commit(types.GENERATE_API_TOKEN, {response});
+                    resolve(response);
+                } else {
+                    reject(response);
+                }
+            }, response => {
+                reject(response);
+            })
+        })
+    },
 }
 
 /**
@@ -72,6 +101,10 @@ const mutations = {
 
     [types.RECEIVE_PLUGINS](state, {plugins}) {
         state.plugins = plugins
+    },
+
+    [types.RECEIVE_SALES](state, {sales}) {
+        state.sales = sales
     },
 
     [types.SAVE_PLUGIN](state, {plugin, response}) {
@@ -132,7 +165,16 @@ const mutations = {
     [types.SUBMIT_PLUGIN](state, {pluginId}) {
         let statePlugin = state.plugins.find(p => p.id == pluginId);
         statePlugin.pendingApproval = true;
+    },
+
+    [types.GENERATE_API_TOKEN](state, {response}){
+        state.hasApiToken = !!response.data.apiToken;
+    },
+
+    [types.RECEIVE_HAS_API_TOKEN](state, {hasApiToken}){
+        state.hasApiToken = hasApiToken;
     }
+
 }
 
 export default {
