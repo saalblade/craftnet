@@ -74,7 +74,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             developerApi.generateApiToken(response => {
                 if (response.data && !response.data.error) {
-                    commit(types.GENERATE_API_TOKEN, {response});
+                    commit(types.RECEIVE_HAS_API_TOKEN, {hasApiToken: !!response.data.apiToken});
                     resolve(response);
                 } else {
                     reject(response);
@@ -157,10 +157,6 @@ const mutations = {
     [types.SUBMIT_PLUGIN](state, {pluginId}) {
         let statePlugin = state.plugins.find(p => p.id == pluginId);
         statePlugin.pendingApproval = true;
-    },
-
-    [types.GENERATE_API_TOKEN](state, {response}){
-        state.hasApiToken = !!response.data.apiToken;
     },
 
     [types.RECEIVE_HAS_API_TOKEN](state, {hasApiToken}){

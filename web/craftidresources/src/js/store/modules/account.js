@@ -56,7 +56,7 @@ const actions = {
      */
 
     connectAppCallback({commit}, apps) {
-        commit(types.CONNECT_APP_CALLBACK, {apps})
+        commit(types.RECEIVE_APPS, {apps})
     },
 
     disconnectApp({commit}, appHandle) {
@@ -117,7 +117,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.saveBillingInfo(data, response => {
                     if (!response.data.errors) {
-                        commit(types.SAVE_BILLING_INFO, {response});
+                        commit(types.RECEIVE_BILLING_ADDRESS, {billingAddress: response.data.address});
                         resolve(response);
                     } else {
                         reject(response);
@@ -137,7 +137,7 @@ const actions = {
     removeCard({commit}) {
         return new Promise((resolve, reject) => {
             accountApi.removeCard(response => {
-                commit(types.REMOVE_CARD);
+                commit(types.REMOVE_STRIPE_CARD);
                 resolve(response);
             }, response => {
                 reject(response);
@@ -148,7 +148,7 @@ const actions = {
     saveCard({commit}, source) {
         return new Promise((resolve, reject) => {
             accountApi.saveCard(source, response => {
-                commit(types.SAVE_CARD, {response});
+                commit(types.RECEIVE_STRIPE_CARD, {card: response.data.card.card});
                 resolve(response);
             }, response => {
                 reject(response);
@@ -229,10 +229,6 @@ const mutations = {
         state.apps = apps;
     },
 
-    [types.CONNECT_APP_CALLBACK](state, {apps}) {
-        state.apps = apps;
-    },
-
     [types.DISCONNECT_APP](state, {appHandle}) {
         Vue.delete(state.apps, appHandle);
     },
@@ -274,10 +270,6 @@ const mutations = {
         }
     },
 
-    [types.SAVE_BILLING_INFO](state, {response}) {
-        state.billingAddress = response.data.address
-    },
-
     [types.RECEIVE_BILLING_ADDRESS](state, {billingAddress}) {
         state.billingAddress = billingAddress
     },
@@ -291,12 +283,8 @@ const mutations = {
      * Credit cards
      */
 
-    [types.REMOVE_CARD](state) {
+    [types.REMOVE_STRIPE_CARD](state) {
         state.stripeCard = null
-    },
-
-    [types.SAVE_CARD](state, {response}) {
-        state.stripeCard = response.data.card.card
     },
 
     [types.RECEIVE_STRIPE_CARD](state, {card}) {
