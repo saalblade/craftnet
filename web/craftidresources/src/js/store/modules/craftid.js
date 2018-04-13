@@ -19,10 +19,6 @@ const state = {
  */
 const getters = {
 
-    craftId(state) {
-        return state.craftId;
-    },
-
     enableRenewalFeatures(state) {
         if (state.craftId) {
             return state.craftId.enableRenewalFeatures;
