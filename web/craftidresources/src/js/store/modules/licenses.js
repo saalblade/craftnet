@@ -33,7 +33,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.claimCmsLicense(licenseKey, response => {
                 if (response.data && !response.data.error) {
-                    commit(types.CLAIM_CMS_LICENSE, {licenseKey});
                     resolve(response);
                 } else {
                     reject(response);
@@ -48,7 +47,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.claimCmsLicenseFile(licenseFile, response => {
                 if (response.data && !response.data.error) {
-                    commit(types.CLAIM_CMS_LICENSE_FILE, {licenseFile});
                     resolve(response);
                 } else {
                     reject(response);
@@ -77,7 +75,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.claimPluginLicense(licenseKey, response => {
                 if (response.data && !response.data.error) {
-                    commit(types.CLAIM_PLUGIN_LICENSE, {licenseKey});
                     resolve(response);
                 } else {
                     reject(response);
@@ -191,15 +188,6 @@ const mutations = {
 
     [types.RECEIVE_PLUGIN_LICENSES](state, {pluginLicenses}) {
         state.pluginLicenses = pluginLicenses;
-    },
-
-    [types.CLAIM_CMS_LICENSE](state, {licenseKey}) {
-    },
-
-    [types.CLAIM_CMS_LICENSE_FILE](state, {licenseFile}) {
-    },
-
-    [types.CLAIM_PLUGIN_LICENSE](state, {licenseKey}) {
     },
 
     [types.GET_CMS_LICENSES](state, {response}) {
