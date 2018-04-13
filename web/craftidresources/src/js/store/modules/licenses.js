@@ -22,12 +22,12 @@ const getters = {
         return state.cmsLicenses;
     },
 
-    licenses(state) {
-        return state.pluginLicenses.concat(state.cmsLicenses);
-    },
-
     pluginLicenses(state) {
         return state.pluginLicenses;
+    },
+
+    licenses(state) {
+        return state.pluginLicenses.concat(state.cmsLicenses);
     },
 
 }

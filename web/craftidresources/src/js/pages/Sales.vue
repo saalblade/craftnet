@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import StripeAccountAlert from '../components/StripeAccountAlert'
 
     export default {
@@ -62,8 +62,11 @@
 
         computed: {
 
+            ...mapState({
+                sales: state => state.developers.sales,
+            }),
+
             ...mapGetters({
-                sales: 'sales',
                 enableRenewalFeatures: 'enableRenewalFeatures',
             }),
 

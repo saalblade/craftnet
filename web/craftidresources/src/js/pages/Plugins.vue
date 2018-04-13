@@ -9,7 +9,7 @@
 
         <stripe-account-alert></stripe-account-alert>
 
-        <div v-if="plugins.length > 0" class="card card-table responsive-content">
+        <div v-if="computedPlugins.length > 0" class="card card-table responsive-content">
             <table class="table">
                 <thead>
                 <tr>
@@ -20,7 +20,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="plugin in plugins">
+                <tr v-for="plugin in computedPlugins">
                     <td class="icon-col">
                         <router-link :to="'/developer/plugins/' + plugin.id"><img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" /></router-link>
                     </td>
@@ -71,6 +71,7 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     import StripeAccountAlert from '../components/StripeAccountAlert'
 
     export default {
@@ -87,8 +88,12 @@
 
         computed: {
 
-            plugins() {
-                let plugins = JSON.parse(JSON.stringify(this.$store.getters.plugins));
+            ...mapState({
+                plugins: state => state.developers.plugins,
+            }),
+
+            computedPlugins() {
+                let plugins = JSON.parse(JSON.stringify(this.plugins));
 
                 plugins.sort((a, b) => {
                     if (a['name'].toLowerCase() < b['name'].toLowerCase()) {

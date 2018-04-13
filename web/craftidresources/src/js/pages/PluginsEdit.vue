@@ -223,10 +223,10 @@
 
             ...mapState({
                 apps: state => state.account.apps,
+                plugins: state => state.developers.plugins,
             }),
 
             ...mapGetters({
-                plugins: 'plugins',
                 userIsInGroup: 'userIsInGroup',
             }),
 

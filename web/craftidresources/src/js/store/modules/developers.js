@@ -19,18 +19,10 @@ const state = {
  */
 const getters = {
 
-    plugins(state) {
-        return state.plugins;
-    },
-
     repositoryIsInUse(state) {
         return repositoryUrl => {
             return state.plugins.find(plugin => plugin.repository === repositoryUrl)
         }
-    },
-
-    sales(state) {
-        return state.sales;
     },
 
     getSaleById(state) {
