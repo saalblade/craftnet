@@ -198,7 +198,7 @@
                     {% for state in plugin.history %}
                         <tr>
                             <td>{{ state.note }}</td>
-                            <td>{{ state.devComments ? state.devComments|md }}</td>
+                            <td>{{ state.devComments ? state.devComments|e|md }}</td>
                             <td>{{ state.dateCreated|timestamp }}</td>
                         </tr>
                     {% endfor %}
