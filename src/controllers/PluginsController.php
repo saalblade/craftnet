@@ -197,6 +197,7 @@ class PluginsController extends Controller
     public function actionSave()
     {
         $request = Craft::$app->getRequest();
+        $newPlugin = false;
 
         if ($pluginId = $request->getBodyParam('pluginId')) {
             $plugin = Plugin::find()->id($pluginId)->status(null)->one();
@@ -209,6 +210,7 @@ class PluginsController extends Controller
             }
         } else {
             $plugin = new Plugin();
+            $newPlugin = true;
         }
 
         if ($request->getIsCpRequest()) {
@@ -470,9 +472,9 @@ class PluginsController extends Controller
         }
 
 
-        // Rename icon with new name and filename
+        // Rename icon & screenshots with new name and filename
 
-        if ($newName || $newHandle) {
+        if (!$newPlugin && ($newName || $newHandle)) {
 
             // Icon
 
