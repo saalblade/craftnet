@@ -8,8 +8,8 @@
 				<th v-if="!excludeCmsLicenseColumn">CMS License</th>
 
 				<template v-if="enableRenewalFeatures">
-					<th>Next Payment</th>
 					<th>Auto Renew</th>
+					<th>Renewal Date</th>
 				</template>
 			</tr>
 			</thead>
