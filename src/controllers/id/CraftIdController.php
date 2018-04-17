@@ -90,7 +90,6 @@ class CraftIdController extends BaseController
             'plugins' => $this->_plugins($currentUser),
             'cmsLicenses' => $this->_cmsLicenses($currentUser),
             'pluginLicenses' => $this->_pluginLicenses($currentUser),
-            'customers' => $this->_customers($currentUser),
             'sales' => $this->_sales($currentUser),
             'upcomingInvoice' => $this->_upcomingInvoice(),
             'categories' => $this->_pluginCategories(),
@@ -137,29 +136,6 @@ class CraftIdController extends BaseController
     private function _pluginLicenses(User $user): array
     {
         return Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return array
-     */
-    private function _customers(User $user): array
-    {
-        return [
-            [
-                'id' => 1,
-                'email' => 'ben@pixelandtonic.com',
-                'username' => 'benjamin',
-                'fullName' => 'Benjamin David',
-            ],
-            [
-                'id' => 2,
-                'email' => 'brandon@pixelandtonic.com',
-                'username' => 'brandon',
-                'fullName' => 'Brandon Kelly',
-            ]
-        ];
     }
 
     /**
