@@ -249,10 +249,8 @@ class CmsEdition extends Purchasable
         $license->editionHandle = $this->handle;
         $license->expired = false;
 
-        // If this was placed before April 4, or it was bought with a coupon created before April 4, set the license to non-expirable
-        if (time() < 1522857600) {
-            $license->expirable = false;
-        } else if ($order->couponCode) {
+        // If this was bought with a coupon created before April 4, set the license to non-expirable
+        if ($order->couponCode) {
             $discount = Commerce::getInstance()->getDiscounts()->getDiscountByCode($order->couponCode);
             if ($discount && $discount->dateCreated->getTimestamp() < 1522857600) {
                 $license->expirable = false;
