@@ -376,6 +376,11 @@ class PluginEdition extends PluginPurchasable
             }
         }
 
+        // If it's expirable, set the expiresOn date to a year from now
+        if ($license->expirable) {
+            $license->expiresOn = (new \DateTime())->modify('+1 year');
+        }
+
         if (isset($lineItem->options['autoRenew'])) {
             $license->autoRenew = $lineItem->options['autoRenew'];
         }

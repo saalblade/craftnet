@@ -107,9 +107,12 @@ class PluginLicensesController extends BaseApiController
             ];
         }
 
+        $expirable = $payload->expirable ?? false;
+        $expiresOn = $expirable ? (new \DateTime())->modify('+1 year') : null;
+
         if (
-            ($expirable = $payload->expirable ?? false) &&
-            ($expiresOn = $payload->expiresOn ?? null) &&
+            $expirable &&
+            isset($payload->expiresOn) &&
             ($expiresOn = DateTimeHelper::toDateTime($expiresOn)) === false
         ) {
             $errors[] = [
@@ -141,7 +144,7 @@ class PluginLicensesController extends BaseApiController
             'key' => KeyHelper::generatePluginKey(),
             'notes' => $payload->notes ?? null,
             'privateNotes' => $payload->privateNotes ?? null,
-            'expiresOn' => $expiresOn ?? null,
+            'expiresOn' => $expiresOn,
         ]);
 
         $manager = $this->module->getPluginLicenseManager();
