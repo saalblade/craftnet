@@ -505,6 +505,11 @@ class PluginLicenseManager extends Component
 
         $license['cmsLicense'] = $cmsLicense;
 
+
+        // Renewal
+
+        $license['renewalDate'] = $license['dateCreated'];
+
         return $license;
     }
 

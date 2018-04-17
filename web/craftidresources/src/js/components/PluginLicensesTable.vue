@@ -42,11 +42,11 @@
 					</td>
 
 					<template v-if="enableRenewalFeatures">
-						<td>{{ license.dateCreated }}</td>
 						<td>
 							<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
 							<span v-else="" class="badge">Disabled</span>
 						</td>
+						<td>{{ license.renewalDate.date|moment("L") }}</td>
 					</template>
 				</tr>
 			</template>
