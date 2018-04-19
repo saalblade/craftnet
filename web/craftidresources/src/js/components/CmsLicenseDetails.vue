@@ -159,7 +159,7 @@
              */
             saveAutoRenew() {
                 this.$store.dispatch('saveCmsLicense', {
-                    id: this.license.id,
+                    key: this.license.key,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then((data) => {
                     if (this.licenseDraft.autoRenew) {

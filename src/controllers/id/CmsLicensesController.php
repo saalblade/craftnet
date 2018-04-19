@@ -142,22 +142,36 @@ class CmsLicensesController extends Controller
 
         try {
             if ($user && $license->ownerId === $user->id) {
-                $oldDomain = $license->domain;
-                $license->domain = Craft::$app->getRequest()->getParam('domain') ?: null;
-                $license->notes = Craft::$app->getRequest()->getParam('notes');
+                $domain = Craft::$app->getRequest()->getParam('domain');
+                $notes = Craft::$app->getRequest()->getParam('notes');
+                $autoRenew = Craft::$app->getRequest()->getParam('autoRenew');
 
-                if ($manager->saveLicense($license)) {
-                    if ($license->domain !== $oldDomain) {
-                        $note = $license->domain ? "tied to domain {$license->domain}" : "untied from domain {$oldDomain}";
-                        $manager->addHistory($license->id, "{$note} by {$user->email}");
-                    }
-                    return $this->asJson([
-                        'success' => true,
-                        'license' => $license->toArray(),
-                    ]);
+                if ($domain !== null) {
+                    $oldDomain = $license->domain;
+                    $license->domain = $domain ?: null;
                 }
 
-                throw new Exception("Couldn't save license.");
+                if($notes !== null) {
+                    $license->notes = $notes;
+                }
+
+                if ($autoRenew !== null) {
+                    $license->autoRenew = Craft::$app->getRequest()->getParam('autoRenew');
+                }
+
+                if (!$manager->saveLicense($license)) {
+                    throw new Exception("Couldn't save license.");
+                }
+
+                if ($domain !== null && $license->domain !== $oldDomain) {
+                    $note = $license->domain ? "tied to domain {$license->domain}" : "untied from domain {$oldDomain}";
+                    $manager->addHistory($license->id, "{$note} by {$user->email}");
+                }
+
+                return $this->asJson([
+                    'success' => true,
+                    'license' => $license->toArray(),
+                ]);
             }
 
             throw new LicenseNotFoundException($key);

@@ -446,7 +446,7 @@ class CmsLicenseManager extends Component
     public function transformLicenseForOwner(CmsLicense $result, User $owner)
     {
         if ($result->ownerId === $owner->id) {
-            $license = $result->getAttributes(['id', 'key', 'domain', 'notes', 'email', 'dateCreated']);
+            $license = $result->getAttributes(['id', 'key', 'domain', 'notes', 'email', 'autoRenew', 'dateCreated']);
             $license['edition'] = $result->editionHandle;
         } else {
             $license = [
