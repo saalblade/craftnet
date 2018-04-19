@@ -42,7 +42,7 @@
                                     <li><router-link @click.native="closeSidebar()" to="/account/licenses/cms">Craft CMS</router-link></li>
                                     <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
                                     <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
-                                    <li v-if="enableRenewalFeatures"><router-link @click.native="closeSidebar()" to="/account/licenses/renew">Renew Licenses ({{licenses.length}})</router-link></li>
+                                    <li v-if="enableRenewalFeatures"><router-link @click.native="closeSidebar()" to="/account/licenses/renew">Renew Licenses</router-link></li>
                                 </ul>
 
                                 <template v-if="userIsInGroup('developers')">
@@ -112,7 +112,6 @@
 
             ...mapGetters({
                 userIsInGroup: 'userIsInGroup',
-                licenses: 'licenses',
             }),
 
         },
