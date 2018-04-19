@@ -7,6 +7,7 @@ use craft\commerce\models\Address;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
+use craftnet\cms\CmsEdition;
 use craftnet\Module;
 use yii\web\Response;
 
@@ -90,6 +91,7 @@ class CraftIdController extends BaseController
             'plugins' => $this->_plugins($currentUser),
             'cmsLicenses' => $this->_cmsLicenses($currentUser),
             'pluginLicenses' => $this->_pluginLicenses($currentUser),
+            'renewLicenses' => $this->_renewLicenses($currentUser),
             'sales' => $this->_sales($currentUser),
             'upcomingInvoice' => $this->_upcomingInvoice(),
             'categories' => $this->_pluginCategories(),
@@ -136,6 +138,50 @@ class CraftIdController extends BaseController
     private function _pluginLicenses(User $user): array
     {
         return Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array licenses that need to be renewed.
+     */
+    private function _renewLicenses(User $user): array
+    {
+        $renewLicenses = [];
+
+        $cmsLicenses = Module::getInstance()->getCmsLicenseManager()->getRenewLicensesByOwner($user->id);
+
+        foreach ($cmsLicenses as $cmsLicense) {
+            $edition = CmsEdition::findOne($cmsLicense->editionId);
+
+            $renewLicenses[] = [
+                'id' => $cmsLicense->id,
+                'type' => 'cmsLicense',
+                'shortKey' => substr($cmsLicense->key, 0, 10),
+                'item' => 'Craft '.$edition->name,
+                'domain' => $cmsLicense->domain,
+                'renewalDate' => $cmsLicense->dateCreated,
+                'renewalPrice' => $edition->renewalPrice,
+            ];
+        }
+
+        $pluginLicenses = Module::getInstance()->getPluginLicenseManager()->getLicensesByOwner($user->id);
+
+        foreach ($pluginLicenses as $pluginLicense) {
+            $plugin = $pluginLicense->getPlugin();
+
+            $renewLicenses[] = [
+                'id' => $pluginLicense->id,
+                'type' => 'pluginLicense',
+                'shortKey' => substr($pluginLicense->key, 0, 10),
+                'item' => $plugin->name,
+                'domain' => null,
+                'renewalDate' => $pluginLicense->dateCreated,
+                'renewalPrice' => $plugin->renewalPrice,
+            ];
+        }
+
+        return $renewLicenses;
     }
 
     /**

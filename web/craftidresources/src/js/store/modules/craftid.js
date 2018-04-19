@@ -12,6 +12,7 @@ const state = {
     categories: [],
     countries: [],
     enableRenewalFeatures: false,
+    renewLicenses: [],
 }
 
 /**
@@ -38,6 +39,7 @@ const actions = {
     getCraftIdData({commit}) {
         return new Promise((resolve, reject) => {
             craftIdApi.getCraftIdData(response => {
+                    commit(types.RECEIVE_CRAFT_ID_DATA, {response});
                     commit(types.RECEIVE_CATEGORIES, {categories: response.data.categories});
                     commit(types.RECEIVE_COUNTRIES, {countries: response.data.countries});
                     commit(types.RECEIVE_ENABLE_RENEWAL_FEATURES, {enableRenewalFeatures: response.data.enableRenewalFeatures});
@@ -65,6 +67,10 @@ const actions = {
  * Mutations
  */
 const mutations = {
+
+    [types.RECEIVE_CRAFT_ID_DATA](state, {response}) {
+        state.renewLicenses = response.data.renewLicenses
+    },
 
     [types.RECEIVE_CATEGORIES](state, {categories}) {
         state.categories = categories;

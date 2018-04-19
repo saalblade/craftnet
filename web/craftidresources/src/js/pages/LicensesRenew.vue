@@ -13,36 +13,19 @@
                         <th>License Key</th>
                         <th>Item</th>
                         <th>Domain</th>
-                        <th>Next Payment</th>
+                        <th>Renewal Date</th>
                         <th>Price</th>
                     </tr>
                     </thead>
                     <tbody>
                     <template>
-                        <tr v-for="license in licenses">
-                            <td>
-                                <input type="checkbox" :value="license.id" v-model="selectedLicenses" />
-                            </td>
-
-                            <template v-if="license.type == 'pluginLicense'">
-                                <td><router-link :to="'/account/licenses/plugins/'+license.id">LIC000{{ license.id }}</router-link></td>
-                                <td>{{ license.plugin.name }}</td>
-                            </template>
-
-                            <template v-if="license.type == 'craftLicense'">
-                                <td><router-link :to="'/account/licenses/cms/'+license.id">LIC000{{ license.id }}</router-link></td>
-                                <td>Craft {{ license.craftEdition.value }}</td>
-                            </template>
-
+                        <tr v-for="license in renewLicenses">
+                            <td><input type="checkbox" :value="license.type+'-'+license.id" v-model="selectedLicenses" /></td>
+                            <td><code>{{ license.shortKey }}</code></td>
+                            <td>{{ license.item }}</td>
                             <td>{{ license.domain }}</td>
-
-                            <td>November 16th, 2017</td>
-
-                            <td>
-                                <template v-if="license.plugin">
-                                    {{ license.plugin.renewalPrice|currency }} for 1 year
-                                </template>
-                            </td>
+                            <td>{{ license.renewalDate.date|moment('L') }}</td>
+                            <td>{{license.renewalPrice|currency}}</td>
                         </tr>
                     </template>
                     </tbody>
@@ -86,7 +69,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
 
     export default {
 
@@ -98,25 +81,25 @@
 
         computed: {
 
-            ...mapGetters({
-                licenses: 'licenses',
+            ...mapState({
+                renewLicenses: state => state.craftId.renewLicenses,
             }),
 
             subtotal() {
-                return this.licenses.reduce((a, b) => {
-                    if (b.plugin && this.selectedLicenses.find(lId => lId == b.id)) {
-                        return a + parseFloat(b.plugin.renewalPrice);
+                return this.renewLicenses.reduce((accumulator, license) => {
+                    if (this.selectedLicenses.find(selectedLicense => selectedLicense === license.type+'-'+license.id)) {
+                        return accumulator + parseFloat(license.renewalPrice);
                     }
 
-                    return a;
+                    return accumulator;
                 }, 0);
             },
 
         },
 
         mounted() {
-            this.licenses.forEach(license => {
-                this.selectedLicenses.push(license.id)
+            this.renewLicenses.forEach(license => {
+                this.selectedLicenses.push(license.type+'-'+license.id)
             })
         }
 

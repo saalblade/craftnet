@@ -123,6 +123,26 @@ class CmsLicenseManager extends Component
     }
 
     /**
+     * Returns licenses owned by a user.
+     *
+     * @param int $ownerId
+     * @return CmsLicense[]
+     */
+    public function getRenewLicensesByOwner(int $ownerId): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->where(['l.ownerId' => $ownerId, 'l.editionHandle' => 'pro'])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new CmsLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
      * Returns licenses purchased by an order.
      *
      * @param int $orderId
@@ -463,6 +483,7 @@ class CmsLicenseManager extends Component
             }
 
             $pluginLicense['plugin'] = $plugin;
+            $pluginLicense['renewalDate'] = $pluginLicensesResult->dateCreated;
 
             $pluginLicenses[] = $pluginLicense;
         }
