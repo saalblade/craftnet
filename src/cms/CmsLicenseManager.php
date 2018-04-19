@@ -483,6 +483,7 @@ class CmsLicenseManager extends Component
             }
 
             $pluginLicense['plugin'] = $plugin;
+            $pluginLicense['autoRenew'] = $pluginLicensesResult->autoRenew;
             $pluginLicense['renewalDate'] = $pluginLicensesResult->dateCreated;
 
             $pluginLicenses[] = $pluginLicense;
