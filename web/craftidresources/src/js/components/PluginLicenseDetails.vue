@@ -225,8 +225,8 @@
              */
             saveAutoRenew() {
                 this.$store.dispatch('savePluginLicense', {
-                    id: this.license.id,
-                    type: this.type,
+                    pluginHandle: this.license.plugin.handle,
+                    key: this.license.key,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then((data) => {
                     if (this.licenseDraft.autoRenew) {
