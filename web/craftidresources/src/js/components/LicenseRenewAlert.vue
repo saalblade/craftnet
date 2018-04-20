@@ -1,7 +1,7 @@
 <template>
 
     <div class="alert alert-info" role="alert">
-        {{ renewLicenses.length }} of your licenses are about to expire. <router-link to="/account/licenses/renew">Renew them now</router-link> and get a discount.
+        {{ renewLicenses.length }} of your licenses are about to expire. Renew them now to keep getting updates.
     </div>
 
 </template>
