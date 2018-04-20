@@ -82,7 +82,7 @@
 				<lightswitch-field
 						id="auto-renew"
 						label="Auto-Renew"
-						instructions="Automatically renew this license when it expires"
+						instructions="Automatically renew this license when it expires."
 						@change="saveAutoRenew"
 						:checked.sync="licenseDraft.autoRenew"
 				/>
