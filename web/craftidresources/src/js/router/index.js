@@ -8,7 +8,6 @@ import LicensesCms from '../pages/LicensesCms'
 import LicensesCmsDetails from '../pages/LicensesCmsDetails'
 import LicensesPlugins from '../pages/LicensesPlugins'
 import LicensesPluginsDetails from '../pages/LicensesPluginsDetails'
-import LicensesRenew from '../pages/LicensesRenew'
 import Sales from '../pages/Sales'
 import SalesDetails from '../pages/SalesDetails'
 import PluginsEdit from '../pages/PluginsEdit'
@@ -57,10 +56,6 @@ const router = new VueRouter({
         {
             path: '/account/licenses/claim',
             component: LicensesClaim
-        },
-        {
-            path: '/account/licenses/renew',
-            component: LicensesRenew
         },
         {
             path: '/account/billing',
