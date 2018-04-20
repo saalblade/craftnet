@@ -186,10 +186,6 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development.'
     ],
-    'SmartMap' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
     'SmartyPants' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/typography.html#smartypants) could be used instead.'
@@ -202,10 +198,6 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) could be used instead',
     ],
-    'SmartMap' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
     'SproutFields' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [NSM Fields](https://github.com/newism/craft3-fields) could be used instead'
@@ -213,10 +205,6 @@ return [
     'SquareBitMaps' => [
         'statusColor' => 'orange',
         'status' => 'Craft 3 upgrade path will be available via [Smart Map](https://www.doublesecretagency.com/plugins/smart-map).'
-    ],
-    'StarRatings' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
     ],
     'SuperSort' => [
         'handle' => 'supersort',

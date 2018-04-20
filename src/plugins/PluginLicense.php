@@ -66,6 +66,18 @@ class PluginLicense extends Model
     }
 
     /**
+     * @inheritdoc
+     */
+    public function datetimeAttributes(): array
+    {
+        $attributes = parent::datetimeAttributes();
+        $attributes[] = 'lastActivityOn';
+        $attributes[] = 'lastRenewedOn';
+        $attributes[] = 'expiresOn';
+        return $attributes;
+    }
+
+    /**
      * Returns a shortened version of the license key.
      *
      * @return string

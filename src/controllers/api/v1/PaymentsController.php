@@ -14,6 +14,7 @@ use craft\commerce\stripe\models\forms\Payment;
 use craft\commerce\stripe\Plugin as Stripe;
 use craftnet\errors\ValidationException;
 use Stripe\Customer as StripeCustomer;
+use Stripe\Error\Base as StripeError;
 use yii\base\Exception;
 use yii\base\UserException;
 use yii\web\BadRequestHttpException;
@@ -104,9 +105,12 @@ class PaymentsController extends CartsController
             // pay
             /** @var Payment $paymentForm */
             $paymentForm = $gateway->getPaymentFormModel();
-            $this->_populatePaymentForm($payload, $gateway, $paymentForm);
+
             try {
+                $this->_populatePaymentForm($payload, $gateway, $paymentForm);
                 $commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction);
+            } catch (StripeError $e) {
+                throw new BadRequestHttpException($e->getMessage(), 0, $e);
             } catch (PaymentException $e) {
                 throw new BadRequestHttpException($e->getMessage(), 0, $e);
             }
