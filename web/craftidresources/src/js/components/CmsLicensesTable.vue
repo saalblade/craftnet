@@ -6,8 +6,8 @@
 				<th>License Key</th>
 				<th>Edition</th>
 				<th>Domain</th>
-				<th>Auto Renew</th>
 				<th>Updates Until</th>
+				<th>Auto Renew</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -26,11 +26,11 @@
 					</td>
 					<td>{{ license.edition }}</td>
 					<td>{{ license.domain }}</td>
+					<td>{{ license.renewalDate.date|moment("L") }}</td>
 					<td>
 						<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
 						<span v-else="" class="badge">Disabled</span>
 					</td>
-					<td>{{ license.renewalDate.date|moment("L") }}</td>
 				</tr>
 			</template>
 			</tbody>

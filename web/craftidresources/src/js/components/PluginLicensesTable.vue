@@ -6,8 +6,8 @@
 				<th>License Key</th>
 				<th>Plugin</th>
 				<th v-if="!excludeCmsLicenseColumn">CMS License</th>
-				<th>Auto Renew</th>
 				<th>Updates Until</th>
+				<th>Auto Renew</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -38,13 +38,13 @@
 						</template>
 					</td>
 					<td>
-						<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
-						<span v-else="" class="badge">Disabled</span>
-					</td>
-					<td>
 						<template v-if="license.renewalDate">
 							{{ license.renewalDate.date|moment("L") }}
 						</template>
+					</td>
+					<td>
+						<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
+						<span v-else="" class="badge">Disabled</span>
 					</td>
 				</tr>
 			</template>
