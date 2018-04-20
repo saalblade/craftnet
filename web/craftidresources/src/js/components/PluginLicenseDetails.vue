@@ -1,92 +1,101 @@
 <template>
-	<div class="card mb-3">
-		<div class="card-body">
-			<h4 class="mb-4">License Details</h4>
-			<template v-if="license">
-				<div class="md:flex -mx-4">
-					<div class="md:w-1/2 px-4">
-						<dl>
-							<template v-if="license.plugin">
-								<dt>Plugin</dt>
-								<dd>{{ license.plugin.name }}</dd>
-							</template>
-
-							<dt>License Key</dt>
-							<dd><code>{{ license.key|formatPluginLicense }}</code></dd>
-
-							<dt>Craft License</dt>
-							<dd>
-								<template v-if="license.cmsLicense">
-									<p>
-										<code>
-											<router-link v-if="license.cmsLicense.key" :to="'/account/licenses/cms/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
-											<template v-else>{{ license.cmsLicense.shortKey }}</template>
-										</code>
-										<span v-if="license.cmsLicense.edition" class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
-									</p>
-									<div class="buttons">
-										<button @click="detachCmsLicense()" type="button" class="btn btn-secondary btn-sm">
-											Detach from this Craft license
-										</button>
-										<div class="spinner" v-if="detaching"></div>
-									</div>
+	<div>
+		<div class="card mb-3">
+			<div class="card-body">
+				<h4 class="mb-4">License Details</h4>
+				<template v-if="license">
+					<div class="md:flex -mx-4">
+						<div class="md:w-1/2 px-4">
+							<dl>
+								<template v-if="license.plugin">
+									<dt>Plugin</dt>
+									<dd>{{ license.plugin.name }}</dd>
 								</template>
-								<template v-else>
-									<span class="text-secondary">Not attached to a CMS license.</span>
-                                    <a v-if="originalCmsLicenseId" @click.prevent="reattachCmsLicense()" href="#">Undo</a>
-								</template>
-							</dd>
-						</dl>
-					</div>
-					<div class="md:w-1/2 px-4">
-						<dl>
-							<dt>Email</dt>
-							<dd>{{ license.email }}</dd>
 
-							<template v-if="enableRenewalFeatures">
-								<dt>Update Period</dt>
-								<dd>2017/05/11 to 2018/05/11</dd>
+								<dt>License Key</dt>
+								<dd><code>{{ license.key|formatPluginLicense }}</code></dd>
 
-								<dt>Auto Renew</dt>
+								<dt>Craft License</dt>
 								<dd>
-									<lightswitch-input @input="saveAutoRenew()" v-model="licenseDraft.autoRenew"></lightswitch-input>
+									<template v-if="license.cmsLicense">
+										<p>
+											<code>
+												<router-link v-if="license.cmsLicense.key" :to="'/account/licenses/cms/'+license.cmsLicenseId">{{ license.cmsLicense.key.substr(0, 10) }}</router-link>
+												<template v-else>{{ license.cmsLicense.shortKey }}</template>
+											</code>
+											<span v-if="license.cmsLicense.edition" class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
+										</p>
+										<div class="buttons">
+											<button @click="detachCmsLicense()" type="button" class="btn btn-secondary btn-sm">
+												Detach from this Craft license
+											</button>
+											<div class="spinner" v-if="detaching"></div>
+										</div>
+									</template>
+									<template v-else>
+										<span class="text-secondary">Not attached to a CMS license.</span>
+										<a v-if="originalCmsLicenseId" @click.prevent="reattachCmsLicense()" href="#">Undo</a>
+									</template>
 								</dd>
-							</template>
+							</dl>
+						</div>
+						<div class="md:w-1/2 px-4">
+							<dl>
+								<dt>Email</dt>
+								<dd>{{ license.email }}</dd>
 
-							<dt>Created</dt>
-							<dd>{{ license.dateCreated.date|moment("L") }}</dd>
+								<dt>Created</dt>
+								<dd>{{ license.dateCreated.date|moment("L") }}</dd>
 
-							<dt>Notes</dt>
-							<dd>
-								<template v-if="!notesEditing">
-									<p>{{ license.notes }}</p>
+								<dt>Notes</dt>
+								<dd>
+									<template v-if="!notesEditing">
+										<p>{{ license.notes }}</p>
 
-									<div class="buttons">
-										<button @click="notesEditing = true" type="button" class="btn btn-secondary btn-sm">
-											<i class="fas fa-pencil-alt"></i>
-											Edit
-										</button>
-									</div>
-								</template>
+										<div class="buttons">
+											<button @click="notesEditing = true" type="button" class="btn btn-secondary btn-sm">
+												<i class="fas fa-pencil-alt"></i>
+												Edit
+											</button>
+										</div>
+									</template>
 
-								<form v-if="notesEditing" @submit.prevent="saveNotes()">
-									<textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
-									<input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
-									<input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
-									<div class="spinner" v-if="notesLoading"></div>
-								</form>
-							</dd>
-						</dl>
+									<form v-if="notesEditing" @submit.prevent="saveNotes()">
+										<textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
+										<input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
+										<input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
+										<div class="spinner" v-if="notesLoading"></div>
+									</form>
+								</dd>
+							</dl>
+						</div>
 					</div>
-				</div>
-			</template>
+				</template>
+			</div>
 		</div>
+
+		<template v-if="enableRenewalFeatures">
+			<div class="card mb-3">
+				<div class="card-body">
+					<h4>Updates</h4>
+					<p>This plugin license will continue having access to updates until <strong>2018/05/11</strong>.</p>
+					
+					<lightswitch-field
+							id="auto-renew"
+							label="Auto-Renew"
+							instructions="Automatically renew this license when it expires"
+							@change="saveAutoRenew"
+							:checked.sync="licenseDraft.autoRenew"
+					/>
+				</div>
+			</div>
+		</template>
 	</div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
-    import LightswitchInput from '../components/inputs/LightswitchInput'
+    import LightswitchField from '../components/fields/LightswitchField'
     import TextareaField from '../components/fields/TextareaField'
 
     export default {
@@ -108,7 +117,7 @@
         },
 
         components: {
-            LightswitchInput,
+            LightswitchField,
             TextareaField,
         },
 

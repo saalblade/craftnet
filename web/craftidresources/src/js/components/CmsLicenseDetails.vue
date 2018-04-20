@@ -40,16 +40,6 @@
 								<dt>Email</dt>
 								<dd>{{ license.email }}</dd>
 
-								<template v-if="enableRenewalFeatures">
-									<dt>Update Period</dt>
-									<dd>2017/05/11 to 2018/05/11</dd>
-
-									<dt>Auto Renew</dt>
-									<dd>
-										<lightswitch-input @input="saveAutoRenew()" v-model="licenseDraft.autoRenew"></lightswitch-input>
-									</dd>
-								</template>
-
 								<dt>Created</dt>
 								<dd>{{ license.dateCreated.date|moment("L") }}</dd>
 
@@ -90,6 +80,22 @@
 			</div>
 		</div>
 
+		<template v-if="enableRenewalFeatures">
+			<div class="card mb-3">
+				<div class="card-body">
+					<h4>Updates</h4>
+					<p>This CMS license will continue having access to updates until <strong>2018/05/11</strong>.</p>
+
+					<lightswitch-field
+							id="auto-renew"
+							label="Auto-Renew"
+							instructions="Automatically renew this license when it expires"
+							@change="saveAutoRenew"
+							:checked.sync="licenseDraft.autoRenew"
+					/>
+				</div>
+			</div>
+		</template>
 	</div>
 </template>
 
@@ -98,6 +104,7 @@
     import TextareaField from '../components/fields/TextareaField'
     import TextField from '../components/fields/TextField'
     import LightswitchInput from '../components/inputs/LightswitchInput'
+    import LightswitchField from '../components/fields/LightswitchField'
 
     export default {
 
@@ -120,6 +127,7 @@
             TextareaField,
             TextField,
             LightswitchInput,
+            LightswitchField,
         },
 
         computed: {
@@ -161,16 +169,16 @@
                 this.$store.dispatch('saveCmsLicense', {
                     key: this.license.key,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
-                }).then((data) => {
+                }).then(response => {
                     if (this.licenseDraft.autoRenew) {
-                        this.$root.displayNotice('Auto renew enabled.');
+                        this.$root.displayNotice('Auto renew enabled.')
                     } else {
-                        this.$root.displayNotice('Auto renew disabled.');
+                        this.$root.displayNotice('Auto renew disabled.')
                     }
-                }).catch((data) => {
-                    this.$root.displayError('Couldn’t save license.');
-                    this.errors = data.errors;
-                });
+                }).catch(response => {
+                    this.$root.displayError('Couldn’t save license.')
+                    this.errors = response.data.errors
+                })
             },
 
             /**
