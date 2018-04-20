@@ -1,7 +1,7 @@
 <template>
 	<div class="card mb-3">
 		<div class="card-body">
-			<h4>History</h4>
+			<h4>Activity</h4>
 
 			<table v-if="history.length" class="table">
 				<thead>
