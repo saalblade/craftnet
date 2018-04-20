@@ -235,6 +235,7 @@
                         this.$root.displayNotice('Auto renew disabled.');
                     }
 
+                    this.$store.dispatch('getCmsLicenses');
                 }).catch((data) => {
                     this.$root.displayError('Couldn’t save license.');
                     this.errors = data.errors;
