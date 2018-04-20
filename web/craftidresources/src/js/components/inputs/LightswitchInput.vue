@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<label for="t1" class="lightswitch">
-			<input id="t1" type="checkbox" :checked="value" @change="$emit('input', $event.target.checked)" />
+		<label :for="id" class="lightswitch">
+			<input :id="id" type="checkbox" :checked="checked" @input="$emit('update:checked', $event.target.checked)" @change="$emit('change', $event)" />
 			<div class="slider round"></div>
 		</label>
 	</div>
@@ -10,12 +10,7 @@
 <script>
     export default {
 
-        props: ['value'],
-
-		methods: {
-            turnOn() {
-			}
-		}
+        props: ['id', 'checked'],
 
     }
 
