@@ -13,7 +13,7 @@
                         <th>License Key</th>
                         <th>Item</th>
                         <th>Domain</th>
-                        <th>Renewal Date</th>
+                        <th>Updates Until</th>
                         <th>Price</th>
                     </tr>
                     </thead>

@@ -9,7 +9,7 @@
 
 				<template v-if="enableRenewalFeatures">
 					<th>Auto Renew</th>
-					<th>Renewal Date</th>
+					<th>Updates Until</th>
 				</template>
 			</tr>
 			</thead>
