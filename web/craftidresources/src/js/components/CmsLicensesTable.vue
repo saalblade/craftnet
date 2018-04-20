@@ -6,11 +6,8 @@
 				<th>License Key</th>
 				<th>Edition</th>
 				<th>Domain</th>
-
-				<template v-if="enableRenewalFeatures">
-					<th>Auto Renew</th>
-					<th>Updates Until</th>
-				</template>
+				<th>Auto Renew</th>
+				<th>Updates Until</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -27,18 +24,13 @@
 							</template>
 						</code>
 					</td>
-
 					<td>{{ license.edition }}</td>
 					<td>{{ license.domain }}</td>
-
-
-					<template v-if="enableRenewalFeatures">
-						<td>
-							<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
-							<span v-else="" class="badge">Disabled</span>
-						</td>
-						<td>{{ license.renewalDate.date|moment("L") }}</td>
-					</template>
+					<td>
+						<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
+						<span v-else="" class="badge">Disabled</span>
+					</td>
+					<td>{{ license.renewalDate.date|moment("L") }}</td>
 				</tr>
 			</template>
 			</tbody>
@@ -47,19 +39,9 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-
     export default {
 
         props: ['licenses'],
-
-        computed: {
-
-            ...mapState({
-                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
-            }),
-
-        }
 
     }
 </script>

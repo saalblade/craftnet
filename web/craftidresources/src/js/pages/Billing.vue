@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <div v-if="enableRenewalFeatures" class="card mb-3">
+        <div class="card mb-3">
             <div class="card-body">
                 <h4>Upcoming Invoice</h4>
 
@@ -65,7 +65,6 @@
             ...mapState({
                 invoices: state => state.account.invoices,
                 upcomingInvoice: state => state.account.upcomingInvoice,
-                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
             }),
 
         },

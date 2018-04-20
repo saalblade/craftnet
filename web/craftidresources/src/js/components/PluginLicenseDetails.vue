@@ -74,27 +74,24 @@
 			</div>
 		</div>
 
-		<template v-if="enableRenewalFeatures">
-			<div class="card mb-3">
-				<div class="card-body">
-					<h4>Updates</h4>
-					<p>This plugin license will continue having access to updates until <strong>2018/05/11</strong>.</p>
-					
-					<lightswitch-field
-							id="auto-renew"
-							label="Auto-Renew"
-							instructions="Automatically renew this license when it expires"
-							@change="saveAutoRenew"
-							:checked.sync="licenseDraft.autoRenew"
-					/>
-				</div>
+		<div class="card mb-3">
+			<div class="card-body">
+				<h4>Updates</h4>
+				<p>This plugin license will continue having access to updates until <strong>2018/05/11</strong>.</p>
+
+				<lightswitch-field
+						id="auto-renew"
+						label="Auto-Renew"
+						instructions="Automatically renew this license when it expires"
+						@change="saveAutoRenew"
+						:checked.sync="licenseDraft.autoRenew"
+				/>
 			</div>
-		</template>
+		</div>
 	</div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
     import LightswitchField from '../components/fields/LightswitchField'
     import TextareaField from '../components/fields/TextareaField'
 
@@ -119,14 +116,6 @@
         components: {
             LightswitchField,
             TextareaField,
-        },
-
-        computed: {
-
-            ...mapState({
-                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
-            }),
-
         },
 
         methods: {

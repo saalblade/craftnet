@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="enableRenewalFeatures" class="card mb-3">
+        <div class="card mb-3">
             <div class="card-header">Upcoming Invoice</div>
             <div class="card-body">
                 <invoices-table :invoices="[upcomingInvoice]" :upcoming="true"></invoices-table>
@@ -32,7 +32,6 @@
             ...mapState({
                 invoices: state => state.account.invoices,
                 upcomingInvoice: state => state.account.upcomingInvoice,
-                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
             }),
 
         },

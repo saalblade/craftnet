@@ -6,11 +6,8 @@
 				<th>License Key</th>
 				<th>Plugin</th>
 				<th v-if="!excludeCmsLicenseColumn">CMS License</th>
-
-				<template v-if="enableRenewalFeatures">
-					<th>Auto Renew</th>
-					<th>Updates Until</th>
-				</template>
+				<th>Auto Renew</th>
+				<th>Updates Until</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -40,18 +37,15 @@
 							—
 						</template>
 					</td>
-
-					<template v-if="enableRenewalFeatures">
-						<td>
-							<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
-							<span v-else="" class="badge">Disabled</span>
-						</td>
-						<td>
-							<template v-if="license.renewalDate">
-								{{ license.renewalDate.date|moment("L") }}
-							</template>
-						</td>
-					</template>
+					<td>
+						<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
+						<span v-else="" class="badge">Disabled</span>
+					</td>
+					<td>
+						<template v-if="license.renewalDate">
+							{{ license.renewalDate.date|moment("L") }}
+						</template>
+					</td>
 				</tr>
 			</template>
 			</tbody>
@@ -61,19 +55,9 @@
 
 
 <script>
-    import {mapState} from 'vuex'
-
     export default {
 
         props: ['excludeCmsLicenseColumn', 'licenses'],
-
-        computed: {
-
-            ...mapState({
-                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
-            }),
-
-        }
 
     }
 </script>

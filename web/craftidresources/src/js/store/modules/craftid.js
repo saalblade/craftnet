@@ -11,7 +11,6 @@ Vue.use(Vuex)
 const state = {
     categories: [],
     countries: [],
-    enableRenewalFeatures: false,
     renewLicenses: [],
 }
 
@@ -20,14 +19,9 @@ const state = {
  */
 const getters = {
 
-    enableRenewalFeatures(state) {
-        return state.enableRenewalFeatures;
-    },
-
     countries(state) {
         return state.countries;
     },
-
 
 }
 
@@ -42,7 +36,6 @@ const actions = {
                     commit(types.RECEIVE_CRAFT_ID_DATA, {response});
                     commit(types.RECEIVE_CATEGORIES, {categories: response.data.categories});
                     commit(types.RECEIVE_COUNTRIES, {countries: response.data.countries});
-                    commit(types.RECEIVE_ENABLE_RENEWAL_FEATURES, {enableRenewalFeatures: response.data.enableRenewalFeatures});
 
                     commit(types.RECEIVE_PLUGINS, {plugins: response.data.plugins});
                     commit(types.RECEIVE_UPCOMING_INVOICE, {upcomingInvoice: response.data.upcomingInvoice});
@@ -78,10 +71,6 @@ const mutations = {
 
     [types.RECEIVE_COUNTRIES](state, {countries}) {
         state.countries = countries;
-    },
-
-    [types.RECEIVE_ENABLE_RENEWAL_FEATURES](state, {enableRenewalFeatures}) {
-        state.enableRenewalFeatures = enableRenewalFeatures;
     },
 
 }
