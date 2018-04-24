@@ -130,7 +130,7 @@ class CmsRenewal extends Purchasable
      */
     public function getPrice(): float
     {
-        return $this->price;
+        return (float)$this->price;
     }
 
     /**

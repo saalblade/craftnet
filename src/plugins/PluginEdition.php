@@ -248,7 +248,7 @@ class PluginEdition extends PluginPurchasable
      */
     public function getPrice(): float
     {
-        return $this->price;
+        return (float)$this->price;
     }
 
     /**
