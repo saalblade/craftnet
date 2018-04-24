@@ -150,7 +150,7 @@ class RefundController extends Controller
             $this->stderr('error: '.$child->message.PHP_EOL, Console::FG_RED);
             return 1;
         }
-        $this->stdout('done.'.PHP_EOL, Console::FG_GREEN);
+        $this->stdout('done'.PHP_EOL, Console::FG_GREEN);
 
         // Debit the developers' accounts
         foreach ($devDebitAmounts as $developerId => $debitAmount) {
@@ -167,7 +167,7 @@ class RefundController extends Controller
                     }
                 }
             } while (true);
-            $this->stdout('done.'.PHP_EOL, Console::FG_GREEN);
+            $this->stdout('done'.PHP_EOL, Console::FG_GREEN);
         }
 
         // Delete the licenses
