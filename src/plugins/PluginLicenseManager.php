@@ -509,6 +509,29 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Deletes a license by its key.
+     *
+     * @param string $key
+     * @throws LicenseNotFoundException if $key is missing
+     */
+    public function deleteLicenseByKey(string $key)
+    {
+        try {
+            $key = $this->normalizeKey($key);
+        } catch (InvalidArgumentException $e) {
+            throw new LicenseNotFoundException($key, $e->getMessage(), 0, $e);
+        }
+
+        $rows = Craft::$app->getDb()->createCommand()
+            ->delete('craftnet_pluginlicenses', ['key' => $key])
+            ->execute();
+
+        if ($rows === 0) {
+            throw new LicenseNotFoundException($key);
+        }
+    }
+
+    /**
      * @return Query
      */
     private function _createLicenseQuery(): Query
