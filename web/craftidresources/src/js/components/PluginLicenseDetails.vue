@@ -130,6 +130,8 @@
 
                 this.savePluginLicense(() => {
                     this.detaching = false;
+                    this.$store.dispatch('getCmsLicenses')
+                    this.$store.dispatch('getPluginLicenses')
                 }, () => {
                     this.detaching = false;
                 });
