@@ -446,7 +446,7 @@ class CmsLicenseManager extends Component
     public function transformLicenseForOwner(CmsLicense $result, User $owner)
     {
         if ($result->ownerId === $owner->id) {
-            $license = $result->getAttributes(['id', 'key', 'domain', 'notes', 'email', 'autoRenew', 'dateCreated']);
+            $license = $result->getAttributes(['id', 'key', 'domain', 'notes', 'email', 'autoRenew', 'expiresOn', 'dateCreated']);
             $license['edition'] = $result->editionHandle;
         } else {
             $license = [
@@ -468,7 +468,7 @@ class CmsLicenseManager extends Component
 
         foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
             if ($pluginLicensesResult->ownerId === $owner->id) {
-                $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key']);
+                $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key', 'expiresOn']);
             } else {
                 $pluginLicense = [
                     'shortKey' => $pluginLicensesResult->getShortKey(),
@@ -484,17 +484,11 @@ class CmsLicenseManager extends Component
 
             $pluginLicense['plugin'] = $plugin;
             $pluginLicense['autoRenew'] = $pluginLicensesResult->autoRenew;
-            $pluginLicense['renewalDate'] = $pluginLicensesResult->dateCreated;
 
             $pluginLicenses[] = $pluginLicense;
         }
 
         $license['pluginLicenses'] = $pluginLicenses;
-
-
-        // Renewal
-
-        $license['renewalDate'] = $license['dateCreated'];
 
         return $license;
     }

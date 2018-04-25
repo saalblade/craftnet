@@ -26,7 +26,11 @@
 					</td>
 					<td>{{ license.edition }}</td>
 					<td>{{ license.domain }}</td>
-					<td>{{ license.renewalDate.date|moment("L") }}</td>
+					<td>
+						<template v-if="license.expiresOn">
+							{{ license.expiresOn.date|moment("L") }}
+						</template>
+					</td>
 					<td>
 						<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
 						<span v-else="" class="badge">Disabled</span>

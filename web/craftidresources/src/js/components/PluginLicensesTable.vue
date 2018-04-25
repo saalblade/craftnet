@@ -37,8 +37,8 @@
 						</template>
 					</td>
 					<td>
-						<template v-if="license.renewalDate">
-							{{ license.renewalDate.date|moment("L") }}
+						<template v-if="license.expiresOn">
+							{{ license.expiresOn.date|moment("L") }}
 						</template>
 					</td>
 					<td>
