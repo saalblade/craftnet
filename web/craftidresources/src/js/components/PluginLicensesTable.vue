@@ -42,8 +42,10 @@
 						</template>
 					</td>
 					<td>
-						<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
-						<span v-else="" class="badge">Disabled</span>
+						<template v-if="typeof(license.autoRenew) !== 'undefined'">
+							<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
+							<span v-else="" class="badge">Disabled</span>
+						</template>
 					</td>
 				</tr>
 			</template>
