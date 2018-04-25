@@ -133,7 +133,7 @@
             ...mapGetters({
                 expiresSoon: 'expiresSoon',
             }),
-			
+
             canSave() {
                 if (this.license.domain != this.licenseDraft.domain) {
                     return true;
