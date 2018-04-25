@@ -22,6 +22,22 @@ const getters = {
         return state.pluginLicenses.concat(state.cmsLicenses);
     },
 
+    expiresSoon(state) {
+        return license => {
+            const today = new Date()
+            let expiryDate = new Date()
+            expiryDate.setDate(today.getDate() + 45)
+
+            const expiresOn = new Date(license.expiresOn.date)
+
+            if(expiryDate > expiresOn) {
+                return true
+            }
+
+            return false
+        }
+    }
+
 }
 
 /**

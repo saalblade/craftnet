@@ -43,7 +43,43 @@ class PluginLicenseManager extends Component
     public function getLicensesByOwner(int $ownerId): array
     {
         $results = $this->_createLicenseQuery()
-            ->where(['l.ownerId' => $ownerId])
+            ->where([
+                'l.ownerId' => $ownerId,
+            ])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
+     * Returns licenses that need to be renewed in the next 45 days.
+     *
+     * @param int $ownerId
+     *
+     * @return PluginLicense[]
+     */
+    public function getRenewLicensesByOwner(int $ownerId): array
+    {
+        $date = new \DateTime();
+        $date->add(new \DateInterval('P45D'));
+
+        $results = $this->_createLicenseQuery()
+            ->where([
+                'and',
+                [
+                    'l.ownerId' => $ownerId,
+                ],
+                [
+                    'and',
+                    ['<', 'expiresOn', Db::prepareDateForDb($date)]
+                ]
+            ])
+
             ->all();
 
         $licenses = [];

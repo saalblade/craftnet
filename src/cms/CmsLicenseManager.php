@@ -123,15 +123,28 @@ class CmsLicenseManager extends Component
     }
 
     /**
-     * Returns licenses owned by a user.
+     * Returns licenses that need to be renewed in the next 45 days.
      *
      * @param int $ownerId
      * @return CmsLicense[]
      */
     public function getRenewLicensesByOwner(int $ownerId): array
     {
+        $date = new \DateTime();
+        $date->add(new \DateInterval('P45D'));
+
         $results = $this->_createLicenseQuery()
-            ->where(['l.ownerId' => $ownerId, 'l.editionHandle' => 'pro'])
+            ->where([
+                'and',
+                [
+                    'l.ownerId' => $ownerId,
+                    'l.editionHandle' => 'pro'
+                ],
+                [
+                    'and',
+                    ['<', 'expiresOn', Db::prepareDateForDb($date)]
+                ]
+            ])
             ->all();
 
         $licenses = [];

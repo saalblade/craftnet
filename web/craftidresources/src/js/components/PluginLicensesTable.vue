@@ -38,7 +38,14 @@
 					</td>
 					<td>
 						<template v-if="license.expiresOn">
-							{{ license.expiresOn.date|moment("L") }}
+							<template v-if="expiresSoon(license)">
+								<span class="text-orange">
+									{{ license.expiresOn.date|moment("L") }}
+								</span>
+							</template>
+							<template v-else>
+								{{ license.expiresOn.date|moment("L") }}
+							</template>
 						</template>
 					</td>
 					<td>
@@ -56,9 +63,19 @@
 
 
 <script>
+    import {mapGetters} from 'vuex'
+
     export default {
 
         props: ['excludeCmsLicenseColumn', 'licenses'],
+
+		computed: {
+
+            ...mapGetters({
+                expiresSoon: 'expiresSoon',
+            }),
+
+		}
 
     }
 </script>

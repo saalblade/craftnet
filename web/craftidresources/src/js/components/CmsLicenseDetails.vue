@@ -83,7 +83,7 @@
 		<div class="card mb-3">
 			<div class="card-body">
 				<h4>Updates</h4>
-				<p>This CMS license will continue having access to updates until <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
+				<p>This CMS license will continue having access to updates until <strong :class="{'text-orange': expiresSoon}">{{ license.expiresOn.date|moment("L") }}</strong>.</p>
 
 				<lightswitch-field
 						id="auto-renew"
@@ -98,6 +98,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     import TextareaField from '../components/fields/TextareaField'
     import TextField from '../components/fields/TextField'
     import LightswitchInput from '../components/inputs/LightswitchInput'
@@ -129,6 +130,10 @@
 
         computed: {
 
+            ...mapGetters({
+                expiresSoon: 'expiresSoon',
+            }),
+			
             canSave() {
                 if (this.license.domain != this.licenseDraft.domain) {
                     return true;
