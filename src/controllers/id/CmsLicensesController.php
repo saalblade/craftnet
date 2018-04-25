@@ -170,7 +170,7 @@ class CmsLicensesController extends Controller
 
                 return $this->asJson([
                     'success' => true,
-                    'license' => $license->toArray(),
+                    'license' => $manager->transformLicenseForOwner($license, $user),
                 ]);
             }
 
