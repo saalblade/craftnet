@@ -83,7 +83,7 @@
 		<div class="card mb-3">
 			<div class="card-body">
 				<h4>Updates</h4>
-				<p>This CMS license will continue having access to updates until <strong>2018/05/11</strong>.</p>
+				<p>This CMS license will continue having access to updates until <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
 
 				<lightswitch-field
 						id="auto-renew"
