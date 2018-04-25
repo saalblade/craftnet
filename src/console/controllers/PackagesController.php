@@ -207,7 +207,19 @@ class PackagesController extends Controller
      */
     public function actionUpdateManagedPackages()
     {
-        $this->module->getPackageManager()->updateManagedPackages($this->force, $this->queue);
+        $this->module->getPackageManager()->updateManagedPackages($this->force, $this->queue, $errors);
+
+        if (!empty($errors)) {
+            $this->stderr('Done, but encountered the following errors:'.PHP_EOL, Console::FG_RED);
+            foreach ($errors as $packageName => $packageErrors) {
+                $this->stderr("* {$packageName}:".PHP_EOL, Console::FG_RED);
+                foreach ($packageErrors as $error) {
+                    $this->stderr("  - {$error}".PHP_EOL, Console::FG_RED);
+                }
+            }
+        } else {
+            $this->stdout('Done'.PHP_EOL, Console::FG_GREEN);
+        }
     }
 
     /**

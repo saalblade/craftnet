@@ -666,23 +666,21 @@ class PackageManager extends Component
 
         // Get all of the already known versions (including invalid releases)
         $storedVersionInfo = (new Query())
-            ->select(['id', 'version', 'sha'])
+            ->select(['id', 'version', 'normalizedVersion', 'sha'])
             ->from(['craftnet_packageversions'])
             ->where(['packageId' => $package->id])
-            ->indexBy('version')
+            ->indexBy('normalizedVersion')
             ->all();
 
         // Get the versions from the VCS
-        $normalizedVersions = [];
-        $versionStability = [];
-
-        $vcsVersionShas = array_filter($vcs->getVersions(), function($sha, $version) use ($isConsole, $package, &$normalizedVersions, &$versionStability) {
+        $vcsVersionInfo = [];
+        foreach ($vcs->getVersions() as $version => $sha) {
             // Don't include development versions, and versions that aren't actually required by any managed packages
             if (($stability = VersionParser::parseStability($version)) === 'dev') {
                 if ($isConsole) {
                     Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - dev stability", [Console::FG_RED]));
                 }
-                return false;
+                continue;
             }
 
             // Don't include duplicate versions
@@ -692,38 +690,41 @@ class PackageManager extends Component
                 if ($isConsole) {
                     Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - invalid version", [Console::FG_RED]));
                 }
-                return false;
+                continue;
             }
 
-            if (isset($normalizedVersions[$normalizedVersion])) {
+            if (isset($vcsVersionInfo[$normalizedVersion])) {
                 if ($isConsole) {
                     Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - duplicate version", [Console::FG_RED]));
                 }
-                return false;
+                continue;
             }
-            $normalizedVersions[$normalizedVersion] = true;
 
-            $versionStability[$version] = $stability;
             if (!$package->managed && !$this->isDependencyVersionRequired($package->name, $version)) {
                 if ($isConsole) {
                     Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - not required", [Console::FG_RED]));
                 }
-                return false;
+                continue;
             }
 
-            return true;
-        }, ARRAY_FILTER_USE_BOTH);
+            // It's a keeper
+            $vcsVersionInfo[$normalizedVersion] = [
+                'version' => $version,
+                'stability' => $stability,
+                'sha' => $sha,
+            ];
+        }
 
         // See which already-stored versions have been deleted/updated
-        $storedVersions = array_keys($storedVersionInfo);
-        $vcsVersions = array_keys($vcsVersionShas);
+        $normalizedStoredVersions = array_keys($storedVersionInfo);
+        $normalizedVcsVersions = array_keys($vcsVersionInfo);
 
-        $deletedVersions = array_diff($storedVersions, $vcsVersions);
-        $newVersions = array_diff($vcsVersions, $storedVersions);
+        $deletedVersions = array_diff($normalizedStoredVersions, $normalizedVcsVersions);
+        $newVersions = array_diff($normalizedVcsVersions, $normalizedStoredVersions);
+
         $updatedVersions = [];
-
-        foreach (array_intersect($storedVersions, $vcsVersions) as $version) {
-            if ($force || $storedVersionInfo[$version]['sha'] !== $vcsVersionShas[$version]) {
+        foreach (array_intersect($normalizedStoredVersions, $normalizedVcsVersions) as $version) {
+            if ($force || $storedVersionInfo[$version]['sha'] !== $vcsVersionInfo[$version]['sha']) {
                 $updatedVersions[] = $version;
             }
         }
@@ -772,8 +773,10 @@ class PackageManager extends Component
             $latestVersion = null;
             $foundStable = false;
 
-            foreach ($newVersions as $version) {
-                $sha = $vcsVersionShas[$version];
+            foreach ($newVersions as $normalizedVersion) {
+                $version = $vcsVersionInfo[$normalizedVersion]['version'];
+                $stability = $vcsVersionInfo[$normalizedVersion]['stability'];
+                $sha = $vcsVersionInfo[$normalizedVersion]['sha'];
 
                 if ($isConsole) {
                     Console::stdout(Console::ansiFormat("- processing {$version} ({$sha}) ... ", [Console::FG_YELLOW]));
@@ -814,7 +817,7 @@ class PackageManager extends Component
                 }
 
                 if ($release->valid) {
-                    if (!$foundStable && $versionStability[$version] === 'stable') {
+                    if (!$foundStable && $stability === 'stable') {
                         $latestVersion = $version;
                         $foundStable = true;
                     } else if ($latestVersion === null) {
@@ -980,8 +983,9 @@ class PackageManager extends Component
      *
      * @param bool $force Whether to update package releases even if their SHA hasn't changed
      * @param bool $queue Whether to queue the updates
+     * @param array $errors Any errors that occur when updating
      */
-    public function updateManagedPackages(bool $force = false, bool $queue = false)
+    public function updateManagedPackages(bool $force = false, bool $queue = false, array &$errors = null)
     {
         Craft::info('Starting to update managed packages.', __METHOD__);
 
@@ -990,8 +994,16 @@ class PackageManager extends Component
             ->where(['managed' => true])
             ->column();
 
+        $errors = [];
         foreach ($names as $name) {
-            $this->updatePackage($name, $force, $queue);
+            try {
+                $this->updatePackage($name, $force, $queue);
+            } catch (\Throwable $e) {
+                // log and keep going
+                Craft::warning("Error updating package {$name}: {$e->getMessage()}", __METHOD__);
+                Craft::$app->getErrorHandler()->logException($e);
+                $errors[$name][] = $e->getMessage();
+            }
         }
 
         Craft::info('Done updating managed packages.', __METHOD__);
