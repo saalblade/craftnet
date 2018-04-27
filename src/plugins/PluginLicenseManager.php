@@ -498,7 +498,7 @@ class PluginLicenseManager extends Component
     public function transformLicenseForOwner(PluginLicense $result, User $owner)
     {
         if ($result->ownerId === $owner->id) {
-            $license = $result->getAttributes(['id', 'key', 'cmsLicenseId', 'email', 'notes', 'autoRenew', 'expiresOn', 'dateCreated']);
+            $license = $result->getAttributes(['id', 'key', 'cmsLicenseId', 'email', 'notes', 'autoRenew', 'expired', 'expiresOn', 'dateCreated']);
         } else {
             $license = [
                 'shortKey' => $result->getShortKey()

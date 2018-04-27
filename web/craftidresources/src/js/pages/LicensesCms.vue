@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Craft CMS</h1>
-        <license-renew-alert></license-renew-alert>
+        <license-renew-alert type="CMS" :expiring-licenses="expiringCmsLicenses"></license-renew-alert>
 
         <div v-if="cmsLicenses.length > 0" class="card card-table">
             <cms-licenses-table type="craft" :licenses="cmsLicenses"></cms-licenses-table>
@@ -32,6 +32,10 @@
 
             ...mapState({
                 cmsLicenses: state => state.licenses.cmsLicenses,
+            }),
+
+            ...mapGetters({
+                expiringCmsLicenses: 'expiringCmsLicenses',
             }),
 
         },

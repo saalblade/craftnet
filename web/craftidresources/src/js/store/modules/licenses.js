@@ -46,7 +46,27 @@ const getters = {
             const diffDays = Math.round(diff / (1000 * 60 * 60 * 24))
             return diffDays;
         }
-    }
+    },
+
+    expiringCmsLicenses(state, getters) {
+        return state.cmsLicenses.filter(license => {
+            if (license.expired) {
+                return false
+            }
+
+            return getters.expiresSoon(license)
+        })
+    },
+
+    expiringPluginLicenses(state, getters) {
+        return state.pluginLicenses.filter(license => {
+            if (license.expired) {
+                return false
+            }
+
+            return getters.expiresSoon(license)
+        })
+    },
 
 }
 
