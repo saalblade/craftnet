@@ -103,7 +103,7 @@
 					</template>
 				</template>
 				<template v-else>
-					<p>License expired.</p>
+					<p>This license has expired and doesn’t have access to updates anymore.</p>
 				</template>
 
 				<h5>Renew License</h5>
