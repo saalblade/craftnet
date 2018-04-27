@@ -83,7 +83,28 @@
 		<div class="card mb-3">
 			<div class="card-body">
 				<h4>Updates</h4>
-				<p>This CMS license will continue having access to updates until <strong :class="{'text-orange': expiresSoon}">{{ license.expiresOn.date|moment("L") }}</strong>.</p>
+
+				<template v-if="expiresIn > 0">
+					<template v-if="expiresSoon(license)">
+						<template v-if="licenseDraft.autoRenew">
+							<p>This license will auto-renew in <strong>{{ expiresIn }} days</strong>.</p>
+						</template>
+						<template v-else>
+							<p>This license will lose access to updates in <span class="text-orange">{{ expiresIn }} days</span>.</p>
+						</template>
+					</template>
+					<template v-else>
+						<template v-if="licenseDraft.autoRenew">
+							<p>This license will auto-renew on <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
+						</template>
+						<template v-else>
+							<p>This license will continue having access to updates until <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
+						</template>
+					</template>
+				</template>
+				<template v-else>
+					<p>License expired.</p>
+				</template>
 
 				<lightswitch-field
 						id="auto-renew"
@@ -132,7 +153,12 @@
 
             ...mapGetters({
                 expiresSoon: 'expiresSoon',
+                daysBeforeExpiry: 'daysBeforeExpiry',
             }),
+
+			expiresIn() {
+				return this.daysBeforeExpiry(this.license)
+			},
 
             canSave() {
                 if (this.license.domain != this.licenseDraft.domain) {

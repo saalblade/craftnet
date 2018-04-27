@@ -36,6 +36,16 @@ const getters = {
 
             return false
         }
+    },
+
+    daysBeforeExpiry(state) {
+        return license => {
+            const today = new Date()
+            const expiresOn = new Date(license.expiresOn.date)
+            const diff = expiresOn.getTime() - today.getTime()
+            const diffDays = Math.round(diff / (1000 * 60 * 60 * 24))
+            return diffDays;
+        }
     }
 
 }
