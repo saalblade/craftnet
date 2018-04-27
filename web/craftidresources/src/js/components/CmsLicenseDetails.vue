@@ -87,7 +87,7 @@
 				<template v-if="!license.expired">
 					<template v-if="expiresSoon(license)">
 						<template v-if="licenseDraft.autoRenew">
-							<p>This license will auto-renew in <strong>{{ daysBeforeExpiry(license) }} days</strong>.</p>
+							<p>This license will auto-renew in <span class="text-green">{{ daysBeforeExpiry(license) }} days</span>.</p>
 						</template>
 						<template v-else>
 							<p>This license will lose access to updates in <span class="text-orange">{{ daysBeforeExpiry(license) }} days</span>.</p>
@@ -117,11 +117,11 @@
 				<h4>Auto-Renew</h4>
 
 				<template v-if="licenseDraft.autoRenew">
-					<p>Auto-renew is <span class="text-green">enabled</span> for this license.</p>
+					<p>Auto-renew is <strong>enabled</strong> for this license.</p>
 				</template>
 
 				<template v-else>
-					<p>Auto-renew is disabled for this license.</p>
+					<p>Auto-renew is <strong>disabled</strong> for this license.</p>
 				</template>
 
 				<lightswitch-field
