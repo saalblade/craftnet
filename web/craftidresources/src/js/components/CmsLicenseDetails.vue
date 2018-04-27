@@ -106,10 +106,27 @@
 					<p>License expired.</p>
 				</template>
 
+				<h5>Renew License</h5>
+				<select-field v-model="renew" :options="renewOptions" />
+				<a href="#" class="btn btn-primary">Renew</a>
+			</div>
+		</div>
+
+		<div class="card mb-3">
+			<div class="card-body">
+				<h4>Auto-Renew</h4>
+
+				<template v-if="licenseDraft.autoRenew">
+					<p>Auto-renew is <span class="text-green">enabled</span> for this license.</p>
+					<p>Next auto-renewal: <strong>{{ license.expiresOn.date|moment("L") }}</strong></p>
+				</template>
+
+				<template v-else>
+					<p>Auto-renew is disabled for this license.</p>
+				</template>
+
 				<lightswitch-field
 						id="auto-renew"
-						label="Auto-Renew"
-						instructions="Automatically renew this license when it expires."
 						@change="saveAutoRenew"
 						:checked.sync="licenseDraft.autoRenew"
 				/>
@@ -122,8 +139,8 @@
     import {mapGetters} from 'vuex'
     import TextareaField from '../components/fields/TextareaField'
     import TextField from '../components/fields/TextField'
-    import LightswitchInput from '../components/inputs/LightswitchInput'
     import LightswitchField from '../components/fields/LightswitchField'
+    import SelectField from '../components/fields/SelectField'
 
     export default {
 
@@ -139,14 +156,15 @@
 				notesEditing: false,
 				notesLoading: false,
 				notesValidates: false,
+				renew: 1,
             }
         },
 
         components: {
             TextareaField,
             TextField,
-            LightswitchInput,
             LightswitchField,
+            SelectField,
         },
 
         computed: {
@@ -180,6 +198,29 @@
 
 			downloadLicenseUrl() {
                 return Craft.actionUrl + '/craftnet/id/cms-licenses/download&id=' + this.license.id;
+			},
+
+			renewOptions() {
+                let options = [];
+				const edition = this.license.editionDetails
+				const renewalPrice = edition.renewalPrice
+
+                for (let i = 1; i <= 5; i++) {
+					const price = renewalPrice * i
+
+                    let label = i + " year of updates - " + this.$options.filters.currency(price);
+
+                    if(i > 1) {
+                        label = i + " years of updates - " + this.$options.filters.currency(price);
+					}
+
+                	options.push({
+						label: label,
+						value: i,
+					})
+				}
+
+                return options;
 			}
 
         },

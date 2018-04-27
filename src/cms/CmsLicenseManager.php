@@ -473,6 +473,7 @@ class CmsLicenseManager extends Component
         // History
 
         $license['history'] = $this->getHistory($result->id);
+        $license['editionDetails'] = CmsEdition::findOne($result->editionId);
 
 
         // Plugin licenses
