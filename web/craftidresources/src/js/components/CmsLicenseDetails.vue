@@ -201,13 +201,10 @@
 				const renewalPrice = edition.renewalPrice
 
                 for (let i = 1; i <= 5; i++) {
+					const date = this.$moment().add(i, 'year')
+                    const formattedDate = this.$moment(date).format('l')
 					const price = renewalPrice * i
-
-                    let label = i + " year of updates - " + this.$options.filters.currency(price);
-
-                    if(i > 1) {
-                        label = i + " years of updates - " + this.$options.filters.currency(price);
-					}
+                    const label = "Extend updates until " + formattedDate + " - " + this.$options.filters.currency(price);
 
                 	options.push({
 						label: label,
