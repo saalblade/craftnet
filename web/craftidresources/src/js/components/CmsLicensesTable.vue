@@ -28,7 +28,7 @@
 					<td>{{ license.domain }}</td>
 					<td>
 						<template v-if="license.expiresOn">
-							<template v-if="daysBeforeExpiry(license) > 0">
+							<template v-if="!license.expired">
 								<template v-if="expiresSoon(license)">
 									<span class="text-orange">{{ license.expiresOn.date|moment("L") }}</span>
 								</template>
@@ -63,7 +63,6 @@
 
             ...mapGetters({
                 expiresSoon: 'expiresSoon',
-                daysBeforeExpiry: 'daysBeforeExpiry',
             }),
 
         }

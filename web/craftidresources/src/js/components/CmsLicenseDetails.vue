@@ -84,13 +84,13 @@
 			<div class="card-body">
 				<h4>Updates</h4>
 
-				<template v-if="expiresIn > 0">
+				<template v-if="!license.expired">
 					<template v-if="expiresSoon(license)">
 						<template v-if="licenseDraft.autoRenew">
-							<p>This license will auto-renew in <strong>{{ expiresIn }} days</strong>.</p>
+							<p>This license will auto-renew in <strong>{{ daysBeforeExpiry(license) }} days</strong>.</p>
 						</template>
 						<template v-else>
-							<p>This license will lose access to updates in <span class="text-orange">{{ expiresIn }} days</span>.</p>
+							<p>This license will lose access to updates in <span class="text-orange">{{ daysBeforeExpiry(license) }} days</span>.</p>
 						</template>
 					</template>
 					<template v-else>
@@ -172,10 +172,6 @@
                 expiresSoon: 'expiresSoon',
                 daysBeforeExpiry: 'daysBeforeExpiry',
             }),
-
-			expiresIn() {
-				return this.daysBeforeExpiry(this.license)
-			},
 
             canSave() {
                 if (this.license.domain != this.licenseDraft.domain) {
