@@ -118,7 +118,6 @@
 
 				<template v-if="licenseDraft.autoRenew">
 					<p>Auto-renew is <span class="text-green">enabled</span> for this license.</p>
-					<p>Next auto-renewal: <strong>{{ license.expiresOn.date|moment("L") }}</strong></p>
 				</template>
 
 				<template v-else>
