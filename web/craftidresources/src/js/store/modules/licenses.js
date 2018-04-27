@@ -269,14 +269,26 @@ const mutations = {
     [types.SAVE_CMS_LICENSE](state, {license}) {
         let stateLicense = state.cmsLicenses.find(l => l.key == license.key);
         for (let attribute in license) {
-            stateLicense[attribute] = license[attribute];
+            switch(attribute) {
+                case 'autoRenew':
+                    stateLicense[attribute] = license[attribute] === 1 || license[attribute] === '1' ? true : false
+                    break
+                default:
+                    stateLicense[attribute] = license[attribute];
+            }
         }
     },
 
     [types.SAVE_PLUGIN_LICENSE](state, {license}) {
         let stateLicense = state.pluginLicenses.find(l => l.key == license.key);
         for (let attribute in license) {
-            stateLicense[attribute] = license[attribute];
+            switch(attribute) {
+                case 'autoRenew':
+                    stateLicense[attribute] = license[attribute] === 1 || license[attribute] === '1' ? true : false
+                    break
+                default:
+                    stateLicense[attribute] = license[attribute];
+            }
         }
     },
 
