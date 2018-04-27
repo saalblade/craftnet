@@ -54,6 +54,10 @@ const getters = {
                 return false
             }
 
+            if (license.autoRenew) {
+                return false
+            }
+            
             return getters.expiresSoon(license)
         })
     },
@@ -61,6 +65,10 @@ const getters = {
     expiringPluginLicenses(state, getters) {
         return state.pluginLicenses.filter(license => {
             if (license.expired) {
+                return false
+            }
+
+            if (license.autoRenew) {
                 return false
             }
 
