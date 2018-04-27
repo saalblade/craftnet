@@ -11,7 +11,6 @@ Vue.use(Vuex)
 const state = {
     categories: [],
     countries: [],
-    renewLicensesTotal: 0,
 }
 
 /**
@@ -62,7 +61,6 @@ const actions = {
 const mutations = {
 
     [types.RECEIVE_CRAFT_ID_DATA](state, {response}) {
-        state.renewLicensesTotal = response.data.renewLicensesTotal
     },
 
     [types.RECEIVE_CATEGORIES](state, {categories}) {

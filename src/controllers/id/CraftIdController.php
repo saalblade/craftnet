@@ -90,7 +90,6 @@ class CraftIdController extends BaseController
             'plugins' => $this->_plugins($currentUser),
             'cmsLicenses' => $this->_cmsLicenses($currentUser),
             'pluginLicenses' => $this->_pluginLicenses($currentUser),
-            'renewLicensesTotal' => $this->_renewLicensesTotal($currentUser),
             'sales' => $this->_sales($currentUser),
             'upcomingInvoice' => $this->_upcomingInvoice(),
             'categories' => $this->_pluginCategories(),
@@ -136,19 +135,6 @@ class CraftIdController extends BaseController
     private function _pluginLicenses(User $user): array
     {
         return Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return int Total of licenses that need to be renewed.
-     */
-    private function _renewLicensesTotal(User $user): int
-    {
-        $cmsLicenses = Module::getInstance()->getCmsLicenseManager()->getRenewLicensesByOwner($user->id);
-        $pluginLicenses = Module::getInstance()->getPluginLicenseManager()->getRenewLicensesByOwner($user->id);
-
-        return count($cmsLicenses) + count($pluginLicenses);
     }
 
     /**
