@@ -8,10 +8,12 @@ use craft\elements\User;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craft\helpers\Json;
+use craft\helpers\StringHelper;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
 use craftnet\plugins\Plugin;
 use LayerShifter\TLDExtract\Extract;
+use LayerShifter\TLDExtract\IDN;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
@@ -67,6 +69,12 @@ class CmsLicenseManager extends Component
      */
     public function normalizeDomain(string $url)
     {
+        $isPunycoded = StringHelper::contains($url, 'xn--', false);
+
+        if ($isPunycoded) {
+            $url = (new IDN())->toUTF8($url);
+        }
+
         $result = (new Extract(null, null, Extract::MODE_ALLOW_ICANN))
             ->parse(mb_strtolower($url));
 
