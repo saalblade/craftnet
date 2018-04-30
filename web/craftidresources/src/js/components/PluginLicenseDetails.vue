@@ -96,16 +96,16 @@
 		<div class="card mb-3">
 			<div class="card-body">
 				<h4>Updates</h4>
-				<p>This plugin license will continue having access to updates until <strong :class="{'text-orange': expiresSoon}">{{ license.expiresOn.date|moment("L") }}</strong>.</p>
+				<license-update-message :license="license"></license-update-message>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
     import LightswitchField from '../components/fields/LightswitchField'
     import TextareaField from '../components/fields/TextareaField'
+    import LicenseUpdateMessage from '../components/LicenseUpdateMessage'
 
     export default {
 
@@ -128,15 +128,8 @@
         components: {
             LightswitchField,
             TextareaField,
+            LicenseUpdateMessage,
         },
-
-		computed: {
-
-            ...mapGetters({
-                expiresSoon: 'expiresSoon',
-            }),
-
-		},
 
         methods: {
 
