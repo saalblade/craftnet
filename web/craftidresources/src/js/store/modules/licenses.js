@@ -24,6 +24,10 @@ const getters = {
 
     expiresSoon(state) {
         return license => {
+            if(!license.expiresOn) {
+                return false
+            }
+
             const today = new Date()
             let expiryDate = new Date()
             expiryDate.setDate(today.getDate() + 45)

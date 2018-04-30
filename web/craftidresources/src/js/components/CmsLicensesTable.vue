@@ -27,7 +27,7 @@
 					<td>{{ license.edition }}</td>
 					<td>{{ license.domain }}</td>
 					<td>
-						<template v-if="license.expiresOn">
+						<template v-if="license.expirable && license.expiresOn">
 							<template v-if="!license.expired">
 								<template v-if="expiresSoon(license)">
 									<span class="text-orange">{{ license.expiresOn.date|moment("L") }}</span>
@@ -40,10 +40,15 @@
 								<span class="text-grey-dark">Expired</span>
 							</template>
 						</template>
+						<template v-else>
+							Forever
+						</template>
 					</td>
 					<td>
-						<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
-						<span v-else="" class="badge">Disabled</span>
+						<template v-if="license.expirable && license.expiresOn">
+							<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
+							<span v-else="" class="badge">Disabled</span>
+						</template>
 					</td>
 				</tr>
 			</template>

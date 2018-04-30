@@ -84,35 +84,80 @@
 			<div class="card-body">
 				<h4>Updates</h4>
 
-				<template v-if="!license.expired">
-					<template v-if="expiresSoon(license)">
-						<template v-if="licenseDraft.autoRenew">
-							<p>This license will auto-renew in <span class="text-green">{{ daysBeforeExpiry(license) }} days</span>.</p>
+				<template v-if="license.expirable && license.expiresOn">
+					<template v-if="!license.expired">
+						<template v-if="expiresSoon(license)">
+							<template v-if="licenseDraft.autoRenew">
+								<p>This license will auto-renew in <span class="text-green">{{ daysBeforeExpiry(license) }} days</span>.</p>
+							</template>
+							<template v-else>
+								<p>This license will lose access to updates in <span class="text-orange">{{ daysBeforeExpiry(license) }} days</span>.</p>
+							</template>
 						</template>
 						<template v-else>
-							<p>This license will lose access to updates in <span class="text-orange">{{ daysBeforeExpiry(license) }} days</span>.</p>
+							<template v-if="licenseDraft.autoRenew">
+								<p>This license will auto-renew on <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
+							</template>
+							<template v-else>
+								<p>This license will continue having access to updates until <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
+							</template>
 						</template>
 					</template>
 					<template v-else>
-						<template v-if="licenseDraft.autoRenew">
-							<p>This license will auto-renew on <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
-						</template>
-						<template v-else>
-							<p>This license will continue having access to updates until <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
-						</template>
+						<p>This license has expired and doesn’t have access to updates anymore.</p>
 					</template>
+
+					<div>
+						<h5>Renew Licenses</h5>
+
+						<select-field v-model="renew" :options="renewOptions" />
+
+						<table class="table mb-2">
+							<thead>
+							<tr>
+								<td><input type="checkbox"></td>
+								<th>Item</th>
+								<th>Renewal Date</th>
+								<th>New Renewal Date</th>
+								<th>Renewal Price</th>
+								<th>Subtotal</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td><input type="checkbox"></td>
+								<td>Craft {{ license.editionDetails.name }}</td>
+								<td>{{ license.expiresOn.date|moment('L') }}</td>
+								<td>{{ newExpiresOn|moment('L') }}</td>
+								<td>{{ license.editionDetails.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(license.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
+								<td>{{ newExpiresOn.diff(license.expiresOn.date, 'years', true) * license.editionDetails.renewalPrice|currency }}</td>
+							</tr>
+							<tr v-for="renewableLicense in renewableLicenses">
+								<td><input type="checkbox"></td>
+								<td>{{ renewableLicense.plugin.name }}</td>
+								<td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
+								<td>{{ newExpiresOn|moment('L') }}</td>
+								<td>{{ renewableLicense.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
+								<td>{{ newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice|currency }}</td>
+							</tr>
+							<tr>
+								<th></th>
+								<th colspan="4" class="text-right">Total</th>
+								<th>{{ renewableLicensesTotal|currency }}</th>
+							</tr>
+							</tbody>
+						</table>
+
+						<a href="#" class="btn btn-primary">Renew Your Licenses</a>
+					</div>
 				</template>
 				<template v-else>
-					<p>This license has expired and doesn’t have access to updates anymore.</p>
+					<p>This license will always have access to updates.</p>
 				</template>
-
-				<h5>Renew License</h5>
-				<select-field v-model="renew" :options="renewOptions" />
-				<a href="#" class="btn btn-primary">Renew</a>
 			</div>
 		</div>
 
-		<div class="card mb-3">
+		<div v-if="license.expirable && license.expiresOn" class="card mb-3">
 			<div class="card-body">
 				<h4>Auto-Renew</h4>
 
@@ -135,7 +180,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import TextareaField from '../components/fields/TextareaField'
     import TextField from '../components/fields/TextField'
     import LightswitchField from '../components/fields/LightswitchField'
@@ -167,6 +212,10 @@
         },
 
         computed: {
+
+            ...mapState({
+                pluginLicenses: state => state.licenses.pluginLicenses,
+            }),
 
             ...mapGetters({
                 expiresSoon: 'expiresSoon',
@@ -201,10 +250,10 @@
 				const renewalPrice = edition.renewalPrice
 
                 for (let i = 1; i <= 5; i++) {
-					const date = this.$moment().add(i, 'year')
-                    const formattedDate = this.$moment(date).format('l')
+					const date = this.$moment(this.license.expiresOn.date).add(i, 'year')
+                    const formattedDate = this.$moment(date).format('L')
 					const price = renewalPrice * i
-                    const label = "Extend updates until " + formattedDate + " - " + this.$options.filters.currency(price);
+                    const label = "Extend updates until " + formattedDate
 
                 	options.push({
 						label: label,
@@ -213,6 +262,37 @@
 				}
 
                 return options;
+			},
+
+			renewableLicenses() {
+                const renewablePluginLicenses = this.license.pluginLicenses.filter(license => !!license.key)
+				const cmsExpiresOn = this.$moment(this.license.expiresOn.date)
+				let cmsNewExpiresOn = cmsExpiresOn.add(this.renew, 'years')
+
+				return this.pluginLicenses.filter(license => {
+				    const pluginExpiresOn = this.$moment(license.expiresOn.date)
+				    if(pluginExpiresOn > cmsNewExpiresOn) {
+				        return false
+					}
+				    return renewablePluginLicenses.find(renewablePluginLicense => renewablePluginLicense.id === license.id)
+				})
+			},
+
+			newExpiresOn() {
+                const cmsExpiresOn = this.$moment(this.license.expiresOn.date)
+                return cmsExpiresOn.add(this.renew, 'years')
+			},
+
+			renewableLicensesTotal() {
+                let total = 0;
+
+                total += this.newExpiresOn.diff(this.license.expiresOn.date, 'years', true) * this.license.editionDetails.renewalPrice
+
+                this.renewableLicenses.forEach(function(renewableLicense) {
+                    total += this.newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice
+				}.bind(this))
+
+				return total;
 			}
 
         },
