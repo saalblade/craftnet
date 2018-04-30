@@ -99,92 +99,68 @@
 				/>
 			</div>
 		</div>
-		
+
 		<div class="card mb-3">
 			<div class="card-body">
 				<h4>Updates</h4>
 
-				<template v-if="license.expirable && license.expiresOn">
-					<template v-if="!license.expired">
-						<template v-if="expiresSoon(license)">
-							<template v-if="licenseDraft.autoRenew">
-								<p>This license will auto-renew in <span class="text-green">{{ daysBeforeExpiry(license) }} days</span>.</p>
-							</template>
-							<template v-else>
-								<p>This license will lose access to updates in <span class="text-orange">{{ daysBeforeExpiry(license) }} days</span>.</p>
-							</template>
-						</template>
-						<template v-else>
-							<template v-if="licenseDraft.autoRenew">
-								<p>This license will auto-renew on <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
-							</template>
-							<template v-else>
-								<p>This license will continue having access to updates until <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
-							</template>
-						</template>
-					</template>
-					<template v-else>
-						<p>This license has expired and doesn’t have access to updates anymore.</p>
-					</template>
+				<license-update-message :license="license"></license-update-message>
 
-					<div>
-						<h5>Renew Licenses</h5>
+				<div v-if="license.expirable && license.expiresOn">
+					<h5>Renew Licenses</h5>
 
-						<select-field v-model="renew" :options="renewOptions" />
+					<select-field v-model="renew" :options="renewOptions" />
 
-						<table class="table mb-2">
-							<thead>
-							<tr>
-								<td><input type="checkbox"></td>
-								<th>Item</th>
-								<th>Renewal Date</th>
-								<th>New Renewal Date</th>
-								<th>Renewal Price</th>
-								<th>Subtotal</th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr>
-								<td><input type="checkbox"></td>
-								<td>Craft {{ license.editionDetails.name }}</td>
-								<td>{{ license.expiresOn.date|moment('L') }}</td>
-								<td>{{ newExpiresOn|moment('L') }}</td>
-								<td>{{ license.editionDetails.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(license.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
-								<td>{{ newExpiresOn.diff(license.expiresOn.date, 'years', true) * license.editionDetails.renewalPrice|currency }}</td>
-							</tr>
-							<tr v-for="renewableLicense in renewableLicenses">
-								<td><input type="checkbox"></td>
-								<td>{{ renewableLicense.plugin.name }}</td>
-								<td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
-								<td>{{ newExpiresOn|moment('L') }}</td>
-								<td>{{ renewableLicense.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
-								<td>{{ newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice|currency }}</td>
-							</tr>
-							<tr>
-								<th></th>
-								<th colspan="4" class="text-right">Total</th>
-								<th>{{ renewableLicensesTotal|currency }}</th>
-							</tr>
-							</tbody>
-						</table>
+					<table class="table mb-2">
+						<thead>
+						<tr>
+							<td><input type="checkbox"></td>
+							<th>Item</th>
+							<th>Renewal Date</th>
+							<th>New Renewal Date</th>
+							<th>Renewal Price</th>
+							<th>Subtotal</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>Craft {{ license.editionDetails.name }}</td>
+							<td>{{ license.expiresOn.date|moment('L') }}</td>
+							<td>{{ newExpiresOn|moment('L') }}</td>
+							<td>{{ license.editionDetails.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(license.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
+							<td>{{ newExpiresOn.diff(license.expiresOn.date, 'years', true) * license.editionDetails.renewalPrice|currency }}</td>
+						</tr>
+						<tr v-for="renewableLicense in renewableLicenses">
+							<td><input type="checkbox"></td>
+							<td>{{ renewableLicense.plugin.name }}</td>
+							<td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
+							<td>{{ newExpiresOn|moment('L') }}</td>
+							<td>{{ renewableLicense.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
+							<td>{{ newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice|currency }}</td>
+						</tr>
+						<tr>
+							<th></th>
+							<th colspan="4" class="text-right">Total</th>
+							<th>{{ renewableLicensesTotal|currency }}</th>
+						</tr>
+						</tbody>
+					</table>
 
-						<a href="#" class="btn btn-primary">Renew Your Licenses</a>
-					</div>
-				</template>
-				<template v-else>
-					<p>This license will always have access to updates.</p>
-				</template>
+					<a href="#" class="btn btn-primary">Renew Your Licenses</a>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import TextareaField from '../components/fields/TextareaField'
     import TextField from '../components/fields/TextField'
     import LightswitchField from '../components/fields/LightswitchField'
     import SelectField from '../components/fields/SelectField'
+    import LicenseUpdateMessage from '../components/LicenseUpdateMessage'
 
     export default {
 
@@ -209,17 +185,13 @@
             TextField,
             LightswitchField,
             SelectField,
+            LicenseUpdateMessage,
         },
 
         computed: {
 
             ...mapState({
                 pluginLicenses: state => state.licenses.pluginLicenses,
-            }),
-
-            ...mapGetters({
-                expiresSoon: 'expiresSoon',
-                daysBeforeExpiry: 'daysBeforeExpiry',
             }),
 
             canSave() {
