@@ -73,19 +73,30 @@
 				</template>
 			</div>
 		</div>
+		<div v-if="license.expirable && license.expiresOn" class="card mb-3">
+			<div class="card-body">
+				<h4>Auto-Renew</h4>
+
+				<template v-if="licenseDraft.autoRenew">
+					<p>Auto-renew is <strong>enabled</strong> for this license.</p>
+				</template>
+
+				<template v-else>
+					<p>Auto-renew is <strong>disabled</strong> for this license.</p>
+				</template>
+
+				<lightswitch-field
+						id="auto-renew"
+						@change="saveAutoRenew"
+						:checked.sync="licenseDraft.autoRenew"
+				/>
+			</div>
+		</div>
 
 		<div class="card mb-3">
 			<div class="card-body">
 				<h4>Updates</h4>
 				<p>This plugin license will continue having access to updates until <strong :class="{'text-orange': expiresSoon}">{{ license.expiresOn.date|moment("L") }}</strong>.</p>
-
-				<lightswitch-field
-						id="auto-renew"
-						label="Auto-Renew"
-						instructions="Automatically renew this license when it expires."
-						@change="saveAutoRenew"
-						:checked.sync="licenseDraft.autoRenew"
-				/>
 			</div>
 		</div>
 	</div>
