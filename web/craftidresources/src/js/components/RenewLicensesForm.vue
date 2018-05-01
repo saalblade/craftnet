@@ -61,7 +61,7 @@
             }),
 
             renewOptions() {
-                let options = [];
+                let options = []
                 const edition = this.license.editionDetails
                 const renewalPrice = edition.renewalPrice
 
@@ -77,7 +77,7 @@
                     })
                 }
 
-                return options;
+                return options
             },
 
             renewableLicenses() {
@@ -124,13 +124,13 @@
             },
 
             renewableLicensesTotal() {
-                let total = 0;
-                
+                let total = 0
+
                 this.renewableLicenses.forEach(function(renewableLicense) {
                     total += this.newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice
                 }.bind(this))
 
-                return total;
+                return total
             }
         }
 
