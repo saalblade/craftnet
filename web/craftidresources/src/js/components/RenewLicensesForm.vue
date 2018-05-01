@@ -125,9 +125,7 @@
 
             renewableLicensesTotal() {
                 let total = 0;
-
-                total += this.newExpiresOn.diff(this.license.expiresOn.date, 'years', true) * this.license.editionDetails.renewalPrice
-
+                
                 this.renewableLicenses.forEach(function(renewableLicense) {
                     total += this.newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice
                 }.bind(this))
