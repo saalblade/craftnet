@@ -7,7 +7,7 @@
         <table class="table mb-2">
             <thead>
             <tr>
-                <td><input type="checkbox"></td>
+                <td><input type="checkbox" @change="checkAll"></td>
                 <th>Item</th>
                 <th>Renewal Date</th>
                 <th>New Renewal Date</th>
@@ -16,8 +16,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="renewableLicense in renewableLicenses">
-                <td><input type="checkbox"></td>
+            <tr v-for="renewableLicense, key in renewableLicenses">
+                <td><input type="checkbox" :value="key" v-model="checkedLicenses"></td>
                 <td>{{ renewableLicense.description }}</td>
                 <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
                 <td>{{ newExpiresOn|moment('L') }}</td>
@@ -47,6 +47,7 @@
         data() {
             return {
                 renew: 1,
+                checkedLicenses: []
             }
         },
 
@@ -126,11 +127,31 @@
             renewableLicensesTotal() {
                 let total = 0
 
-                this.renewableLicenses.forEach(function(renewableLicense) {
-                    total += this.newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice
+                this.renewableLicenses.forEach(function(renewableLicense, key) {
+                    let isChecked = this.checkedLicenses.find(checkedKey => checkedKey === key)
+
+                    isChecked = typeof(isChecked) !== 'undefined' ? true : false
+
+                    if (isChecked) {
+                        total += this.newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice
+                    }
                 }.bind(this))
 
                 return total
+            }
+        },
+
+        methods: {
+            checkAll($event) {
+                const checked = $event.target.checked
+
+                this.checkedLicenses = []
+
+                if(checked) {
+                    this.renewableLicenses.forEach(function(renewableLicense, key) {
+                        this.checkedLicenses.push(key)
+                    }.bind(this))
+                }
             }
         }
 
