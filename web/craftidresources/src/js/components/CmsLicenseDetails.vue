@@ -103,9 +103,7 @@
 		<div class="card mb-3">
 			<div class="card-body">
 				<h4>Updates</h4>
-
-				<license-update-message :license="license"></license-update-message>
-
+				<license-update-message :license="license" />
 				<renew-licenses-form :license="license" />
 			</div>
 		</div>
