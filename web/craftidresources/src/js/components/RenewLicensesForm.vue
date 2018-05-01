@@ -16,17 +16,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>Craft {{ license.editionDetails.name }}</td>
-                <td>{{ license.expiresOn.date|moment('L') }}</td>
-                <td>{{ newExpiresOn|moment('L') }}</td>
-                <td>{{ license.editionDetails.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(license.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
-                <td>{{ newExpiresOn.diff(license.expiresOn.date, 'years', true) * license.editionDetails.renewalPrice|currency }}</td>
-            </tr>
             <tr v-for="renewableLicense in renewableLicenses">
                 <td><input type="checkbox"></td>
-                <td>{{ renewableLicense.plugin.name }}</td>
+                <td>{{ renewableLicense.description }}</td>
                 <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
                 <td>{{ newExpiresOn|moment('L') }}</td>
                 <td>{{ renewableLicense.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
@@ -89,17 +81,41 @@
             },
 
             renewableLicenses() {
-                const renewablePluginLicenses = this.license.pluginLicenses.filter(license => !!license.key)
+                let renewableLicenses = []
+
+
+                // CMS license
+
+                renewableLicenses.push({
+                    description: 'Craft ' + this.license.editionDetails.name,
+                    expiresOn: this.license.expiresOn,
+                    edition: this.license.editionDetails,
+                })
+
+
+                // Plugin licenses
+
+                let renewablePluginLicenses = this.license.pluginLicenses.filter(license => !!license.key)
                 const cmsExpiresOn = this.$moment(this.license.expiresOn.date)
                 let cmsNewExpiresOn = cmsExpiresOn.add(this.renew, 'years')
 
-                return this.pluginLicenses.filter(license => {
+                renewablePluginLicenses = this.pluginLicenses.filter(license => {
                     const pluginExpiresOn = this.$moment(license.expiresOn.date)
                     if(pluginExpiresOn > cmsNewExpiresOn) {
                         return false
                     }
                     return renewablePluginLicenses.find(renewablePluginLicense => renewablePluginLicense.id === license.id)
                 })
+
+                renewablePluginLicenses.forEach(function(renewablePluginLicense) {
+                    renewableLicenses.push({
+                        description: renewablePluginLicense.plugin.name,
+                        expiresOn: renewablePluginLicense.expiresOn,
+                        edition: renewablePluginLicense.edition,
+                    })
+                }.bind(this))
+
+                return renewableLicenses
             },
 
             newExpiresOn() {
