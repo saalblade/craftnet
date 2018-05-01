@@ -97,6 +97,33 @@
 			<div class="card-body">
 				<h4>Updates</h4>
 				<license-update-message :license="license"></license-update-message>
+
+				<h5>Renew License</h5>
+
+				<select-field v-model="renew" :options="renewOptions" />
+
+				<table class="table mb-2">
+					<thead>
+					<tr>
+						<th>Item</th>
+						<th>Renewal Date</th>
+						<th>New Renewal Date</th>
+						<th>Renewal Price</th>
+						<th>Subtotal</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>{{ license.plugin.name }}</td>
+						<td>{{ license.expiresOn.date|moment('L') }}</td>
+						<td>{{ newExpiresOn|moment('L') }}</td>
+						<td>{{ license.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(license.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
+						<td>{{ newExpiresOn.diff(license.expiresOn.date, 'years', true) * license.edition.renewalPrice|currency }}</td>
+					</tr>
+					</tbody>
+				</table>
+
+				<a href="#" class="btn btn-primary">Renew Your License</a>
 			</div>
 		</div>
 	</div>
@@ -105,6 +132,7 @@
 <script>
     import LightswitchField from '../components/fields/LightswitchField'
     import TextareaField from '../components/fields/TextareaField'
+    import SelectField from '../components/fields/SelectField'
     import LicenseUpdateMessage from '../components/LicenseUpdateMessage'
 
     export default {
@@ -122,14 +150,41 @@
                 notesEditing: false,
                 notesLoading: false,
                 notesValidates: false,
+				renew: 1,
             }
         },
 
         components: {
             LightswitchField,
             TextareaField,
+            SelectField,
             LicenseUpdateMessage,
         },
+
+		computed: {
+
+            renewOptions() {
+                let options = [];
+
+                for (let i = 1; i <= 5; i++) {
+                    const date = this.$moment(this.license.expiresOn.date).add(i, 'year')
+                    const formattedDate = this.$moment(date).format('L')
+                    const label = "Extend updates until " + formattedDate
+
+                    options.push({
+                        label: label,
+                        value: i,
+                    })
+                }
+
+                return options;
+            },
+
+            newExpiresOn() {
+                const expiresOn = this.$moment(this.license.expiresOn.date)
+                return expiresOn.add(this.renew, 'years')
+            },
+		},
 
         methods: {
 
