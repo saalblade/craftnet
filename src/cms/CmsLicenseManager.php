@@ -484,9 +484,8 @@ class CmsLicenseManager extends Component
             if ($pluginLicensesResult->ownerId === $owner->id) {
                 $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key', 'expiresOn', 'autoRenew']);
             } else {
-                $pluginLicense = [
-                    'shortKey' => $pluginLicensesResult->getShortKey(),
-                ];
+                $pluginLicense = $pluginLicensesResult->getAttributes(['expiresOn', 'autoRenew']);
+                $pluginLicense['shortKey'] = $pluginLicensesResult->getShortKey();
             }
 
             $plugin = null;
