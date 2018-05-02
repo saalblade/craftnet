@@ -113,7 +113,7 @@ class PluginLicensesController extends BaseApiController
         if (
             $expirable &&
             isset($payload->expiresOn) &&
-            ($expiresOn = DateTimeHelper::toDateTime($expiresOn)) === false
+            ($expiresOn = DateTimeHelper::toDateTime($payload->expiresOn)) === false
         ) {
             $errors[] = [
                 'param' => 'expiresOn',
