@@ -214,6 +214,7 @@ class PluginLicenseManager extends Component
     {
         $results = $this->_createLicenseQuery()
             ->where(['cmsLicenseId' => $cmsLicenseId])
+            ->orderBy(['l.pluginHandle' => SORT_ASC])
             ->all();
 
         $licenses = [];

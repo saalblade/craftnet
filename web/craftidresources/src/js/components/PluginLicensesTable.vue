@@ -49,7 +49,14 @@
 						</template>
 					</td>
 					<td>
-						<template v-if="typeof(license.autoRenew) !== 'undefined'">
+						<template v-if="license.key && autoRenewSwitch">
+							<lightswitch-field
+									:id="'auto-renew-'+license.id"
+									@change="savePluginLicenseAutoRenew(license, $event)"
+									:checked.sync="pluginLicensesAutoRenew[license.id]"
+							/>
+						</template>
+						<template v-else>
 							<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
 							<span v-else="" class="badge">Disabled</span>
 						</template>
@@ -64,10 +71,21 @@
 
 <script>
     import {mapGetters} from 'vuex'
+    import LightswitchField from './fields/LightswitchField'
 
     export default {
 
-        props: ['excludeCmsLicenseColumn', 'licenses'],
+        data() {
+        	return {
+        	    pluginLicensesAutoRenew: {},
+			}
+		},
+
+        props: ['licenses', 'excludeCmsLicenseColumn', 'autoRenewSwitch'],
+
+		components: {
+        	LightswitchField,
+		},
 
 		computed: {
 
@@ -75,6 +93,42 @@
                 expiresSoon: 'expiresSoon',
             }),
 
+		},
+
+		methods: {
+            savePluginLicenseAutoRenew(license, $event) {
+                const autoRenew = $event.target.checked
+                const data = {
+					pluginHandle: license.plugin.handle,
+					key: license.key,
+					autoRenew: autoRenew ? 1 : 0,
+				}
+
+                this.$store.dispatch('savePluginLicense', data)
+					.then(response => {
+						if (autoRenew) {
+							this.$root.displayNotice('Auto renew enabled.');
+						} else {
+							this.$root.displayNotice('Auto renew disabled.');
+						}
+
+						this.$store.dispatch('getCmsLicenses');
+					}).catch(response => {
+						this.$root.displayError('Couldn’t save license.');
+						this.errors = response.errors;
+					});
+			}
+		},
+
+		mounted() {
+
+            this.pluginLicensesAutoRenew = {};
+			console.log('-----------');
+            this.licenses.forEach(function(license) {
+                console.log('license.autoRenew', license.autoRenew);
+                console.log('----');
+                this.pluginLicensesAutoRenew[license.id] = license.autoRenew
+			}.bind(this))
 		}
 
     }

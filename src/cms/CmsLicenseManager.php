@@ -500,7 +500,7 @@ class CmsLicenseManager extends Component
 
             if ($pluginLicensesResult->pluginId) {
                 $pluginResult = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
-                $plugin = $pluginResult->getAttributes(['name']);
+                $plugin = $pluginResult->getAttributes(['name', 'handle']);
             }
 
             $pluginLicense['plugin'] = $plugin;
