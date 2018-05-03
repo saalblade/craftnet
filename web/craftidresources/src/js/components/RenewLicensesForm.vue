@@ -2,43 +2,85 @@
     <div v-if="license.expirable && license.expiresOn">
         <h5>Renew Licenses</h5>
 
-        <select-field v-model="renew" :options="renewOptions" />
+<!--        <ul>
+            <li>
+                <template v-if="step === 'cart'">Select licenses to renew</template>
+                <a v-else @click="step = 'cart'" href="#">Select licenses to renew</a>
+            </li>
+            <li>
+                Payment
+            </li>
+        </ul>-->
 
-        <table class="table mb-2">
-            <thead>
-            <tr>
-                <td><input type="checkbox" @change="checkAll"></td>
-                <th>Item</th>
-                <th>Renewal Date</th>
-                <th>New Renewal Date</th>
-                <th>Renewal Price</th>
-                <th>Subtotal</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="renewableLicense, key in renewableLicenses">
-                <td><input type="checkbox" :value="key" v-model="checkedLicenses"></td>
-                <td>{{ renewableLicense.description }}</td>
-                <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
-                <td>{{ newExpiresOn|moment('L') }}</td>
-                <td>{{ renewableLicense.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
-                <td>{{ newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice|currency }}</td>
-            </tr>
-            <tr>
-                <th></th>
-                <th colspan="4" class="text-right">Total</th>
-                <th>{{ renewableLicensesTotal|currency }}</th>
-            </tr>
-            </tbody>
-        </table>
+        <template v-if="step === 'cart'">
+            <select-field v-model="renew" :options="renewOptions" />
 
-        <a href="#" class="btn btn-primary">Renew Your Licenses</a>
+            <table class="table mb-2">
+                <thead>
+                <tr>
+                    <td><input type="checkbox" @change="checkAll"></td>
+                    <th>Item</th>
+                    <th>Renewal Date</th>
+                    <th>New Renewal Date</th>
+                    <th>Renewal Price</th>
+                    <th>Subtotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="renewableLicense, key in renewableLicenses">
+                    <td><input type="checkbox" :value="key" v-model="checkedLicenses"></td>
+                    <td>{{ renewableLicense.description }}</td>
+                    <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
+                    <td>{{ newExpiresOn|moment('L') }}</td>
+                    <td>{{ renewableLicense.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
+                    <td>{{ newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice|currency }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th colspan="4" class="text-right">Total</th>
+                    <th>{{ renewableLicensesTotal|currency }}</th>
+                </tr>
+                </tbody>
+            </table>
+
+            <button @click="step = 'payment'" class="btn btn-primary" :disabled="renewableLicensesTotal === 0" :class="{disabled: renewableLicensesTotal === 0}">Renew Your Licenses</button>
+        </template>
+
+        <template v-if="step === 'payment'">
+            <div class="md:flex -mx-4">
+                <div class="md:w-1/2 px-4">
+                    <h6>Payment Method</h6>
+                    <text-field placeholder="Card Number" id="card-number" />
+                    <text-field placeholder="Card Expiry" id="card-expiry" />
+                    <text-field placeholder="Card CVC" id="card-cvc" />
+
+                    <h6>Coupon Code</h6>
+                    <text-field placeholder="XXXXXXX" id="coupon-code" size="12" />
+                </div>
+                <div class="md:w-1/2 px-4">
+                    <h6>Billing Informations</h6>
+                    <text-field placeholder="First Name" id="first-name" />
+                    <text-field placeholder="Last Name" id="last-name" />
+                    <text-field placeholder="Business Name" id="business-name" />
+                    <text-field placeholder="Business Tax ID" id="business-tax-id" />
+                    <text-field placeholder="Address 1" id="address-1" />
+                    <text-field placeholder="Address 2" id="address-2" />
+                    <text-field placeholder="Zip Code" id="zip-code" />
+                    <text-field placeholder="City" id="city" />
+                    <text-field placeholder="Country" id="country" />
+                </div>
+            </div>
+
+            <a @click="step = 'cart'" href="#" class="btn btn-secondary">Back</a>
+            <a @click="step = 'thank-you'" href="#" class="btn btn-primary">Pay {{ renewableLicensesTotal|currency }}</a>
+        </template>
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
     import SelectField from '../components/fields/SelectField'
+    import TextField from '../components/fields/TextField'
 
     export default {
 
@@ -47,12 +89,14 @@
         data() {
             return {
                 renew: 1,
-                checkedLicenses: []
+                checkedLicenses: [],
+                step: 'cart',
             }
         },
 
         components: {
             SelectField,
+            TextField,
         },
 
         computed: {

@@ -104,6 +104,7 @@
 			<div class="card-body">
 				<h4>Updates</h4>
 				<license-update-message :license="license" />
+				<hr>
 				<renew-licenses-form :license="license" />
 			</div>
 		</div>
