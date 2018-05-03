@@ -76,57 +76,57 @@
     export default {
 
         data() {
-        	return {
-        	    pluginLicensesAutoRenew: {},
-			}
-		},
+            return {
+                pluginLicensesAutoRenew: {},
+            }
+        },
 
         props: ['licenses', 'excludeCmsLicenseColumn', 'autoRenewSwitch'],
 
-		components: {
-        	LightswitchField,
-		},
+        components: {
+            LightswitchField,
+        },
 
-		computed: {
+        computed: {
 
             ...mapGetters({
                 expiresSoon: 'expiresSoon',
             }),
 
-		},
+        },
 
-		methods: {
+        methods: {
             savePluginLicenseAutoRenew(license, $event) {
                 const autoRenew = $event.target.checked
                 const data = {
-					pluginHandle: license.plugin.handle,
-					key: license.key,
-					autoRenew: autoRenew ? 1 : 0,
-				}
+                    pluginHandle: license.plugin.handle,
+                    key: license.key,
+                    autoRenew: autoRenew ? 1 : 0,
+                }
 
                 this.$store.dispatch('savePluginLicense', data)
-					.then(response => {
-						if (autoRenew) {
-							this.$root.displayNotice('Auto renew enabled.');
-						} else {
-							this.$root.displayNotice('Auto renew disabled.');
-						}
+                    .then(response => {
+                        if (autoRenew) {
+                            this.$root.displayNotice('Auto renew enabled.');
+                        } else {
+                            this.$root.displayNotice('Auto renew disabled.');
+                        }
 
-						this.$store.dispatch('getCmsLicenses');
-					}).catch(response => {
-						this.$root.displayError('Couldn’t save license.');
-						this.errors = response.errors;
-					});
-			}
-		},
+                        this.$store.dispatch('getCmsLicenses');
+                    }).catch(response => {
+                    this.$root.displayError('Couldn’t save license.');
+                    this.errors = response.errors;
+                });
+            }
+        },
 
-		mounted() {
+        mounted() {
             this.pluginLicensesAutoRenew = {};
-            
+
             this.licenses.forEach(function(license) {
                 this.pluginLicensesAutoRenew[license.id] = license.autoRenew
-			}.bind(this))
-		}
+            }.bind(this))
+        }
 
     }
 </script>
