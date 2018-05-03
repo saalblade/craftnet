@@ -7,6 +7,7 @@
 		@input="$emit('input', $event.target.value)"
 		autocomplete="off"
 		class="form-control"
+		:class="{'w-full': !size }"
 		ref="input"
 		type="password"/>
 </template>
@@ -14,7 +15,7 @@
 <script>
     export default {
 
-        props: ['id', 'placeholder', 'value', 'autofocus'],
+        props: ['id', 'placeholder', 'value', 'autofocus', 'size'],
 
         created() {
             this.$on('focus', function() {

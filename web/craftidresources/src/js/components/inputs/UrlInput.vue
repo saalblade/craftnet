@@ -8,6 +8,7 @@
 		@input="$emit('input', $event.target.value)"
 		autocomplete="off"
 		class="form-control"
+		:class="{'w-full': !size }"
 		ref="input"
 		type="url"/>
 </template>
@@ -15,7 +16,7 @@
 <script>
     export default {
 
-        props: ['id', 'placeholder', 'value', 'autofocus', 'disabled'],
+        props: ['id', 'placeholder', 'value', 'autofocus', 'disabled', 'size'],
 
         created() {
             this.$on('focus', function() {

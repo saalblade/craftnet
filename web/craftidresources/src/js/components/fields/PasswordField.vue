@@ -1,9 +1,14 @@
 <template>
 	<div class="form-group">
 		<label :id="id" v-if="label">{{ label }}</label>
-		<password-input ref="input" :id="id" :class="{'is-invalid': errors }"
-						:placeholder="placeholder" :value="value"
-						@input="$emit('input', $event)" :autofocus="autofocus"/>
+		<password-input
+				ref="input"
+				:id="id"
+				:class="{'is-invalid': errors }"
+				:placeholder="placeholder" :value="value"
+				@input="$emit('input', $event)"
+				:size="size"
+				:autofocus="autofocus" />
 		<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
 	</div>
 </template>

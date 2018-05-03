@@ -13,6 +13,7 @@
 			:id="id"
 			:placeholder="placeholder" :value="value"
 			@input="$emit('input', $event)"
+			:size="size"
 			ref="input"/>
 
 		<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
@@ -24,7 +25,7 @@
 
     export default {
 
-        props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors', 'disabled', 'instructions'],
+        props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors', 'disabled', 'instructions', 'size'],
 
         components: {
             UrlInput,
