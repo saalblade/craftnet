@@ -8,11 +8,13 @@
 		@input="$emit('input', $event.target.value)"
 		autocomplete="off"
 		class="form-control"
+		:class="{'w-full': !size }"
 		ref="input"
 		v-mask="mask"
 		:autocapitalize="autocapitalize"
 		:spellcheck="spellcheck"
 		:readonly="readonly"
+		:size="size"
 		type="text"/>
 </template>
 
@@ -21,7 +23,7 @@
 
     export default {
 
-        props: ['id', 'placeholder', 'value', 'autofocus', 'disabled', 'mask', 'autocapitalize', 'spellcheck', "readonly"],
+        props: ['id', 'placeholder', 'value', 'autofocus', 'disabled', 'mask', 'autocapitalize', 'spellcheck', 'readonly', 'size'],
 
         created() {
             this.$on('focus', function () {

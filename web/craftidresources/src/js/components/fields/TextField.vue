@@ -18,6 +18,7 @@
 			:autocapitalize="autocapitalize"
 			:spellcheck="spellcheck"
 			:readonly="readonly"
+			:size="size"
 			ref="input"/>
 
 		<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
@@ -29,7 +30,7 @@
 
     export default {
 
-        props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors', 'disabled', 'instructions', 'mask', 'autocapitalize', 'spellcheck', 'readonly'],
+        props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors', 'disabled', 'instructions', 'mask', 'autocapitalize', 'spellcheck', 'readonly', 'size'],
 
         components: {
             TextInput,

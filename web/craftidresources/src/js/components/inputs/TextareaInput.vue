@@ -10,6 +10,7 @@
 			:spellcheck="spellcheck"
 			autocomplete="off"
 			class="form-control"
+			:class="{'w-full': !size }"
 			type="text">
 	</textarea>
 </template>
@@ -17,7 +18,7 @@
 <script>
     export default {
 
-        props: ['id', 'placeholder', 'value', 'cols', 'disabled', 'autocapitalize', 'spellcheck'],
+        props: ['id', 'placeholder', 'value', 'cols', 'disabled', 'autocapitalize', 'spellcheck', 'size'],
 
     }
 </script>

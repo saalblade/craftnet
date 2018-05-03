@@ -11,6 +11,7 @@
 			:rows="rows ? rows : 4"
 			:spellcheck="spellcheck"
 			:value="value"
+			:size="size"
 			@input="$emit('input', $event)"/>
 		<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
 	</div>
@@ -21,7 +22,7 @@
 
     export default {
 
-        props: ['label', 'id', 'placeholder', 'value', 'cols', 'rows', 'errors', 'disabled', 'autocapitalize', 'spellcheck'],
+        props: ['label', 'id', 'placeholder', 'value', 'cols', 'rows', 'errors', 'disabled', 'autocapitalize', 'spellcheck', 'size'],
 
         components: {
             TextareaInput,
