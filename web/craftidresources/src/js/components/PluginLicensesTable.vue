@@ -121,12 +121,9 @@
 		},
 
 		mounted() {
-
             this.pluginLicensesAutoRenew = {};
-			console.log('-----------');
+            
             this.licenses.forEach(function(license) {
-                console.log('license.autoRenew', license.autoRenew);
-                console.log('----');
                 this.pluginLicensesAutoRenew[license.id] = license.autoRenew
 			}.bind(this))
 		}
