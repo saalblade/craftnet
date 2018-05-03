@@ -2,16 +2,6 @@
     <div v-if="license.expirable && license.expiresOn">
         <h5>Renew Licenses</h5>
 
-<!--        <ul>
-            <li>
-                <template v-if="step === 'cart'">Select licenses to renew</template>
-                <a v-else @click="step = 'cart'" href="#">Select licenses to renew</a>
-            </li>
-            <li>
-                Payment
-            </li>
-        </ul>-->
-
         <template v-if="step === 'cart'">
             <select-field v-model="renew" :options="renewOptions" />
 
