@@ -3,6 +3,7 @@
 		:autofocus="autofocus"
 		:disabled="disabled"
 		:id="id"
+		:name="name"
 		:placeholder="placeholder"
 		:value="value"
 		@input="$emit('input', $event.target.value)"
@@ -23,7 +24,7 @@
 
     export default {
 
-        props: ['id', 'placeholder', 'value', 'autofocus', 'disabled', 'mask', 'autocapitalize', 'spellcheck', 'readonly', 'size'],
+        props: ['id', 'name', 'placeholder', 'value', 'autofocus', 'disabled', 'mask', 'autocapitalize', 'spellcheck', 'readonly', 'size'],
 
         created() {
             this.$on('focus', function () {

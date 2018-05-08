@@ -4,15 +4,9 @@
 			<input type="hidden" :name="csrfTokenName" :value="csrfTokenValue">
 			<input type="hidden" name="action" value="users/login">
 
-			<div class="form-group">
-				<label for="loginName">Username or email</label>
-				<input class="form-control" id="loginName" type="text" name="loginName" value="" v-model="loginName" ref="loginNameInput" />
-			</div>
+			<text-field label="Username or email" id="loginName" name="loginName" v-model="loginName" ref="loginNameField" />
 
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input class="form-control" id="password" type="password" name="password" v-model="password" ref="passwordInput" />
-			</div>
+			<password-field label="Password" id="password" name="password" v-model="password" ref="passwordField" />
 
 			<div class="form-check mb-2">
 				<label class="form-check-label">
@@ -27,9 +21,17 @@
 </template>
 
 <script>
+    import PasswordField from '../components/fields/PasswordField'
+    import TextField from '../components/fields/TextField'
+
     export default {
 
         props: ['rememberedUsername'],
+
+		components: {
+            PasswordField,
+            TextField,
+		},
 
         data() {
             return {
@@ -84,9 +86,9 @@
             }
 
             if (this.loginName.length === 0) {
-                this.$refs.loginNameInput.focus();
+                this.$refs.loginNameField.$children[0].$el.focus();
             } else {
-                this.$refs.passwordInput.focus();
+                this.$refs.passwordField.$children[0].$el.focus();
             }
         }
 

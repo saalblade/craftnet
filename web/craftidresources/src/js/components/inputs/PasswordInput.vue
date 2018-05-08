@@ -2,6 +2,7 @@
 	<input
 		:autofocus="autofocus"
 		:id="id"
+		:name="name"
 		:placeholder="placeholder"
 		:value="value"
 		@input="$emit('input', $event.target.value)"
@@ -15,7 +16,7 @@
 <script>
     export default {
 
-        props: ['id', 'placeholder', 'value', 'autofocus', 'size'],
+        props: ['id', 'name', 'placeholder', 'value', 'autofocus', 'size'],
 
         created() {
             this.$on('focus', function() {

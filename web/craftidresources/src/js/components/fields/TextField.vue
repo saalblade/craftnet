@@ -11,6 +11,7 @@
 			:class="{'is-invalid': errors }"
 			:disabled="disabled"
 			:id="id"
+			:name="name"
 			:placeholder="placeholder"
 			:value="value"
 			:mask="mask"
@@ -30,7 +31,7 @@
 
     export default {
 
-        props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors', 'disabled', 'instructions', 'mask', 'autocapitalize', 'spellcheck', 'readonly', 'size'],
+        props: ['label', 'id', 'name', 'placeholder', 'value', 'autofocus', 'errors', 'disabled', 'instructions', 'mask', 'autocapitalize', 'spellcheck', 'readonly', 'size'],
 
         components: {
             TextInput,

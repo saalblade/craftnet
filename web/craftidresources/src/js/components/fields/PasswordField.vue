@@ -4,6 +4,7 @@
 		<password-input
 				ref="input"
 				:id="id"
+				:name="name"
 				:class="{'is-invalid': errors }"
 				:placeholder="placeholder" :value="value"
 				@input="$emit('input', $event)"
@@ -18,7 +19,7 @@
 
     export default {
 
-        props: ['label', 'id', 'placeholder', 'value', 'autofocus', 'errors'],
+        props: ['label', 'id', 'name', 'placeholder', 'value', 'autofocus', 'errors', 'size'],
 
         components: {
             PasswordInput,
