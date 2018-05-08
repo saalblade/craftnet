@@ -104,8 +104,13 @@
 			<div class="card-body">
 				<h4>Updates</h4>
 				<license-update-message :license="license" />
-				<hr>
-				<renew-licenses-form :license="license" />
+
+				<button v-if="!renewLicenses" @click="renewLicenses = true" class="btn btn-primary">Renew your license now</button>
+
+				<template v-else>
+					<hr>
+					<renew-licenses-form :license="license" @cancel="renewLicenses = false" />
+				</template>
 			</div>
 		</div>
 	</div>
@@ -132,6 +137,7 @@
 				notesEditing: false,
 				notesLoading: false,
 				notesValidates: false,
+				renewLicenses: false,
             }
         },
 
