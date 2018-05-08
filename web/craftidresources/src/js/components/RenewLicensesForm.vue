@@ -9,7 +9,6 @@
         </template>
 
         <template v-if="step === 'cart'">
-
             <table class="table mb-2">
                 <thead>
                 <tr>
@@ -69,6 +68,12 @@
 
             <a @click="step = 'cart'" href="#" class="btn btn-secondary">Back</a>
             <a @click="step = 'thank-you'" href="#" class="btn btn-primary">Pay {{ renewableLicensesTotal|currency }}</a>
+        </template>
+
+        <template v-if="step === 'thank-you'">
+            <h6>{{ "Thank You!"|t('app') }}</h6>
+            <p>{{ "Your order has been processed successfully."|t('app') }}</p>
+            <button @click="step = 'extend-updates'; $emit('cancel')" class="btn btn-primary">Done</button>
         </template>
     </div>
 </template>
