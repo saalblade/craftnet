@@ -83,6 +83,9 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
+    'EmbeddedAssets' => [
+        'handle' => 'embeddedassets',
+    ],
     'Entitle' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/casing.html#apTitleize) could be used instead.'
