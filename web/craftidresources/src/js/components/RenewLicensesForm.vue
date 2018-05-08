@@ -27,8 +27,8 @@
                     <td>{{ renewableLicense.description }}</td>
                     <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
                     <td>{{ newExpiresOn|moment('L') }}</td>
-                    <td>{{ renewableLicense.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
-                    <td>{{ newExpiresOn.diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice|currency }}</td>
+                    <td>{{ renewableLicense.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(renewableLicense.expiresOn.date, 'days', true)) }} day(s)</td>
+                    <td>{{ newExpiresOn.diff(renewableLicense.expiresOn.date, 'days', true) * renewableLicense.edition.renewalPrice|currency }}</td>
                 </tr>
                 <tr>
                     <th></th>
