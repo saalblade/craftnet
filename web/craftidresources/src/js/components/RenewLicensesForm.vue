@@ -2,8 +2,13 @@
     <div v-if="license.expirable && license.expiresOn">
         <h5>Renew Licenses</h5>
 
-        <template v-if="step === 'cart'">
+        <template v-if="step === 'extend-updates'">
             <select-field v-model="renew" :options="renewOptions" />
+            <button @click="$emit('cancel')" class="btn btn-secondary">Cancel</button>
+            <button @click="step = 'cart'" class="btn btn-primary">Continue</button>
+        </template>
+
+        <template v-if="step === 'cart'">
 
             <table class="table mb-2">
                 <thead>
@@ -33,7 +38,8 @@
                 </tbody>
             </table>
 
-            <button @click="step = 'payment'" class="btn btn-primary" :disabled="renewableLicensesTotal === 0" :class="{disabled: renewableLicensesTotal === 0}">Renew Your Licenses</button>
+            <button @click="step = 'extend-updates'" class="btn btn-secondary">Back</button>
+            <button @click="step = 'payment'" class="btn btn-primary" :disabled="renewableLicensesTotal === 0" :class="{disabled: renewableLicensesTotal === 0}">Checkout</button>
         </template>
 
         <template v-if="step === 'payment'">
@@ -80,7 +86,7 @@
             return {
                 renew: 1,
                 checkedLicenses: [],
-                step: 'cart',
+                step: 'extend-updates',
             }
         },
 
