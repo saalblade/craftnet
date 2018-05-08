@@ -4,6 +4,9 @@ import Vuex from 'vuex'
 import licensesApi from '../../api/licenses';
 
 Vue.use(Vuex)
+Vue.use(require('vue-moment'))
+
+var VueApp = new Vue();
 
 /**
  * State
@@ -79,6 +82,71 @@ const getters = {
             return getters.expiresSoon(license)
         })
     },
+
+    renewableLicenses(state) {
+        return (license, renew) => {
+            let renewableLicenses = []
+
+
+            // CMS license
+
+            renewableLicenses.push({
+                description: 'Craft ' + license.editionDetails.name,
+                expiresOn: license.expiresOn,
+                edition: license.editionDetails,
+            })
+
+
+            // Plugin licenses
+
+            let renewablePluginLicenses = license.pluginLicenses.filter(license => !!license.key)
+
+            const cmsExpiresOn = VueApp.$moment(license.expiresOn.date)
+            let cmsNewExpiresOn = cmsExpiresOn.add(renew, 'years')
+
+            renewablePluginLicenses = state.pluginLicenses.filter(license => {
+                const pluginExpiresOn = VueApp.$moment(license.expiresOn.date)
+                if(pluginExpiresOn > cmsNewExpiresOn) {
+                    return false
+                }
+                return renewablePluginLicenses.find(renewablePluginLicense => renewablePluginLicense.id === license.id)
+            })
+
+            renewablePluginLicenses.forEach(function(renewablePluginLicense) {
+                renewableLicenses.push({
+                    description: renewablePluginLicense.plugin.name,
+                    expiresOn: renewablePluginLicense.expiresOn,
+                    edition: renewablePluginLicense.edition,
+                })
+            }.bind(this))
+
+            return renewableLicenses
+        }
+    },
+
+
+    newExpiresOn() {
+        return (license, renew) => {
+            const cmsExpiresOn = VueApp.$moment(license.expiresOn.date)
+            return cmsExpiresOn.add(renew, 'years')
+        }
+    },
+
+    renewableLicensesTotal(state, getters) {
+        return (license, renew, checkedLicenses) => {
+            let total = 0
+
+            getters.renewableLicenses(license, renew).forEach(function(renewableLicense, key) {
+                const isChecked = checkedLicenses[key]
+
+                if (isChecked) {
+                    total += getters.newExpiresOn(license, renew).diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice
+                }
+            })
+
+            return total
+        }
+    }
 
 }
 

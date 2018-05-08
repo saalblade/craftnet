@@ -121,7 +121,7 @@
     import TextField from '../components/fields/TextField'
     import LightswitchField from '../components/fields/LightswitchField'
     import LicenseUpdateMessage from '../components/LicenseUpdateMessage'
-    import RenewLicensesForm from '../components/RenewLicensesForm'
+    import RenewLicensesForm from './renew-licenses/RenewLicensesForm'
 
     export default {
 

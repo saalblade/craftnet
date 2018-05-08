@@ -1,7 +1,6 @@
 <template>
 	<form @submit.prevent="save()">
-		<div ref="cardElement" id="card-element"
-			 class="card-element form-control mb-3"></div>
+		<div ref="cardElement" id="card-element" class="card-element form-control mb-3"></div>
 		<p id="card-errors" class="text-red" role="alert"></p>
 
 		<input type="submit" class="btn btn-primary" value="Save"></input>
