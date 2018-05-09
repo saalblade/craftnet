@@ -1,9 +1,42 @@
 <template>
-    <div ref="cardElement" id="card-element" class="card-element form-control mb-3"></div>
+    <div>
+        <div ref="cardElement" id="card-element" class="card-element form-control mb-3"></div>
+        <p id="card-errors" class="text-red" role="alert"></p>
+    </div>
 </template>
 
 <script>
     export default {
+
+        data() {
+            return {
+                stripe: null,
+                elements: null,
+                card: null,
+            }
+        },
+
+        methods: {
+
+            /**
+             * Save the credit card.
+             */
+            save(cb, cbError) {
+                let vm = this;
+                this.stripe.createSource(this.card).then(function(result) {
+                    if (result.error) {
+                        let errorElement = document.getElementById('card-errors');
+                        errorElement.textContent = result.error.message;
+                        // vm.$emit('error', result.error);
+                        cbError(result.error)
+                    } else {
+                        // vm.$emit('save', vm.card, result.source);
+                        cb(vm.card, result.source)
+                    }
+                });
+            },
+
+        },
 
         mounted() {
             this.stripe = Stripe(window.stripePublicKey);

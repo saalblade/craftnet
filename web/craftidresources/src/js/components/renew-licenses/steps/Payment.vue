@@ -3,7 +3,6 @@
         <div class="md:flex -mx-4">
             <div class="md:w-1/2 px-4">
                 <h6>Payment Method</h6>
-
                 <template v-if="card">
                     <p><label><input type="radio" value="existingCard" v-model="paymentMode" /> Use card <span>{{ card.brand }} •••• •••• •••• {{ card.last4 }} — {{ card.exp_month }}/{{ card.exp_year }}</span></label></p>
                 </template>
@@ -11,7 +10,9 @@
                 <p><label><input type="radio" value="newCard" v-model="paymentMode" /> Use a new credit card</label></p>
 
                 <template v-if="paymentMode === 'newCard'">
-                    <card-element></card-element>
+                    <card-element v-if="!cardToken" ref="newCard" />
+                    <p v-else>{{ cardToken.card.brand }} •••• •••• •••• {{ cardToken.card.last4 }} ({{ cardToken.card.exp_month }}/{{ cardToken.card.exp_year }}) <a class="delete icon" @click="cardToken = null">Delete</a></p>
+
                     <checkbox-field id="replaceCard" v-model="replaceCard" label="Save as my new credit card" />
                 </template>
 
