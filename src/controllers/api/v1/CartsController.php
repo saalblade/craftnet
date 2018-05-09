@@ -419,7 +419,7 @@ class CartsController extends BaseApiController
                 // Make sure it looks like a valid VAT ID
                 $vatId = preg_replace('/[^A-Za-z0-9]/', '', $billingAddress->businessTaxId);
 
-                // Greece is EL inside the EU and GR everyone else.
+                // Greece is EL inside the EU and GR everywhere else.
                 $iso = $country->iso === 'GR' ? 'EL' : $country->iso;
 
                 // Make sure the VAT ID the user supplied starts with the correct country code.
