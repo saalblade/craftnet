@@ -117,6 +117,7 @@
                 this.savePaymentMethod(() => {
                     this.saveBillingInfo(() => {
                         this.loading = false
+                        this.$emit('pay');
                     }, () => {
                         this.loading = false
                     })
@@ -124,8 +125,6 @@
                     this.loading = false
 
                 })
-
-                // this.$emit('pay');
             },
 
             savePaymentMethod(cb, cbError) {
