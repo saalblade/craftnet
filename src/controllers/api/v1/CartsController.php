@@ -9,6 +9,7 @@ use craft\commerce\models\Customer;
 use craft\commerce\models\LineItem;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\User;
+use craft\helpers\StringHelper;
 use craftnet\cms\CmsEdition;
 use craftnet\cms\CmsLicenseManager;
 use craftnet\controllers\api\BaseApiController;
@@ -417,6 +418,12 @@ class CartsController extends BaseApiController
             } else if (!empty($billingAddress->businessTaxId) && (new CountryInfo())->isEuMember($country->iso)) {
                 // Make sure it looks like a valid VAT ID
                 $vatId = preg_replace('/[^A-Za-z0-9]/', '', $billingAddress->businessTaxId);
+
+                // Greece is EL inside the EU and GR everyone else.
+                $iso = $country->iso === 'GR' ? 'EL' : $country->iso;
+
+                // Make sure the VAT ID the user supplied starts with the correct country code.
+                $vatId = StringHelper::ensureLeft($vatId, $iso);
                 if ($vatId && !(new Validator())->isValid($vatId)) {
                     $addressErrors[] = [
                         'param' => 'billingAddress.businessTaxId',
