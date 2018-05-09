@@ -48,7 +48,8 @@
         </div>
 
         <button @click="$emit('back')" class="btn btn-secondary">Back</button>
-        <button @click="$emit('pay')" class="btn btn-primary">Pay {{ renewableLicensesTotal(license, renew, checkedLicenses)|currency }}</button>
+        <button @click="pay" class="btn btn-primary">Pay {{ totalPrice|currency }}</button>
+        <div v-if="loading" class="spinner"></div>
     </div>
 </template>
 
@@ -72,8 +73,23 @@
 
         data() {
             return {
+                loading: false,
                 paymentMode: 'newCard',
                 replaceCard: false,
+                cardToken: null,
+                billingInfo: {
+                    firstName: '',
+                    lastName: '',
+                    businessName: '',
+                    businessTaxId: '',
+                    address1: '',
+                    address2: '',
+                    country: '',
+                    state: '',
+                    city: '',
+                    zipCode: '',
+                },
+                errors: {},
             }
         },
 
@@ -87,6 +103,80 @@
                 renewableLicensesTotal: 'renewableLicensesTotal',
             }),
 
+            totalPrice() {
+                return this.renewableLicensesTotal(this.license, this.renew, this.checkedLicenses);
+            },
         },
+
+        methods: {
+
+
+            pay() {
+                this.loading = true
+
+                this.savePaymentMethod(() => {
+                    this.saveBillingInfo(() => {
+                        this.loading = false
+                    }, () => {
+                        this.loading = false
+                    })
+                }, () => {
+                    this.loading = false
+
+                })
+
+                // this.$emit('pay');
+            },
+
+            savePaymentMethod(cb, cbError) {
+                if (this.totalPrice > 0) {
+                    if (this.paymentMode === 'newCard') {
+                        if (!this.cardToken) {
+                            // Save new card
+                            this.$refs.newCard.save((card, source) => {
+                                this.cardToken = source
+                                cb()
+                            }, error => {
+                                cbError(error)
+                            });
+                        } else {
+                            cb()
+                        }
+                    } else {
+                        cb()
+                    }
+                } else {
+                    cb()
+                }
+            },
+
+            saveBillingInfo(cb, cbError) {
+                let cartData = {
+                    billingAddress: {
+                        firstName: this.billingInfo.firstName,
+                        lastName: this.billingInfo.lastName,
+                        businessName: this.billingInfo.businessName,
+                        businessTaxId: this.billingInfo.businessTaxId,
+                        address1: this.billingInfo.address1,
+                        address2: this.billingInfo.address2,
+                        country: this.billingInfo.country,
+                        state: this.billingInfo.state,
+                        city: this.billingInfo.city,
+                        zipCode: this.billingInfo.zipCode,
+                    },
+                }
+
+                cb()
+//
+//                this.$store.dispatch('saveCart', cartData)
+//                    .then(response => {
+//                        cb(response)
+//                    })
+//                    .catch(response => {
+//                        cbError(response)
+//                    })
+            },
+
+        }
     }
 </script>
