@@ -3,7 +3,7 @@
         <table class="table mb-2">
             <thead>
             <tr>
-                <td><input type="checkbox" @change="checkAll"></td>
+                <td><input type="checkbox" ref="checkAll" @change="checkAll"></td>
                 <th>Item</th>
                 <th>Renewal Date</th>
                 <th>New Renewal Date</th>
@@ -82,6 +82,12 @@
             }
 
         },
+
+        mounted() {
+            if(this.checkedLicenses.length === 0) {
+                this.$refs.checkAll.click();
+            }
+        }
 
     }
 </script>
