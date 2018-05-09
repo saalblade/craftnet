@@ -10,8 +10,9 @@ Vue.use(Vuex)
  */
 const state = {
     apps: {},
-    currentUser: null,
     billingAddress: null,
+    card: null,
+    currentUser: null,
     invoices: [],
     stripeAccount: null,
     stripeCard: null,
@@ -272,6 +273,10 @@ const mutations = {
 
     [types.RECEIVE_BILLING_ADDRESS](state, {billingAddress}) {
         state.billingAddress = billingAddress
+    },
+
+    [types.RECEIVE_CARD](state, {card}) {
+        state.card = card
     },
 
     [types.RECEIVE_CURRENT_USER](state, {currentUser}) {

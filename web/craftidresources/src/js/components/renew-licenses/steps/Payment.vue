@@ -3,9 +3,19 @@
         <div class="md:flex -mx-4">
             <div class="md:w-1/2 px-4">
                 <h6>Payment Method</h6>
-                <card-element></card-element>
 
-                <h6>Coupon Code</h6>
+                <template v-if="card">
+                    <p><label><input type="radio" value="existingCard" v-model="paymentMode" /> Use card <span>{{ card.brand }} •••• •••• •••• {{ card.last4 }} — {{ card.exp_month }}/{{ card.exp_year }}</span></label></p>
+                </template>
+
+                <p><label><input type="radio" value="newCard" v-model="paymentMode" /> Use a new credit card</label></p>
+
+                <template v-if="paymentMode === 'newCard'">
+                    <card-element></card-element>
+                    <checkbox-field id="replaceCard" v-model="replaceCard" label="Save as my new credit card" />
+                </template>
+
+                <h6 class="mt-4">Coupon Code</h6>
                 <text-field placeholder="XXXXXXX" id="coupon-code" size="12" />
             </div>
             <div class="md:w-1/2 px-4">
@@ -27,10 +37,10 @@
                 </div>
                 <div class="md:flex -mx-2">
                     <div class="md:w-1/2 px-2">
-                        <select-field :fullwidth="true" :options="[{label: 'My option', value: 1}]" id="state" />
+                        <select-field :fullwidth="true" :options="[{label: 'State', value: 0}]" :value="0" id="state" />
                     </div>
                     <div class="md:w-1/2 px-2">
-                        <select-field :fullwidth="true" :options="[{label: 'My option', value: 1}]" id="country" />
+                        <select-field :fullwidth="true" :options="[{label: 'Country', value: 0}]" :value="0" id="country" />
                     </div>
                 </div>
             </div>
@@ -42,8 +52,9 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import CardElement from '../../CardElement'
+    import CheckboxField from '../../fields/CheckboxField'
     import TextField from '../../fields/TextField'
     import SelectField from '../../fields/SelectField'
 
@@ -53,11 +64,23 @@
 
         components: {
             CardElement,
+            CheckboxField,
             TextField,
             SelectField,
         },
 
+        data() {
+            return {
+                paymentMode: 'newCard',
+                replaceCard: false,
+            }
+        },
+
         computed: {
+
+            ...mapState({
+                card: state => state.account.card,
+            }),
 
             ...mapGetters({
                 renewableLicensesTotal: 'renewableLicensesTotal',

@@ -45,6 +45,7 @@ const actions = {
                     commit(types.RECEIVE_APPS, {apps: response.data.apps});
                     commit(types.RECEIVE_CURRENT_USER, {currentUser: response.data.currentUser});
                     commit(types.RECEIVE_BILLING_ADDRESS, {billingAddress: response.data.billingAddress});
+                    commit(types.RECEIVE_CARD, {card: response.data.card});
                     resolve(response);
                 },
                 response => {

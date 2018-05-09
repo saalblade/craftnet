@@ -7,6 +7,7 @@ use craft\commerce\models\Address;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
+use craft\helpers\Json;
 use craftnet\cms\CmsEdition;
 use craftnet\Module;
 use yii\web\Response;
@@ -84,6 +85,7 @@ class CraftIdController extends BaseController
                 'photoUrl' => $currentUser->getThumbUrl(200),
                 'hasApiToken' => ($currentUser->apiToken !== null),
             ],
+            'card' => $this->_card($currentUser),
             'billingAddress' => $billingAddressArray,
             'countries' => Craft::$app->getApi()->getCountries(),
             'apps' => Module::getInstance()->getOauth()->getApps(),
@@ -100,6 +102,31 @@ class CraftIdController extends BaseController
 
     // Private Methods
     // =========================================================================
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    private function _card(User $user): array
+    {
+        $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
+
+        if (\count($paymentSources) === 0) {
+            return null;
+        }
+
+        $paymentSource = $paymentSources[0];
+        $response = Json::decode($paymentSource->response);
+
+        if (isset($response['object']) && $response['object'] === 'card') {
+            return $response;
+        } elseif (isset($response['object']) && $response['object'] === 'source') {
+            return $response['card'];
+        }
+
+        return null;
+    }
 
     /**
      * @param User $user
