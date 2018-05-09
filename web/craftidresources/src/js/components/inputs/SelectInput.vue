@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="select">
-			<select :value="value" @input="$emit('input', $event)">
+			<select :value="value" :class="{ 'w-full': fullwidth }" @input="$emit('input', $event)">
 				<option v-for="option in this.options" :value="option.value">{{ option.label }}</option>
 			</select>
 		</div>
@@ -12,7 +12,7 @@
 <script>
     export default {
 
-        props: ['options', 'value'],
+        props: ['fullwidth', 'options', 'value'],
 
     }
 </script>

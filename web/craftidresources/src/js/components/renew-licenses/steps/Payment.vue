@@ -16,9 +16,23 @@
                 <text-field placeholder="Business Tax ID" id="business-tax-id" />
                 <text-field placeholder="Address 1" id="address-1" />
                 <text-field placeholder="Address 2" id="address-2" />
-                <text-field placeholder="Zip Code" id="zip-code" />
-                <text-field placeholder="City" id="city" />
-                <text-field placeholder="Country" id="country" />
+
+                <div class="md:flex -mx-2">
+                    <div class="md:w-1/2 px-2">
+                        <text-field placeholder="City" id="city" />
+                    </div>
+                    <div class="md:w-1/2 px-2">
+                        <text-field placeholder="Zip Code" id="zip-code" />
+                    </div>
+                </div>
+                <div class="md:flex -mx-2">
+                    <div class="md:w-1/2 px-2">
+                        <select-field :fullwidth="true" :options="[{label: 'My option', value: 1}]" id="state" />
+                    </div>
+                    <div class="md:w-1/2 px-2">
+                        <select-field :fullwidth="true" :options="[{label: 'My option', value: 1}]" id="country" />
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -31,6 +45,7 @@
     import {mapGetters} from 'vuex'
     import CardElement from '../../CardElement'
     import TextField from '../../fields/TextField'
+    import SelectField from '../../fields/SelectField'
 
     export default {
 
@@ -39,6 +54,7 @@
         components: {
             CardElement,
             TextField,
+            SelectField,
         },
 
         computed: {

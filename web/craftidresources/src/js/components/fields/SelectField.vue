@@ -2,7 +2,7 @@
 	<div class="form-group">
 		<label v-if="label" :id="id+'-label'" :for="id">{{ label }}</label>
 
-		<select-input :options="options" :value="value" @input="$emit('input', $event.target.value)"></select-input>
+		<select-input :fullwidth="fullwidth" :options="options" :value="value" @input="$emit('input', $event.target.value)"></select-input>
 	</div>
 </template>
 
@@ -12,7 +12,7 @@
 
     export default {
 
-        props: ['label', 'id', 'options', 'value'],
+        props: ['label', 'fullwidth', 'id', 'options', 'value'],
 
         components: {
             SelectInput,
