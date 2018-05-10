@@ -116,6 +116,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [ImageOptimize](https://github.com/nystudio107/craft3-imageoptimize) or [Imgix](https://github.com/sjelfull/craft3-imgix) could be used instead'
     ],
+    'Import' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Feed Me](https://github.com/verbb/feed-me) could be used instead'
+    ],
     'Inflect' => [
         'statusColor' => 'orange',
         'status' => '[Discontinued](https://github.com/lukeholder/craft-inflect/blob/master/readme.md#craft-2-only), but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
