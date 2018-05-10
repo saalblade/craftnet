@@ -1,6 +1,7 @@
 <template>
     <div>
         <auth-manager ref="authManager"></auth-manager>
+        <renew-licenses-modal v-if="$root.showRenewLicensesModal" :license="$root.renewLicense" @cancel="$root.showRenewLicensesModal = false" />
 
         <template v-if="notification">
             <div id="notifications-wrapper" :class="{'hide': !notification }">
@@ -82,16 +83,18 @@
 </template>
 
 <script>
-    import AuthManager from './components/AuthManager';
-    import router from './router';
     import {mapState, mapGetters} from 'vuex'
+    import router from './router';
+    import AuthManager from './components/AuthManager';
+    import RenewLicensesModal from './components/renew-licenses/RenewLicensesModal';
 
     export default {
 
         router,
 
         components: {
-            AuthManager
+            AuthManager,
+            RenewLicensesModal,
         },
 
         props: ['notification', 'loading'],

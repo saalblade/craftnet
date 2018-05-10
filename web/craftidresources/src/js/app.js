@@ -28,6 +28,8 @@ window.craftIdApp = new Vue({
             stripeAccountLoading: true,
             loading: true,
             notification: null,
+            renewLicense: null,
+            showRenewLicensesModal: false,
         }
     },
 

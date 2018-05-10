@@ -2,7 +2,7 @@
     <div>
         <div class="md:flex -mx-4">
             <div class="md:w-1/2 px-4">
-                <h6>Payment Method</h6>
+                <h3>Payment Method</h3>
                 <template v-if="card">
                     <p><label><input type="radio" value="existingCard" v-model="paymentMode" /> Use card <span>{{ card.brand }} •••• •••• •••• {{ card.last4 }} — {{ card.exp_month }}/{{ card.exp_year }}</span></label></p>
                 </template>
@@ -16,11 +16,11 @@
                     <checkbox-field id="replaceCard" v-model="replaceCard" label="Save as my new credit card" />
                 </template>
 
-                <h6 class="mt-4">Coupon Code</h6>
+                <h3 class="mt-4">Coupon Code</h3>
                 <text-field placeholder="XXXXXXX" id="coupon-code" size="12" />
             </div>
             <div class="md:w-1/2 px-4">
-                <h6>Billing Informations</h6>
+                <h3>Billing Informations</h3>
                 <text-field placeholder="First Name" id="first-name" v-model="billingInfo.firstName" :errors="errors['billingAddress.firstName']" />
                 <text-field placeholder="Last Name" id="last-name" v-model="billingInfo.lastName" :errors="errors['billingAddress.lastName']" />
                 <text-field placeholder="Business Name" id="business-name" v-model="billingInfo.businessName" :errors="errors['billingAddress.businessName']" />

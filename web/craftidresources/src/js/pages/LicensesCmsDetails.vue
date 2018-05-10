@@ -80,6 +80,10 @@
                     });
             }
 
+        },
+
+        mounted() {
+            this.$root.renewLicense = this.license
         }
 
     }

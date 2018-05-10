@@ -14,3 +14,24 @@
     }
   }
 }
+
+#renew-licenses-modal {
+  background-color: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+
+  .modal {
+    .modal-dialog {
+      max-width: 800px;
+
+      .modal-content {
+        .modal-body {
+          padding: 24px;
+          height: 580px;
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 <template>
     <div v-if="license.expirable && license.expiresOn">
-        <h5>Renew Licenses</h5>
+        <h2 class="mb-3">Renew Licenses</h2>
 
         <template v-if="step === 'extend-updates'">
             <extend-updates :license="license" @cancel="$emit('cancel')" @continue="step = 'cart'" :renew.sync="renew"></extend-updates>
