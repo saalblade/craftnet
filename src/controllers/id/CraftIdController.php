@@ -106,9 +106,9 @@ class CraftIdController extends BaseController
     /**
      * @param User $user
      *
-     * @return array
+     * @return array|null
      */
-    private function _card(User $user): array
+    private function _card(User $user)
     {
         $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
 
