@@ -50,6 +50,10 @@
         <button @click="$emit('back')" class="btn btn-secondary">Back</button>
         <button @click="pay" class="btn btn-primary">Pay {{ totalPrice|currency }}</button>
         <div v-if="loading" class="spinner"></div>
+
+        <div class="mt-4">
+            <img src="/craftidresources/dist/images/powered_by_stripe.svg" height="18" />
+        </div>
     </div>
 </template>
 
