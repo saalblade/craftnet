@@ -83,6 +83,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
+    'DuplicateUserDashboard' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Default Dashboard](https://github.com/verbb/default-dashboard) could be used instead.'
+    ],
     'EmbeddedAssets' => [
         'handle' => 'embeddedassets',
     ],
@@ -147,6 +151,10 @@ return [
     'Oauth' => [
         'statusColor' => 'red',
         'status' => 'Unnecessary thanks to Craft 3’s inclusion of an OAuth 2 client library'
+    ],
+    'OneDashboard' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Default Dashboard](https://github.com/verbb/default-dashboard) could be used instead.'
     ],
     'PhpTweak' => [
         'statusColor' => 'red',
