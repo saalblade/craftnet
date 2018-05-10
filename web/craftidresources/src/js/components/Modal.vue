@@ -1,6 +1,6 @@
 <template>
 	<transition :name="transition" @enter="$emit('enter')" @after-enter="$emit('after-enter')" @leave="$emit('leave')">
-		<div v-if="show" class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div v-if="show" class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" @click="test">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div v-if="$slots.header" class="modal-header">
@@ -25,5 +25,12 @@
 
         props: ['show', 'transition'],
 
+		methods: {
+            test($ev) {
+                if($ev.target.classList.contains('modal')) {
+                    this.$emit('background-click')
+				}
+			}
+		}
     }
 </script>

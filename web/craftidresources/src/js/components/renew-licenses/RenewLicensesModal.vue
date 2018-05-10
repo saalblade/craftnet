@@ -1,6 +1,6 @@
 <template>
     <div v-if="license" id="renew-licenses-modal">
-        <modal :show="true">
+        <modal :show="true" @background-click="$emit('cancel')">
             <template slot="body">
                 <renew-licenses-form :license="license" @cancel="$emit('cancel')" />
             </template>
