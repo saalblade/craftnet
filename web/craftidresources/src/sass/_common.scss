@@ -676,4 +676,34 @@ th {
   }
 }
 
+
+/* Tooltip */
+
+.tooltip {
+  position: relative;
+  padding: 10px;
+
+  .tooltip-content {
+    @apply .bg-white .p-6 .rounded;
+
+    display: none;
+    position: absolute;
+    left: 50%;
+    margin-left: -280px;
+    z-index: 1;
+    min-width: 560px;
+    -webkit-box-shadow: 0 0 40px 0 rgba(0,0,0,.4);
+    box-shadow: 0 0 40px 0 rgba(0,0,0,.4);
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    .tooltip-content {
+      display: block;
+    }
+  }
+}
+
+
 @tailwind utilities;
