@@ -357,6 +357,10 @@ th {
   width: 46px;
   height: 30px;
 
+  &.disabled {
+    opacity: .5;
+  }
+
   input {
     @apply .absolute .opacity-0;
   }

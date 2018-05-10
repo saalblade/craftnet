@@ -4,7 +4,7 @@
         <div v-if="instructions" class="instructions">
             <p>{{ instructions }}</p>
         </div>
-        <lightswitch-input :id="id" :checked="checked" @change="$emit('change', $event)" @update:checked="$emit('update:checked', $event)" />
+        <lightswitch-input :id="id" :checked="checked" :disabled="disabled" @change="$emit('change', $event)" @update:checked="$emit('update:checked', $event)" />
     </div>
 </template>
 
@@ -13,7 +13,7 @@
 
     export default {
 
-        props: ['label', 'id', 'checked', 'instructions'],
+        props: ['label', 'id', 'checked', 'instructions', 'disabled'],
 
         components: {
             LightswitchInput,
