@@ -17,8 +17,8 @@
                 <td><input type="checkbox" :value="1" :checked="checkedLicenses[key]" @input="checkLicense($event, key)"></td>
                 <td>{{ renewableLicense.description }}</td>
                 <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
-                <td>{{ newExpiresOn(license, renew)|moment('L') }}</td>
-                <td>{{ renewableLicense.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn(license, renew).diff(renewableLicense.expiresOn.date, 'days', true)) }} day(s)</td>
+                <td>{{ newExpiresOn(license, renew)|moment('L') }} <small class="text-grey-dark">(+{{ Math.round(newExpiresOn(license, renew).diff(renewableLicense.expiresOn.date, 'days', true)) }} days)</small></td>
+                <td>{{ renewableLicense.edition.renewalPrice|currency }}/year</td>
                 <td>{{ newExpiresOn(license, renew).diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice|currency }}</td>
             </tr>
             <tr>
