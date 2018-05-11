@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p>Do you want to renew plugin licenses as well?</p>
         <table class="table mb-2">
             <thead>
             <tr>
