@@ -11,20 +11,7 @@
 								<dd>{{ license.edition }}</dd>
 
 								<dt>License Key</dt>
-								<dd>
-									<code>{{ license.key.slice(0, 10) }}…</code>
-									<!--<a href="#license-key">View license key</a>-->
-
-									<a class="tooltip">More
-										<div class="tooltip-content">
-											<h4>License Key</h4>
-											<div v-if="license">
-												<textarea-field id="notes" class="mono" v-model="formattedLicense" :disabled="true" rows="6"></textarea-field>
-												<a :href="downloadLicenseUrl" class="btn btn-secondary" target="_blank">Download License Key</a>
-											</div>
-										</div>
-									</a>
-								</dd>
+								<dd><code>{{ license.key.slice(0, 10) }}…</code> <a href="#license-key">View license key</a></dd>
 
 								<dt>Domain Name</dt>
 								<dd>
@@ -80,6 +67,16 @@
 						</div>
 					</div>
 				</template>
+			</div>
+		</div>
+
+		<div id="license-key" class="card mb-3">
+			<div class="card-body">
+				<h4>License Key</h4>
+				<div v-if="license">
+					<textarea-field id="notes" class="mono" v-model="formattedLicense" :disabled="true" rows="6"></textarea-field>
+					<a :href="downloadLicenseUrl" class="btn btn-secondary" target="_blank">Download License Key</a>
+				</div>
 			</div>
 		</div>
 
