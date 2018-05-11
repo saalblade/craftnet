@@ -141,6 +141,10 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
     ],
+    'Neo' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development',
+    ],
     'NpEditMultipleElements' => [
         'handle' => 'sequential-edit',
     ],
