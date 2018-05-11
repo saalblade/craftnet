@@ -49,12 +49,24 @@
 						</template>
 					</td>
 					<td>
-						<template v-if="license.key && autoRenewSwitch">
-							<lightswitch-field
-									:id="'auto-renew-'+license.id"
-									@change="savePluginLicenseAutoRenew(license, $event)"
-									:checked.sync="pluginLicensesAutoRenew[license.id]"
-							/>
+						<template v-if="autoRenewSwitch">
+
+							<template v-if="!!license.key">
+								<lightswitch-field
+										:id="'auto-renew-'+license.id"
+										@change="savePluginLicenseAutoRenew(license, $event)"
+										:checked.sync="pluginLicensesAutoRenew[license.id]"
+										:disabled="!license.key"
+								/>
+							</template>
+							<template v-else>
+								<lightswitch-field
+										:id="'auto-renew-'+license.id"
+										:checked="license.autoRenew"
+										:disabled="true"
+								/>
+							</template>
+
 						</template>
 						<template v-else>
 							<span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
@@ -97,6 +109,10 @@
 
         methods: {
             savePluginLicenseAutoRenew(license, $event) {
+                if(!license.key) {
+                    return false;
+				}
+
                 const autoRenew = $event.target.checked
                 const data = {
                     pluginHandle: license.plugin.handle,
