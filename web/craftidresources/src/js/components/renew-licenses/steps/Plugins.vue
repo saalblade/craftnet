@@ -48,11 +48,6 @@
 
         props: ['license', 'renew', 'checkedLicenses'],
 
-        data() {
-            return {
-            }
-        },
-
         computed: {
 
             ...mapState({
