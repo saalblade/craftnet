@@ -180,6 +180,12 @@
 //                    })
             },
 
+        },
+
+        mounted() {
+            if (this.card) {
+                this.paymentMode = 'existingCard'
+            }
         }
     }
 </script>
