@@ -85,8 +85,13 @@
         },
 
         mounted() {
-            if(this.checkedLicenses.length === 0) {
+            if(this.renewableLicenses(this.license, this.renew).length === 1) {
                 this.$refs.checkAll.click();
+                this.$parent.step = 'payment'
+            } else {
+                if(this.checkedLicenses.length === 0) {
+                    this.$refs.checkAll.click();
+                }
             }
         }
 
