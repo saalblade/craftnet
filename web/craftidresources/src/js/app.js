@@ -24,7 +24,6 @@ window.craftIdApp = new Vue({
     data() {
         return {
             invoicesLoading: true,
-            stripeCustomerLoading: true,
             stripeAccountLoading: true,
             loading: true,
             notification: null,
@@ -86,12 +85,6 @@ window.craftIdApp = new Vue({
     created() {
         this.$store.dispatch('getCraftIdData').then(() => {
             this.loading = false;
-        });
-
-        this.$store.dispatch('getStripeCustomer').then(response => {
-            this.stripeCustomerLoading = false;
-        }, error => {
-            this.stripeCustomerLoading = false;
         });
 
         if (window.stripeAccessToken) {

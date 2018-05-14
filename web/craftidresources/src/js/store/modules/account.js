@@ -15,7 +15,6 @@ const state = {
     currentUser: null,
     invoices: [],
     stripeAccount: null,
-    stripeCard: null,
     stripeCustomer: null,
     upcomingInvoice: null,
 }
@@ -71,6 +70,7 @@ const actions = {
                 })
         })
     },
+
 
     /**
      * User
@@ -150,18 +150,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.saveCard(source, response => {
                 commit(types.RECEIVE_STRIPE_CARD, {card: response.data.card.card});
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    getStripeCustomer({commit}) {
-        return new Promise((resolve, reject) => {
-            accountApi.getStripeCustomer(response => {
-                commit(types.RECEIVE_STRIPE_CUSTOMER, {customer: response.data.customer});
-                commit(types.RECEIVE_STRIPE_CARD, {card: response.data.card});
                 resolve(response);
             }, response => {
                 reject(response);
@@ -289,15 +277,11 @@ const mutations = {
      */
 
     [types.REMOVE_STRIPE_CARD](state) {
-        state.stripeCard = null
+        state.card = null
     },
 
     [types.RECEIVE_STRIPE_CARD](state, {card}) {
-        state.stripeCard = card
-    },
-
-    [types.RECEIVE_STRIPE_CUSTOMER](state, {customer}) {
-        state.stripeCustomer = customer
+        state.card = card
     },
 
 

@@ -4,28 +4,24 @@
             <div class="flex-1">
                 <h4>Payment</h4>
 
-                <div v-if="stripeCustomerLoading" class="spinner"></div>
-
-                <div v-if="!stripeCustomerLoading">
-                    <div v-if="!editing">
-                        <div v-if="stripeCard" class="credit-card">
-                            <card-icon :brand="stripeCard.brand"></card-icon>
-                            <ul class="list-reset">
-                                <li>Number: •••• •••• •••• {{ stripeCard.last4 }}</li>
-                                <li>Expiry: {{ stripeCard.exp_month }}/{{ stripeCard.exp_year }}</li>
-                            </ul>
-                        </div>
-
-                        <p v-else class="text-secondary">Credit card not defined.</p>
+                <div v-if="!editing">
+                    <div v-if="card" class="credit-card">
+                        <card-icon :brand="card.brand"></card-icon>
+                        <ul class="list-reset">
+                            <li>Number: •••• •••• •••• {{ card.last4 }}</li>
+                            <li>Expiry: {{ card.exp_month }}/{{ card.exp_year }}</li>
+                        </ul>
                     </div>
 
-                    <div :class="{'hidden': !editing}">
-                        <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard" @cancel="cancel"></card-form>
-                    </div>
+                    <p v-else class="text-secondary">Credit card not defined.</p>
+                </div>
 
-                    <div class="mt-3">
-                        <img src="/craftidresources/dist/images/powered_by_stripe.svg" height="18" />
-                    </div>
+                <div :class="{'hidden': !editing}">
+                    <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard" @cancel="cancel"></card-form>
+                </div>
+
+                <div class="mt-3">
+                    <img src="/craftidresources/dist/images/powered_by_stripe.svg" height="18" />
                 </div>
             </div>
 
@@ -37,7 +33,7 @@
                     </button>
                 </p>
 
-                <p v-if="stripeCard">
+                <p v-if="card">
                     <button @click="removeCard()" class="btn btn-sm btn-danger">
                         <i class="fas fa-times"></i>
                         Remove
@@ -67,22 +63,16 @@
                 editing: false,
                 cardFormloading: false,
                 removeCardLoading: false,
-                stripe: null,
-                elements: null,
-                card: null,
             }
         },
 
         computed: {
+                stripe: null,
+                elements: null,
 
             ...mapState({
-                stripeCustomer: state => state.account.stripeCustomer,
-                stripeCard: state => state.account.stripeCard,
+                card: state => state.account.card,
             }),
-
-            stripeCustomerLoading() {
-                return this.$root.stripeCustomerLoading;
-            }
 
         },
 

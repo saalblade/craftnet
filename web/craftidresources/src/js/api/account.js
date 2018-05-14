@@ -86,12 +86,6 @@ export default {
             .catch(error => cbError(error.response));
     },
 
-    getStripeCustomer(cb, cbError) {
-        axios.get(window.craftIdUrl + '/stripe/customer')
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
-    },
-
     disconnectStripeAccount(cb, cbError) {
         axios.post(window.craftIdUrl + '/stripe/disconnect')
             .then(response => cb(response))
