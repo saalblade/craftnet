@@ -14,7 +14,14 @@
             </thead>
             <tbody>
             <tr v-for="renewableLicense, key in renewableLicenses(license, renew)">
-                <td><input type="checkbox" :value="1" :checked="checkedLicenses[key]" @input="checkLicense($event, key)"></td>
+                <td>
+                    <input
+                            type="checkbox"
+                            :value="1"
+                            :disabled="key === 0 ? true : false"
+                            :checked="checkedLicenses[key]"
+                            @input="checkLicense($event, key)" />
+                </td>
                 <td>{{ renewableLicense.description }}</td>
                 <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
                 <td>{{ newExpiresOn(license, renew)|moment('L') }} <small class="text-grey-dark">(+{{ Math.round(newExpiresOn(license, renew).diff(renewableLicense.expiresOn.date, 'days', true)) }} days)</small></td>
@@ -69,14 +76,14 @@
             },
 
             checkAll($event) {
-                const checked = $event.target.checked
-
                 let checkedLicenses = []
 
-                if(checked) {
+                if($event.target.checked) {
                     this.renewableLicenses(this.license, this.renew).forEach(function(renewableLicense, key) {
                         checkedLicenses[key] = 1
                     })
+                } else {
+                    checkedLicenses[0] = 1
                 }
 
                 this.$emit('update:checkedLicenses', checkedLicenses)
