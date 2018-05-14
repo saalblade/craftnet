@@ -67,8 +67,6 @@
         },
 
         computed: {
-                stripe: null,
-                elements: null,
 
             ...mapState({
                 card: state => state.account.card,
