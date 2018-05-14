@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import developers from './modules/developers'
 import account from './modules/account'
 import licenses from './modules/licenses'
-import craftId from './modules/craftId'
+import craftId from './modules/craftid'
 
 Vue.use(Vuex);
 
