@@ -2,21 +2,33 @@
     <div v-if="license.expirable && license.expiresOn">
         <h2 class="mb-3">Renew Licenses</h2>
 
-        <template v-if="step === 'extend-updates'">
-            <extend-updates :license="license" @cancel="$emit('cancel')" @continue="step = 'plugins'" :renew.sync="renew"></extend-updates>
-        </template>
+        <extend-updates
+                v-if="step === 'extend-updates'"
+                :license="license"
+                :renew.sync="renew"
+                @cancel="$emit('cancel')"
+                @continue="step = 'plugins'" />
 
-        <template v-if="step === 'plugins'">
-            <plugins :license="license" @back="step = 'extend-updates'" @checkout="step = 'payment'" :checkedLicenses.sync="checkedLicenses" :renew="renew"></plugins>
-        </template>
+        <plugins
+                v-if="step === 'plugins'"
+                :checkedLicenses.sync="checkedLicenses"
+                :license="license"
+                :renew="renew"
+                @back="step = 'extend-updates'"
+                @checkout="step = 'payment'" />
 
-        <template v-if="step === 'payment'">
-            <payment :license="license" :renew="renew" :checkedLicenses="checkedLicenses" @back="step = renewableLicenses(license, renew).length > 1 ? 'plugins' : 'extend-updates'" @pay="step = 'thank-you'"></payment>
-        </template>
+        <payment
+                v-if="step === 'payment'"
+                :checkedLicenses="checkedLicenses"
+                :license="license"
+                :renew="renew"
+                @back="step = renewableLicenses(license, renew).length > 1 ? 'plugins' : 'extend-updates'"
+                @pay="step = 'thank-you'" />
 
-        <template v-if="step === 'thank-you'">
-            <thank-you @done="step = 'extend-updates'; $emit('cancel')"></thank-you>
-        </template>
+        <thank-you
+                v-if="step === 'thank-you'"
+                @done="step = 'extend-updates'; $emit('cancel')" />
+
     </div>
 </template>
 
