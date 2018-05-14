@@ -1,3 +1,7 @@
+th[align="right"] {
+  text-align: right;
+}
+
 .plugin-icon {
   max-width: 40px;
   max-height: 40px;
@@ -8,6 +12,6 @@
 }
 
 .plugin-renewal-price {
-  opacity: .5;
+  color: #999;
   font-style: italic;
 }

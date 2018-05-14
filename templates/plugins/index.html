@@ -14,7 +14,7 @@
 							<th></th>
 							<th>Plugin</th>
 							<th>Developer</th>
-							<th>Price</th>
+							<th align="right">Price</th>
 						</tr>
 					</thead>
 
@@ -38,14 +38,10 @@
 										{{ plugin.developer.developerName }}
 									{% endif %}
 								</td>
-								<td>
-									{% if plugin.price && plugin.price != '0.00' %}
-										<p class="plugin-price">
+								<td align="right">
+									{% if plugin.price %}
 											{{ plugin.price|currency('USD') }}<br>
-											{% if plugin.renewalPrice != '0.00' %}
-												<span class="plugin-renewal-price">{{ plugin.renewalPrice|currency('USD') }}</span>
-											{% endif %}
-										</p>
+											<span class="plugin-renewal-price">{{ plugin.renewalPrice|currency('USD') }}/year</span>
 									{% else %}
 										Free
 									{% endif %}
