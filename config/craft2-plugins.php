@@ -132,6 +132,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
+    'Link Vault' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
+    ],
     'Maps' => [
         'statusColor' => 'orange',
         'status' => 'Craft 3 upgrade path will be available via [Smart Map](https://www.doublesecretagency.com/plugins/smart-map).'
