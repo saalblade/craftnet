@@ -2,3 +2,12 @@
   max-width: 40px;
   max-height: 40px;
 }
+
+.plugin-price {
+  white-space: nowrap;
+}
+
+.plugin-renewal-price {
+  opacity: .5;
+  font-style: italic;
+}
