@@ -189,6 +189,7 @@ class StripeController extends BaseController
      * Removes the default payment source.
      *
      * @return Response
+     * @throws \Throwable
      */
     public function actionRemoveCard(): Response
     {
