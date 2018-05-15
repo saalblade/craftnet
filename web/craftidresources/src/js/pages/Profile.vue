@@ -147,10 +147,9 @@
                 this.$store.dispatch('uploadUserPhoto', data)
                     .then(response => {
                         this.$root.displayNotice('Photo uploaded.');
-
+		                let photoUrl = response.data.photoUrl
                         this.userDraft.photoId = response.data.photoId;
-                        this.userDraft.photoUrl = response.data.photoUrl + '&' + Math.floor(Math.random() * 1000000);
-
+                        this.userDraft.photoUrl = photoUrl + (photoUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000);
                         this.errors = {};
 
                         this.photoLoading = false;
