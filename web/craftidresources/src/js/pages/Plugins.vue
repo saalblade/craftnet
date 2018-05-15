@@ -22,7 +22,10 @@
                 <tbody>
                 <tr v-for="plugin in computedPlugins">
                     <td class="icon-col">
-                        <router-link :to="'/developer/plugins/' + plugin.id"><img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" /></router-link>
+                        <router-link :to="'/developer/plugins/' + plugin.id">
+                            <img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" />
+                            <img v-else :src="'/craftidresources/dist/images/default-plugin.svg'" height="36" />
+                        </router-link>
                     </td>
                     <td>
                         <router-link :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>
