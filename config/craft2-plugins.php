@@ -180,6 +180,9 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/statistics.html#readTime) could be used instead.'
     ],
+    'RedactorInlineStyles' => [
+        'handle' => 'redactor-custom-styles'
+    ],
     'RedactorExtras' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but the new [Redactor](https://github.com/craftcms/redactor) plugin makes it easy to include Redactor plugins without a Craft plugin.'
