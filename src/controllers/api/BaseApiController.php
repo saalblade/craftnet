@@ -604,7 +604,8 @@ abstract class BaseApiController extends Controller
                 $screenshotIds[] = $screenshot->getId();
             }
 
-            $longDescription = Markdown::process($plugin->longDescription, 'gfm');
+            $longDescription = htmlentities($plugin->longDescription, ENT_COMPAT, 'UTF-8');
+            $longDescription = Markdown::process($longDescription, 'gfm');
             $longDescription = HtmlPurifier::process($longDescription);
 
             $data['compatibility'] = 'Craft 3';
