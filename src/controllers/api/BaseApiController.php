@@ -597,10 +597,14 @@ abstract class BaseApiController extends Controller
         if ($fullDetails) {
             // Screenshots
             $screenshotUrls = [];
+            $thumbnailUrls = [];
             $screenshotIds = [];
 
             foreach ($plugin->getScreenshots() as $screenshot) {
                 $screenshotUrls[] = $screenshot->getUrl().'?'.$screenshot->dateModified->getTimestamp();
+                $thumbnailUrls[] = $screenshot->getUrl([
+                    'height' => 300,
+                    ]).'?'.$screenshot->dateModified->getTimestamp();
                 $screenshotIds[] = $screenshot->getId();
             }
 
@@ -617,6 +621,7 @@ abstract class BaseApiController extends Controller
             $data['license'] = $plugin->license;
             $data['developerUrl'] = $developer->developerUrl;
             $data['screenshotUrls'] = $screenshotUrls;
+            $data['thumbnailUrls'] = $thumbnailUrls;
             $data['screenshotIds'] = $screenshotIds;
         }
 
