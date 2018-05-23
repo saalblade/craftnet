@@ -557,9 +557,11 @@ abstract class BaseApiController extends Controller
 
     /**
      * @param Plugin $plugin
-     * @param bool $fullDetails
+     * @param bool   $fullDetails
      *
      * @return array
+     * @throws \craftnet\errors\MissingTokenException
+     * @throws \yii\base\InvalidConfigException
      */
     protected function transformPlugin(Plugin $plugin, bool $fullDetails = true): array
     {
