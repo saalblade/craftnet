@@ -110,10 +110,16 @@ const mutations = {
             newPlugin = true;
         }
 
+        let iconUrl = response.data.iconUrl
+
+        if(iconUrl) {
+            iconUrl = photoUrl + (photoUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000);
+        }
+
         statePlugin.siteId = plugin.siteId;
         statePlugin.pluginId = response.data.id;
         statePlugin.icon = plugin.icon;
-        statePlugin.iconUrl = response.data.iconUrl + '?' + Math.floor(Math.random() * 1000000);
+        statePlugin.iconUrl = iconUrl;
         statePlugin.iconId = response.data.iconId;
         statePlugin.developerId = plugin.developerId;
         statePlugin.developerName = plugin.developerName;

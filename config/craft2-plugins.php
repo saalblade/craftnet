@@ -83,6 +83,13 @@ return [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
+    'DuplicateUserDashboard' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Default Dashboard](https://github.com/verbb/default-dashboard) could be used instead.'
+    ],
+    'EmbeddedAssets' => [
+        'handle' => 'embeddedassets',
+    ],
     'Entitle' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/casing.html#apTitleize) could be used instead.'
@@ -109,6 +116,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [ImageOptimize](https://github.com/nystudio107/craft3-imageoptimize) or [Imgix](https://github.com/sjelfull/craft3-imgix) could be used instead'
     ],
+    'Import' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Feed Me](https://github.com/verbb/feed-me) could be used instead'
+    ],
     'Inflect' => [
         'statusColor' => 'orange',
         'status' => '[Discontinued](https://github.com/lukeholder/craft-inflect/blob/master/readme.md#craft-2-only), but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
@@ -118,6 +129,10 @@ return [
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
     ],
     'LanguageLink' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
+    ],
+    'Link Vault' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
@@ -138,12 +153,20 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
     ],
+    'Neo' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development',
+    ],
     'NpEditMultipleElements' => [
         'handle' => 'sequential-edit',
     ],
     'Oauth' => [
         'statusColor' => 'red',
         'status' => 'Unnecessary thanks to Craft 3’s inclusion of an OAuth 2 client library'
+    ],
+    'OneDashboard' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Default Dashboard](https://github.com/verbb/default-dashboard) could be used instead.'
     ],
     'PhpTweak' => [
         'statusColor' => 'red',
@@ -156,6 +179,9 @@ return [
     'ReadTime' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/statistics.html#readTime) could be used instead.'
+    ],
+    'RedactorInlineStyles' => [
+        'handle' => 'redactor-custom-styles'
     ],
     'RedactorExtras' => [
         'statusColor' => 'orange',

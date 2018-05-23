@@ -1,0 +1,139 @@
+<h2>Date Range: {{ dateStart|date('short') }} - {{ dateEnd|date('short') }}</h2>
+
+{% set totalSales = 0 %}
+{% set totalRevenue = 0 %}
+{% set totalRefunds = 0 %}
+{% set totalCraftSalesAmount = 0 %}
+{% set totalCraftSalesNumber = 0 %}
+{% set totalCommerceSalesAmount = 0 %}
+{% set totalCommerceSalesNumber = 0 %}
+{% set totalGatewaySalesAmount = 0 %}
+{% set totalGatewaySalesNumber = 0 %}
+{% set totalDiscounts = 0 %}
+{% set total3rdPartyPluginStoreSalesAmount = 0 %}
+{% set total3rdPartyPluginStoreSalesNumber = 0 %}
+{% set totalPluginStoreFees = 0 %}
+{% set totalPluginStorePayout = 0 %}
+
+<table class="data fullwidth">
+    {% for order in orders %}
+        {% if order.itemTotal != order.totalPaid %}
+            {% set totalDiscounts = totalDiscounts + (order.itemTotal - order.totalPaid) %}
+        {% endif %}
+
+        <tr>
+            <td scope="col"><strong>Order Id</strong></td>
+            <td scope="col"><strong>Order Num</strong></td>
+            <td scope="col"><strong>Date Paid</strong></td>
+            <td scope="col"><strong>Item Total</strong></td>
+            <td scope="col"><strong>Total Paid</strong></td>
+        </tr>
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.number }}</td>
+            <td>{{ order.datePaid|date('short') }}</td>
+            <td>{{ order.itemTotal|currency }}</td>
+            <td>{{ order.totalPaid|currency }}</td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <table class="data fullwidth">
+                    <tr>
+                        <td scope="col"><strong>SKU</strong></td>
+                        <td scope="col"><strong>Quantity</strong></td>
+                        <td scope="col"><strong>Sale Price</strong></td>
+                        <td scope="col"><strong>Total Price</strong></td>
+                    </tr>
+                    {% for lineItem in order.lineItems %}
+                        <tr>
+                            <td>{{ lineItem.sku }}</td>
+                            <td>{{ lineItem.qty }}</td>
+                            <td>{{ lineItem.salePrice|currency }}</td>
+                            <td>{{ lineItem.total|currency }}</td>
+                        </tr>
+
+                        {% if lineItem.sku in allPurchasables %}
+                            {% set totalRevenue = totalRevenue + lineItem.total %}
+                         {% endif %}
+
+                        {% if lineItem.sku in craftPurchasables %}
+                            {% set totalCraftSalesAmount = totalCraftSalesAmount + lineItem.total %}
+                            {% set totalCraftSalesNumber = totalCraftSalesNumber + lineItem.qty %}
+                        {% elseif lineItem.sku in commercePurchasables %}
+                            {% set totalCommerceSalesAmount = totalCommerceSalesAmount + lineItem.total %}
+                            {% set totalCommerceSalesNumber = totalCommerceSalesNumber + lineItem.qty %}
+                        {% elseif lineItem.sku in gatewayPurchasables%}
+                            {% set totalGatewaySalesAmount = totalGatewaySalesAmount + lineItem.total %}
+                            {% set totalGatewaySalesNumber = totalGatewaySalesNumber + lineItem.qty %}
+                        {% else %}
+                            {% set total3rdPartyPluginStoreSalesNumber = total3rdPartyPluginStoreSalesNumber + lineItem.qty %}
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <table class="data fullwidth">
+                    <tr>
+                        <td scope="col"><strong>Type</strong></td>
+                        <td scope="col"><strong>Amount</strong></td>
+                        <td scope="col"><strong>Reference</strong></td>
+                    </tr>
+                    {% for transaction in order.transactions %}
+                        {% if transaction.type == 'purchase' %}
+                            {% set totalSales = totalSales + transaction.amount %}
+                        {% elseif transaction.type == 'refund' %}
+                            {% set totalRefunds = totalRefunds + transaction.amount %}
+                        {% endif %}
+
+                        <tr>
+                            <td>{{ transaction.type }}</td>
+                            <td>{{ transaction.amount|currency }}</td>
+                            <td><a href="https://dashboard.stripe.com/payments/{{ transaction.reference }}" target="_blank">{{ transaction.reference }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    {% if devPayments[order.id] is defined %}
+                        <tr>
+                            <td scope="col"><strong>Plugin Store Fee</strong></td>
+                            <td scope="col"><strong>Developer Payout</strong></td>
+                            <td scope="col">&nbsp;</td>
+                        </tr>
+                        {% for devPayment in devPayments[order.id] %}
+                            {% if devPayment['credit'] is defined %}
+                                {% set total3rdPartyPluginStoreSalesAmount = total3rdPartyPluginStoreSalesAmount + devPayment['credit'] %}
+                            {% endif %}
+
+                            {% if devPayment['fee'] is defined %}
+                                {% set totalPluginStoreFees = totalPluginStoreFees + devPayment['fee'] %}
+                                {% set totalRevenue = totalRevenue + devPayment['fee'] %}
+                            {% endif %}
+
+                            {% if devPayment['debit'] is defined %}
+                                {% set totalPluginStorePayout = totalPluginStorePayout + devPayment['debit'] %}
+                            {% endif %}
+
+                            <tr>
+                                <td>{{ devPayment['fee'] ? devPayment['fee']|currency : '' }}</td>
+                                <td>{{ devPayment['debit'] ? devPayment['debit']|currency : ''}}</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </table>
+            </td>
+        </tr>
+        <tr><td colspan="5"><hr></td></tr>
+    {% endfor %}
+</table>
+
+<h2>Total Sales: {{ totalSales|currency }}</h2>
+<h2>Total Refunds: {{ totalRefunds|currency }}</h2>
+<h2>Total Discounts: {{ totalDiscounts|currency }}</h2>
+<h2>Total Craft Sales: {{ totalCraftSalesAmount|currency }} ({{ totalCraftSalesNumber }})</h2>
+<h2>Total Commerce Sales: {{ totalCommerceSalesAmount|currency }} ({{ totalCommerceSalesNumber }})</h2>
+<h2>Total Gateway Sales: {{ totalGatewaySalesAmount|currency }} ({{ totalGatewaySalesNumber }})</h2>
+<h2>Total 3rd Party Plugin Store Sales: {{ total3rdPartyPluginStoreSalesAmount|currency }} ({{ total3rdPartyPluginStoreSalesNumber }})</h2>
+<h2>Total Plugin Store Fees: {{ totalPluginStoreFees|currency }}</h2>
+<h2>Total Plugin Store Payout: {{ totalPluginStorePayout|currency }}</h2>
+<h2>Total Revenue: {{ (totalRevenue - totalRefunds)|currency }}</h2>

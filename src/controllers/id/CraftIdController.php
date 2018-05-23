@@ -68,6 +68,13 @@ class CraftIdController extends BaseController
 
         // Data
 
+        $photo = $currentUser->getPhoto();
+        $photoUrl = $photo ? Craft::$app->getAssets()->getAssetUrl($photo, [
+            'mode' => 'crop',
+            'width' => 200,
+            'height' => 200,
+        ], true) : null;
+
         $data = [
             'currentUser' => [
                 'id' => $currentUser->id,
@@ -81,8 +88,8 @@ class CraftIdController extends BaseController
                 'enablePluginDeveloperFeatures' => ($currentUser->isInGroup('developers') ? true : false),
                 'enableShowcaseFeatures' => ($currentUser->enableShowcaseFeatures == 1 ? true : false),
                 'groups' => $currentUser->getGroups(),
-                'photoId' => ($currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null),
-                'photoUrl' => $currentUser->getThumbUrl(200),
+                'photoId' => $currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null,
+                'photoUrl' => $photoUrl,
                 'hasApiToken' => ($currentUser->apiToken !== null),
             ],
             'card' => $this->_card($currentUser),

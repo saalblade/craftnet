@@ -557,9 +557,11 @@ abstract class BaseApiController extends Controller
 
     /**
      * @param Plugin $plugin
-     * @param bool $fullDetails
+     * @param bool   $fullDetails
      *
      * @return array
+     * @throws \craftnet\errors\MissingTokenException
+     * @throws \yii\base\InvalidConfigException
      */
     protected function transformPlugin(Plugin $plugin, bool $fullDetails = true): array
     {
@@ -597,10 +599,14 @@ abstract class BaseApiController extends Controller
         if ($fullDetails) {
             // Screenshots
             $screenshotUrls = [];
+            $thumbnailUrls = [];
             $screenshotIds = [];
 
             foreach ($plugin->getScreenshots() as $screenshot) {
                 $screenshotUrls[] = $screenshot->getUrl().'?'.$screenshot->dateModified->getTimestamp();
+                $thumbnailUrls[] = $screenshot->getUrl([
+                    'height' => 300,
+                    ]).'?'.$screenshot->dateModified->getTimestamp();
                 $screenshotIds[] = $screenshot->getId();
             }
 
@@ -617,6 +623,7 @@ abstract class BaseApiController extends Controller
             $data['license'] = $plugin->license;
             $data['developerUrl'] = $developer->developerUrl;
             $data['screenshotUrls'] = $screenshotUrls;
+            $data['thumbnailUrls'] = $thumbnailUrls;
             $data['screenshotIds'] = $screenshotIds;
         }
 
