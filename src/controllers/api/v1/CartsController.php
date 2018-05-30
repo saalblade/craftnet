@@ -423,7 +423,7 @@ class CartsController extends BaseApiController
                 $iso = $country->iso === 'GR' ? 'EL' : $country->iso;
 
                 // Make sure the VAT ID the user supplied starts with the correct country code.
-                $vatId = StringHelper::ensureLeft($vatId, $iso);
+                $vatId = StringHelper::ensureLeft(StringHelper::toUpperCase($vatId), StringHelper::toUpperCase($iso));
                 if ($vatId && !(new Validator())->isValid($vatId)) {
                     $addressErrors[] = [
                         'param' => 'billingAddress.businessTaxId',
