@@ -25,8 +25,8 @@ class DbTarget extends \yii\log\DbTarget
         }
 
         $tableName = $this->db->quoteTableName($this->logTable);
-        $sql = "INSERT INTO $tableName ([[level]], [[category]], [[log_time]], [[prefix]], [[message]])
-                VALUES (:level, :category, :log_time, :prefix, :message)";
+        $sql = "INSERT INTO $tableName ([[requestId]], [[level]], [[category]], [[timestamp]], [[prefix]], [[message]])
+                VALUES (:requestId, :level, :category, :timestamp, :prefix, :message)";
         $command = $this->db->createCommand($sql);
         foreach ($this->messages as $message) {
             list($text, $level, $category, $timestamp) = $message;
