@@ -86,8 +86,8 @@ class AccountController extends Controller
             ]);
         } catch (\Throwable $exception) {
             /** @noinspection UnSafeIsSetOverArrayInspection - FP */
-            if (isset($fileLocation)) {
-                FileHelper::removeFile($fileLocation);
+            if (isset($fileLocation) && file_exists($fileLocation)) {
+                FileHelper::unlink($fileLocation);
             }
 
             Craft::error('There was an error uploading the photo: '.$exception->getMessage(), __METHOD__);
@@ -169,7 +169,7 @@ class AccountController extends Controller
             $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
 
             $invoices = [];
-            
+
             if ($customer) {
                 $invoices = Module::getInstance()->getInvoiceManager()->getInvoices($customer);
             }
