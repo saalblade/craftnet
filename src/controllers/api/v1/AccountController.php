@@ -4,9 +4,7 @@ namespace craftnet\controllers\api\v1;
 
 use Craft;
 use craft\commerce\Plugin as Commerce;
-use craft\elements\User;
 use craftnet\controllers\api\BaseApiController;
-use craftnet\oauthserver\Module as OauthServer;
 use yii\helpers\Json;
 use yii\web\Response;
 use yii\web\UnauthorizedHttpException;

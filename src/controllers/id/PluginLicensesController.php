@@ -8,7 +8,6 @@ use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
 use Exception;
 use Throwable;
-use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 /**

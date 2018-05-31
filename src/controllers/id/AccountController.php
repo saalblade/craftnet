@@ -9,11 +9,11 @@ use craft\elements\Asset;
 use craft\errors\UploadFailedException;
 use craft\helpers\Assets;
 use craft\helpers\FileHelper;
-use craft\helpers\Json;
 use craft\web\Controller;
 use craft\web\UploadedFile;
 use craftnet\Module;
 use Throwable;
+use yii\base\UserException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
@@ -86,8 +86,8 @@ class AccountController extends Controller
             ]);
         } catch (\Throwable $exception) {
             /** @noinspection UnSafeIsSetOverArrayInspection - FP */
-            if (isset($fileLocation)) {
-                FileHelper::removeFile($fileLocation);
+            if (isset($fileLocation) && file_exists($fileLocation)) {
+                FileHelper::unlink($fileLocation);
             }
 
             Craft::error('There was an error uploading the photo: '.$exception->getMessage(), __METHOD__);
@@ -169,7 +169,7 @@ class AccountController extends Controller
             $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
 
             $invoices = [];
-            
+
             if ($customer) {
                 $invoices = Module::getInstance()->getInvoiceManager()->getInvoices($customer);
             }
@@ -205,13 +205,13 @@ class AccountController extends Controller
         $countryIso = Craft::$app->getRequest()->getBodyParam('country');
         $stateAbbr = Craft::$app->getRequest()->getBodyParam('state');
 
-        if($countryIso) {
+        if ($countryIso) {
             $country = Commerce::getInstance()->getCountries()->getCountryByIso($countryIso);
 
-            if($country) {
+            if ($country) {
                 $address->countryId = $country->id;
 
-                if(!empty($stateAbbr)) {
+                if (!empty($stateAbbr)) {
                     $state = Commerce::getInstance()->getStates()->getStateByAbbreviation($country->id, $stateAbbr);
                     $address->stateId = $state ? $state->id : null;
                 }
@@ -219,25 +219,33 @@ class AccountController extends Controller
         }
 
         try {
+            // save the address
             $customerService = Commerce::getInstance()->getCustomers();
+            if (!$customerService->saveAddress($address)) {
+                $errors = implode(', ', $address->getErrorSummary(false));
+                throw new UserException($errors ?: 'An error occurred saving the billing address.');
+            }
 
-            $customerService->saveAddress($address);
+            // set this as the user's primary billing address
             $customer = $customerService->getCustomer();
             $customer->primaryBillingAddressId = $address->id;
+            if (!$customerService->saveCustomer($customer)) {
+                $errors = implode(', ', $customer->getErrorSummary(false));
+                throw new UserException($errors ?: 'An error occurred saving the billing address.');
+            }
 
-            $customerService->saveCustomer($customer);
-
+            // return the address info
             $addressArray = $address->toArray();
-
-            if($countryIso) {
+            if ($countryIso) {
                 $addressArray['country'] = $countryIso;
             }
-
-            if($stateAbbr) {
+            if ($stateAbbr) {
                 $addressArray['state'] = $stateAbbr;
             }
-
-            return $this->asJson(['success' => true, 'address' => $addressArray]);
+            return $this->asJson([
+                'success' => true,
+                'address' => $addressArray,
+            ]);
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
