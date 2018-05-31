@@ -324,7 +324,6 @@ class CartsController extends BaseApiController
                 ->one();
         }
 
-
         if ($user) {
             // see if we have a customer record for them
             $customer = $customersService->getCustomerByUserId($user->id);
@@ -361,38 +360,6 @@ class CartsController extends BaseApiController
         if ($email !== null) {
             $cart->setEmail($email);
         }
-    }
-
-    /**
-     * @param Order $cart
-     * @param int $billingAddressId
-     * @param array $errors
-     */
-    private function _updateCartBillingAddressId(Order $cart, int $billingAddressId, array &$errors)
-    {
-        // make sure the billing address belongs to the cart's customer
-        if (!$cart->customerId) {
-            $errors[] = [
-                'param' => 'billingAddressId',
-                'message' => 'Unable to verify that the billing address is owned by the customer',
-                'code' => self::ERROR_CODE_INVALID,
-            ];
-            return;
-        }
-
-        $addresses = Commerce::getInstance()->getAddresses()->getAddressesByCustomerId($cart->customerId);
-        $addressIds = ArrayHelper::getColumn($addresses, 'id');
-
-        if (!in_array($billingAddressId, $addressIds, false)) {
-            $errors[] = [
-                'billingAddressId',
-                'message' => 'Billing address not owned by the customer',
-                'code' => self::ERROR_CODE_INVALID,
-            ];
-            return;
-        }
-
-        $cart->billingAddressId = $billingAddressId;
     }
 
     /**
