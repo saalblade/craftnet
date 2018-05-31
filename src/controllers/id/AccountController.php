@@ -13,6 +13,7 @@ use craft\web\Controller;
 use craft\web\UploadedFile;
 use craftnet\Module;
 use Throwable;
+use yii\base\UserException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
@@ -220,12 +221,18 @@ class AccountController extends Controller
         try {
             // save the address
             $customerService = Commerce::getInstance()->getCustomers();
-            $customerService->saveAddress($address);
+            if (!$customerService->saveAddress($address)) {
+                $errors = implode(', ', $address->getErrorSummary(false));
+                throw new UserException($errors ?: 'An error occurred saving the billing address.');
+            }
 
             // set this as the user's primary billing address
             $customer = $customerService->getCustomer();
             $customer->primaryBillingAddressId = $address->id;
-            $customerService->saveCustomer($customer);
+            if (!$customerService->saveCustomer($customer)) {
+                $errors = implode(', ', $customer->getErrorSummary(false));
+                throw new UserException($errors ?: 'An error occurred saving the billing address.');
+            }
 
             // return the address info
             $addressArray = $address->toArray();
