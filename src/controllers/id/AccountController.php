@@ -218,25 +218,27 @@ class AccountController extends Controller
         }
 
         try {
+            // save the address
             $customerService = Commerce::getInstance()->getCustomers();
-
             $customerService->saveAddress($address);
+
+            // set this as the user's primary billing address
             $customer = $customerService->getCustomer();
             $customer->primaryBillingAddressId = $address->id;
-
             $customerService->saveCustomer($customer);
 
+            // return the address info
             $addressArray = $address->toArray();
-
             if ($countryIso) {
                 $addressArray['country'] = $countryIso;
             }
-
             if ($stateAbbr) {
                 $addressArray['state'] = $stateAbbr;
             }
-
-            return $this->asJson(['success' => true, 'address' => $addressArray]);
+            return $this->asJson([
+                'success' => true,
+                'address' => $addressArray,
+            ]);
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
