@@ -17,6 +17,7 @@ use craftnet\errors\LicenseNotFoundException;
 use craftnet\errors\ValidationException;
 use craftnet\helpers\KeyHelper;
 use craftnet\Module;
+use craftnet\oauthserver\Module as OauthServer;
 use craftnet\plugins\Plugin;
 use craftnet\plugins\PluginLicense;
 use JsonSchema\Validator;
@@ -31,8 +32,6 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller as YiiController;
 use yii\web\HttpException;
 use yii\web\Response;
-use yii\web\UnauthorizedHttpException;
-use craftnet\oauthserver\Module as OauthServer;
 
 /**
  * Class BaseController
@@ -557,7 +556,7 @@ abstract class BaseApiController extends Controller
 
     /**
      * @param Plugin $plugin
-     * @param bool   $fullDetails
+     * @param bool $fullDetails
      *
      * @return array
      * @throws \craftnet\errors\MissingTokenException
@@ -605,7 +604,7 @@ abstract class BaseApiController extends Controller
             foreach ($plugin->getScreenshots() as $screenshot) {
                 $screenshotUrls[] = $screenshot->getUrl().'?'.$screenshot->dateModified->getTimestamp();
                 $thumbnailUrls[] = $screenshot->getUrl([
-                    'height' => 300,
+                        'height' => 300,
                     ]).'?'.$screenshot->dateModified->getTimestamp();
                 $screenshotIds[] = $screenshot->getId();
             }

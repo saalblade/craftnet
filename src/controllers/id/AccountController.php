@@ -9,7 +9,6 @@ use craft\elements\Asset;
 use craft\errors\UploadFailedException;
 use craft\helpers\Assets;
 use craft\helpers\FileHelper;
-use craft\helpers\Json;
 use craft\web\Controller;
 use craft\web\UploadedFile;
 use craftnet\Module;
@@ -205,13 +204,13 @@ class AccountController extends Controller
         $countryIso = Craft::$app->getRequest()->getBodyParam('country');
         $stateAbbr = Craft::$app->getRequest()->getBodyParam('state');
 
-        if($countryIso) {
+        if ($countryIso) {
             $country = Commerce::getInstance()->getCountries()->getCountryByIso($countryIso);
 
-            if($country) {
+            if ($country) {
                 $address->countryId = $country->id;
 
-                if(!empty($stateAbbr)) {
+                if (!empty($stateAbbr)) {
                     $state = Commerce::getInstance()->getStates()->getStateByAbbreviation($country->id, $stateAbbr);
                     $address->stateId = $state ? $state->id : null;
                 }
@@ -229,11 +228,11 @@ class AccountController extends Controller
 
             $addressArray = $address->toArray();
 
-            if($countryIso) {
+            if ($countryIso) {
                 $addressArray['country'] = $countryIso;
             }
 
-            if($stateAbbr) {
+            if ($stateAbbr) {
                 $addressArray['state'] = $stateAbbr;
             }
 

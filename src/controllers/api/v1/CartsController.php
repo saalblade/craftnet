@@ -22,7 +22,6 @@ use Moccalotto\Eu\CountryInfo;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
 use yii\base\NotSupportedException;
-use yii\helpers\ArrayHelper;
 use yii\validators\EmailValidator;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
