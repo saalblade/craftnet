@@ -11,7 +11,7 @@
 
                 <template v-if="license.pluginLicenses.length > 0">
                     <p class="text-secondary mb-4">Plugin licenses attached to this Craft CMS license.</p>
-                    <plugin-licenses-table :licenses="license.pluginLicenses" :exclude-cms-license-column="true"></plugin-licenses-table>
+                    <plugin-licenses-table :licenses="license.pluginLicenses" :exclude-cms-license-column="true" :exclude-notes-column="true"></plugin-licenses-table>
                 </template>
                 <template v-else>
                     <p class="text-secondary mb-4">No plugin licenses are attached to this Craft CMS license.</p>

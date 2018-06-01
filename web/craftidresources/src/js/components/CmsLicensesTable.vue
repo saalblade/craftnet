@@ -6,6 +6,7 @@
 				<th>License Key</th>
 				<th>Edition</th>
 				<th>Domain</th>
+				<th>Notes</th>
 
 				<template v-if="enableRenewalFeatures">
 					<th>Next Payment</th>
@@ -30,6 +31,7 @@
 
 					<td>{{ license.edition }}</td>
 					<td>{{ license.domain }}</td>
+					<td>{{ license.notes }}</td>
 
 
 					<template v-if="enableRenewalFeatures">
