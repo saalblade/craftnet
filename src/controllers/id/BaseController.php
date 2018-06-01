@@ -86,7 +86,8 @@ abstract class BaseController extends Controller
             'screenshotIds' => $screenshotIds,
             'categoryIds' => ArrayHelper::getColumn($plugin->getCategories(), 'id'),
 
-            'lastHistoryNote' => $lastHistoryNote
+            'lastHistoryNote' => $lastHistoryNote,
+            'activeInstalls' => $plugin->activeInstalls,
         ];
     }
 }

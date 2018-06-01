@@ -15,6 +15,7 @@
                 <tr>
                     <th></th>
                     <th>Name</th>
+                    <th>Active Installs</th>
                     <th>Price</th>
                     <th>Status</th>
                 </tr>
@@ -32,6 +33,7 @@
                         <small class="text-secondary" v-if="plugin.latestVersion">{{ plugin.latestVersion }}</small>
                         <div>{{ plugin.shortDescription }}</div>
                     </td>
+                    <td>{{ plugin.activeInstalls }}</td>
                     <td>
                         <template v-if="!plugin.price || plugin.price == '0.00'">
                             Free
