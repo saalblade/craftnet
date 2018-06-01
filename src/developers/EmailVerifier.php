@@ -3,6 +3,7 @@
 namespace craftnet\developers;
 
 use Craft;
+use craft\commerce\Plugin as Commerce;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\DateTimeHelper;
@@ -13,7 +14,6 @@ use craftnet\Module;
 use yii\base\BaseObject;
 use yii\base\InvalidArgumentException;
 use yii\validators\EmailValidator;
-use craft\commerce\Plugin as Commerce;
 
 class EmailVerifier extends BaseObject
 {

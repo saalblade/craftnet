@@ -436,7 +436,7 @@ class PluginLicenseManager extends Component
      * Transforms licenses for the given owner.
      *
      * @param array $results
-     * @param User  $owner
+     * @param User $owner
      *
      * @return array
      */
@@ -455,7 +455,7 @@ class PluginLicenseManager extends Component
      * Transforms a license for the given owner.
      *
      * @param CmsLicense $result
-     * @param User       $owner
+     * @param User $owner
      *
      * @return array
      */
