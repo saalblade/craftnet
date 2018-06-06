@@ -8,7 +8,9 @@
             <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
                 <div class="header">
                     <div class="actions-left">
-                        <a class="sidebar-toggle" @click.prevent="toggleSidebar()"><i class="fas fa-bars"></i></a>
+                        <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
+                            <i class="fas fa-bars"></i>
+                        </a>
                     </div>
 
                     <div>
@@ -55,6 +57,22 @@
                 plugins: state => state.pluginStore.plugins,
                 searchQuery: state => state.pluginStore.searchQuery,
             }),
+
+        },
+
+        watch: {
+
+            showingSidebar(value) {
+                const svg = this.$refs.sidebarToggle.querySelector("[data-fa-i2svg]");
+
+                if(value) {
+                    svg.classList.remove('fa-bars')
+                    svg.classList.add('fa-times')
+                } else {
+                    svg.classList.add('fa-bars')
+                    svg.classList.remove('fa-times')
+                }
+            }
 
         },
 
