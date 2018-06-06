@@ -1,19 +1,20 @@
 <template>
     <div>
-        <div class="grid-wrapper has-sidebar">
-            <div class="grid-sidebar">
-                <div class="developer-card">
+        <div class="developer-card">
+            <div class="photo">
+                <template v-if="!loading && developer">
+                    <img :src="developer.photoUrl" />
+                </template>
+            </div>
+
+            <div class="developer-details">
+                <div class="developer-details-content">
                     <template v-if="loading || !developer">
-                        <div class="spinner"></div>
+                        <div class="loading">Loading…</div>
                     </template>
-
                     <template v-else>
-                        <div class="avatar">
-                            <img :src="developer.photoUrl" />
-                        </div>
-
+                        <h1>{{ developer.developerName }}</h1>
                         <ul>
-                            <li><strong>{{ developer.developerName }}</strong></li>
                             <li>{{ developer.location }}</li>
                         </ul>
 
@@ -22,12 +23,13 @@
                             <li><a class="btn" :href="developer.developerUrl">{{ "Contact" }}</a></li>
                         </ul>
                     </template>
+
                 </div>
             </div>
+        </div>
 
-            <div class="grid-main">
-                <plugin-index :plugins="plugins" columns="3"></plugin-index>
-            </div>
+        <div class="grid-main">
+            <plugin-index :plugins="plugins" columns="3"></plugin-index>
         </div>
     </div>
 </template>
