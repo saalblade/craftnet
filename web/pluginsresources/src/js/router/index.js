@@ -54,6 +54,11 @@ router.beforeEach((to, from, next) => {
         router.app.$store.commit(types.UPDATE_SEARCH_QUERY, '')
     }
 
+    if(router.app.showingSidebar) {
+        // Hide sidebar
+        router.app.showingSidebar = false
+    }
+
     next();
 });
 
