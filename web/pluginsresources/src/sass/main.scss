@@ -316,7 +316,7 @@ input.text {
 
 .plugin-details {
   .plugin-details-header {
-    @apply .flex .border-b .py-6;
+    @apply .flex .border-b .pb-6;
 
     .plugin-icon-large {
       @apply .mr-6;
@@ -327,6 +327,10 @@ input.text {
 
       .details {
         @apply .flex-1 .leading-normal;
+
+        h1 {
+          @apply .border-b-0;
+        }
       }
 
       .price {
