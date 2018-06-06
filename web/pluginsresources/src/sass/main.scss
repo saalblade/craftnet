@@ -59,6 +59,11 @@ input.text {
   @apply .bg-grey-lighter .px-3 .py-2 .rounded;
 }
 
+/* Loading */
+
+.loading {
+  @apply .py-8 .text-grey-darker;
+}
 
 /* Grids */
 

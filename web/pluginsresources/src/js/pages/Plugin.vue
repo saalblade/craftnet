@@ -73,7 +73,7 @@
                 </div>
             </template>
             <template v-else>
-                <div>Loading…</div>
+                <div class="loading">Loading…</div>
             </template>
         </div>
     </div>
