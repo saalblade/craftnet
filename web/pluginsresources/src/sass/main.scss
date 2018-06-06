@@ -193,8 +193,8 @@ input.text {
       .actions-left {
         .sidebar-toggle {
           @apply .inline-block .mr-4;
-          display: inline-block;
           margin-top: 5px;
+          min-width: 14px;
         }
       }
 
