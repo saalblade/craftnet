@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Search results for “{{ searchQuery }}”</h1>
+        <h1>Showing results for “{{ searchQuery }}”</h1>
 
         <plugin-grid :plugins="pluginsToRender" :columns="4"></plugin-grid>
     </div>
