@@ -228,6 +228,14 @@ input.text {
     .sidebar {
       @apply .w-64 .p-6 .overflow-auto;
 
+      .header {
+        .actions-left {
+          .sidebar-toggle {
+            @apply .hidden;
+          }
+        }
+      }
+
       .navigation {
         @apply .block;
       }
