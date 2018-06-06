@@ -1,6 +1,6 @@
 <template>
     <div v-if="category">
-        <h1 class="mb-6">{{category.title}}</h1>
+        <h1>{{category.title}}</h1>
 
         <plugin-index :plugins="plugins" :columns="4"></plugin-index>
     </div>
