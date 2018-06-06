@@ -267,14 +267,14 @@ input.text {
 
       li {
         a {
-          @apply .block .py-2 .no-underline .-mx-6 .px-6;
+          @apply .block .py-2 .no-underline .-mx-6 .px-6 .text-grey-darker;
 
           img {
             @apply .align-middle;
           }
 
           &:hover {
-            @apply .bg-grey-light;
+            @apply .text-blue;
           }
 
           &.active {
