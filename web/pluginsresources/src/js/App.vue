@@ -5,12 +5,18 @@
         </div>
 
         <template v-else>
-            <div class="sidebar">
-                <h2 class="mb-4"><router-link to="/">Craft 3 Plugins</router-link></h2>
+            <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
+                <div class="header">
+                    <div class="actions-left">
+                        <a class="sidebar-toggle" @click.prevent="toggleSidebar()"><i class="fas fa-bars"></i></a>
+                    </div>
+
+                    <div>
+                        <h2><router-link to="/">Craft 3 Plugins</router-link></h2>
+                    </div>
+                </div>
 
                 <!--<plugin-search @showResults="showingSearchResults = true" @hideResults="showingSearchResults = false" :plugins="plugins"></plugin-search>-->
-
-                <plugin-search-form></plugin-search-form>
 
                 <navigation></navigation>
             </div>
@@ -36,12 +42,12 @@
         data() {
             return {
                 loading: true,
+                showingSidebar: false,
             }
         },
 
         components: {
             PluginSearch: require('./components/PluginSearch'),
-            PluginSearchForm: require('./components/PluginSearchForm'),
             PluginSearchResults: require('./components/PluginSearchResults'),
             Navigation: require('./components/Navigation'),
         },
@@ -52,6 +58,17 @@
                 plugins: state => state.pluginStore.plugins,
                 searchQuery: state => state.pluginStore.searchQuery,
             }),
+
+        },
+
+        methods: {
+
+            /**
+             * Toggles the sidebar.
+             */
+            toggleSidebar() {
+                this.showingSidebar = !this.showingSidebar;
+            },
 
         },
 
@@ -66,6 +83,7 @@
                     console.log('error', response)
                 })
         }
+
     }
 </script>
 

@@ -47,13 +47,10 @@ const router = new VueRouter({
     ]
 });
 
-// Renew session when changing route
+// Make things happen when changing route
 router.beforeEach((to, from, next) => {
-//    if (router.app.$refs.authManager) {
-//        router.app.$refs.authManager.renewSession();
-//    }
-//
     if(router.app.$store) {
+        // Reset search query
         router.app.$store.commit(types.UPDATE_SEARCH_QUERY, '')
     }
 
