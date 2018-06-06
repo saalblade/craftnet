@@ -107,6 +107,15 @@ input.text {
   }
 }
 
+@media (min-width: 2000px) {
+  .grid-plugins {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+  .grid-plugins-4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
 
 /* Plugin Card */
 
