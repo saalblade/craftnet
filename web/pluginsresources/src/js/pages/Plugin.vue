@@ -9,20 +9,22 @@
                     <img v-else :src="defaultPluginSvg" height="100" />
                 </div>
 
-                <div class="details">
-                    <h1>{{ pluginSnippet.name }}</h1>
-                    <div>{{ pluginSnippet.shortDescription }}</div>
-                    <div><router-link :to="'/developer/'+pluginSnippet.developerId">{{ pluginSnippet.developerName }}</router-link></div>
-                </div>
+                <div class="plugin-details-description">
+                    <div class="details">
+                        <h1>{{ pluginSnippet.name }}</h1>
+                        <div>{{ pluginSnippet.shortDescription }}</div>
+                        <div><router-link :to="'/developer/'+pluginSnippet.developerId">{{ pluginSnippet.developerName }}</router-link></div>
+                    </div>
 
-                <div class="price">
-                    <div class="price-btn">
-                        <template v-if="pluginSnippet.editions[0].price != null && pluginSnippet.editions[0].price !== '0.00'">
-                            {{ pluginSnippet.editions[0].price|currency }}
-                        </template>
-                        <template v-else>
-                            Free
-                        </template>
+                    <div class="price">
+                        <div class="price-btn">
+                            <template v-if="pluginSnippet.editions[0].price != null && pluginSnippet.editions[0].price !== '0.00'">
+                                {{ pluginSnippet.editions[0].price|currency }}
+                            </template>
+                            <template v-else>
+                                Free
+                            </template>
+                        </div>
                     </div>
                 </div>
             </div>
