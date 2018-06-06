@@ -16,8 +16,6 @@
                     </div>
                 </div>
 
-                <!--<plugin-search @showResults="showingSearchResults = true" @hideResults="showingSearchResults = false" :plugins="plugins"></plugin-search>-->
-
                 <navigation></navigation>
             </div>
             <div class="view">
@@ -47,7 +45,6 @@
         },
 
         components: {
-            PluginSearch: require('./components/PluginSearch'),
             PluginSearchResults: require('./components/PluginSearchResults'),
             Navigation: require('./components/Navigation'),
         },
