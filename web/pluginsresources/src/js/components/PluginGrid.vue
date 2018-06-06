@@ -36,7 +36,6 @@
 
             showPlugin(plugin) {
                 this.$router.push({path: '/plugin/' + plugin.id});
-                // this.$root.showPlugin(plugin)
             },
 
         },
