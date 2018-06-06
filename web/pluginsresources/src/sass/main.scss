@@ -36,6 +36,10 @@ body {
 a {
   @apply .no-underline;
   color: #0d78f2;
+
+  &:hover {
+    @apply .cursor-pointer;
+  }
 }
 
 hr {
