@@ -1,7 +1,7 @@
 <template>
     <div>
         <div :class="cssClass" v-if="plugins && plugins.length > 0">
-            <div class="ps-grid-box" v-for="plugin in plugins">
+            <div class="grid-box" v-for="plugin in plugins">
                 <plugin-card :plugin="plugin"></plugin-card>
             </div>
         </div>
@@ -21,10 +21,10 @@
         computed: {
 
             cssClass() {
-                let cssClass = 'ps-grid-plugins'
+                let cssClass = 'grid-plugins'
 
                 if (this.columns) {
-                    cssClass += ' ps-grid-plugins-' + this.columns
+                    cssClass += ' grid-plugins-' + this.columns
                 }
 
                 return cssClass

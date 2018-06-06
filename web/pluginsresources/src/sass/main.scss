@@ -18,12 +18,6 @@
   font-style: italic;
 }*/
 
-$sidebarWidth: 225px;
-$detailsWidth: 350px;
-$minFullUiWidth: 1224px;
-$minHorizontalUiWidth: $minFullUiWidth - $sidebarWidth;
-$minLargeScreenWidth: 1824px;
-
 @tailwind preflight;
 
 
@@ -67,76 +61,52 @@ input.text {
 
 /* Grids */
 
-.ps-grid-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 40px;
-}
-
-.ps-grid-wrapper.has-sidebar {
-  grid-template-columns: 1fr 4fr;
-}
-
-.ps-grid-plugins {
+.grid-plugins {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-auto-rows: 1fr;
   grid-column-gap: 30px;
   color: #444;
   margin-bottom: 20px;
+
+  .grid-box {
+    @apply .border-b .py-6 .overflow-hidden;
+  }
 }
 
-.ps-grid-plugins-4 {
-  grid-template-columns: 1fr 1fr 1fr;
+.grid-plugins-4 {
+  grid-template-columns: 1fr;
 }
 
-.ps-grid-box {
-  overflow: hidden;
-  @apply .border-b .py-6;
+
+@media (min-width: 576px) {
+  .grid-plugins {
+    grid-template-columns: 1fr 1fr;
+  }
+  .grid-plugins-4 {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
-@media only screen and (max-width: $minFullUiWidth - 1px) {
-  .ps-grid-plugins-4 {
+@media (min-width: 1220px) {
+  .grid-plugins {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .grid-plugins-4 {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
-@media only screen and (min-width: $minLargeScreenWidth) {
-  .ps-grid-plugins {
+@media (min-width: 1600px) {
+  .grid-plugins {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
-
-  .ps-grid-plugins-4 {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  .grid-plugins-4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
 
-// Rearrange #main-content to flow vertically at < 999
-@media only screen and (max-width: $minHorizontalUiWidth - 1px) {
-  .ps-grid-wrapper.has-sidebar {
-    grid-template-columns: 1fr;
-  }
-  .ps-grid-plugins {
-    grid-template-columns: 1fr 1fr;
-  }
-  .ps-grid-plugins-4 {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media only screen and (max-width: 673px) {
-  .ps-grid-plugins {
-    grid-gap: 10px;
-  }
-
-  .ps-grid-plugins {
-    grid-template-columns: 1fr;
-  }
-  .ps-grid-plugins-4 {
-    grid-template-columns: 1fr;
-  }
-}
 
 /* Plugin Card */
 
@@ -397,7 +367,6 @@ input.text {
   }
 }
 
-
 @media (min-width: 768px) {
   .plugin-details {
     .plugin-details-header {
@@ -422,4 +391,5 @@ input.text {
     }
   }
 }
+
 @tailwind utilities;

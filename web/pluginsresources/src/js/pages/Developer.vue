@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="ps-grid-wrapper has-sidebar">
-            <div class="ps-grid-sidebar">
+        <div class="grid-wrapper has-sidebar">
+            <div class="grid-sidebar">
                 <div class="developer-card">
                     <template v-if="loading || !developer">
                         <div class="spinner"></div>
@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <div class="ps-grid-main">
+            <div class="grid-main">
                 <plugin-index :plugins="plugins" columns="3"></plugin-index>
             </div>
         </div>
