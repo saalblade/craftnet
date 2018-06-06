@@ -308,7 +308,7 @@ input.text {
     @apply .flex .border-b .py-6;
 
     .plugin-icon-large {
-      @apply .mr-4;
+      @apply .mr-6;
     }
 
     .plugin-details-description {
@@ -347,8 +347,23 @@ input.text {
           }
 
           &.plugin-meta-data {
+            @apply .border-b;
+
             li {
-              @apply .border-b;
+              @apply .border-b .flex .py-2;
+
+              &:last-child {
+                @apply .border-b-0;
+              }
+
+              & span,
+              & strong {
+                @apply .flex-1;
+              }
+
+              & strong {
+                @apply .text-right;
+              }
             }
           }
 
@@ -393,11 +408,7 @@ input.text {
         }
       }
     }
-  }
-}
 
-@media (min-width: 768px) {
-  .plugin-details {
     .plugin-details-body {
       @apply .flex;
 
