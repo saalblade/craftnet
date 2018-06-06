@@ -16,7 +16,14 @@
                 </div>
 
                 <div class="price">
-                    <div class="price-btn">[price]</div>
+                    <div class="price-btn">
+                        <template v-if="pluginSnippet.editions[0].price != null && pluginSnippet.editions[0].price !== '0.00'">
+                            {{ pluginSnippet.editions[0].price|currency }}
+                        </template>
+                        <template v-else>
+                            Free
+                        </template>
+                    </div>
                 </div>
             </div>
 
