@@ -180,17 +180,62 @@ input.text {
 /* Layout */
 
 .wrapper {
-  @apply .flex .absolute .pin;
 
   .sidebar {
-    @apply .w-1/5 .px-4 .py-6;
+    @apply .px-6 .py-4;
+
+    .header {
+      @apply .flex;
+
+      .actions-left {
+        .sidebar-toggle {
+          @apply .inline-block .mr-4;
+          display: inline-block;
+          margin-top: 5px;
+        }
+      }
+
+      & > div:last-child {
+        @apply .flex-1;
+      }
+    }
+
+    .navigation {
+      @apply .hidden;
+    }
+
+    &.showing-sidebar {
+      .navigation {
+        @apply .block;
+      }
+    }
   }
 
   .view {
-    @apply .w-4/5 .py-6 .overflow-auto;
-    padding-left: 3rem;
-    padding-right: 3rem;
+    @apply .px-6 .py-4;
   }
+}
+
+@media (min-width: 992px) {
+
+  .wrapper {
+    @apply .flex .absolute .pin;
+
+    .sidebar {
+      @apply .w-64 .p-6 .overflow-auto;
+
+      .navigation {
+        @apply .block;
+      }
+    }
+
+    .view {
+      @apply .flex-1 .py-6 .overflow-auto;
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+
 }
 
 /* Sidebar */
@@ -212,7 +257,7 @@ input.text {
 
       li {
         a {
-          @apply .block .py-2 .no-underline .-mx-4 .px-4;
+          @apply .block .py-2 .no-underline .-mx-6 .px-6;
 
           img {
             @apply .align-middle;
