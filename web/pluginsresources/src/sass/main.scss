@@ -184,7 +184,6 @@ input.text {
 /* Layout */
 
 .wrapper {
-
   .sidebar {
     @apply .px-6 .py-4;
 
@@ -221,7 +220,6 @@ input.text {
 }
 
 @media (min-width: 992px) {
-
   .wrapper {
     @apply .flex .absolute .pin;
 
@@ -247,7 +245,6 @@ input.text {
       padding-right: 3rem;
     }
   }
-
 }
 
 /* Sidebar */
@@ -379,8 +376,5 @@ input.text {
     }
   }
 }
-
-
-/* Search form */
 
 @tailwind utilities;
