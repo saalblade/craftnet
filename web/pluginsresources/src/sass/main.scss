@@ -361,6 +361,10 @@ input.text {
 
     .plugin-description {
       @apply .px-4;
+
+      h1 {
+        @apply .border-b-0;
+      }
     }
 
     .plugin-sidebar {
