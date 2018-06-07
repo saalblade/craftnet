@@ -12,6 +12,8 @@
                 </div>
             </template>
         </template>
+
+        <div class="mt-6 text-right text-grey-lighter">{{ plugins.length }}</div>
     </div>
 </template>
 
