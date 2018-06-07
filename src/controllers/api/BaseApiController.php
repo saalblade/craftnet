@@ -458,14 +458,29 @@ abstract class BaseApiController extends Controller
                 $logException = $e;
             }
 
+            $exceptionType = get_class($logException);
+            $exceptionMessage = $logException->getMessage();
+            $exceptionStackTrace = $logException->getTraceAsString();
+
             $db->createCommand()
                 ->insert('apilog.request_errors', [
                     'requestId' => $this->requestId,
-                    'type' => get_class($logException),
-                    'message' => $logException->getMessage(),
-                    'stackTrace' => $logException->getTraceAsString(),
+                    'type' => $exceptionType,
+                    'message' => $exceptionMessage,
+                    'stackTrace' => $exceptionStackTrace,
                 ], false)
                 ->execute();
+
+            try {
+                Craft::$app->getMailer()->compose()
+                    ->setSubject('Craftnet API Error')
+                    ->setTextBody('RequestId: '.$this->requestId.PHP_EOL.'Type: '.$exceptionType.PHP_EOL.'Message: '.$exceptionMessage.PHP_EOL.'Stack Trace: '.$exceptionStackTrace)
+                    ->setTo(explode(',', getenv('API_ERROR_RECIPIENTS')))
+                    ->send();
+            } catch (\Exception $e) {
+                // Just log and move on.
+                Craft::error('There was a problem sending the API error email: '.$e->getMessage(), __METHOD__);
+            }
 
             // assemble and return the response
             $data = [
