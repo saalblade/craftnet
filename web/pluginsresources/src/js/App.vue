@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
-        <div v-if="loading">
-            Loading…
+        <div v-if="loading" class="loading-wrapper">
+            <div class="loading">Loading…</div>
         </div>
 
         <template v-else>

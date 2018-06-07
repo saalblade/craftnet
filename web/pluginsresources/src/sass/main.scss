@@ -63,6 +63,15 @@ input.text {
   @apply .py-6 .text-grey-darker;
 }
 
+.wrapper {
+  .loading-wrapper {
+    @apply .flex-1 .flex .justify-center;
+
+    .loading {
+      @apply .self-center .text-lg;
+    }
+  }
+}
 /* Grids */
 
 .grid-plugins {
