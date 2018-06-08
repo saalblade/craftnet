@@ -472,9 +472,26 @@ abstract class BaseApiController extends Controller
                 ->execute();
 
             try {
+
+                $body = 'RequestId: '.$this->requestId.PHP_EOL.PHP_EOL.
+                        'Type: '.$exceptionType.PHP_EOL.PHP_EOL.
+                        'Message: '.$exceptionMessage.PHP_EOL.PHP_EOL.
+                        'Stack Trace: '.$exceptionStackTrace.PHP_EOL.PHP_EOL.
+                        'Method: '.$request->getMethod().PHP_EOL.PHP_EOL.
+                        'URI: '.$request->getUrl().PHP_EOL.PHP_EOL.
+                        'IP: '.$request->getUserIP().PHP_EOL.PHP_EOL.
+                        'Action: '.$this->getUniqueId().'/'.$id.PHP_EOL.PHP_EOL.
+                        'Body: '.$request->getRawBody().PHP_EOL.PHP_EOL.
+                        'System: '.$requestHeaders->get('X-Craft-System').PHP_EOL.PHP_EOL.
+                        'Platform: '.$requestHeaders->get('X-Craft-Platform').PHP_EOL.PHP_EOL.
+                        'Host: '.$requestHeaders->get('X-Craft-Host').PHP_EOL.PHP_EOL.
+                        'User Email: '.$requestHeaders->get('X-Craft-User-Email').PHP_EOL.PHP_EOL.
+                        'User IP: '.$requestHeaders->get('X-Craft-User-Ip').PHP_EOL.PHP_EOL.
+                        'Response Code: '.$response->getStatusCode().PHP_EOL.PHP_EOL;
+
                 Craft::$app->getMailer()->compose()
                     ->setSubject('Craftnet API Error')
-                    ->setTextBody('RequestId: '.$this->requestId.PHP_EOL.'Type: '.$exceptionType.PHP_EOL.'Message: '.$exceptionMessage.PHP_EOL.'Stack Trace: '.$exceptionStackTrace)
+                    ->setTextBody($body)
                     ->setTo(explode(',', getenv('API_ERROR_RECIPIENTS')))
                     ->send();
             } catch (\Exception $e) {
