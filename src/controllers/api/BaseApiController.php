@@ -471,9 +471,10 @@ abstract class BaseApiController extends Controller
                 ], false)
                 ->execute();
 
-            try {
+            if ($response->getStatusCode() != 400) {
+                try {
 
-                $body = 'RequestId: '.$this->requestId.PHP_EOL.PHP_EOL.
+                    $body = 'RequestId: '.$this->requestId.PHP_EOL.PHP_EOL.
                         'Type: '.$exceptionType.PHP_EOL.PHP_EOL.
                         'Message: '.$exceptionMessage.PHP_EOL.PHP_EOL.
                         'Stack Trace: '.$exceptionStackTrace.PHP_EOL.PHP_EOL.
@@ -489,14 +490,15 @@ abstract class BaseApiController extends Controller
                         'User IP: '.$requestHeaders->get('X-Craft-User-Ip').PHP_EOL.PHP_EOL.
                         'Response Code: '.$response->getStatusCode().PHP_EOL.PHP_EOL;
 
-                Craft::$app->getMailer()->compose()
-                    ->setSubject('Craftnet API Error')
-                    ->setTextBody($body)
-                    ->setTo(explode(',', getenv('API_ERROR_RECIPIENTS')))
-                    ->send();
-            } catch (\Exception $e) {
-                // Just log and move on.
-                Craft::error('There was a problem sending the API error email: '.$e->getMessage(), __METHOD__);
+                    Craft::$app->getMailer()->compose()
+                        ->setSubject('Craftnet API Error')
+                        ->setTextBody($body)
+                        ->setTo(explode(',', getenv('API_ERROR_RECIPIENTS')))
+                        ->send();
+                } catch (\Exception $e) {
+                    // Just log and move on.
+                    Craft::error('There was a problem sending the API error email: '.$e->getMessage(), __METHOD__);
+                }
             }
 
             // assemble and return the response
