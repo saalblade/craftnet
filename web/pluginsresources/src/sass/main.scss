@@ -44,6 +44,18 @@ p {
   @apply .mb-4;
 }
 
+table.data {
+  @apply .border-t .mt-2;
+
+  th, td {
+    @apply .border-b .p-2;
+  }
+  
+  th {
+    text-align: left;
+  }
+}
+
 
 /* Inputs */
 

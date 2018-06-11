@@ -38,6 +38,58 @@
                     <div class="plugin-description">
                         <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                         <p v-else>No description.</p>
+
+                        <template v-if="pluginSnippet.editions[0].price != null && pluginSnippet.editions[0].price !== '0.00'">
+                            <h2 id="pricing" class="mt-4">Pricing</h2>
+                            <table class="data w-full">
+                                <tr>
+                                    <th></th>
+                                    <th>
+                                        <div class="mb-2">Lite</div>
+                                        <a href="#" class="btn inline-block">{{ (pluginSnippet.editions[0].price / 4)|currency }}</a>
+                                    </th>
+                                    <th>
+                                        <div class="mb-2">Standard</div>
+                                        <a href="#" class="btn inline-block">{{ (pluginSnippet.editions[0].price * 1)|currency }}</a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Feature description</th>
+                                    <td>Yes</td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <th>Feature description</th>
+                                    <td>Yes</td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <th>Feature description</th>
+                                    <td>Yes</td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <th>Feature description</th>
+                                    <td>No</td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <th>Feature description</th>
+                                    <td>No</td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <th>Feature description</th>
+                                    <td>No</td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <th>Feature description</th>
+                                    <td>No</td>
+                                    <td>Yes</td>
+                                </tr>
+                            </table>
+                        </template>
                     </div>
 
                     <div class="plugin-sidebar">
