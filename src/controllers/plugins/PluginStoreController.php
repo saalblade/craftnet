@@ -3,6 +3,7 @@
 namespace craftnet\controllers\plugins;
 
 use Craft;
+use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use yii\web\Response;
 
