@@ -26,6 +26,6 @@ Vue.filter('t', val => {
 /**
  * FormatNumber.
  */
-Vue.filter('formatNumber', val => {
-    return val;
+Vue.filter('formatNumber', (number, precision, thousand, decimal) => {
+    return Accounting.formatNumber(number, precision, thousand, decimal);
 })
