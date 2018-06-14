@@ -19,8 +19,8 @@ Vue.filter('currency', value => {
 /**
  * Translate filter.
  */
-Vue.filter('t', val => {
-    return val;
+Vue.filter('t', value => {
+    return value;
 })
 
 /**
