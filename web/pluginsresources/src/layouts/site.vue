@@ -14,7 +14,7 @@
                     </div>
 
                     <div>
-                        <h2><router-link to="/">Craft 3 Plugins</router-link></h2>
+                        <h2><router-link to="/">Craft Plugins</router-link></h2>
                     </div>
                 </div>
 
