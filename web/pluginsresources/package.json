@@ -19,7 +19,8 @@
     "lodash": "^4.17.10",
     "nuxt": "^1.4.1",
     "vue": "^2.5.2",
-    "vue-lodash": "^1.0.3"
+    "vue-lodash": "^1.0.3",
+    "vue-moment": "^4.0.0-0"
   },
   "devDependencies": {
     "laravel-mix": "^2.0.0",

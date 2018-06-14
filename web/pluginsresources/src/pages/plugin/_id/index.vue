@@ -173,9 +173,8 @@
             }),
 
             lastUpdate() {
-                return;
                 const date = new Date(this.plugin.lastUpdate.replace(/\s/, 'T'))
-                return this.$options.filters.formatDate(date)
+                return this.$moment(date).format('l')
             },
 
             licenseLabel() {
