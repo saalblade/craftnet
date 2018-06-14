@@ -16,10 +16,16 @@ Vue.filter('currency', value => {
     return Accounting.formatMoney(floatValue, '$', precision);
 })
 
+/**
+ * Translate filter.
+ */
 Vue.filter('t', val => {
     return val;
 })
 
+/**
+ * FormatNumber.
+ */
 Vue.filter('formatNumber', val => {
     return val;
 })
