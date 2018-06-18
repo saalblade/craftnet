@@ -12,6 +12,9 @@
     "mix:production:watch": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=./node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free-solid": "^5.0.13",
+    "@fortawesome/vue-fontawesome": "0.0.23",
     "accounting": "^0.4.1",
     "autoprefixer": "^8.6.2",
     "axios": "^0.18.0",

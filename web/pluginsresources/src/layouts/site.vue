@@ -10,6 +10,7 @@
                     <div class="actions-left">
                         <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
                             <i class="fas fa-bars"></i>
+                            <font-awesome-icon :icon="icon" />
                         </a>
                     </div>
 
@@ -30,6 +31,9 @@
 <script>
     import {mapState} from 'vuex'
     import Navigation from '../components/Navigation'
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+    import faBars from '@fortawesome/fontawesome-free-solid/faBars'
+    import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
 
     export default {
 
@@ -42,13 +46,33 @@
 
         components: {
             Navigation,
+            FontAwesomeIcon,
         },
 
         computed: {
 
+            icon () {
+                if (this.showingSidebar) {
+                    return faTimes
+                }
+
+                return faBars
+            },
+
             ...mapState({
                 searchQuery: state => state.pluginStore.searchQuery,
             }),
+
+        },
+
+        methods: {
+
+            /**
+             * Toggles the sidebar.
+             */
+            toggleSidebar() {
+                this.showingSidebar = !this.showingSidebar;
+            },
 
         },
 
