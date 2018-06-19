@@ -300,34 +300,32 @@ input.text {
 
 .sidebar {
   @apply .bg-grey-lighter;
+  
+  h3 {
+    @apply .mb-2;
 
-  .navigation {
-    h3 {
-      @apply .mb-2;
-
-      &:not(:first-child) {
-        @apply .mt-4;
-      }
+    &:not(:first-child) {
+      @apply .mt-4;
     }
+  }
 
-    ul {
-      @apply .list-reset;
+  ul {
+    @apply .list-reset;
 
-      li {
-        a {
-          @apply .block .py-2 .no-underline .-mx-6 .px-6 .text-grey-darker;
+    li {
+      a {
+        @apply .block .py-2 .no-underline .-mx-6 .px-6 .text-grey-darker;
 
-          img {
-            @apply .align-middle;
-          }
+        img {
+          @apply .align-middle;
+        }
 
-          &:hover {
-            @apply .text-blue;
-          }
+        &:hover {
+          @apply .text-blue;
+        }
 
-          &.nuxt-link-active {
-            @apply .bg-grey-light;
-          }
+        &.nuxt-link-active {
+          @apply .bg-grey-light;
         }
       }
     }
