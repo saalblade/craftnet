@@ -1,30 +1,37 @@
 <template>
     <div class="wrapper">
-        <div v-if="loading" class="loading-wrapper">
-            <div class="loading">Loading…</div>
-        </div>
+        <header>
+            <div>
+                <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                    <font-awesome-icon :icon="icon" />
+                </a>
 
-        <template v-else>
-            <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
-                <div class="header">
-                    <div class="actions-left">
-                        <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
-                            <i class="fas fa-bars"></i>
-                            <font-awesome-icon :icon="icon" />
-                        </a>
-                    </div>
+                <h2><router-link to="/">Craft Plugins</router-link></h2>
 
-                    <div>
-                        <h2><router-link to="/">Craft Plugins</router-link></h2>
-                    </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Craft Plugins</a></li>
+                        <li><a href="#">Craft ID</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div class="main">
+            <div v-if="loading" class="loading-wrapper">
+                <div class="loading">Loading…</div>
+            </div>
+
+            <template v-else>
+                <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
+                    <navigation></navigation>
                 </div>
-
-                <navigation></navigation>
-            </div>
-            <div class="view">
-                <nuxt/>
-            </div>
-        </template>
+                <div class="view">
+                    <nuxt/>
+                </div>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -40,7 +47,6 @@
         data() {
             return {
                 loading: false,
-                showingSidebar: false,
             }
         },
 
@@ -60,6 +66,7 @@
             },
 
             ...mapState({
+                showingSidebar: state => state.app.showingSidebar,
                 searchQuery: state => state.pluginStore.searchQuery,
             }),
 
@@ -71,7 +78,7 @@
              * Toggles the sidebar.
              */
             toggleSidebar() {
-                this.showingSidebar = !this.showingSidebar;
+                this.$store.commit('app/toggleSidebar')
             },
 
         },

@@ -1,5 +1,5 @@
 <template>
-    <div class="navigation mt-6">
+    <div class="navigation">
         <plugin-search-form></plugin-search-form>
 
         <template v-if="featuredPlugins">

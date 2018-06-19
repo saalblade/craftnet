@@ -189,38 +189,60 @@ input.text {
 /* Layout */
 
 .wrapper {
-  .sidebar {
-    @apply .px-6 .py-4;
+  @apply .flex .flex-col;
 
-    .header {
-      @apply .flex;
+  header {
+    @apply .px-6 .py-4 .border-b;
 
-      .actions-left {
-        .sidebar-toggle {
-          @apply .inline-block .mr-4;
-          margin-top: 5px;
-          min-width: 14px;
+    & > div {
+      @apply .flex .justify-between;
+
+      a.sidebar-toggle {
+        @apply .mr-4 .self-center .text-grey-darker;
+        width: 14px;
+        text-align: center;
+      }
+
+      h2 {
+        @apply .flex-1 .text-lg;
+
+        a {
+          @apply .text-grey-darker;
         }
       }
 
-      & > div:last-child {
-        @apply .flex-1;
-      }
-    }
+      nav {
+        @apply .self-center;
 
-    .navigation {
-      @apply .hidden;
-    }
+        ul {
+          @apply .list-reset;
 
-    &.showing-sidebar {
-      .navigation {
-        @apply .block;
+          li {
+            @apply .inline-block;
+
+            &:not(:first-child) {
+              @apply .ml-6;
+            }
+          }
+        }
       }
     }
   }
 
-  .view {
-    @apply .px-6 .py-4;
+  .main {
+    @apply .flex .flex-col;
+
+    .sidebar {
+      @apply .px-6 .py-4 .hidden;
+
+      &.showing-sidebar {
+        @apply .block;
+      }
+    }
+
+    .view {
+      @apply .px-6 .py-4;
+    }
   }
 }
 
@@ -228,26 +250,24 @@ input.text {
   .wrapper {
     @apply .flex .absolute .pin;
 
-    .sidebar {
-      @apply .w-64 .p-6 .overflow-auto;
-
-      .header {
-        .actions-left {
-          .sidebar-toggle {
-            @apply .hidden;
-          }
-        }
-      }
-
-      .navigation {
-        @apply .block;
+    header {
+      .sidebar-toggle {
+        @apply .hidden;
       }
     }
 
-    .view {
-      @apply .flex-1 .py-6 .overflow-auto;
-      padding-left: 3rem;
-      padding-right: 3rem;
+    .main {
+      @apply .flex-row;
+
+      .sidebar {
+        @apply .w-64 .p-6 .overflow-auto .block;
+      }
+
+      .view {
+        @apply .flex-1 .py-6 .overflow-auto;
+        padding-left: 3rem;
+        padding-right: 3rem;
+      }
     }
   }
 }
