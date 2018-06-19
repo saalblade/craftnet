@@ -1,7 +1,5 @@
 <template>
     <div class="navigation">
-        <plugin-search-form></plugin-search-form>
-
         <template v-if="featuredPlugins">
             <h3>{{ "Staff Picks" }}</h3>
             <ul>
@@ -25,13 +23,8 @@
 
 <script>
     import {mapState} from 'vuex'
-    import PluginSearchForm from './PluginSearchForm'
 
     export default {
-
-        components: {
-            PluginSearchForm,
-        },
 
         computed: {
 

@@ -9,6 +9,8 @@
 
                 <h2><router-link to="/">Craft Plugins</router-link></h2>
 
+                <plugin-search-form></plugin-search-form>
+
                 <nav>
                     <ul>
                         <li><a href="#">Craft Plugins</a></li>
@@ -38,6 +40,7 @@
 <script>
     import {mapState} from 'vuex'
     import Navigation from '../components/Navigation'
+    import PluginSearchForm from '../components/PluginSearchForm'
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faBars from '@fortawesome/fontawesome-free-solid/faBars'
     import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
@@ -52,6 +55,7 @@
 
         components: {
             Navigation,
+            PluginSearchForm,
             FontAwesomeIcon,
         },
 
