@@ -18,17 +18,20 @@
             FontAwesomeIcon,
         },
 
-        data() {
-            return {
-                searchQuery: '',
-            }
-        },
-
         computed: {
 
             icon () {
                 return faSearch
             },
+
+            searchQuery: {
+                get () {
+                    return this.$store.state.app.searchQuery
+                },
+                set (value) {
+                    this.$store.commit('app/updateSearchQuery', value)
+                }
+            }
 
         },
 

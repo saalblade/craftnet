@@ -89,6 +89,10 @@
 
         created() {
             console.log('env', process.env.NODE_ENV);
+
+            if (this.$route.query.q) {
+                this.$store.commit('app/updateSearchQuery', this.$route.query.q)
+            }
         }
     }
 </script>

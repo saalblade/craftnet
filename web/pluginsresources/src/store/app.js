@@ -3,6 +3,7 @@
  */
 export const state = () => ({
     showingSidebar: false,
+    searchQuery: '',
 })
 
 
@@ -18,5 +19,9 @@ export const mutations = {
     hideSidebar(state) {
         state.showingSidebar = false
     },
+
+    updateSearchQuery(state, searchQuery) {
+        state.searchQuery = searchQuery
+    }
 
 }
