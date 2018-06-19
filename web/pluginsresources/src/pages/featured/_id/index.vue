@@ -8,7 +8,6 @@
 <script>
     import {mapGetters} from 'vuex'
     import PluginGrid from '../../../components/PluginGrid'
-    import Navigation from '../../../components/Navigation'
 
     export default {
 
@@ -16,7 +15,6 @@
 
         components: {
             PluginGrid,
-            Navigation,
         },
 
         head () {

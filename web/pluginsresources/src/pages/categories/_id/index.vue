@@ -9,7 +9,6 @@
 <script>
     import {mapGetters} from 'vuex'
     import PluginIndex from '../../../components/PluginIndex'
-    import Navigation from '../../../components/Navigation'
 
     export default {
 
@@ -17,7 +16,6 @@
 
         components: {
             PluginIndex,
-            Navigation,
         },
 
         head () {

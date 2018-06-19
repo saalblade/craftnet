@@ -27,7 +27,26 @@
 
             <template v-else>
                 <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
-                    <navigation></navigation>
+                    <div class="navigation">
+                        <template v-if="featuredPlugins">
+                            <h3>{{ "Staff Picks" }}</h3>
+                            <ul>
+                                <template v-for="featuredPlugin in featuredPlugins">
+                                    <li><nuxt-link :to="'/featured/'+featuredPlugin.id">{{ featuredPlugin.title }}</nuxt-link></li>
+                                </template>
+                            </ul>
+                        </template>
+
+                        <h3>{{ "Categories" }}</h3>
+                        <ul class="categories">
+                            <li v-for="category in categories">
+                                <nuxt-link :to="'/categories/'+category.id">
+                                    <img :src="category.iconUrl" height="24" />
+                                    {{ category.title }}
+                                </nuxt-link>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="view">
                     <nuxt/>
@@ -39,7 +58,6 @@
 
 <script>
     import {mapState} from 'vuex'
-    import Navigation from '../components/Navigation'
     import PluginSearchForm from '../components/PluginSearchForm'
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faBars from '@fortawesome/fontawesome-free-solid/faBars'
@@ -54,7 +72,6 @@
         },
 
         components: {
-            Navigation,
             PluginSearchForm,
             FontAwesomeIcon,
         },
@@ -72,6 +89,8 @@
             ...mapState({
                 showingSidebar: state => state.app.showingSidebar,
                 searchQuery: state => state.pluginStore.searchQuery,
+                categories: state => state.pluginStore.categories,
+                featuredPlugins: state => state.pluginStore.featuredPlugins,
             }),
 
         },

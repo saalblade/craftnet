@@ -2,7 +2,7 @@ export default function ({store, route, app}) {
     if(process.server) {
         return
     }
-    
+
     if (route.path !== '/search') {
         store.commit('app/updateSearchQuery', '')
     } else {
