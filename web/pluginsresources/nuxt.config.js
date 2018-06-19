@@ -10,5 +10,8 @@ module.exports = {
     },
     router: {
         middleware: 'route'
-    }
+    },
+    loading: {
+        duration: 2000,
+    },
 }
