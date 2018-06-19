@@ -7,5 +7,8 @@ module.exports = {
     ],
     env: {
         actionUrl: process.env.NODE_ENV === 'production' ? 'https://plugins.craftcms.com/index.php/actions' : 'https://plugins.craftcms.test/index.php/actions',
+    },
+    router: {
+        middleware: 'route'
     }
 }
