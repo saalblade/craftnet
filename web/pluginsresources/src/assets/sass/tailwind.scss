@@ -192,7 +192,7 @@ input.text {
   @apply .flex .flex-col;
 
   header {
-    @apply .px-6 .py-2 .border-b;
+    @apply .px-6 .py-3 .border-b;
 
     & > div {
       @apply .flex .justify-between;
