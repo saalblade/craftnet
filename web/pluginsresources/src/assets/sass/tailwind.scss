@@ -192,19 +192,19 @@ input.text {
   @apply .flex .flex-col;
 
   header {
-    @apply .px-6 .py-3 .border-b;
+    @apply .px-0 .py-3 .border-b;
 
     & > div {
       @apply .flex .justify-between;
 
       a.sidebar-toggle {
-        @apply .mr-4 .self-center .text-grey-darker;
+        @apply .ml-6 .self-center .text-grey-darker;
         width: 14px;
         text-align: center;
       }
 
       h2 {
-        @apply .text-lg .self-center;
+        @apply .text-lg .self-center .pl-6;
 
         a {
           @apply .text-grey-darker;
@@ -212,7 +212,7 @@ input.text {
       }
 
       .search-form {
-        @apply .flex-1 .ml-6 .relative;
+        @apply .flex-1 .mx-6 .relative;
 
         input.text {
           padding-left: 32px;
@@ -230,7 +230,7 @@ input.text {
       }
 
       nav {
-        @apply .self-center .hidden;
+        @apply .self-center .hidden .mr-6;
 
         ul {
           @apply .list-reset;
@@ -272,6 +272,14 @@ input.text {
       & > div {
         .sidebar-toggle {
           @apply .hidden;
+        }
+
+        h2 {
+          @apply .w-64;
+        }
+
+        .search-form {
+          @apply .ml-0;
         }
 
         nav {
