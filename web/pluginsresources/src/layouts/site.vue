@@ -11,12 +11,7 @@
 
                 <plugin-search-form></plugin-search-form>
 
-                <nav>
-                    <ul>
-                        <li><a href="#">Craft Plugins</a></li>
-                        <li><a href="#">Craft ID</a></li>
-                    </ul>
-                </nav>
+                <navigation></navigation>
             </div>
         </header>
 
@@ -27,26 +22,26 @@
 
             <template v-else>
                 <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
-                    <div class="navigation">
-                        <template v-if="featuredPlugins">
-                            <h3>{{ "Staff Picks" }}</h3>
-                            <ul>
-                                <template v-for="featuredPlugin in featuredPlugins">
-                                    <li><nuxt-link :to="'/featured/'+featuredPlugin.id">{{ featuredPlugin.title }}</nuxt-link></li>
-                                </template>
-                            </ul>
-                        </template>
+                    <navigation></navigation>
 
-                        <h3>{{ "Categories" }}</h3>
-                        <ul class="categories">
-                            <li v-for="category in categories">
-                                <nuxt-link :to="'/categories/'+category.id">
-                                    <img :src="category.iconUrl" height="24" />
-                                    {{ category.title }}
-                                </nuxt-link>
-                            </li>
+                    <template v-if="featuredPlugins">
+                        <h3>{{ "Staff Picks" }}</h3>
+                        <ul>
+                            <template v-for="featuredPlugin in featuredPlugins">
+                                <li><nuxt-link :to="'/featured/'+featuredPlugin.id">{{ featuredPlugin.title }}</nuxt-link></li>
+                            </template>
                         </ul>
-                    </div>
+                    </template>
+
+                    <h3>{{ "Categories" }}</h3>
+                    <ul class="categories">
+                        <li v-for="category in categories">
+                            <nuxt-link :to="'/categories/'+category.id">
+                                <img :src="category.iconUrl" height="24" />
+                                {{ category.title }}
+                            </nuxt-link>
+                        </li>
+                    </ul>
                 </div>
                 <div class="view">
                     <nuxt/>
@@ -58,6 +53,7 @@
 
 <script>
     import {mapState} from 'vuex'
+    import Navigation from '../components/Navigation'
     import PluginSearchForm from '../components/PluginSearchForm'
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faBars from '@fortawesome/fontawesome-free-solid/faBars'
@@ -72,6 +68,7 @@
         },
 
         components: {
+            Navigation,
             PluginSearchForm,
             FontAwesomeIcon,
         },

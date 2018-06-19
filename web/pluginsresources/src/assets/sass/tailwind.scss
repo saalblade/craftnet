@@ -285,6 +285,14 @@ input.text {
 
       .sidebar {
         @apply .w-64 .p-6 .overflow-auto .block;
+
+        nav {
+          @apply .hidden;
+        }
+
+        nav + h3 {
+          @apply .mt-0;
+        }
       }
 
       .view {
@@ -300,7 +308,7 @@ input.text {
 
 .sidebar {
   @apply .bg-grey-lighter;
-  
+
   h3 {
     @apply .mb-2;
 
