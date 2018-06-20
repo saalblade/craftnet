@@ -92,6 +92,11 @@
                     </div>
 
                     <div class="plugin-sidebar">
+                        <h3>Install</h3>
+                        <p>You can install this plugin from the Plugin Store, search for <code>{{ plugin.packageName }}</code> and click “Install”.</p>
+                        <p>You can also install this plugin with Composer:</p>
+                        <pre class="mb-6"><code>composer require {{ plugin.packageName }}</code></pre>
+
                         <h3>Informations</h3>
                         <div class="plugin-meta">
                             <ul class="plugin-meta-data">
