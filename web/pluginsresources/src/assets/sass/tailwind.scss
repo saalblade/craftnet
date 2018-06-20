@@ -251,7 +251,7 @@ input.text {
     @apply .flex .flex-col;
 
     .sidebar {
-      @apply .px-6 .py-4 .hidden;
+      @apply .px-6 .py-4 .hidden .border-r;
 
       &.showing-sidebar {
         @apply .block;
@@ -287,7 +287,7 @@ input.text {
         }
 
         nav {
-          @apply .block .ml-6;
+          @apply .block;
         }
       }
     }
