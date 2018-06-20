@@ -12,7 +12,7 @@
                 <div class="plugin-details-description">
                     <div class="details">
                         <h1>{{ pluginSnippet.name }}</h1>
-                        <div>{{ pluginSnippet.shortDescription }}</div>
+                        <div class="short-description">{{ pluginSnippet.shortDescription }}</div>
                         <div><router-link :to="'/developer/'+pluginSnippet.developerId">{{ pluginSnippet.developerName }}</router-link></div>
                     </div>
 
