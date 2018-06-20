@@ -28,14 +28,13 @@
             </div>
 
             <template v-if="plugin && !loading">
-                <div v-if="plugin.thumbnailUrls.length > 0" class="screenshots">
-                    <a v-for="(screenshotUrl, screenshotKey) in plugin.screenshotUrls" @click="zoomScreenshot(screenshotKey)">
-                        <img :src="screenshotUrl" />
-                    </a>
-                </div>
-
                 <div class="plugin-details-body">
                     <div class="plugin-description">
+                        <div v-if="plugin.thumbnailUrls.length > 0" class="screenshots">
+                            <a v-for="(screenshotUrl, screenshotKey) in plugin.screenshotUrls" @click="zoomScreenshot(screenshotKey)">
+                                <img :src="screenshotUrl" />
+                            </a>
+                        </div>
                         <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                         <p v-else>No description.</p>
 
