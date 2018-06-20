@@ -92,6 +92,7 @@
                     </div>
 
                     <div class="plugin-sidebar">
+                        <h3>Informations</h3>
                         <div class="plugin-meta">
                             <ul class="plugin-meta-data">
                                 <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
@@ -113,6 +114,7 @@
                                 </li>
                             </ul>
 
+                            <h3>Links</h3>
                             <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)" class="plugin-meta-links">
                                 <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl" class="btn fullwidth" target="_blank">{{ "Documentation"|t('app') }}</a></li>
                                 <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl" class="btn fullwidth" target="_blank">{{ "Changelog"|t('app') }}</a></li>
