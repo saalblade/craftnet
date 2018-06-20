@@ -37,7 +37,7 @@ hr {
 }
 
 h1 {
-  @apply .border-b .pb-2;
+  @apply .border-b .pb-2 .leading-tight;
 }
 
 p {
@@ -416,7 +416,7 @@ input.text {
         @apply .flex-1 .leading-normal;
 
         h1 {
-          @apply .border-b-0 .pb-0;
+          @apply .border-b-0 .pb-0 .mb-2;
         }
 
         .short-description {
