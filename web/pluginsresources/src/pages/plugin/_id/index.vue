@@ -158,7 +158,7 @@
 
         head () {
             return {
-                title: this.plugin.name,
+                title: this.plugin.name + ' on the Plugin Store',
                 meta: [
                     { hid: 'description', name: 'description', content: 'My plugin description' }
                 ]
