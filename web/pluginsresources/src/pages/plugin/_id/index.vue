@@ -1,7 +1,5 @@
 <template>
     <div>
-        <!--<router-link to="/">← Browse Plugins</router-link>-->
-
         <div v-if="pluginSnippet" class="plugin-details">
             <div class="plugin-details-header">
                 <div class="plugin-icon-large">
@@ -38,57 +36,7 @@
                         <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                         <p v-else>No description.</p>
 
-                        <template v-if="pluginSnippet.editions[0].price != null && pluginSnippet.editions[0].price !== '0.00'">
-                            <h2 id="pricing" class="mt-4">Pricing</h2>
-                            <table class="data w-full">
-                                <tr>
-                                    <th></th>
-                                    <th>
-                                        <div class="mb-2">Lite</div>
-                                        <a href="#" class="btn inline-block">{{ (pluginSnippet.editions[0].price / 4)|currency }}</a>
-                                    </th>
-                                    <th>
-                                        <div class="mb-2">Standard</div>
-                                        <a href="#" class="btn inline-block">{{ (pluginSnippet.editions[0].price * 1)|currency }}</a>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>Feature description</th>
-                                    <td>Yes</td>
-                                    <td>Yes</td>
-                                </tr>
-                                <tr>
-                                    <th>Feature description</th>
-                                    <td>Yes</td>
-                                    <td>Yes</td>
-                                </tr>
-                                <tr>
-                                    <th>Feature description</th>
-                                    <td>Yes</td>
-                                    <td>Yes</td>
-                                </tr>
-                                <tr>
-                                    <th>Feature description</th>
-                                    <td>No</td>
-                                    <td>Yes</td>
-                                </tr>
-                                <tr>
-                                    <th>Feature description</th>
-                                    <td>No</td>
-                                    <td>Yes</td>
-                                </tr>
-                                <tr>
-                                    <th>Feature description</th>
-                                    <td>No</td>
-                                    <td>Yes</td>
-                                </tr>
-                                <tr>
-                                    <th>Feature description</th>
-                                    <td>No</td>
-                                    <td>Yes</td>
-                                </tr>
-                            </table>
-                        </template>
+                        <plugin-pricing :plugin-snippet="pluginSnippet"></plugin-pricing
                     </div>
 
                     <div class="plugin-sidebar">
@@ -113,10 +61,6 @@
                                     </strong>
                                 </li>
                                 <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
-                                <li v-if="pluginSnippet.editions[0].renewalPrice">
-                                    <span>{{ "Renewal price"|t('app') }}</span>
-                                    <strong>{{ pluginSnippet.editions[0].renewalPrice|currency }}/year</strong>
-                                </li>
                             </ul>
 
                             <h3>Links</h3>
@@ -137,6 +81,7 @@
 
 <script>
     import {mapState} from 'vuex'
+    import PluginPricing from '../../../components/PluginPricing'
 
     export default {
 
@@ -155,6 +100,10 @@
 
         layout: 'site',
 
+        components: {
+            PluginPricing
+        },
+
         data() {
             return {
                 actionsLoading: false,
@@ -163,6 +112,10 @@
         },
 
         head () {
+            if (!this.plugin) {
+                return
+            }
+
             return {
                 title: this.plugin.name + ' on the Plugin Store',
                 meta: [

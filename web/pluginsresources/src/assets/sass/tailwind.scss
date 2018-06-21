@@ -538,4 +538,28 @@ input.text {
   }
 }
 
+.plugin-pricing {
+  .edition-name {
+    @apply .border .border-blue .rounded .inline-block .px-2 .py-1 .uppercase .font-normal .text-blue;
+  }
+
+  .price {
+    @apply .font-normal;
+  }
+
+  table {
+    tr {
+      th {
+        &.group {
+          @apply .pt-6;
+        }
+
+        &.feature {
+          @apply .font-normal;
+        }
+      }
+    }
+  }
+}
+
 @tailwind utilities;
