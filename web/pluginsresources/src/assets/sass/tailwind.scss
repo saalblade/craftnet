@@ -42,6 +42,10 @@ h1 {
 
 p {
   @apply .mb-4;
+
+  code {
+    @apply .bg-grey-lighter .px-2 .py-1;
+  }
 }
 
 table.data {
@@ -56,6 +60,9 @@ table.data {
   }
 }
 
+pre {
+  @apply .bg-grey-lighter .p-4;
+}
 
 /* Inputs */
 
