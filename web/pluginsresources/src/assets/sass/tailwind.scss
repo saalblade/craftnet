@@ -497,7 +497,7 @@ input.text {
   }
 
   .screenshots {
-    @apply .my-6 .whitespace-no-wrap;
+    @apply .mt-2 .mb-6 .whitespace-no-wrap;
     overflow-y: hidden;
     overflow-x: auto;
     line-height: 0;
