@@ -70,7 +70,10 @@ class JsonDumper extends Component
                 'dist',
             ])
             ->from(['craftnet_packageversions'])
-            ->where(['packageId' => array_keys($packages)])
+            ->where([
+                'packageId' => array_keys($packages),
+                'valid' => true,
+            ])
             ->indexBy('id')
             ->all();
 
