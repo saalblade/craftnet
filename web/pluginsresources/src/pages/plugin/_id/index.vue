@@ -36,7 +36,7 @@
                         <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                         <p v-else>No description.</p>
 
-                        <plugin-pricing :plugin-snippet="pluginSnippet"></plugin-pricing
+                        <plugin-pricing :plugin-snippet="pluginSnippet"></plugin-pricing>
                     </div>
 
                     <div class="plugin-sidebar">
