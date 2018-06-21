@@ -61,7 +61,7 @@ table.data {
 }
 
 pre {
-  @apply .bg-grey-lighter .p-4;
+  @apply .bg-grey-lighter .p-4 .overflow-x-auto;
 }
 
 /* Inputs */
