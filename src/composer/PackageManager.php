@@ -100,9 +100,13 @@ class PackageManager extends Component
         foreach ($constraints as $constraint) {
             $satisfied = false;
             foreach ($versions as $version) {
-                if (Semver::satisfies($version, $constraint)) {
-                    $satisfied = true;
-                    break;
+                try {
+                    if (Semver::satisfies($version, $constraint)) {
+                        $satisfied = true;
+                        break;
+                    }
+                } catch (\UnexpectedValueException $e) {
+                    // empty
                 }
             }
             if (!$satisfied) {
