@@ -103,6 +103,18 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
 
         if (isset($config['require'])) {
             $release->require = $config['require'];
+
+            // make sure all the constraints are valid
+            $vp = new VersionParser();
+            foreach ($release->require as $depName => $constraints) {
+                try {
+                    $vp->parseConstraints($constraints);
+                } catch (\UnexpectedValueException $e) {
+                    Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to invalid {$depName} constraints in composer.json: {$constraints}", __METHOD__);
+                    $release->invalidate("invalid {$depName} constraints -- {$constraints}");
+                    return false;
+                }
+            }
         }
 
         if (isset($config['conflict'])) {
