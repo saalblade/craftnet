@@ -1,10 +1,10 @@
 <?php
 
-namespace craftcom\oauthserver\server\Repositories;
+namespace craftnet\oauthserver\server\Repositories;
 
-use craftcom\oauthserver\models\RefreshToken;
-use craftcom\oauthserver\Module as OauthServer;
-use craftcom\oauthserver\server\Entities\RefreshTokenEntity;
+use craftnet\oauthserver\models\RefreshToken;
+use craftnet\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\server\Entities\RefreshTokenEntity;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;

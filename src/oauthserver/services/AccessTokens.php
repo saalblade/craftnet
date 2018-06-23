@@ -1,17 +1,15 @@
 <?php
 
-namespace craftcom\oauthserver\services;
+namespace craftnet\oauthserver\services;
 
 use Craft;
-use craftcom\oauthserver\models\AccessToken;
-use craftcom\oauthserver\Module;
-use craftcom\oauthserver\records\AccessToken as AccessTokenRecord;
+use craftnet\oauthserver\models\AccessToken;
+use craftnet\oauthserver\Module;
+use craftnet\oauthserver\records\AccessToken as AccessTokenRecord;
 use yii\base\Component;
 
 /**
  * Class AccessTokens
- *
- * @package craftcom\oauthserver\services
  */
 class AccessTokens extends Component
 {
@@ -19,7 +17,7 @@ class AccessTokens extends Component
     // =========================================================================
 
     /**
-     * @return AccessToken
+     * @return AccessToken|null
      * @throws \Exception
      */
     public function getAccessTokenFromRequest($request = null)
@@ -31,17 +29,19 @@ class AccessTokens extends Component
         $headers = $request->getHeaders();
         $jwt = substr($headers['Authorization'], 7);
 
-        if ($jwt) {
-            $token = Module::getInstance()->getOauth()->parseJwt($jwt);
-
-            if ($token->isExpired()) {
-                throw new \Exception("Token has expired.");
-            }
-
-            $tokenClaims = $token->getClaims();
-
-            return $this->getAccessTokenByIdentifier($tokenClaims['jti']);
+        if (!$jwt) {
+            return null;
         }
+
+        $token = Module::getInstance()->getOauth()->parseJwt($jwt);
+
+        if ($token->isExpired()) {
+            throw new \Exception("Token has expired.");
+        }
+
+        $tokenClaims = $token->getClaims();
+
+        return $this->getAccessTokenByIdentifier($tokenClaims['jti']);
     }
 
     /**
@@ -80,15 +80,17 @@ class AccessTokens extends Component
      * @param $identifier
      * @param bool $isRevoked
      *
-     * @return AccessToken
+     * @return AccessToken|null
      */
     public function getAccessTokenByIdentifier($identifier, $isRevoked = false)
     {
         $record = AccessTokenRecord::findOne(['identifier' => $identifier, 'isRevoked' => $isRevoked]);
 
-        if ($record) {
-            return new AccessToken($record->getAttributes());
+        if (!$record) {
+            return null;
         }
+
+        return new AccessToken($record->getAttributes());
     }
 
     /**

@@ -2,8 +2,9 @@
 
 return [
     '*' => [
-        'stripeClientId' => getenv('STRIPE_PUBLIC_KEY'),
-        'stripeClientSecret' => getenv('STRIPE_API_KEY'),
+        'stripePublicKey' => getenv('STRIPE_PUBLIC_KEY'),
+        'stripeApiKey' => getenv('STRIPE_API_KEY'),
+        'stripeClientId' => getenv('STRIPE_CLIENT_ID'),
         'oauthServer' => [
             'accessTokenExpiry' => 'PT1H',
             'refreshTokenExpiry' => 'P1M',
@@ -37,9 +38,11 @@ return [
     'prod' => [
         'craftIdUrl' => 'https://id.craftcms.com',
         'enablePluginStoreCache' => true,
+        'enableRenewalFeatures' => false,
     ],
     'dev' => [
         'craftIdUrl' => 'https://id.craftcms.test',
         'enablePluginStoreCache' => false,
+        'enableRenewalFeatures' => false,
     ]
 ];

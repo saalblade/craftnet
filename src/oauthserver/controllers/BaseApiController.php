@@ -1,13 +1,11 @@
 <?php
 
-namespace craftcom\oauthserver\controllers;
+namespace craftnet\oauthserver\controllers;
 
 use craft\web\Controller;
 
 /**
  * Class BaseController
- *
- * @package craftcom\oauthserver\controllers
  */
 abstract class BaseApiController extends Controller
 {

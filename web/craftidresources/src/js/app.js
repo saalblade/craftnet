@@ -1,9 +1,15 @@
+// import './../sass/app.scss';
+
 import Vue from 'vue';
 import store from './store'
-import { currency } from './filters/currency';
+import {currency} from './filters/currency';
+import {formatCmsLicense, formatPluginLicense} from './filters/licenses';
 import App from './App.vue';
 
 Vue.filter('currency', currency);
+Vue.filter('formatCmsLicense', formatCmsLicense);
+Vue.filter('formatPluginLicense', formatPluginLicense);
+Vue.use(require('vue-moment'));
 
 window.craftIdApp = new Vue({
 
@@ -17,6 +23,7 @@ window.craftIdApp = new Vue({
 
     data() {
         return {
+            invoicesLoading: true,
             stripeCustomerLoading: true,
             stripeAccountLoading: true,
             loading: true,
@@ -26,12 +33,41 @@ window.craftIdApp = new Vue({
 
     methods: {
 
+        /**
+         * Connect app callback.
+         *
+         * @param apps
+         */
         connectAppCallback(apps) {
             this.$store.dispatch('connectAppCallback', apps);
 
             this.$root.displayNotice('App connected.');
         },
 
+        /**
+         *  Displays an error.
+         *
+         * @param {string} message
+         */
+        displayNotice(message) {
+            this.displayNotification('success', message);
+        },
+
+        /**
+         *  Displays an error.
+         *
+         * @param {string} message
+         */
+        displayError(message) {
+            this.displayNotification('error', message);
+        },
+
+        /**
+         *  Displays a notification.
+         *
+         * @param {string} type
+         * @param {string} message
+         */
         displayNotification(type, message) {
             this.notification = {
                 type: type,
@@ -41,14 +77,6 @@ window.craftIdApp = new Vue({
             setTimeout(function() {
                 this.notification = null;
             }.bind(this), 2000);
-        },
-
-        displayNotice(message) {
-            this.displayNotification('success', message);
-        },
-
-        displayError(message) {
-            this.displayNotification('danger', message);
         },
 
     },
@@ -64,7 +92,7 @@ window.craftIdApp = new Vue({
             this.stripeCustomerLoading = false;
         });
 
-        if(window.stripeAccessToken) {
+        if (window.stripeAccessToken) {
             this.$store.dispatch('getStripeAccount').then(response => {
                 this.stripeAccountLoading = false;
             }, error => {
@@ -73,5 +101,22 @@ window.craftIdApp = new Vue({
         } else {
             this.stripeAccountLoading = false;
         }
+
+        this.$store.dispatch('getInvoices')
+            .then(response => {
+                this.invoicesLoading = false;
+            })
+            .catch(response => {
+                this.invoicesLoading = false;
+            });
+
+        if(window.sessionNotice) {
+            this.$root.displayNotice(window.sessionNotice);
+        }
+
+        if(window.sessionError) {
+            this.$root.displayError(window.sessionError);
+        }
     }
+
 });

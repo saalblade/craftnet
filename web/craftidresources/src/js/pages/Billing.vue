@@ -1,61 +1,74 @@
 <template>
     <div>
+        <h1>Billing</h1>
+
         <div class="card mb-3">
             <div class="card-body">
                 <billing-payment></billing-payment>
             </div>
         </div>
+
         <div class="card mb-3">
             <div class="card-body">
-                <billing-infos></billing-infos>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-body">
-                <billing-coupon></billing-coupon>
+                <billing-address-form></billing-address-form>
             </div>
         </div>
 
         <div class="card mb-3">
-            <div class="card-header">Payment history</div>
             <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Payment Method</th>
-                        <th>Amount</th>
-                        <th>Receipt</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>J5NZMPTA</td>
-                        <td>2017/04/24</td>
-                        <td>Visa ending in 7702</td>
-                        <td>$299.00</td>
-                        <td><a href="#">Receipt</a></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <billing-invoice-details></billing-invoice-details>
+            </div>
+        </div>
+
+        <div v-if="enableRenewalFeatures" class="card mb-3">
+            <div class="card-body">
+                <h4>Upcoming Invoice</h4>
+
+                <invoices-table :invoices="[upcomingInvoice]" :upcoming="true"></invoices-table>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4>Invoices</h4>
+
+                <div v-if="$root.invoicesLoading" class="spinner"></div>
+
+                <template v-else>
+                    <invoices-table v-if="invoices && invoices.length > 0" :invoices="invoices"></invoices-table>
+                    <p v-else class="text-secondary">No invoices.</p>
+                </template>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     import BillingPayment from '../components/BillingPayment'
-    import BillingCoupon from '../components/BillingCoupon'
-    import BillingInfos from '../components/BillingInfos'
+    import BillingInvoiceDetails from '../components/BillingInvoiceDetails'
+    import BillingAddressForm from '../components/BillingAddressForm'
+    import InvoicesTable from '../components/InvoicesTable'
+
 
     export default {
 
         components: {
             BillingPayment,
-            BillingCoupon,
-            BillingInfos,
-        }
+            BillingInvoiceDetails,
+            BillingAddressForm,
+            InvoicesTable,
+        },
+
+        computed: {
+
+            ...mapState({
+                invoices: state => state.account.invoices,
+                upcomingInvoice: state => state.account.upcomingInvoice,
+                enableRenewalFeatures: state => state.craftId.enableRenewalFeatures,
+            }),
+
+        },
 
     }
 </script>

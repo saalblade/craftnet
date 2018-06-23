@@ -1,15 +1,13 @@
 <?php
 
-namespace craftcom\oauthserver\models;
+namespace craftnet\oauthserver\models;
 
 use craft\base\Model;
 use craft\helpers\Json;
-use craftcom\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\Module as OauthServer;
 
 /**
  * Class AccessToken
- *
- * @package craftcom\oauthserver\models
  */
 class AccessToken extends Model
 {

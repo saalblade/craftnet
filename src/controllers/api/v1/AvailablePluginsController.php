@@ -1,18 +1,16 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
 use Craft;
 use craft\helpers\ArrayHelper;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\plugins\Plugin;
+use craftnet\controllers\api\BaseApiController;
+use craftnet\plugins\Plugin;
 use yii\helpers\Inflector;
 use yii\web\Response;
 
 /**
  * Class PluginController
- *
- * @package craftcom\controllers\api\v1
  */
 class AvailablePluginsController extends BaseApiController
 {
@@ -105,7 +103,7 @@ class AvailablePluginsController extends BaseApiController
             foreach ($clientInfo->plugins as $oldHandle) {
                 $available = in_array($res[$oldHandle]['statusColor'], ['green', 'orange'], true);
                 $db->createCommand(
-                    'INSERT INTO [[craftcom_craft2pluginhits]] as [[h]] ([[plugin]], [[hits]], [[available]]) VALUES (:plugin, 1, :available) '.
+                    'INSERT INTO [[craftnet_craft2pluginhits]] as [[h]] ([[plugin]], [[hits]], [[available]]) VALUES (:plugin, 1, :available) '.
                     'ON CONFLICT ([[plugin]]) DO UPDATE SET [[hits]] = [[h.hits]] + 1, [[available]] = :available',
                     [
                         'plugin' => $oldHandle,

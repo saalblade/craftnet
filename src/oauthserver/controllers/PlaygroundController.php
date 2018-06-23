@@ -1,18 +1,16 @@
 <?php
 
-namespace craftcom\oauthserver\controllers;
+namespace craftnet\oauthserver\controllers;
 
 use Craft;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use craftcms\oauth2\client\provider\CraftId;
-use craftcom\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\Module as OauthServer;
 use League\OAuth2\Client\Token\AccessToken;
 
 /**
  * Class PlaygroundController
- *
- * @package craftcom\oauthserver\controllers
  */
 class PlaygroundController extends Controller
 {

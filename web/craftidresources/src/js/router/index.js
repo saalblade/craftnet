@@ -2,74 +2,75 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Profile from '../pages/Profile'
 import Billing from '../pages/Billing'
-import Customers from '../pages/Customers'
-import CustomersDetails from '../pages/CustomersDetails'
-import Licenses from '../pages/Licenses'
+import BillingInvoiceDetails from '../pages/BillingInvoiceDetails'
 import LicensesClaim from '../pages/LicensesClaim'
-import LicensesCraft from '../pages/LicensesCraft'
-import LicensesCraftDetails from '../pages/LicensesCraftDetails'
+import LicensesCms from '../pages/LicensesCms'
+import LicensesCmsDetails from '../pages/LicensesCmsDetails'
 import LicensesPlugins from '../pages/LicensesPlugins'
 import LicensesPluginsDetails from '../pages/LicensesPluginsDetails'
 import LicensesRenew from '../pages/LicensesRenew'
-import Payments from '../pages/Payments'
-import PaymentsDetails from '../pages/PaymentsDetails'
-import Payouts from '../pages/Payouts'
-import PayoutsDetails from '../pages/PayoutsDetails'
-import Plugins from '../pages/Plugins'
+import Sales from '../pages/Sales'
+import SalesDetails from '../pages/SalesDetails'
 import PluginsEdit from '../pages/PluginsEdit'
-import PluginsIndex from '../pages/PluginsIndex'
+import Plugins from '../pages/Plugins'
 import Settings from '../pages/Settings'
+import DeveloperSettings from '../pages/DeveloperSettings'
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
+    canReuse: false,
+    scrollBehavior (to, from, savedPosition) {
+        return savedPosition || { x: 0, y: 0 };
+    },
     routes: [
         {
             path: '/',
-            redirect: '/account',
+            redirect: '/account/licenses',
         },
         {
             path: '/account',
-            redirect: '/developer/plugins',
+            redirect: '/account/billing',
         },
         {
             path: '/account/licenses',
-            name: 'Licenses',
-            component: Licenses,
-            redirect: '/account/licenses/craft',
-            children: [
-                {
-                    path: 'craft',
-                    component: LicensesCraft,
-                },
-                {
-                    path: 'craft/:id',
-                    component: LicensesCraftDetails
-                },
-                {
-                    path: 'plugins',
-                    component: LicensesPlugins
-                },
-                {
-                    path: 'plugins/:id',
-                    component: LicensesPluginsDetails
-                },
-                {
-                    path: 'claim',
-                    component: LicensesClaim
-                },
-                {
-                    path: 'renew',
-                    component: LicensesRenew
-                }
-            ],
+            redirect: '/account/licenses/cms',
+        },
+        {
+            path: '/account/licenses/cms',
+            component: LicensesCms,
+        },
+        {
+            path: '/account/licenses/cms/:id',
+            component: LicensesCmsDetails
+        },
+        {
+            path: '/account/licenses/plugins',
+            component: LicensesPlugins
+        },
+        {
+            path: '/account/licenses/plugins/:id',
+            component: LicensesPluginsDetails
+        },
+        {
+            path: '/account/licenses/claim',
+            component: LicensesClaim
+        },
+        {
+            path: '/account/licenses/renew',
+            component: LicensesRenew
         },
         {
             path: '/account/billing',
             name: 'Billing',
             component: Billing
+        },
+        {
+            path: '/account/billing/invoices/:number',
+            name: 'BillingInvoiceDetails',
+            component: BillingInvoiceDetails
         },
         {
             path: '/account/profile',
@@ -82,61 +83,44 @@ const router = new VueRouter({
             component: Settings
         },
         {
-            path: '/developer/customers',
-            name: 'Customers',
-            component: Customers
-        },
-        {
-            path: '/developer/customers/:id',
-            name: 'CustomersDetails',
-            component: CustomersDetails
+            path: '/developer',
+            redirect: '/developer/plugins',
         },
         {
             path: '/developer/plugins',
-            component: Plugins,
-            children: [
-                {
-                    path: '',
-                    name: 'Plugins',
-                    component: PluginsIndex
-                },
-                {
-                    path: 'submit',
-                    component: PluginsEdit,
-                },
-                {
-                    path: ':id',
-                    name: 'PluginsEdit',
-                    component: PluginsEdit,
-                }
-
-            ]
+            name: 'Plugins',
+            component: Plugins
         },
         {
-            path: '/developer/payments',
-            name: 'Payments',
-            component: Payments
+            path: '/developer/add-plugin',
+            component: PluginsEdit,
         },
         {
-            path: '/developer/payments/:id',
-            name: 'PaymentsDetails',
-            component: PaymentsDetails,
+            path: '/developer/plugins/:id',
+            name: 'PluginsEdit',
+            component: PluginsEdit,
         },
         {
-            path: '/developer/payouts',
-            name: 'Payouts',
-            component: Payouts,
+            path: '/developer/sales',
+            name: 'Sales',
+            component: Sales
         },
         {
-            path: '/developer/payouts/:id',
-            name: 'PayoutsDetails',
-            component: PayoutsDetails,
-        }
+            path: '/developer/sales/:id',
+            name: 'SalesDetails',
+            component: SalesDetails,
+        },
+        {
+            path: '/developer/settings',
+            name: 'DeveloperSettings',
+            component: DeveloperSettings
+        },
     ]
 });
 
+// Renew session when changing route
 router.beforeEach((to, from, next) => {
-    if(router.app.$refs.authManager) {
+    if (router.app.$refs.authManager) {
         router.app.$refs.authManager.renewSession();
     }
 

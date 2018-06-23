@@ -1,11 +1,10 @@
 <template>
     <div>
+        <h1>Renew Licenses</h1>
+
         <div class="card">
             <div class="card-body">
-                <div class="text-center mt-1 mb-4">
-                    <h3>Renew Licenses</h3>
-                    <p class="text-secondary">Renew your licenses for another year of great updates.</p>
-                </div>
+                <p>Renew your licenses for another year of great updates.</p>
 
                 <table class="table">
                     <thead>
@@ -26,12 +25,12 @@
                             </td>
 
                             <template v-if="license.type == 'pluginLicense'">
-                                <td><router-link :to="'/licenses/plugins/'+license.id">000000{{ license.id }}</router-link></td>
+                                <td><router-link :to="'/account/licenses/plugins/'+license.id">LIC000{{ license.id }}</router-link></td>
                                 <td>{{ license.plugin.name }}</td>
                             </template>
 
                             <template v-if="license.type == 'craftLicense'">
-                                <td><router-link :to="'/licenses/craft/'+license.id">000000{{ license.id }}</router-link></td>
+                                <td><router-link :to="'/account/licenses/cms/'+license.id">LIC000{{ license.id }}</router-link></td>
                                 <td>Craft {{ license.craftEdition.value }}</td>
                             </template>
 
@@ -52,23 +51,23 @@
                 <hr>
 
                 <div class="text-center mt-4">
-                    <p>
+                    <div class="mb-4">
                         <select name="" id="">
                             <option value="">Renew for 3 years and save $XX.00</option>
                         </select>
-                    </p>
+                    </div>
 
-                    <div class="row">
-                        <div class="col-sm-6 text-right"><strong>Subtotal</strong></div>
-                        <div class="col-sm-6 text-left">{{ subtotal|currency }}</div>
+                    <div class="flex">
+                        <div class="w-1/2 px-4 py-2 text-right"><strong>Subtotal</strong></div>
+                        <div class="w-1/2 px-4 py-2 text-left">{{ subtotal|currency }}</div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6 text-right"><strong>Pro-Rate discount</strong></div>
-                        <div class="col-sm-6 text-left">$XX.00</div>
+                    <div class="flex">
+                        <div class="w-1/2 px-4 py-2 text-right"><strong>Pro-Rate discount</strong></div>
+                        <div class="w-1/2 px-4 py-2 text-left">$XX.00</div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6 text-right"><strong>Total</strong></div>
-                        <div class="col-sm-6 text-left">$XX.00</div>
+                    <div class="flex">
+                        <div class="w-1/2 px-4 py-2 text-right"><strong>Total</strong></div>
+                        <div class="w-1/2 px-4 py-2 text-left">$XX.00</div>
                     </div>
 
                     <div class="mt-3">
@@ -87,14 +86,9 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-    import LicenseTable from '../components/LicenseTable';
+    import {mapGetters} from 'vuex'
 
     export default {
-
-        components: {
-            LicenseTable
-        },
 
         data() {
             return {
@@ -110,7 +104,7 @@
 
             subtotal() {
                 return this.licenses.reduce((a, b) => {
-                    if(b.plugin && this.selectedLicenses.find(lId => lId == b.id)) {
+                    if (b.plugin && this.selectedLicenses.find(lId => lId == b.id)) {
                         return a + parseFloat(b.plugin.renewalPrice);
                     }
 

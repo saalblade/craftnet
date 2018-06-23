@@ -5,7 +5,7 @@
  * @license https://craftcms.github.io/license/
  */
 
-namespace craftcom\records;
+namespace craftnet\records;
 
 use craft\db\ActiveRecord;
 use craft\records\Asset;
@@ -23,8 +23,8 @@ use yii\db\ActiveQueryInterface;
  * @property string $repository Repository
  * @property string $name Name
  * @property string $handle Handle
- * @property int|null $price Price
- * @property int|null $renewalPrice Renewal price
+ * @property float|null $price Price
+ * @property float|null $renewalPrice Renewal price
  * @property string $license License
  * @property string|null $shortDescription Short description
  * @property string|null $longDescription Long description
@@ -47,7 +47,7 @@ class Plugin extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'craftcom_plugins';
+        return 'craftnet_plugins';
     }
 
     /**

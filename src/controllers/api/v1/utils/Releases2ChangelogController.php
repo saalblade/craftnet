@@ -1,19 +1,17 @@
 <?php
 
-namespace craftcom\controllers\api\v1\utils;
+namespace craftnet\controllers\api\v1\utils;
 
 use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
 use Craft;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Json;
-use craftcom\controllers\api\BaseApiController;
+use craftnet\controllers\api\BaseApiController;
 use yii\web\Response;
 
 /**
  * Class AccountController
- *
- * @package craftcom\controllers\api\v1
  */
 class Releases2ChangelogController extends BaseApiController
 {

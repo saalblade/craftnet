@@ -1,42 +1,31 @@
 <template>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Invoice</th>
-            <th>Amount</th>
-            <th>Date</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr v-for="invoice in invoices">
-                <td>#00000{{ invoice.id }}</td>
-                <td>{{ invoice.amount|currency }}</td>
-                <td>{{ invoice.date }}</td>
+    <div class="responsive-content">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Price</th>
+                <th>Date</th>
+                <th v-if="!upcoming">Receipt</th>
             </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <tr v-for="invoice in invoices">
+                <td v-if="!upcoming"><router-link :to="'/account/billing/invoices/' + invoice.number">{{ invoice.shortNumber }}</router-link></td>
+                <td v-else>—</td>
+                <td>{{ invoice.totalPrice|currency }}</td>
+                <td><template v-if="invoice.datePaid">{{ invoice.datePaid.date|moment("L") }}</template></td>
+                <td v-if="!upcoming"><a :href="invoice.pdfUrl">Download Receipt</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <script>
     export default {
 
-        props: ['upcoming'],
-
-        computed: {
-
-            invoices() {
-                if(this.upcoming) {
-                    return [
-                        {id: 2, email: 'ben@pixelandtonic.com', amount: 299.00, date: '2018/05/11 11:25'}
-                    ]
-                }
-
-                return [
-                    {id: 1, email: 'ben@pixelandtonic.com', amount: 299.00, date: '2017/05/11 11:25'}
-                ]
-            }
-
-        }
+        props: ['upcoming', 'invoices'],
 
     }
 </script>

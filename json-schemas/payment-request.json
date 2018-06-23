@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "orderNumber": {"type": "string"},
+    "expectedPrice": {"$ref": "definitions.json#/price"},
+    "token": {"type": ["string", "null"]},
+    "makePrimary": {"type": "boolean"}
+  },
+  "required": ["orderNumber", "expectedPrice"]
+}

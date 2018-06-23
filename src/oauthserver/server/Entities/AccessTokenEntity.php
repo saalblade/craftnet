@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\oauthserver\server\Entities;
+namespace craftnet\oauthserver\server\Entities;
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
@@ -9,8 +9,6 @@ use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 
 /**
  * Class AccessTokenEntity
- *
- * @package craftcom\oauthserver\server\Entities
  */
 class AccessTokenEntity implements AccessTokenEntityInterface
 {

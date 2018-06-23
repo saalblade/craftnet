@@ -1,10 +1,10 @@
 <?php
 
-namespace craftcom\oauthserver\server\Repositories;
+namespace craftnet\oauthserver\server\Repositories;
 
-use craftcom\oauthserver\models\AccessToken;
-use craftcom\oauthserver\Module as OauthServer;
-use craftcom\oauthserver\server\Entities\AccessTokenEntity;
+use craftnet\oauthserver\models\AccessToken;
+use craftnet\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\server\Entities\AccessTokenEntity;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;

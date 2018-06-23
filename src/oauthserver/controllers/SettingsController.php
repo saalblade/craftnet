@@ -1,15 +1,13 @@
 <?php
 
-namespace craftcom\oauthserver\controllers;
+namespace craftnet\oauthserver\controllers;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\Module as OauthServer;
 
 /**
  * Class SettingsController
- *
- * @package craftcom\oauthserver\controllers
  */
 class SettingsController extends Controller
 {

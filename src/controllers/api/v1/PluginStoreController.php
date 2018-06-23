@@ -1,21 +1,19 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
 use Craft;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\Entry;
 use craft\helpers\ArrayHelper;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\plugins\Plugin;
+use craftnet\controllers\api\BaseApiController;
+use craftnet\plugins\Plugin;
 use yii\caching\FileDependency;
 use yii\web\Response;
 
 /**
  * Class PluginStoreController
- *
- * @package craftcom\controllers\api\v1
  */
 class PluginStoreController extends BaseApiController
 {
@@ -33,8 +31,7 @@ class PluginStoreController extends BaseApiController
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
         $enablePluginStoreCache = $craftIdConfig['enablePluginStoreCache'];
-        $enableCraftId = (bool)Craft::$app->getRequest()->getParam('enableCraftId', false);
-        $cacheKey = $enableCraftId ? 'pluginStoreDataCraftId' : 'pluginStoreData';
+        $cacheKey = 'pluginStoreData';
 
         if ($enablePluginStoreCache) {
             $pluginStoreData = Craft::$app->getCache()->get($cacheKey);
@@ -44,7 +41,7 @@ class PluginStoreController extends BaseApiController
             $pluginStoreData = [
                 'categories' => $this->_categories(),
                 'featuredPlugins' => $this->_featuredPlugins(),
-                'plugins' => $this->_plugins($enableCraftId),
+                'plugins' => $this->_plugins(),
             ];
 
             if ($enablePluginStoreCache) {
@@ -88,16 +85,17 @@ class PluginStoreController extends BaseApiController
         $ret = [];
 
         $recents = Plugin::find()
-            ->orderBy(['craftcom_plugins.dateApproved' => SORT_DESC])
+            ->orderBy(['craftnet_plugins.dateApproved' => SORT_DESC])
             ->limit(10)
             ->hasLatestVersion()
+            ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
             ->ids();
 
         $ret[] = [
             'id' => 'recently-added',
             'title' => 'Recently Added',
             'plugins' => $recents,
-            'limit' => 3,
+            'limit' => 6,
         ];
 
         $entries = Entry::find()
@@ -124,17 +122,17 @@ class PluginStoreController extends BaseApiController
      *
      * @return array
      */
-    private function _plugins(bool $includePrices): array
+    private function _plugins(): array
     {
         $ret = [];
 
         $plugins = Plugin::find()
-            ->andWhere(['not', ['craftcom_plugins.latestVersion' => null]])
+            ->andWhere(['not', ['craftnet_plugins.latestVersion' => null]])
             ->with(['developer', 'categories', 'icon'])
             ->all();
 
         foreach ($plugins as $plugin) {
-            $ret[] = $this->transformPlugin($plugin, false, $includePrices);
+            $ret[] = $this->transformPlugin($plugin, false);
         }
 
         return $ret;

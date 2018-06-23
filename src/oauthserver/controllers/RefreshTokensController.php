@@ -1,16 +1,14 @@
 <?php
 
-namespace craftcom\oauthserver\controllers;
+namespace craftnet\oauthserver\controllers;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\Module as OauthServer;
 use yii\web\Response;
 
 /**
  * Class RefreshTokensController
- *
- * @package craftcom\oauthserver\controllers
  */
 class RefreshTokensController extends Controller
 {

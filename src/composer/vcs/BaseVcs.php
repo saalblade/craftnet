@@ -1,11 +1,11 @@
 <?php
 
-namespace craftcom\composer\vcs;
+namespace craftnet\composer\vcs;
 
 use Composer\Semver\VersionParser;
 use Craft;
-use craftcom\composer\Package;
-use craftcom\composer\PackageRelease;
+use craftnet\composer\Package;
+use craftnet\composer\PackageRelease;
 use yii\base\BaseObject;
 
 abstract class BaseVcs extends BaseObject implements VcsInterface

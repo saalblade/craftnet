@@ -1,18 +1,18 @@
 <?php
 
-namespace craftcom\oauthserver\controllers;
+namespace craftnet\oauthserver\controllers;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\oauthserver\Module;
-use craftcom\oauthserver\server\Entities\UserEntity;
-use craftcom\oauthserver\server\Repositories\AccessTokenRepository;
-use craftcom\oauthserver\server\Repositories\AuthCodeRepository;
-use craftcom\oauthserver\server\Repositories\ClientRepository;
-use craftcom\oauthserver\server\Repositories\RefreshTokenRepository;
-use craftcom\oauthserver\server\Repositories\ScopeRepository;
-use craftcom\oauthserver\server\Repositories\UserRepository;
-use craftcom\oauthserver\server\Response;
+use craftnet\oauthserver\Module;
+use craftnet\oauthserver\server\Entities\UserEntity;
+use craftnet\oauthserver\server\Repositories\AccessTokenRepository;
+use craftnet\oauthserver\server\Repositories\AuthCodeRepository;
+use craftnet\oauthserver\server\Repositories\ClientRepository;
+use craftnet\oauthserver\server\Repositories\RefreshTokenRepository;
+use craftnet\oauthserver\server\Repositories\ScopeRepository;
+use craftnet\oauthserver\server\Repositories\UserRepository;
+use craftnet\oauthserver\server\Response;
 use DateInterval;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -26,8 +26,6 @@ use League\OAuth2\Server\Grant\RefreshTokenGrant;
 
 /**
  * Class OauthController
- *
- * @package craftcom\oauthserver\controllers
  */
 class OauthController extends Controller
 {

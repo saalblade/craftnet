@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\composer\jobs;
+namespace craftnet\composer\jobs;
 
 use craft\helpers\FileHelper;
 use craft\queue\BaseJob;
@@ -16,7 +16,7 @@ class DeletePaths extends BaseJob
     {
         foreach ($this->paths as $path) {
             if (file_exists($path)) {
-                FileHelper::removeFile($path);
+                FileHelper::unlink($path);
             }
         }
     }

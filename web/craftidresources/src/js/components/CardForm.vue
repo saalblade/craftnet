@@ -1,13 +1,16 @@
 <template>
-    <form @submit.prevent="save()">
-        <div ref="cardElement" id="card-element" class="form-control mb-3"></div>
-        <p id="card-errors" class="text-danger" role="alert"></p>
+	<form @submit.prevent="save()">
+		<div ref="cardElement" id="card-element"
+			 class="card-element form-control mb-3"></div>
+		<p id="card-errors" class="text-red" role="alert"></p>
 
-        <input type="submit" class="btn btn-primary" value="Save"></input>
-        <button type="button" class="btn btn-secondary" @click="cancel()">Cancel</button>
+		<input type="submit" class="btn btn-primary" value="Save"></input>
+		<button type="button" class="btn btn-secondary" @click="cancel()">
+			Cancel
+		</button>
 
-        <div class="spinner" v-if="loading"></div>
-    </form>
+		<div class="spinner" v-if="loading"></div>
+	</form>
 </template>
 
 
@@ -18,21 +21,27 @@
 
         methods: {
 
+            /**
+             * Save the credit card.
+             */
             save() {
                 this.$emit('beforeSave');
 
                 let vm = this;
-                this.stripe.createToken(this.card).then(function(result) {
+                this.stripe.createSource(this.card).then(function(result) {
                     if (result.error) {
                         let errorElement = document.getElementById('card-errors');
                         errorElement.textContent = result.error.message;
                         vm.$emit('error', result.error);
                     } else {
-                        vm.$emit('save', vm.card, result.token);
+                        vm.$emit('save', vm.card, result.source);
                     }
                 });
             },
 
+            /**
+             * Cancel.
+             */
             cancel() {
                 this.card.clear();
 
@@ -45,9 +54,9 @@
         },
 
         mounted() {
-            this.stripe = Stripe(window.stripePublishableKey);
+            this.stripe = Stripe(window.stripePublicKey);
             this.elements = this.stripe.elements();
-            this.card = this.elements.create('card');
+            this.card = this.elements.create('card', { hidePostalCode: true });
 
             // Vue likes to stay in control of $el but Stripe needs a real element
             const el = document.createElement('div')

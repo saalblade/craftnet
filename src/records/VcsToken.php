@@ -5,7 +5,7 @@
  * @license https://craftcms.github.io/license/
  */
 
-namespace craftcom\records;
+namespace craftnet\records;
 
 use craft\db\ActiveRecord;
 use craft\records\User;
@@ -35,7 +35,7 @@ class VcsToken extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'craftcom_vcstokens';
+        return 'craftnet_vcstokens';
     }
 
     /**

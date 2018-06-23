@@ -14,6 +14,7 @@
 							<th></th>
 							<th>Plugin</th>
 							<th>Developer</th>
+							<th align="right">Price</th>
 						</tr>
 					</thead>
 
@@ -21,10 +22,12 @@
 						{% for plugin in plugins %}
 							<tr>
 								<td>
-                                    {% if plugin.iconId %}
-                                        {% set icon = craft.assets({id: plugin.iconId, site: 'api'}).one() %}
+									{% if plugin.iconId %}
+										{% set icon = craft.assets({id: plugin.iconId, site: 'api'}).one() %}
 										<img src="{{ icon.getUrl() }}" class="plugin-icon" />
-                                    {% endif %}
+									{% else %}
+										<img src="/craftidresources/dist/images/default-plugin.svg" class="plugin-icon">
+									{% endif %}
 								</td>
 								<td>
 									<strong><a href="{{ plugin.repository }}" target="_blank">{{ plugin.name }}</a></strong>
@@ -35,6 +38,14 @@
 										<a href="{{ plugin.developer.developerUrl }}" target="_blank">{{ plugin.developer.developerName }}</a>
 									{% else %}
 										{{ plugin.developer.developerName }}
+									{% endif %}
+								</td>
+								<td align="right">
+									{% if plugin.price %}
+											{{ plugin.price|currency('USD') }}<br>
+											<span class="plugin-renewal-price">{{ plugin.renewalPrice|currency('USD') }}/year</span>
+									{% else %}
+										Free
 									{% endif %}
 								</td>
 							</tr>

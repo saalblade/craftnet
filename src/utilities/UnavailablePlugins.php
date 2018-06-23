@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\utilities;
+namespace craftnet\utilities;
 
 use Craft;
 use craft\base\Utility;
@@ -42,12 +42,12 @@ class UnavailablePlugins extends Utility
     {
         $plugins = (new Query())
             ->select(['plugin', 'hits'])
-            ->from(['craftcom_craft2pluginhits'])
+            ->from(['craftnet_craft2pluginhits'])
             ->where(['available' => false])
             ->orderBy(['hits' => SORT_DESC])
             ->pairs();
 
-        return Craft::$app->getView()->renderTemplate('craftcom/unavailable-plugins/_content', [
+        return Craft::$app->getView()->renderTemplate('craftnet/unavailable-plugins/_content', [
             'plugins' => $plugins,
         ]);
     }

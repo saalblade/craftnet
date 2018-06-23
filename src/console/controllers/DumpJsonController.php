@@ -1,8 +1,8 @@
 <?php
 
-namespace craftcom\console\controllers;
+namespace craftnet\console\controllers;
 
-use craftcom\Module;
+use craftnet\Module;
 use yii\console\Controller;
 
 /**

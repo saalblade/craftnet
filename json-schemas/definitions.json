@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "price": {"type": "integer", "minimum": 0},
+  "price": {"type": "number", "minimum": 0},
   "cmsLicenseKey": {
     "type": "string",
     "minLength": 250,
