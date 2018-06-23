@@ -1,9 +1,9 @@
 <?php
 
-namespace craftcom\oauthserver\server\Repositories;
+namespace craftnet\oauthserver\server\Repositories;
 
-use craftcom\oauthserver\Module;
-use craftcom\oauthserver\server\Entities\ClientEntity;
+use craftnet\oauthserver\Module;
+use craftnet\oauthserver\server\Entities\ClientEntity;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 

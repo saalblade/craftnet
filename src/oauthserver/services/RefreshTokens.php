@@ -1,16 +1,14 @@
 <?php
 
-namespace craftcom\oauthserver\services;
+namespace craftnet\oauthserver\services;
 
 use Craft;
-use craftcom\oauthserver\models\RefreshToken;
-use craftcom\oauthserver\records\RefreshToken as RefreshTokenRecord;
+use craftnet\oauthserver\models\RefreshToken;
+use craftnet\oauthserver\records\RefreshToken as RefreshTokenRecord;
 use yii\base\Component;
 
 /**
  * Class RefreshTokens
- *
- * @package craftcom\oauthserver\services
  */
 class RefreshTokens extends Component
 {

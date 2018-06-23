@@ -2,9 +2,8 @@
 
 namespace craft\contentmigrations;
 
-use Craft;
 use craft\db\Migration;
-use craftcom\plugins\Plugin;
+use craftnet\plugins\Plugin;
 use yii\db\Expression;
 
 /**

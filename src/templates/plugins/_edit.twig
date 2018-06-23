@@ -40,7 +40,7 @@
             {% if plugin.id %}
                 <hr>
                 <ul>
-                    <li><a class="formsubmit error" data-action="craftcom/plugins/delete" data-confirm="Are you sure you want to delete this plugin?" data-redirect="{{ 'plugins'|hash }}">Delete</a></li>
+                    <li><a class="formsubmit error" data-action="craftnet/plugins/delete" data-confirm="Are you sure you want to delete this plugin?" data-redirect="{{ 'plugins'|hash }}">Delete</a></li>
                 </ul>
             {% endif %}
         </div>
@@ -50,7 +50,7 @@
 
 {% block content %}
     <div id="info">
-        <input type="hidden" name="action" value="craftcom/plugins/save">
+        <input type="hidden" name="action" value="craftnet/plugins/save">
         <input type="hidden" name="redirect" value="{{ 'plugins/{id}'|hash }}">
         {% if plugin.id %}<input type="hidden" name="pluginId" value="{{ plugin.id }}">{% endif %}
 
@@ -198,7 +198,7 @@
                     {% for state in plugin.history %}
                         <tr>
                             <td>{{ state.note }}</td>
-                            <td>{{ state.devComments ? state.devComments|md }}</td>
+                            <td>{{ state.devComments ? state.devComments|e|md }}</td>
                             <td>{{ state.dateCreated|timestamp }}</td>
                         </tr>
                     {% endfor %}
@@ -295,7 +295,7 @@
                 return;
             }
             $('#load-details-spinner').removeClass('hidden');
-            Craft.postActionRequest('craftcom/plugins/load-details?repository='+encodeURIComponent(url), function(response, textStatus) {
+            Craft.postActionRequest('craftnet/plugins/load-details?repository='+encodeURIComponent(url), function(response, textStatus) {
                 $('#load-details-spinner').addClass('hidden');
                 if (textStatus === 'success') {
                     if (response.error) {

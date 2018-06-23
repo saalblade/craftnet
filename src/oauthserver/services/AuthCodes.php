@@ -1,16 +1,14 @@
 <?php
 
-namespace craftcom\oauthserver\services;
+namespace craftnet\oauthserver\services;
 
 use Craft;
-use craftcom\oauthserver\models\AuthCode;
-use craftcom\oauthserver\records\AuthCode as AuthCodeRecord;
+use craftnet\oauthserver\models\AuthCode;
+use craftnet\oauthserver\records\AuthCode as AuthCodeRecord;
 use yii\base\Component;
 
 /**
  * Class AuthCodes
- *
- * @package craftcom\oauthserver\services
  */
 class AuthCodes extends Component
 {

@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development node ./node_modules/webpack/bin/webpack.js --progress --hide-modules --config=./node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "cross-env NODE_ENV=development node ./node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=./node_modules/laravel-mix/setup/webpack.config.js",
-    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=./node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=./node_modules/laravel-mix/setup/webpack.config.js --https  --key ../ssl/id.craftcms.test.key --cert ../ssl/id.craftcms.test.crt",
     "production": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js --progress --hide-modules --config=./node_modules/laravel-mix/setup/webpack.config.js",
     "production:watch": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=./node_modules/laravel-mix/setup/webpack.config.js"
   },
@@ -16,13 +16,20 @@
     "marked": "^0.3.6",
     "mobile-detect": "^1.3.7",
     "qs": "^6.5.1",
-    "vue": "^2.4.4",
+    "ts-loader": "^2.0.3",
+    "vue": "^2.5.2",
+    "inputmask": "^3.3.8",
     "vue-lodash": "^1.0.3",
-    "vue-router": "^2.5.3",
+    "vue-moment": "^3.2.0",
+    "vue-router": "^3.0.1",
     "vuedraggable": "^2.15.0",
     "vuex": "^2.3.1"
   },
   "devDependencies": {
-    "laravel-mix": "^1.6.1"
+    "laravel-mix": "^2.0.0",
+    "tailwindcss": "^0.4.2",
+    "typescript": "^2.3.2",
+    "vue-class-component": "^6.0.0",
+    "webpack-dev-server": "^2.11.0"
   }
 }

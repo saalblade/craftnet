@@ -1,12 +1,12 @@
 <?php
 
-namespace craftcom\composer\vcs;
+namespace craftnet\composer\vcs;
 
 use Composer\Semver\Comparator;
 use Craft;
 use craft\helpers\Json;
-use craftcom\composer\PackageRelease;
-use craftcom\errors\VcsException;
+use craftnet\composer\PackageRelease;
+use craftnet\errors\VcsException;
 use Github\Client;
 use Github\Exception\RuntimeException;
 use Github\ResultPager;

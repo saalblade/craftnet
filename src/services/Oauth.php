@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\services;
+namespace craftnet\services;
 
 use Craft;
 use craft\db\Query;
@@ -68,6 +68,8 @@ class Oauth extends Component
                     continue;
                 }
 
+                $repositories = [];
+
                 foreach ($repos as $repo) {
                     // Make sure they have administrative privileges on the repo
                     if ($repo['permissions']['admin']) {
@@ -126,7 +128,7 @@ class Oauth extends Component
     {
         return (new Query())
             ->select(['accessToken'])
-            ->from(['craftcom_vcstokens'])
+            ->from(['craftnet_vcstokens'])
             ->where(['userId' => $userId, 'provider' => $providerClass])
             ->scalar();
     }
@@ -150,7 +152,7 @@ class Oauth extends Component
                 'expiryDate',
                 'refreshToken',
             ])
-            ->from(['craftcom_vcstokens'])
+            ->from(['craftnet_vcstokens'])
             ->where(['userId' => $userId, 'provider' => $providerClass])
             ->one();
     }
@@ -184,7 +186,7 @@ class Oauth extends Component
     public function deleteAccessToken($userId, $provider)
     {
         Craft::$app->getDb()->createCommand()
-            ->delete('craftcom_vcstokens', ['userId' => $userId, 'provider' => $provider])
+            ->delete('craftnet_vcstokens', ['userId' => $userId, 'provider' => $provider])
             ->execute();
     }
 }

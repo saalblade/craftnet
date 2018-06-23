@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\plugins;
+namespace craftnet\plugins;
 
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -136,56 +136,56 @@ class PluginQuery extends ElementQuery
 
     protected function beforePrepare(): bool
     {
-        $this->joinElementTable('craftcom_plugins');
+        $this->joinElementTable('craftnet_plugins');
 
         $this->query->select([
-            'craftcom_plugins.developerId',
-            'craftcom_plugins.packageId',
-            'craftcom_plugins.iconId',
-            'craftcom_plugins.packageName',
-            'craftcom_plugins.repository',
-            'craftcom_plugins.name',
-            'craftcom_plugins.handle',
-            'craftcom_plugins.price',
-            'craftcom_plugins.renewalPrice',
-            'craftcom_plugins.license',
-            'craftcom_plugins.shortDescription',
-            'craftcom_plugins.longDescription',
-            'craftcom_plugins.documentationUrl',
-            'craftcom_plugins.changelogPath',
-            'craftcom_plugins.latestVersion',
-            'craftcom_plugins.activeInstalls',
-            'craftcom_plugins.pendingApproval',
-            'craftcom_plugins.keywords',
-            'craftcom_plugins.dateApproved',
+            'craftnet_plugins.developerId',
+            'craftnet_plugins.packageId',
+            'craftnet_plugins.iconId',
+            'craftnet_plugins.packageName',
+            'craftnet_plugins.repository',
+            'craftnet_plugins.name',
+            'craftnet_plugins.handle',
+            'craftnet_plugins.price',
+            'craftnet_plugins.renewalPrice',
+            'craftnet_plugins.license',
+            'craftnet_plugins.shortDescription',
+            'craftnet_plugins.longDescription',
+            'craftnet_plugins.documentationUrl',
+            'craftnet_plugins.changelogPath',
+            'craftnet_plugins.latestVersion',
+            'craftnet_plugins.activeInstalls',
+            'craftnet_plugins.pendingApproval',
+            'craftnet_plugins.keywords',
+            'craftnet_plugins.dateApproved',
         ]);
 
         if ($this->handle) {
-            $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.handle', $this->handle));
+            $this->subQuery->andWhere(Db::parseParam('craftnet_plugins.handle', $this->handle));
         }
 
         if ($this->license) {
-            $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.license', $this->license));
+            $this->subQuery->andWhere(Db::parseParam('craftnet_plugins.license', $this->license));
         }
 
         if ($this->developerId) {
-            $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.developerId', $this->developerId));
+            $this->subQuery->andWhere(Db::parseParam('craftnet_plugins.developerId', $this->developerId));
         }
 
         if ($this->packageId) {
-            $this->subQuery->andWhere(Db::parseParam('craftcom_plugins.packageId', $this->packageId));
+            $this->subQuery->andWhere(Db::parseParam('craftnet_plugins.packageId', $this->packageId));
         }
 
         if ($this->categoryId) {
             $this->subQuery
-                ->innerJoin(['craftcom_plugincategories pc'], '[[pc.pluginId]] = [[elements.id]]')
+                ->innerJoin(['craftnet_plugincategories pc'], '[[pc.pluginId]] = [[elements.id]]')
                 ->andWhere(Db::parseParam('pc.categoryId', $this->categoryId));
         }
 
         if ($this->hasLatestVersion === true) {
-            $this->subQuery->andWhere(['not', ['craftcom_plugins.latestVersion' => null]]);
+            $this->subQuery->andWhere(['not', ['craftnet_plugins.latestVersion' => null]]);
         } else if ($this->hasLatestVersion === false) {
-            $this->subQuery->andWhere(['craftcom_plugins.latestVersion' => null]);
+            $this->subQuery->andWhere(['craftnet_plugins.latestVersion' => null]);
         }
 
         return parent::beforePrepare();
@@ -197,7 +197,7 @@ class PluginQuery extends ElementQuery
     protected function statusCondition(string $status)
     {
         if ($status === Plugin::STATUS_PENDING) {
-            return ['elements.enabled' => false, 'craftcom_plugins.pendingApproval' => true];
+            return ['elements.enabled' => false, 'craftnet_plugins.pendingApproval' => true];
         }
 
         return parent::statusCondition($status);

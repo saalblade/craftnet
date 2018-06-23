@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\controllers;
+namespace craftnet\controllers;
 
 use Craft;
 use craft\base\Element;
@@ -15,8 +15,8 @@ use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use craftcom\Module;
-use craftcom\plugins\Plugin;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
 use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
@@ -171,7 +171,7 @@ class PluginsController extends Controller
                     throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
                 }
 
-                if (!Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+                if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                     throw new ForbiddenHttpException('User is not permitted to perform this action');
                 }
             } else {
@@ -185,7 +185,7 @@ class PluginsController extends Controller
 
         $title = $plugin->id ? $plugin->name : 'Add a new plugin';
 
-        return $this->renderTemplate('craftcom/plugins/_edit', compact('plugin', 'title'));
+        return $this->renderTemplate('craftnet/plugins/_edit', compact('plugin', 'title'));
     }
 
     /**
@@ -197,6 +197,7 @@ class PluginsController extends Controller
     public function actionSave()
     {
         $request = Craft::$app->getRequest();
+        $newPlugin = false;
 
         if ($pluginId = $request->getBodyParam('pluginId')) {
             $plugin = Plugin::find()->id($pluginId)->status(null)->one();
@@ -204,11 +205,12 @@ class PluginsController extends Controller
                 throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
             }
 
-            if (!Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+            if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
                 throw new ForbiddenHttpException('User is not permitted to perform this action');
             }
         } else {
             $plugin = new Plugin();
+            $newPlugin = true;
         }
 
         if ($request->getIsCpRequest()) {
@@ -226,7 +228,7 @@ class PluginsController extends Controller
         }
 
         // Only plugin managers are able to change developer for a plugin
-        if (Craft::$app->getUser()->checkPermission('craftcom:managePlugins') && isset($request->getBodyParam('developerId')[0])) {
+        if (Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && isset($request->getBodyParam('developerId')[0])) {
             $plugin->developerId = $request->getBodyParam('developerId')[0];
         }
 
@@ -256,7 +258,11 @@ class PluginsController extends Controller
         $plugin->devComments = $request->getBodyParam('devComments') ?: null;
         $plugin->keywords = $request->getBodyParam('keywords');
 
-        if (!$plugin->enabled || ($plugin->enabled && $plugin->price)) {
+        if (
+            !$plugin->enabled ||
+            ($plugin->enabled && $plugin->price) ||
+            Craft::$app->getUser()->getIdentity()->isInGroup('staff')
+        ) {
             $plugin->price = (float)$request->getBodyParam('price');
             $plugin->renewalPrice = (float)$request->getBodyParam('renewalPrice');
         }
@@ -337,7 +343,7 @@ class PluginsController extends Controller
                     ]);
 
                     if (!Craft::$app->getElements()->saveElement($icon, false)) {
-                        throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+                        throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
                     }
 
                     $plugin->iconId = $icon->id;
@@ -434,7 +440,7 @@ class PluginsController extends Controller
                     $screenshot->validate(['newLocation']);
 
                     if ($screenshot->hasErrors() || !Craft::$app->getElements()->saveElement($screenshot, false)) {
-                        throw new Exception('Unable to save icon asset: '.implode(',', $screenshot->getFirstErrors()));
+                        throw new Exception('Could not save icon asset: '.implode(', ', $screenshot->getErrorSummary(true)));
                     }
 
                     $screenshotIds[] = $screenshot->id;
@@ -466,9 +472,9 @@ class PluginsController extends Controller
         }
 
 
-        // Rename icon with new name and filename
+        // Rename icon & screenshots with new name and filename
 
-        if ($newName || $newHandle) {
+        if (!$newPlugin && ($newName || $newHandle)) {
 
             // Icon
 
@@ -484,7 +490,7 @@ class PluginsController extends Controller
                 }
 
                 if (!Craft::$app->getElements()->saveElement($icon, false)) {
-                    throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+                    throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
                 }
             }
 
@@ -509,7 +515,7 @@ class PluginsController extends Controller
 
                 foreach ($plugin->screenshots as $screenshot) {
                     if (!$assetsService->moveAsset($screenshot, $folder)) {
-                        throw new Exception('Unable to save icon asset: '.implode(',', $screenshot->getFirstErrors()));
+                        throw new Exception('Could not save screenshot asset: '.implode(', ', $screenshot->getErrorSummary(true)));
                     }
                 }
             }
@@ -588,7 +594,12 @@ class PluginsController extends Controller
      * Submits a plugin for approval.
      *
      * @return Response
+     * @throws Exception
+     * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSubmit(): Response
     {
@@ -598,6 +609,10 @@ class PluginsController extends Controller
 
         if (!$plugin) {
             throw new NotFoundHttpException('Plugin not found');
+        }
+
+        if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
+            throw new ForbiddenHttpException('User is not permitted to perform this action');
         }
 
         if ($plugin->enabled) {
@@ -764,7 +779,7 @@ class PluginsController extends Controller
         ]);
 
         if (!Craft::$app->getElements()->saveElement($icon, false)) {
-            throw new Exception('Unable to save icon asset: '.implode(',', $icon->getFirstErrors()));
+            throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
         }
 
         return $icon;

@@ -5,7 +5,7 @@ namespace craft\contentmigrations;
 use Craft;
 use craft\db\Migration;
 use craft\queue\jobs\ResaveElements;
-use craftcom\plugins\Plugin;
+use craftnet\plugins\Plugin;
 
 /**
  * m171124_232934_resave_plugins migration.

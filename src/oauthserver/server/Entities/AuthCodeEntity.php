@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\oauthserver\server\Entities;
+namespace craftnet\oauthserver\server\Entities;
 
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AuthCodeTrait;
@@ -9,8 +9,6 @@ use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 
 /**
  * Class AuthCodeEntity
- *
- * @package craftcom\oauthserver\server\Entities
  */
 class AuthCodeEntity implements AuthCodeEntityInterface
 {

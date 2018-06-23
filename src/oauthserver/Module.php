@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\oauthserver;
+namespace craftnet\oauthserver;
 
 use Craft;
 use craft\events\RegisterCpNavItemsEvent;
@@ -10,8 +10,8 @@ use craft\helpers\UrlHelper;
 use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
-use craftcom\oauthserver\base\ModuleTrait;
-use craftcom\oauthserver\models\Settings;
+use craftnet\oauthserver\base\ModuleTrait;
+use craftnet\oauthserver\models\Settings;
 use yii\base\Event;
 
 class Module extends \yii\base\Module
@@ -23,15 +23,15 @@ class Module extends \yii\base\Module
      */
     public function init()
     {
-        Craft::setAlias('@craftcom/oauthserver/controllers', __DIR__.'/controllers');
+        Craft::setAlias('@craftnet/oauthserver/controllers', __DIR__.'/controllers');
 
         $this->setComponents([
-            'accessTokens' => \craftcom\oauthserver\services\AccessTokens::class,
-            'authCodes' => \craftcom\oauthserver\services\AuthCodes::class,
-            'clients' => \craftcom\oauthserver\services\Clients::class,
-            'oauth' => \craftcom\oauthserver\services\Oauth::class,
-            'refreshTokens' => \craftcom\oauthserver\services\RefreshTokens::class,
-            'tokens' => \craftcom\oauthserver\services\Tokens::class,
+            'accessTokens' => \craftnet\oauthserver\services\AccessTokens::class,
+            'authCodes' => \craftnet\oauthserver\services\AuthCodes::class,
+            'clients' => \craftnet\oauthserver\services\Clients::class,
+            'oauth' => \craftnet\oauthserver\services\Oauth::class,
+            'refreshTokens' => \craftnet\oauthserver\services\RefreshTokens::class,
+            'tokens' => \craftnet\oauthserver\services\Tokens::class,
         ]);
 
         Event::on(Cp::class, Cp::EVENT_REGISTER_CP_NAV_ITEMS, function(RegisterCpNavItemsEvent $event) {

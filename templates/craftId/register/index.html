@@ -19,59 +19,56 @@
 {% from _self import errorList %}
 
 {% block content %}
-	<div class="container">
-		<div class="row">
-			<div class="col-12 text-center mt-5 mb-3">
-				<div class="p-3">
-					<img src="/craftidresources/dist/images/craftid.svg" width="80" />
-				</div>
-				<h1>Register</h1>
-				<p class="lead">Create your Craft ID.</p>
+	<div class="mx-auto max-w-sm">
+		<div class="pt-8 text-center">
+			<div class="pt-8 pb-3">
+				<img src="/craftidresources/dist/images/craftid.svg" width="80" />
 			</div>
-			<div class="col-6 ml-auto mr-auto">
-				<div class="card">
-					<div class="card-body">
-						<form method="post" accept-charset="UTF-8">
-							{{ csrfInput() }}
-							<input type="hidden" name="action" value="users/save-user">
-							<input type="hidden" name="redirect" value="{{ 'register/success'|hash }}">
+			<h1>Register</h1>
+			<p class="lead">Create your Craft ID.</p>
+		</div>
 
-							<div class="form-group">
-								<label for="username">Username</label>
-								<input class="form-control{{ user is defined and user.getErrors('username') ? ' is-invalid' : '' }}" id="username" type="text" name="username" {%- if user is defined %} value="{{ user.username }}"{% endif -%} />
+		<div class="card">
+			<div class="card-body">
+				<form method="post" accept-charset="UTF-8" @submit.prevent="register()" ref="registerform">
+					{{ csrfInput() }}
+					<input type="hidden" name="action" value="users/save-user">
+					<input type="hidden" name="redirect" value="{{ 'register/success'|hash }}">
 
-								{% if user is defined %}
-									{{ errorList(user.getErrors('username')) }}
-								{% endif %}
-							</div>
+					<div class="form-group">
+						<label for="username">Username</label>
+						<input class="form-control{{ user is defined and user.getErrors('username') ? ' is-invalid' : '' }}" id="username" type="text" name="username" {%- if user is defined %} value="{{ user.username }}"{% endif -%} />
 
-							<div class="form-group">
-								<label for="email">Email</label>
-								<input class="form-control{{ user is defined and user.getErrors('email') ? ' is-invalid' : '' }}" id="email" type="text" name="email" {%- if user is defined %} value="{{ user.email }}"{% endif -%} />
-
-								{% if user is defined %}
-									{{ errorList(user.getErrors('email')) }}
-								{% endif %}
-							</div>
-
-							<div class="form-group">
-								<label for="password">Password</label>
-								<input class="form-control{{ user is defined and user.getErrors('password') ? ' is-invalid' : '' }}" id="password" type="password" name="password" />
-
-								{% if user is defined %}
-									{{ errorList(user.getErrors('password')) }}
-								{% endif %}
-							</div>
-
-							<input type="submit" class="btn btn-primary btn-block" value="Register">
-						</form>
+						{% if user is defined %}
+							{{ errorList(user.getErrors('username')) }}
+						{% endif %}
 					</div>
-				</div>
 
-				<div class="mt-4 text-center">
-					<p>Already have an account? <a href="{{ url('login') }}">Sign in</a>.</p>
-				</div>
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input class="form-control{{ user is defined and user.getErrors('email') ? ' is-invalid' : '' }}" id="email" type="text" name="email" {%- if user is defined %} value="{{ user.email }}"{% endif -%} />
+
+						{% if user is defined %}
+							{{ errorList(user.getErrors('email')) }}
+						{% endif %}
+					</div>
+
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input class="form-control{{ user is defined and user.getErrors('password') ? ' is-invalid' : '' }}" id="password" type="password" name="password" />
+
+						{% if user is defined %}
+							{{ errorList(user.getErrors('password')) }}
+						{% endif %}
+					</div>
+
+					<input type="submit" class="btn btn-primary btn-block" :class="{ disabled: registerFormLoading }" :disabled="registerFormLoading" value="Register">
+				</form>
 			</div>
+		</div>
+
+		<div class="mt-4 text-center">
+			<p>Already have an account? <a href="{{ url('login') }}">Sign in</a>.</p>
 		</div>
 	</div>
 {% endblock %}

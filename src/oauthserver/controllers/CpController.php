@@ -1,13 +1,11 @@
 <?php
 
-namespace craftcom\oauthserver\controllers;
+namespace craftnet\oauthserver\controllers;
 
 use yii\web\Response;
 
 /**
  * Class CpController
- *
- * @package craftcom\oauthserver\controllers\v1
  */
 class CpController extends BaseApiController
 {

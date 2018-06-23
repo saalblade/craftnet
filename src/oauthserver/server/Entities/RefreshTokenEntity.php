@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\oauthserver\server\Entities;
+namespace craftnet\oauthserver\server\Entities;
 
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\ClientTrait;
@@ -9,8 +9,6 @@ use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
 
 /**
  * Class RefreshTokenEntity
- *
- * @package craftcom\oauthserver\server\Entities
  */
 class RefreshTokenEntity implements RefreshTokenEntityInterface
 {

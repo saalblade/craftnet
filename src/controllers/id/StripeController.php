@@ -1,23 +1,24 @@
 <?php
 
-namespace craftcom\controllers\id;
+namespace craftnet\controllers\id;
 
 use AdamPaterson\OAuth2\Client\Provider\Stripe as StripeOauthProvider;
 use Craft;
-use craft\helpers\Db;
+use craft\commerce\base\Gateway;
+use craft\commerce\Plugin as Commerce;
+use craft\elements\User;
 use craft\helpers\UrlHelper;
-use craftcom\records\StripeCustomer as StripeCustomerRecord;
-use craftcom\records\VcsToken;
+use craftnet\developers\UserBehavior;
 use League\OAuth2\Client\Token\AccessToken;
 use Stripe\Account;
-use Stripe\Customer;
 use Stripe\Stripe;
+use yii\helpers\Json;
+use yii\web\HttpException;
 use yii\web\Response;
+
 
 /**
  * Class StripeController
- *
- * @package craftcom\controllers\id
  */
 class StripeController extends BaseController
 {
@@ -32,7 +33,9 @@ class StripeController extends BaseController
     public function actionConnect(): Response
     {
         $provider = $this->_getStripeProvider();
-        $options = [];
+        $options = [
+            'scope' => 'read_write'
+        ];
 
         Craft::$app->getSession()->set('stripe.referrer', Craft::$app->getRequest()->getReferrer());
         $authorizationUrl = $provider->getAuthorizationUrl($options);
@@ -47,29 +50,8 @@ class StripeController extends BaseController
      */
     public function actionCallback(): Response
     {
+        /** @var User|UserBehavior $user */
         $user = Craft::$app->getUser()->getIdentity();
-        $customerRecord = StripeCustomerRecord::find()
-            ->where(Db::parseParam('userId', $user->id))
-            ->one();
-
-        if (!$customerRecord) {
-            $customerRecord = new StripeCustomerRecord();
-            $customerRecord->userId = $user->id;
-        }
-
-        // Remove existing token
-        if ($customerRecord->oauthTokenId) {
-            $tokenRecord = VcsToken::find()
-                ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
-                ->one();
-
-            if ($tokenRecord) {
-                $tokenRecord->delete();
-            }
-        }
-
-
-        // Save new token
         $provider = $this->_getStripeProvider();
         $code = Craft::$app->getRequest()->getParam('code');
 
@@ -77,19 +59,17 @@ class StripeController extends BaseController
             'code' => $code
         ]);
 
-        $tokenRecord = new VcsToken();
-        $tokenRecord->userId = Craft::$app->getUser()->getIdentity()->id;
-        $tokenRecord->provider = 'Stripe';
-        $tokenRecord->accessToken = $accessToken->getToken();
-        $tokenRecord->expiresIn = $accessToken->getExpires();
-        $tokenRecord->refreshToken = $accessToken->getRefreshToken();
-        $tokenRecord->save();
-
         $resourceOwner = $provider->getResourceOwner($accessToken);
 
-        $customerRecord->oauthTokenId = $tokenRecord->id;
-        $customerRecord->stripeAccountId = $resourceOwner->getId();
-        $customerRecord->save();
+        $user->stripeAccessToken = $accessToken->getToken();
+        $user->stripeAccount = $resourceOwner->getId();
+
+        // set their country
+        Stripe::setApiKey($user->stripeAccessToken);
+        $account = Account::retrieve();
+        $user->country = $account->country;
+
+        $user->saveDeveloperInfo();
 
         $referrer = Craft::$app->getSession()->get('stripe.referrer');
 
@@ -103,37 +83,25 @@ class StripeController extends BaseController
      */
     public function actionDisconnect(): Response
     {
-        $userId = Craft::$app->getUser()->getIdentity()->id;
-
-        $customerRecord = StripeCustomerRecord::find()
-            ->where(Db::parseParam('userId', $userId))
-            ->one();
-
-        $tokenRecord = VcsToken::find()
-            ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
-            ->one();
+        /** @var User|UserBehavior $user */
+        $user = Craft::$app->getUser()->getIdentity();
 
         $provider = $this->_getStripeProvider();
-        $accessToken = new AccessToken(['access_token' => $tokenRecord->accessToken]);
+        $accessToken = new AccessToken(['access_token' => $user->stripeAccessToken]);
         $resourceOwner = $provider->getResourceOwner($accessToken);
         $accountId = $resourceOwner->getId();
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
 
         Stripe::setClientId($craftIdConfig['stripeClientId']);
-        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
+        Stripe::setApiKey($craftIdConfig['stripeApiKey']);
 
         $account = Account::retrieve($accountId);
         $account->deauthorize();
 
-        if ($tokenRecord) {
-            $tokenRecord->delete();
-        }
-
-        if ($customerRecord) {
-            $customerRecord->stripeAccountId = null;
-            $customerRecord->save();
-        }
+        $user->stripeAccessToken = null;
+        $user->stripeAccount = null;
+        $user->saveDeveloperInfo();
 
         return $this->asJson(['success' => true]);
     }
@@ -145,19 +113,11 @@ class StripeController extends BaseController
      */
     public function actionAccount(): Response
     {
-        $userId = Craft::$app->getUser()->getIdentity()->id;
-        $customerRecord = StripeCustomerRecord::find()
-            ->where(Db::parseParam('userId', $userId))
-            ->one();
+        $user = Craft::$app->getUser()->getIdentity();
 
-        if ($customerRecord && $customerRecord->oauthTokenId) {
-            $tokenRecord = VcsToken::find()
-                ->where(Db::parseParam('id', $customerRecord->oauthTokenId))
-                ->one();
-
-            Stripe::setApiKey($tokenRecord->accessToken);
+        if ($user->stripeAccessToken) {
+            Stripe::setApiKey($user->stripeAccessToken);
             $account = Account::retrieve();
-
             return $this->asJson($account);
         }
 
@@ -172,101 +132,114 @@ class StripeController extends BaseController
     public function actionCustomer(): Response
     {
         $user = Craft::$app->getUser()->getIdentity();
-        $customerRecord = StripeCustomerRecord::find()
-            ->where(Db::parseParam('userId', $user->id))
-            ->one();
+        $customer = \craft\commerce\stripe\Plugin::getInstance()->getCustomers()->getCustomer(getenv('STRIPE_GATEWAY_ID'), $user);
 
-        $customer = null;
+        $paymentSource = null;
+        $card = null;
+        $paymentSources = \craft\commerce\Plugin::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
 
-        if ($customerRecord && $customerRecord->stripeCustomerId) {
-            $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
+        if (count($paymentSources)) {
+            $paymentSource = $paymentSources[0];
+            $response = Json::decode($paymentSource->response);
 
-            Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
-            $customer = Customer::retrieve($customerRecord->stripeCustomerId);
+            if (isset($response['card'])) {
+                $card = $response['card'];
+            } elseif (isset($response['object']) && $response['object'] === 'card') {
+                $card = $response;
+            }
         }
 
         return $this->asJson([
             'customer' => $customer,
-            'card' => ($customer && $customer->default_source ? $customer->sources->retrieve($customer->default_source) : null)
+            'paymentSource' => $paymentSource,
+            'card' => $card,
         ]);
     }
 
     /**
      * Saves a new credit card and sets it as default source for the Stripe customer.
      *
-     * @return Response
+     * @return Response|null
+     * @throws \Throwable if something went wrong when adding the payment source
      */
     public function actionSaveCard(): Response
     {
-        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
-        $user = Craft::$app->getUser()->getIdentity();
+        $this->requirePostRequest();
 
-        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
+        $order = null;
 
-        $customerRecord = StripeCustomerRecord::find()
-            ->where(Db::parseParam('userId', $user->id))
-            ->one();
+        $plugin = Commerce::getInstance();
+        $request = Craft::$app->getRequest();
+        $paymentSources = $plugin->getPaymentSources();
 
-        if (!$customerRecord) {
-            $customerRecord = new StripeCustomerRecord();
-            $customerRecord->userId = $user->id;
+        // Are we paying anonymously?
+        $userId = Craft::$app->getUser()->getId();
+
+        if (!$userId) {
+            throw new HttpException(401, Craft::t('commerce', 'Not authorized to save a credit card.'));
         }
 
-        if (!$customerRecord->stripeCustomerId) {
-            $customer = Customer::create([
-                "email" => $user->email,
-                "description" => "Customer for ".$user->email,
-            ]);
-            $customerRecord->stripeCustomerId = $customer->id;
+        /** @var Gateway $gateway */
+        $gateway = $plugin->getGateways()->getGatewayById(getenv('STRIPE_GATEWAY_ID'));
+
+        if (!$gateway || !$gateway->supportsPaymentSources()) {
+            $error = Craft::t('commerce', 'There is no gateway selected that supports payment sources.');
+            return $this->asErrorJson($error);
         }
 
-        $customerRecord->save();
+        // Remove existing payment sources
+        $existingPaymentSources = $paymentSources->getAllGatewayPaymentSourcesByUserId($gateway->id, $userId);
+        foreach ($existingPaymentSources as $paymentSource) {
+            $paymentSources->deletePaymentSourceById($paymentSource->id);
+        }
 
-        if ($customerRecord->stripeCustomerId) {
-            $token = Craft::$app->getRequest()->getParam('token');
-            $customer = Customer::retrieve($customerRecord->stripeCustomerId);
+        // Get the payment method' gateway adapter's expected form model
+        $paymentForm = $gateway->getPaymentFormModel();
+        $paymentForm->setAttributes($request->getBodyParams(), false);
+        $description = 'Default Source';
 
-            if ($customer->default_source) {
-                $customer->sources->retrieve($customer->default_source)->delete();
+        $error = '';
+
+        try {
+            $paymentSource = $paymentSources->createPaymentSource($userId, $gateway, $paymentForm, $description);
+
+            if ($paymentSource) {
+                $card = $paymentSource->response;
+
+                return $this->asJson([
+                    'success' => true,
+                    'card' => $card,
+                ]);
             }
-
-            $card = $customer->sources->create(['source' => $token]);
-            $customer->default_source = $card->id;
-            $customer->save();
-
-            return $this->asJson(['card' => $card]);
+        } catch (\Throwable $exception) {
+            $error = $exception->getMessage();
         }
 
-        return $this->asErrorJson('Couldn’t save credit card.');
+        return $this->asJson(['error' => $error, 'paymentForm' => $paymentForm->getErrors()]);
     }
 
     /**
-     * Removes the default credit card from the Stripe customer.
+     * Removes the default payment source.
      *
      * @return Response
      */
     public function actionRemoveCard(): Response
     {
-        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
-
-        Stripe::setApiKey($craftIdConfig['stripeClientSecret']);
-
         $user = Craft::$app->getUser()->getIdentity();
 
-        $customerRecord = StripeCustomerRecord::find()
-            ->where(Db::parseParam('userId', $user->id))
-            ->one();
+        $paymentSourcesService = Commerce::getInstance()->getPaymentSources();
 
-        if ($customerRecord && $customerRecord->stripeCustomerId) {
-            $customer = Customer::retrieve($customerRecord->stripeCustomerId);
+        $paymentSources = $paymentSourcesService->getAllPaymentSourcesByUserId($user->id);
 
-            if ($customer->default_source) {
-                $customer->sources->retrieve($customer->default_source)->delete();
-                return $this->asJson(['success' => true]);
+        if (count($paymentSources)) {
+            $result = $paymentSourcesService->deletePaymentSourceById($paymentSources[0]->id);
+
+            if (!$result) {
+                return $this->asErrorJson('Couldn’t delete credit card.');
             }
         }
 
-        return $this->asErrorJson('Couldn’t save credit card.');
+        return $this->asJson(['success' => true]);
     }
 
     // Private Methods
@@ -281,8 +254,8 @@ class StripeController extends BaseController
 
         $provider = new StripeOauthProvider([
             'clientId' => $craftIdConfig['stripeClientId'],
-            'clientSecret' => $craftIdConfig['stripeClientSecret'],
-            'redirectUri' => UrlHelper::actionUrl('craftcom/id/stripe/callback'),
+            'clientSecret' => $craftIdConfig['stripeApiKey'],
+            'redirectUri' => UrlHelper::actionUrl('craftnet/id/stripe/callback'),
         ]);
 
         return $provider;

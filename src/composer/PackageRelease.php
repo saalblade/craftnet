@@ -1,6 +1,6 @@
 <?php
 
-namespace craftcom\composer;
+namespace craftnet\composer;
 
 use Composer\Semver\VersionParser;
 use craft\base\Model;

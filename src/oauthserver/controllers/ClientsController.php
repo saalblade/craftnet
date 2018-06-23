@@ -1,18 +1,16 @@
 <?php
 
-namespace craftcom\oauthserver\controllers;
+namespace craftnet\oauthserver\controllers;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\oauthserver\models\Client;
-use craftcom\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\models\Client;
+use craftnet\oauthserver\Module as OauthServer;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
  * Class ClientsController
- *
- * @package craftcom\oauthserver\controllers
  */
 class ClientsController extends Controller
 {

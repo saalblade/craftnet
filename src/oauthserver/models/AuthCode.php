@@ -1,15 +1,13 @@
 <?php
 
-namespace craftcom\oauthserver\models;
+namespace craftnet\oauthserver\models;
 
 use Craft;
 use craft\base\Model;
-use craftcom\oauthserver\Module;
+use craftnet\oauthserver\Module;
 
 /**
  * Class AuthCode
- *
- * @package craftcom\oauthserver\models
  */
 class AuthCode extends Model
 {

@@ -1,18 +1,16 @@
 <?php
 
-namespace craftcom\oauthserver\controllers;
+namespace craftnet\oauthserver\controllers;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\oauthserver\Module;
-use craftcom\oauthserver\Module as OauthServer;
-use craftcom\oauthserver\server\Repositories\AccessTokenRepository;
+use craftnet\oauthserver\Module;
+use craftnet\oauthserver\Module as OauthServer;
+use craftnet\oauthserver\server\Repositories\AccessTokenRepository;
 use yii\web\Response;
 
 /**
  * Class AccessTokensController
- *
- * @package craftcom\oauthserver\controllers
  */
 class AccessTokensController extends Controller
 {

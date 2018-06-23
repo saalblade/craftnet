@@ -1,16 +1,13 @@
 <?php
 
-namespace craftcom\controllers\api\v1;
+namespace craftnet\controllers\api\v1;
 
-use Craft;
-use craftcom\controllers\api\BaseApiController;
-use craftcom\plugins\Plugin;
+use craftnet\controllers\api\BaseApiController;
+use craftnet\plugins\Plugin;
 use yii\web\Response;
 
 /**
  * Class PluginController
- *
- * @package craftcom\controllers\api\v1
  */
 class PluginController extends BaseApiController
 {
@@ -30,8 +27,6 @@ class PluginController extends BaseApiController
             return $this->asErrorJson("Couldn't find plugin");
         }
 
-        $enableCraftId = (bool)Craft::$app->getRequest()->getParam('enableCraftId', false);
-
-        return $this->asJson($this->transformPlugin($plugin, true, $enableCraftId));
+        return $this->asJson($this->transformPlugin($plugin, true));
     }
 }

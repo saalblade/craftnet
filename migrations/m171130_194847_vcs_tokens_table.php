@@ -2,7 +2,6 @@
 
 namespace craft\contentmigrations;
 
-use Craft;
 use craft\db\Migration;
 use craft\helpers\MigrationHelper;
 
@@ -16,7 +15,7 @@ class m171130_194847_vcs_tokens_table extends Migration
      */
     public function safeUp()
     {
-        MigrationHelper::renameTable('oauthtokens', 'craftcom_vcstokens', $this); ;
+        MigrationHelper::renameTable('oauthtokens', 'craftcom_vcstokens', $this);;
     }
 
     /**
