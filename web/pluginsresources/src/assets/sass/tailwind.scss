@@ -52,7 +52,7 @@ table.data {
   @apply .border-t .mt-2;
 
   th, td {
-    @apply .border-b .p-2;
+    @apply .border-b .py-2;
   }
 
   th {
@@ -197,9 +197,10 @@ input.text {
 
 .wrapper {
   @apply .flex .flex-col;
+  padding-top: 61px;
 
   header {
-    @apply .px-0 .py-3 .border-b;
+    @apply .px-0 .py-3 .border-b .fixed .w-full .bg-white .pin-t;
 
     & > div {
       @apply .flex .justify-between;
@@ -233,6 +234,7 @@ input.text {
           @apply .absolute .text-grey-dark;
           top: 10px;
           left: 12px;
+          max-width: 16px;
         }
       }
 
@@ -408,87 +410,85 @@ input.text {
 
 /* Plugin Details */
 
-.plugin-details {
-  .plugin-details-header {
-    @apply .flex .border-b .pb-6;
+.plugin-details-header {
+  @apply .flex .border-b .pb-6;
 
-    .plugin-icon-large {
-      @apply .mr-6;
-    }
+  .plugin-icon-large {
+    @apply .mr-6;
+  }
 
-    .plugin-details-description {
-      @apply .flex-1;
+  .plugin-details-description {
+    @apply .flex-1;
 
-      .details {
-        @apply .flex-1 .leading-normal;
+    .details {
+      @apply .flex-1 .leading-normal;
 
-        h1 {
-          @apply .border-b-0 .pb-0 .mb-2;
-        }
-
-        .short-description {
-          @apply .mb-2;
-        }
+      h1 {
+        @apply .border-b-0 .pb-0 .mb-2;
       }
 
-      .price {
-        @apply .mt-4;
+      .short-description {
+        @apply .mb-2;
+      }
+    }
 
-        .price-btn {
-          @apply .inline-block .bg-grey-light .text-grey-darker .px-4 .py-2 .rounded-full;
-        }
+    .price {
+      @apply .mt-4;
+
+      .price-btn {
+        @apply .inline-block .bg-blue .text-white .px-4 .py-2 .rounded;
       }
     }
   }
+}
 
-  .plugin-details-body {
-    @apply .mt-6 .-mx-4 .leading-normal;
+.plugin-details-body {
+  @apply .mt-6 .-mx-4 .leading-normal;
 
-    .plugin-description {
-      @apply .px-4;
+  .plugin-description {
+    @apply .px-4;
 
-      h1 {
-        @apply .border-b-0;
-      }
+    h1 {
+      @apply .border-b-0;
     }
+  }
 
-    .plugin-sidebar {
-      @apply .px-4;
+  .plugin-sidebar {
+    @apply .px-4;
 
-      .plugin-meta {
-        ul {
-          @apply .list-reset .mb-4;
+    .plugin-meta {
+      ul {
+        @apply .list-reset .mb-4;
+
+        li {
+          @apply .py-2;
+        }
+
+        &.plugin-meta-data {
+          @apply .border-b;
 
           li {
-            @apply .py-2;
-          }
+            @apply .border-b .flex .py-2;
 
-          &.plugin-meta-data {
-            @apply .border-b;
+            &:last-child {
+              @apply .border-b-0;
+            }
 
-            li {
-              @apply .border-b .flex .py-2;
+            & span,
+            & strong {
+              @apply .flex-1;
+            }
 
-              &:last-child {
-                @apply .border-b-0;
-              }
-
-              & span,
-              & strong {
-                @apply .flex-1;
-              }
-
-              & strong {
-                @apply .text-right;
-              }
+            & strong {
+              @apply .text-right;
             }
           }
+        }
 
-          &.plugin-meta-links {
-            li {
-              a {
-                @apply .inline-block;
-              }
+        &.plugin-meta-links {
+          li {
+            a {
+              @apply .inline-block;
             }
           }
         }
@@ -514,26 +514,24 @@ input.text {
 }
 
 @media (min-width: 768px) {
-  .plugin-details {
-    .plugin-details-header {
-      .plugin-details-description {
-        @apply .flex;
-
-        .price {
-          @apply .ml-6;
-        }
-      }
-    }
-
-    .plugin-details-body {
+  .plugin-details-header {
+    .plugin-details-description {
       @apply .flex;
 
-      .plugin-description {
-        @apply .w-2/3 .px-4;
+      .price {
+        @apply .ml-6;
       }
-      .plugin-sidebar {
-        @apply .w-1/3 .px-4;
-      }
+    }
+  }
+
+  .plugin-details-body {
+    @apply .flex;
+
+    .plugin-description {
+      @apply .w-2/3 .px-4;
+    }
+    .plugin-sidebar {
+      @apply .w-1/3 .px-4;
     }
   }
 }
@@ -557,6 +555,25 @@ input.text {
         &.feature {
           @apply .font-normal;
         }
+      }
+    }
+  }
+}
+
+ul.tabs {
+  @apply .list-reset .mt-6 .border-b;
+
+  li {
+    @apply .inline-block;
+
+    a {
+      @apply .inline-block .px-4 .py-2 .rounded-t;
+      margin-bottom: -1px;
+
+      &.sel,
+      &.nuxt-link-active {
+        @apply .border;
+        border-bottom-color: #fff;
       }
     }
   }

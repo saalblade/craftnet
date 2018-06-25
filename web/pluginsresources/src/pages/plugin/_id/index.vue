@@ -1,87 +1,58 @@
 <template>
-    <div>
-        <div v-if="pluginSnippet" class="plugin-details">
-            <div class="plugin-details-header">
-                <div class="plugin-icon-large">
-                    <img v-if="pluginSnippet.iconUrl" :src="pluginSnippet.iconUrl" height="100" />
-                    <img v-else :src="defaultPluginSvg" height="100" />
+    <plugin-layout>
+        <template v-if="pluginSnippet && plugin && !loading">
+            <div class="plugin-details-body">
+                <div class="plugin-description">
+                    <div v-if="plugin.thumbnailUrls.length > 0" class="screenshots">
+                        <a v-for="(screenshotUrl, screenshotKey) in plugin.screenshotUrls" @click="zoomScreenshot(screenshotKey)">
+                            <img :src="screenshotUrl" />
+                        </a>
+                    </div>
+                    <div v-if="longDescription" v-html="longDescription" class="readable"></div>
+                    <p v-else>No description.</p>
                 </div>
 
-                <div class="plugin-details-description">
-                    <div class="details">
-                        <h1>{{ pluginSnippet.name }}</h1>
-                        <div class="short-description">{{ pluginSnippet.shortDescription }}</div>
-                        <div><router-link :to="'/developer/'+pluginSnippet.developerId">{{ pluginSnippet.developerName }}</router-link></div>
-                    </div>
+                <div class="plugin-sidebar">
+                    <h3>Package Name</h3>
+                    <p>You can install this plugin from the Plugin Store, search for <code>{{ plugin.packageName }}</code> and click “Install”.</p>
 
-                    <div class="price">
-                        <template v-if="pluginSnippet.editions[0].price != null && pluginSnippet.editions[0].price !== '0.00'">
-                            <a class="price-btn" href="#pricing">Starting at {{ (pluginSnippet.editions[0].price / 4)|currency }}</a>
-                        </template>
-                        <template v-else>
-                            <div class="price-btn">Free</div>
-                        </template>
+                    <h3>Informations</h3>
+                    <div class="plugin-meta">
+                        <ul class="plugin-meta-data">
+                            <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
+                            <li><span>{{ "Last update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>
+                            <li v-if="plugin.activeInstalls > 0"><span>{{ "Active installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
+                            <li><span>{{ "Compatibility"|t('app') }}</span> <strong>{{ plugin.compatibility }}</strong></li>
+                            <li v-if="pluginCategories.length > 0">
+                                <span>{{ "Categories"|t('app') }}</span>
+                                <strong>
+                                    <template v-for="category, key in pluginCategories">
+                                        <a @click="viewCategory(category)">{{ category.title }}</a><template v-if="key < (pluginCategories.length - 1)">, </template>
+                                    </template>
+                                </strong>
+                            </li>
+                            <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
+                        </ul>
+
+                        <h3>Links</h3>
+                        <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)" class="plugin-meta-links">
+                            <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl" class="btn fullwidth" target="_blank">{{ "Documentation"|t('app') }}</a></li>
+                            <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl" class="btn fullwidth" target="_blank">{{ "Changelog"|t('app') }}</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
-
-            <template v-if="plugin && !loading">
-                <div class="plugin-details-body">
-                    <div class="plugin-description">
-                        <div v-if="plugin.thumbnailUrls.length > 0" class="screenshots">
-                            <a v-for="(screenshotUrl, screenshotKey) in plugin.screenshotUrls" @click="zoomScreenshot(screenshotKey)">
-                                <img :src="screenshotUrl" />
-                            </a>
-                        </div>
-                        <div v-if="longDescription" v-html="longDescription" class="readable"></div>
-                        <p v-else>No description.</p>
-
-                        <plugin-pricing :plugin-snippet="pluginSnippet"></plugin-pricing>
-                    </div>
-
-                    <div class="plugin-sidebar">
-                        <h3>Install</h3>
-                        <p>You can install this plugin from the Plugin Store, search for <code>{{ plugin.packageName }}</code> and click “Install”.</p>
-                        <p>You can also install this plugin with Composer:</p>
-                        <pre class="mb-6"><code>composer require {{ plugin.packageName }}</code></pre>
-
-                        <h3>Informations</h3>
-                        <div class="plugin-meta">
-                            <ul class="plugin-meta-data">
-                                <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
-                                <li><span>{{ "Last update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>
-                                <li v-if="plugin.activeInstalls > 0"><span>{{ "Active installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
-                                <li><span>{{ "Compatibility"|t('app') }}</span> <strong>{{ plugin.compatibility }}</strong></li>
-                                <li v-if="pluginCategories.length > 0">
-                                    <span>{{ "Categories"|t('app') }}</span>
-                                    <strong>
-                                        <template v-for="category, key in pluginCategories">
-                                            <a @click="viewCategory(category)">{{ category.title }}</a><template v-if="key < (pluginCategories.length - 1)">, </template>
-                                        </template>
-                                    </strong>
-                                </li>
-                                <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
-                            </ul>
-
-                            <h3>Links</h3>
-                            <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)" class="plugin-meta-links">
-                                <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl" class="btn fullwidth" target="_blank">{{ "Documentation"|t('app') }}</a></li>
-                                <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl" class="btn fullwidth" target="_blank">{{ "Changelog"|t('app') }}</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <template v-else>
-                <div class="loading">Loading…</div>
-            </template>
-        </div>
-    </div>
+        </template>
+        <template v-else>
+            <div class="loading">Loading…</div>
+        </template>
+    </plugin-layout>
 </template>
 
 <script>
     import {mapState} from 'vuex'
     import PluginPricing from '../../../components/PluginPricing'
+    import PluginLayout from '../../../components/PluginLayout'
 
     export default {
 
@@ -101,7 +72,8 @@
         layout: 'site',
 
         components: {
-            PluginPricing
+            PluginPricing,
+            PluginLayout,
         },
 
         data() {
