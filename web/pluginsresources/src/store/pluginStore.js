@@ -14,6 +14,7 @@ export const state = () => ({
     featuredPlugins: [],
     plugins: [],
     actionUrl: null,
+    plugin: null,
 })
 
 /**

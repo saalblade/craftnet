@@ -57,9 +57,14 @@
     export default {
 
         fetch({ params, store }) {
-            const pluginId = params.id
+            const pluginId = parseInt(params.id)
+
+            if (store.state.pluginStore.plugin && store.state.pluginStore.plugin.id === pluginId) {
+                return;
+            }
 
             store.commit('pluginStore/updatePluginDetails', null)
+
             return store.dispatch('pluginStore/getPluginDetails', pluginId)
                 .then(response => {
                     console.log('success')
