@@ -16,6 +16,11 @@
                     <h3>Package Name</h3>
                     <p>You can install this plugin from the Plugin Store, search for <code>{{ plugin.packageName }}</code> and click “Install”.</p>
 
+                    <div class="copy-package">
+                        <input type="text" class="text w-full" :value="plugin.packageName" />
+                        <a href="#" class="btn submit"><font-awesome-icon :icon="copyIcon" /></a>
+                    </div>
+
                     <h3>Informations</h3>
                     <div class="plugin-meta">
                         <ul class="plugin-meta-data">
@@ -53,6 +58,8 @@
     import {mapState} from 'vuex'
     import PluginPricing from '../../../components/PluginPricing'
     import PluginLayout from '../../../components/PluginLayout'
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+    import faCopy from '@fortawesome/fontawesome-free-solid/faCopy'
 
     export default {
 
@@ -79,6 +86,7 @@
         components: {
             PluginPricing,
             PluginLayout,
+            FontAwesomeIcon,
         },
 
         data() {
@@ -139,6 +147,9 @@
                 return this.$store.getters['pluginStore/getPluginById'](this.$route.params.id)
             },
 
+            copyIcon () {
+                return faCopy
+            },
         },
 
     }

@@ -456,6 +456,18 @@ input.text {
   .plugin-sidebar {
     @apply .px-4;
 
+    .copy-package {
+      @apply .flex .mb-4;
+
+      input {
+        @apply .rounded-r-none;
+      }
+
+      a {
+        @apply .text-black .border .rounded-l-none .border-l-0;
+      }
+    }
+
     .plugin-meta {
       ul {
         @apply .list-reset .mb-4;
