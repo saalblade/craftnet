@@ -120,16 +120,23 @@ return [
                 $session->authAccessParam = $stateKeyPrefix.'__auth_access';
                 return $session;
             },
-            'log' => [
-                'class' => yii\log\Dispatcher::class,
-                'targets' => [
-                    [
-                        'class' => craftnet\logs\DbTarget::class,
-                        'logTable' => 'apilog.logs',
-                        'categories' => ['craftnet\\*'],
+            'log' => function() {
+                $log = Craft::createObject([
+                    'class' => yii\log\Dispatcher::class,
+                    'targets' => [
+                        [
+                            'class' => craftnet\logs\DbTarget::class,
+                            'logTable' => 'apilog.logs',
+                            'categories' => ['craftnet\\*'],
+                        ],
+                        [
+                            'class' => craft\log\FileTarget::class,
+                        ]
                     ],
-                ],
-            ],
+                ]);
+
+                return $log;
+            },
         ],
     ]
 ];
