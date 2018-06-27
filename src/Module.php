@@ -138,7 +138,7 @@ class Module extends \yii\base\Module
                 $this->_initSiteRequest();
             }
         }
-
+        Craft::error('Test error log', __METHOD__);
         parent::init();
     }
 
