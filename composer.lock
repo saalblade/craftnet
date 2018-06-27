@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "483532fa9287eebcb381150766915e11",
+    "content-hash": "e81eaf48fc4f191a6a0b587ab39a022c",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -2436,6 +2436,65 @@
                 "shell"
             ],
             "time": "2017-06-30T06:21:01+00:00"
+        },
+        {
+            "name": "misterbk/mix",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mister-bk/craft-plugin-mix.git",
+                "reference": "2cc9705ad2387b7eb84d1b810ee1faca56473a01"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mister-bk/craft-plugin-mix/zipball/2cc9705ad2387b7eb84d1b810ee1faca56473a01",
+                "reference": "2cc9705ad2387b7eb84d1b810ee1faca56473a01",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "^3.0.0-RC1"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Mix",
+                "handle": "mix",
+                "schemaVersion": "1.0.0",
+                "developerEmail": "dev@mister-bk.de",
+                "documentationUrl": "https://github.com/mister-bk/craft-plugin-mix/blob/master/README.md",
+                "changelogUrl": "https://raw.githubusercontent.com/mister-bk/craft-plugin-mix/master/CHANGELOG.md",
+                "hasCpSettings": true,
+                "hasCpSection": false,
+                "components": {
+                    "mix": "misterbk\\mix\\services\\MixService"
+                },
+                "class": "misterbk\\mix\\Mix"
+            },
+            "autoload": {
+                "psr-4": {
+                    "misterbk\\mix\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "mister bk! GmbH",
+                    "email": "info@mister-bk.de",
+                    "homepage": "https://www.mister-bk.de/"
+                }
+            ],
+            "description": "Helper plugin for Laravel Mix in Craft CMS templates",
+            "keywords": [
+                "Craft",
+                "craft-plugin",
+                "craft3",
+                "craftcms",
+                "laravel-mix",
+                "mix"
+            ],
+            "time": "2018-06-26T19:30:51+00:00"
         },
         {
             "name": "moccalotto/eu",
@@ -5173,6 +5232,6 @@
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.0.21"
+        "php": "7.1.17"
     }
 }
