@@ -15,7 +15,7 @@
 
                 <div class="price">
                     <template v-if="pluginSnippet.editions[0].price != null && pluginSnippet.editions[0].price !== '0.00'">
-                        <a class="price-btn" href="#pricing">Starting at {{ (pluginSnippet.editions[0].price / 4)|currency }}</a>
+                        <nuxt-link class="price-btn" :to="'/plugin/'+pluginSnippet.id+'/pricing'">Starting at {{ (pluginSnippet.editions[0].price / 4)|currency }}</nuxt-link>
                     </template>
                     <template v-else>
                         <div class="price-btn">Free</div>
