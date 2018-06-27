@@ -127,10 +127,7 @@ return [
                         [
                             'class' => craftnet\logs\DbTarget::class,
                             'logTable' => 'apilog.logs',
-                            'categories' => ['craftnet\\*'],
-                        ],
-                        [
-                            'class' => craft\log\FileTarget::class,
+                            'levels' => !YII_DEBUG ? yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING : yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING | yii\log\Logger::LEVEL_INFO | yii\log\Logger::LEVEL_TRACE | yii\log\Logger::LEVEL_PROFILE,
                         ]
                     ],
                 ]);
