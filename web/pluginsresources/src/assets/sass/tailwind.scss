@@ -596,7 +596,7 @@ ul.tabs {
 }
 
 .changelog-release {
-  @apply .pt-4 .pb-6 .border-b .flex;
+  @apply .pt-2 .pb-4 .border-b .flex;
 
   .version {
     @apply .w-full .max-w-xs;
