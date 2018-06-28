@@ -1,14 +1,14 @@
 <template>
     <plugin-layout>
-        <h2>Version 1.0.1</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias atque doloremque eos eum expedita illum, laboriosam, libero molestiae neque nostrum numquam omnis perspiciatis quibusdam quis ratione rerum vel veniam voluptatem!
-        <h2>Version 1.0.0</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias atque doloremque eos eum expedita illum, laboriosam, libero molestiae neque nostrum numquam omnis perspiciatis quibusdam quis ratione rerum vel veniam voluptatem!</p>
+        <changelog-release version="1.0.2"></changelog-release>
+        <changelog-release version="1.0.1"></changelog-release>
+        <changelog-release version="1.0.0"></changelog-release>
     </plugin-layout>
 </template>
 
 <script>
     import PluginLayout from '../../../components/PluginLayout'
+    import ChangelogRelease from '../../../components/ChangelogRelease'
 
     export default {
 
@@ -16,6 +16,7 @@
 
         components: {
             PluginLayout,
+            ChangelogRelease,
         },
 
         computed: {
