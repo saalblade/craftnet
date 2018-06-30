@@ -55,7 +55,7 @@ return [
                                 'oauthClass' => League\OAuth2\Client\Provider\Github::class,
                                 'clientIdKey' => getenv('GITHUB_APP_CLIENT_ID'),
                                 'clientSecretKey' => getenv('GITHUB_APP_CLIENT_SECRET'),
-                                'scope' => ['user:email', 'write:repo_hook', 'repo'],
+                                'scope' => ['user:email', 'write:repo_hook', 'public_repo'],
                             ],
                             Oauth::PROVIDER_BITBUCKET => [
                                 'class' => 'Bitbucket',
