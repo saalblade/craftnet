@@ -24,15 +24,6 @@
                 <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
                     <navigation></navigation>
 
-                    <template v-if="featuredPlugins">
-                        <h3>{{ "Staff Picks" }}</h3>
-                        <ul>
-                            <template v-for="featuredPlugin in featuredPlugins">
-                                <li><nuxt-link :to="'/featured/'+featuredPlugin.id">{{ featuredPlugin.title }}</nuxt-link></li>
-                            </template>
-                        </ul>
-                    </template>
-
                     <h3>{{ "Categories" }}</h3>
                     <ul class="categories">
                         <li v-for="category in categories">
