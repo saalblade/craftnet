@@ -26,7 +26,11 @@
 
         <ul class="tabs">
             <li><nuxt-link :to="'/plugin/'+pluginSnippet.id" exact>Features</nuxt-link></li>
-            <li><nuxt-link :to="'/plugin/'+pluginSnippet.id+'/pricing'">Pricing</nuxt-link></li>
+
+            <template v-if="pluginSnippet.editions[0].price != null">
+                <li><nuxt-link :to="'/plugin/'+pluginSnippet.id+'/pricing'">Pricing</nuxt-link></li>
+            </template>
+
             <li><nuxt-link :to="'/plugin/'+pluginSnippet.id+'/changelog'">Changelog</nuxt-link></li>
         </ul>
 
