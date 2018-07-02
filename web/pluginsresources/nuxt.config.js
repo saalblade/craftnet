@@ -1,9 +1,13 @@
 module.exports = {
     srcDir: 'src/',
-    css: ['@/assets/sass/tailwind.scss'],
+    css: [
+        '@/assets/sass/tailwind.scss',
+        'swiper/dist/css/swiper.css',
+    ],
     plugins: [
         '~plugins/filters.js',
         '~plugins/moment.js',
+        { src: '~/plugins/swiper.js', ssr: false },
     ],
     env: {
         actionUrl: process.env.NODE_ENV === 'production' ? 'https://plugins.craftcms.com/index.php/actions' : 'https://plugins.craftcms.test/index.php/actions',

@@ -3,11 +3,7 @@
         <template v-if="pluginSnippet && plugin && !loading">
             <div class="plugin-details-body">
                 <div class="plugin-description">
-                    <div v-if="plugin.thumbnailUrls.length > 0" class="screenshots">
-                        <a v-for="(screenshotUrl, screenshotKey) in plugin.screenshotUrls" @click="zoomScreenshot(screenshotKey)">
-                            <img :src="screenshotUrl" />
-                        </a>
-                    </div>
+                    <carousel :plugin="plugin"></carousel>
                     <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                     <p v-else>No description.</p>
                 </div>
@@ -58,6 +54,7 @@
     import PluginPricing from '../../../components/PluginPricing'
     import PluginLayout from '../../../components/PluginLayout'
     import CopyPackage from '../../../components/CopyPackage'
+    import Carousel from '../../../components/Carousel'
 
     export default {
 
@@ -85,6 +82,7 @@
             PluginPricing,
             PluginLayout,
             CopyPackage,
+            Carousel,
         },
 
         data() {
@@ -144,7 +142,29 @@
             pluginSnippet() {
                 return this.$store.getters['pluginStore/getPluginById'](this.$route.params.id)
             },
+
         },
 
     }
 </script>
+
+<style lang="scss" scoped>
+    .my-swiper {
+        height: 300px;
+        width: 100%;
+        .swiper-slide {
+            text-align: center;
+            font-size: 38px;
+            font-weight: 700;
+            background-color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .swiper-pagination {
+            > .swiper-pagination-bullet {
+                background-color: red;
+            }
+        }
+    }
+</style>
