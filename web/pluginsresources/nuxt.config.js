@@ -1,7 +1,7 @@
 module.exports = {
     srcDir: 'src/',
     css: [
-        '@/assets/sass/tailwind.scss',
+        '@/assets/sass/app.scss',
         'swiper/dist/css/swiper.css',
     ],
     plugins: [
