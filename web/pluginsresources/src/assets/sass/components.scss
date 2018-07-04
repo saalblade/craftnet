@@ -113,7 +113,7 @@
   @apply .flex .mb-4;
 
   input {
-    @apply .rounded-r-none;
+    @apply .rounded-r-none .font-mono;
   }
 
   a {
