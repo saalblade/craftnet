@@ -1,5 +1,7 @@
 <template>
     <div class="wrapper">
+        <screenshot-modal v-if="showingScreenshotModal"></screenshot-modal>
+
         <header>
             <div>
                 <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
@@ -46,6 +48,7 @@
     import {mapState} from 'vuex'
     import Navigation from '../components/Navigation'
     import PluginSearchForm from '../components/PluginSearchForm'
+    import ScreenshotModal from '../components/ScreenshotModal'
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faBars from '@fortawesome/fontawesome-free-solid/faBars'
     import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
@@ -62,6 +65,7 @@
             Navigation,
             PluginSearchForm,
             FontAwesomeIcon,
+            ScreenshotModal,
         },
 
         computed: {
@@ -76,6 +80,7 @@
 
             ...mapState({
                 showingSidebar: state => state.app.showingSidebar,
+                showingScreenshotModal: state => state.app.showingScreenshotModal,
                 searchQuery: state => state.pluginStore.searchQuery,
                 categories: state => state.pluginStore.categories,
                 featuredPlugins: state => state.pluginStore.featuredPlugins,

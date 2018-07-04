@@ -3,7 +3,7 @@
         <template v-if="pluginSnippet && plugin && !loading">
             <div class="plugin-details-body">
                 <div class="plugin-description">
-                    <carousel :plugin="plugin"></carousel>
+                    <carousel identifier="plugin-carousel" :inline="true" :images="plugin.screenshotUrls"></carousel>
                     <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                     <p v-else>No description.</p>
                 </div>
