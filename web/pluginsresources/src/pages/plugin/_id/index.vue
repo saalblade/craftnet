@@ -12,9 +12,10 @@
                     <div class="plugin-meta">
                         <ul class="plugin-meta-data">
                             <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
-                            <li><span>{{ "Last update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>
-                            <li v-if="plugin.activeInstalls > 0"><span>{{ "Active installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
+                            <li><span>{{ "Last Update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>
+                            <li v-if="plugin.activeInstalls > 0"><span>{{ "Active Installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
                             <li><span>{{ "Compatibility"|t('app') }}</span> <strong>{{ plugin.compatibility }}</strong></li>
+                            <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
                             <li v-if="pluginCategories.length > 0">
                                 <span>{{ "Categories"|t('app') }}</span>
                                 <strong>
@@ -23,21 +24,23 @@
                                     </template>
                                 </strong>
                             </li>
-                            <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
                         </ul>
+                        <div class="clearfix"></div>
                     </div>
+
 
                     <h3>Package Name</h3>
                     <p>To install this plugin, search for its package name on the Plugin Store and click “Install”.</p>
 
                     <copy-package :plugin="plugin"></copy-package>
 
+                    <hr>
 
-                    <div class="plugin-meta">
+                    <div class="plugin-meta-links">
                         <h3>Links</h3>
-                        <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)" class="plugin-meta-links">
-                            <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl" class="btn fullwidth" target="_blank">{{ "Documentation"|t('app') }}</a></li>
-                            <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl" class="btn fullwidth" target="_blank">{{ "Changelog"|t('app') }}</a></li>
+                        <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)">
+                            <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl" target="_blank"><font-awesome-icon :icon="icon('book')" /> {{ "Documentation"|t('app') }}</a></li>
+                            <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl" target="_blank"><font-awesome-icon :icon="icon('certificate')" /> {{ "Changelog"|t('app') }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -55,6 +58,9 @@
     import PluginLayout from '../../../components/PluginLayout'
     import CopyPackage from '../../../components/CopyPackage'
     import Carousel from '../../../components/Carousel'
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+    import faBook from '@fortawesome/fontawesome-free-solid/faBook'
+    import faCertificate from '@fortawesome/fontawesome-free-solid/faCertificate'
 
     export default {
 
@@ -83,6 +89,7 @@
             PluginLayout,
             CopyPackage,
             Carousel,
+            FontAwesomeIcon,
         },
 
         data() {
@@ -144,6 +151,20 @@
             },
 
         },
+
+        methods: {
+            icon(icon) {
+                switch(icon) {
+                    case 'book':
+                        return faBook;
+                        break;
+                    case 'certificate':
+                        return faCertificate;
+                        break;
+                }
+
+            }
+        }
 
     }
 </script>

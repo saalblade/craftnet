@@ -93,40 +93,31 @@
     @apply .px-4;
 
     .plugin-meta {
+      @apply .border-b .mb-4;
+
       ul {
-        @apply .list-reset .mb-4;
+        @apply .list-reset;
 
         li {
-          @apply .py-2;
-        }
+          @apply  .w-1/2 .float-left .mb-4;
 
-        &.plugin-meta-data {
-          @apply .border-b;
+          span {
+            @apply .text-grey-dark .block;
+          }
 
-          li {
-            @apply .border-b .flex .py-2;
-
-            &:last-child {
-              @apply .border-b-0;
-            }
-
-            & span,
-            & strong {
-              @apply .flex-1;
-            }
-
-            & strong {
-              @apply .text-right;
-            }
+          strong {
+            @apply .font-normal;
           }
         }
+      }
+    }
 
-        &.plugin-meta-links {
-          li {
-            a {
-              @apply .inline-block;
-            }
-          }
+    .plugin-meta-links {
+      ul {
+        @apply .list-reset;
+
+        li {
+          @apply .my-2;
         }
       }
     }
