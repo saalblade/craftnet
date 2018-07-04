@@ -27,21 +27,14 @@
 
         methods: {
 
-            change() {
-                this.$refs.input.value = this.plugin.packageName
-                this.copy();
-            },
-
             select() {
-                const input = this.$refs.input
-
-                this.$nextTick(() => {
-                    input.select()
-                })
+                this.$refs.input.select()
             },
 
             copy() {
-                this.select()
+                this.select();
+
+                window.document.execCommand('copy');
             },
 
         }
