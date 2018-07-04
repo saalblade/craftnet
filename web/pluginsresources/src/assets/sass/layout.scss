@@ -65,7 +65,7 @@
   padding-top: 61px;
 
   header {
-    @apply .px-0 .py-3 .border-b .fixed .w-full .bg-white .pin-t .z-10;
+    @apply .px-0 .py-3 .border-b .fixed .w-full .bg-white .pin-t .z-20;
 
     & > div {
       @apply .flex .justify-between;
@@ -106,10 +106,11 @@
     @apply .flex .flex-col;
 
     .sidebar {
-      @apply .px-6 .py-4 .hidden .border-r;
+      @apply .px-6 .py-4 .hidden;
 
       &.showing-sidebar {
-        @apply .block;
+        @apply .block .fixed .pin .z-10 .overflow-y-auto;
+        padding-top: 78px;
       }
 
       nav {
@@ -147,7 +148,12 @@
       @apply .flex-row .flex-1;
 
       .sidebar {
-        @apply .w-64 .p-6 .overflow-auto .block;
+        @apply .w-64 .p-6 .overflow-auto .block .border-r;
+
+        &.showing-sidebar {
+          @apply .relative .pin-none;
+          padding-top: 24px;
+        }
 
         nav {
           @apply .hidden;
