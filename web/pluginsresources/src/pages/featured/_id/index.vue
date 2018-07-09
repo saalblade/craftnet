@@ -6,10 +6,28 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import PluginGrid from '../../../components/PluginGrid'
 
     export default {
+
+        async fetch ({ store, params }) {
+            const featuredPlugin = store.getters['pluginStore/getFeaturedPlugin'](params.id)
+
+            await store.commit('app/updatePageMeta', {
+                title: featuredPlugin.title,
+                description: featuredPlugin.title + ' featured plugins.'
+            })
+        },
+
+        head () {
+            return {
+                title: this.pageMeta.title + ' on the Plugin Store',
+                meta: [
+                    { hid: 'description', name: 'description', content: this.pageMeta.description }
+                ]
+            };
+        },
 
         layout: 'site',
 
@@ -17,16 +35,11 @@
             PluginGrid,
         },
 
-        head () {
-            return {
-                title: this.featuredPlugin.title,
-                meta: [
-                    { hid: 'description', name: 'description', content: 'My featured plugins description' }
-                ]
-            }
-        },
-
         computed: {
+
+            ...mapState({
+                pageMeta: state => state.app.pageMeta,
+            }),
 
             ...mapGetters({
                 getFeaturedPlugin: 'pluginStore/getFeaturedPlugin',

@@ -11,6 +11,7 @@ module.exports = {
     ],
     env: {
         actionUrl: process.env.NODE_ENV === 'production' ? 'https://plugins.craftcms.com/index.php/actions' : 'https://plugins.craftcms.test/index.php/actions',
+        showSeoMeta: false,
     },
     router: {
         middleware: 'route'

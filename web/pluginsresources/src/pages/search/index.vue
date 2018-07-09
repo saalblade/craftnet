@@ -14,10 +14,37 @@
 
     export default {
 
+        async fetch ({ store, query }) {
+            await store.commit('app/updatePageMeta', {
+                title: query.q + ' - Craft Plugins Search',
+                description: 'Search results for “' + query.q + '”.'
+            })
+        },
+
+        head () {
+            return {
+                title: this.pageMeta.title,
+                meta: [
+                    { hid: 'description', name: 'description', content: this.pageMeta.description }
+                ]
+            };
+        },
+
         layout: 'site',
 
         components: {
             PluginGrid,
+        },
+
+        watch: {
+
+            searchQuery(val) {
+                this.$store.commit('app/updatePageMeta', {
+                    title: val + ' - Craft Plugins Search',
+                    description: 'Search results description'
+                })
+            }
+
         },
 
         computed: {
@@ -28,6 +55,7 @@
 
             ...mapState({
                 plugins: state => state.pluginStore.plugins,
+                pageMeta: state => state.app.pageMeta,
             }),
 
             pluginsToRender() {

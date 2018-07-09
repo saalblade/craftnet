@@ -1,16 +1,33 @@
 <template>
     <div v-if="category">
         <h1>{{category.title}}</h1>
-
         <plugin-index :plugins="plugins" :columns="4"></plugin-index>
     </div>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import PluginIndex from '../../../components/PluginIndex'
 
     export default {
+
+        async fetch ({ store, params }) {
+            let category = store.getters['pluginStore/getCategoryById'](params.id)
+
+            await store.commit('app/updatePageMeta', {
+                title: category.title,
+                description: category.title + ' category.'
+            })
+        },
+
+        head () {
+            return {
+                title: this.pageMeta.title,
+                meta: [
+                    { hid: 'description', name: 'description', content: this.pageMeta.description }
+                ]
+            };
+        },
 
         layout: 'site',
 
@@ -18,16 +35,11 @@
             PluginIndex,
         },
 
-        head () {
-            return {
-                title: 'Category',
-                meta: [
-                    { hid: 'description', name: 'description', content: 'My category description' }
-                ]
-            }
-        },
-
         computed: {
+
+            ...mapState({
+                pageMeta: state => state.app.pageMeta,
+            }),
 
             ...mapGetters({
                 getCategoryById: 'pluginStore/getCategoryById',
@@ -39,13 +51,7 @@
             },
 
             category() {
-                let category = this.getCategoryById(this.categoryId)
-
-                if (category) {
-                    this.$root.pageTitle = category.title
-                }
-
-                return category
+                return this.getCategoryById(this.categoryId)
             },
 
             plugins() {

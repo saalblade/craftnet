@@ -64,22 +64,42 @@
 
     export default {
 
-        fetch({ params, store }) {
+        async fetch({store, params}) {
             const pluginId = parseInt(params.id)
+            let plugin = null
 
             if (store.state.pluginStore.plugin && store.state.pluginStore.plugin.id === pluginId) {
-                return;
+                plugin = store.state.pluginStore.plugin
+
+                await store.commit('app/updatePageMeta', {
+                    title: plugin.name,
+                    description: plugin.name + ' plugin for Craft CMS.'
+                })
+
+                return
             }
 
             store.commit('pluginStore/updatePluginDetails', null)
 
-            return store.dispatch('pluginStore/getPluginDetails', pluginId)
+            await store.dispatch('pluginStore/getPluginDetails', pluginId)
                 .then(response => {
-                    console.log('success')
+                    store.commit('app/updatePageMeta', {
+                        title: store.state.pluginStore.plugin.name,
+                        description: store.state.pluginStore.plugin.name + ' plugin for Craft CMS.'
+                    })
                 })
                 .catch(response => {
                     console.log('error')
                 })
+        },
+
+        head () {
+            return {
+                title: this.pageMeta.title,
+                meta: [
+                    { hid: 'description', name: 'description', content: this.pageMeta.description }
+                ]
+            };
         },
 
         layout: 'site',
@@ -99,22 +119,10 @@
             }
         },
 
-        head () {
-            if (!this.plugin) {
-                return
-            }
-
-            return {
-                title: this.plugin.name + ' on the Plugin Store',
-                meta: [
-                    { hid: 'description', name: 'description', content: 'My plugin description' }
-                ]
-            }
-        },
-
         computed: {
 
             ...mapState({
+                pageMeta: state => state.app.pageMeta,
                 categories: state => state.pluginStore.categories,
                 plugin: state => state.pluginStore.plugin,
             }),

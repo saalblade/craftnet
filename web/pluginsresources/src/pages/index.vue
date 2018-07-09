@@ -23,6 +23,22 @@
 
     export default {
 
+        async fetch ({ store, params }) {
+            await store.commit('app/updatePageMeta', {
+                title: 'Craft Plugins',
+                description: 'Plugins for Craft CMS.'
+            })
+        },
+
+        head () {
+            return {
+                title: this.pageMeta.title,
+                meta: [
+                    { hid: 'description', name: 'description', content: this.pageMeta.description }
+                ]
+            };
+        },
+
         layout: 'site',
 
         components: {
@@ -34,6 +50,7 @@
             ...mapState({
                 featuredPlugins: state => state.pluginStore.featuredPlugins,
                 plugins: state => state.pluginStore.plugins,
+                pageMeta: state => state.app.pageMeta,
             }),
 
             ...mapGetters({

@@ -40,16 +40,33 @@
 
     export default {
 
-        fetch({ params, store }) {
+        async fetch({store, params}) {
             let developerId = params.id
 
-            return store.dispatch('pluginStore/getDeveloper', developerId)
-                .then(developer => {
-                    console.log('success')
+            await store.dispatch('pluginStore/getDeveloper', developerId)
+                .then(response => {
+                    const developer = store.state.pluginStore.developer
+
+                    store.commit('app/updatePageMeta', {
+                        title: developer.developerName,
+                        description: developer.developerName + ' developer.'
+                    })
                 })
                 .catch(response => {
                     console.log('error')
                 })
+
+
+            return
+        },
+
+        head () {
+            return {
+                title: this.pageMeta.title,
+                meta: [
+                    { hid: 'description', name: 'description', content: this.pageMeta.description }
+                ]
+            };
         },
 
         layout: 'site',
@@ -60,15 +77,6 @@
             }
         },
 
-        head () {
-            return {
-                title: this.developer.developerName,
-                meta: [
-                    { hid: 'description', name: 'description', content: 'My plugin description' }
-                ]
-            }
-        },
-
         components: {
             PluginIndex,
         },
@@ -76,6 +84,7 @@
         computed: {
 
             ...mapState({
+                pageMeta: state => state.app.pageMeta,
                 developer: state => state.pluginStore.developer,
             }),
 

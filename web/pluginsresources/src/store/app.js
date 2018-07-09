@@ -2,6 +2,7 @@
  * State
  */
 export const state = () => ({
+    pageMeta: null,
     showingSidebar: false,
     searchQuery: '',
     showingScreenshotModal: false,
@@ -32,6 +33,10 @@ export const mutations = {
 
     updateScreenshotModalImages(state, images) {
         state.screenshotModalImages = images
+    },
+
+    updatePageMeta(state, pageMeta) {
+        state.pageMeta = pageMeta
     }
 
 }

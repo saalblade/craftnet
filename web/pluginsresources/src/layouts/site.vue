@@ -37,6 +37,12 @@
                     </ul>
                 </div>
                 <div class="view">
+                    <div v-if="pageMeta && showSeoMeta" class="seo-meta">
+                        <ul>
+                            <li><strong>Title:</strong> {{pageMeta.title}}</li>
+                            <li><strong>Description:</strong> {{pageMeta.description}}</li>
+                        </ul>
+                    </div>
                     <nuxt/>
                 </div>
             </template>
@@ -81,10 +87,15 @@
             ...mapState({
                 showingSidebar: state => state.app.showingSidebar,
                 showingScreenshotModal: state => state.app.showingScreenshotModal,
+                pageMeta: state => state.app.pageMeta,
                 searchQuery: state => state.pluginStore.searchQuery,
                 categories: state => state.pluginStore.categories,
                 featuredPlugins: state => state.pluginStore.featuredPlugins,
             }),
+
+            showSeoMeta() {
+                return process.env.showSeoMeta
+            },
 
         },
 
@@ -100,7 +111,7 @@
         },
 
         created() {
-            console.log('env', process.env.NODE_ENV);
+            // console.log('env', process.env.NODE_ENV);
 
             if (this.$route.query.q) {
                 this.$store.commit('app/updateSearchQuery', this.$route.query.q)
