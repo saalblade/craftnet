@@ -37,21 +37,27 @@ export const getters = {
     },
 
     getFeaturedPlugin(state) {
-        return id => {
-            return state.featuredPlugins.find(g => g.id == id)
+        return slug => {
+            return state.featuredPlugins.find(g => g.slug == slug)
         }
     },
 
-    getCategoryById(state) {
-        return id => {
-            return state.categories.find(c => c.id == id)
+    getCategoryBySlug(state) {
+        return slug => {
+            return state.categories.find(c => c.slug == slug)
         }
     },
 
-    getPluginsByCategory(state) {
-        return categoryId => {
+    getPluginsByCategorySlug(state, getters) {
+        return categorySlug => {
+            const category = getters.getCategoryBySlug(categorySlug)
+
+            if (!category) {
+                return []
+            }
+
             return state.plugins.filter(p => {
-                return p.categoryIds.find(c => c == categoryId)
+                return p.categoryIds.find(c => c == category.id)
             })
         }
     },
@@ -59,6 +65,13 @@ export const getters = {
     getPluginById(state) {
         return id => {
             return state.plugins.find(p => p.id == id)
+        }
+    },
+
+
+    getPluginByHandle(state) {
+        return handle => {
+            return state.plugins.find(p => p.handle == handle)
         }
     },
 

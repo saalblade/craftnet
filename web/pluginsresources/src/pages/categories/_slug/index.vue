@@ -12,7 +12,7 @@
     export default {
 
         async fetch ({ store, params }) {
-            let category = store.getters['pluginStore/getCategoryById'](params.id)
+            let category = store.getters['pluginStore/getCategoryBySlug'](params.slug)
 
             await store.commit('app/updatePageMeta', {
                 title: category.title,
@@ -42,20 +42,20 @@
             }),
 
             ...mapGetters({
-                getCategoryById: 'pluginStore/getCategoryById',
-                getPluginsByCategory: 'pluginStore/getPluginsByCategory',
+                getCategoryBySlug: 'pluginStore/getCategoryBySlug',
+                getPluginsByCategorySlug: 'pluginStore/getPluginsByCategorySlug',
             }),
 
-            categoryId() {
-                return this.$route.params.id
+            categorySlug() {
+                return this.$route.params.slug
             },
 
             category() {
-                return this.getCategoryById(this.categoryId)
+                return this.getCategoryBySlug(this.categorySlug)
             },
 
             plugins() {
-                return this.getPluginsByCategory(this.categoryId)
+                return this.getPluginsByCategorySlug(this.categorySlug)
             }
 
         },

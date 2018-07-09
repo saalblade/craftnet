@@ -65,7 +65,14 @@
     export default {
 
         async fetch({store, params}) {
-            const pluginId = parseInt(params.id)
+            const pluginSnippet = store.getters['pluginStore/getPluginByHandle'](params.handle)
+
+            if (!pluginSnippet) {
+                return;
+            }
+
+            const pluginId = pluginSnippet.id
+
             let plugin = null
 
             if (store.state.pluginStore.plugin && store.state.pluginStore.plugin.id === pluginId) {
@@ -155,7 +162,7 @@
             },
 
             pluginSnippet() {
-                return this.$store.getters['pluginStore/getPluginById'](this.$route.params.id)
+                return this.$store.getters['pluginStore/getPluginByHandle'](this.$route.params.handle)
             },
 
         },

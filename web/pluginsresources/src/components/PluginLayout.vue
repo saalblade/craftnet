@@ -16,13 +16,13 @@
         </div>
 
         <ul class="tabs">
-            <li><nuxt-link :to="'/plugin/'+pluginSnippet.id" exact>Features</nuxt-link></li>
+            <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle" exact>Features</nuxt-link></li>
 
             <template v-if="pluginSnippet.editions[0].price != null">
-                <li><nuxt-link :to="'/plugin/'+pluginSnippet.id+'/pricing'">Pricing</nuxt-link></li>
+                <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/pricing'">Pricing</nuxt-link></li>
             </template>
 
-            <li><nuxt-link :to="'/plugin/'+pluginSnippet.id+'/changelog'">Changelog</nuxt-link></li>
+            <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'">Changelog</nuxt-link></li>
         </ul>
 
         <slot></slot>
@@ -35,7 +35,7 @@
         computed: {
 
             pluginSnippet() {
-                return this.$store.getters['pluginStore/getPluginById'](this.$route.params.id)
+                return this.$store.getters['pluginStore/getPluginByHandle'](this.$route.params.handle)
             },
 
         },

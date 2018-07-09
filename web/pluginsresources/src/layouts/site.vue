@@ -29,7 +29,7 @@
                     <h3>{{ "Categories" }}</h3>
                     <ul class="categories">
                         <li v-for="category in categories">
-                            <nuxt-link :to="'/categories/'+category.id">
+                            <nuxt-link :to="'/categories/'+category.slug">
                                 <img :src="category.iconUrl" height="24" />
                                 {{ category.title }}
                             </nuxt-link>

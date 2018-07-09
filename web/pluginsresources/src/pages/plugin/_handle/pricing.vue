@@ -1,24 +1,22 @@
 <template>
     <plugin-layout>
-        <changelog-release version="1.0.2"></changelog-release>
-        <changelog-release version="1.0.1"></changelog-release>
-        <changelog-release version="1.0.0"></changelog-release>
+        <plugin-pricing :plugin-snippet="pluginSnippet"></plugin-pricing>
     </plugin-layout>
 </template>
 
 <script>
     import {mapState} from 'vuex'
     import PluginLayout from '../../../components/PluginLayout'
-    import ChangelogRelease from '../../../components/ChangelogRelease'
+    import PluginPricing from '../../../components/PluginPricing'
 
     export default {
 
         async fetch ({ store, params }) {
-            const pluginSnippet = store.getters['pluginStore/getPluginById'](params.id)
+            const pluginSnippet = store.getters['pluginStore/getPluginByHandle'](params.handle)
 
             await store.commit('app/updatePageMeta', {
-                title: pluginSnippet.name + ' Changelog',
-                description: pluginSnippet.name + ' Changelog',
+                title: pluginSnippet.name + ' Pricing',
+                description: pluginSnippet.name + ' Pricing',
             })
         },
 
@@ -35,7 +33,7 @@
 
         components: {
             PluginLayout,
-            ChangelogRelease,
+            PluginPricing,
         },
 
         computed: {
@@ -45,10 +43,17 @@
             }),
 
             pluginSnippet() {
-                return this.$store.getters['pluginStore/getPluginById'](this.$route.params.id)
+                return this.$store.getters['pluginStore/getPluginByHandle'](this.$route.params.handle)
             },
 
-        }
+        },
+
+        mounted() {
+            if (!this.pluginSnippet.editions[0].price) {
+                // Redirect to the plugin’s features section if plugin is free.
+                this.$router.push({path: '/plugin/' + this.pluginSnippet.handle});
+            }
+        },
 
     }
 </script>

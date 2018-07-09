@@ -93,6 +93,7 @@ class PluginStoreController extends BaseApiController
 
         $ret[] = [
             'id' => 'recently-added',
+            'slug' => 'recently-added',
             'title' => 'Recently Added',
             'plugins' => $recents,
             'limit' => 6,
@@ -100,7 +101,7 @@ class PluginStoreController extends BaseApiController
 
         $entries = Entry::find()
             ->site('craftId')
-            ->select(['elements.id', 'elements.fieldLayoutId', 'content.title', 'content.field_limit'])
+            ->select(['elements.id', 'elements.fieldLayoutId', 'content.title', 'content.field_limit', 'elements_sites.slug'])
             ->section('featuredPlugins')
             ->with('plugins', ['select' => ['elements.id']])
             ->all();
@@ -108,6 +109,7 @@ class PluginStoreController extends BaseApiController
         foreach ($entries as $entry) {
             $ret[] = [
                 'id' => $entry->id,
+                'slug' => $entry->slug,
                 'title' => $entry->title,
                 'plugins' => ArrayHelper::getColumn($entry->plugins, 'id'),
                 'limit' => $entry->limit,
