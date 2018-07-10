@@ -15,6 +15,7 @@ import PluginsEdit from '../pages/PluginsEdit'
 import Plugins from '../pages/Plugins'
 import Settings from '../pages/Settings'
 import DeveloperSettings from '../pages/DeveloperSettings'
+import PartnerOverview from '../pages/PartnerOverview'
 
 Vue.use(VueRouter);
 
@@ -115,6 +116,15 @@ const router = new VueRouter({
             name: 'DeveloperSettings',
             component: DeveloperSettings
         },
+        {
+            path: '/partner',
+            redirect: '/partner/overview',
+        },
+        {
+            path: '/partner/overview',
+            name: 'PartnerOverview',
+            component: PartnerOverview
+        }
     ]
 });
 
