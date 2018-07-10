@@ -173,8 +173,7 @@ return [
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
     ],
     'PimpMyMatrix' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development.',
+        'handle' => 'spoon',
     ],
     'Printmaker' => [
         'statusColor' => 'orange',
