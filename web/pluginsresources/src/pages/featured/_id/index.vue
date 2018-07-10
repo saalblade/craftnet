@@ -15,8 +15,8 @@
             const featuredPlugin = store.getters['pluginStore/getFeaturedPlugin'](params.id)
 
             await store.commit('app/updatePageMeta', {
-                title: featuredPlugin.title  + ' on the Plugin Store',
-                description: featuredPlugin.title + ' featured plugins.'
+                title: featuredPlugin.title,
+                description: featuredPlugin.description,
             })
         },
 

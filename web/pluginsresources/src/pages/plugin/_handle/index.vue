@@ -80,7 +80,7 @@
 
                 await store.commit('app/updatePageMeta', {
                     title: plugin.name,
-                    description: plugin.name + ' plugin for Craft CMS.'
+                    description: plugin.shortDescription
                 })
 
                 return

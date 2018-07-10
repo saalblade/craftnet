@@ -16,7 +16,7 @@
 
             await store.commit('app/updatePageMeta', {
                 title: category.title,
-                description: category.title + ' category.'
+                description: category.description,
             })
         },
 

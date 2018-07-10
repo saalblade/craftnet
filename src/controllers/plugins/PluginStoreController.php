@@ -58,6 +58,20 @@ class PluginStoreController extends Controller
     {
         $pluginStoreData = Craft::$app->getApi()->getPluginStoreData();
 
+        $seo = [];
+
+
+        // Index
+
+        $indexSeo = Craft::$app->getGlobals()->getSetByHandle('indexSeo');
+
+        $seo['index'] = [
+            'title' => $indexSeo->pageTitle,
+            'description' => $indexSeo->description,
+        ];
+
+        $pluginStoreData['seo'] = $seo;
+
         return $this->asJson($pluginStoreData);
     }
 }

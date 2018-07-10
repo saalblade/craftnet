@@ -16,6 +16,7 @@ export const state = () => ({
     actionUrl: null,
     plugin: null,
     developer: null,
+    seo: {},
 })
 
 /**
@@ -68,7 +69,6 @@ export const getters = {
         }
     },
 
-
     getPluginByHandle(state) {
         return handle => {
             return state.plugins.find(p => p.handle == handle)
@@ -80,6 +80,12 @@ export const getters = {
             return state.plugins.filter(p => p.developerId == developerId)
         }
     },
+
+    getSeo(state) {
+        return page => {
+            return state.seo[page]
+        }
+    }
 
 }
 
@@ -143,6 +149,7 @@ export const mutations = {
         state.categories = response.data.categories
         state.featuredPlugins = response.data.featuredPlugins
         state.plugins = response.data.plugins
+        state.seo = response.data.seo
     },
 
     updatePluginDetails(state, pluginDetails) {

@@ -24,9 +24,11 @@
     export default {
 
         async fetch ({ store, params }) {
+            const seo = store.getters['pluginStore/getSeo']('index')
+
             await store.commit('app/updatePageMeta', {
-                title: 'Craft Plugins',
-                description: 'Plugins for Craft CMS.'
+                title: seo.title,
+                description: seo.description,
             })
         },
 
