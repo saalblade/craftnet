@@ -75,3 +75,14 @@ input.text {
     }
   }
 }
+
+
+/* Truncate */
+
+.truncate {
+  .truncate-in {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

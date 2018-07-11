@@ -7,8 +7,12 @@
             </div>
 
             <div class="details">
-                <div class="name">{{ plugin.name }}</div>
-                <div class="description">{{ plugin.shortDescription.substr(0, 60) }}…</div>
+                <div class="name">
+                    <div class="truncate">
+                        <div class="truncate-in">{{ plugin.name }}</div>
+                    </div>
+                </div>
+                <div class="description" v-shave="{ height: 45 }">{{ plugin.shortDescription }}</div>
                 <div class="price">
                     <template v-if="plugin.editions[0].price != null && plugin.editions[0].price !== '0.00'">
                         {{ plugin.editions[0].price|currency }}
