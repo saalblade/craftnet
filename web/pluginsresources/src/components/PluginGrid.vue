@@ -1,7 +1,7 @@
 <template>
     <div>
         <div :class="cssClass" v-if="plugins && plugins.length > 0">
-            <div class="grid-box" v-for="plugin in plugins">
+            <div class="grid-box" v-for="plugin, key in plugins" :class="{'responsive-limit': (key + 1) > responsiveLimit}">
                 <plugin-card :plugin="plugin"></plugin-card>
             </div>
         </div>
@@ -18,7 +18,7 @@
             PluginCard,
         },
 
-        props: ['plugins', 'columns'],
+        props: ['plugins', 'columns', 'responsiveLimit'],
 
         computed: {
 

@@ -7,7 +7,7 @@
                 <div>
                     <h2 class="mb-4">{{ featuredPlugin.title }}</h2>
                     <div class="mb-8">
-                        <plugin-grid :plugins="getPluginsByIds(featuredPlugin.plugins.slice(0, featuredPlugin.limit))"></plugin-grid>
+                        <plugin-grid :plugins="getPluginsByIds(featuredPlugin.plugins.slice(0, 8))" responsive-limit="6"></plugin-grid>
                     </div>
                 </div>
             </template>

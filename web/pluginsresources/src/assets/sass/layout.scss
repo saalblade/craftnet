@@ -13,6 +13,10 @@
 
   .grid-box {
     @apply .border-b .py-6 .overflow-hidden;
+
+    &.responsive-limit {
+      @apply hidden;
+    }
   }
 }
 
@@ -42,6 +46,12 @@
 @media (min-width: 1600px) {
   .grid-plugins {
     grid-template-columns: 1fr 1fr 1fr 1fr;
+
+    .grid-box {
+      &.responsive-limit {
+        @apply block;
+      }
+    }
   }
   .grid-plugins-4 {
     grid-template-columns: 1fr 1fr 1fr 1fr;
