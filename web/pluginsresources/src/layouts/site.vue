@@ -24,9 +24,7 @@
 
             <template v-else>
                 <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
-                    <navigation></navigation>
-
-                    <h3>{{ "Categories" }}</h3>
+                    <h3 class="first">{{ "Categories" }}</h3>
                     <ul class="categories">
                         <li v-for="category in categories">
                             <nuxt-link :to="'/categories/'+category.slug">
@@ -35,6 +33,11 @@
                             </nuxt-link>
                         </li>
                     </ul>
+
+                    <div class="nav">
+                        <h3>Switch Sites</h3>
+                        <navigation></navigation>
+                    </div>
                 </div>
                 <div class="view">
                     <div v-if="pageMeta && showSeoMeta" class="seo-meta">
