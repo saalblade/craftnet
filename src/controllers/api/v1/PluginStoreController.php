@@ -92,13 +92,13 @@ class PluginStoreController extends BaseApiController
             ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
             ->ids();
 
-        $recentlyAddedPluginsSeo = Craft::$app->getGlobals()->getSetByHandle('recentlyAddedPluginsSeo');
+        $recentlyAddedPluginsEntry = Entry::find()->site('plugins')->section('recentlyAddedPlugins')->one();
 
         $ret[] = [
             'id' => 'recently-added',
             'slug' => 'recently-added',
-            'title' => $recentlyAddedPluginsSeo->pageTitle,
-            'description' => $recentlyAddedPluginsSeo->description,
+            'title' => $recentlyAddedPluginsEntry->title,
+            'description' => $recentlyAddedPluginsEntry->description,
             'plugins' => $recents,
             'limit' => 6,
         ];

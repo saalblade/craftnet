@@ -3,7 +3,7 @@
 namespace craftnet\controllers\plugins;
 
 use Craft;
-use craft\helpers\UrlHelper;
+use craft\elements\Entry;
 use craft\web\Controller;
 use yii\web\Response;
 
@@ -62,12 +62,11 @@ class PluginStoreController extends Controller
 
 
         // Index
-
-        $indexSeo = Craft::$app->getGlobals()->getSetByHandle('indexSeo');
+        $indexEntry = Entry::find()->site('plugins')->section('index')->one();
 
         $seo['index'] = [
-            'title' => $indexSeo->pageTitle,
-            'description' => $indexSeo->description,
+            'title' => $indexEntry->title,
+            'description' => $indexEntry->description,
         ];
 
         $pluginStoreData['seo'] = $seo;
