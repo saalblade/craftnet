@@ -4,6 +4,7 @@ import developers from './modules/developers'
 import account from './modules/account'
 import licenses from './modules/licenses'
 import craftId from './modules/craftid'
+import partner from './modules/partner'
 
 Vue.use(Vuex);
 
@@ -14,5 +15,6 @@ export default new Vuex.Store({
         account,
         developers,
         licenses,
+        partner
     }
 })
