@@ -13,6 +13,7 @@
                 <text-field id="minimumBudget" label="Minimum Budget" v-model="partnerDraft.minimumBudget" :errors="errors.minimumBudget" />
                 <select-field id="agencySize" label="Agency Size" v-model="partnerDraft.agencySize" :options="formDefaults.agencyOptions" :errors="errors.agencySize" />
                 <url-field id="msaLink" label="Link to MSA or Equivalent paperwork" v-model="partnerDraft.msaLink" :errors="errors.msaLink" />
+                <checkbox-set id="capabilities" label="Capabilities" v-model="partnerDraft.capabilities" :options="formDefaults.capabilitiesOptions" :errors="errors.capabilities" />
             </div>
         </div>
 	</div>
@@ -20,6 +21,7 @@
 
 <script>
     import {mapState} from 'vuex'
+    import CheckboxSet from '../components/fields/CheckboxSet'
     import SelectField from '../components/fields/SelectField'
     import TextareaField from '../components/fields/TextareaField'
     import TextField from '../components/fields/TextField'
@@ -36,12 +38,19 @@
                         {label: "Boutique", value: "Boutique"},
                         {label: "Agency (10-50)", value: "Agency"},
                         {label: "Large Agency (50+)", value: "Large Agency"}
+                    ],
+                    capabilitiesOptions: [
+                        {label: 'Commerce', 'value': 'Commerce'},
+                        {label: 'Full Service', 'value': 'Full Service'},
+                        {label: 'Custom Development', 'value': 'Custom Development'},
+                        {label: 'Contract Work', 'value': 'Contract Work'},
                     ]
                 }
             }
         },
 
         components: {
+            CheckboxSet,
             SelectField,
             TextareaField,
             TextField,
@@ -56,7 +65,8 @@
 
         mounted() {
             this.partnerDraft = {
-                agencySize: "Boutique"
+                agencySize: "Boutique",
+                capabilities: ['Commerce']
             }
         }
     }
