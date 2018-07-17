@@ -120,6 +120,7 @@
 
       &.showing-sidebar {
         @apply .block .fixed .pin .z-10 .overflow-y-auto;
+        -webkit-overflow-scrolling: touch;
         top:60px;
       }
 
