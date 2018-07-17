@@ -55,7 +55,7 @@ class CartsController extends BaseApiController
             'currency' => 'USD',
             'paymentCurrency' => 'USD',
             'gatewayId' => getenv('STRIPE_GATEWAY_ID'),
-            'orderLocale' => Craft::$app->language
+            'orderLanguage' => Craft::$app->language,
         ]);
 
         $this->_updateCart($cart, $payload);
