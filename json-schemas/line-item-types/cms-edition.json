@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "edition": {"enum": ["client", "pro"]},
+    "edition": {"enum": ["pro"]},
     "licenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"},
     "autoRenew": {"type": "boolean"}
   },
