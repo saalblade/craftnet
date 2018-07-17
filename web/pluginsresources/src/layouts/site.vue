@@ -23,22 +23,26 @@
             </div>
 
             <template v-else>
-                <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
-                    <h3 class="first">{{ "Categories" }}</h3>
-                    <ul class="categories">
-                        <li v-for="category in categories">
-                            <nuxt-link :to="'/categories/'+category.slug">
-                                <img :src="category.iconUrl" height="24" />
-                                {{ category.title }}
-                            </nuxt-link>
-                        </li>
-                    </ul>
+                <transition :name="transitionName">
+                    <div v-if="computedShowingSidebar" class="sidebar showing-sidebar">
+                    <!--<div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">-->
+                        <h3 class="first">{{ "Categories" }}</h3>
+                        <ul class="categories">
+                            <li v-for="category in categories">
+                                <nuxt-link :to="'/categories/'+category.slug">
+                                    <img :src="category.iconUrl" height="24" />
+                                    {{ category.title }}
+                                </nuxt-link>
+                            </li>
+                        </ul>
 
-                    <div class="nav">
-                        <h3>Switch Sites</h3>
-                        <navigation></navigation>
+                        <div class="nav">
+                            <h3>Switch Sites</h3>
+                            <navigation></navigation>
+                        </div>
                     </div>
-                </div>
+                </transition>
+
                 <div class="view">
                     <div v-if="pageMeta && showSeoMeta" class="seo-meta">
                         <ul>
@@ -67,6 +71,7 @@
         data() {
             return {
                 loading: false,
+                bigScreen: false,
             }
         },
 
@@ -100,6 +105,22 @@
                 return process.env.showSeoMeta
             },
 
+            computedShowingSidebar() {
+                if(this.bigScreen) {
+                    return true
+                }
+
+                return this.showingSidebar
+            },
+
+            transitionName() {
+                if(this.bigScreen) {
+                    return null
+                }
+
+                return 'fade'
+            }
+
         },
 
         methods: {
@@ -111,6 +132,30 @@
                 this.$store.commit('app/toggleSidebar')
             },
 
+            handleResize() {
+
+                if(window.outerWidth > 991) {
+                    this.bigScreen = true
+
+                    if(this.showingSidebar) {
+                        this.toggleSidebar()
+                    }
+                } else {
+                    this.bigScreen = false
+                }
+
+                // console.log('this.computedShowingSidebar', this.computedShowingSidebar);
+
+                // console.log('window resize', window.outerWidth, this.showingSidebar)
+                //
+                // if(window.outerWidth > 1200) {
+                //     if(!this.showingSidebar) {
+                //         this.toggleSidebar()
+                //     }
+                // } else {
+                //
+                // }
+            },
         },
 
         created() {
@@ -119,6 +164,11 @@
             if (this.$route.query.q) {
                 this.$store.commit('app/updateSearchQuery', this.$route.query.q)
             }
-        }
+        },
+
+        mounted () {
+            window.addEventListener('resize', this.handleResize)
+            this.handleResize()
+        },
     }
 </script>

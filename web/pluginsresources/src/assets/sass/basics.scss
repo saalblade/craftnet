@@ -86,3 +86,21 @@ input.text {
     text-overflow: ellipsis;
   }
 }
+
+
+/* Transitions */
+
+@media (max-width: 991px) {
+  .fade-enter-active, .fade-leave-active {
+    transition: all .25s ease-out;
+  }
+  .fade-enter, .fade-leave-to {
+    transform: translateY(-100%);
+  }
+}
+
+@media (min-width: 992px) {
+  .fade-enter-active, .fade-leave-active {
+    transition-duration: 0s;
+  }
+}

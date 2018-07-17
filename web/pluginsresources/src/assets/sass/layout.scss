@@ -120,7 +120,7 @@
 
       &.showing-sidebar {
         @apply .block .fixed .pin .z-10 .overflow-y-auto;
-        padding-top: 78px;
+        top:60px;
       }
 
       nav {
