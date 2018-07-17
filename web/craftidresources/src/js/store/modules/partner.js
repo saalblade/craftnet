@@ -32,15 +32,33 @@ const actions = {
             } else {
                 partnerApi.getPartnerProfile(1, response => {
                     if (response.data && !response.data.error) {
-                        commit(types.RECEIVE_PARTNER_PROFILE, response.data.profile);
-                        resolve(response);
+                        commit(types.RECEIVE_PARTNER_PROFILE, response.data.partnerProfile)
+                        resolve(response)
                     } else {
-                        reject(response);
+                        reject(response)
                     }
                 }, response => {
-                    reject(response);
+                    reject(response)
                 })
             }
+        })
+    },
+    patchPartnerProfile({commit, state}, patchObj) {
+        return new Promise((resolve, reject) => {
+            partnerApi.patchPartnerProfile(
+                patchObj,
+                response => {
+                    if (response.data && !response.data.error) {
+                        commit(types.RECEIVE_PARTNER_PROFILE, response.data.partnerProfile)
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                },
+                response => {
+                    reject(response)
+                }
+            )
         })
     }
 }

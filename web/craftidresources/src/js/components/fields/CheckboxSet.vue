@@ -6,10 +6,11 @@
 			<ul class="list-reset pl-4 pt-2">
 				<li v-for="option in this.options">
 					<label>
-						<input type="checkbox" class="mr-2" v-model="localValue" :value="option.value" @change="$emit('input', localValue)">
+						<input type="checkbox" class="mr-2" v-model="localValue" :value="option.value" @change="onChange">
 						{{ option.label }}
 					</label>
 				</li>
+				<pre>{{ localValue }}</pre>
 			</ul>
 
 			<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
@@ -20,7 +21,7 @@
 <script>
     export default {
 
-		props: ['options', 'value', 'label', 'errors'],
+		props: ['options', 'label', 'value', 'errors'],
 
 		data() {
 			return {
@@ -28,17 +29,15 @@
 			}
 		},
 
-		mounted() {
-			this.$nextTick(() => {
-				// clone the array
-				this.localValue = this.value.slice(0)
-			})
+		methods: {
+			onChange(e) {
+				this.$emit('input', this.localValue)
+			}
 		},
 
-		watch: {
-			localValue: (val) => {
-				this.value = val
-			}
+		mounted() {
+			// clone not to manipulate prop
+			this.localValue = (this.value || []).slice(0)
 		}
     }
 </script>
