@@ -276,7 +276,7 @@
 /* ScreenshotModal */
 
 .screenshot-modal {
-  @apply .absolute .pin .bg-grey-lightest .z-30 .overflow-hidden;
+  @apply .fixed .pin .bg-grey-lightest .z-40 .overflow-hidden;
 
   .close {
     @apply .inline-block .text-center .absolute .pin-t .pin-l .z-30;
