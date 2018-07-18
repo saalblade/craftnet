@@ -10,7 +10,7 @@
                 </div>
 
                 <div v-if="!isEditing">
-                    <ul class="list-reset">
+                    <ul class="info-list list-reset">
                         <li v-if="partner.businessName">
                             <strong>{{ partner.businessName }}</strong>
                         </li>
@@ -23,19 +23,22 @@
                         <li v-if="partner.primaryContactPhone">
                             {{ partner.primaryContactPhone }}
                         </li>
-                        <li v-if="partner.businessSummary">
-                            Business Summary:<br>{{ partner.businessSummary }}
+                        <li v-if="partner.businessSummary" class="mt-4">
+                            Business Summary:
+                            <p class="text-grey-darker text-sm p-2">
+                                {{ partner.businessSummary }}
+                            </p>
                         </li>
-                        <li v-if="partner.minimumBudget">
-                            {{ partner.minimumBudget }}
+                        <li v-if="partner.minimumBudget" class="mt-2">
+                            Minimum Budget: {{ partner.minimumBudget }}
                         </li>
-                        <li v-if="partner.agencySize">
-                            {{ partner.agencySize }}
+                        <li v-if="partner.agencySize" class="mt-2">
+                            Agency Size: {{ partner.agencySize }}
                         </li>
-                        <li v-if="partner.msaLink">
-                            MSA Link:<br><a :href="partner.msaLink" target="_blank">{{ partner.msaLink }}</a>
+                        <li v-if="partner.msaLink" class="mt-2">
+                            MSA Link: <a :href="partner.msaLink" target="_blank" class="mt-2">{{ partner.msaLink }}</a>
                         </li>
-                        <li v-if="capabilitiesJoined">
+                        <li v-if="capabilitiesJoined" class="mt-2">
                             Capabilities: {{ capabilitiesJoined }}
                         </li>
                     </ul>

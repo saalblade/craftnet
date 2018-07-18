@@ -10,7 +10,6 @@
 						{{ option.label }}
 					</label>
 				</li>
-				<pre>{{ localValue }}</pre>
 			</ul>
 
 			<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>

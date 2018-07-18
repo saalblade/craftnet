@@ -46,7 +46,6 @@
                 this.loadState = this.LOADED
                 this.clonePartnerProfile()
             } else {
-                console.warn('dispatching')
                 this.$store.dispatch('initPartnerProfile')
                     .then(() => {
                         this.loadState = this.LOADED
