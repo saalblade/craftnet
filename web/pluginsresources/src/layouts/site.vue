@@ -25,7 +25,6 @@
             <template v-else>
                 <transition :name="transitionName">
                     <div v-if="computedShowingSidebar" class="sidebar showing-sidebar">
-                    <!--<div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">-->
                         <h3 class="first">{{ "Categories" }}</h3>
                         <ul class="categories">
                             <li v-for="category in categories">
@@ -133,8 +132,9 @@
             },
 
             handleResize() {
+                const windowWidth = document.documentElement.clientWidth;
 
-                if(window.outerWidth > 991) {
+                if(windowWidth > 991) {
                     this.bigScreen = true
 
                     if(this.showingSidebar) {
@@ -143,18 +143,6 @@
                 } else {
                     this.bigScreen = false
                 }
-
-                // console.log('this.computedShowingSidebar', this.computedShowingSidebar);
-
-                // console.log('window resize', window.outerWidth, this.showingSidebar)
-                //
-                // if(window.outerWidth > 1200) {
-                //     if(!this.showingSidebar) {
-                //         this.toggleSidebar()
-                //     }
-                // } else {
-                //
-                // }
             },
         },
 
@@ -168,7 +156,8 @@
 
         mounted () {
             window.addEventListener('resize', this.handleResize)
-            this.handleResize()
+            // this.handleResize()
+            window.dispatchEvent(new Event('resize'));
         },
     }
 </script>

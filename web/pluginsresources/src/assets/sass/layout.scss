@@ -75,7 +75,7 @@
   padding-top: 61px;
 
   header {
-    @apply .px-0 .py-3 .border-b .fixed .w-full .bg-white .pin-t .z-20;
+    @apply .px-0 .py-3 .border-b .fixed .w-full .bg-white .pin-t .z-30;
 
     & > div {
       @apply .flex .justify-between;
@@ -119,7 +119,7 @@
       @apply .px-6 .py-4 .hidden;
 
       &.showing-sidebar {
-        @apply .block .fixed .pin .z-10 .overflow-y-auto;
+        @apply .block .fixed .pin .z-20 .overflow-y-auto;
         -webkit-overflow-scrolling: touch;
         top:60px;
       }
