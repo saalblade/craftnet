@@ -39,6 +39,10 @@ return [
     'AmCommand' => [
         'handle' => 'command-palette',
     ],
+    'AmNav' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
+    ],
     'TheArchitect' => [
         'handle' => 'architect',
     ],
@@ -75,6 +79,10 @@ return [
     ],
     'CpFieldLinks' => [
         'handle' => 'cp-field-inspect'
+    ],
+    'Craftnav' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
     ],
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
@@ -140,6 +148,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Craft 3 upgrade path will be available via [Smart Map](https://www.doublesecretagency.com/plugins/smart-map).'
     ],
+    'Menus' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
+    ],
     'MnBreakAndContinue' => [
         'handle' => 'twig-perversion'
     ],
@@ -153,6 +165,10 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
     ],
+    'Navee' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
+    ],
     'Neo' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development',
@@ -163,6 +179,10 @@ return [
     'Oauth' => [
         'statusColor' => 'red',
         'status' => 'Unnecessary thanks to Craft 3’s inclusion of an OAuth 2 client library'
+    ],
+    'Olivemenus' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
     ],
     'OneDashboard' => [
         'statusColor' => 'orange',
