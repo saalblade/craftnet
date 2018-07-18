@@ -194,6 +194,41 @@
 }
 
 
+@media (max-width: 991px) {
+  .plugin-pricing {
+    table {
+      tr {
+        &.editions {
+          @apply .flex;
+          
+          th:first-child {
+            display: none;
+          }
+        }
+
+        th:not(.edition) {
+          display: block;
+          width: auto;
+          clear: left;
+        }
+
+        td, th.edition {
+          display: block;
+          width: 33%;
+          float: left;
+          text-align: center;
+          min-height: 2.2em;
+
+          &:nth-child(2n) {
+            @apply .bg-grey-lighter;
+          }
+        }
+      }
+    }
+  }
+}
+
+
 /* PluginSearchForm */
 
 .plugin-search-form {
