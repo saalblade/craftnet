@@ -47,32 +47,37 @@
 /* Plugin Details (plugin/_id) */
 
 .plugin-details-header {
-  @apply .flex .py-4;
+  @apply .py-4 .border-b .sticky .pin-t .pin-l .pin-r .z-30;
+  background-color: rgba(255, 255, 255, .98);
 
-  .plugin-icon-large {
-    @apply .mr-6;
-  }
+  .name {
+    @apply .flex;
 
-  .plugin-details-description {
-    @apply .flex-1;
-
-    .details {
-      @apply .flex-1 .leading-normal;
-
-      h1 {
-        @apply .border-b-0 .pb-0 .mb-2;
-      }
-
-      .short-description {
-        @apply .mb-2;
-      }
+    .icon {
+      @apply .self-center;
+      line-height: 0;
+      width: 46px;
     }
 
-    .price {
-      @apply .mt-4;
+    h1 {
+      @apply .border-b-0 .pb-0 .ml-3 .self-center;
+    }
 
-      .price-btn {
-        @apply .inline-block .bg-blue .text-white .px-4 .py-2 .rounded;
+    .nav-toggle {
+      @apply .self-center .text-right .flex-1;
+    }
+  }
+
+  ul.nav {
+    @apply .list-reset .w-full .pin-l .pin-r .pin-b .mt-4 .px-4;
+
+    li {
+      a {
+        @apply .block .py-3 .border-t;
+
+        &.nuxt-link-active {
+          @apply .text-grey-dark;
+        }
       }
     }
   }
@@ -156,11 +161,27 @@
 
 @media (min-width: 768px) {
   .plugin-details-header {
-    .plugin-details-description {
-      @apply .flex;
+    @apply .block;
 
-      .price {
-        @apply .ml-6;
+    .xcontainer {
+      @apply .flex .justify-between;
+    }
+
+    .name {
+      .nav-toggle {
+        @apply .hidden;
+      }
+    }
+
+    ul.nav {
+      @apply .block .w-auto;
+
+      li {
+        @apply .inline-block;
+
+        a {
+          @apply .border-0 .px-4 .py-0;
+        }
       }
     }
   }

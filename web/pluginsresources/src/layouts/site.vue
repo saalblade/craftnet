@@ -2,7 +2,7 @@
     <div class="wrapper">
         <screenshot-modal v-if="showingScreenshotModal"></screenshot-modal>
 
-        <header>
+        <header :class="{sticky: stickyHeader}">
             <div>
                 <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
                     <i class="fas fa-bars"></i>
@@ -95,6 +95,7 @@
                 showingSidebar: state => state.app.showingSidebar,
                 showingScreenshotModal: state => state.app.showingScreenshotModal,
                 pageMeta: state => state.app.pageMeta,
+                stickyHeader: state => state.app.stickyHeader,
                 searchQuery: state => state.pluginStore.searchQuery,
                 categories: state => state.pluginStore.categories,
                 featuredPlugins: state => state.pluginStore.featuredPlugins,
@@ -144,6 +145,12 @@
                     this.bigScreen = false
                 }
             },
+        },
+
+        watch: {
+            '$route.path': function() {
+                this.$store.commit('app/updateStickyHeader', true)
+            }
         },
 
         created() {

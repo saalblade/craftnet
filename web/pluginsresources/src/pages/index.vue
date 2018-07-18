@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="xcontainer py-6">
         <template v-if="featuredPlugins">
             <template v-for="featuredPlugin in featuredPlugins">
                 <router-link class="float-right" :to="'/featured/'+featuredPlugin.slug">{{ "See all" }}</router-link>

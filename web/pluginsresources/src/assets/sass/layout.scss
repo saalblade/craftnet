@@ -70,12 +70,20 @@
 
 /* Layout */
 
-.wrapper {
-  @apply .flex .flex-col;
-  padding-top: 61px;
 
+.xcontainer {
+  @apply .w-full .mx-auto;
+  padding: 0 2rem;
+  max-width: 1440px;
+}
+
+.wrapper {
   header {
-    @apply .px-0 .py-3 .border-b .fixed .w-full .bg-white .pin-t .z-30;
+    @apply .px-0 .py-3 .border-b .w-full .bg-white;
+
+    &.sticky {
+      @apply .sticky .pin-t .z-30;
+    }
 
     & > div {
       @apply .flex .justify-between;
@@ -128,16 +136,12 @@
         @apply .-mx-6 .px-6 .pb-4 .mb-4;
       }
     }
-
-    .view {
-      @apply .px-6 .py-4;
-    }
   }
 }
 
 @media (min-width: 992px) {
   .wrapper {
-    @apply .flex .absolute .pin;
+    @apply .flex .flex-col .absolute .pin;
 
     header {
       & > div {
@@ -172,9 +176,7 @@
       }
 
       .view {
-        @apply .flex-1 .py-6 .overflow-auto;
-        padding-left: 3rem;
-        padding-right: 3rem;
+        @apply .flex-1 .overflow-auto;
       }
     }
   }
