@@ -58,18 +58,8 @@
   }
 }
 
-@media (min-width: 2000px) {
-  .grid-plugins {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  }
-  .grid-plugins-4 {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  }
-}
-
 
 /* Layout */
-
 
 .xcontainer {
   @apply .w-full .mx-auto;
@@ -78,58 +68,42 @@
 }
 
 .wrapper {
-  header {
-    @apply .px-0 .py-3 .border-b .w-full .bg-white;
+  .main {
+    .sidebar {
+      @apply .overflow-y-auto .pin .z-40;
+      -webkit-overflow-scrolling: touch;
 
-    &.sticky {
-      @apply .sticky .pin-t .z-30;
-    }
-
-    & > div {
-      @apply .flex .justify-between;
-
-      a.sidebar-toggle {
-        @apply .ml-6 .self-center .text-grey-darker;
-        width: 14px;
-        text-align: center;
+      &.sticky {
+        @apply .sticky;
       }
 
-      h2 {
-        @apply .text-lg .self-center .pl-6;
+      &.showing-sidebar {
+        @apply .fixed;
 
-        a {
-          @apply .text-grey-darker;
+        .sidebar-main {
+          @apply .block;
         }
       }
 
-      nav {
-        @apply .self-center .hidden .mr-6;
+      header {
+        @apply .flex .sticky .pin .z-10 .px-6 .py-4 .bg-grey-lighter .border-b;
 
-        ul {
-          @apply .list-reset;
+        a.sidebar-toggle {
+          @apply .self-center .text-grey-darker .mr-4;
+          width: 14px;
+        }
 
-          li {
-            @apply .inline-block;
+        h2 {
+          @apply .text-lg .self-center;
 
-            &:not(:first-child) {
-              @apply .ml-6;
-            }
+          a {
+            @apply .text-grey-darker;
           }
         }
       }
-    }
-  }
 
-  .main {
-    @apply .flex .flex-col;
-
-    .sidebar {
-      @apply .px-6 .py-4 .hidden;
-
-      &.showing-sidebar {
-        @apply .block .fixed .pin .z-20 .overflow-y-auto;
-        -webkit-overflow-scrolling: touch;
-        top:60px;
+      .sidebar-main {
+        @apply .hidden .px-6 .py-4;
       }
 
       nav {
@@ -144,34 +118,22 @@
     @apply .flex .flex-col .absolute .pin;
 
     header {
-      & > div {
-        .sidebar-toggle {
-          @apply .hidden;
-        }
+      @apply .-mb-6;
+      border-bottom: 0;
 
-        h2 {
-          @apply .w-64;
-        }
-
-        nav {
-          @apply .block;
-        }
+      .sidebar-toggle {
+        @apply .hidden;
       }
     }
 
     .main {
-      @apply .flex-row .flex-1;
+      @apply .flex .flex-row .flex-1;
 
       .sidebar {
-        @apply .w-64 .p-6 .overflow-auto .block .border-r;
+        @apply .w-64 .overflow-auto .block .border-r;
 
         &.showing-sidebar {
           @apply .relative .pin-none;
-          padding-top: 24px;
-        }
-
-        .nav {
-          @apply .hidden;
         }
       }
 

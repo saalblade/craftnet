@@ -2,21 +2,6 @@
     <div class="wrapper">
         <screenshot-modal v-if="showingScreenshotModal"></screenshot-modal>
 
-        <header :class="{sticky: stickyHeader}">
-            <div>
-                <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                    <font-awesome-icon :icon="icon" />
-                </a>
-
-                <h2><router-link to="/">Craft Plugins</router-link></h2>
-
-                <plugin-search-form></plugin-search-form>
-
-                <navigation></navigation>
-            </div>
-        </header>
-
         <div class="main">
             <div v-if="loading" class="loading-wrapper">
                 <div class="loading">Loading…</div>
@@ -24,20 +9,34 @@
 
             <template v-else>
                 <transition :name="transitionName">
-                    <div v-if="computedShowingSidebar" class="sidebar showing-sidebar">
-                        <h3 class="first">{{ "Categories" }}</h3>
-                        <ul class="categories">
-                            <li v-for="category in categories">
-                                <nuxt-link :to="'/categories/'+category.slug">
-                                    <img :src="category.iconUrl" height="24" />
-                                    {{ category.title }}
-                                </nuxt-link>
-                            </li>
-                        </ul>
+                    <!--<div v-if="computedShowingSidebar" class="sidebar showing-sidebar">-->
+                    <div class="sidebar" :class="{'showing-sidebar': computedShowingSidebar, sticky: stickyHeader}">
+                        <header>
+                            <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
+                                <i class="fas fa-bars"></i>
+                                <font-awesome-icon :icon="icon" />
+                            </a>
 
-                        <div class="nav">
-                            <h3>Switch Sites</h3>
-                            <navigation></navigation>
+                            <h2><router-link to="/">Craft Plugins</router-link></h2>
+                        </header>
+
+                        <div class="sidebar-main">
+                            <plugin-search-form></plugin-search-form>
+
+                            <h3 class="first">{{ "Categories" }}</h3>
+                            <ul class="categories">
+                                <li v-for="category in categories">
+                                    <nuxt-link :to="'/categories/'+category.slug">
+                                        <img :src="category.iconUrl" height="24" />
+                                        {{ category.title }}
+                                    </nuxt-link>
+                                </li>
+                            </ul>
+
+                            <div class="nav">
+                                <h3>Switch Sites</h3>
+                                <navigation></navigation>
+                            </div>
                         </div>
                     </div>
                 </transition>
