@@ -47,21 +47,52 @@
 /* Plugin Details (plugin/_id) */
 
 .plugin-details-header {
-  @apply .py-4 .border-b .sticky .pin-t .pin-l .pin-r .z-30;
+  @apply .py-2; // .pt-6 .pb-2;
   background-color: rgba(255, 255, 255, .98);
+  transition: all 0.1s ease-out;
 
-  .name {
+  &.scrolled {
+    @apply .py-2 .border-b .sticky .pin-t .pin-l .pin-r .z-30 .w-full; // .pin-t .pin-l .pin-r .z-30;
+    // margin-bottom: 50px;
+
+    .description {
+      .icon {
+        img {
+          height: 50px;
+        }
+      }
+
+      .name {
+        h1 {
+          @apply .text-lg;
+        }
+
+        .developer {
+          @apply .hidden;
+        }
+      }
+    }
+  }
+
+  .description {
     @apply .flex;
 
     .icon {
       @apply .self-center;
       line-height: 0;
-      width: 46px;
+
+      img {
+        height: 80px;
+      }
     }
 
-    h1 {
-      @apply .border-b-0 .pb-0 .ml-3 .self-center;
-    }
+   .name {
+     @apply .ml-3 .self-center;
+
+     h1 {
+       @apply .border-b-0 .pb-0 .self-center .text-2xl;
+     }
+   }
 
     .nav-toggle {
       @apply .self-center .text-right .flex-1;
@@ -72,7 +103,7 @@
     @apply .list-reset .w-full .pin-l .pin-r .pin-b .mt-4 .px-4;
 
     li {
-      a {
+      a:not(.btn) {
         @apply .block .py-3 .border-t;
 
         &.nuxt-link-active {
@@ -167,7 +198,7 @@
       @apply .flex .justify-between;
     }
 
-    .name {
+    .description {
       .nav-toggle {
         @apply .hidden;
       }
@@ -179,7 +210,7 @@
       li {
         @apply .inline-block;
 
-        a {
+        a:not(.btn) {
           @apply .border-0 .px-4 .py-0;
         }
       }

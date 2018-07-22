@@ -42,7 +42,7 @@
                     </div>
                 </transition>
 
-                <div class="view">
+                <div ref="view" class="view">
                     <div v-if="pageMeta && showSeoMeta" class="seo-meta">
                         <ul>
                             <li><strong>Title:</strong> {{pageMeta.title}}</li>
@@ -145,6 +145,10 @@
                     this.bigScreen = false
                 }
             },
+
+            onViewScroll(e) {
+                this.$bus.$emit('viewScroll', e)
+            }
         },
 
         watch: {
@@ -165,6 +169,8 @@
             window.addEventListener('resize', this.handleResize)
             // this.handleResize()
             window.dispatchEvent(new Event('resize'));
+
+            this.$refs.view.addEventListener('scroll', this.onViewScroll)
         },
     }
 </script>

@@ -7,8 +7,9 @@ module.exports = {
     plugins: [
         '~plugins/filters.js',
         '~plugins/moment.js',
-        { src: '~/plugins/swiper.js', ssr: false },
         '~plugins/shave.js',
+        '~plugins/eventBus.js',
+        { src: '~/plugins/swiper.js', ssr: false },
     ],
     env: {
         actionUrl: process.env.NODE_ENV === 'production' ? 'https://plugins.craftcms.com/index.php/actions' : 'https://plugins.craftcms.test/index.php/actions',

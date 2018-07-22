@@ -1,15 +1,22 @@
 <template>
-    <div>
-        <div class="plugin-details-header">
+    <div class="plugin-layout">
+        <div ref="pluginDetailsHeader" class="plugin-details-header" :class="{scrolled: scrolled}">
             <div class="xcontainer">
-                <div class="name">
+                <div class="description">
                     <div class="icon">
-                        <img v-if="pluginSnippet.iconUrl" :src="pluginSnippet.iconUrl" height="46" width="46" />
-                        <img v-else :src="defaultPluginSvg" height="46" width="46" />
+                        <img v-if="pluginSnippet.iconUrl" :src="pluginSnippet.iconUrl" />
+                        <img v-else :src="defaultPluginSvg" />
                     </div>
-                    <h1>
-                        {{ pluginSnippet.name }}
-                    </h1>
+
+                    <div class="name">
+                        <h1>
+                            {{ pluginSnippet.name }}
+                        </h1>
+
+                        <div class="developer">
+                            <router-link :to="'/developer/'+pluginSnippet.developerId">{{ pluginSnippet.developerName }}</router-link>
+                        </div>
+                    </div>
 
                     <a class="nav-toggle" @click="showNav=!showNav"><font-awesome-icon :icon="navIcon" /></a>
                     <!--<div class="short-description">{{ pluginSnippet.shortDescription }}</div>-->
@@ -24,6 +31,7 @@
                     </template>
 
                     <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'">Changelog</nuxt-link></li>
+                    <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'" class="btn btn-submit">Buy</nuxt-link></li>
                 </ul>
             </div>
         </div>
@@ -45,6 +53,7 @@
         data() {
             return {
                 showNav: false,
+                scrolled: false,
             }
         },
 
@@ -67,11 +76,38 @@
             },
         },
 
+        methods: {
+            onWindowScroll() {
+                this.onScroll(window.scrollY);
+            },
+
+            onViewScroll(e) {
+                this.onScroll(e.target.scrollTop);
+            },
+
+            onScroll(scrollY) {
+                const headerHeight = this.$refs.pluginDetailsHeader.clientHeight;
+
+                if(scrollY > headerHeight) {
+                    this.scrolled = true
+                } else {
+                    this.scrolled = false
+                }
+            }
+        },
+
         mounted() {
             this.$nextTick(() => {
                 this.$store.commit('app/updateStickyHeader', false)
             })
+
+            window.addEventListener('scroll', this.onWindowScroll)
+            this.$bus.$on('viewScroll', this.onViewScroll)
         },
 
+        destroyed() {
+            window.removeEventListener('scroll', this.onWindowScroll, true)
+            this.$bus.$off('viewScroll')
+        }
     }
 </script>
