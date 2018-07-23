@@ -1,7 +1,7 @@
 <template>
 	<transition :name="transition" @enter="$emit('enter')" @after-enter="$emit('after-enter')" @leave="$emit('leave')">
 		<div v-if="show" class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
+			<div :class="modalTypeClass" role="document">
 				<div class="modal-content">
 					<div v-if="$slots.header" class="modal-header">
 						<h5 class="modal-title" id="exampleModalLabel"><slot name="header"></slot></h5>
@@ -23,7 +23,21 @@
 <script>
     export default {
 
-        props: ['show', 'transition'],
+		// constants
+		DIALOGUE: 'dialog',
+		WIDE: 'wide',
+
+        props: {
+			show: Boolean,
+			transition: String,
+			modalType: { default: 'dialog' }
+		},
+
+		computed: {
+			modalTypeClass() {
+				return 'modal-' + this.modalType
+			}
+		}
 
     }
 </script>
