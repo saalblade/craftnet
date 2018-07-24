@@ -23,10 +23,6 @@
 <script>
     export default {
 
-		// constants
-		DIALOGUE: 'dialog',
-		WIDE: 'wide',
-
         props: {
 			show: Boolean,
 			transition: String,
@@ -35,9 +31,9 @@
 
 		computed: {
 			modalTypeClass() {
+				// 'dialog' (default) or 'wide' - see `.modal` styles
 				return 'modal-' + this.modalType
 			}
 		}
-
     }
 </script>

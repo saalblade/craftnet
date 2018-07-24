@@ -10,6 +10,7 @@
 
         <div v-if="loadState == LOADED">
             <partner-business-info></partner-business-info>
+            <partner-locations></partner-locations>
         </div>
 	</div>
 </template>
@@ -17,6 +18,7 @@
 <script>
     import {mapState} from 'vuex'
     import PartnerBusinessInfo from '../components/PartnerBusinessInfo'
+    import PartnerLocations from '../components/PartnerLocations'
 
     export default {
 
@@ -32,7 +34,8 @@
         },
 
         components: {
-            PartnerBusinessInfo
+            PartnerBusinessInfo,
+            PartnerLocations
         },
 
         computed: {
@@ -44,7 +47,6 @@
         mounted() {
             if (this.partner) {
                 this.loadState = this.LOADED
-                this.clonePartnerProfile()
             } else {
                 this.$store.dispatch('initPartnerProfile')
                     .then(() => {

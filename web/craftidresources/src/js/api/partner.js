@@ -7,7 +7,26 @@ const devProfile = {
     businessSummary: '',
     capabilities: ['Commerce'],
     craftSites: [],
-    locations: [],
+    locations: [{
+        title: 'First Location',
+        addressLine1: '100 Any Street',
+        addressLine2: 'Suite A',
+        businessCity: 'Any Town',
+        businessState: 'FL',
+        businessCountry: 'USA',
+        phone: '999-999-9999',
+        email: 'hello@sayhi.com',
+    },
+    {
+        title: 'First Location',
+        addressLine1: '100 Any Street',
+        addressLine2: 'Suite A',
+        businessCity: 'Any Town',
+        businessState: 'FL',
+        businessCountry: 'USA',
+        phone: '999-999-9999',
+        email: 'hello@sayhi.com',
+    }],
     minimumBudget: null,
     msaLink: '',
     primaryContactName: '',
@@ -38,5 +57,5 @@ export default {
         setTimeout(() => {
             cb(response)
         }, 500)
-    }
+    },
 }
