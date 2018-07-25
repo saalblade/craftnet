@@ -47,19 +47,58 @@
 /* Plugin Details (plugin/_id) */
 
 .plugin-details-header {
-  @apply .py-2; // .pt-6 .pb-2;
-  background-color: rgba(255, 255, 255, .98);
-  transition: all 0.1s ease-out;
+  @apply .bg-white .mt-0 .py-2;
+  -webkit-box-shadow: 0 4px 2px -2px rgba(0,0,0,.1);
+  box-shadow: 0 4px 2px -2px rgba(0,0,0,.1);
+
+  .description {
+    @apply .flex;
+
+    .icon {
+      @apply .self-center;
+      line-height: 0;
+      max-width: 80px;
+
+      img {
+        width: 100%;
+      }
+    }
+
+   .name {
+     @apply .ml-3 .self-center;
+
+     h1 {
+       @apply .self-center .pb-0 .border-b-0 .text-2xl;
+     }
+   }
+
+    .nav-toggle {
+      @apply .flex-1 .self-center .text-right;
+    }
+  }
+
+  ul.nav {
+    @apply .list-reset .self-center .py-4 .w-full;
+
+    li {
+      a:not(.btn) {
+        @apply .block .py-3 .border-t;
+
+        &.nuxt-link-active {
+          @apply .text-grey-dark;
+        }
+      }
+    }
+  }
 
   &.scrolled {
-    @apply .py-2 .border-b .sticky .pin-t .pin-l .pin-r .z-30 .w-full; // .pin-t .pin-l .pin-r .z-30;
-    // margin-bottom: 50px;
+    @apply .py-2 .sticky .pin-t .z-30 .w-full;
+    margin-top: 30px;
 
     .description {
       .icon {
-        img {
-          height: 50px;
-        }
+        max-width: 50px;
+        transition: all 0s ease-out;
       }
 
       .name {
@@ -69,45 +108,6 @@
 
         .developer {
           @apply .hidden;
-        }
-      }
-    }
-  }
-
-  .description {
-    @apply .flex;
-
-    .icon {
-      @apply .self-center;
-      line-height: 0;
-
-      img {
-        height: 80px;
-      }
-    }
-
-   .name {
-     @apply .ml-3 .self-center;
-
-     h1 {
-       @apply .border-b-0 .pb-0 .self-center .text-2xl;
-     }
-   }
-
-    .nav-toggle {
-      @apply .self-center .text-right .flex-1;
-    }
-  }
-
-  ul.nav {
-    @apply .list-reset .w-full .pin-l .pin-r .pin-b .mt-4 .px-4;
-
-    li {
-      a:not(.btn) {
-        @apply .block .py-3 .border-t;
-
-        &.nuxt-link-active {
-          @apply .text-grey-dark;
         }
       }
     }
@@ -205,7 +205,7 @@
     }
 
     ul.nav {
-      @apply .block .w-auto;
+      @apply .block .w-auto .py-0;
 
       li {
         @apply .inline-block;
@@ -225,25 +225,6 @@
     }
     .plugin-sidebar {
       @apply .w-1/3 .px-4;
-    }
-  }
-}
-
-ul.tabs {
-  @apply .list-reset .mt-6 .border-b;
-
-  li {
-    @apply .inline-block;
-
-    a {
-      @apply .inline-block .px-4 .py-3 .rounded-t .border .border-transparent;
-      margin-bottom: -1px;
-
-      &.sel,
-      &.nuxt-link-active {
-        @apply .border .border-grey-light .text-grey-darker;
-        border-bottom-color: #fff;
-      }
     }
   }
 }

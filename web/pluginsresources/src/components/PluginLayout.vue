@@ -36,12 +36,12 @@
             </div>
         </div>
 
-
         <div class="xcontainer">
             <slot></slot>
         </div>
     </div>
 </template>
+
 
 <script>
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
@@ -52,8 +52,8 @@
 
         data() {
             return {
-                showNav: false,
                 scrolled: false,
+                showNav: false,
             }
         },
 
@@ -74,26 +74,40 @@
 
                 return faChevronDown
             },
+
         },
 
         methods: {
-            onWindowScroll() {
-                this.onScroll(window.scrollY);
-            },
-
-            onViewScroll(e) {
-                this.onScroll(e.target.scrollTop);
-            },
 
             onScroll(scrollY) {
-                const headerHeight = this.$refs.pluginDetailsHeader.clientHeight;
+                let headerHeight = this.$refs.pluginDetailsHeader.clientHeight
+
+                if(this.scrolled) {
+                    headerHeight += 30
+                }
 
                 if(scrollY > headerHeight) {
                     this.scrolled = true
                 } else {
                     this.scrolled = false
                 }
-            }
+            },
+
+            onViewScroll(e) {
+                this.onScroll(e.target.scrollTop);
+            },
+
+            onWindowResize() {
+                if(window.clientHeight > 991) {
+                    this.onViewScroll()
+                } else {
+                    this.onWindowScroll()
+                }
+            },
+
+            onWindowScroll() {
+                this.onScroll(window.scrollY);
+            },
         },
 
         mounted() {
@@ -103,11 +117,15 @@
 
             window.addEventListener('scroll', this.onWindowScroll)
             this.$bus.$on('viewScroll', this.onViewScroll)
+            window.addEventListener('resize', this.onWindowResize)
+            this.onWindowResize()
         },
 
         destroyed() {
             window.removeEventListener('scroll', this.onWindowScroll, true)
             this.$bus.$off('viewScroll')
+            window.removeEventListener('resize', this.onWindowResize, true)
         }
     }
+
 </script>
