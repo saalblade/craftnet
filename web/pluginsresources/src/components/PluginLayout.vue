@@ -80,20 +80,22 @@
         methods: {
 
             onScroll(scrollY) {
-                let headerHeight = this.$refs.pluginDetailsHeader.clientHeight
+                if (this.$refs.pluginDetailsHeader) {
+                    let headerHeight = this.$refs.pluginDetailsHeader.clientHeight
 
-                if (this.scrolled) {
-                    headerHeight += 30
-                }
+                    if (this.scrolled) {
+                        headerHeight += 30
+                    }
 
-                if (!this.scrolled && window.innerHeight < 992) {
-                    headerHeight += this.$refs.pluginDetailsHeader.offsetTop
-                }
+                    if (!this.scrolled && window.innerHeight < 992) {
+                        headerHeight += this.$refs.pluginDetailsHeader.offsetTop
+                    }
 
-                if (scrollY > headerHeight) {
-                    this.scrolled = true
-                } else {
-                    this.scrolled = false
+                    if (scrollY > headerHeight) {
+                        this.scrolled = true
+                    } else {
+                        this.scrolled = false
+                    }
                 }
             },
 
