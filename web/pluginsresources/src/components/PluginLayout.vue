@@ -31,7 +31,7 @@
                     </template>
 
                     <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'">Changelog</nuxt-link></li>
-                    <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'" class="btn btn-primary">Buy</nuxt-link></li>
+                    <li><a :href="craftIdUrl+'/buy/'+pluginSnippet.handle" class="btn btn-primary" target="_blank">Buy</a></li>
                 </ul>
             </div>
         </div>
@@ -74,6 +74,10 @@
 
                 return faChevronDown
             },
+
+            craftIdUrl() {
+                return process.env.craftIdUrl
+            }
 
         },
 
