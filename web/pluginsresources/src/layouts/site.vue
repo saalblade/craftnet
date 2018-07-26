@@ -10,7 +10,8 @@
             <h2><router-link to="/">Craft Plugins</router-link></h2>
 
             <div class="search">
-                <plugin-search-form></plugin-search-form>
+                <search-form />
+                
                 <div class="search-toggle">
                     <font-awesome-icon :icon="iconSearch" />
                 </div>
@@ -66,7 +67,7 @@
 <script>
     import {mapState} from 'vuex'
     import Navigation from '../components/Navigation'
-    import PluginSearchForm from '../components/PluginSearchForm'
+    import SearchForm from '../components/SearchForm'
     import ScreenshotModal from '../components/ScreenshotModal'
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faBars from '@fortawesome/fontawesome-free-solid/faBars'
@@ -84,7 +85,7 @@
 
         components: {
             Navigation,
-            PluginSearchForm,
+            SearchForm,
             FontAwesomeIcon,
             ScreenshotModal,
         },

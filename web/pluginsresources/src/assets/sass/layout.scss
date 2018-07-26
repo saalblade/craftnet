@@ -89,7 +89,7 @@
     }
 
     .search {
-      .plugin-search-form {
+      .search-form {
         @apply .hidden;
       }
     }
@@ -134,7 +134,7 @@
       .search {
         @apply .flex-1;
 
-        .plugin-search-form {
+        .search-form {
           @apply .block;
         }
 

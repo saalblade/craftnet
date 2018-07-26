@@ -1,5 +1,5 @@
 <template>
-    <form class="plugin-search-form" @submit.prevent="submitSearch">
+    <form class="search-form" @submit.prevent="submitSearch">
         <input ref="searchQuery" class="text w-full" id="searchQuery" name="searchQuery" type="text" :placeholder="'Search plugins'" v-model="searchQuery" autocomplete="off">
         <div class="clear" :class="{ hidden: searchQuery.length == 0 }" @click="searchQuery = ''" title="Clear"></div>
         <div class="search-icon">
