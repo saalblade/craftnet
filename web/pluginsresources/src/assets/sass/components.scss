@@ -232,7 +232,7 @@
 /* PluginSearchForm */
 
 .plugin-search-form {
-  @apply .flex-1 .mt-2 .mb-4 .relative;
+  @apply .flex-1 .relative;
 
   input.text {
     padding-left: 32px;
@@ -247,12 +247,6 @@
     top: 10px;
     left: 12px;
     max-width: 16px;
-  }
-}
-
-@media (min-width: 992px) {
-  .plugin-search-form {
-    @apply .ml-0;
   }
 }
 
