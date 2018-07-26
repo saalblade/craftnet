@@ -1,5 +1,5 @@
 <template>
-    <div v-if="featuredPlugin">
+    <div v-if="featuredPlugin" class="xcontainer">
         <h1>{{ featuredPlugin.title }}</h1>
         <plugin-grid :columns="4" :plugins="getPluginsByIds(featuredPlugin.plugins)"></plugin-grid>
     </div>

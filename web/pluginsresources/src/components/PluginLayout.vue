@@ -31,7 +31,7 @@
                     </template>
 
                     <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'">Changelog</nuxt-link></li>
-                    <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'" class="btn btn-submit">Buy</nuxt-link></li>
+                    <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'" class="btn btn-primary">Buy</nuxt-link></li>
                 </ul>
             </div>
         </div>
@@ -82,11 +82,15 @@
             onScroll(scrollY) {
                 let headerHeight = this.$refs.pluginDetailsHeader.clientHeight
 
-                if(this.scrolled) {
+                if (this.scrolled) {
                     headerHeight += 30
                 }
 
-                if(scrollY > headerHeight) {
+                if (!this.scrolled && window.innerHeight < 992) {
+                    headerHeight += this.$refs.pluginDetailsHeader.offsetTop
+                }
+
+                if (scrollY > headerHeight) {
                     this.scrolled = true
                 } else {
                     this.scrolled = false
@@ -98,7 +102,7 @@
             },
 
             onWindowResize() {
-                if(window.clientHeight > 991) {
+                if(window.innerHeight > 991) {
                     this.onViewScroll()
                 } else {
                     this.onWindowScroll()

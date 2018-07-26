@@ -68,10 +68,42 @@
 }
 
 .wrapper {
+  header {
+    @apply .flex .px-6 .py-4 .bg-white .border-b .justify-between;
+
+    &.sticky {
+      @apply .sticky .pin .z-10;
+    }
+
+    a.sidebar-toggle {
+      @apply .self-center .text-grey-darker .mr-4;
+      width: 14px;
+    }
+
+    h2 {
+      @apply .text-lg .self-center .pr-6;
+
+      a {
+        @apply .text-grey-darker;
+      }
+    }
+
+    .search {
+      .plugin-search-form {
+        @apply .hidden;
+      }
+    }
+
+    .nav {
+      @apply .hidden;
+    }
+  }
+
   .main {
     .sidebar {
       @apply .overflow-y-auto .pin .z-40;
       -webkit-overflow-scrolling: touch;
+      top: 69px;
 
       &.sticky {
         @apply .sticky;
@@ -82,23 +114,6 @@
 
         .sidebar-main {
           @apply .block;
-        }
-      }
-
-      header {
-        @apply .flex .sticky .pin .z-10 .px-6 .py-4 .bg-grey-lighter .border-b;
-
-        a.sidebar-toggle {
-          @apply .self-center .text-grey-darker .mr-4;
-          width: 14px;
-        }
-
-        h2 {
-          @apply .text-lg .self-center;
-
-          a {
-            @apply .text-grey-darker;
-          }
         }
       }
 
@@ -113,16 +128,55 @@
   }
 }
 
+@media (min-width: 576px) {
+  .wrapper {
+    header {
+      .search {
+        @apply .flex-1;
+
+        .plugin-search-form {
+          @apply .block;
+        }
+
+        .search-toggle {
+          @apply .hidden;
+        }
+      }
+    }
+  }
+}
+
 @media (min-width: 992px) {
   .wrapper {
     @apply .flex .flex-col .absolute .pin;
 
     header {
-      @apply .-mb-6;
-      border-bottom: 0;
+       h2 {
+         @apply .w-64;
+       }
 
       .sidebar-toggle {
         @apply .hidden;
+      }
+
+      .search {
+        @apply .-ml-6;
+      }
+
+      .nav {
+        @apply .block .ml-2 .self-center;
+
+        ul {
+          @apply .list-reset;
+
+          li {
+            @apply .inline-block .ml-2;
+
+            a {
+              @apply .p-2;
+            }
+          }
+        }
       }
     }
 
@@ -143,6 +197,7 @@
     }
   }
 }
+
 
 /* Sidebar */
 
@@ -176,6 +231,14 @@
           @apply .bg-grey-light;
         }
       }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .sidebar {
+    .nav {
+      @apply .hidden;
     }
   }
 }

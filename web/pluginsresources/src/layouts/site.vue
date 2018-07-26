@@ -1,6 +1,25 @@
 <template>
     <div class="wrapper">
         <screenshot-modal v-if="showingScreenshotModal"></screenshot-modal>
+        <header :class="{sticky: stickyHeader}">
+            <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+                <font-awesome-icon :icon="icon" />
+            </a>
+
+            <h2><router-link to="/">Craft Plugins</router-link></h2>
+
+            <div class="search">
+                <plugin-search-form></plugin-search-form>
+                <div class="search-toggle">
+                    <font-awesome-icon :icon="iconSearch" />
+                </div>
+            </div>
+
+            <div class="nav">
+                <navigation></navigation>
+            </div>
+        </header>
 
         <div class="main">
             <div v-if="loading" class="loading-wrapper">
@@ -11,18 +30,7 @@
                 <transition :name="transitionName">
                     <!--<div v-if="computedShowingSidebar" class="sidebar showing-sidebar">-->
                     <div class="sidebar" :class="{'showing-sidebar': computedShowingSidebar, sticky: stickyHeader}">
-                        <header>
-                            <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
-                                <i class="fas fa-bars"></i>
-                                <font-awesome-icon :icon="icon" />
-                            </a>
-
-                            <h2><router-link to="/">Craft Plugins</router-link></h2>
-                        </header>
-
                         <div class="sidebar-main">
-                            <plugin-search-form></plugin-search-form>
-
                             <h3 class="first">{{ "Categories" }}</h3>
                             <ul class="categories">
                                 <li v-for="category in categories">
@@ -63,6 +71,7 @@
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faBars from '@fortawesome/fontawesome-free-solid/faBars'
     import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
+    import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
 
     export default {
 
@@ -88,6 +97,10 @@
                 }
 
                 return faBars
+            },
+
+            iconSearch() {
+                return faSearch
             },
 
             ...mapState({

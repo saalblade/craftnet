@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="xcontainer">
         <h1>Showing results for “{{ searchQuery }}”</h1>
 
         <plugin-grid :plugins="pluginsToRender" :columns="4"></plugin-grid>

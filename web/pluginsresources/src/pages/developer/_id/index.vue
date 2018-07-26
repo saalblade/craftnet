@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="xcontainer">
         <div class="developer-card">
             <div class="photo">
                 <template v-if="!loading && developer">

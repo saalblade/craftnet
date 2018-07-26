@@ -57,7 +57,7 @@
     .icon {
       @apply .self-center;
       line-height: 0;
-      max-width: 80px;
+      width: 80px;
 
       img {
         width: 100%;
@@ -97,7 +97,7 @@
 
     .description {
       .icon {
-        max-width: 50px;
+        width: 50px;
         transition: all 0s ease-out;
       }
 
