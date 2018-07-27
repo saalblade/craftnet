@@ -75,7 +75,7 @@ return [
         'components' => [
             'errorHandler' => [
                 'memoryReserveSize' => 1024000
-            ]
+            ],
         ],
     ],
     'prod' => [
@@ -133,7 +133,15 @@ return [
                             'class' => craft\log\FileTarget::class,
                             'logFile' => getenv('CRAFT_STORAGE_PATH').'/web.log',
                             'levels' => !YII_DEBUG ? yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING : yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING | yii\log\Logger::LEVEL_INFO | yii\log\Logger::LEVEL_TRACE | yii\log\Logger::LEVEL_PROFILE,
-                        ]
+                        ],
+                        [
+                            'class' => 'spacedealer\loggly\Target',
+                            'customerToken' => getenv('LOGGLY_KEY'),
+                            'levels' => ['error', 'warning'],
+                            'tags' => ['craftnet'],
+                            'enableIp' => true,
+                            'enableTrail' => true,
+                        ],
                     ],
                 ]);
 

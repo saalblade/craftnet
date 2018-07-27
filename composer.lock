@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36080d6ece25af58ce63aa3cf51be46a",
+    "content-hash": "17fb4d2ac9dcd7a27755755dda67ab2e",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.63.2",
+            "version": "3.64.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "ee02c24ba420d971c6e3c204e8fec5c9e3c9bd8d"
+                "reference": "6f2443e77da201ef074a2a9a608b9f2f38a49003"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ee02c24ba420d971c6e3c204e8fec5c9e3c9bd8d",
-                "reference": "ee02c24ba420d971c6e3c204e8fec5c9e3c9bd8d",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6f2443e77da201ef074a2a9a608b9f2f38a49003",
+                "reference": "6f2443e77da201ef074a2a9a608b9f2f38a49003",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-07-17T15:31:13+00:00"
+            "time": "2018-07-26T21:58:51+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -845,16 +845,16 @@
         },
         {
             "name": "craftcms/server-check",
-            "version": "1.1.1",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/server-check.git",
-                "reference": "a39dea7f05c66751532a0ad09d51cae46da3f9cf"
+                "reference": "5d6a2c6033db666fd775c301b6c92b9a86487ace"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/server-check/zipball/a39dea7f05c66751532a0ad09d51cae46da3f9cf",
-                "reference": "a39dea7f05c66751532a0ad09d51cae46da3f9cf",
+                "url": "https://api.github.com/repos/craftcms/server-check/zipball/5d6a2c6033db666fd775c301b6c92b9a86487ace",
+                "reference": "5d6a2c6033db666fd775c301b6c92b9a86487ace",
                 "shasum": ""
             },
             "type": "library",
@@ -875,7 +875,7 @@
                 "requirements",
                 "yii2"
             ],
-            "time": "2017-12-15T16:00:57+00:00"
+            "time": "2018-07-25T19:16:43+00:00"
         },
         {
             "name": "creocoder/yii2-nested-sets",
@@ -1076,21 +1076,21 @@
         },
         {
             "name": "defuse/php-encryption",
-            "version": "v2.2.0",
+            "version": "v2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/defuse/php-encryption.git",
-                "reference": "0d4d27c368ca6798bc162469e43248c363c73495"
+                "reference": "0f407c43b953d571421e0020ba92082ed5fb7620"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/0d4d27c368ca6798bc162469e43248c363c73495",
-                "reference": "0d4d27c368ca6798bc162469e43248c363c73495",
+                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/0f407c43b953d571421e0020ba92082ed5fb7620",
+                "reference": "0f407c43b953d571421e0020ba92082ed5fb7620",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
-                "paragonie/random_compat": "~2.0",
+                "paragonie/random_compat": ">= 2",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -1135,7 +1135,7 @@
                 "security",
                 "symmetric key cryptography"
             ],
-            "time": "2018-04-23T19:33:40+00:00"
+            "time": "2018-07-24T23:27:56+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1312,23 +1312,23 @@
         },
         {
             "name": "elvanto/litemoji",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elvanto/litemoji.git",
-                "reference": "7c0276dd0e5004bc78b7865e12030f3d2b6b8d0e"
+                "reference": "b30d679cad29531ec16ca1afadebc78c4495fa10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elvanto/litemoji/zipball/7c0276dd0e5004bc78b7865e12030f3d2b6b8d0e",
-                "reference": "7c0276dd0e5004bc78b7865e12030f3d2b6b8d0e",
+                "url": "https://api.github.com/repos/elvanto/litemoji/zipball/b30d679cad29531ec16ca1afadebc78c4495fa10",
+                "reference": "b30d679cad29531ec16ca1afadebc78c4495fa10",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4"
             },
             "require-dev": {
-                "milesj/emojibase": "*",
+                "milesj/emojibase": "2.0.0",
                 "phpunit/phpunit": "^5.0"
             },
             "type": "library",
@@ -1346,7 +1346,7 @@
                 "emoji",
                 "php-emoji"
             ],
-            "time": "2018-05-25T04:37:05+00:00"
+            "time": "2018-07-24T06:21:15+00:00"
         },
         {
             "name": "enshrined/svg-sanitize",
@@ -1773,16 +1773,16 @@
         },
         {
             "name": "knplabs/github-api",
-            "version": "2.8.0",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "1e404bffaad30a7acf631b67340757646efbbf71"
+                "reference": "31abea216314657904f8fd7a6a5516d47199399b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/1e404bffaad30a7acf631b67340757646efbbf71",
-                "reference": "1e404bffaad30a7acf631b67340757646efbbf71",
+                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/31abea216314657904f8fd7a6a5516d47199399b",
+                "reference": "31abea216314657904f8fd7a6a5516d47199399b",
                 "shasum": ""
             },
             "require": {
@@ -1806,7 +1806,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8.x-dev"
+                    "dev-master": "2.9.x-dev"
                 }
             },
             "autoload": {
@@ -1837,7 +1837,7 @@
                 "gist",
                 "github"
             ],
-            "time": "2018-03-23T16:42:55+00:00"
+            "time": "2018-07-23T07:41:29+00:00"
         },
         {
             "name": "layershifter/tld-database",
@@ -2032,7 +2032,7 @@
                 {
                     "name": "Luís Otávio Cobucci Oblonczyk",
                     "email": "lcobucci@gmail.com",
-                    "role": "Developer"
+                    "role": "developer"
                 }
             ],
             "description": "A simple library to work with JSON Web Token and JSON Web Signature",
@@ -2454,16 +2454,16 @@
         },
         {
             "name": "misterbk/mix",
-            "version": "1.5.1",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mister-bk/craft-plugin-mix.git",
-                "reference": "5f115f09db242af2404e0f15ada749ebf9a94196"
+                "reference": "c30704f07f84d81f018fbbc4c617eb8652ee2d48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mister-bk/craft-plugin-mix/zipball/5f115f09db242af2404e0f15ada749ebf9a94196",
-                "reference": "5f115f09db242af2404e0f15ada749ebf9a94196",
+                "url": "https://api.github.com/repos/mister-bk/craft-plugin-mix/zipball/c30704f07f84d81f018fbbc4c617eb8652ee2d48",
+                "reference": "c30704f07f84d81f018fbbc4c617eb8652ee2d48",
                 "shasum": ""
             },
             "require": {
@@ -2510,7 +2510,7 @@
                 "laravel-mix",
                 "mix"
             ],
-            "time": "2018-06-30T11:29:32+00:00"
+            "time": "2018-07-20T14:32:06+00:00"
         },
         {
             "name": "moccalotto/eu",
@@ -3537,12 +3537,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "731d60f7fc78a8816dae7049df255cd55e30c313"
+                "reference": "053766d789f6393e5bc0896635d35abf8d2d362e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/731d60f7fc78a8816dae7049df255cd55e30c313",
-                "reference": "731d60f7fc78a8816dae7049df255cd55e30c313",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/053766d789f6393e5bc0896635d35abf8d2d362e",
+                "reference": "053766d789f6393e5bc0896635d35abf8d2d362e",
                 "shasum": ""
             },
             "conflict": {
@@ -3591,7 +3591,7 @@
                 "kreait/firebase-php": ">=3.2,<3.8.1",
                 "laravel/framework": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.40|>=5.6,<5.6.15",
                 "laravel/socialite": ">=1,<1.0.99|>=2,<2.0.10",
-                "magento/magento1ce": ">=1.5.0.1,<1.9.3.2",
+                "magento/magento1ce": "<1.9.3.9",
                 "magento/magento1ee": ">=1.9,<1.14.3.2",
                 "magento/product-community-edition": ">=2,<2.2.5",
                 "monolog/monolog": ">=1.8,<1.12",
@@ -3649,7 +3649,8 @@
                 "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
                 "titon/framework": ">=0,<9.9.99",
                 "twig/twig": "<1.20",
-                "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.22|>=8,<8.7.5",
+                "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.30|>=8,<8.7.17|>=9,<9.3.2",
+                "typo3/cms-core": ">=8,<8.7.17|>=9,<9.3.2",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "willdurand/js-translation-bundle": "<2.1.1",
@@ -3698,7 +3699,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-07-09T14:09:25+00:00"
+            "time": "2018-07-18T13:51:34+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -3886,6 +3887,52 @@
             "time": "2015-10-13T18:44:15+00:00"
         },
         {
+            "name": "spacedealer/yii2-loggly",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spacedealer/yii2-loggly.git",
+                "reference": "2711d69cea1b77bf4ab4526c61025d0da242775b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spacedealer/yii2-loggly/zipball/2711d69cea1b77bf4ab4526c61025d0da242775b",
+                "reference": "2711d69cea1b77bf4ab4526c61025d0da242775b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.6.*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "spacedealer\\loggly\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Dirk Adler",
+                    "email": "adler@spacedealer.de"
+                }
+            ],
+            "description": "Use loggly cloud log management service as log target within Yii2 apps.",
+            "homepage": "https://github.com/spacedealer/yii2-loggly",
+            "keywords": [
+                "log",
+                "loggly",
+                "yii2"
+            ],
+            "time": "2015-05-18T10:18:24+00:00"
+        },
+        {
             "name": "stevenmaguire/oauth2-bitbucket",
             "version": "2.0.0",
             "source": {
@@ -3942,16 +3989,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.10.3",
+            "version": "v6.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "dcd993f0ed2abc885f1c5c3a4fc3c1e3b162af70"
+                "reference": "473592b09b09495a6bc65f9e77812456876747a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/dcd993f0ed2abc885f1c5c3a4fc3c1e3b162af70",
-                "reference": "dcd993f0ed2abc885f1c5c3a4fc3c1e3b162af70",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/473592b09b09495a6bc65f9e77812456876747a9",
+                "reference": "473592b09b09495a6bc65f9e77812456876747a9",
                 "shasum": ""
             },
             "require": {
@@ -3993,7 +4040,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2018-07-16T11:49:48+00:00"
+            "time": "2018-07-26T18:25:47+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4056,16 +4103,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "70591cda56b4b47c55776ac78e157c4bb6c8b43f"
+                "reference": "5c31f6a97c1c240707f6d786e7e59bfacdbc0219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/70591cda56b4b47c55776ac78e157c4bb6c8b43f",
-                "reference": "70591cda56b4b47c55776ac78e157c4bb6c8b43f",
+                "url": "https://api.github.com/repos/symfony/console/zipball/5c31f6a97c1c240707f6d786e7e59bfacdbc0219",
+                "reference": "5c31f6a97c1c240707f6d786e7e59bfacdbc0219",
                 "shasum": ""
             },
             "require": {
@@ -4120,11 +4167,11 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-31T10:17:53+00:00"
+            "time": "2018-07-16T14:05:40+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -4174,7 +4221,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -4223,16 +4270,16 @@
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "45cdcc8a96ef92b43a50723e6d1f5f83096e8cef"
+                "reference": "0aec9f9c5d2447ae7ea5ea31bc82f1d43f9a8a56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/45cdcc8a96ef92b43a50723e6d1f5f83096e8cef",
-                "reference": "45cdcc8a96ef92b43a50723e6d1f5f83096e8cef",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/0aec9f9c5d2447ae7ea5ea31bc82f1d43f9a8a56",
+                "reference": "0aec9f9c5d2447ae7ea5ea31bc82f1d43f9a8a56",
                 "shasum": ""
             },
             "require": {
@@ -4273,7 +4320,7 @@
                 "configuration",
                 "options"
             ],
-            "time": "2018-05-31T10:17:53+00:00"
+            "time": "2018-07-07T16:00:36+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -4391,7 +4438,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
