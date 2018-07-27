@@ -103,7 +103,7 @@
     .sidebar {
       @apply .overflow-y-auto .pin .z-40;
       -webkit-overflow-scrolling: touch;
-      top: 69px;
+      top: 53px;
 
       &.sticky {
         @apply .sticky;
@@ -141,6 +141,12 @@
         .search-toggle {
           @apply .hidden;
         }
+      }
+    }
+
+    .main {
+      .sidebar {
+        top: 69px;
       }
     }
   }
