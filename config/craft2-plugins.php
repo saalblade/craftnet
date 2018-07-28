@@ -54,8 +54,9 @@ return [
         'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
     ],
     'CacheFlag' => [
-        'statusColor' => 'orange',
-        'status' => 'Coming soon'
+        'statusColor' => 'green',
+        'status' => 'Available',
+        'handle' => 'cache-flag',
     ],
     'Calendars' => [
         'statusColor' => 'orange',
