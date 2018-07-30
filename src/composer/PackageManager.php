@@ -763,6 +763,7 @@ class PackageManager extends Component
 
         // We can treat "updated" versions as "new" now.
         $newVersions = array_merge($updatedVersions, $newVersions);
+        $latestVersion = null;
 
         // Bail early if there's nothing new
         if (!empty($newVersions)) {
@@ -774,7 +775,6 @@ class PackageManager extends Component
             $this->_sortVersions($newVersions, SORT_DESC);
 
             $packageDeps = [];
-            $latestVersion = null;
             $foundStable = false;
 
             foreach ($newVersions as $normalizedVersion) {
@@ -834,30 +834,6 @@ class PackageManager extends Component
                 }
             }
 
-            // Ignore the new latest version if we already have another one that's better
-            if ($package->latestVersion !== null && !in_array($package->latestVersion, $deletedVersions, true)) {
-                if ($latestVersion === null) {
-                    $latestVersion = $package->latestVersion;
-                } else {
-                    $vp = new VersionParser();
-                    if (Comparator::greaterThan($vp->normalize($package->latestVersion), $vp->normalize($latestVersion))) {
-                        $latestVersion = $package->latestVersion;
-                    }
-                }
-            }
-
-            // Update the package's latestVersion and dateUpdated
-            $db->createCommand()
-                ->update('craftnet_packages', ['latestVersion' => $latestVersion], ['id' => $package->id])
-                ->execute();
-
-            if ($plugin && $latestVersion !== $plugin->latestVersion) {
-                $plugin->latestVersion = $latestVersion;
-                $db->createCommand()
-                    ->update('craftnet_plugins', ['latestVersion' => $latestVersion], ['id' => $plugin->id])
-                    ->execute();
-            }
-
             // For each dependency, see if we already have a version that satisfies the conditions
             if (!empty($packageDeps)) {
                 $depsToUpdate = [];
@@ -901,6 +877,32 @@ class PackageManager extends Component
             if ($isConsole) {
                 Console::output('No new versions to process.');
             }
+        }
+
+        // Does the package already have a latestVersion in the DB, which wasn't just deleted?
+        if (!$force && $package->latestVersion !== null && !in_array($package->latestVersion, $deletedVersions, true)) {
+            // If we couldn't find a new latestVersion, then don't change it
+            if ($latestVersion === null) {
+                $latestVersion = $package->latestVersion;
+            } else {
+                // Otherwise make sure that the new latestVersion is greater than the stored one
+                $vp = new VersionParser();
+                if (Comparator::greaterThan($vp->normalize($package->latestVersion), $vp->normalize($latestVersion))) {
+                    $latestVersion = $package->latestVersion;
+                }
+            }
+        }
+
+        // Update the package's latestVersion and dateUpdated
+        $db->createCommand()
+            ->update('craftnet_packages', ['latestVersion' => $latestVersion], ['id' => $package->id])
+            ->execute();
+
+        if ($plugin && $latestVersion !== $plugin->latestVersion) {
+            $plugin->latestVersion = $latestVersion;
+            $db->createCommand()
+                ->update('craftnet_plugins', ['latestVersion' => $latestVersion], ['id' => $plugin->id])
+                ->execute();
         }
 
         if ($dumpJson && (!empty($deletedVersions) || !empty($newVersions))) {
