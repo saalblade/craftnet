@@ -804,7 +804,12 @@ class PackageManager extends Component
                 if (!empty($release->require)) {
                     $depValues = [];
                     foreach ($release->require as $depName => $constraints) {
+                        if (trim($constraints) === 'self.version') {
+                            $constraints = $release->version;
+                        }
+
                         $depValues[] = [$package->id, $release->id, $depName, $constraints];
+
                         if (
                             $depName !== '__root__' &&
                             $depName !== 'composer-plugin-api' &&

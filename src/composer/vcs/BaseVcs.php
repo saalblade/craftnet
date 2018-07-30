@@ -107,6 +107,10 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
             // make sure all the constraints are valid
             $vp = new VersionParser();
             foreach ($release->require as $depName => $constraints) {
+                if (trim($constraints) === 'self.version') {
+                    $constraints = $release->version;
+                }
+
                 try {
                     $vp->parseConstraints($constraints);
                 } catch (\UnexpectedValueException $e) {
