@@ -1,0 +1,142 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set crumbs = [
+    {label: 'Partners', url: url('partners')}
+] %}
+
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = partner.getCpEditUrl() %}
+
+{% block actionButton %}
+    <div class="btngroup">
+        <input type="submit" class="btn submit" value="Save">
+
+        <div class="btn submit menubtn"></div>
+        <div class="menu">
+            {% if partner.pendingApproval %}
+                <hr>
+                <ul>
+                    <li><a class="formsubmit" data-param="approve" data-value="1"><span class="status green"></span>Approve</a></li>
+                    <li><a class="formsubmit" data-param="reject" data-value="1"><span class="status red"></span>Request changes</a></li>
+                </ul>
+                <hr>
+            {% endif %}
+            <ul>
+                <li><a class="formsubmit" data-redirect="{{ saveShortcutRedirect|hash }}">
+                        {{ forms.optionShortcutLabel('S') }}
+                        Save and continue editing
+                    </a></li>
+                <li><a class="formsubmit" data-redirect="{{ ('partners/new')|hash }}">Save and add another</a></li>
+            </ul>
+            {% if partner.id %}
+                <hr>
+                <ul>
+                    <li><a class="formsubmit error" data-action="craftnet/partners/delete" data-confirm="Are you sure you want to delete this partner?" data-redirect="{{ 'partners'|hash }}">Delete</a></li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="fields">
+        <input type="hidden" name="action" value="craftnet/partners/save">
+        <input type="hidden" name="redirect" value="{{ 'partners/{id}'|hash }}">
+        {% if partner.id %}<input type="hidden" name="partnerId" value="{{ partner.id }}">{% endif %}
+
+        {{ forms.textField({
+            label: 'Business Name',
+            required: true,
+            id: 'businessName',
+            name: 'businessName',
+            value: partner.businessName,
+            errors: partner.getErrors('businessName'),
+        }) }}
+
+        {{ forms.textField({
+            label: 'Primary Contact Name',
+            required: true,
+            id: 'primaryContactName',
+            name: 'primaryContactName',
+            value: partner.primaryContactName,
+            errors: partner.getErrors('primaryContactName'),
+        }) }}
+
+        {{ forms.textField({
+            type: 'email',
+            label: 'Primary Contact Email',
+            required: true,
+            id: 'primaryContactEmail',
+            name: 'primaryContactEmail',
+            value: partner.primaryContactEmail,
+            errors: partner.getErrors('primaryContactEmail'),
+        }) }}
+
+        {{ forms.textField({
+            type: 'phone',
+            label: 'Primary Contact Phone',
+            required: true,
+            id: 'primaryContactPhone',
+            name: 'primaryContactPhone',
+            value: partner.primaryContactPhone,
+            errors: partner.getErrors('primaryContactPhone'),
+        }) }}
+
+        {{ forms.textareaField({
+            label: 'Business Summary',
+            required: true,
+            rows: 4,
+            id: 'businessSummary',
+            name: 'businessSummary',
+            value: partner.businessSummary,
+            errors: partner.getErrors('businessSummary'),
+        }) }}
+
+        {{ forms.textField({
+            type: 'text',
+            label: 'Minimum Budget',
+            instructions: 'Amount in USD',
+            required: true,
+            id: 'minimumBudget',
+            name: 'minimumBudget',
+            value: partner.minimumBudget,
+            errors: partner.getErrors('minimumBudget'),
+        }) }}
+
+        {{ forms.textField({
+            type: 'url',
+            label: 'Master Servic Agreement Link',
+            required: true,
+            id: 'msaLink',
+            name: 'msaLink',
+            value: partner.msaLink,
+            errors: partner.getErrors('msaLink'),
+        }) }}
+    </div>
+{% endblock %}
+
+{% block details %}
+    <div id="settings" class="meta">
+        {{ forms.elementSelectField({
+            first: true,
+            label: 'Owner',
+            required: true,
+            id: 'ownerId',
+            name: 'ownerId',
+            elementType: 'craft\\elements\\User',
+            sources: ['group:'~(craft.app.userGroups.getGroupByHandle('developers').id)],
+            limit: 1,
+            elements: partner.ownerId ? [partner.owner] : null,
+            errors: partner.getErrors('ownerId'),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Enabled',
+            id: 'enabled',
+            name: 'enabled',
+            on: partner.enabled,
+        }) }}
+    </div>
+{% endblock %}

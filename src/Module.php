@@ -200,6 +200,12 @@ class Module extends \yii\base\Module
                 'label' => 'Plugins',
                 'icon' => 'plugin',
             ];
+
+            $e->navItems[] = [
+                'url' => 'partners',
+                'label' => 'Partners',
+                'icon' => 'users',
+            ];
         });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $e) {
@@ -207,6 +213,9 @@ class Module extends \yii\base\Module
                 'plugins' => ['template' => 'craftnet/plugins/_index'],
                 'plugins/new' => 'craftnet/plugins/edit',
                 'plugins/<pluginId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/plugins/edit',
+                'partners' => ['template' => 'craftnet/partners/_index'],
+                'partners/new' => 'craftnet/partners/edit',
+                'partners/<partnerId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/partners/edit',
             ]);
         });
 
