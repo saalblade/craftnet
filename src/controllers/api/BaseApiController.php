@@ -471,9 +471,9 @@ abstract class BaseApiController extends Controller
                 ], false)
                 ->execute();
 
-            if ($response->getStatusCode() != 400) {
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 500 && $statusCode < 600) {
                 try {
-
                     $body = 'RequestId: '.$this->requestId.PHP_EOL.PHP_EOL.
                         'Type: '.$exceptionType.PHP_EOL.PHP_EOL.
                         'Message: '.$exceptionMessage.PHP_EOL.PHP_EOL.

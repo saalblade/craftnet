@@ -53,10 +53,6 @@ return [
         'statusColor' => 'red',
         'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
     ],
-    'CacheFlag' => [
-        'statusColor' => 'orange',
-        'status' => 'Coming soon'
-    ],
     'Calendars' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Solspace Calendar](https://solspace.com/craft/calendar/) could be used instead.'
@@ -173,8 +169,7 @@ return [
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
     ],
     'PimpMyMatrix' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development.',
+        'handle' => 'spoon',
     ],
     'Printmaker' => [
         'statusColor' => 'orange',
