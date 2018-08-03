@@ -9,12 +9,12 @@
 
             <h2><router-link to="/">Craft Plugins</router-link></h2>
 
-            <div class="search">
-                <search-form />
+            <div class="search" :class="{open: searchVisible}">
+                <search-form ref="searchForm" @searchQueryBlur="searchQueryBlur()" />
                 
-                <div class="search-toggle">
+                <a class="search-toggle" @click="showSearch()">
                     <font-awesome-icon :icon="iconSearch" />
-                </div>
+                </a>
             </div>
 
             <div class="nav">
@@ -80,6 +80,7 @@
             return {
                 loading: false,
                 bigScreen: false,
+                searchVisible: false,
             }
         },
 
@@ -161,6 +162,19 @@
 
             onViewScroll(e) {
                 this.$bus.$emit('viewScroll', e)
+            },
+
+            showSearch() {
+                this.searchVisible = true
+                const searchQueryInput = this.$refs.searchForm.$refs.searchQuery
+
+                this.$nextTick(() => {
+                    searchQueryInput.focus()
+                })
+            },
+
+            searchQueryBlur() {
+                this.searchVisible = false
             }
         },
 

@@ -69,7 +69,7 @@
 
 .wrapper {
   header {
-    @apply .flex .px-6 .py-4 .bg-grey-lighter .border-b .justify-between;
+    @apply .flex .px-6 .py-2 .bg-grey-lighter .border-b .justify-between;
 
     &.sticky {
       @apply .sticky .pin .z-10;
@@ -81,7 +81,7 @@
     }
 
     h2 {
-      @apply .text-lg .self-center .pr-6;
+      @apply .text-lg .self-center .py-2 .flex-no-shrink;
 
       a {
         @apply .text-grey-darker;
@@ -89,8 +89,25 @@
     }
 
     .search {
+      @apply .self-center;
+
       .search-form {
         @apply .hidden;
+      }
+
+      &.open {
+        @apply .absolute;
+        top: 0.5rem;
+        left: 1.5rem;
+        right: 1.5rem;
+
+        .search-form {
+          @apply .block;
+        }
+
+        .search-toggle {
+          @apply .hidden;
+        }
       }
     }
 
