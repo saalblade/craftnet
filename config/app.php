@@ -134,14 +134,6 @@ return [
                             'logFile' => getenv('CRAFT_STORAGE_PATH').'/logs/web.log',
                             'levels' => !YII_DEBUG ? yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING : yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING | yii\log\Logger::LEVEL_INFO | yii\log\Logger::LEVEL_TRACE | yii\log\Logger::LEVEL_PROFILE,
                         ],
-                        [
-                            'class' => 'spacedealer\loggly\Target',
-                            'customerToken' => getenv('LOGGLY_KEY'),
-                            'levels' => ['error', 'warning'],
-                            'tags' => ['craftnet'],
-                            'enableIp' => true,
-                            'enableTrail' => true,
-                        ],
                     ],
                 ]);
 
