@@ -11,7 +11,7 @@ use yii\web\BadRequestHttpException;
 /**
  * @property Module $module
  */
-class ToolsController extends Controller
+class JobsController extends Controller
 {
     // Properties
     // =========================================================================
