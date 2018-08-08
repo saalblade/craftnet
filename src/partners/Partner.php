@@ -172,6 +172,11 @@ class Partner extends Element
      */
     private $_capabilities;
 
+    /**
+     * @var array
+     */
+    private $_locations;
+
     // Public Methods
     // =========================================================================
 
@@ -317,6 +322,15 @@ class Partner extends Element
                 'title' => $allCapabilities[$id]
             ];
         }
+    }
+
+    public function getLocations()
+    {
+        if (!isset($this->_locations)) {
+            $this->_locations = [];
+        }
+
+        return $this->_locations;
     }
 
     /**
