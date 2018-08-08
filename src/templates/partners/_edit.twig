@@ -107,13 +107,21 @@
 
         {{ forms.textField({
             type: 'url',
-            label: 'Master Servic Agreement Link',
+            label: 'Master Service Agreement Link',
             required: true,
             id: 'msaLink',
             name: 'msaLink',
             value: partner.msaLink,
             errors: partner.getErrors('msaLink'),
         }) }}
+
+        {{ forms.checkboxGroupField({
+            label: 'Capabilities',
+            options: capabilities,
+            values: partner.capabilities|keys,
+            name: 'capabilities'
+        }) }}
+
     </div>
 {% endblock %}
 

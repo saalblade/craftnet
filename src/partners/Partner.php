@@ -6,6 +6,8 @@ use Craft;
 use craft\base\Element;
 use craft\elements\actions\SetStatus;
 use craft\elements\db\ElementQueryInterface;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 
 /**
@@ -165,6 +167,11 @@ class Partner extends Element
      */
     public $msaLink;
 
+    /**
+     * @var array
+     */
+    private $_capabilities;
+
     // Public Methods
     // =========================================================================
 
@@ -231,6 +238,29 @@ class Partner extends Element
                 ->update('craftnet_partners', $partnerData)
                 ->execute();
         }
+
+        // Capabilities
+
+        $db->createCommand()
+            ->delete('craftnet_partners_partnercapabilities', ['partnerId' => $this->id])
+            ->execute();
+
+        if (count($this->_capabilities) > 0) {
+            $partnerId = $this->id;
+
+            $rows = array_map(function($capability) use ($partnerId) {
+                return [$partnerId, $capability['id']];
+            }, $this->_capabilities);
+
+            $db->createCommand()
+                ->batchInsert(
+                    'craftnet_partners_partnercapabilities',
+                    ['partnerId', 'partnercapabilitiesId'],
+                    $rows,
+                    false
+                )
+                ->execute();
+        }
     }
 
     /**
@@ -244,12 +274,74 @@ class Partner extends Element
     }
 
     /**
+     * Capabilities are a query result array for capabilities
+     * related to this Partner. The `title` value can be missing
+     * when populated from only ids during a post request.
+     *
+     * ```
+     * [
+     *     ['id' => 1, 'title' => 'Commerce']
+     *     ...
+     * ]
+     * ```
+     * @return array
+     */
+    public function getCapabilities()
+    {
+        if (!isset($this->_capabilities)) {
+            $this->_capabilities = (new PartnerCapabilitiesQuery())
+                ->partner($this)
+                ->asIndexedTitles()
+                ->all();
+        }
+
+        return $this->_capabilities;
+    }
+
+    /**
+     * @param array $ids A list of capability ids.
+     */
+    public function setCapabilitiesByIds($ids)
+    {
+        $this->_capabilities = [];
+
+        $allCapabilities = (new PartnerCapabilitiesQuery())->asIndexedTitles()->all();
+
+        foreach ($ids as $id) {
+            if (!array_key_exists($id, $allCapabilities)) {
+                continue;
+            }
+
+            $this->_capabilities[] = [
+                'id' => (int) $id,
+                'title' => $allCapabilities[$id]
+            ];
+        }
+    }
+
+    /**
      * @return \craft\elements\User|null
      */
     public function getOwner()
     {
         return Craft::$app->getUsers()->getUserById($this->ownerId);
     }
+
+    public static function eagerLoadingMap(array $sourceElements, string $handle)
+    {
+        switch ($handle) {
+            case 'editions':
+                $query = (new Query())
+                    ->select(['id as source', 'partnerId as target'])
+                    ->from(['craftnet_partnerlocations'])
+                    ->where(['id' => ArrayHelper::getColumn($sourceElements, 'id')]);
+                return ['elementType' => PluginEdition::class, 'map' => $query->all()];
+
+            default:
+                return parent::eagerLoadingMap($sourceElements, $handle);
+        }
+    }
+
 
     /**
      * @return string

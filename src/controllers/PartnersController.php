@@ -7,7 +7,9 @@ use craft\base\Element;
 use craft\web\Controller;
 use craftnet\Module;
 use craftnet\partners\Partner;
+use craftnet\partners\PartnerCapabilitiesQuery;
 use yii\base\Exception;
+use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -55,9 +57,12 @@ class PartnersController extends Controller
             }
         }
 
+        $c = $partner->capabilities;
+
+        $capabilities = (new PartnerCapabilitiesQuery())->asIndexedTitles()->all();
         $title = $partner->id ? $partner->businessName : 'Add a new partner';
 
-        return $this->renderTemplate('craftnet/partners/_edit', compact('partner', 'title'));
+        return $this->renderTemplate('craftnet/partners/_edit', compact('partner', 'title', 'capabilities'));
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,6 +100,7 @@ class PartnersController extends Controller
         $partner->businessSummary = $request->getBodyParam('businessSummary');
         $partner->minimumBudget = $request->getBodyParam('minimumBudget');
         $partner->msaLink = $request->getBodyParam('msaLink');
+        $partner->setCapabilitiesByIds($request->getBodyParam('capabilities', []));
 
         if ($partner->enabled) {
             $partner->setScenario(Element::SCENARIO_LIVE);

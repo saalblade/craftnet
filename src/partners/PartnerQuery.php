@@ -55,19 +55,6 @@ class PartnerQuery extends ElementQuery
     public $msaLink;
 
     /**
-     * @inheritdoc
-     */
-//    public function __construct($elementType, array $config = [])
-//    {
-//        // Default orderBy
-//        if (!isset($config['orderBy'])) {
-//            $config['orderBy'] = 'businessName';
-//        }
-//
-//        parent::__construct($elementType, $config);
-//    }
-
-    /**
      * Sets the [[ownerId]] property.
      *
      * @param int|int[]|null $value The property value

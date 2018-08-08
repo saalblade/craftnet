@@ -77,7 +77,7 @@ class m180724_195341_create_partners_tables extends Migration
         ]);
 
         $this->addForeignKey('partners_capabilities_partnerId_fk', 'craftnet_partners_partnercapabilities', ['partnerId'], 'craftnet_partners', ['id'], 'CASCADE');
-        $this->addForeignKey('partners_capabilities_partnercapabilitiesId_fk', 'craftnet_partners_partnercapabilities', ['partnercapabilitiesId'], 'craftnet_partners', ['id'], 'CASCADE');
+        $this->addForeignKey('partners_capabilities_partnercapabilitiesId_fk', 'craftnet_partners_partnercapabilities', ['partnercapabilitiesId'], 'craftnet_partnercapabilities', ['id'], 'CASCADE');
 
         // Locations -----------------------------------------------------------
 
