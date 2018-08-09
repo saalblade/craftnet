@@ -1,10 +1,10 @@
 <?php
 
-namespace craftcom\controllers;
+namespace craftnet\controllers;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\Module;
+use craftnet\Module;
 use mikehaertl\shellcommand\Command as ShellCommand;
 use yii\web\BadRequestHttpException;
 
