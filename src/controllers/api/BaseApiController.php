@@ -13,6 +13,7 @@ use craft\web\Controller;
 use craftnet\cms\CmsLicense;
 use craftnet\cms\CmsLicenseManager;
 use craftnet\developers\UserBehavior;
+use craftnet\errors\ExpiredTokenException;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\errors\ValidationException;
 use craftnet\helpers\KeyHelper;
@@ -679,6 +680,8 @@ abstract class BaseApiController extends Controller
             ) {
                 return $user;
             }
+        } catch (ExpiredTokenException $e) {
+            throw new BadRequestHttpException($e->getMessage());
         } catch (\InvalidArgumentException $e) {
         }
 
