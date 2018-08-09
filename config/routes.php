@@ -68,6 +68,8 @@ return [
         'oauth/access-token' => 'oauth-server/oauth/access-token',
         'oauth/revoke' => 'oauth-server/oauth/revoke',
 
+        'GET     sync-staging' => 'craftnet/jobs/sync-staging',
+
         // Catch-all route for Vue when people reload the page.
         'login'=> ['template' => 'login'],
         'register'=> ['template' => 'register'],
