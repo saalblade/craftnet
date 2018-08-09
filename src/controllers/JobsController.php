@@ -34,13 +34,23 @@ class JobsController extends Controller
     // Public Methods
     // =========================================================================
 
+    /**
+     *
+     */
     public function actionUpdateDeps()
     {
         $this->module->getPackageManager()->updateDeps(false, true);
     }
 
+    /**
+     *
+     */
     public function actionSyncStaging()
     {
+        if (getenv('CRAFT_ENV') !== 'stage') {
+            throw new BadRequestHttpException();
+        }
+
         $shellCommand = new ShellCommand();
         $shellCommand->setCommand(getenv('SYNC_PATH'));
 
