@@ -100,6 +100,7 @@ const mutations = {
     },
 
     [types.SAVE_PLUGIN](state, {plugin, response}) {
+
         let newPlugin = false;
         let statePlugin = state.plugins.find(p => p.id == plugin.pluginId);
 
@@ -113,7 +114,7 @@ const mutations = {
         let iconUrl = response.data.iconUrl
 
         if(iconUrl) {
-            iconUrl = photoUrl + (photoUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000);
+            iconUrl = iconUrl + (iconUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000);
         }
 
         statePlugin.siteId = plugin.siteId;

@@ -79,7 +79,7 @@ class PackagesController extends Controller
     public function options($actionID)
     {
         $options = parent::options($actionID);
-        $options[] = 'dump-json';
+        $options[] = 'dumpJson';
 
         switch ($actionID) {
             case 'add':
@@ -120,8 +120,7 @@ class PackagesController extends Controller
      */
     public function afterAction($action, $result)
     {
-        if ($this->dumpJson) {
-            echo 'dump json!'.($this->queue ? 'yes' : 'no')."\n";
+        if ($this->action->id !== 'update' && $this->dumpJson) {
             $this->module->getJsonDumper()->dump($this->queue);
         }
 
@@ -147,7 +146,7 @@ class PackagesController extends Controller
         if ($this->confirm('Update its versions now?')) {
             $packageManager->updatePackage($name);
         }
-        if ($this->confirm('Dump new Composer JSON?')) {
+        if (!$this->dumpJson && $this->confirm('Dump new Composer JSON?')) {
             $this->module->getJsonDumper()->dump();
         }
     }
@@ -179,7 +178,7 @@ class PackagesController extends Controller
      */
     public function actionUpdate(string $name)
     {
-        $this->module->getPackageManager()->updatePackage($name, $this->force, $this->queue);
+        $this->module->getPackageManager()->updatePackage($name, $this->force, $this->queue, $this->dumpJson);
     }
 
     /**

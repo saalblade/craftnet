@@ -40,7 +40,6 @@ use craftnet\orders\PdfRenderer;
 use craftnet\plugins\PluginEdition;
 use craftnet\plugins\PluginLicenseManager;
 use craftnet\services\Oauth;
-use craftnet\twigextensions\CraftIdTwigExtension;
 use craftnet\utilities\SalesReport;
 use craftnet\utilities\UnavailablePlugins;
 use yii\base\Event;
@@ -227,6 +226,5 @@ class Module extends \yii\base\Module
     private function _initSiteRequest()
     {
         Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
-        Craft::$app->getView()->registerTwigExtension(new CraftIdTwigExtension());
     }
 }

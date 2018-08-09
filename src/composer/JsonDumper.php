@@ -4,6 +4,7 @@ namespace craftnet\composer;
 
 use Craft;
 use craft\db\Query;
+use craft\helpers\Console;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craftnet\composer\jobs\DeletePaths;
@@ -33,7 +34,13 @@ class JsonDumper extends Component
             return;
         }
 
+        $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
+
         Craft::info('Dumping JSON.', __METHOD__);
+
+        if ($isConsole) {
+            Console::stdout('Dumping JSON ... ');
+        }
 
         // Fetch all the data
         $packages = (new Query())
@@ -70,7 +77,10 @@ class JsonDumper extends Component
                 'dist',
             ])
             ->from(['craftnet_packageversions'])
-            ->where(['packageId' => array_keys($packages)])
+            ->where([
+                'packageId' => array_keys($packages),
+                'valid' => true,
+            ])
             ->indexBy('id')
             ->all();
 
@@ -185,6 +195,10 @@ class JsonDumper extends Component
 
         Craft::info("Writing JSON file to {$this->composerWebroot}/packages.json", __METHOD__);
         FileHelper::writeToFile($this->composerWebroot.'/packages.json', Json::encode($rootData));
+
+        if ($isConsole) {
+            Console::output('done');
+        }
 
         if (!empty($oldPaths)) {
             Craft::$app->getQueue()->delay(60 * 5)->push(new DeletePaths([
