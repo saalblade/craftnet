@@ -28,10 +28,6 @@ return [
     'Adminbar' => [
         'handle' => 'admin-bar',
     ],
-    'AdWizard' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
     'Algolia' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Scout](https://github.com/rias500/craft-scout) could be used instead'
@@ -74,10 +70,6 @@ return [
     ],
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
-    ],
-    'DigitalDownload' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
     ],
     'DuplicateUserDashboard' => [
         'statusColor' => 'orange',
@@ -123,10 +115,6 @@ return [
     'Inflector' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
-    ],
-    'LanguageLink' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
     ],
     'LinkVault' => [
         'statusColor' => 'orange',
@@ -241,10 +229,6 @@ return [
     ],
     'SuperSort' => [
         'handle' => 'supersort',
-    ],
-    'Upvote' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
     ],
     'Widont' => [
         'handle' => 'widontextension',
