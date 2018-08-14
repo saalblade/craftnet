@@ -28,16 +28,15 @@ class m180724_195341_create_partners_tables extends Migration
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
-            'PRIMARY KEY(id)',
+            'PRIMARY KEY([[id]])'
         ]);
 
         // Sizes ---------------------------------------------------------------
 
         // Holds available options
         $this->createTable('craftnet_partnersizes', [
-            'id' => $this->integer()->notNull(),
+            'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
-            'PRIMARY KEY(id)',
         ]);
 
         $this->batchInsert('craftnet_partnersizes', ['id', 'title'], [
@@ -58,9 +57,8 @@ class m180724_195341_create_partners_tables extends Migration
         // Capabilities --------------------------------------------------------
 
         $this->createTable('craftnet_partnercapabilities', [
-            'id' => $this->integer()->notNull(),
+            'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
-            'PRIMARY KEY(id)',
         ]);
 
         $this->batchInsert('craftnet_partnercapabilities', ['id', 'title'], [
@@ -82,7 +80,7 @@ class m180724_195341_create_partners_tables extends Migration
         // Locations -----------------------------------------------------------
 
         $this->createTable('craftnet_partnerlocations', [
-            'id' => $this->integer()->notNull(),
+            'id' => $this->primaryKey(),
             'partnerId' => $this->integer()->notNull(),
             'title' => $this->string(),
             'addressLine1' => $this->string(),
@@ -96,7 +94,6 @@ class m180724_195341_create_partners_tables extends Migration
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
-            'PRIMARY KEY(id)',
         ]);
 
         $this->addForeignKey('craftnet_partnerlocations_partnerId_fk', 'craftnet_partnerlocations', ['partnerId'], 'craftnet_partners', ['id'], 'CASCADE');
@@ -104,14 +101,13 @@ class m180724_195341_create_partners_tables extends Migration
         // Sites ---------------------------------------------------------------
 
         $this->createTable('craftnet_partnersites', [
-            'id' => $this->integer()->notNull(),
+            'id' => $this->primaryKey(),
             'partnerId' => $this->integer()->notNull(),
             'url' => $this->integer()->notNull(),
             'screenshotId' => $this->integer(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
-            'PRIMARY KEY(id)',
         ]);
 
         $this->addForeignKey('craftnet_partnersites_partnerId_fk', 'craftnet_partnersites', ['partnerId'], 'craftnet_partners', ['id'], 'CASCADE');

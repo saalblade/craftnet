@@ -9,13 +9,6 @@ use craft\helpers\ArrayHelper;
 /**
  * Class PartnerCapabilites
  *
- * Get all capability definitions
- * ```
- * $capabilityDefinitions = (new PartnerCapabilities())->all();
- * ```
- *
- *
- *
  * @package craftnet\partners
  */
 class PartnerCapabilitiesQuery extends Query

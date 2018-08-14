@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\elements\actions\SetStatus;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\UrlHelper;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
@@ -18,11 +19,6 @@ use yii\helpers\Inflector;
  */
 class Partner extends Element
 {
-    public function __construct(array $config = [])
-    {
-        parent::__construct($config);
-    }
-
     // Constants
     // =========================================================================
 
@@ -170,12 +166,12 @@ class Partner extends Element
     /**
      * @var array
      */
-    private $_capabilities;
+    private $_capabilities = null;
 
     /**
      * @var array
      */
-    private $_locations;
+    private $_locations = null;
 
     // Public Methods
     // =========================================================================
@@ -202,7 +198,9 @@ class Partner extends Element
                 'primaryContactPhone',
                 'businessSummary',
                 'minimumBudget',
-                'msaLink'
+                'msaLink',
+                'capabilities',
+                'locations',
             ],
             'required',
             'on' => self::SCENARIO_LIVE
@@ -221,7 +219,6 @@ class Partner extends Element
     public function afterSave(bool $isNew)
     {
         $partnerData = $this->getAttributes([
-            'id',
             'ownerId',
             'businessName',
             'primaryContactName',
@@ -232,6 +229,10 @@ class Partner extends Element
             'msaLink',
         ]);
 
+        if ($isNew) {
+            $partnerData['id'] = $this->id;
+        }
+
         $db = Craft::$app->getDb();
 
         if ($isNew) {
@@ -240,7 +241,7 @@ class Partner extends Element
                 ->execute();
         } else {
             $db->createCommand()
-                ->update('craftnet_partners', $partnerData)
+                ->update('craftnet_partners', $partnerData, ['id' => $this->id])
                 ->execute();
         }
 
@@ -266,6 +267,44 @@ class Partner extends Element
                 )
                 ->execute();
         }
+
+        // Locations
+
+        $db->createCommand()
+            ->delete('craftnet_partnerlocations', ['partnerId' => $this->id])
+            ->execute();
+
+        foreach($this->_locations as $location) {
+            $data = array_merge($location->attributes, ['partnerId' => $this->id]);
+            unset($data['id']);
+
+            $db->createCommand()
+                ->insert(
+                    'craftnet_partnerlocations',
+                    $data
+                )
+                ->execute();
+        }
+    }
+
+    /**
+     * Validate locations.
+     * @inheritdoc
+     */
+    public function afterValidate()
+    {
+        foreach ($this->_locations as $location) {
+            // Same scenarios on Partner and ParnerLocationModel:
+            // SCENARIO_DEFAULT, SCENARIO_LIVE
+            $location->setScenario($this->getScenario());
+            $isValid = $location->validate();
+
+            if (!$isValid && !$this->hasErrors('locations')) {
+                $this->addError('locations', 'Please fix location errors');
+            }
+        }
+
+        return parent::afterValidate();
     }
 
     /**
@@ -275,25 +314,29 @@ class Partner extends Element
     {
         $slug = Inflector::slug($this->businessName);
 
-        return "partners/{$this->id}-{$slug}";
+        return UrlHelper::cpUrl("partners/{$this->id}-{$slug}");
     }
 
     /**
-     * Capabilities are a query result array for capabilities
-     * related to this Partner. The `title` value can be missing
-     * when populated from only ids during a post request.
-     *
+     * Capabilities related to this Partner as {id: title}
      * ```
      * [
-     *     ['id' => 1, 'title' => 'Commerce']
-     *     ...
+     *   1 => 'Commerce',
+     *   4 => 'Contract Work',
      * ]
      * ```
+     *
      * @return array
      */
     public function getCapabilities()
     {
-        if (!isset($this->_capabilities)) {
+        // New Partner instance
+        if ($this->id === null) {
+            $this->_capabilities = [];
+        }
+
+        // Existing Partner instance without capabilities set yet
+        if ($this->_capabilities === null) {
             $this->_capabilities = (new PartnerCapabilitiesQuery())
                 ->partner($this)
                 ->asIndexedTitles()
@@ -304,33 +347,51 @@ class Partner extends Element
     }
 
     /**
-     * @param array $ids A list of capability ids.
+     * @param array $capabilities An array of ids, or associative array of `id => title`
      */
-    public function setCapabilitiesByIds($ids)
+    public function setCapabilities($capabilities)
     {
-        $this->_capabilities = [];
-
-        $allCapabilities = (new PartnerCapabilitiesQuery())->asIndexedTitles()->all();
-
-        foreach ($ids as $id) {
-            if (!array_key_exists($id, $allCapabilities)) {
-                continue;
-            }
-
-            $this->_capabilities[] = [
-                'id' => (int) $id,
-                'title' => $allCapabilities[$id]
-            ];
-        }
+        $this->_capabilities = PartnersHelper::normalizeCapabilities($capabilities);
     }
 
+    /**
+     * @return array
+     */
     public function getLocations()
     {
-        if (!isset($this->_locations)) {
+        // New Partner instance
+        if ($this->id === null) {
             $this->_locations = [];
         }
 
+        // Existing Partner instance without locations set yet
+        if ($this->_locations === null) {
+            $result = (new PartnerLocationsQuery())
+                ->partner($this->id)
+                ->all();
+
+            $this->setLocations($result);
+        }
+
         return $this->_locations;
+    }
+
+    /**
+     * Sets the `location` attribute to PartnerLocationModels
+     * from the given data array.
+     * @param array $locations
+     */
+    public function setLocations(array $locations)
+    {
+        $this->_locations = PartnersHelper::normalizeLocations($locations);
+    }
+
+    /**
+     * @param array $locations
+     */
+    public function setLocationsFromPost($locations = [])
+    {
+        $this->setLocations(PartnersHelper::normalizePostArray($locations));
     }
 
     /**
@@ -355,7 +416,6 @@ class Partner extends Element
                 return parent::eagerLoadingMap($sourceElements, $handle);
         }
     }
-
 
     /**
      * @return string

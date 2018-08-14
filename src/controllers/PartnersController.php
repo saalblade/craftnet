@@ -57,12 +57,10 @@ class PartnersController extends Controller
             }
         }
 
-        $c = $partner->capabilities;
-
-        $capabilities = (new PartnerCapabilitiesQuery())->asIndexedTitles()->all();
+        $allCapabilities = (new PartnerCapabilitiesQuery())->asIndexedTitles()->all();
         $title = $partner->id ? $partner->businessName : 'Add a new partner';
 
-        return $this->renderTemplate('craftnet/partners/_edit', compact('partner', 'title', 'capabilities'));
+        return $this->renderTemplate('craftnet/partners/_edit', compact('partner', 'title', 'allCapabilities'));
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,7 +98,8 @@ class PartnersController extends Controller
         $partner->businessSummary = $request->getBodyParam('businessSummary');
         $partner->minimumBudget = $request->getBodyParam('minimumBudget');
         $partner->msaLink = $request->getBodyParam('msaLink');
-        $partner->setCapabilitiesByIds($request->getBodyParam('capabilities', []));
+        $partner->setCapabilities($request->getBodyParam('capabilities', []));
+        $partner->setLocationsFromPost($request->getBodyParam('locations', []));
 
         if ($partner->enabled) {
             $partner->setScenario(Element::SCENARIO_LIVE);

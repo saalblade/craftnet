@@ -117,11 +117,11 @@
 
         {{ forms.checkboxGroupField({
             label: 'Capabilities',
-            options: capabilities,
-            values: partner.capabilities|keys,
-            name: 'capabilities'
+            options: allCapabilities,
+            values: partner.getCapabilities() | keys,
+            name: 'capabilities',
+            errors: partner.getErrors('capabilities'),
         }) }}
-
 
         {% macro locationForm(location) %}
             <table class="subform shadow-box">
@@ -138,55 +138,64 @@
                     <tr class="subform-row">
                         <th><label class="required">Title</label></th>
                         <td>
-                            <input type="text" class="text" name="partner[locations][title][]" value="{{ location.title ?? '' }}" autocomplete="off">
+                            <input type="text" class="text" name="locations[title][]" value="{{ location.title ?? '' }}" autocomplete="off">
+                            {% include "_includes/forms/errorList" with { errors: location.getErrors('title') ?? [] } %}
                         </td>
                     </tr>
                     <tr class="subform-row">
                         <th><label class="required">Address</label></th>
                         <td class="textual">
-                            <input type="text" class="text" name="partner[locations][addressLine1][]" value="{{ location.addressLine1 ?? '' }}" autocomplete="off">
+                            <input type="text" class="text" name="locations[addressLine1][]" value="{{ location.addressLine1 ?? '' }}" autocomplete="off">
+                            {% include "_includes/forms/errorList" with { errors: location.getErrors('addressLine1') ?? [] } %}
                         </td>
                     </tr>
                     <tr class="subform-row">
                         <th><label>Address Line 2</label></th>
                         <td class="textual">
-                            <input type="text" class="text" name="partner[locations][addressLine2][]" value="{{ location.addressLine2 ?? '' }}" autocomplete="off">
+                            <input type="text" class="text" name="locations[addressLine2][]" value="{{ location.addressLine2 ?? '' }}" autocomplete="off">
+                            {% include "_includes/forms/errorList" with { errors: location.getErrors('addressLine2') ?? [] } %}
                         </td>
                     </tr>
                     <tr class="subform-row">
                         <th><label class="required">City</label></th>
                         <td class="textual">
-                            <input type="text" class="text" name="partner[locations][city][]" value="{{ location.city ?? '' }}" autocomplete="off">
+                            <input type="text" class="text" name="locations[city][]" value="{{ location.city ?? '' }}" autocomplete="off">
+                            {% include "_includes/forms/errorList" with { errors: location.getErrors('city') ?? [] } %}
                         </td>
                     </tr>
                     <tr class="subform-row">
                         <th><label class="required">State</label></th>
                         <td class="textual">
-                            <input type="text" class="text" name="partner[locations][state][]" value="{{ location.state ?? '' }}" autocomplete="off">
+                            <input type="text" class="text" name="locations[state][]" value="{{ location.state ?? '' }}" autocomplete="off">
+                            {% include "_includes/forms/errorList" with { errors: location.getErrors('state') ?? [] } %}
                         </td>
                     </tr>
                     <tr class="subform-row">
                         <th><label class="required">Zip</label></th>
                         <td class="textual">
-                            <input type="text" class="text" name="partner[locations][zip][]" value="{{ location.zip ?? '' }}" autocomplete="off">
+                            <input type="text" class="text" name="locations[zip][]" value="{{ location.zip ?? '' }}" autocomplete="off">
+                            {% include "_includes/forms/errorList" with { errors: location.getErrors('zip') ?? [] } %}
                         </td>
                     </tr>
                     <tr class="subform-row">
                         <th><label class="required">Country</label></th>
                         <td class="textual">
-                            <input type="text" class="text" name="partner[locations][country][]" value="{{ location.country ?? '' }}" autocomplete="off">
+                            <input type="text" class="text" name="locations[country][]" value="{{ location.country ?? '' }}" autocomplete="off">
+                            {% include "_includes/forms/errorList" with { errors: location.getErrors('country') ?? [] } %}
                         </td>
                     </tr>
                     <tr class="subform-row">
                         <th><label>Phone</label></th>
                         <td class="textual">
-                            <input type="text" class="text" name="partner[locations][phone][]" value="{{ location.phone ?? '' }}" autocomplete="off">
+                            <input type="text" class="text" name="locations[phone][]" value="{{ location.phone ?? '' }}" autocomplete="off">
+                            {% include "_includes/forms/errorList" with { errors: location.getErrors('phone') ?? [] } %}
                         </td>
                     </tr>
                     <tr class="subform-row">
                         <th><label>Email</label></th>
                         <td class="textual">
-                            <input type="text" class="text" name="partner[locations][email][]" value="{{ location.email ?? '' }}" autocomplete="off">
+                            <input type="text" class="text" name="locations[email][]" value="{{ location.email ?? '' }}" autocomplete="off">
+                            {% include "_includes/forms/errorList" with { errors: location.getErrors('email') ?? [] } %}
                         </td>
                     </tr>
                 </tbody>
@@ -207,6 +216,7 @@
                 {% endfor %}
             </div>
             <div>
+                {% include "_includes/forms/errorList" with { errors: partner.getErrors('locations') ?? null } %}
                 <button id="add-location" class="btn">Add a Location</button>
             </div>
         </div>
