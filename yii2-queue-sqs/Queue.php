@@ -8,6 +8,7 @@
 namespace pixelandtonic\yii\queue\sqs;
 
 use Aws\Sqs\SqsClient;
+use Craft;
 use yii\base\InvalidConfigException;
 use yii\queue\serializers\JsonSerializer;
 use yii\web\Application as WebApp;
@@ -99,6 +100,18 @@ class Queue extends \yii\queue\cli\Queue
     public function handle($id, $message, $ttr, $attempt): bool
     {
         return $this->handleMessage($id, $message, $ttr, $attempt);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function handleError($id, $job, $ttr, $attempt, $error)
+    {
+        // Log the exception
+        $e = new \Exception('Error handling queue message: '.$error->getMessage(), 0, $error);
+        Craft::$app->getErrorHandler()->logException($e);
+
+        return parent::handleError($id, $job, $ttr, $attempt, $error);
     }
 
     /**

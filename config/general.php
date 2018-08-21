@@ -64,7 +64,7 @@ return [
             'plugins' => 'https://plugins.craftcms.com/',
         ],
         'defaultCookieDomain' => '.craftcms.com',
-        'baseCpUrl' => 'http://staging.id.craftcms.com/',
+        'baseCpUrl' => 'https://staging.id.craftcms.com/',
     ],
     'dev' => [
         'devMode' => true,

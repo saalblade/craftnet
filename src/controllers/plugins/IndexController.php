@@ -24,13 +24,12 @@ class IndexController extends Controller
 
     public function actionIndex()
     {
-        $criteria = [];
-        $query = Plugin::find();
-        if ($criteria) {
-            Craft::configure($query, $criteria);
-        }
-
-        $plugins = $query->all();
+        $plugins = Plugin::find()
+            ->with([
+                'icon',
+                'developer',
+            ])
+            ->all();
 
         return $this->renderTemplate('plugins/index', [
             'plugins' => $plugins,
