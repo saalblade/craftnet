@@ -98,19 +98,20 @@ class m180724_195341_create_partners_tables extends Migration
 
         $this->addForeignKey('craftnet_partnerlocations_partnerId_fk', 'craftnet_partnerlocations', ['partnerId'], 'craftnet_partners', ['id'], 'CASCADE');
 
-        // Sites ---------------------------------------------------------------
+        // Projects ------------------------------------------------------------
 
-        $this->createTable('craftnet_partnersites', [
+        $this->createTable('craftnet_partnerprojects', [
             'id' => $this->primaryKey(),
             'partnerId' => $this->integer()->notNull(),
             'url' => $this->integer()->notNull(),
             'screenshotId' => $this->integer(),
+            'public' => $this->boolean(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
         ]);
 
-        $this->addForeignKey('craftnet_partnersites_partnerId_fk', 'craftnet_partnersites', ['partnerId'], 'craftnet_partners', ['id'], 'CASCADE');
+        $this->addForeignKey('craftnet_partnerprojects_partnerId_fk', 'craftnet_partnerprojects', ['partnerId'], 'craftnet_partners', ['id'], 'CASCADE');
 
     }
 
@@ -128,7 +129,7 @@ class m180724_195341_create_partners_tables extends Migration
         $this->dropTable('craftnet_partners_partnercapabilities');
         $this->dropTable('craftnet_partnercapabilities');
         $this->dropTable('craftnet_partnerlocations');
-        $this->dropTable('craftnet_partnersites');
+        $this->dropTable('craftnet_partnerprojects');
         $this->dropTable('craftnet_partners');
     }
 }
