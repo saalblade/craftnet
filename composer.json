@@ -28,16 +28,6 @@
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/craftcms/commerce"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/craftcms/commerce-stripe"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "craftnet\\": "src/",
