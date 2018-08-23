@@ -6,6 +6,7 @@
                 <th>License Key</th>
                 <th>Edition</th>
                 <th>Domain</th>
+                <th>Notes</th>
                 <th>Updates Until</th>
                 <th>Auto Renew</th>
             </tr>
@@ -26,6 +27,7 @@
                     </td>
                     <td>{{ license.edition }}</td>
                     <td>{{ license.domain }}</td>
+                    <td>{{ license.notes }}</td>
                     <td>
                         <template v-if="license.expirable && license.expiresOn">
                             <template v-if="!license.expired">

@@ -5,6 +5,7 @@
             <tr>
                 <th>License Key</th>
                 <th>Plugin</th>
+                <th v-if="!excludeNotesColumn">Notes</th>
                 <th v-if="!excludeCmsLicenseColumn">CMS License</th>
                 <th>Updates Until</th>
                 <th>Auto Renew</th>
@@ -24,6 +25,7 @@
                             {{ license.plugin.name }}
                         </template>
                     </td>
+                    <td v-if="!excludeNotesColumn">{{ license.notes }}</td>
                     <td v-if="!excludeCmsLicenseColumn">
                         <template v-if="license.cmsLicense">
                             <code>
@@ -93,7 +95,7 @@
             }
         },
 
-        props: ['licenses', 'excludeCmsLicenseColumn', 'autoRenewSwitch'],
+        props: ['licenses', 'excludeCmsLicenseColumn', 'excludeNotesColumn', 'autoRenewSwitch'],
 
         components: {
             ...CraftComponents,

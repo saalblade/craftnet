@@ -22,9 +22,8 @@
 						{% for plugin in plugins %}
 							<tr>
 								<td>
-									{% if plugin.iconId %}
-										{% set icon = craft.assets({id: plugin.iconId, site: 'api'}).one() %}
-										<img src="{{ icon.getUrl() }}" class="plugin-icon" />
+									{% if plugin.icon %}
+										<img src="{{ plugin.icon.getUrl() }}" class="plugin-icon" />
 									{% else %}
 										<img src="/craftidresources/dist/images/default-plugin.svg" class="plugin-icon">
 									{% endif %}

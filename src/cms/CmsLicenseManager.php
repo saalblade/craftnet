@@ -5,7 +5,6 @@ namespace craftnet\cms;
 use Craft;
 use craft\db\Query;
 use craft\elements\User;
-use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
@@ -441,7 +440,7 @@ class CmsLicenseManager extends Component
      * Transforms licenses for the given owner.
      *
      * @param array $results
-     * @param User  $owner
+     * @param User $owner
      *
      * @return array
      */
@@ -460,7 +459,7 @@ class CmsLicenseManager extends Component
      * Transforms a license for the given owner.
      *
      * @param CmsLicense $result
-     * @param User       $owner
+     * @param User $owner
      *
      * @return array
      */

@@ -95,7 +95,7 @@ class PluginStoreController extends BaseApiController
             'id' => 'recently-added',
             'title' => 'Recently Added',
             'plugins' => $recents,
-            'limit' => 3,
+            'limit' => 6,
         ];
 
         $entries = Entry::find()

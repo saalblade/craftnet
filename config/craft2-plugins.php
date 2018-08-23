@@ -28,10 +28,6 @@ return [
     'Adminbar' => [
         'handle' => 'admin-bar',
     ],
-    'AdWizard' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
     'Algolia' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Scout](https://github.com/rias500/craft-scout) could be used instead'
@@ -52,10 +48,6 @@ return [
     'BusinessLogic' => [
         'statusColor' => 'red',
         'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
-    ],
-    'CacheFlag' => [
-        'statusColor' => 'orange',
-        'status' => 'Coming soon'
     ],
     'Calendars' => [
         'statusColor' => 'orange',
@@ -78,10 +70,6 @@ return [
     ],
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
-    ],
-    'DigitalDownload' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
     ],
     'DuplicateUserDashboard' => [
         'statusColor' => 'orange',
@@ -118,7 +106,7 @@ return [
     ],
     'Import' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Feed Me](https://github.com/verbb/feed-me) could be used instead'
+        'status' => 'Not available yet, but [Feed Me](https://github.com/verbb/feed-me) or [Sprout Import](https://github.com/barrelstrength/craft-sprout-import) could be used instead'
     ],
     'Inflect' => [
         'statusColor' => 'orange',
@@ -128,11 +116,7 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
     ],
-    'LanguageLink' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
-    'Link Vault' => [
+    'LinkVault' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
     ],
@@ -172,6 +156,9 @@ return [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
     ],
+    'PimpMyMatrix' => [
+        'handle' => 'spoon',
+    ],
     'Printmaker' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development.'
@@ -198,7 +185,7 @@ return [
     ],
     'Retour' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Redirect Manager](https://github.com/Dolphiq/craft3-plugin-redirect) could be used instead'
+        'status' => 'Not available yet, but [Redirect Manager](https://github.com/Dolphiq/craft3-plugin-redirect) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) could be used instead'
     ],
     'Scraper' => [
         'statusColor' => 'orange',
@@ -222,11 +209,19 @@ return [
     'Sitemap' => [
         'handle' => 'sitemap-tmp',
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) could be used instead',
+        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) could be used instead',
     ],
-    'SproutFields' => [
+    'SproutInvisibleCaptcha' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [NSM Fields](https://github.com/newism/craft3-fields) could be used instead'
+        'status' => 'Features have been rolled into Sprout Forms which is available in the Plugin Store. Invisible Captcha will no longer be a standalone plugin in Craft 3.'
+    ],
+    'SproutEmail' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
+    ],
+    'SproutSeo' => [
+        'statusColor' => 'orange',
+        'status' => 'Currently in development'
     ],
     'SquareBitMaps' => [
         'statusColor' => 'orange',
@@ -234,10 +229,6 @@ return [
     ],
     'SuperSort' => [
         'handle' => 'supersort',
-    ],
-    'Upvote' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
     ],
     'Widont' => [
         'handle' => 'widontextension',

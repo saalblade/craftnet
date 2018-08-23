@@ -3,12 +3,8 @@
 namespace craftnet\controllers\api\v1;
 
 use Craft;
-use craftnet\cms\CmsLicense;
-use craftnet\cms\CmsLicenseManager;
 use craftnet\controllers\api\BaseApiController;
-use craftnet\helpers\KeyHelper;
 use yii\base\Exception;
-use yii\validators\EmailValidator;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 

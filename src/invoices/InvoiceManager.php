@@ -2,10 +2,10 @@
 
 namespace craftnet\invoices;
 
-use craftnet\Module;
 use craft\commerce\elements\Order;
 use craft\commerce\models\Customer;
 use craft\helpers\UrlHelper;
+use craftnet\Module;
 use yii\base\Component;
 
 class InvoiceManager extends Component

@@ -100,9 +100,13 @@ class PackageManager extends Component
         foreach ($constraints as $constraint) {
             $satisfied = false;
             foreach ($versions as $version) {
-                if (Semver::satisfies($version, $constraint)) {
-                    $satisfied = true;
-                    break;
+                try {
+                    if (Semver::satisfies($version, $constraint)) {
+                        $satisfied = true;
+                        break;
+                    }
+                } catch (\UnexpectedValueException $e) {
+                    // empty
                 }
             }
             if (!$satisfied) {
@@ -640,10 +644,11 @@ class PackageManager extends Component
      * @param bool $force Whether to update package releases even if their SHA hasn't changed
      * @param bool $queue Whether to queue the update
      * @param bool $dumpJson Whether to update the JSON if anything changed
-     *
+     * @return int The total number of added/removed package releases
      * @throws MissingTokenException if the package is a plugin, but we don't have a VCS token for it
+     * @throws \Throwable if reasons
      */
-    public function updatePackage(string $name, bool $force = false, bool $queue = false, bool $dumpJson = false)
+    public function updatePackage(string $name, bool $force = false, bool $queue = false, bool $dumpJson = false): int
     {
         if ($queue) {
             Craft::$app->getQueue()->push(new UpdatePackage([
@@ -651,190 +656,209 @@ class PackageManager extends Component
                 'force' => $force,
                 'dumpJson' => $dumpJson,
             ]));
-            return;
+            return 0;
         }
 
-        $package = $this->getPackage($name);
-        $vcs = $package->getVcs();
-        $plugin = $package->getPlugin();
-        $db = Craft::$app->getDb();
-        $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
-
-        if ($isConsole) {
-            Console::output("Updating version data for {$name} ...");
-        }
-
-        // Get all of the already known versions (including invalid releases)
-        $storedVersionInfo = (new Query())
-            ->select(['id', 'version', 'normalizedVersion', 'sha'])
-            ->from(['craftnet_packageversions'])
-            ->where(['packageId' => $package->id])
-            ->indexBy('normalizedVersion')
-            ->all();
-
-        // Get the versions from the VCS
-        $vcsVersionInfo = [];
-        foreach ($vcs->getVersions() as $version => $sha) {
-            // Don't include development versions, and versions that aren't actually required by any managed packages
-            if (($stability = VersionParser::parseStability($version)) === 'dev') {
-                if ($isConsole) {
-                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - dev stability", [Console::FG_RED]));
-                }
-                continue;
-            }
-
-            // Don't include duplicate versions
-            try {
-                $normalizedVersion = (new VersionParser())->normalize($version);
-            } catch (\UnexpectedValueException $e) {
-                if ($isConsole) {
-                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - invalid version", [Console::FG_RED]));
-                }
-                continue;
-            }
-
-            if (isset($vcsVersionInfo[$normalizedVersion])) {
-                if ($isConsole) {
-                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - duplicate version", [Console::FG_RED]));
-                }
-                continue;
-            }
-
-            if (!$package->managed && !$this->isDependencyVersionRequired($package->name, $version)) {
-                if ($isConsole) {
-                    Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - not required", [Console::FG_RED]));
-                }
-                continue;
-            }
-
-            // It's a keeper
-            $vcsVersionInfo[$normalizedVersion] = [
-                'version' => $version,
-                'stability' => $stability,
-                'sha' => $sha,
-            ];
-        }
-
-        // See which already-stored versions have been deleted/updated
-        $normalizedStoredVersions = array_keys($storedVersionInfo);
-        $normalizedVcsVersions = array_keys($vcsVersionInfo);
-
-        $deletedVersions = array_diff($normalizedStoredVersions, $normalizedVcsVersions);
-        $newVersions = array_diff($normalizedVcsVersions, $normalizedStoredVersions);
-
-        $updatedVersions = [];
-        foreach (array_intersect($normalizedStoredVersions, $normalizedVcsVersions) as $version) {
-            if ($force || $storedVersionInfo[$version]['sha'] !== $vcsVersionInfo[$version]['sha']) {
-                $updatedVersions[] = $version;
-            }
-        }
-
-        if ($isConsole) {
-            Console::stdout(Console::ansiFormat('- new: ', [Console::FG_YELLOW]));
-            Console::output(count($newVersions));
-            Console::stdout(Console::ansiFormat('- updated: ', [Console::FG_YELLOW]));
-            Console::output(count($updatedVersions));
-            Console::stdout(Console::ansiFormat('- deleted: ', [Console::FG_YELLOW]));
-            Console::output(count($deletedVersions));
-        }
-
-        if (!empty($deletedVersions) || !empty($updatedVersions)) {
-            if ($isConsole) {
-                Console::stdout('Deleting old versions ... ');
-            }
-
-            $versionIdsToDelete = [];
-            foreach (array_merge($deletedVersions, $updatedVersions) as $version) {
-                $versionIdsToDelete[] = $storedVersionInfo[$version]['id'];
-            }
-
-            $db->createCommand()
-                ->delete('craftnet_packageversions', ['id' => $versionIdsToDelete])
-                ->execute();
+        // Start a transaction
+        $transaction = Craft::$app->getDb()->beginTransaction();
+        try {
+            $package = $this->getPackage($name);
+            $vcs = $package->getVcs();
+            $plugin = $package->getPlugin();
+            $db = Craft::$app->getDb();
+            $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
 
             if ($isConsole) {
-                Console::output('done.');
-            }
-        }
-
-        // We can treat "updated" versions as "new" now.
-        $newVersions = array_merge($updatedVersions, $newVersions);
-
-        // Bail early if there's nothing new
-        if (!empty($newVersions)) {
-            if ($isConsole) {
-                Console::output('Processing new versions ...');
+                Console::output("Updating version data for {$name} ...");
             }
 
-            // Sort by newest => oldest
-            $this->_sortVersions($newVersions, SORT_DESC);
+            // Get all of the already known versions (including invalid releases)
+            $storedVersionInfo = (new Query())
+                ->select(['id', 'version', 'normalizedVersion', 'sha'])
+                ->from(['craftnet_packageversions'])
+                ->where(['packageId' => $package->id])
+                ->indexBy('normalizedVersion')
+                ->all();
 
-            $packageDeps = [];
-            $latestVersion = null;
-            $foundStable = false;
-
-            foreach ($newVersions as $normalizedVersion) {
-                $version = $vcsVersionInfo[$normalizedVersion]['version'];
-                $stability = $vcsVersionInfo[$normalizedVersion]['stability'];
-                $sha = $vcsVersionInfo[$normalizedVersion]['sha'];
-
-                if ($isConsole) {
-                    Console::stdout(Console::ansiFormat("- processing {$version} ({$sha}) ... ", [Console::FG_YELLOW]));
+            // Get the versions from the VCS
+            $vcsVersionInfo = [];
+            foreach ($vcs->getVersions() as $version => $sha) {
+                // Don't include development versions, and versions that aren't actually required by any managed packages
+                if (($stability = VersionParser::parseStability($version)) === 'dev') {
+                    if ($isConsole) {
+                        Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - dev stability", [Console::FG_RED]));
+                    }
+                    continue;
                 }
 
-                $release = new PackageRelease([
-                    'packageId' => $package->id,
+                // Don't include duplicate versions
+                try {
+                    $normalizedVersion = (new VersionParser())->normalize($version);
+                } catch (\UnexpectedValueException $e) {
+                    if ($isConsole) {
+                        Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - invalid version", [Console::FG_RED]));
+                    }
+                    continue;
+                }
+
+                if (isset($vcsVersionInfo[$normalizedVersion])) {
+                    if ($isConsole) {
+                        Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - duplicate version", [Console::FG_RED]));
+                    }
+                    continue;
+                }
+
+                if (!$package->managed && !$this->isDependencyVersionRequired($package->name, $version)) {
+                    if ($isConsole) {
+                        Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - not required", [Console::FG_RED]));
+                    }
+                    continue;
+                }
+
+                // It's a keeper
+                $vcsVersionInfo[$normalizedVersion] = [
                     'version' => $version,
+                    'stability' => $stability,
                     'sha' => $sha,
-                ]);
+                ];
+            }
 
-                $vcs->populateRelease($release);
+            // See which already-stored versions have been deleted/updated
+            $normalizedStoredVersions = array_keys($storedVersionInfo);
+            $normalizedVcsVersions = array_keys($vcsVersionInfo);
 
-                if ($isConsole && !$release->valid) {
-                    Console::stdout(Console::ansiFormat('invalid'.($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
-                    Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
+            $deletedVersions = array_diff($normalizedStoredVersions, $normalizedVcsVersions);
+            $newVersions = array_diff($normalizedVcsVersions, $normalizedStoredVersions);
+
+            $updatedVersions = [];
+            foreach (array_intersect($normalizedStoredVersions, $normalizedVcsVersions) as $version) {
+                if ($force || $storedVersionInfo[$version]['sha'] !== $vcsVersionInfo[$version]['sha']) {
+                    $updatedVersions[] = $version;
+                }
+            }
+
+            if ($isConsole) {
+                Console::stdout(Console::ansiFormat('- new: ', [Console::FG_YELLOW]));
+                Console::output(count($newVersions));
+                Console::stdout(Console::ansiFormat('- updated: ', [Console::FG_YELLOW]));
+                Console::output(count($updatedVersions));
+                Console::stdout(Console::ansiFormat('- deleted: ', [Console::FG_YELLOW]));
+                Console::output(count($deletedVersions));
+            }
+
+            if (!empty($deletedVersions) || !empty($updatedVersions)) {
+                if ($isConsole) {
+                    Console::stdout('Deleting old versions ... ');
                 }
 
-                $this->savePackageRelease($release);
+                $versionIdsToDelete = [];
+                foreach (array_merge($deletedVersions, $updatedVersions) as $version) {
+                    $versionIdsToDelete[] = $storedVersionInfo[$version]['id'];
+                }
 
-                if (!empty($release->require)) {
-                    $depValues = [];
-                    foreach ($release->require as $depName => $constraints) {
-                        $depValues[] = [$package->id, $release->id, $depName, $constraints];
-                        if (
-                            $depName !== '__root__' &&
-                            $depName !== 'composer-plugin-api' &&
-                            !preg_match(PlatformRepository::PLATFORM_PACKAGE_REGEX, $depName) &&
-                            strpos($depName, 'bower-asset/') !== 0 &&
-                            strpos($depName, 'npm-asset/') !== 0
-                        ) {
-                            $packageDeps[$depName][$constraints] = true;
+                $db->createCommand()
+                    ->delete('craftnet_packageversions', ['id' => $versionIdsToDelete])
+                    ->execute();
+
+                if ($isConsole) {
+                    Console::output('done.');
+                }
+            }
+
+            // We can treat "updated" versions as "new" now.
+            $newVersions = array_merge($updatedVersions, $newVersions);
+            $latestVersion = null;
+            $packageDeps = [];
+
+            // Bail early if there's nothing new
+            if (!empty($newVersions)) {
+                if ($isConsole) {
+                    Console::output('Processing new versions ...');
+                }
+
+                // Sort by newest => oldest
+                $this->_sortVersions($newVersions, SORT_DESC);
+
+                $foundStable = false;
+
+                foreach ($newVersions as $normalizedVersion) {
+                    $version = $vcsVersionInfo[$normalizedVersion]['version'];
+                    $stability = $vcsVersionInfo[$normalizedVersion]['stability'];
+                    $sha = $vcsVersionInfo[$normalizedVersion]['sha'];
+
+                    if ($isConsole) {
+                        Console::stdout(Console::ansiFormat("- processing {$version} ({$sha}) ... ", [Console::FG_YELLOW]));
+                    }
+
+                    $release = new PackageRelease([
+                        'packageId' => $package->id,
+                        'version' => $version,
+                        'sha' => $sha,
+                    ]);
+
+                    $vcs->populateRelease($release);
+
+                    if ($isConsole && !$release->valid) {
+                        Console::stdout(Console::ansiFormat('invalid'.($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
+                        Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
+                    }
+
+                    $this->savePackageRelease($release);
+
+                    if (!empty($release->require)) {
+                        $depValues = [];
+                        foreach ($release->require as $depName => $constraints) {
+                            if (trim($constraints) === 'self.version') {
+                                $constraints = $release->version;
+                            }
+
+                            $depValues[] = [$package->id, $release->id, $depName, $constraints];
+
+                            if (
+                                $depName !== '__root__' &&
+                                $depName !== 'composer-plugin-api' &&
+                                !preg_match(PlatformRepository::PLATFORM_PACKAGE_REGEX, $depName) &&
+                                strpos($depName, 'bower-asset/') !== 0 &&
+                                strpos($depName, 'npm-asset/') !== 0
+                            ) {
+                                $packageDeps[$depName][$constraints] = true;
+                            }
+                        }
+                        $db->createCommand()
+                            ->batchInsert('craftnet_packagedeps', ['packageId', 'versionId', 'name', 'constraints'], $depValues)
+                            ->execute();
+                    }
+
+                    if ($release->valid) {
+                        if (!$foundStable && $stability === 'stable') {
+                            $latestVersion = $version;
+                            $foundStable = true;
+                        } else if ($latestVersion === null) {
+                            $latestVersion = $version;
                         }
                     }
-                    $db->createCommand()
-                        ->batchInsert('craftnet_packagedeps', ['packageId', 'versionId', 'name', 'constraints'], $depValues)
-                        ->execute();
-                }
 
-                if ($release->valid) {
-                    if (!$foundStable && $stability === 'stable') {
-                        $latestVersion = $version;
-                        $foundStable = true;
-                    } else if ($latestVersion === null) {
-                        $latestVersion = $version;
+                    if ($isConsole) {
+                        Console::output(Console::ansiFormat('done.', [Console::FG_YELLOW]));
                     }
                 }
 
                 if ($isConsole) {
-                    Console::output(Console::ansiFormat('done.', [Console::FG_YELLOW]));
+                    Console::output('Done processing '.count($newVersions).' versions.');
+                }
+            } else {
+                if ($isConsole) {
+                    Console::output('No new versions to process.');
                 }
             }
 
-            // Ignore the new latest version if we already have another one that's better
-            if ($package->latestVersion !== null && !in_array($package->latestVersion, $deletedVersions, true)) {
+            // Does the package already have a latestVersion in the DB, which wasn't just deleted?
+            if (!$force && $package->latestVersion !== null && !in_array($package->latestVersion, $deletedVersions, true)) {
+                // If we couldn't find a new latestVersion, then don't change it
                 if ($latestVersion === null) {
                     $latestVersion = $package->latestVersion;
                 } else {
+                    // Otherwise make sure that the new latestVersion is greater than the stored one
                     $vp = new VersionParser();
                     if (Comparator::greaterThan($vp->normalize($package->latestVersion), $vp->normalize($latestVersion))) {
                         $latestVersion = $package->latestVersion;
@@ -853,6 +877,16 @@ class PackageManager extends Component
                     ->update('craftnet_plugins', ['latestVersion' => $latestVersion], ['id' => $plugin->id])
                     ->execute();
             }
+
+            if ($isConsole) {
+                if ($latestVersion !== null) {
+                    Console::output("Latest version for {$name} is now {$latestVersion}.");
+                } else {
+                    Console::output("No latest version known for {$name}.");
+                }
+            }
+
+            $totalAffected = count($deletedVersions) + count($newVersions);
 
             // For each dependency, see if we already have a version that satisfies the conditions
             if (!empty($packageDeps)) {
@@ -881,31 +915,28 @@ class PackageManager extends Component
                 }
 
                 if (!empty($depsToUpdate)) {
+                    if ($isConsole) {
+                        Console::output('Updating missing dependencies ...');
+                    }
+
                     foreach ($depsToUpdate as $depName) {
-                        $this->updatePackage($depName, $force, true);
-                        if ($isConsole) {
-                            Console::output("{$depName} is queued to be updated.");
-                        }
+                        $totalAffected += $this->updatePackage($depName, $force);
                     }
                 }
             }
 
-            if ($isConsole) {
-                Console::output('Done processing '.count($newVersions).' versions.');
+            if ($dumpJson && $totalAffected !== 0) {
+                Module::getInstance()->getJsonDumper()->dump();
             }
-        } else {
-            if ($isConsole) {
-                Console::output('No new versions to process.');
-            }
+
+            $transaction->commit();
+        }
+        catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
         }
 
-        if ($dumpJson && (!empty($deletedVersions) || !empty($newVersions))) {
-            Module::getInstance()->getJsonDumper()->dump(true);
-
-            if ($isConsole) {
-                Console::output('The Composer JSON is queued to be dumped.');
-            }
-        }
+        return $totalAffected;
     }
 
     /**

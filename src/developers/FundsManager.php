@@ -22,7 +22,7 @@ use yii\db\Expression;
 
 class FundsManager extends BaseObject
 {
-    const TXN_TYPE_PLUGIN_PAYMENT =  'plugin_payment';
+    const TXN_TYPE_PLUGIN_PAYMENT = 'plugin_payment';
     const TXN_TYPE_STRIPE_TRANSFER = 'stripe_transfer';
 
     /**
