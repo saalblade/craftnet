@@ -8,6 +8,7 @@ use Craft;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
+use craft\helpers\HtmlPurifier;
 use craft\models\Update;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\errors\ValidationException;
@@ -236,14 +237,11 @@ class UpdatesController extends BaseApiController
      */
     private function _parseReleaseNotes(string $notes): string
     {
-        // Encode any HTML within the notes
-        $notes = Html::encode($notes);
-
-        // Except for `> blockquotes`
-        $notes = preg_replace('/^(\s*)&gt;/m', '$1>', $notes);
-
         // Parse as Markdown
         $notes = Markdown::process($notes, 'gfm');
+
+        // Purify HTML
+        $notes = HtmlPurifier::process($notes);
 
         // Notes/tips
         $notes = preg_replace('/<blockquote><p>\{(note|tip|warning)\}/', '<blockquote class="note $1"><p>', $notes);
