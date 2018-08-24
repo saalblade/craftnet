@@ -1,36 +1,17 @@
 {% extends "_layouts/base" %}
 
-{% do view.registerJsFile("//use.fontawesome.com/releases/v5.0.13/js/all.js") %}
-{% do view.registerJsFile(mix('/js/main.js', '/pluginsresources/dist')) %}
+{% do view.registerCssFile("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css") %}
+{% do view.registerCssFile("//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css") %}
+{% do view.registerCssFile(mix('css/plugins.css')) %}
 
-{% set config = craft.app.config.getConfigFromFile('craftid') %}
-
-{% js at head %}
-	window.craftIdUrl = "{{ config.craftIdUrl }}";
-	window.currentUserId = {{ currentUser is defined and currentUser and currentUser.id ? currentUser.id : 'null'  }};
-	window.defaultPluginSvg = "{{ craft.app.assetManager.publishedUrl('@app/web/assets/pluginstore/dist/', true, 'images/default-plugin.svg')  }}";
-
-	window.Craft = {
-		actionUrl:             "{{ actionUrl()|e('js') }}",
-		username:              {{ currentUser is defined and currentUser ? ('"'~currentUser.username|e('js')~'"')|raw : 'null' }},
-		remainingSessionTime:  {{ craft.app.user.getRemainingSessionTime() }},
-		maxUploadSize:         {{ craft.io.getMaxUploadSize() }},
-
-		{% if craft.app.config.general.enableCsrfProtection %}
-			csrfTokenValue:        "{{ craft.app.request.getCsrfToken()|e('js') }}",
-			csrfTokenName:         "{{ craft.app.config.general.csrfTokenName|e('js') }}",
-		{% endif %}
-	};
-{% endjs %}
+{% set bodyClass = 'bg-light' %}
 
 {% block body %}
 
 	<div id="site">
-		<app></app>
-{#
-        {% block content %}
+		{% block content %}
 			{{ content is defined ? content }}
-		{% endblock %}#}
+		{% endblock %}
 	</div>
 
 {% endblock %}

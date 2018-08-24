@@ -3,8 +3,8 @@
 {#{% do view.registerCssFile("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css") %}#}
 {% do view.registerJsFile("//use.fontawesome.com/releases/v5.0.4/js/all.js") %}
 {% do view.registerJsFile("//js.stripe.com/v3/") %}
-{% do view.registerJsFile(mix('/js/app.js', '/craftidresources/dist')) %}
-{% do view.registerCssFile(mix('/css/app.css', '/craftidresources/dist')) %}
+{% do view.registerJsFile(mix('js/app.js')) %}
+{% do view.registerCssFile(mix('css/app.css')) %}
 
 {% set config = craft.app.config.getConfigFromFile('craftid') %}
 

@@ -3,7 +3,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.0.0",
-    "craftcms/cms": "^3.0.0",
+    "craftcms/cms": "dev-develop#22d435c83148c779532ec487c6e2832af4dec933 as 3.0.16",
     "roave/security-advisories": "dev-master",
     "justinrainbow/json-schema": "^5.2",
     "yiisoft/yii2-redis": "^2.0.6",
@@ -16,12 +16,14 @@
     "stripe/stripe-php": "^6.1",
     "stevenmaguire/oauth2-bitbucket": "^2.0",
     "flipboxfactory/craft-postmark": "^1.0.0-rc.1",
-    "craftcms/commerce": "dev-develop#8169d3e26036f5ae2da72432a308e99904601a4e as 2.0.0-beta.3",
+    "craftcms/commerce": "dev-develop#4da6aabbab920b1964ecfaf712f0cd91d59a8f7a as 2.0.0-beta.6",
     "craftcms/commerce-stripe": "^1.0.0",
     "layershifter/tld-extract": "^1.2",
     "ddeboer/vatin": "^2.1",
     "moccalotto/eu": "^0.3.0",
-    "tecnickcom/tcpdf": "^6.2"
+    "tecnickcom/tcpdf": "^6.2",
+    "misterbk/mix": "^1.5",
+    "spacedealer/yii2-loggly": "^0.2.0"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
@@ -45,7 +47,7 @@
   "config": {
     "optimize-autoloader": true,
     "platform": {
-      "php": "7.0.21"
+      "php": "7.1.17"
     }
   }
 }

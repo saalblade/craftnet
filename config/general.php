@@ -16,6 +16,7 @@ return [
         'csrfTokenName' => 'CRAFTCOM_CSRF_TOKEN',
         'phpSessionName' => 'CraftComSessionId',
         'generateTransformsBeforePageLoad' => true,
+        'backupOnUpdate' => false,
         'backupCommand' => 'PGPASSWORD="{password}" ' .
             'pg_dump ' .
             '--dbname={database} '.
@@ -63,7 +64,7 @@ return [
             'plugins' => 'https://plugins.craftcms.com/',
         ],
         'defaultCookieDomain' => '.craftcms.com',
-        'baseCpUrl' => 'http://staging.id.craftcms.com/',
+        'baseCpUrl' => 'https://staging.id.craftcms.com/',
     ],
     'dev' => [
         'devMode' => true,

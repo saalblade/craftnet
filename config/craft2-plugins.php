@@ -28,10 +28,6 @@ return [
     'Adminbar' => [
         'handle' => 'admin-bar',
     ],
-    'AdWizard' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
     'Algolia' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Scout](https://github.com/rias500/craft-scout) could be used instead'
@@ -52,10 +48,6 @@ return [
     'BusinessLogic' => [
         'statusColor' => 'red',
         'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
-    ],
-    'CacheFlag' => [
-        'statusColor' => 'orange',
-        'status' => 'Coming soon'
     ],
     'Calendars' => [
         'statusColor' => 'orange',
@@ -78,10 +70,6 @@ return [
     ],
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
-    ],
-    'DigitalDownload' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
     ],
     'DuplicateUserDashboard' => [
         'statusColor' => 'orange',
@@ -128,10 +116,6 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
     ],
-    'LanguageLink' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
     'LinkVault' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
@@ -171,6 +155,9 @@ return [
     'PhpTweak' => [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
+    ],
+    'PimpMyMatrix' => [
+        'handle' => 'spoon',
     ],
     'Printmaker' => [
         'statusColor' => 'orange',
@@ -242,10 +229,6 @@ return [
     ],
     'SuperSort' => [
         'handle' => 'supersort',
-    ],
-    'Upvote' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
     ],
     'Widont' => [
         'handle' => 'widontextension',

@@ -13,6 +13,7 @@ use craft\web\Controller;
 use craftnet\cms\CmsLicense;
 use craftnet\cms\CmsLicenseManager;
 use craftnet\developers\UserBehavior;
+use craftnet\errors\ExpiredTokenException;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\errors\ValidationException;
 use craftnet\helpers\KeyHelper;
@@ -458,14 +459,48 @@ abstract class BaseApiController extends Controller
                 $logException = $e;
             }
 
+            $exceptionType = get_class($logException);
+            $exceptionMessage = $logException->getMessage();
+            $exceptionStackTrace = $logException->getTraceAsString();
+
             $db->createCommand()
                 ->insert('apilog.request_errors', [
                     'requestId' => $this->requestId,
-                    'type' => get_class($logException),
-                    'message' => $logException->getMessage(),
-                    'stackTrace' => $logException->getTraceAsString(),
+                    'type' => $exceptionType,
+                    'message' => $exceptionMessage,
+                    'stackTrace' => $exceptionStackTrace,
                 ], false)
                 ->execute();
+
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 500 && $statusCode < 600) {
+                try {
+                    $body = 'RequestId: '.$this->requestId.PHP_EOL.PHP_EOL.
+                        'Type: '.$exceptionType.PHP_EOL.PHP_EOL.
+                        'Message: '.$exceptionMessage.PHP_EOL.PHP_EOL.
+                        'Stack Trace: '.$exceptionStackTrace.PHP_EOL.PHP_EOL.
+                        'Method: '.$request->getMethod().PHP_EOL.PHP_EOL.
+                        'URI: '.$request->getUrl().PHP_EOL.PHP_EOL.
+                        'IP: '.$request->getUserIP().PHP_EOL.PHP_EOL.
+                        'Action: '.$this->getUniqueId().'/'.$id.PHP_EOL.PHP_EOL.
+                        'Body: '.$request->getRawBody().PHP_EOL.PHP_EOL.
+                        'System: '.$requestHeaders->get('X-Craft-System').PHP_EOL.PHP_EOL.
+                        'Platform: '.$requestHeaders->get('X-Craft-Platform').PHP_EOL.PHP_EOL.
+                        'Host: '.$requestHeaders->get('X-Craft-Host').PHP_EOL.PHP_EOL.
+                        'User Email: '.$requestHeaders->get('X-Craft-User-Email').PHP_EOL.PHP_EOL.
+                        'User IP: '.$requestHeaders->get('X-Craft-User-Ip').PHP_EOL.PHP_EOL.
+                        'Response Code: '.$response->getStatusCode().PHP_EOL.PHP_EOL;
+
+                    Craft::$app->getMailer()->compose()
+                        ->setSubject('Craftnet API Error')
+                        ->setTextBody($body)
+                        ->setTo(explode(',', getenv('API_ERROR_RECIPIENTS')))
+                        ->send();
+                } catch (\Exception $e) {
+                    // Just log and move on.
+                    Craft::error('There was a problem sending the API error email: '.$e->getMessage(), __METHOD__);
+                }
+            }
 
             // assemble and return the response
             $data = [
@@ -645,6 +680,8 @@ abstract class BaseApiController extends Controller
             ) {
                 return $user;
             }
+        } catch (ExpiredTokenException $e) {
+            throw new BadRequestHttpException($e->getMessage());
         } catch (\InvalidArgumentException $e) {
         }
 
