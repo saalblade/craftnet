@@ -3,6 +3,7 @@
 namespace craftnet\oauthserver\services;
 
 use Craft;
+use craftnet\errors\ExpiredTokenException;
 use craftnet\oauthserver\models\AccessToken;
 use craftnet\oauthserver\Module;
 use craftnet\oauthserver\records\AccessToken as AccessTokenRecord;
@@ -18,7 +19,7 @@ class AccessTokens extends Component
 
     /**
      * @return AccessToken|null
-     * @throws \Exception
+     * @throws ExpiredTokenException
      */
     public function getAccessTokenFromRequest($request = null)
     {
@@ -36,7 +37,7 @@ class AccessTokens extends Component
         $token = Module::getInstance()->getOauth()->parseJwt($jwt);
 
         if ($token->isExpired()) {
-            throw new \Exception("Token has expired.");
+            throw new ExpiredTokenException();
         }
 
         $tokenClaims = $token->getClaims();
