@@ -1,0 +1,8 @@
+.subform { padding: 10px; }
+.subform + .subform { margin-top: 20px; }
+.subform-controls { text-align: right !important; }
+.subform tbody { padding: 5px 10px; }
+.subform td { padding: 5px 0; }
+.subform .text { width: 100%; }
+.subforms-wrap .btn.red { color: red; }
+.subform-add { margin: 20px 0; }

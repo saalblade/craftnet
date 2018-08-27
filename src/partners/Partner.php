@@ -7,6 +7,7 @@ use craft\base\Element;
 use craft\elements\actions\SetStatus;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\UrlHelper;
+use DateTime;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
@@ -173,6 +174,11 @@ class Partner extends Element
      */
     private $_locations = null;
 
+    /**
+     * @var array
+     */
+    private $_projects = null;
+
     // Public Methods
     // =========================================================================
 
@@ -285,6 +291,42 @@ class Partner extends Element
                 )
                 ->execute();
         }
+
+        // Projects
+
+        $savedIds = [];
+        foreach($this->_projects as $project) {
+            $project->partnerId = $this->id;
+
+            if (!$project->id) {
+                $data = $project->getAttributes(null, ['id', 'dateCreated', 'dateUpdated', 'uid']);
+                $db->createCommand()
+                    ->insert('craftnet_partnerprojects', $data)
+                    ->execute();
+
+                $savedIds[] = (int) $db->getLastInsertID();
+            } else {
+                $data = $project->getAttributes(null, ['dateCreated', 'dateUpdated', 'uid']);
+                $db->createCommand()
+                    ->update('craftnet_partnerprojects', $data, 'id=:id', [':id' => $data['id']], true)
+                    ->execute();
+
+                $savedIds[] = $project->id;
+            }
+        }
+
+        if (count($savedIds) !== 0) {
+            $db->createCommand()
+                ->delete(
+                    'craftnet_partnerprojects',
+                    [
+                        'AND',
+                        ['partnerId' => $this->id],
+                        ['not in', 'id', $savedIds],
+                    ]
+                )
+                ->execute();
+        }
     }
 
     /**
@@ -301,6 +343,17 @@ class Partner extends Element
 
             if (!$isValid && !$this->hasErrors('locations')) {
                 $this->addError('locations', 'Please fix location errors');
+            }
+        }
+
+        foreach ($this->_projects as $project) {
+            // Same scenarios on Partner and ParnerLocationModel:
+            // SCENARIO_DEFAULT, SCENARIO_LIVE
+            $project->setScenario($this->getScenario());
+            $isValid = $project->validate();
+
+            if (!$isValid && !$this->hasErrors('projects')) {
+                $this->addError('projects', 'Please fix projects errors');
             }
         }
 
@@ -392,6 +445,52 @@ class Partner extends Element
     public function setLocationsFromPost($locations = [])
     {
         $this->setLocations(PartnersHelper::normalizePostArray($locations));
+    }
+
+    /**
+     * @return array
+     */
+    public function getProjects()
+    {
+        // New Partner instance
+        if ($this->id === null) {
+            $this->_projects = [];
+        }
+
+        // Existing Partner instance without projects set yet
+        if ($this->_projects === null) {
+            $result = (new PartnerProjectsQuery())
+                ->partner($this->id)
+                ->all();
+
+            $this->setProjects($result);
+        }
+
+        return $this->_projects;
+    }
+
+    /**
+     * Sets the `location` attribute to PartnerProjectModels
+     * from the given data array.
+     * @param array $projects
+     */
+    public function setProjects(array $projects)
+    {
+        $this->_projects = PartnersHelper::normalizeProjects($projects, $this);
+    }
+
+    /**
+     * @param array $projects
+     */
+    public function setProjectsFromPost($projects = [])
+    {
+        foreach ($projects as $id => &$project) {
+            if (substr($id, 0, 3) !== 'new') {
+                $project['id'] = $id;
+            }
+        }
+
+        $this->setProjects($projects);
     }
 
     /**

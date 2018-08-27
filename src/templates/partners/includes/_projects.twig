@@ -1,0 +1,74 @@
+
+{% macro projectForm(project) %}
+    {% import "_includes/forms" as forms %}
+    {% set id = project.id ?? '%new%' %}
+
+    <div id="project-{{ id }}" class="subform shadow-box">
+
+        <div class="subform-controls">
+            <button class="btn js-subform-up">&uarr;</button>
+            <button class="btn js-subform-down">&darr;</button>
+            <button class="btn js-subform-delete red">Delete</button>
+        </div>
+
+        <div class="subform-fields">
+
+            {{ forms.textField({
+                type: 'text',
+                label: 'Project URL',
+                required: true,
+                id: 'url',
+                name: 'projects[' ~ id ~ '][url]',
+                value: project.url ?? '',
+                errors: project.getErrors('url') ?? [],
+            }) }}
+
+            {{ forms.elementSelectField({
+                label: 'Screenshot',
+                id: 'screenshotId',
+                name: 'projects[' ~ id ~ '][screenshotId]',
+                required: true,
+                elementType: 'craft\\elements\\Asset',
+                criteria: {kind: 'image'},
+                limit: 1,
+                elements: [],
+                errors: project.getErrors('screenshotId') ?? [],
+            }) }}
+
+            {{ forms.lightswitchField({
+                label: 'Private',
+                instructions: project.id is not defined ? 'Save, then this lightswitch will work' : null,
+                id: 'private',
+                name: 'projects[' ~ id ~ '][private]',
+                on: project.private ?? false,
+            }) }}
+
+        </div>
+    </div>
+
+
+{% endmacro %}
+
+<div class="field">
+    <div class="heading">
+        <label>Projects</label>
+    </div>
+    <div class="subforms-wrap">
+        {# Template for adding new projects dynamically #}
+        {% import _self as self %}
+        <script class="subform-template" type="text/html">
+            {{ self.projectForm() }}
+        </script>
+
+        <div class="subforms">
+            {% for project in partner.projects | default([]) %}
+                {{ self.projectForm(project) }}
+            {% endfor %}
+        </div>
+
+        <div>
+            {% include "_includes/forms/errorList" with { errors: partner.getErrors('projects') ?? null } %}
+            <button class="btn subform-add js-subform-add">Add a Project</button>
+        </div>
+    </div>
+</div>

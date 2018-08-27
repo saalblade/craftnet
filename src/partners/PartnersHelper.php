@@ -53,7 +53,7 @@ class PartnersHelper extends Component
      * and returns an array of PartnerLocationModel instances.
      *
      * @param array $locations
-     * @return array
+     * @return PartnerLocationModel[]
      */
     public static function normalizeLocations(array $locations): array
     {
@@ -62,6 +62,29 @@ class PartnersHelper extends Component
         }, $locations);
 
         return $locations;
+    }
+
+    /**
+     * Accepts an array of project data arrays or PartnerProjectModel instances
+     * and returns an array of PartnerProjectModel instances.
+     *
+     * @param array $projects
+     * @param Partner $partner
+     * @return PartnerProjectModel[]
+     */
+    public static function normalizeProjects(array $projects, $partner): array
+    {
+        $projects = array_map(function($project) use ($partner) {
+            if (!$project instanceof PartnerProjectModel) {
+                $project = new PartnerProjectModel($project);
+            }
+
+            $project->partnerId = $partner->id;
+
+            return $project;
+        }, $projects);
+
+        return $projects;
     }
 
     /**

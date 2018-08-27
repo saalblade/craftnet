@@ -103,9 +103,9 @@ class m180724_195341_create_partners_tables extends Migration
         $this->createTable('craftnet_partnerprojects', [
             'id' => $this->primaryKey(),
             'partnerId' => $this->integer()->notNull(),
-            'url' => $this->integer()->notNull(),
+            'url' => $this->string(),
             'screenshotId' => $this->integer(),
-            'public' => $this->boolean(),
+            'private' => $this->boolean(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
