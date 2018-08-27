@@ -4,7 +4,7 @@
 
         <div v-for="appType, index in appTypes" class="list-group-item">
             <div class="flex items-start">
-                <img class="flex mr-3" :src="'/craftidresources/dist/images/' + appType.handle + '.svg'" height="48" />
+                <img class="flex mr-3" :src="'/craftnetresources/id/dist/images/' + appType.handle + '.svg'" height="48" />
                 <div class="flex-1">
                     <template v-if="apps[appType.handle]">
                         <h5>{{ accountName(appType.handle) }}</h5>

@@ -25,7 +25,7 @@
                     <td class="icon-col">
                         <router-link :to="'/developer/plugins/' + plugin.id">
                             <img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" />
-                            <img v-else :src="'/craftidresources/dist/images/default-plugin.svg'" height="36" />
+                            <img v-else :src="'/craftnetresources/id/dist/images/default-plugin.svg'" height="36" />
                         </router-link>
                     </td>
                     <td>

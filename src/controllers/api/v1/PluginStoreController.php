@@ -72,6 +72,7 @@ class PluginStoreController extends BaseApiController
             $ret[] = [
                 'id' => $category->id,
                 'title' => $category->title,
+                'description' => $category->description,
                 'slug' => $category->slug,
                 'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
             ];
@@ -91,16 +92,20 @@ class PluginStoreController extends BaseApiController
             ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
             ->ids();
 
+        $recentlyAddedPluginsEntry = Entry::find()->site('plugins')->section('recentlyAddedPlugins')->one();
+
         $ret[] = [
             'id' => 'recently-added',
-            'title' => 'Recently Added',
+            'slug' => 'recently-added',
+            'title' => $recentlyAddedPluginsEntry->title,
+            'description' => $recentlyAddedPluginsEntry->description,
             'plugins' => $recents,
             'limit' => 6,
         ];
 
         $entries = Entry::find()
             ->site('craftId')
-            ->select(['elements.id', 'elements.fieldLayoutId', 'content.title', 'content.field_limit'])
+            ->select(['elements.id', 'elements.fieldLayoutId', 'content.title', 'content.field_limit', 'content.field_description', 'elements_sites.slug'])
             ->section('featuredPlugins')
             ->with('plugins', ['select' => ['elements.id']])
             ->all();
@@ -108,7 +113,9 @@ class PluginStoreController extends BaseApiController
         foreach ($entries as $entry) {
             $ret[] = [
                 'id' => $entry->id,
+                'slug' => $entry->slug,
                 'title' => $entry->title,
+                'description' => $entry->description,
                 'plugins' => ArrayHelper::getColumn($entry->plugins, 'id'),
                 'limit' => $entry->limit,
             ];

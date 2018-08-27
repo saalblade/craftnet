@@ -79,5 +79,6 @@ return [
     ],
     'plugins' => [
         '/' => 'craftnet/plugins/index/index',
+        '<url:(.*)>'=> 'craftnet/plugins/index/index',
     ],
 ];

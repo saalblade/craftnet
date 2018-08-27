@@ -5,7 +5,7 @@
         </template>
         <template v-else>
             <div class="flex items-start">
-                <img class="flex mr-3" :src="'/craftidresources/dist/images/stripe.svg'" height="48" />
+                <img class="flex mr-3" :src="'/craftnetresources/id/dist/images/stripe.svg'" height="48" />
                 <div class="flex-1">
                     <template v-if="stripeAccount">
                         <h5>{{ stripeAccount.display_name }}</h5>

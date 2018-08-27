@@ -52,7 +52,7 @@
         <div v-if="loading" class="spinner"></div>
 
         <div class="mt-4">
-            <img src="/craftidresources/dist/images/powered_by_stripe.svg" height="18" />
+            <img src="/craftnetresources/id/dist/images/powered_by_stripe.svg" height="18" />
         </div>
     </div>
 </template>

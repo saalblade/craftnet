@@ -1,0 +1,109 @@
+/* HTML Basics */
+
+a {
+  @apply .no-underline;
+  color: #0d78f2;
+
+  &:hover {
+    @apply .cursor-pointer;
+  }
+}
+
+hr {
+  @apply .border-b .my-6;
+}
+
+h1 {
+  @apply .border-b .pb-2 .leading-tight;
+}
+
+p {
+  @apply .mb-4;
+
+  code {
+    @apply .bg-grey-lighter .px-2 .py-1;
+  }
+}
+
+ul {
+  @apply .pl-8;
+}
+
+table.data {
+  @apply .border-t .mt-2;
+
+  th, td {
+    @apply .border-b .py-2;
+  }
+
+  th {
+    text-align: left;
+  }
+}
+
+pre {
+  @apply .bg-grey-lighter .p-4 .overflow-x-auto;
+}
+
+
+/* Inputs */
+
+input.text {
+  @apply .border .p-2 .rounded;
+}
+
+
+/* Buttons */
+
+.btn {
+  @apply .bg-grey-lighter .px-3 .py-2 .rounded;
+}
+
+.btn-primary {
+  @apply .bg-blue .text-white;
+}
+
+/* Loading */
+
+.loading {
+  @apply .py-6 .text-grey-darker;
+}
+
+.wrapper {
+  .loading-wrapper {
+    @apply .flex-1 .flex .justify-center;
+
+    .loading {
+      @apply .self-center .text-lg;
+    }
+  }
+}
+
+
+/* Truncate */
+
+.truncate {
+  .truncate-in {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+
+/* Transitions */
+
+@media (max-width: 991px) {
+  .fade-enter-active, .fade-leave-active {
+    transition: all .25s ease-out;
+  }
+  .fade-enter, .fade-leave-to {
+    transform: translateY(-100%);
+  }
+}
+
+@media (min-width: 992px) {
+  .fade-enter-active, .fade-leave-active {
+    transition-duration: 0s;
+  }
+}
