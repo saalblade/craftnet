@@ -67,6 +67,7 @@ return [
     ],
     'dev' => [
         'devMode' => true,
+        'useCompressedJs' => false,
         'allowUpdates' => true,
         'testToEmailAddress' => getenv('TEST_EMAIL'),
         'siteUrl' => [
