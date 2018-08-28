@@ -53,12 +53,19 @@ class PartnersHelper extends Component
      * and returns an array of PartnerLocationModel instances.
      *
      * @param array $locations
+     * @param Partner $partner
      * @return PartnerLocationModel[]
      */
-    public static function normalizeLocations(array $locations): array
+    public static function normalizeLocations(array $locations, $partner): array
     {
-        $locations = array_map(function($location) {
-            return $location instanceof PartnerLocationModel ? $location : new PartnerLocationModel($location);
+        $locations = array_map(function($location) use ($partner) {
+            if (!$location instanceof PartnerLocationModel) {
+                $location = new PartnerLocationModel($location);
+            }
+
+            $location->partnerId = $partner->id;
+
+            return $location;
         }, $locations);
 
         return $locations;
@@ -85,38 +92,5 @@ class PartnersHelper extends Component
         }, $projects);
 
         return $projects;
-    }
-
-    /**
-     * Example: POST `locations` look like:
-     * ```
-     * [
-     *     'title' => ['first', 'second', 'third'],
-     *     'addressLine1' => ['street one', 'street two', 'street three'],
-     *     ...
-     *  ]
-     * ```
-     * This normalizes the array to:
-     * ```
-     * [
-     *     0 => ['title' => 'first', 'addressLine1' => 'street one']
-     *     1 => ['title' => 'second', 'addressLine1' => 'street two']
-     * ]
-     * ```
-     * @param array $postArray
-     * @return array
-     */
-    public static function normalizePostArray($postArray = [])
-    {
-        $normalized = [];
-
-        foreach ($postArray as $field => $values) {
-            $i = -1;
-            foreach ($values as $value) {
-                $normalized[++$i][$field] = $value;
-            }
-        }
-
-        return $normalized;
     }
 }

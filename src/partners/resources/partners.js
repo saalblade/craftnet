@@ -4,7 +4,6 @@
         this.$el = $(element);
         this.template = this.$el.find('.subform-template').html();
         this.$subforms = this.$el.find('.subforms');
-        this.newIndex = 0;
 
         this.init();
     };
@@ -18,7 +17,7 @@
         },
         onAddClick: function(e) {
             e.preventDefault();
-            var id = 'new' + ++this.newIndex;
+            var id = this.getNewIndex();
             this.$subforms.append(this.template.replace(/%new%/g, id));
             Craft.initUiElements($('#project-' + id));
         },
@@ -41,6 +40,17 @@
             if ($subformBelow.length) {
                 $subform.insertAfter($subformBelow).hide().fadeIn();
             }
+        },
+        getNewIndex: function() {
+            var previousNewId = 0;
+            this.$subforms.find('.subform').each(function() {
+                var id = String($(this).data('id'));
+                if (id.slice(0,3) === 'new') {
+                    previousNewId = Math.max(previousNewId, Number(id.slice(3)))
+                }
+            });
+
+            return 'new' + ++previousNewId;
         }
     };
 

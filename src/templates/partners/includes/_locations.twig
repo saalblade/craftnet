@@ -1,5 +1,8 @@
-{% macro locationForm(location) %}
-    <table class="subform shadow-box">
+{% macro locationForm(key, location) %}
+    {% set id = key matches '/new/' ? key : location.id %}
+    {% set location = location | default({}) %}
+
+    <table class="subform shadow-box" data-id="{{ id }}">
         <thead>
         <tr>
             <td colspan="2" class="subform-controls">
@@ -13,63 +16,63 @@
         <tr>
             <th><label class="required">Title</label></th>
             <td>
-                <input type="text" class="text" name="locations[title][]" value="{{ location.title ?? '' }}" autocomplete="off">
+                <input type="text" class="text" name="locations[{{ id }}][title]" value="{{ location.title ?? '' }}" autocomplete="off">
                 {% include "_includes/forms/errorList" with { errors: location.getErrors('title') ?? [] } %}
             </td>
         </tr>
         <tr>
             <th><label class="required">Address</label></th>
             <td class="textual">
-                <input type="text" class="text" name="locations[addressLine1][]" value="{{ location.addressLine1 ?? '' }}" autocomplete="off">
+                <input type="text" class="text" name="locations[{{ id }}][addressLine1]" value="{{ location.addressLine1 ?? '' }}" autocomplete="off">
                 {% include "_includes/forms/errorList" with { errors: location.getErrors('addressLine1') ?? [] } %}
             </td>
         </tr>
         <tr>
             <th><label>Address Line 2</label></th>
             <td class="textual">
-                <input type="text" class="text" name="locations[addressLine2][]" value="{{ location.addressLine2 ?? '' }}" autocomplete="off">
+                <input type="text" class="text" name="locations[{{ id }}][addressLine2]" value="{{ location.addressLine2 ?? '' }}" autocomplete="off">
                 {% include "_includes/forms/errorList" with { errors: location.getErrors('addressLine2') ?? [] } %}
             </td>
         </tr>
         <tr>
             <th><label class="required">City</label></th>
             <td class="textual">
-                <input type="text" class="text" name="locations[city][]" value="{{ location.city ?? '' }}" autocomplete="off">
+                <input type="text" class="text" name="locations[{{ id }}][city]" value="{{ location.city ?? '' }}" autocomplete="off">
                 {% include "_includes/forms/errorList" with { errors: location.getErrors('city') ?? [] } %}
             </td>
         </tr>
         <tr>
             <th><label class="required">State</label></th>
             <td class="textual">
-                <input type="text" class="text" name="locations[state][]" value="{{ location.state ?? '' }}" autocomplete="off">
+                <input type="text" class="text" name="locations[{{ id }}][state]" value="{{ location.state ?? '' }}" autocomplete="off">
                 {% include "_includes/forms/errorList" with { errors: location.getErrors('state') ?? [] } %}
             </td>
         </tr>
         <tr>
             <th><label class="required">Zip</label></th>
             <td class="textual">
-                <input type="text" class="text" name="locations[zip][]" value="{{ location.zip ?? '' }}" autocomplete="off">
+                <input type="text" class="text" name="locations[{{ id }}][zip]" value="{{ location.zip ?? '' }}" autocomplete="off">
                 {% include "_includes/forms/errorList" with { errors: location.getErrors('zip') ?? [] } %}
             </td>
         </tr>
         <tr>
             <th><label class="required">Country</label></th>
             <td class="textual">
-                <input type="text" class="text" name="locations[country][]" value="{{ location.country ?? '' }}" autocomplete="off">
+                <input type="text" class="text" name="locations[{{ id }}][country]" value="{{ location.country ?? '' }}" autocomplete="off">
                 {% include "_includes/forms/errorList" with { errors: location.getErrors('country') ?? [] } %}
             </td>
         </tr>
         <tr>
             <th><label>Phone</label></th>
             <td class="textual">
-                <input type="text" class="text" name="locations[phone][]" value="{{ location.phone ?? '' }}" autocomplete="off">
+                <input type="text" class="text" name="locations[{{ id }}][phone]" value="{{ location.phone ?? '' }}" autocomplete="off">
                 {% include "_includes/forms/errorList" with { errors: location.getErrors('phone') ?? [] } %}
             </td>
         </tr>
         <tr>
             <th><label>Email</label></th>
             <td class="textual">
-                <input type="text" class="text" name="locations[email][]" value="{{ location.email ?? '' }}" autocomplete="off">
+                <input type="text" class="text" name="locations[{{ id }}][email]" value="{{ location.email ?? '' }}" autocomplete="off">
                 {% include "_includes/forms/errorList" with { errors: location.getErrors('email') ?? [] } %}
             </td>
         </tr>
@@ -84,11 +87,11 @@
     <div class="subforms-wrap">
         {# Template for adding new locations dynamically #}
         {% import _self as self %}
-        <script class="subform-template" type="text/html">{{ self.locationForm() }}</script>
+        <script class="subform-template" type="text/html">{{ self.locationForm('%new%') }}</script>
 
         <div class="subforms">
-            {% for location in partner.locations | default([]) %}
-                {{ self.locationForm(location) }}
+            {% for key, location in partner.locations | default([]) %}
+                {{ self.locationForm(key, location) }}
             {% endfor %}
         </div>
         <div>

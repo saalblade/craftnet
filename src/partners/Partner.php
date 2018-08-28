@@ -4,10 +4,10 @@ namespace craftnet\partners;
 
 use Craft;
 use craft\base\Element;
+use craft\base\Model;
 use craft\elements\actions\SetStatus;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\UrlHelper;
-use DateTime;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
@@ -274,59 +274,8 @@ class Partner extends Element
                 ->execute();
         }
 
-        // Locations
-
-        $db->createCommand()
-            ->delete('craftnet_partnerlocations', ['partnerId' => $this->id])
-            ->execute();
-
-        foreach($this->_locations as $location) {
-            $data = array_merge($location->attributes, ['partnerId' => $this->id]);
-            unset($data['id']);
-
-            $db->createCommand()
-                ->insert(
-                    'craftnet_partnerlocations',
-                    $data
-                )
-                ->execute();
-        }
-
-        // Projects
-
-        $savedIds = [];
-        foreach($this->_projects as $project) {
-            $project->partnerId = $this->id;
-
-            if (!$project->id) {
-                $data = $project->getAttributes(null, ['id', 'dateCreated', 'dateUpdated', 'uid']);
-                $db->createCommand()
-                    ->insert('craftnet_partnerprojects', $data)
-                    ->execute();
-
-                $savedIds[] = (int) $db->getLastInsertID();
-            } else {
-                $data = $project->getAttributes(null, ['dateCreated', 'dateUpdated', 'uid']);
-                $db->createCommand()
-                    ->update('craftnet_partnerprojects', $data, 'id=:id', [':id' => $data['id']], true)
-                    ->execute();
-
-                $savedIds[] = $project->id;
-            }
-        }
-
-        if (count($savedIds) !== 0) {
-            $db->createCommand()
-                ->delete(
-                    'craftnet_partnerprojects',
-                    [
-                        'AND',
-                        ['partnerId' => $this->id],
-                        ['not in', 'id', $savedIds],
-                    ]
-                )
-                ->execute();
-        }
+        $this->_saveOneToManyRelations($this->_locations, 'craftnet_partnerlocations');
+        $this->_saveOneToManyRelations($this->_projects, 'craftnet_partnerprojects');
     }
 
     /**
@@ -430,13 +379,14 @@ class Partner extends Element
     }
 
     /**
-     * Sets the `location` attribute to PartnerLocationModels
-     * from the given data array.
+     * Sets the `locations` attribute to a list of PartnerLocationModel
+     * instances given an array of models or data arrays suitable for
+     * PartnerLocationModel instantiation.
      * @param array $locations
      */
     public function setLocations(array $locations)
     {
-        $this->_locations = PartnersHelper::normalizeLocations($locations);
+        $this->_locations = PartnersHelper::normalizeLocations($locations, $this);
     }
 
     /**
@@ -444,7 +394,13 @@ class Partner extends Element
      */
     public function setLocationsFromPost($locations = [])
     {
-        $this->setLocations(PartnersHelper::normalizePostArray($locations));
+        foreach ($locations as $id => &$location) {
+            if (substr($id, 0, 3) !== 'new') {
+                $location['id'] = $id;
+            }
+        }
+
+        $this->setLocations($locations);
     }
 
     /**
@@ -470,8 +426,9 @@ class Partner extends Element
     }
 
     /**
-     * Sets the `location` attribute to PartnerProjectModels
-     * from the given data array.
+     * Sets the `projects` attribute to a list of PartnerProjectModel
+     * instances given an array of models or data arrays suitable for
+     * PartnerProjectModel instantiation.
      * @param array $projects
      */
     public function setProjects(array $projects)
@@ -513,6 +470,51 @@ class Partner extends Element
 
             default:
                 return parent::eagerLoadingMap($sourceElements, $handle);
+        }
+    }
+
+    /**
+     * Generic method to save one-to-many relations like projects and locations.
+     * @param Model[] $models
+     * @param string $table
+     * @param bool $prune Prune rows not belonging to `$models`
+     */
+    private function _saveOneToManyRelations($models, $table, $prune = true)
+    {
+        $db = Craft::$app->getDb();
+        $savedIds = [];
+
+        foreach($models as $model) {
+            $model->partnerId = $this->id;
+
+            if (!$model->id) {
+                $data = $model->getAttributes(null, ['id', 'dateCreated', 'dateUpdated', 'uid']);
+                $db->createCommand()
+                    ->insert($table, $data)
+                    ->execute();
+
+                $savedIds[] = (int) $db->getLastInsertID();
+            } else {
+                $data = $model->getAttributes(null, ['dateCreated', 'dateUpdated', 'uid']);
+                $db->createCommand()
+                    ->update($table, $data, 'id=:id', [':id' => $data['id']], true)
+                    ->execute();
+
+                $savedIds[] = $model->id;
+            }
+        }
+
+        if ($prune && count($savedIds) !== 0) {
+            $db->createCommand()
+                ->delete(
+                    $table,
+                    [
+                        'AND',
+                        ['partnerId' => $this->id],
+                        ['not in', 'id', $savedIds],
+                    ]
+                )
+                ->execute();
         }
     }
 
