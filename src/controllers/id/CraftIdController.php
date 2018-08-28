@@ -106,6 +106,13 @@ class CraftIdController extends BaseController
         return $this->asJson($data);
     }
 
+    public function actionPluginStoreData()
+    {
+        $pluginStoreData = Craft::$app->getApi()->getPluginStoreData();
+
+        return $this->asJson($pluginStoreData);
+    }
+
     // Private Methods
     // =========================================================================
 
