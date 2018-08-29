@@ -185,6 +185,34 @@ class FundsManager extends BaseObject
     }
 
     /**
+     * Settles up with the developer.
+     *
+     * @throws InaccessibleFundsException if the developer's funds could not be locked
+     */
+    public function settleUp()
+    {
+        $e = null;
+
+        // no double-dipping
+        if (!$this->_lockFunds(5)) {
+            throw new InaccessibleFundsException();
+        }
+
+        // figure out how much we owe them
+        $balance = $this->getBalance();
+
+        // don't transfer if they're in the red
+        if ($balance <= 0) {
+            return;
+        }
+
+        $this->_transferFunds('Transferred funds for owed Craft ID balance.', $balance);
+
+        // unlock the funds
+        $this->_unlockFunds();
+    }
+
+    /**
      * Locks the developer's funds so no other FundsManager instance can deduct funds.
      *
      * @param int $timeout
