@@ -87,7 +87,9 @@
     <div class="subforms-wrap">
         {# Template for adding new locations dynamically #}
         {% import _self as self %}
-        <script class="subform-template" type="text/html">{{ self.locationForm('%new%') }}</script>
+        <script class="subform-template" type="text/html">
+            {{ self.locationForm('__new__') }}
+        </script>
 
         <div class="subforms">
             {% for key, location in partner.locations | default([]) %}

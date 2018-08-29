@@ -1,10 +1,11 @@
 
-{% macro projectForm(key, project) %}
+{% macro projectForm(key, project, isTemplate) %}
     {% import "_includes/forms" as forms %}
     {% set id = key matches '/new/' ? key : project.id %}
     {% set project = project | default({}) %}
+    {% set isTemplate = isTemplate | default(false) %}
 
-    <div id="project-{{ id }}" class="subform shadow-box">
+    <div id="project-{{ id }}" class="subform shadow-box" data-id="{{ id }}">
 
         <div class="subform-controls">
             <button class="btn js-subform-up">&uarr;</button>
@@ -18,7 +19,7 @@
                 type: 'text',
                 label: 'Project URL',
                 required: true,
-                id: 'url',
+                id: 'url-' ~ id,
                 name: 'projects[' ~ id ~ '][url]',
                 value: project.url ?? '',
                 errors: project.getErrors('url') ?? [],
@@ -26,7 +27,7 @@
 
             {{ forms.elementSelectField({
                 label: 'Screenshot',
-                id: 'screenshotId',
+                id: 'projects-' ~ id ~ '-screenshotId',
                 name: 'projects[' ~ id ~ '][screenshotId]',
                 required: true,
                 elementType: 'craft\\elements\\Asset',
@@ -38,16 +39,33 @@
 
             {{ forms.lightswitchField({
                 label: 'Private',
-                instructions: project.id is not defined ? 'Save, then this lightswitch will work' : null,
-                id: 'private',
+                id: 'private-' ~ id,
                 name: 'projects[' ~ id ~ '][private]',
                 on: project.private ?? false,
             }) }}
 
         </div>
+
+        {% if isTemplate %}
+            __script__
+                Craft.initUiElements(document.getElementById('#project-{{ id }}'));
+
+                new Craft.BaseElementSelectInput({
+                    id: 'projects-{{ id }}-screenshotId',
+                    name: 'projects[{{ id }}][screenshotId]',
+                    elementType: 'craft\\elements\\Asset',
+                    sources: null,
+                    criteria: {
+                        kind: 'image'
+                    },
+                    sourceElementId: null,
+                    viewMode: 'list',
+                    limit: 5,
+                    modalStorageKey: null
+                });
+            __/script__
+        {% endif %}
     </div>
-
-
 {% endmacro %}
 
 <div class="field">
@@ -58,7 +76,7 @@
         {# Template for adding new projects dynamically #}
         {% import _self as self %}
         <script class="subform-template" type="text/html">
-            {{ self.projectForm('%new%') }}
+            {{ self.projectForm('__new__', null, true) }}
         </script>
 
         <div class="subforms">

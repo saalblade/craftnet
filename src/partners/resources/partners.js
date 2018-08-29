@@ -1,5 +1,22 @@
 (function(window, document, $) {
 
+    /**
+     * Subforms are repeating groups of fields for Partner relationships
+     * like `locations` and `projects`.
+     *
+     * Each subform is expected to have a `<script class="subform-template" type="text/html">`
+     * element with html template code from which to add new subforms.
+     *
+     * Each subform template wrapping div is expected have a `data-id` attribute with a value
+     * like `1` or `new1`. This id will replace text `__new__` within the template.
+     *
+     * Each subform template is responsible to initialize itself with its own script but,
+     * because template code is inside a `<script type="text/html">` tag already, JS should
+     * be wrapped in `__script__` `__/script__`. These will be replaced with proper `<script>`
+     * tags.
+     *
+     * @param {element} element
+     */
     var Subforms = function(element) {
         this.$el = $(element);
         this.template = this.$el.find('.subform-template').html();
@@ -18,8 +35,11 @@
         onAddClick: function(e) {
             e.preventDefault();
             var id = this.getNewIndex();
-            this.$subforms.append(this.template.replace(/%new%/g, id));
-            Craft.initUiElements($('#project-' + id));
+            var template = this.template
+                .replace(/__new__/g, id) // update ids
+                .replace(/__(\/?script)__/g, '<$1>'); // template initializes itself
+
+            this.$subforms.append(template);
         },
         onDeleteClick: function(e) {
             e.preventDefault();
@@ -57,7 +77,5 @@
     $('.subforms-wrap').each(function() {
         new Subforms(this);
     });
-
-    // Craft.initUiElements([jQuery selector])
 
 })(window, document, jQuery);
