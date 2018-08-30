@@ -19,6 +19,16 @@ const state = {
  */
 const getters = {
 
+    cartTotal(state) {
+        let total = 0;
+
+        state.cart.items.forEach(item => {
+            total += item.lineItem.total;
+        })
+
+        return total
+    },
+
 }
 
 /**
@@ -56,7 +66,7 @@ const actions = {
                 name: pluginHandle
             },
             lineItem: {
-                total: '$99.00'
+                total: 99
             }
         }
 

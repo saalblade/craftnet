@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Buy License</h1>
-        
+
         <div class="card mb-4">
             <div class="card-body">
                 <h2>Select a plugin edition</h2>
@@ -29,29 +29,16 @@
                 </div>
             </div>
         </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <h2>Cart</h2>
-                <p>Cart with checkout button.</p>
-                <cart></cart>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <h2>Checkout</h2>
 
-                <ul>
-                    <li>Identity = Craft ID Account</li>
-                    <li>Payment Method</li>
-                </ul>
-            </div>
-        </div>
+        <cart></cart>
+        <payment></payment>
     </div>
 </template>
 
 <script>
     import {mapState, mapActions} from 'vuex'
-    import Cart from '../components/Cart'
+    import Cart from '../components/buy-license/Cart'
+    import Payment from '../components/buy-license/Payment'
 
     export default {
 
@@ -63,7 +50,8 @@
         },
 
         components: {
-            Cart
+            Cart,
+            Payment,
         },
 
         computed: {
