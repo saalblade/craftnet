@@ -31,6 +31,7 @@
         </div>
 
         <cart></cart>
+
         <payment></payment>
     </div>
 </template>
