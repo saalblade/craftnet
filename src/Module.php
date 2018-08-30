@@ -216,6 +216,7 @@ class Module extends \yii\base\Module
                 'partners' => ['template' => 'craftnet/partners/_index'],
                 'partners/new' => 'craftnet/partners/edit',
                 'partners/<partnerId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/partners/edit',
+                'partners/foo' => 'craftnet/partners/foo',
             ]);
         });
 

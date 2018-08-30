@@ -27,14 +27,14 @@
 
             {{ forms.elementSelectField({
                 label: 'Screenshot',
-                id: 'projects-' ~ id ~ '-screenshotId',
-                name: 'projects[' ~ id ~ '][screenshotId]',
+                id: 'projects-' ~ id ~ '-screenshots',
+                name: 'projects[' ~ id ~ '][screenshots]',
                 required: true,
                 elementType: 'craft\\elements\\Asset',
                 criteria: {kind: 'image'},
-                limit: 1,
-                elements: [],
-                errors: project.getErrors('screenshotId') ?? [],
+                limit: 0,
+                elements: project.screenshots ?? [],
+                errors: project.getErrors('screenshots') ?? [],
             }) }}
 
             {{ forms.lightswitchField({
@@ -48,11 +48,11 @@
 
         {% if isTemplate %}
             __script__
-                Craft.initUiElements(document.getElementById('#project-{{ id }}'));
+                Craft.initUiElements(document.getElementById('project-{{ id }}'));
 
                 new Craft.BaseElementSelectInput({
-                    id: 'projects-{{ id }}-screenshotId',
-                    name: 'projects[{{ id }}][screenshotId]',
+                    id: 'projects-{{ id }}-screenshots',
+                    name: 'projects[{{ id }}][screenshots]',
                     elementType: 'craft\\elements\\Asset',
                     sources: null,
                     criteria: {

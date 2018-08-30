@@ -1,12 +1,61 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: sam
+ * Date: 8/30/18
+ * Time: 9:35 AM
+ */
 
 namespace craftnet\partners;
 
 
-use craft\base\Component;
 
-class PartnersHelper extends Component
+use craft\elements\Asset;
+use yii\helpers\ArrayHelper;
+
+class PartnerService
 {
+    private static $_instance;
+
+    public static function getInstance()
+    {
+        if (!isset(self::$_instance)) {
+            self::$_instance= new self();
+        }
+
+        return self::$_instance;
+    }
+
+    /**
+     * @param array|PartnerProjectModel[] $projects
+     */
+    public function eagerLoadProjectScreenshots(&$projects)
+    {
+        if (!$projects) {
+            return;
+        }
+
+        $screenshots = (new PartnerProjectScreenshotsQuery())
+            ->project($projects)
+            ->all();
+
+        if (!$screenshots) {
+            return;
+        }
+
+        $assetsByProjectId = [];
+
+        foreach ($screenshots as $screenshot) {
+            $projectId = $screenshot['projectId'];
+            unset($screenshot['projectId']);
+            $assetsByProjectId[$projectId][] = new Asset($screenshot);
+        }
+
+        foreach ($projects as &$project) {
+            $project->screenshots = $assetsByProjectId[$project->id] ?: [];
+        }
+    }
+
     /**
      * Capabilities are represented by simple associative arrays rather than
      * by models. This accepts an array of numeric Capability IDs or valid
@@ -22,7 +71,7 @@ class PartnersHelper extends Component
      * @param mixed $capabilities An array, but might be an empty string when from POST
      * @return array
      */
-    public static function normalizeCapabilities($capabilities)
+    public function normalizeCapabilities($capabilities)
     {
         $normalized = [];
 
@@ -56,7 +105,7 @@ class PartnersHelper extends Component
      * @param Partner $partner
      * @return PartnerLocationModel[]
      */
-    public static function normalizeLocations(array $locations, $partner): array
+    public function normalizeLocations(array $locations, $partner): array
     {
         $locations = array_map(function($location) use ($partner) {
             if (!$location instanceof PartnerLocationModel) {
@@ -77,19 +126,29 @@ class PartnersHelper extends Component
      *
      * @param array $projects
      * @param Partner $partner
+     * @param bool $eagerLoad
      * @return PartnerProjectModel[]
      */
-    public static function normalizeProjects(array $projects, $partner): array
+    public function normalizeProjects(array $projects, $partner, $eagerLoad = false): array
     {
-        $projects = array_map(function($project) use ($partner) {
+        if (count($projects) === 0) {
+            return $projects;
+        }
+
+        $ids = [];
+
+        foreach ($projects as &$project) {
             if (!$project instanceof PartnerProjectModel) {
                 $project = new PartnerProjectModel($project);
             }
 
             $project->partnerId = $partner->id;
+            $ids[] = $project->id;
+        }
 
-            return $project;
-        }, $projects);
+        if ($eagerLoad) {
+            $this->eagerLoadProjectScreenshots($projects);
+        }
 
         return $projects;
     }

@@ -275,7 +275,11 @@ class Partner extends Element
         }
 
         $this->_saveOneToManyRelations($this->_locations, 'craftnet_partnerlocations');
-        $this->_saveOneToManyRelations($this->_projects, 'craftnet_partnerprojects');
+        $this->_saveOneToManyRelations($this->_projects, 'craftnet_partnerprojects', true, ['screenshots']);
+
+        foreach ($this->_projects as $project) {
+            $this->_saveProjectScreenshots($project);
+        }
     }
 
     /**
@@ -353,7 +357,7 @@ class Partner extends Element
      */
     public function setCapabilities($capabilities)
     {
-        $this->_capabilities = PartnersHelper::normalizeCapabilities($capabilities);
+        $this->_capabilities = PartnerService::getInstance()->normalizeCapabilities($capabilities);
     }
 
     /**
@@ -386,7 +390,7 @@ class Partner extends Element
      */
     public function setLocations(array $locations)
     {
-        $this->_locations = PartnersHelper::normalizeLocations($locations, $this);
+        $this->_locations = PartnerService::getInstance()->normalizeLocations($locations, $this);
     }
 
     /**
@@ -415,11 +419,11 @@ class Partner extends Element
 
         // Existing Partner instance without projects set yet
         if ($this->_projects === null) {
-            $result = (new PartnerProjectsQuery())
+            $projects = (new PartnerProjectsQuery())
                 ->partner($this->id)
                 ->all();
 
-            $this->setProjects($result);
+            $this->setProjects($projects, true);
         }
 
         return $this->_projects;
@@ -430,10 +434,11 @@ class Partner extends Element
      * instances given an array of models or data arrays suitable for
      * PartnerProjectModel instantiation.
      * @param array $projects
+     * @param bool $eagerLoad
      */
-    public function setProjects(array $projects)
+    public function setProjects(array $projects, $eagerLoad = false)
     {
-        $this->_projects = PartnersHelper::normalizeProjects($projects, $this);
+        $this->_projects = PartnerService::getInstance()->normalizeProjects($projects, $this, $eagerLoad);
     }
 
     /**
@@ -478,24 +483,27 @@ class Partner extends Element
      * @param Model[] $models
      * @param string $table
      * @param bool $prune Prune rows not belonging to `$models`
+     * @param array $without Attributes to exclude
      */
-    private function _saveOneToManyRelations($models, $table, $prune = true)
+    private function _saveOneToManyRelations($models, $table, $prune = true, $without = [])
     {
         $db = Craft::$app->getDb();
         $savedIds = [];
+        $without = array_unique(array_merge($without, ['dateCreated', 'dateUpdated', 'uid']));
 
-        foreach($models as $model) {
+        foreach($models as &$model) {
             $model->partnerId = $this->id;
 
             if (!$model->id) {
-                $data = $model->getAttributes(null, ['id', 'dateCreated', 'dateUpdated', 'uid']);
+                $data = $model->getAttributes(null, array_merge($without, ['id']));
                 $db->createCommand()
                     ->insert($table, $data)
                     ->execute();
 
-                $savedIds[] = (int) $db->getLastInsertID();
+                $model->id = (int) $db->getLastInsertID();
+                $savedIds[] = $model->id;
             } else {
-                $data = $model->getAttributes(null, ['dateCreated', 'dateUpdated', 'uid']);
+                $data = $model->getAttributes(null, $without);
                 $db->createCommand()
                     ->update($table, $data, 'id=:id', [':id' => $data['id']], true)
                     ->execute();
@@ -504,18 +512,46 @@ class Partner extends Element
             }
         }
 
-        if ($prune && count($savedIds) !== 0) {
+        if ($prune) {
+            $condition = ['AND', ['partnerId' => $this->id]];
+
+            if (count($savedIds) !== 0) {
+                $condition[] = ['not in', 'id', $savedIds];
+            }
+
             $db->createCommand()
-                ->delete(
-                    $table,
-                    [
-                        'AND',
-                        ['partnerId' => $this->id],
-                        ['not in', 'id', $savedIds],
-                    ]
-                )
+                ->delete($table, $condition)
                 ->execute();
         }
+    }
+
+    /**
+     * @param PartnerProjectModel $project
+     * @throws \yii\db\Exception
+     */
+    private function _saveProjectScreenshots($project)
+    {
+        $db = Craft::$app->getDb();
+        $table = 'craftnet_partnerprojectscreenshots';
+
+        $db->createCommand()
+            ->delete($table, ['projectId' => $project->id])
+            ->execute();
+
+        if (count($project->screenshots) === 0) {
+            return;
+        }
+
+        $columns = ['projectId', 'assetId', 'sortOrder'];
+        $rows = [];
+
+        foreach ($project->getScreenshotIds() as $key => $assetId) {
+            $rows[] = [$project->id, $assetId, $key];
+        }
+
+        $db->createCommand()
+            ->batchInsert($table, $columns, $rows)
+            ->execute();
     }
 
     /**
