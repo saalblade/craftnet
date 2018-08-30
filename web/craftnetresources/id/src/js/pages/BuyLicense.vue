@@ -1,17 +1,7 @@
 <template>
     <div>
         <h1>Buy License</h1>
-        <div class="card mb-4">
-            <div class="card-body">
-                <ol>
-                    <li v-if="!handle">Select a plugin edition</li>
-                    <li>Add the <code v-if="handle">{{handle}}</code> plugin
-                        edition to the cart
-                    </li>
-                    <li>Redirect to the cart</li>
-                </ol>
-            </div>
-        </div>
+        
         <div class="card mb-4">
             <div class="card-body">
                 <h2>Select a plugin edition</h2>
