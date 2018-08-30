@@ -5,7 +5,9 @@
             <div class="card-body">
                 <ol>
                     <li v-if="!handle">Select a plugin edition</li>
-                    <li>Add the <code v-if="handle">{{handle}}</code> plugin edition to the cart</li>
+                    <li>Add the <code v-if="handle">{{handle}}</code> plugin
+                        edition to the cart
+                    </li>
                     <li>Redirect to the cart</li>
                 </ol>
             </div>
@@ -13,25 +15,27 @@
         <div class="card mb-4">
             <div class="card-body">
                 <h2>Select a plugin edition</h2>
-                <p>Dropdown with add to cart button.</p>
-                <ul class="mb-4">
-                    <li>Categories: {{categories.length}}</li>
-                    <li>Plugins: {{plugins.length}}</li>
-                </ul>
 
-                <div class="buttons mb-4">
-                    <input type="button" class="btn btn-secondary" value="Get Plugin Store Data" @click="getPluginStoreData" />
+                <div class="flex items-center mb-4">
+                    <div>
+                        <select v-model="selectedPlugin">
+                            <option value="">Select a plugin</option>
+                            <option v-for="plugin in plugins"
+                                    :value="plugin.handle">{{ plugin.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div class="spinner" v-if="loading"></div>
+                    </div>
                 </div>
 
-                <select v-model="selectedPlugin" class="mb-4">
-                    <option value="">Select a plugin</option>
-                    <option v-for="plugin in plugins" :value="plugin.handle">{{ plugin.name }}</option>
-                </select>
-
-                <p>Selected Plugin: {{ selectedPlugin }}</p>
-
                 <div class="buttons">
-                    <input type="button" class="btn btn-primary" :class="{disabled: !selectedPlugin}" disabled="!selectedPlugin" value="Add to cart" />
+                    <input type="button" class="btn btn-primary"
+                           :class="{disabled: !selectedPlugin}"
+                           @click="addToCart(selectedPlugin)"
+                           :disabled="!selectedPlugin" value="Add to cart"/>
                 </div>
             </div>
         </div>
@@ -63,6 +67,7 @@
 
         data() {
             return {
+                loading: false,
                 selectedPlugin: '',
             }
         },
@@ -74,7 +79,6 @@
         computed: {
 
             ...mapState({
-                categories: state => state.pluginstore.categories,
                 plugins: state => state.pluginstore.plugins,
             }),
 
@@ -86,7 +90,22 @@
         methods: {
             ...mapActions({
                 getPluginStoreData: 'getPluginStoreData',
+                addToCart: 'addToCart',
             })
+        },
+
+        mounted() {
+            if (this.plugins.length === 0) {
+                this.loading = true
+
+                this.getPluginStoreData()
+                    .then(response => {
+                        this.loading = false
+                    })
+                    .catch(response => {
+                        this.loading = false
+                    })
+            }
         }
 
     }

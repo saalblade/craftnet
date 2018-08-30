@@ -10,16 +10,7 @@ Vue.use(Vuex)
  */
 const state = {
     cart: {
-        items: [
-            {
-                plugin: {
-                    name: 'Some Plugin'
-                },
-                lineItem: {
-                    total: '$99.00'
-                }
-            }
-        ]
+        items: []
     }
 }
 
@@ -59,12 +50,31 @@ const actions = {
             })
     },
 
+    addToCart({commit}, pluginHandle) {
+        const item = {
+            plugin: {
+                name: pluginHandle
+            },
+            lineItem: {
+                total: '$99.00'
+            }
+        }
+
+        commit('addToCart', {item})
+
+        console.log('add to cart', item);
+    }
+
 }
 
 /**
  * Mutations
  */
 const mutations = {
+
+    addToCart(state, {item}) {
+        state.cart.items.push(item)
+    },
 
 }
 
