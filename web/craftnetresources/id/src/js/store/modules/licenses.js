@@ -87,7 +87,6 @@ const getters = {
         return (license, renew) => {
             let renewableLicenses = []
 
-
             // CMS license
 
             renewableLicenses.push({
@@ -99,26 +98,28 @@ const getters = {
 
             // Plugin licenses
 
-            let renewablePluginLicenses = license.pluginLicenses.filter(license => !!license.key)
+            if(license.pluginLicenses.length > 0) {
+                let renewablePluginLicenses = license.pluginLicenses.filter(license => !!license.key)
 
-            const cmsExpiresOn = VueApp.$moment(license.expiresOn.date)
-            let cmsNewExpiresOn = cmsExpiresOn.add(renew, 'years')
+                const cmsExpiresOn = VueApp.$moment(license.expiresOn.date)
+                let cmsNewExpiresOn = cmsExpiresOn.add(renew, 'years')
 
-            renewablePluginLicenses = state.pluginLicenses.filter(license => {
-                const pluginExpiresOn = VueApp.$moment(license.expiresOn.date)
-                if(pluginExpiresOn > cmsNewExpiresOn) {
-                    return false
-                }
-                return renewablePluginLicenses.find(renewablePluginLicense => renewablePluginLicense.id === license.id)
-            })
-
-            renewablePluginLicenses.forEach(function(renewablePluginLicense) {
-                renewableLicenses.push({
-                    description: renewablePluginLicense.plugin.name,
-                    expiresOn: renewablePluginLicense.expiresOn,
-                    edition: renewablePluginLicense.edition,
+                renewablePluginLicenses = state.pluginLicenses.filter(license => {
+                    const pluginExpiresOn = VueApp.$moment(license.expiresOn.date)
+                    if(pluginExpiresOn > cmsNewExpiresOn) {
+                        return false
+                    }
+                    return renewablePluginLicenses.find(renewablePluginLicense => renewablePluginLicense.id === license.id)
                 })
-            }.bind(this))
+
+                renewablePluginLicenses.forEach(function(renewablePluginLicense) {
+                    renewableLicenses.push({
+                        description: renewablePluginLicense.plugin.name,
+                        expiresOn: renewablePluginLicense.expiresOn,
+                        edition: renewablePluginLicense.edition,
+                    })
+                }.bind(this))
+            }
 
             return renewableLicenses
         }
