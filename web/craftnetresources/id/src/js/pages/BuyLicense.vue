@@ -31,7 +31,7 @@
                 <p>Selected Plugin: {{ selectedPlugin }}</p>
 
                 <div class="buttons">
-                    <input type="button" class="btn btn-primary" value="Add to cart" />
+                    <input type="button" class="btn btn-primary" :class="{disabled: !selectedPlugin}" disabled="!selectedPlugin" value="Add to cart" />
                 </div>
             </div>
         </div>
