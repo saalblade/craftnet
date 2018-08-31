@@ -226,7 +226,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.getPluginLicenses(response => {
                 if (response.data && !response.data.error) {
-                    commit('receivePluginLicenses', {pluginLicenses: response.data});
+                    commit('updatePluginLicenses', {pluginLicenses: response.data});
                     resolve(response);
                 } else {
                     reject(response);
@@ -308,7 +308,7 @@ const mutations = {
         state.cmsLicenses = cmsLicenses;
     },
 
-    receivePluginLicenses(state, {pluginLicenses}) {
+    updatePluginLicenses(state, {pluginLicenses}) {
         state.pluginLicenses = pluginLicenses;
     },
 

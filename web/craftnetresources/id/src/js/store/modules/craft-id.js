@@ -35,7 +35,7 @@ const actions = {
                     commit('developers/updateSales', {sales: response.data.sales}, {root: true});
 
                     commit('licenses/updateCmsLicenses', {cmsLicenses: response.data.cmsLicenses}, {root: true});
-                    commit('licenses/receivePluginLicenses', {pluginLicenses: response.data.pluginLicenses}, {root: true});
+                    commit('licenses/updatePluginLicenses', {pluginLicenses: response.data.pluginLicenses}, {root: true});
 
                     commit('account/updateUpcomingInvoice', {upcomingInvoice: response.data.upcomingInvoice}, {root: true});
                     commit('account/updateApps', {apps: response.data.apps}, {root: true});
