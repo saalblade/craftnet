@@ -1,38 +1,45 @@
 <template>
     <div class="card mb-4">
         <div class="card-body">
-            <h2>Cart</h2>
-
+            <h2>{{cart.items.length}} item(s) in your cart</h2>
             <table v-if="cart.items.length > 0" class="table">
                 <thead>
                 <tr>
                     <th></th>
                     <th>Item</th>
+                    <th>Edition</th>
                     <th>Updates</th>
                     <th></th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="item in cart.items">
-                    <td>Icon</td>
+                <tr v-for="(item, itemKey) in cart.items">
+                    <td>
+                        <img :src="item.plugin.iconUrl" width="32" height="32" alt="">
+                    </td>
                     <td>{{item.plugin.name}}</td>
-                    <td>Select input with renewal options</td>
+                    <td>{{item.pluginEditionHandle}}</td>
+                    <td>
+                        <select>
+                            <option>Updates Until x/x/xxxx (+$00.00)</option>
+                        </select>
+                    </td>
                     <td>${{item.lineItem.total}}</td>
-                    <td><a href="#" class="btn btn-secondary">Remove</a></td>
+                    <td><input type="button" class="btn btn-secondary" @click="removeFromCart(itemKey)" value="Remove" /></td>
                 </tr>
                 <tr>
-                    <th colspan="3" class="text-right">Total</th>
+                    <th colspan="4" class="text-right">Total</th>
                     <th>${{cartTotal}}</th>
                     <th></th>
                 </tr>
                 </tbody>
             </table>
 
-            <p v-else>Cart is empty.</p>
+            <p v-else>Your cart is empty.</p>
 
             <div class="flex justify-between">
-                <input type="button" class="btn btn-primary" :class="{disabled: cart.items.length === 0}" value="Checkout" />
+                <input type="button" class="btn btn-primary" :class="{disabled: cart.items.length === 0}" value="Checkout" @click="checkout()" />
                 <input type="button" class="btn btn-secondary" value="Create Cart" @click="createCart" />
             </div>
         </div>
@@ -59,7 +66,12 @@
         methods: {
             ...mapActions({
                 createCart: 'cart/createCart',
-            })
+                removeFromCart: 'cart/removeFromCart',
+            }),
+
+            checkout() {
+                this.$router.push({path: '/payment'});
+            }
         }
     }
 </script>

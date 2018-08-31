@@ -23,7 +23,7 @@ const getters = {
         let total = 0;
 
         state.cart.items.forEach(item => {
-            total += item.lineItem.total;
+            total += parseFloat(item.lineItem.total);
         })
 
         return total
@@ -60,20 +60,23 @@ const actions = {
             })
     },
 
-    addToCart({commit}, pluginHandle) {
+    addToCart({commit}, {plugin, pluginEditionHandle}) {
+        const pluginEdition = plugin.editions.find(edition => edition.handle === pluginEditionHandle)
+
         const item = {
-            plugin: {
-                name: pluginHandle
-            },
+            plugin,
+            pluginEditionHandle,
             lineItem: {
-                total: 99
+                total: pluginEdition.price
             }
         }
 
         commit('addToCart', {item})
+    },
 
-        console.log('add to cart', item);
-    }
+    removeFromCart({commit, state}, lineItemKey) {
+        commit('removeFromCart', {lineItemKey})
+    },
 
 }
 
@@ -85,6 +88,10 @@ const mutations = {
     addToCart(state, {item}) {
         state.cart.items.push(item)
     },
+
+    removeFromCart(state, {lineItemKey}) {
+        state.cart.items.splice(lineItemKey, 1)
+    }
 
 }
 

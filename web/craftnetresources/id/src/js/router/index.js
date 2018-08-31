@@ -15,6 +15,9 @@ import Plugins from '../pages/Plugins'
 import Settings from '../pages/Settings'
 import DeveloperSettings from '../pages/DeveloperSettings'
 import BuyLicense from '../pages/BuyLicense'
+import Cart from '../pages/Cart'
+import Payment from '../pages/Payment'
+import BuyPlugin from '../pages/BuyPlugin'
 
 Vue.use(VueRouter);
 
@@ -117,9 +120,19 @@ const router = new VueRouter({
             component: BuyLicense
         },
         {
-            path: '/buy/:handle',
-            name: 'BuyLicense',
-            component: BuyLicense
+            path: '/buy-plugin/:handle',
+            name: 'BuyPlugin',
+            component: BuyPlugin
+        },
+        {
+            path: '/cart',
+            name: 'Cart',
+            component: Cart
+        },
+        {
+            path: '/payment',
+            name: 'Payment',
+            component: Payment
         },
     ]
 });

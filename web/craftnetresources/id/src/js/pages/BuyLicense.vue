@@ -4,14 +4,14 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <h2>Select a plugin edition</h2>
+                <h2>Plugin License</h2>
 
                 <div class="flex items-center mb-4">
                     <div>
-                        <select v-model="selectedPlugin">
+                        <select v-model="selectedPluginHandle">
                             <option value="">Select a plugin</option>
-                            <option v-for="plugin in plugins"
-                                    :value="plugin.handle">{{ plugin.name }}
+                            <option v-for="plugin in commercialPlugins" :value="plugin.handle">
+                                    {{ plugin.name }} (Starting at ${{plugin.editions[0].price}})
                             </option>
                         </select>
                     </div>
@@ -21,38 +21,41 @@
                     </div>
                 </div>
 
+                <ul v-if="selectedPlugin" class="list-reset mb-4">
+                   <li v-for="edition in selectedPlugin.editions" class="flex">
+                       <input type="radio" checked="checked" :value="edition.handle" class="mt-1" v-model="pluginEditionHandle">
+                       <div class="ml-2">
+                           <h3>{{edition.name}}</h3>
+                           <p>
+                               ${{edition.price}} (License + 1 year of updates)<br />
+                               <em>Then ${{edition.renewalPrice}}/year</em>
+                           </p>
+                       </div>
+                   </li>
+                </ul>
+
                 <div class="buttons">
                     <input type="button" class="btn btn-primary"
-                           :class="{disabled: !selectedPlugin}"
-                           @click="addToCart(selectedPlugin)"
-                           :disabled="!selectedPlugin" value="Add to cart"/>
+                           :class="{disabled: !selectedPluginHandle}"
+                           @click="addToCart(selectedPluginHandle)"
+                           :disabled="!selectedPluginHandle" value="Add to cart"/>
                 </div>
             </div>
         </div>
-
-        <cart></cart>
-
-        <payment></payment>
     </div>
 </template>
 
 <script>
-    import {mapState, mapActions} from 'vuex'
-    import Cart from '../components/buy-license/Cart'
-    import Payment from '../components/buy-license/Payment'
+    import {mapState, mapGetters, mapActions} from 'vuex'
 
     export default {
 
         data() {
             return {
                 loading: false,
-                selectedPlugin: '',
+                selectedPluginHandle: '',
+                pluginEditionHandle: 'standard',
             }
-        },
-
-        components: {
-            Cart,
-            Payment,
         },
 
         computed: {
@@ -61,16 +64,45 @@
                 plugins: state => state.pluginStore.plugins,
             }),
 
+            ...mapGetters({
+                getPluginByHandle: 'pluginStore/getPluginByHandle',
+            }),
+
             handle() {
                 return this.$route.params.handle
+            },
+
+            selectedPlugin() {
+                return this.getPluginByHandle(this.selectedPluginHandle)
+            },
+
+            commercialPlugins() {
+                return this.plugins.filter(plugin => {
+                    if(plugin.editions[0].price > 0) {
+                        return true
+                    }
+
+                    return false
+                })
             }
         },
 
         methods: {
+
             ...mapActions({
                 getPluginStoreData: 'pluginStore/getPluginStoreData',
-                addToCart: 'cart/addToCart',
-            })
+            }),
+
+            addToCart() {
+                const plugin = this.getPluginByHandle(this.selectedPluginHandle)
+                const pluginEditionHandle = this.pluginEditionHandle
+
+                this.$store.dispatch('cart/addToCart', {plugin, pluginEditionHandle})
+                    .then(response => {
+                        this.$router.push({path: '/cart'})
+                    })
+            }
+
         },
 
         mounted() {
