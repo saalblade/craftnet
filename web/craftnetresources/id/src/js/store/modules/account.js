@@ -260,7 +260,7 @@ const mutations = {
         state.card = card
     },
 
-    receiveCurrentUser(state, {currentUser}) {
+    updateCurrentUser(state, {currentUser}) {
         state.currentUser = currentUser
     },
 
