@@ -29,7 +29,7 @@
 						</code>
 					</td>
 
-					<td>{{ license.edition }}</td>
+					<td>{{ license.edition|capitalize }}</td>
 					<td>{{ license.domain }}</td>
 					<td>{{ license.notes }}</td>
 
