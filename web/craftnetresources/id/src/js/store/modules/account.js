@@ -49,7 +49,7 @@ const actions = {
      */
 
     connectAppCallback({commit}, apps) {
-        commit('receiveApps', {apps})
+        commit('updateApps', {apps})
     },
 
     disconnectApp({commit}, appHandle) {
@@ -207,7 +207,7 @@ const mutations = {
      * Apps
      */
 
-    receiveApps(state, {apps}) {
+    updateApps(state, {apps}) {
         state.apps = apps;
     },
 
