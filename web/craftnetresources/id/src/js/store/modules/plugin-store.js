@@ -38,7 +38,7 @@ const actions = {
                 }
             })
             .then(response => {
-                commit('receivePluginStoreData', {response})
+                commit('updatePluginStoreData', {response})
             })
     },
 
@@ -49,7 +49,7 @@ const actions = {
  */
 const mutations = {
 
-    receivePluginStoreData(state, {response}) {
+    updatePluginStoreData(state, {response}) {
         console.log('receive plugin store data mutation');
         state.categories = response.data.categories
         state.featuredPlugins = response.data.featuredPlugins
