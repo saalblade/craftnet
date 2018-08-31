@@ -186,7 +186,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.getInvoices(response => {
                 if (response.data && !response.data.error) {
-                    commit('receiveInvoices', {response});
+                    commit('updateInvoices', {response});
                     resolve(response);
                 } else {
                     reject(response);
@@ -295,7 +295,7 @@ const mutations = {
      * Invoices
      */
 
-    receiveInvoices(state, {response}) {
+    updateInvoices(state, {response}) {
         state.invoices = response.data;
     },
 
