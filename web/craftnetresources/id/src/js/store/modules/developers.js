@@ -90,7 +90,7 @@ const actions = {
  */
 const mutations = {
 
-    receivePlugins(state, {plugins}) {
+    updatePlugins(state, {plugins}) {
         state.plugins = plugins
     },
 
