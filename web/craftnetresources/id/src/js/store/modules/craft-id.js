@@ -28,7 +28,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             craftIdApi.getCraftIdData(response => {
                     commit('updateCategories', {categories: response.data.categories});
-                    commit('receiveCountries', {countries: response.data.countries});
+                    commit('updateCountries', {countries: response.data.countries});
 
                     commit('developers/receiveHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true});
                     commit('developers/receivePlugins', {plugins: response.data.plugins}, {root: true});
@@ -62,7 +62,7 @@ const mutations = {
         state.categories = categories;
     },
 
-    receiveCountries(state, {countries}) {
+    updateCountries(state, {countries}) {
         state.countries = countries;
     },
 
