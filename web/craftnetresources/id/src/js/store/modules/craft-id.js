@@ -30,7 +30,7 @@ const actions = {
                     commit('updateCategories', {categories: response.data.categories});
                     commit('updateCountries', {countries: response.data.countries});
 
-                    commit('developers/receiveHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true});
+                    commit('developers/updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true});
                     commit('developers/updatePlugins', {plugins: response.data.plugins}, {root: true});
                     commit('developers/updateSales', {sales: response.data.sales}, {root: true});
 

@@ -73,7 +73,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             developerApi.generateApiToken(response => {
                 if (response.data && !response.data.error) {
-                    commit('receiveHasApiToken', {hasApiToken: !!response.data.apiToken});
+                    commit('updateHasApiToken', {hasApiToken: !!response.data.apiToken});
                     resolve(response);
                 } else {
                     reject(response);
@@ -165,7 +165,7 @@ const mutations = {
         statePlugin.pendingApproval = true;
     },
 
-    receiveHasApiToken(state, {hasApiToken}){
+    updateHasApiToken(state, {hasApiToken}){
         state.hasApiToken = hasApiToken;
     }
 
