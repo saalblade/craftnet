@@ -169,7 +169,7 @@ const actions = {
     getStripeAccount({commit}) {
         return new Promise((resolve, reject) => {
             accountApi.getStripeAccount(response => {
-                commit('receiveStripeAccount', {response});
+                commit('updateStripeAccount', {response});
                 resolve(response);
             }, response => {
                 reject(response);
@@ -286,7 +286,7 @@ const mutations = {
         state.stripeAccount = null
     },
 
-    receiveStripeAccount(state, {response}) {
+    updateStripeAccount(state, {response}) {
         state.stripeAccount = response.data
     },
 
