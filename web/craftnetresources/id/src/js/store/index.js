@@ -3,9 +3,9 @@ import Vuex from 'vuex'
 import developers from './modules/developers'
 import account from './modules/account'
 import licenses from './modules/licenses'
-import craftId from './modules/craftid'
+import craftId from './modules/craft-id'
 import cart from './modules/cart'
-import pluginstore from './modules/pluginstore'
+import pluginStore from './modules/plugin-store'
 
 Vue.use(Vuex);
 
@@ -17,6 +17,6 @@ export default new Vuex.Store({
         developers,
         licenses,
         cart,
-        pluginstore,
+        pluginStore,
     }
 })

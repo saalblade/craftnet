@@ -58,7 +58,7 @@
         computed: {
 
             ...mapState({
-                plugins: state => state.pluginstore.plugins,
+                plugins: state => state.pluginStore.plugins,
             }),
 
             handle() {
@@ -68,7 +68,7 @@
 
         methods: {
             ...mapActions({
-                getPluginStoreData: 'pluginstore/getPluginStoreData',
+                getPluginStoreData: 'pluginStore/getPluginStoreData',
                 addToCart: 'cart/addToCart',
             })
         },

@@ -57,7 +57,7 @@ const actions = {
  * Mutations
  */
 const mutations = {
-    
+
     receiveCategories(state, {categories}) {
         state.categories = categories;
     },
