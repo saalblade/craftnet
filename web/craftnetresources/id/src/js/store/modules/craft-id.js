@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import craftIdApi from '../../api/craftid';
+import craftIdApi from '../../api/craft-id';
 
 Vue.use(Vuex)
 
