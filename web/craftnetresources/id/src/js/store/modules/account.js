@@ -256,7 +256,7 @@ const mutations = {
         state.billingAddress = billingAddress
     },
 
-    receiveCard(state, {card}) {
+    updateCard(state, {card}) {
         state.card = card
     },
 
