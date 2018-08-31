@@ -32,7 +32,7 @@ const actions = {
 
                     commit('developers/receiveHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true});
                     commit('developers/updatePlugins', {plugins: response.data.plugins}, {root: true});
-                    commit('developers/receiveSales', {sales: response.data.sales}, {root: true});
+                    commit('developers/updateSales', {sales: response.data.sales}, {root: true});
 
                     commit('licenses/receiveCmsLicenses', {cmsLicenses: response.data.cmsLicenses}, {root: true});
                     commit('licenses/receivePluginLicenses', {pluginLicenses: response.data.pluginLicenses}, {root: true});

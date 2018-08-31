@@ -94,7 +94,7 @@ const mutations = {
         state.plugins = plugins
     },
 
-    receiveSales(state, {sales}) {
+    updateSales(state, {sales}) {
         state.sales = sales
     },
 
