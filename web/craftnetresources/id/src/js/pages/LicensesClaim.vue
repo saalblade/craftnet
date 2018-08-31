@@ -104,12 +104,12 @@
             claimCmsLicense() {
                 this.cmsLicenseLoading = true;
 
-                this.$store.dispatch('claimCmsLicense', this.cmsLicenseKey)
+                this.$store.dispatch('licenses/claimCmsLicense', this.cmsLicenseKey)
                     .then(response => {
                         this.cmsLicenseLoading = false;
-                        this.$store.dispatch('getCmsLicenses');
-                        this.$store.dispatch('getPluginLicenses');
-                        this.$store.dispatch('getInvoices');
+                        this.$store.dispatch('licenses/getCmsLicenses');
+                        this.$store.dispatch('licenses/getPluginLicenses');
+                        this.$store.dispatch('account/getInvoices');
                         this.$root.displayNotice('CMS license claimed.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })
@@ -121,12 +121,12 @@
             },
 
             claimCmsLicenseFile() {
-                this.$store.dispatch('claimCmsLicenseFile', this.$refs.licenseFile.files[0])
+                this.$store.dispatch('licenses/claimCmsLicenseFile', this.$refs.licenseFile.files[0])
                     .then(response => {
                         this.cmsLicenseFileLoading = false;
-                        this.$store.dispatch('getCmsLicenses');
-                        this.$store.dispatch('getPluginLicenses');
-                        this.$store.dispatch('getInvoices');
+                        this.$store.dispatch('licenses/getCmsLicenses');
+                        this.$store.dispatch('licenses/getPluginLicenses');
+                        this.$store.dispatch('account/getInvoices');
                         this.$root.displayNotice('CMS license claimed.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })
@@ -140,12 +140,12 @@
             claimLicensesByEmail() {
                 this.emailLoading = true;
 
-                this.$store.dispatch('claimLicensesByEmail', this.email)
+                this.$store.dispatch('licenses/claimLicensesByEmail', this.email)
                     .then(response => {
                         this.emailLoading = false;
-                        this.$store.dispatch('getCmsLicenses');
-                        this.$store.dispatch('getPluginLicenses');
-                        this.$store.dispatch('getInvoices');
+                        this.$store.dispatch('licenses/getCmsLicenses');
+                        this.$store.dispatch('licenses/getPluginLicenses');
+                        this.$store.dispatch('account/getInvoices');
                         this.$root.displayNotice('Verification email sent to ' + this.email + '.');
                     })
                     .catch(response => {
@@ -158,12 +158,12 @@
             claimPluginLicense() {
                 this.pluginLicenseLoading = true;
 
-                this.$store.dispatch('claimPluginLicense', this.pluginLicenseKey)
+                this.$store.dispatch('licenses/claimPluginLicense', this.pluginLicenseKey)
                     .then(response => {
                         this.pluginLicenseLoading = false;
-                        this.$store.dispatch('getCmsLicenses');
-                        this.$store.dispatch('getPluginLicenses');
-                        this.$store.dispatch('getInvoices');
+                        this.$store.dispatch('licenses/getCmsLicenses');
+                        this.$store.dispatch('licenses/getPluginLicenses');
+                        this.$store.dispatch('account/getInvoices');
                         this.$root.displayNotice('Plugin license claimed.');
                         this.$router.push({path: '/account/licenses/plugins'});
                     })

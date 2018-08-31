@@ -35,7 +35,7 @@
             }),
 
             ...mapGetters({
-                expiringCmsLicenses: 'expiringCmsLicenses',
+                expiringCmsLicenses: 'licenses/expiringCmsLicenses',
             }),
 
         },

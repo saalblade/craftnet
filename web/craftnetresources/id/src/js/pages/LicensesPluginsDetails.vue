@@ -51,14 +51,14 @@
                     return false;
                 }
 
-                this.$store.dispatch('releasePluginLicense', {
+                this.$store.dispatch('licenses/releasePluginLicense', {
                         pluginHandle: this.license.plugin.handle,
                         licenseKey: this.license.key,
                     })
                     .then(response => {
-                        this.$store.dispatch('getCmsLicenses');
-                        this.$store.dispatch('getPluginLicenses');
-                        this.$store.dispatch('getInvoices');
+                        this.$store.dispatch('licenses/getCmsLicenses');
+                        this.$store.dispatch('licenses/getPluginLicenses');
+                        this.$store.dispatch('account/getInvoices');
                         this.$root.displayNotice('Plugin license released.');
                         this.$router.push({path: '/account/licenses/plugins'});
                     })

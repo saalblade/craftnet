@@ -83,7 +83,7 @@
              * @param source
              */
             saveCard(card, source) {
-                this.$store.dispatch('saveCard', source).then(response => {
+                this.$store.dispatch('account/saveCard', source).then(response => {
                     card.clear();
                     this.cardFormloading = false;
                     this.editing = false;
@@ -96,7 +96,7 @@
              */
             removeCard() {
                 this.removeCardLoading = true;
-                this.$store.dispatch('removeCard').then(response => {
+                this.$store.dispatch('account/removeCard').then(response => {
                     this.removeCardLoading = false;
                     this.$root.displayNotice('Card removed.')
                 })

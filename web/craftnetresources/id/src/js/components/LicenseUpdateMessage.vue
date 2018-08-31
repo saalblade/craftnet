@@ -38,8 +38,8 @@
 
         computed: {
             ...mapGetters({
-                expiresSoon: 'expiresSoon',
-                daysBeforeExpiry: 'daysBeforeExpiry',
+                expiresSoon: 'licenses/expiresSoon',
+                daysBeforeExpiry: 'licenses/daysBeforeExpiry',
             }),
         }
 

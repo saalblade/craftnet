@@ -66,11 +66,11 @@
                     return false;
                 }
 
-                this.$store.dispatch('releaseCmsLicense', this.license.key)
+                this.$store.dispatch('licenses/releaseCmsLicense', this.license.key)
                     .then(response => {
-                        this.$store.dispatch('getCmsLicenses');
-                        this.$store.dispatch('getPluginLicenses');
-                        this.$store.dispatch('getInvoices');
+                        this.$store.dispatch('licenses/getCmsLicenses');
+                        this.$store.dispatch('licenses/getPluginLicenses');
+                        this.$store.dispatch('account/getInvoices');
                         this.$root.displayNotice('CMS license released.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })

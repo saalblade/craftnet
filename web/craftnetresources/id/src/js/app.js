@@ -40,7 +40,7 @@ window.craftIdApp = new Vue({
          * @param apps
          */
         connectAppCallback(apps) {
-            this.$store.dispatch('connectAppCallback', apps);
+            this.$store.dispatch('account/connectAppCallback', apps);
 
             this.$root.displayNotice('App connected.');
         },
@@ -83,12 +83,12 @@ window.craftIdApp = new Vue({
     },
 
     created() {
-        this.$store.dispatch('getCraftIdData').then(() => {
+        this.$store.dispatch('craftId/getCraftIdData').then(() => {
             this.loading = false;
         });
 
         if (window.stripeAccessToken) {
-            this.$store.dispatch('getStripeAccount').then(response => {
+            this.$store.dispatch('account/getStripeAccount').then(response => {
                 this.stripeAccountLoading = false;
             }, error => {
                 this.stripeAccountLoading = false;
@@ -97,7 +97,7 @@ window.craftIdApp = new Vue({
             this.stripeAccountLoading = false;
         }
 
-        this.$store.dispatch('getInvoices')
+        this.$store.dispatch('account/getInvoices')
             .then(response => {
                 this.invoicesLoading = false;
             })

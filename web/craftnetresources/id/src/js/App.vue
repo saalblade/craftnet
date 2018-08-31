@@ -113,7 +113,7 @@
             }),
 
             ...mapGetters({
-                userIsInGroup: 'userIsInGroup',
+                userIsInGroup: 'account/userIsInGroup',
             }),
 
         },

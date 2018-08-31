@@ -63,7 +63,7 @@
             }),
 
             ...mapGetters({
-                userIsInGroup: 'userIsInGroup',
+                userIsInGroup: 'account/userIsInGroup',
             }),
 
         },
@@ -82,7 +82,7 @@
                     newEmail = true;
                 }
 
-                this.$store.dispatch('saveUser', {
+                this.$store.dispatch('account/saveUser', {
                     id: this.userDraft.id,
                     email: this.userDraft.email,
                     username: this.userDraft.username,

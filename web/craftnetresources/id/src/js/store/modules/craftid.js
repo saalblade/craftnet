@@ -1,4 +1,3 @@
-import * as types from '../mutation-types'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import craftIdApi from '../../api/craftid';
@@ -28,20 +27,23 @@ const actions = {
     getCraftIdData({commit}) {
         return new Promise((resolve, reject) => {
             craftIdApi.getCraftIdData(response => {
-                    commit(types.RECEIVE_CRAFT_ID_DATA, {response});
-                    commit(types.RECEIVE_CATEGORIES, {categories: response.data.categories});
-                    commit(types.RECEIVE_COUNTRIES, {countries: response.data.countries});
+                    commit('receiveCraftIdData', {response});
+                    commit('receiveCategories', {categories: response.data.categories});
+                    commit('receiveCountries', {countries: response.data.countries});
 
-                    commit(types.RECEIVE_PLUGINS, {plugins: response.data.plugins});
-                    commit(types.RECEIVE_UPCOMING_INVOICE, {upcomingInvoice: response.data.upcomingInvoice});
-                    commit(types.RECEIVE_SALES, {sales: response.data.sales});
-                    commit(types.RECEIVE_CMS_LICENSES, {cmsLicenses: response.data.cmsLicenses});
-                    commit(types.RECEIVE_PLUGIN_LICENSES, {pluginLicenses: response.data.pluginLicenses});
-                    commit(types.RECEIVE_HAS_API_TOKEN, {hasApiToken: response.data.currentUser.hasApiToken});
-                    commit(types.RECEIVE_APPS, {apps: response.data.apps});
-                    commit(types.RECEIVE_CURRENT_USER, {currentUser: response.data.currentUser});
-                    commit(types.RECEIVE_BILLING_ADDRESS, {billingAddress: response.data.billingAddress});
-                    commit(types.RECEIVE_CARD, {card: response.data.card});
+                    commit('developers/receiveHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true});
+                    commit('developers/receivePlugins', {plugins: response.data.plugins}, {root: true});
+                    commit('developers/receiveSales', {sales: response.data.sales}, {root: true});
+
+                    commit('licenses/receiveCmsLicenses', {cmsLicenses: response.data.cmsLicenses}, {root: true});
+                    commit('licenses/receivePluginLicenses', {pluginLicenses: response.data.pluginLicenses}, {root: true});
+
+                    commit('account/receiveUpcomingInvoice', {upcomingInvoice: response.data.upcomingInvoice}, {root: true});
+                    commit('account/receiveApps', {apps: response.data.apps}, {root: true});
+                    commit('account/receiveCurrentUser', {currentUser: response.data.currentUser}, {root: true});
+                    commit('account/receiveBillingAddress', {billingAddress: response.data.billingAddress}, {root: true});
+                    commit('account/receiveCard', {card: response.data.card}, {root: true});
+
                     resolve(response);
                 },
                 response => {
@@ -57,20 +59,21 @@ const actions = {
  */
 const mutations = {
 
-    [types.RECEIVE_CRAFT_ID_DATA](state, {response}) {
+    receiveCraftIdData(state, {response}) {
     },
 
-    [types.RECEIVE_CATEGORIES](state, {categories}) {
+    receiveCategories(state, {categories}) {
         state.categories = categories;
     },
 
-    [types.RECEIVE_COUNTRIES](state, {countries}) {
+    receiveCountries(state, {countries}) {
         state.countries = countries;
     },
 
 }
 
 export default {
+    namespaced: true,
     state,
     getters,
     actions,

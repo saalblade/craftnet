@@ -171,7 +171,7 @@
              * Save auto renew.
              */
             saveAutoRenew() {
-                this.$store.dispatch('saveCmsLicense', {
+                this.$store.dispatch('licenses/saveCmsLicense', {
                     key: this.license.key,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then(response => {
@@ -237,7 +237,7 @@
              * @param cbError
              */
             saveCmsLicense(cb, cbError) {
-                this.$store.dispatch('saveCmsLicense', {
+                this.$store.dispatch('licenses/saveCmsLicense', {
                     key: this.license.key,
                     domain: this.licenseDraft.domain,
                     notes: this.licenseDraft.notes,

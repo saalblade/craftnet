@@ -69,7 +69,7 @@
         computed: {
 
             ...mapGetters({
-                expiresSoon: 'expiresSoon',
+                expiresSoon: 'licenses/expiresSoon',
             }),
 
         }

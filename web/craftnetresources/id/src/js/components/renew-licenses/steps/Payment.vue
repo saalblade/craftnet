@@ -100,7 +100,7 @@
             }),
 
             ...mapGetters({
-                renewableLicensesTotal: 'renewableLicensesTotal',
+                renewableLicensesTotal: 'licenses/renewableLicensesTotal',
             }),
 
             totalPrice() {

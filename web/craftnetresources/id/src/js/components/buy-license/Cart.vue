@@ -51,14 +51,14 @@
             }),
 
             ...mapGetters({
-                cartTotal: 'cartTotal',
+                cartTotal: 'cart/cartTotal',
             }),
 
         },
 
         methods: {
             ...mapActions({
-                createCart: 'createCart',
+                createCart: 'cart/createCart',
             })
         }
     }

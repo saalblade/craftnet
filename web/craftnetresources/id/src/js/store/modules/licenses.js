@@ -1,4 +1,3 @@
-import * as types from '../mutation-types'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import licensesApi from '../../api/licenses';
@@ -212,7 +211,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.getCmsLicenses(response => {
                 if (response.data && !response.data.error) {
-                    commit(types.RECEIVE_CMS_LICENSES, {cmsLicenses: response.data});
+                    commit('receiveCmsLicenses', {cmsLicenses: response.data});
                     resolve(response);
                 } else {
                     reject(response);
@@ -227,7 +226,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.getPluginLicenses(response => {
                 if (response.data && !response.data.error) {
-                    commit(types.RECEIVE_PLUGIN_LICENSES, {pluginLicenses: response.data});
+                    commit('receivePluginLicenses', {pluginLicenses: response.data});
                     resolve(response);
                 } else {
                     reject(response);
@@ -242,7 +241,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.releaseCmsLicense(licenseKey, response => {
                 if (response.data && !response.data.error) {
-                    commit(types.RELEASE_CMS_LICENSE, {licenseKey});
+                    commit('releaseCmsLicense', {licenseKey});
                     resolve(response);
                 } else {
                     reject(response);
@@ -257,7 +256,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.releasePluginLicense({pluginHandle, licenseKey}, response => {
                 if (response.data && !response.data.error) {
-                    commit(types.RELEASE_PLUGIN_LICENSE, {licenseKey});
+                    commit('releasePluginLicense', {licenseKey});
                     resolve(response);
                 } else {
                     reject(response);
@@ -272,7 +271,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.saveCmsLicense(license, response => {
                 if (response.data && !response.data.error) {
-                    commit(types.SAVE_CMS_LICENSE, { license: response.data.license });
+                    commit('saveCmsLicense', { license: response.data.license });
                     resolve(response);
                 } else {
                     reject(response);
@@ -287,7 +286,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.savePluginLicense(license, response => {
                 if (response.data && !response.data.error) {
-                    commit(types.SAVE_PLUGIN_LICENSE, {license});
+                    commit('savePluginLicense', {license});
                     resolve(response);
                 } else {
                     reject(response);
@@ -305,15 +304,15 @@ const actions = {
  */
 const mutations = {
 
-    [types.RECEIVE_CMS_LICENSES](state, {cmsLicenses}) {
+    receiveCmsLicenses(state, {cmsLicenses}) {
         state.cmsLicenses = cmsLicenses;
     },
 
-    [types.RECEIVE_PLUGIN_LICENSES](state, {pluginLicenses}) {
+    receivePluginLicenses(state, {pluginLicenses}) {
         state.pluginLicenses = pluginLicenses;
     },
 
-    [types.RELEASE_CMS_LICENSE](state, {licenseKey}) {
+    releaseCmsLicense(state, {licenseKey}) {
         state.cmsLicenses.find((l, index, array) => {
             if (l.key === licenseKey) {
                 array.splice(index, 1);
@@ -324,7 +323,7 @@ const mutations = {
         });
     },
 
-    [types.RELEASE_PLUGIN_LICENSE](state, {licenseKey}) {
+    releasePluginLicense(state, {licenseKey}) {
         state.pluginLicenses.find((l, index, array) => {
             if (l.key === licenseKey) {
                 array.splice(index, 1);
@@ -335,7 +334,7 @@ const mutations = {
         });
     },
 
-    [types.SAVE_CMS_LICENSE](state, {license}) {
+    saveCmsLicense(state, {license}) {
         let stateLicense = state.cmsLicenses.find(l => l.key == license.key);
         for (let attribute in license) {
             switch(attribute) {
@@ -348,7 +347,7 @@ const mutations = {
         }
     },
 
-    [types.SAVE_PLUGIN_LICENSE](state, {license}) {
+    savePluginLicense(state, {license}) {
         let stateLicense = state.pluginLicenses.find(l => l.key == license.key);
         for (let attribute in license) {
             switch(attribute) {
@@ -364,6 +363,7 @@ const mutations = {
 }
 
 export default {
+    namespaced: true,
     state,
     getters,
     actions,

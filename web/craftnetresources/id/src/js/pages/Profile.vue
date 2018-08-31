@@ -78,7 +78,7 @@
             }),
 
             ...mapGetters({
-                userIsInGroup: 'userIsInGroup',
+                userIsInGroup: 'account/userIsInGroup',
             }),
 
         },
@@ -94,7 +94,7 @@
                 if (confirm("Are you sure you want to delete this image?")) {
                     this.photoLoading = true;
 
-                    this.$store.dispatch('deleteUserPhoto')
+                    this.$store.dispatch('account/deleteUserPhoto')
                         .then(response => {
                             this.$root.displayNotice('Photo deleted.');
                             this.userDraft.photoId = response.data.photoId;
@@ -140,7 +140,7 @@
                     photoUrl: this.userDraft.photoUrl,
                 };
 
-                this.$store.dispatch('uploadUserPhoto', data)
+                this.$store.dispatch('account/uploadUserPhoto', data)
                     .then(response => {
                         this.$root.displayNotice('Photo uploaded.');
                         let photoUrl = response.data.photoUrl
@@ -166,7 +166,7 @@
             save() {
                 this.loading = true;
 
-                this.$store.dispatch('saveUser', {
+                this.$store.dispatch('account/saveUser', {
                         id: this.userDraft.id,
                         developerName: this.userDraft.developerName,
                         developerUrl: this.userDraft.developerUrl,

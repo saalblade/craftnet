@@ -51,7 +51,7 @@
             }),
 
             ...mapGetters({
-                repositoryIsInUse: 'repositoryIsInUse',
+                repositoryIsInUse: 'developers/repositoryIsInUse',
             }),
 
             app() {

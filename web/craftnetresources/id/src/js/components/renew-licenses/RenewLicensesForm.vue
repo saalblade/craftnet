@@ -61,7 +61,7 @@
         computed: {
 
             ...mapGetters({
-                renewableLicenses: 'renewableLicenses',
+                renewableLicenses: 'licenses/renewableLicenses',
             }),
 
         },

@@ -59,7 +59,7 @@
             generateToken() {
                 this.loading = true
 
-                this.$store.dispatch('generateApiToken')
+                this.$store.dispatch('developers/generateApiToken')
                     .then(response => {
                         this.apiToken = response.data.apiToken
 

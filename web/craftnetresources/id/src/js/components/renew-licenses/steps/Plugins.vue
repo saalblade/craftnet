@@ -55,9 +55,9 @@
             }),
 
             ...mapGetters({
-                renewableLicenses: 'renewableLicenses',
-                newExpiresOn: 'newExpiresOn',
-                renewableLicensesTotal: 'renewableLicensesTotal',
+                renewableLicenses: 'licenses/renewableLicenses',
+                newExpiresOn: 'licenses/newExpiresOn',
+                renewableLicensesTotal: 'licenses/renewableLicensesTotal',
             }),
 
         },

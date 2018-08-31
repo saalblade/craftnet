@@ -35,7 +35,7 @@
             }),
 
             ...mapGetters({
-                expiringPluginLicenses: 'expiringPluginLicenses',
+                expiringPluginLicenses: 'licenses/expiringPluginLicenses',
             }),
 
         },

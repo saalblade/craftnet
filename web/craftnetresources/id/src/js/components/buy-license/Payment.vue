@@ -41,7 +41,7 @@
         computed: {
 
             ...mapGetters({
-                cartTotal: 'cartTotal',
+                cartTotal: 'cart/cartTotal',
             }),
 
         },

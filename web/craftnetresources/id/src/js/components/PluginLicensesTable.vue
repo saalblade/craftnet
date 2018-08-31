@@ -104,7 +104,7 @@
         computed: {
 
             ...mapGetters({
-                expiresSoon: 'expiresSoon',
+                expiresSoon: 'licenses/expiresSoon',
             }),
 
         },
@@ -122,7 +122,7 @@
                     autoRenew: autoRenew ? 1 : 0,
                 }
 
-                this.$store.dispatch('savePluginLicense', data)
+                this.$store.dispatch('licenses/savePluginLicense', data)
                     .then(response => {
                         if (autoRenew) {
                             this.$root.displayNotice('Auto renew enabled.');
@@ -130,7 +130,7 @@
                             this.$root.displayNotice('Auto renew disabled.');
                         }
 
-                        this.$store.dispatch('getCmsLicenses');
+                        this.$store.dispatch('licenses/getCmsLicenses');
                     }).catch(response => {
                     this.$root.displayError('Couldn’t save license.');
                     this.errors = response.errors;

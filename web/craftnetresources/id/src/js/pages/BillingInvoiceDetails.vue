@@ -116,7 +116,7 @@
         computed: {
 
             ...mapGetters({
-                getInvoiceByNumber: 'getInvoiceByNumber',
+                getInvoiceByNumber: 'account/getInvoiceByNumber',
             }),
 
             invoice() {

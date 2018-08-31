@@ -72,7 +72,7 @@
             }),
 
             ...mapGetters({
-                userIsInGroup: 'userIsInGroup',
+                userIsInGroup: 'account/userIsInGroup',
             }),
 
         },
@@ -136,7 +136,7 @@
              */
             disconnect(provider) {
                 this.loading[provider] = true;
-                this.$store.dispatch('disconnectApp', provider)
+                this.$store.dispatch('account/disconnectApp', provider)
                     .then(response => {
                         this.loading[provider] = false;
                         this.$root.displayNotice('App disconnected.');

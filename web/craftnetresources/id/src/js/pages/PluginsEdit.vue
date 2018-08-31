@@ -223,7 +223,7 @@
             }),
 
             ...mapGetters({
-                userIsInGroup: 'userIsInGroup',
+                userIsInGroup: 'account/userIsInGroup',
             }),
 
             pluginId() {
@@ -482,7 +482,7 @@
                     plugin.screenshotIds = this.pluginDraft.screenshotIds;
                 }
 
-                this.$store.dispatch('savePlugin', {plugin}).then(response => {
+                this.$store.dispatch('developers/savePlugin', {plugin}).then(response => {
                     this.loading = false;
                     this.$root.displayNotice('Plugin saved.');
                     this.$router.push({path: '/developer/plugins'});
@@ -501,7 +501,7 @@
              */
             submit() {
                 this.pluginSubmitLoading = true;
-                this.$store.dispatch('submitPlugin', this.plugin.id).then(response => {
+                this.$store.dispatch('developers/submitPlugin', this.plugin.id).then(response => {
                     this.pluginSubmitLoading = false;
                     this.$root.displayNotice('Plugin submitted for approval.');
                 }).catch(response => {

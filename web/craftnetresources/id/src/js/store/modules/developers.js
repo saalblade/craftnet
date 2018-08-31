@@ -1,4 +1,3 @@
-import * as types from '../mutation-types'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import developerApi from '../../api/developer';
@@ -44,7 +43,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             developerApi.savePlugin({plugin}, response => {
                 if (response.data.success) {
-                    commit(types.SAVE_PLUGIN, {plugin, response});
+                    commit('savePlugin', {plugin, response});
                     resolve(response);
                 } else {
                     reject(response);
@@ -59,7 +58,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             developerApi.submitPlugin(pluginId, response => {
                 if (response.data.success) {
-                    commit(types.SUBMIT_PLUGIN, {pluginId});
+                    commit('submitPlugin', {pluginId});
                     resolve(response);
                 } else {
                     reject(response);
@@ -74,7 +73,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             developerApi.generateApiToken(response => {
                 if (response.data && !response.data.error) {
-                    commit(types.RECEIVE_HAS_API_TOKEN, {hasApiToken: !!response.data.apiToken});
+                    commit('receiveHasApiToken', {hasApiToken: !!response.data.apiToken});
                     resolve(response);
                 } else {
                     reject(response);
@@ -91,15 +90,15 @@ const actions = {
  */
 const mutations = {
 
-    [types.RECEIVE_PLUGINS](state, {plugins}) {
+    receivePlugins(state, {plugins}) {
         state.plugins = plugins
     },
 
-    [types.RECEIVE_SALES](state, {sales}) {
+    receiveSales(state, {sales}) {
         state.sales = sales
     },
 
-    [types.SAVE_PLUGIN](state, {plugin, response}) {
+    savePlugin(state, {plugin, response}) {
 
         let newPlugin = false;
         let statePlugin = state.plugins.find(p => p.id == plugin.pluginId);
@@ -161,18 +160,19 @@ const mutations = {
         }
     },
 
-    [types.SUBMIT_PLUGIN](state, {pluginId}) {
+    submitPlugin(state, {pluginId}) {
         let statePlugin = state.plugins.find(p => p.id == pluginId);
         statePlugin.pendingApproval = true;
     },
 
-    [types.RECEIVE_HAS_API_TOKEN](state, {hasApiToken}){
+    receiveHasApiToken(state, {hasApiToken}){
         state.hasApiToken = hasApiToken;
     }
 
 }
 
 export default {
+    namespaced: true,
     state,
     getters,
     actions,

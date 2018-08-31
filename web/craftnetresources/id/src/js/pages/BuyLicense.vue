@@ -68,8 +68,8 @@
 
         methods: {
             ...mapActions({
-                getPluginStoreData: 'getPluginStoreData',
-                addToCart: 'addToCart',
+                getPluginStoreData: 'pluginstore/getPluginStoreData',
+                addToCart: 'cart/addToCart',
             })
         },
 

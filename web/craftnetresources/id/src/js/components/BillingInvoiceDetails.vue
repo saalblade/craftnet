@@ -95,7 +95,7 @@
                     });
                 }
 
-                this.$store.dispatch('saveBillingInfo', data).then(response => {
+                this.$store.dispatch('account/saveBillingInfo', data).then(response => {
                     this.$root.displayNotice('Invoice details saved.');
                     this.showForm = false;
                     this.errors = {};

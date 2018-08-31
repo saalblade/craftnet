@@ -49,7 +49,7 @@
         computed: {
 
             ...mapGetters({
-                getSaleById: 'getSaleById',
+                getSaleById: 'developers/getSaleById',
             }),
 
             sale() {

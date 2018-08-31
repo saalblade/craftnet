@@ -194,8 +194,8 @@
 
                 this.savePluginLicense(() => {
                     this.detaching = false;
-                    this.$store.dispatch('getCmsLicenses')
-                    this.$store.dispatch('getPluginLicenses')
+                    this.$store.dispatch('licenses/getCmsLicenses')
+                    this.$store.dispatch('licenses/getPluginLicenses')
                 }, () => {
                     this.detaching = false;
                 });
@@ -268,7 +268,7 @@
              * @param cbError
              */
             savePluginLicense(cb, cbError) {
-                this.$store.dispatch('savePluginLicense', {
+                this.$store.dispatch('licenses/savePluginLicense', {
                     pluginHandle: this.license.plugin.handle,
                     key: this.license.key,
                     cmsLicenseId: this.licenseDraft.cmsLicenseId,
@@ -288,7 +288,7 @@
              * Save auto renew
              */
             saveAutoRenew() {
-                this.$store.dispatch('savePluginLicense', {
+                this.$store.dispatch('licenses/savePluginLicense', {
                     pluginHandle: this.license.plugin.handle,
                     key: this.license.key,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
@@ -299,7 +299,7 @@
                         this.$root.displayNotice('Auto renew disabled.');
                     }
 
-                    this.$store.dispatch('getCmsLicenses');
+                    this.$store.dispatch('licenses/getCmsLicenses');
                 }).catch((data) => {
                     this.$root.displayError('Couldn’t save license.');
                     this.errors = data.errors;

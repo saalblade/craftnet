@@ -151,7 +151,7 @@
                     });
                 }
 
-                this.$store.dispatch('saveBillingInfo', data).then(response => {
+                this.$store.dispatch('account/saveBillingInfo', data).then(response => {
                     this.$root.displayNotice('Billing address saved.');
                     this.showForm = false;
                     this.errors = {};

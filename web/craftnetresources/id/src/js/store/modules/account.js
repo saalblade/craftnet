@@ -1,4 +1,3 @@
-import * as types from '../mutation-types'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import accountApi from '../../api/account'
@@ -50,13 +49,13 @@ const actions = {
      */
 
     connectAppCallback({commit}, apps) {
-        commit(types.RECEIVE_APPS, {apps})
+        commit('receiveApps', {apps})
     },
 
     disconnectApp({commit}, appHandle) {
         return new Promise((resolve, reject) => {
             accountApi.disconnectApp(appHandle, response => {
-                    commit(types.DISCONNECT_APP, {appHandle});
+                    commit('disconnectApp', {appHandle});
                     resolve(response);
                 },
                 response => {
@@ -73,7 +72,7 @@ const actions = {
     deleteUserPhoto({commit}) {
         return new Promise((resolve, reject) => {
             accountApi.deleteUserPhoto(response => {
-                commit(types.DELETE_USER_PHOTO, {response});
+                commit('deleteUserPhoto', {response});
                 resolve(response);
             }, response => {
                 reject(response);
@@ -85,7 +84,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.saveUser(user, response => {
                     if (!response.data.errors) {
-                        commit(types.SAVE_USER, {user, response});
+                        commit('saveUser', {user, response});
                         resolve(response);
                     } else {
                         reject(response);
@@ -100,7 +99,7 @@ const actions = {
     uploadUserPhoto({commit}, data) {
         return new Promise((resolve, reject) => {
             accountApi.uploadUserPhoto(data, response => {
-                commit(types.UPLOAD_USER_PHOTO, {response});
+                commit('uploadUserPhoto', {response});
                 resolve(response);
             }, response => {
                 reject(response);
@@ -112,7 +111,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.saveBillingInfo(data, response => {
                     if (!response.data.errors) {
-                        commit(types.RECEIVE_BILLING_ADDRESS, {billingAddress: response.data.address});
+                        commit('receiveBillingAddress', {billingAddress: response.data.address});
                         resolve(response);
                     } else {
                         reject(response);
@@ -132,7 +131,7 @@ const actions = {
     removeCard({commit}) {
         return new Promise((resolve, reject) => {
             accountApi.removeCard(response => {
-                commit(types.REMOVE_STRIPE_CARD);
+                commit('removeStripeCard');
                 resolve(response);
             }, response => {
                 reject(response);
@@ -143,7 +142,7 @@ const actions = {
     saveCard({commit}, source) {
         return new Promise((resolve, reject) => {
             accountApi.saveCard(source, response => {
-                commit(types.RECEIVE_STRIPE_CARD, {card: response.data.card.card});
+                commit('receiveStripeCard', {card: response.data.card.card});
                 resolve(response);
             }, response => {
                 reject(response);
@@ -159,7 +158,7 @@ const actions = {
     disconnectStripeAccount({commit}) {
         return new Promise((resolve, reject) => {
             accountApi.disconnectStripeAccount(response => {
-                commit(types.DISCONNECT_STRIPE_ACCOUNT);
+                commit('disconnectStripeAccount');
                 resolve(response);
             }, response => {
                 reject(response);
@@ -170,7 +169,7 @@ const actions = {
     getStripeAccount({commit}) {
         return new Promise((resolve, reject) => {
             accountApi.getStripeAccount(response => {
-                commit(types.RECEIVE_STRIPE_ACCOUNT, {response});
+                commit('receiveStripeAccount', {response});
                 resolve(response);
             }, response => {
                 reject(response);
@@ -187,7 +186,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.getInvoices(response => {
                 if (response.data && !response.data.error) {
-                    commit(types.RECEIVE_INVOICES, {response});
+                    commit('receiveInvoices', {response});
                     resolve(response);
                 } else {
                     reject(response);
@@ -208,11 +207,11 @@ const mutations = {
      * Apps
      */
 
-    [types.RECEIVE_APPS](state, {apps}) {
+    receiveApps(state, {apps}) {
         state.apps = apps;
     },
 
-    [types.DISCONNECT_APP](state, {appHandle}) {
+    disconnectApp(state, {appHandle}) {
         Vue.delete(state.apps, appHandle);
     },
 
@@ -221,17 +220,17 @@ const mutations = {
      * User
      */
 
-    [types.UPLOAD_USER_PHOTO](state, {response}) {
+    uploadUserPhoto(state, {response}) {
         state.currentUser.photoId = response.data.photoId;
         state.currentUser.photoUrl = response.data.photoUrl;
     },
 
-    [types.DELETE_USER_PHOTO](state, {response}) {
+    deleteUserPhoto(state, {response}) {
         state.currentUser.photoId = response.data.photoId;
         state.currentUser.photoUrl = response.data.photoUrl;
     },
 
-    [types.SAVE_USER](state, {user, response}) {
+    saveUser(state, {user, response}) {
         for (let attribute in user) {
             if (attribute === 'id' || attribute === 'email') {
                 continue;
@@ -253,15 +252,15 @@ const mutations = {
         }
     },
 
-    [types.RECEIVE_BILLING_ADDRESS](state, {billingAddress}) {
+    receiveBillingAddress(state, {billingAddress}) {
         state.billingAddress = billingAddress
     },
 
-    [types.RECEIVE_CARD](state, {card}) {
+    receiveCard(state, {card}) {
         state.card = card
     },
 
-    [types.RECEIVE_CURRENT_USER](state, {currentUser}) {
+    receiveCurrentUser(state, {currentUser}) {
         state.currentUser = currentUser
     },
 
@@ -270,11 +269,11 @@ const mutations = {
      * Credit cards
      */
 
-    [types.REMOVE_STRIPE_CARD](state) {
+    removeStripeCard(state) {
         state.card = null
     },
 
-    [types.RECEIVE_STRIPE_CARD](state, {card}) {
+    receiveStripeCard(state, {card}) {
         state.card = card
     },
 
@@ -283,11 +282,11 @@ const mutations = {
      * Stripe Account
      */
 
-    [types.DISCONNECT_STRIPE_ACCOUNT](state) {
+    disconnectStripeAccount(state) {
         state.stripeAccount = null
     },
 
-    [types.RECEIVE_STRIPE_ACCOUNT](state, {response}) {
+    receiveStripeAccount(state, {response}) {
         state.stripeAccount = response.data
     },
 
@@ -296,17 +295,18 @@ const mutations = {
      * Invoices
      */
 
-    [types.RECEIVE_INVOICES](state, {response}) {
+    receiveInvoices(state, {response}) {
         state.invoices = response.data;
     },
 
-    [types.RECEIVE_UPCOMING_INVOICE](state, {upcomingInvoice}) {
+    receiveUpcomingInvoice(state, {upcomingInvoice}) {
         state.upcomingInvoice = upcomingInvoice;
     }
 
 }
 
 export default {
+    namespaced: true,
     state,
     getters,
     actions,
