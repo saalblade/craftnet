@@ -116,6 +116,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
     ],
+    'LanguageLink' => [
+        'statusColor' => 'green',
+        'status' => 'Renamed to "Site Switcher" in Craft 3'
+    ],
     'LinkVault' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
