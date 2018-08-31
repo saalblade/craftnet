@@ -142,7 +142,7 @@ const actions = {
     saveCard({commit}, source) {
         return new Promise((resolve, reject) => {
             accountApi.saveCard(source, response => {
-                commit('receiveStripeCard', {card: response.data.card.card});
+                commit('updateStripeCard', {card: response.data.card.card});
                 resolve(response);
             }, response => {
                 reject(response);
@@ -273,7 +273,7 @@ const mutations = {
         state.card = null
     },
 
-    receiveStripeCard(state, {card}) {
+    updateStripeCard(state, {card}) {
         state.card = card
     },
 
