@@ -27,7 +27,6 @@ const actions = {
     getCraftIdData({commit}) {
         return new Promise((resolve, reject) => {
             craftIdApi.getCraftIdData(response => {
-                    commit('receiveCraftIdData', {response});
                     commit('receiveCategories', {categories: response.data.categories});
                     commit('receiveCountries', {countries: response.data.countries});
 
@@ -58,10 +57,7 @@ const actions = {
  * Mutations
  */
 const mutations = {
-
-    receiveCraftIdData(state, {response}) {
-    },
-
+    
     receiveCategories(state, {categories}) {
         state.categories = categories;
     },
