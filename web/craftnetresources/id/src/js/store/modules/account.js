@@ -299,7 +299,7 @@ const mutations = {
         state.invoices = response.data;
     },
 
-    receiveUpcomingInvoice(state, {upcomingInvoice}) {
+    updateUpcomingInvoice(state, {upcomingInvoice}) {
         state.upcomingInvoice = upcomingInvoice;
     }
 
