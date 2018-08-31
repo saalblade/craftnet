@@ -211,7 +211,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.getCmsLicenses(response => {
                 if (response.data && !response.data.error) {
-                    commit('receiveCmsLicenses', {cmsLicenses: response.data});
+                    commit('updateCmsLicenses', {cmsLicenses: response.data});
                     resolve(response);
                 } else {
                     reject(response);
@@ -304,7 +304,7 @@ const actions = {
  */
 const mutations = {
 
-    receiveCmsLicenses(state, {cmsLicenses}) {
+    updateCmsLicenses(state, {cmsLicenses}) {
         state.cmsLicenses = cmsLicenses;
     },
 
