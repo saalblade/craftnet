@@ -18,10 +18,6 @@ const state = {
  */
 const getters = {
 
-    countries(state) {
-        return state.countries;
-    },
-
 }
 
 /**

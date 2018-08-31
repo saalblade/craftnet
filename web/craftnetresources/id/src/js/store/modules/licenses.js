@@ -21,10 +21,6 @@ const state = {
  */
 const getters = {
 
-    licenses(state) {
-        return state.pluginLicenses.concat(state.cmsLicenses);
-    },
-
     expiresSoon(state) {
         return license => {
             if(!license.expiresOn) {
@@ -359,29 +355,6 @@ const mutations = {
                 case 'autoRenew':
                     stateLicense[attribute] = license[attribute] === 1 || license[attribute] === '1' ? true : false
                     break
-                default:
-                    stateLicense[attribute] = license[attribute];
-            }
-        }
-    },
-
-    [types.SAVE_LICENSE](state, {license}) {
-        let stateLicense = null;
-        if (license.type === 'cmsLicense') {
-            stateLicense = state.cmsLicenses.find(l => l.id == license.id);
-        } else if (license.type === 'pluginLicense') {
-            stateLicense = state.pluginLicenses.find(l => l.id == license.id);
-        }
-
-        for (let attribute in license) {
-            switch (attribute) {
-                case 'id':
-                case 'type':
-                    // ignore
-                    break;
-                case 'autoRenew':
-                    stateLicense[attribute] = (license[attribute] ? 1 : 0);
-                    break;
                 default:
                     stateLicense[attribute] = license[attribute];
             }

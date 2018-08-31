@@ -30,12 +30,6 @@ const getters = {
         }
     },
 
-    getInvoiceById(state) {
-        return id => {
-            return state.invoices.find(inv => inv.id == id)
-        }
-    },
-
     getInvoiceByNumber(state) {
         return number => {
             if (state.invoices) {
