@@ -50,7 +50,6 @@ const actions = {
 const mutations = {
 
     updatePluginStoreData(state, {response}) {
-        console.log('receive plugin store data mutation');
         state.categories = response.data.categories
         state.featuredPlugins = response.data.featuredPlugins
         state.plugins = response.data.plugins
