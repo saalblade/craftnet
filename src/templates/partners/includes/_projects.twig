@@ -1,5 +1,5 @@
 
-{% macro projectForm(key, project, isTemplate) %}
+{% macro projectForm(key, project, folderId, isTemplate) %}
     {% import "_includes/forms" as forms %}
     {% set id = key matches '/new/' ? key : project.id %}
     {% set project = project | default({}) %}
@@ -33,6 +33,7 @@
                 elementType: 'craft\\elements\\Asset',
                 criteria: {kind: 'image'},
                 limit: 0,
+                sources: ['folder:' ~ folderId],
                 elements: project.screenshots ?? [],
                 errors: project.getErrors('screenshots') ?? [],
             }) }}
@@ -50,18 +51,14 @@
             __script__
                 Craft.initUiElements(document.getElementById('project-{{ id }}'));
 
-                new Craft.BaseElementSelectInput({
+                new Craft.AssetSelectInput({
                     id: 'projects-{{ id }}-screenshots',
                     name: 'projects[{{ id }}][screenshots]',
                     elementType: 'craft\\elements\\Asset',
-                    sources: null,
-                    criteria: {
-                        kind: 'image'
-                    },
-                    sourceElementId: null,
+                    sources: ['folder:{{ folderId }}'],
+                    criteria: {kind: 'image'},
                     viewMode: 'list',
-                    limit: 5,
-                    modalStorageKey: null
+                    modalStorageKey: 'partnerScreenshot.{{ id }}'
                 });
             __/script__
         {% endif %}
@@ -76,12 +73,12 @@
         {# Template for adding new projects dynamically #}
         {% import _self as self %}
         <script class="subform-template" type="text/html">
-            {{ self.projectForm('__new__', null, true) }}
+            {{ self.projectForm('__new__', null, partnerScreenshotFolderId, true) }}
         </script>
 
         <div class="subforms">
             {% for key, project in partner.projects | default([]) %}
-                {{ self.projectForm(key, project) }}
+                {{ self.projectForm(key, project, partnerScreenshotFolderId) }}
             {% endfor %}
         </div>
 

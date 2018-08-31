@@ -9,6 +9,7 @@ use craftnet\Module;
 use craftnet\partners\Partner;
 use craftnet\partners\PartnerAsset;
 use craftnet\partners\PartnerCapabilitiesQuery;
+use craftnet\partners\PartnerService;
 use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -59,10 +60,16 @@ class PartnersController extends Controller
 
         $allCapabilities = (new PartnerCapabilitiesQuery())->asIndexedTitles()->all();
         $title = $partner->id ? $partner->businessName : 'Add a new partner';
+        $partnerScreenshotFolderId = PartnerService::getInstance()->getPartnerScreenshotsFolderId();
 
         $this->view->registerAssetBundle(PartnerAsset::class);
 
-        return $this->renderTemplate('craftnet/partners/_edit', compact('partner', 'title', 'allCapabilities'));
+        return $this->renderTemplate('craftnet/partners/_edit', compact(
+            'partner',
+            'title',
+            'allCapabilities',
+            'partnerScreenshotFolderId'
+        ));
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -140,6 +147,11 @@ class PartnersController extends Controller
         }
 
         return $this->redirectToPostedUrl($partner);
+    }
+
+    public function actionFoo()
+    {
+        return 'Dev test route';
     }
 
     // Private Methods

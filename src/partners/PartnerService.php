@@ -1,17 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sam
- * Date: 8/30/18
- * Time: 9:35 AM
- */
 
 namespace craftnet\partners;
 
-
-
+use craft\db\Query;
 use craft\elements\Asset;
-use yii\helpers\ArrayHelper;
 
 class PartnerService
 {
@@ -151,5 +143,33 @@ class PartnerService
         }
 
         return $projects;
+    }
+
+    /**
+     * This volume is created by a content migration so we'll depend on the
+     * volume handle to get the volumefolder id. There is only one folder
+     * for this volume so a scalar query works.
+     *
+     * @return int Folder id or `false` if not found
+     * @throws \Exception
+     */
+    public function getPartnerScreenshotsFolderId()
+    {
+        static $folderId;
+
+        if (!isset($folderId)) {
+            $folderId = (new Query())
+                ->select('f.id')
+                ->from('volumes v')
+                ->rightJoin('volumefolders f', '[[v.id]] = [[f.volumeId]]')
+                ->where(['handle' => 'partnerScreenshots'])
+                ->scalar();
+
+            if (!$folderId) {
+                throw new \Exception('Parter Screenshots volume folder does not exist. Need to run migrations?');
+            }
+        }
+
+        return $folderId;
     }
 }
