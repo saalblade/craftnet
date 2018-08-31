@@ -40,7 +40,7 @@ const actions = {
                     commit('account/receiveUpcomingInvoice', {upcomingInvoice: response.data.upcomingInvoice}, {root: true});
                     commit('account/updateApps', {apps: response.data.apps}, {root: true});
                     commit('account/receiveCurrentUser', {currentUser: response.data.currentUser}, {root: true});
-                    commit('account/receiveBillingAddress', {billingAddress: response.data.billingAddress}, {root: true});
+                    commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true});
                     commit('account/receiveCard', {card: response.data.card}, {root: true});
 
                     resolve(response);

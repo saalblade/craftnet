@@ -111,7 +111,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.saveBillingInfo(data, response => {
                     if (!response.data.errors) {
-                        commit('receiveBillingAddress', {billingAddress: response.data.address});
+                        commit('updateBillingAddress', {billingAddress: response.data.address});
                         resolve(response);
                     } else {
                         reject(response);
@@ -252,7 +252,7 @@ const mutations = {
         }
     },
 
-    receiveBillingAddress(state, {billingAddress}) {
+    updateBillingAddress(state, {billingAddress}) {
         state.billingAddress = billingAddress
     },
 
