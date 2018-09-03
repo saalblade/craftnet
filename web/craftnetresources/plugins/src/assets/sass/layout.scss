@@ -81,7 +81,7 @@
     }
 
     h2 {
-      @apply .text-lg .self-center .py-2 .flex-no-shrink;
+      @apply .text-lg .self-center .px-6 .py-2 .flex-no-shrink .-ml-6;
 
       a {
         @apply .text-grey-darker;
@@ -169,7 +169,7 @@
 
     header {
        h2 {
-         @apply .w-64;
+         @apply .w-64 .border-r;
        }
 
       .sidebar-toggle {
@@ -177,7 +177,7 @@
       }
 
       .search {
-        @apply .-ml-6;
+        @apply .ml-6;
       }
 
       .nav {
