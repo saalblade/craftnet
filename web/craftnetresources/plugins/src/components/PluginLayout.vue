@@ -31,7 +31,10 @@
                     </template>
 
                     <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'">Changelog</nuxt-link></li>
-                    <li><a :href="craftIdUrl+'/buy/'+pluginSnippet.handle" class="btn btn-primary" target="_blank">Buy</a></li>
+
+                    <template v-if="isCommercial(pluginSnippet)">
+                        <li class="buy"><a :href="craftIdUrl+'/buy-plugin/'+pluginSnippet.handle+'/standard'" class="btn btn-primary" target="_blank">Buy</a></li>
+                    </template>
                 </ul>
             </div>
         </div>
@@ -44,6 +47,7 @@
 
 
 <script>
+    import {mapGetters} from 'vuex'
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faChevronDown from '@fortawesome/fontawesome-free-solid/faChevronDown'
     import faChevronUp from '@fortawesome/fontawesome-free-solid/faChevronUp'
@@ -62,6 +66,10 @@
         },
 
         computed: {
+
+            ...mapGetters({
+                isCommercial: 'pluginStore/isCommercial',
+            }),
 
             pluginSnippet() {
                 return this.$store.getters['pluginStore/getPluginByHandle'](this.$route.params.handle)

@@ -85,6 +85,12 @@ export const getters = {
         return page => {
             return state.seo[page]
         }
+    },
+
+    isCommercial(state) {
+        return plugin => {
+            return !!plugin.editions.find(edition => edition.price > 0)
+        }
     }
 
 }

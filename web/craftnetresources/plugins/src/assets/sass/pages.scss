@@ -214,6 +214,10 @@
           @apply .border-0 .px-4 .py-0;
         }
       }
+
+      li.buy {
+        @apply .ml-4;
+      }
     }
   }
 
