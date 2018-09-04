@@ -35,6 +35,11 @@ class PackageManager extends Component
     public $requirePluginVcsTokens = true;
 
     /**
+     * @var bool Whether we've already acquired a lock for updatePackages()
+     */
+    private $_acquiredLock = false;
+
+    /**
      *
      */
     public function init()
@@ -661,21 +666,26 @@ class PackageManager extends Component
 
         $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
 
-        if ($isConsole) {
-            Console::stdout("Acquiring a lock to update {$name} ... ");
-        }
-
-        $mutex = Craft::$app->getMutex();
-
-        if (!$mutex->acquire(__METHOD__, 10)) {
+        $acquiredLock = false;
+        if (!$this->_acquiredLock) {
             if ($isConsole) {
-                Console::output('failed');
+                Console::stdout("Acquiring a lock to update {$name} ... ");
             }
-            throw new Exception("Failed to acquire a lock to update {$name}.");
-        }
 
-        if ($isConsole) {
-            Console::output('done');
+            $mutex = Craft::$app->getMutex();
+
+            if (!$mutex->acquire(__METHOD__, 10)) {
+                if ($isConsole) {
+                    Console::output('failed');
+                }
+                throw new Exception("Failed to acquire a lock to update {$name}.");
+            }
+
+            $this->_acquiredLock = $acquiredLock = true;
+
+            if ($isConsole) {
+                Console::output('done');
+            }
         }
 
         // Start a transaction
@@ -955,14 +965,16 @@ class PackageManager extends Component
             throw $e;
         }
 
-        if ($isConsole) {
-            Console::stdout('Releasing the lock ... ');
-        }
+        if ($acquiredLock) {
+            if ($isConsole) {
+                Console::stdout('Releasing the lock ... ');
+            }
 
-        $mutex->release(__METHOD__);
+            $mutex->release(__METHOD__);
 
-        if ($isConsole) {
-            Console::output('done');
+            if ($isConsole) {
+                Console::output('done');
+            }
         }
 
         return $totalAffected;
