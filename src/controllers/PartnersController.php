@@ -60,7 +60,7 @@ class PartnersController extends Controller
 
         $allCapabilities = (new PartnerCapabilitiesQuery())->asIndexedTitles()->all();
         $title = $partner->id ? $partner->businessName : 'Add a new partner';
-        $partnerScreenshotFolderId = PartnerService::getInstance()->getPartnerScreenshotsFolderId();
+        $folderIds = PartnerService::getInstance()->getVolumeFolderIds();
 
         $this->view->registerAssetBundle(PartnerAsset::class);
 
@@ -68,7 +68,7 @@ class PartnersController extends Controller
             'partner',
             'title',
             'allCapabilities',
-            'partnerScreenshotFolderId'
+            'folderIds'
         ));
     }
 
@@ -106,7 +106,7 @@ class PartnersController extends Controller
         $partner->primaryContactPhone = $request->getBodyParam('primaryContactPhone');
         $partner->businessSummary = $request->getBodyParam('businessSummary');
         $partner->minimumBudget = $request->getBodyParam('minimumBudget');
-        $partner->msaLink = $request->getBodyParam('msaLink');
+        $partner->setMsaAssetIdFromPost($request->getBodyParam('msa'));
         $partner->setCapabilities($request->getBodyParam('capabilities', []));
         $partner->setLocationsFromPost($request->getBodyParam('locations', []));
         $partner->setProjectsFromPost($request->getBodyParam('projects', []));
@@ -151,7 +151,7 @@ class PartnersController extends Controller
 
     public function actionFoo()
     {
-        return 'Dev test route';
+        return '';
     }
 
     // Private Methods

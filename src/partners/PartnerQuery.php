@@ -50,9 +50,9 @@ class PartnerQuery extends ElementQuery
     public $minimumBudget;
 
     /**
-     * @var string|string[]|null URL of the business’ Master Service Agreement or equivalent
+     * @var int Master Service Agreement PDF asset id
      */
-    public $msaLink;
+    public $msaAssetId;
 
     /**
      * Sets the [[ownerId]] property.
@@ -146,15 +146,16 @@ class PartnerQuery extends ElementQuery
     }
 
     /**
-     * Sets the [[msaLink]] property.
+     * Sets the [[msaAssetId]] property.
      *
-     * @param string|string[]|null $value The property value
+     * @param int $value The Asset id
      *
      * @return static self reference
      */
-    public function msaLink($value)
+    public function msaAssetId($value)
     {
-        $this->msaLink = $value;
+        $this->msaAssetId = $value;
+
         return $this;
     }
 
@@ -170,7 +171,7 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.primaryContactPhone',
             'craftnet_partners.businessSummary',
             'craftnet_partners.minimumBudget',
-            'craftnet_partners.msaLink',
+            'craftnet_partners.msaAssetId',
         ]);
 
         $andColumns = [
@@ -181,7 +182,7 @@ class PartnerQuery extends ElementQuery
             'primaryContactPhone',
             'businessSummary',
             'minimumBudget',
-            'msaLink',
+            'msaAssetId',
         ];
 
         foreach($andColumns as $column) {

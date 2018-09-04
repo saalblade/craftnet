@@ -105,22 +105,27 @@
             errors: partner.getErrors('minimumBudget'),
         }) }}
 
-        {{ forms.textField({
-            type: 'url',
-            label: 'Master Service Agreement Link',
-            required: true,
-            id: 'msaLink',
-            name: 'msaLink',
-            value: partner.msaLink,
-            errors: partner.getErrors('msaLink'),
-        }) }}
-
         {{ forms.checkboxGroupField({
             label: 'Capabilities',
             options: allCapabilities,
             values: partner.getCapabilities() | keys,
             name: 'capabilities',
             errors: partner.getErrors('capabilities'),
+        }) }}
+
+        {% set msaElement = partner.getMsa() %}
+
+        {{ forms.elementSelectField({
+            label: 'Master Service Agreement PDF',
+            id: 'msa',
+            name: 'msa',
+            required: true,
+            elementType: 'craft\\elements\\Asset',
+            criteria: {kind: 'pdf'},
+            limit: 1,
+            sources: ['folder:' ~ folderIds.partnerDocuments],
+            elements: msaElement ? [msaElement] : [],
+            errors: partner.getErrors('msaAssetId') ?? [],
         }) }}
 
         {% include 'craftnet/partners/includes/_locations' %}

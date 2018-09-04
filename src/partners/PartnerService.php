@@ -4,6 +4,7 @@ namespace craftnet\partners;
 
 use craft\db\Query;
 use craft\elements\Asset;
+use yii\helpers\ArrayHelper;
 
 class PartnerService
 {
@@ -143,6 +144,33 @@ class PartnerService
         }
 
         return $projects;
+    }
+
+
+    /**
+     * Partner volumes are created from migrations so the reliable way to get
+     * folder ids is from the volume handles. Returns an array of root folder
+     * ids indexed by volume handles.
+     *
+     * @return array
+     */
+    public function getVolumeFolderIds()
+    {
+        static $folderIds;
+
+        if (!isset($folderIds)) {
+            $rows = (new Query())
+                ->select('f.id, v.handle')
+                    ->from('volumes v')
+                    ->rightJoin('volumefolders f', '[[v.id]] = [[f.volumeId]]')
+                    ->where(['handle' => ['partnerDocuments', 'partnerScreenshots']])
+                    ->andWhere(['f.parentId' => null]) // root folders only
+                    ->all();
+
+            $folderIds = ArrayHelper::map($rows, 'handle', 'id');
+        }
+
+        return $folderIds;
     }
 
     /**

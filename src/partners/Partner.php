@@ -6,10 +6,9 @@ use Craft;
 use craft\base\Element;
 use craft\base\Model;
 use craft\elements\actions\SetStatus;
+use craft\elements\Asset;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\UrlHelper;
-use yii\db\Query;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 
 /**
@@ -104,7 +103,6 @@ class Partner extends Element
             'primaryContactEmail' => 'Primary Email',
             'primaryContactPhone' => 'Primary Phone',
             'minimumBudget' => 'Minimum Budget',
-            'msaLink' => 'MSA Link',
         ];
     }
 
@@ -160,9 +158,9 @@ class Partner extends Element
     public $minimumBudget;
 
     /**
-     * @var string URL for master service agreement
+     * @var int Master Service Agreement PDF asset id
      */
-    public $msaLink;
+    public $msaAssetId;
 
     /**
      * @var array
@@ -178,6 +176,11 @@ class Partner extends Element
      * @var array
      */
     private $_projects = null;
+
+    /**
+     * @var Asset Master Service Agreement asset model
+     */
+    public $_msa;
 
     // Public Methods
     // =========================================================================
@@ -204,7 +207,7 @@ class Partner extends Element
                 'primaryContactPhone',
                 'businessSummary',
                 'minimumBudget',
-                'msaLink',
+                'msaAssetId',
                 'capabilities',
                 'locations',
             ],
@@ -214,7 +217,6 @@ class Partner extends Element
 
         $rules[] = ['primaryContactEmail', 'email'];
         $rules[] = ['minimumBudget', 'number'];
-        $rules[] = ['msaLink',  'url'];
 
         return $rules;
     }
@@ -232,7 +234,7 @@ class Partner extends Element
             'primaryContactPhone',
             'businessSummary',
             'minimumBudget',
-            'msaLink',
+            'msaAssetId',
         ]);
 
         if ($isNew) {
@@ -408,6 +410,28 @@ class Partner extends Element
     }
 
     /**
+     * Not worried about eager loading atm because this is only for
+     * Control Panel and Craft ID dashboard.
+     * @return Asset|null
+     */
+    public function getMsa()
+    {
+        if ($this->msaAssetId) {
+            return Asset::findOne($this->msaAssetId);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array|string $ids
+     */
+    public function setMsaAssetIdFromPost($ids)
+    {
+        $this->msaAssetId = $ids ? $ids[0] : null;
+    }
+
+    /**
      * @return array
      */
     public function getProjects()
@@ -461,21 +485,6 @@ class Partner extends Element
     public function getOwner()
     {
         return Craft::$app->getUsers()->getUserById($this->ownerId);
-    }
-
-    public static function eagerLoadingMap(array $sourceElements, string $handle)
-    {
-        switch ($handle) {
-            case 'editions':
-                $query = (new Query())
-                    ->select(['id as source', 'partnerId as target'])
-                    ->from(['craftnet_partnerlocations'])
-                    ->where(['id' => ArrayHelper::getColumn($sourceElements, 'id')]);
-                return ['elementType' => PluginEdition::class, 'map' => $query->all()];
-
-            default:
-                return parent::eagerLoadingMap($sourceElements, $handle);
-        }
     }
 
     /**
