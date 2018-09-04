@@ -659,6 +659,25 @@ class PackageManager extends Component
             return 0;
         }
 
+        $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
+
+        if ($isConsole) {
+            Console::stdout("Acquiring a lock to update {$name} ... ");
+        }
+
+        $mutex = Craft::$app->getMutex();
+
+        if (!$mutex->acquire(__METHOD__, 10)) {
+            if ($isConsole) {
+                Console::output('failed');
+            }
+            throw new Exception("Failed to acquire a lock to update {$name}.");
+        }
+
+        if ($isConsole) {
+            Console::output('done');
+        }
+
         // Start a transaction
         $transaction = Craft::$app->getDb()->beginTransaction();
         try {
@@ -666,7 +685,6 @@ class PackageManager extends Component
             $vcs = $package->getVcs();
             $plugin = $package->getPlugin();
             $db = Craft::$app->getDb();
-            $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
 
             if ($isConsole) {
                 Console::output("Updating version data for {$name} ...");
@@ -933,7 +951,18 @@ class PackageManager extends Component
         }
         catch (\Throwable $e) {
             $transaction->rollBack();
+            $mutex->release(__METHOD__);
             throw $e;
+        }
+
+        if ($isConsole) {
+            Console::stdout('Releasing the lock ... ');
+        }
+
+        $mutex->release(__METHOD__);
+
+        if ($isConsole) {
+            Console::output('done');
         }
 
         return $totalAffected;
