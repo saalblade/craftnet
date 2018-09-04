@@ -121,6 +121,12 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
             }
         }
 
+        if ($this->package->getIsPlugin() && !isset($release->require['craftcms/cms'])) {
+            Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to missing craftcms/cms constraints in composer.json", __METHOD__);
+            $release->invalidate('missing craftcms/cms constraints');
+            return false;
+        }
+
         if (isset($config['conflict'])) {
             $release->conflict = $config['conflict'];
         }
