@@ -26,30 +26,12 @@
     </div>
 </template>
 
-
-
 <script>
     import CraftComponents from "@benjamindavid/craftcomponents";
 
     export default {
 
-        data() {
-            return {
-                billingInfo: {
-                    firstName: '',
-                    lastName: '',
-                    businessName: '',
-                    businessTaxId: '',
-                    address1: '',
-                    address2: '',
-                    country: '',
-                    state: '',
-                    city: '',
-                    zipCode: '',
-                },
-                errors: {},
-            }
-        },
+        props: ['billingInfo', 'errors'],
 
         components: {
             ...CraftComponents,

@@ -10,7 +10,11 @@
             <card-element v-if="!cardToken" ref="newCard" />
             <p v-else>{{ cardToken.card.brand }} •••• •••• •••• {{ cardToken.card.last4 }} ({{ cardToken.card.exp_month }}/{{ cardToken.card.exp_year }}) <a class="delete icon" @click="cardToken = null">Delete</a></p>
 
-            <checkbox-field id="replaceCard" v-model="replaceCard" label="Save as my new credit card" />
+            <checkbox-field
+                    id="replaceCard"
+                    label="Save as my new credit card"
+                    :value="replaceCard"
+                    @input="$emit('update:replaceCard', !replaceCard)"/>
         </template>
     </div>
 </template>
@@ -21,14 +25,7 @@
 
     export default {
 
-        data() {
-            return {
-                card: null,
-                cardToken: null,
-                paymentMode: 'newCard',
-                replaceCard: false,
-            }
-        },
+        props: ['card', 'cardToken', 'paymentMode', 'replaceCard'],
 
         components: {
             ...CraftComponents,

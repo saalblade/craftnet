@@ -34,12 +34,14 @@
                    </li>
                 </ul>
 
-                <div class="buttons">
+                <div class="buttons mb-4">
                     <input type="button" class="btn btn-primary"
                            :class="{disabled: !selectedPluginHandle}"
                            @click="addToCart(selectedPluginHandle)"
                            :disabled="!selectedPluginHandle" value="Add to cart"/>
                 </div>
+
+                <p>(Redirects to /buy-plugin/{{selectedPluginHandle}}/{{pluginEditionHandle}})</p>
             </div>
         </div>
     </div>
@@ -94,13 +96,14 @@
             }),
 
             addToCart() {
-                const plugin = this.getPluginByHandle(this.selectedPluginHandle)
-                const pluginEditionHandle = this.pluginEditionHandle
+                this.$router.push({path: '/buy-plugin/' + this.selectedPluginHandle + '/' + this.pluginEditionHandle})
 
-                this.$store.dispatch('cart/addToCart', {plugin, pluginEditionHandle})
-                    .then(response => {
-                        this.$router.push({path: '/cart'})
-                    })
+                // const plugin = this.getPluginByHandle(this.selectedPluginHandle)
+                // const pluginEditionHandle = this.pluginEditionHandle
+                // this.$store.dispatch('cart/addToCart', {plugin, pluginEditionHandle})
+                //     .then(response => {
+                //         this.$router.push({path: '/cart'})
+                //     })
             }
 
         },

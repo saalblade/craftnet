@@ -120,7 +120,7 @@ const router = new VueRouter({
             component: BuyLicense
         },
         {
-            path: '/buy-plugin/:handle',
+            path: '/buy-plugin/:handle/:edition',
             name: 'BuyPlugin',
             component: BuyPlugin
         },

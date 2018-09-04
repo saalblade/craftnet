@@ -1,46 +1,29 @@
 <template>
     <div>
-        <h1>Buy License</h1>
+        <h1>Buy Plugin</h1>
 
         <div class="card mb-4">
             <div class="card-body">
-                <h2>Plugin License</h2>
+                Adding
+                <template v-if="plugin">{{plugin.name}}</template>
+                <code v-else>{{handle}}</code>
+                to your cart…
 
-                <div class="flex items-center mb-4">
-                    <div>
-                        <select v-model="selectedPlugin">
-                            <option value="">Select a plugin</option>
-                            <option v-for="plugin in plugins"
-                                    :value="plugin.handle">{{ plugin.name }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <div class="spinner" v-if="loading"></div>
-                    </div>
-                </div>
-
-                <div class="buttons">
-                    <input type="button" class="btn btn-primary"
-                           :class="{disabled: !selectedPlugin}"
-                           @click="addToCart(selectedPlugin)"
-                           :disabled="!selectedPlugin" value="Add to cart"/>
-                </div>
+                <div class="spinner" v-if="loading"></div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import {mapState, mapActions} from 'vuex'
+    import {mapState, mapGetters, mapActions} from 'vuex'
 
     export default {
 
         data() {
             return {
                 loading: false,
-                selectedPlugin: '',
+                plugin: null,
             }
         },
 
@@ -50,8 +33,16 @@
                 plugins: state => state.pluginStore.plugins,
             }),
 
+            ...mapGetters({
+                getPluginByHandle: 'pluginStore/getPluginByHandle',
+            }),
+
             handle() {
                 return this.$route.params.handle
+            },
+
+            edition() {
+                return this.$route.params.edition
             }
         },
 
@@ -62,25 +53,31 @@
             }),
 
             addToCart() {
-                this.$store.dispatch('cart/addToCart')
+                this.plugin = this.getPluginByHandle(this.handle)
+
+                this.$store.dispatch('cart/addToCart', {
+                        plugin: this.plugin,
+                        pluginEditionHandle: this.edition,
+                    })
                     .then(response => {
-                        this.$router.push({path: '/cart'});
+                        this.$router.push({path: '/cart'})
                     })
             }
-
         },
 
         mounted() {
-            if (this.plugins.length === 0) {
+            if(this.plugins.length === 0) {
                 this.loading = true
-
                 this.getPluginStoreData()
                     .then(response => {
                         this.loading = false
+                        this.addToCart();
                     })
                     .catch(response => {
                         this.loading = false
                     })
+            } else {
+                this.addToCart();
             }
         }
 
