@@ -169,15 +169,11 @@
 
     header {
        h2 {
-         @apply .w-64 .border-r;
+         @apply .w-64;
        }
 
       .sidebar-toggle {
         @apply .hidden;
-      }
-
-      .search {
-        @apply .ml-6;
       }
 
       .nav {
