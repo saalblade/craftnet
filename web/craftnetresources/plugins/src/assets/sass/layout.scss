@@ -69,7 +69,7 @@
 
 .wrapper {
   header {
-    @apply .flex .px-6 .py-2 .bg-grey-lighter .border-b .justify-between;
+    @apply .flex .px-6 .py-3 .bg-grey-lighter .border-b .justify-between;
 
     &.sticky {
       @apply .sticky .pin .z-10;
