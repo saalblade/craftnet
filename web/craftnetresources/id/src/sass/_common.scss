@@ -108,8 +108,10 @@ th {
   .app {
     .header-container {
       .header {
-        #sidebar-toggle {
-          @apply .hidden;
+        .header-left {
+          #sidebar-toggle {
+            @apply .hidden;
+          }
         }
       }
     }
@@ -151,24 +153,34 @@ th {
   .header {
     @apply .flex .justify-between .px-8 .py-4;
 
-    #sidebar-toggle {
-      @apply .relative .inline-block .mr-4;
-      margin-top: 6px;
+    .header-left {
+      @apply .flex .items-center;
+
+      #sidebar-toggle {
+        @apply .mr-4;
+      }
+    }
+
+    .actions-left {
+      @apply .hidden;
     }
 
     .actions-right {
       @apply .ml-4;
     }
 
-    .navbar-brand {
-      @apply .text-xl .text-black .flex-1;
+    .header-brand {
+      a {
+        @apply .text-xl .text-black;
+      }
     }
+
 
     ul {
       @apply .list-reset;
 
       li {
-        @apply .inline-block;
+        @apply .inline-block .ml-6;
 
         a {
           @apply .block;

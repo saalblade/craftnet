@@ -21,10 +21,13 @@
             <div class="app">
                 <div class="header-container">
                     <div class="header">
-                        <div class="actions-left">
+                        <div class="header-left">
                             <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()"><i class="fas fa-bars"></i></a>
+
+                            <div class="header-brand">
+                                <router-link to="/">Craft ID</router-link>
+                            </div>
                         </div>
-                        <router-link class="navbar-brand" to="/">Craft ID</router-link>
 
                         <div class="actions-right">
                             <ul>
