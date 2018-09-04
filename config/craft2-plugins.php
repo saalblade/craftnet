@@ -118,7 +118,7 @@ return [
     ],
     'LanguageLink' => [
         'statusColor' => 'green',
-        'status' => 'Renamed to "Site Switcher" in Craft 3'
+        'status' => 'Renamed to “Site Switcher” for Craft 3.'
     ],
     'LinkVault' => [
         'statusColor' => 'orange',
