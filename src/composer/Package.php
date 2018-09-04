@@ -14,6 +14,7 @@ use craftnet\plugins\Plugin;
 use Github\Client as GithubClient;
 
 /**
+ * @property bool $isPlugin
  * @property Plugin|null $plugin
  * @property VcsInterface $vcs
  */
@@ -101,13 +102,23 @@ class Package extends Model
     }
 
     /**
+     * Returns whether this pcakage is for a Craft plugin.
+     *
+     * @return bool
+     */
+    public function getIsPlugin(): bool
+    {
+        return $this->type === 'craft-plugin';
+    }
+
+    /**
      * Returns the plugin associated with this package, if any.
      *
      * @return Plugin|null
      */
     public function getPlugin()
     {
-        if ($this->type !== 'craft-plugin') {
+        if (!$this->getIsPlugin()) {
             return null;
         }
 
