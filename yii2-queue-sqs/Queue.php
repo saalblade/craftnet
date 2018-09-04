@@ -26,6 +26,11 @@ class Queue extends \yii\queue\cli\Queue
     public $url;
 
     /**
+     * @var string The SQS message group ID
+     */
+    public $messageGroupId;
+
+    /**
      * @var SqsClient The SQS client. This can initially be set to an SQS client config array.
      */
     public $client;
@@ -133,6 +138,7 @@ class Queue extends \yii\queue\cli\Queue
     {
         $result = $this->client->sendMessage([
             'QueueUrl' => $this->url,
+            'MessageGroupId' => $this->messageGroupId,
             'MessageBody' => $message,
             'DelaySeconds' => $delay,
             'MessageAttributes' => [
