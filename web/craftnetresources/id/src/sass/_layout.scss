@@ -95,7 +95,7 @@
 
           li {
             a {
-              @apply .block .text-grey-darker .px-6 .py-1 .rounded .no-underline;
+              @apply .block .text-grey-darker .px-6 .py-2 .no-underline;
               padding-left: 46px;
 
               &:hover {
@@ -103,7 +103,7 @@
               }
 
               &.active {
-                @apply .text-blue .font-bold .bg-grey-light;
+                @apply .bg-grey-light;
               }
 
               &.disabled {
