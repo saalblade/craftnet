@@ -12,7 +12,7 @@ import '../sass/element-variables.scss'
 
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCoffee, faTimes, faTh, faBars, faPlus, faKey, faPlug, faImage, faUser, faPencilAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { faCoffee, faTimes, faTh, faBars, faPlus, faKey, faPlug, faImage, faUser, faPencilAlt, faExclamationTriangle, faBug } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add([
     faCoffee,
@@ -25,7 +25,8 @@ library.add([
     faImage,
     faUser,
     faPencilAlt,
-    faExclamationTriangle
+    faExclamationTriangle,
+    faBug
 ])
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

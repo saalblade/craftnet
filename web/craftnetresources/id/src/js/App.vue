@@ -87,8 +87,6 @@
                                 <li><router-link @click.native="closeSidebar()" to="/account/licenses/cms">Craft CMS</router-link></li>
                                 <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
                                 <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
-                                <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
-                                <li><router-link @click.native="closeSidebar()" to="/cart">Cart</router-link></li>
                             </ul>
 
                             <template v-if="userIsInGroup('developers')">
@@ -129,6 +127,16 @@
                             <ul>
                                 <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
                                 <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
+                            </ul>
+                            <h5>
+                                <router-link @click.native="closeSidebar()" to="/buy">
+                                    <font-awesome-icon icon="bug" />
+                                    Tests
+                                </router-link>
+                            </h5>
+                            <ul>
+                                <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
+                                <li><router-link @click.native="closeSidebar()" to="/cart">Cart</router-link></li>
                             </ul>
                         </div>
                     </div>

@@ -12,7 +12,7 @@
 
         <stripe-account-alert></stripe-account-alert>
 
-        <div v-if="computedPlugins.length > 0" class="card card-table responsive-content">
+        <template v-if="computedPlugins.length > 0" class="responsive-content">
             <table class="table">
                 <thead>
                 <tr>
@@ -67,7 +67,7 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
+        </template>
 
         <div v-else class="card card-empty">
             <div class="card-body">
