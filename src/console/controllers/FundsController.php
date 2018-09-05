@@ -82,7 +82,7 @@ class FundsController extends Controller
                 $this->_currency($account['balance'], true),
             ];
         }
-        $this->stdout('Accounts with a balance owed:' . PHP_EOL . PHP_EOL);
+        $this->stdout('Accounts with a non-zero balance:' . PHP_EOL . PHP_EOL);
         $this->table(['Username', 'Name', 'Email', 'Balance'], $tableData);
         $this->stdout(PHP_EOL);
 
