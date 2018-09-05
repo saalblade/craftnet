@@ -28,7 +28,7 @@
                         <td><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></td>
                         <td>{{ sale.grossAmount|currency }}</td>
                         <td>{{ sale.netAmount|currency }}</td>
-                        <td>{{ sale.saleTime|moment("LLL") }}</td>
+                        <td class="date-col">{{ sale.saleTime|moment("LLL") }}</td>
                     </tr>
                     </tbody>
                 </table>

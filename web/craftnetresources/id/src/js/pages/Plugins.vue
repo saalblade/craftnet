@@ -12,7 +12,7 @@
 
         <stripe-account-alert></stripe-account-alert>
 
-        <template v-if="computedPlugins.length > 0" class="responsive-content">
+        <div v-if="computedPlugins.length > 0" class="responsive-content">
             <table class="table">
                 <thead>
                 <tr>
@@ -31,7 +31,7 @@
                             <img v-else :src="'/craftnetresources/id/dist/images/default-plugin.svg'" height="36" />
                         </router-link>
                     </td>
-                    <td>
+                    <td class="name-col">
                         <router-link :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>
                         <small class="text-secondary" v-if="plugin.latestVersion">{{ plugin.latestVersion }}</small>
                         <div>{{ plugin.shortDescription }}</div>
@@ -67,7 +67,7 @@
                 </tr>
                 </tbody>
             </table>
-        </template>
+        </div>
 
         <div v-else class="card card-empty">
             <div class="card-body">
