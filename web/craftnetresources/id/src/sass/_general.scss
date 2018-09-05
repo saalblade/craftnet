@@ -1,0 +1,188 @@
+/* HTML Basics */
+
+body {
+  @apply .leading-normal .bg-grey-lighter;
+}
+
+a:not(.btn) {
+  @apply .text-blue .no-underline;
+
+  &:hover {
+    @apply .text-blue-darker .underline;
+  }
+}
+
+h1 {
+  @apply .text-2xl .mb-4 .text-grey-darkest;
+
+  a {
+    @apply .text-grey;
+
+    &:hover {
+      @apply .text-grey-darker .no-underline;
+    }
+  }
+}
+
+h4 {
+  @apply .text-xl .mb-2;
+}
+
+h5 {
+  @apply .text-lg .mb-2;
+}
+
+h6 {
+  @apply .text-base .mb-2;
+}
+
+p {
+  @apply .mt-0 .mb-2;
+}
+
+hr {
+  @apply .my-6 .border-t .border-grey-light;
+}
+
+form {
+  @apply .m-0;
+}
+
+dl {
+  @apply .mb-4;
+
+  dt {
+    @apply .font-bold;
+  }
+  dd {
+    @apply .mb-3;
+  }
+}
+
+th {
+  text-align: inherit;
+}
+
+
+/* Classes */
+
+.responsive-content {
+  overflow-x: auto;
+}
+
+.table {
+  @apply .w-full .leading-normal;
+  border-collapse: collapse;
+
+  th, td {
+    @apply .border-t .border-grey-light .p-3;
+
+    &.thin {
+      width: 0.01% !important;
+    }
+  }
+
+  td.icon-col {
+    img {
+      width: 40px;
+      height: 40px;
+      max-width: none;
+    }
+  }
+
+  td.name-col {
+    min-width: 220px;
+  }
+
+  td.date-col {
+    min-width: 200px;
+  }
+}
+
+.alert {
+  @apply .p-4 .mb-4 .rounded .border .border-grey .bg-grey-light .text-grey-darker;
+}
+
+.alert-info {
+  @apply .bg-blue-lighter .border-blue-light .text-blue-darker;
+}
+
+.alert-warning {
+  @apply .bg-orange-lighter .border-orange-light .text-orange-darker;
+}
+
+.img-thumbnail {
+  @apply .border .border-solid .border-grey .p-1 .rounded .block .w-full;
+}
+
+.text-secondary {
+  @apply .text-grey-dark;
+}
+
+.text-secondary {
+  @apply .text-grey-dark;
+}
+
+
+/* Vue Transitions */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  @apply .opacity-0;
+}
+
+.quick-fade-enter-active,
+.quick-fade-leave-active {
+  transition: opacity 0s;
+}
+
+.quick-fade-enter, .quick-fade-leave-to {
+  @apply .opacity-0;
+}
+
+
+/* Auth Manager Modal */
+
+.auth-manager-modal {
+  .modal-body {
+    padding: 24px;
+    padding-left: 76px;
+
+    & > svg {
+      float: left;
+      margin: -6px 0 0 -58px;
+      width: 40px;
+      height: 40px;
+      color: #b9bfc6;
+    }
+  }
+}
+
+
+/* Renew Licenses Modal */
+
+#renew-licenses-modal {
+  background-color: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+
+  .modal {
+    .modal-dialog {
+      max-width: 800px;
+
+      .modal-content {
+        .modal-body {
+          padding: 24px;
+          height: 620px;
+        }
+      }
+    }
+  }
+}

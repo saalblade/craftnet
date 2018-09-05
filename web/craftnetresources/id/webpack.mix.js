@@ -12,7 +12,6 @@ mix.setPublicPath(distPath);
 mix.js(sourcePath + '/js/app.js', 'js')
     .js(sourcePath + '/js/site.js', 'js')
     .sass(sourcePath + '/sass/app.scss', 'css')
-    .sass(sourcePath + '/sass/site.scss', 'css')
     .options({
         processCssUrls: false,
         postCss: [ tailwindcss('./tailwind-config.js') ],

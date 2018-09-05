@@ -1,37 +1,8 @@
-@import 'common';
+@tailwind preflight;
 
-.auth-manager-modal {
-  .modal-body {
-    padding: 24px;
-    padding-left: 76px;
+@import "~@benjamindavid/craftcomponents/src/sass/components.scss";
+@import 'layout';
+@import 'general';
+@import 'components';
 
-    & > svg {
-      float: left;
-      margin: -6px 0 0 -58px;
-      width: 40px;
-      height: 40px;
-      color: #b9bfc6;
-    }
-  }
-}
-
-#renew-licenses-modal {
-  background-color: red;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10000;
-
-  .modal {
-    .modal-dialog {
-      max-width: 800px;
-
-      .modal-content {
-        .modal-body {
-          padding: 24px;
-          height: 620px;
-        }
-      }
-    }
-  }
-}
+@tailwind utilities;
