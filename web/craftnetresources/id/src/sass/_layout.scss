@@ -2,52 +2,48 @@
   @apply .fixed .pin .flex .flex-col;
 
 
-  /* Header container */
+  /* Header */
 
-  .header-container {
-    @apply .bg-grey-lighter .border-b .border-grey-light .w-full;
+  .header {
+    @apply .flex .justify-between .px-6 .py-3 .items-center .border-b .border-grey-light;
 
-    .header {
-      @apply .flex .justify-between .px-6 .py-3 .items-center;
+    &-left {
+      @apply .flex .items-center;
 
-      .header-left {
-        @apply .flex .items-center;
+      #sidebar-toggle {
+        @apply .mr-4 .text-grey-darker .text-center;
+        width: 14px;
 
-        #sidebar-toggle {
-          @apply .mr-4 .text-grey-darker .text-center;
-          width: 14px;
-
-          &:hover {
-            @apply .text-black;
-          }
+        &:hover {
+          @apply .text-black;
         }
       }
+    }
 
-      .header-brand {
-        a {
-          @apply .text-lg .text-grey-darker .font-bold;
+    &-brand {
+      a {
+        @apply .text-lg .text-grey-darker .font-bold;
 
-          &:hover {
-            @apply .no-underline .text-black;
-          }
+        &:hover {
+          @apply .no-underline .text-black;
         }
       }
+    }
 
-      .actions-right {
-        @apply .ml-4;
+    &-right {
+      @apply .ml-4;
 
-        ul {
-          @apply .list-reset .flex .items-center;
+      ul {
+        @apply .list-reset .flex .items-center;
 
-          li {
-            @apply .block .ml-3;
+        li {
+          @apply .block .ml-3;
 
-            & > a {
-              @apply .block .text-grey-darker;
+          & > a {
+            @apply .block .text-grey-darker;
 
-              &:hover {
-                @apply .cursor-pointer .text-black;
-              }
+            &:hover {
+              @apply .cursor-pointer .text-black;
             }
           }
         }
@@ -88,14 +84,7 @@
           svg {
             width: 13px;
             margin-right: 5px;
-            /*@apply .hidden;*/
           }
-          //
-          //svg {
-          //  @apply .absolute .pin-l;
-          //  top: 3px;
-          //  width: 13px;
-          //}
 
           &:not(:first-child) {
             @apply .mt-4;
@@ -104,7 +93,6 @@
 
         ul {
           @apply .list-reset;
-          /*margin-left: 24px;*/
 
           li {
             a {
@@ -160,12 +148,10 @@
 @media (min-width: 768px) {
 
   .app {
-    .header-container {
-      .header {
-        .header-left {
-          #sidebar-toggle {
-            @apply .hidden;
-          }
+    .header {
+      &-left {
+        #sidebar-toggle {
+          @apply .hidden;
         }
       }
     }

@@ -3,6 +3,7 @@
 @import "~@benjamindavid/craftcomponents/src/sass/components.scss";
 @import 'layout';
 
+
 /* HTML Basics */
 
 body {
@@ -375,27 +376,6 @@ th {
 
   .card-body {
     @apply .text-center .text-grey-dark .py-8;
-  }
-}
-
-
-/* Nav pills */
-
-.nav-pills {
-  @apply .list-reset .flex;
-
-  li {
-    a {
-      @apply .px-2 .text-grey-darker .inline-block;
-
-      &:hover {
-        @apply .text-black .no-underline;
-      }
-
-      &.active {
-        @apply .text-blue .font-bold;
-      }
-    }
   }
 }
 

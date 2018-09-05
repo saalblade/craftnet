@@ -19,58 +19,56 @@
 
         <template v-else>
             <div class="app">
-                <div class="header-container">
-                    <div class="header">
-                        <div class="header-left">
-                            <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()">
-                                <font-awesome-icon :icon="showingSidebar ? 'times' : 'bars'" />
-                            </a>
+                <div class="header">
+                    <div class="header-left">
+                        <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()">
+                            <font-awesome-icon :icon="showingSidebar ? 'times' : 'bars'" />
+                        </a>
 
-                            <div class="header-brand">
-                                <router-link to="/">Craft ID</router-link>
-                            </div>
+                        <div class="header-brand">
+                            <router-link to="/">Craft ID</router-link>
                         </div>
+                    </div>
 
-                        <div class="actions-right">
-                            <ul>
-                                <li class="global-menu" v-on-clickaway="awayGlobalMenu">
-                                    <a class="toggle" @click="globalMenuToggle">
-                                        <font-awesome-icon icon="th" />
-                                    </a>
+                    <div class="header-right">
+                        <ul>
+                            <li class="global-menu" v-on-clickaway="awayGlobalMenu">
+                                <a class="toggle" @click="globalMenuToggle">
+                                    <font-awesome-icon icon="th" />
+                                </a>
 
-                                    <div class="popover" :class="{hidden: !showingGlobalMenu}">
-                                        <div>
-                                            <p><a href="http://localhost:3000/" target="_blank">Craft Plugins</a></p>
-                                            <p><router-link @click.native="showingGlobalMenu = false" to="/">Craft ID</router-link></p>
-                                        </div>
-
-                                        <div class="popover-arrow"></div>
+                                <div class="popover" :class="{hidden: !showingGlobalMenu}">
+                                    <div>
+                                        <p><a href="http://localhost:3000/" target="_blank">Craft Plugins</a></p>
+                                        <p><router-link @click.native="showingGlobalMenu = false" to="/">Craft ID</router-link></p>
                                     </div>
-                                </li>
-                                <li class="user-menu" v-on-clickaway="awayUserMenu">
-                                    <a class="toggle" @click="userMenuToggle">
-                                        <img :src="currentUser.photoUrl" />
-                                    </a>
 
-                                    <div class="popover" :class="{hidden: !showingUserMenu}">
-                                        <div>
-                                            {{currentUser.email}}
-                                        </div>
+                                    <div class="popover-arrow"></div>
+                                </div>
+                            </li>
+                            <li class="user-menu" v-on-clickaway="awayUserMenu">
+                                <a class="toggle" @click="userMenuToggle">
+                                    <img :src="currentUser.photoUrl" />
+                                </a>
 
-                                        <div>
-                                            <router-link @click.native="showingUserMenu = false" to="/account/settings">Account Settings</router-link>
-                                        </div>
-
-                                        <hr>
-
-                                        <div>
-                                            <a href="/logout">Logout</a>
-                                        </div>
-                                        <div class="popover-arrow"></div>
+                                <div class="popover" :class="{hidden: !showingUserMenu}">
+                                    <div>
+                                        {{currentUser.email}}
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
+
+                                    <div>
+                                        <router-link @click.native="showingUserMenu = false" to="/account/settings">Account Settings</router-link>
+                                    </div>
+
+                                    <hr>
+
+                                    <div>
+                                        <a href="/logout">Logout</a>
+                                    </div>
+                                    <div class="popover-arrow"></div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
