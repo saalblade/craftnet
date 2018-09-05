@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <div class="content-container">
+                <div class="flex-container">
                     <div id="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
                         <div class="sidenav">
                             <h5>
