@@ -73,70 +73,68 @@
                 </div>
 
                 <div class="flex-container">
-                    <div id="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
-                        <div class="sidenav">
+                    <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
+                        <h5>
+                            <router-link @click.native="closeSidebar()" to="/account/licenses">
+                                <font-awesome-icon icon="key" />
+                                Licenses
+                            </router-link>
+                        </h5>
+                        <ul>
+                            <li><router-link @click.native="closeSidebar()" to="/account/licenses/cms">Craft CMS</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
+                        </ul>
+
+                        <template v-if="userIsInGroup('developers')">
                             <h5>
-                                <router-link @click.native="closeSidebar()" to="/account/licenses">
-                                    <font-awesome-icon icon="key" />
-                                    Licenses
+                                <router-link @click.native="closeSidebar()" to="/developer">
+                                    <font-awesome-icon icon="plug" />
+                                    Developer
                                 </router-link>
                             </h5>
                             <ul>
-                                <li><router-link @click.native="closeSidebar()" to="/account/licenses/cms">Craft CMS</router-link></li>
-                                <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
-                                <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
+                                <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
+                                <li><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
+                                <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
+                                <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
                             </ul>
+                        </template>
 
-                            <template v-if="userIsInGroup('developers')">
-                                <h5>
-                                    <router-link @click.native="closeSidebar()" to="/developer">
-                                        <font-awesome-icon icon="plug" />
-                                        Developer
-                                    </router-link>
-                                </h5>
-                                <ul>
-                                    <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
-                                    <li><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
-                                    <li><router-link @click.native="closeSidebar()" to="/account/profile">Profile</router-link></li>
-                                    <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
-                                </ul>
-                            </template>
-
-                            <template v-if="userIsInGroup('staff') && currentUser.enableShowcaseFeatures">
-                                <h5>
-                                    <a class="disabled" href="#">
-                                        <font-awesome-icon icon="image" />
-                                        Showcase
-                                    </a>
-                                </h5>
-                                <ul>
-                                    <li><a class="disabled" href="#">Activity</a></li>
-                                    <li><a class="disabled" href="#">Projects</a></li>
-                                    <li><a class="disabled" href="#">Agency Profile</a></li>
-                                </ul>
-                            </template>
-
+                        <template v-if="userIsInGroup('staff') && currentUser.enableShowcaseFeatures">
                             <h5>
-                                <router-link @click.native="closeSidebar()" to="/account">
-                                    <font-awesome-icon icon="user" />
-                                    Account
-                                </router-link>
+                                <a class="disabled" href="#">
+                                    <font-awesome-icon icon="image" />
+                                    Showcase
+                                </a>
                             </h5>
                             <ul>
-                                <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
-                                <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
+                                <li><a class="disabled" href="#">Activity</a></li>
+                                <li><a class="disabled" href="#">Projects</a></li>
+                                <li><a class="disabled" href="#">Agency Profile</a></li>
                             </ul>
-                            <h5>
-                                <router-link @click.native="closeSidebar()" to="/buy">
-                                    <font-awesome-icon icon="bug" />
-                                    Tests
-                                </router-link>
-                            </h5>
-                            <ul>
-                                <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
-                                <li><router-link @click.native="closeSidebar()" to="/cart">Cart</router-link></li>
-                            </ul>
-                        </div>
+                        </template>
+
+                        <h5>
+                            <router-link @click.native="closeSidebar()" to="/account">
+                                <font-awesome-icon icon="user" />
+                                Account
+                            </router-link>
+                        </h5>
+                        <ul>
+                            <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
+                        </ul>
+                        <h5>
+                            <router-link @click.native="closeSidebar()" to="/buy">
+                                <font-awesome-icon icon="bug" />
+                                Tests
+                            </router-link>
+                        </h5>
+                        <ul>
+                            <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/cart">Cart</router-link></li>
+                        </ul>
                     </div>
 
                     <div class="main">
