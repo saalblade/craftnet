@@ -26,7 +26,7 @@ library.add([
     faUser,
     faPencilAlt,
     faExclamationTriangle,
-    faBug
+    faBug,
 ])
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
