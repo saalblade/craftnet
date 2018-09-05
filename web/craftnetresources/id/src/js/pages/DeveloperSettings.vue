@@ -1,27 +1,23 @@
 <template>
     <div>
         <h1>Developer Settings</h1>
-        <div class="card mb-3">
-            <div class="card-body">
-                <h4>Connected Apps</h4>
-                <connected-apps title="Connected Apps" :show-stripe="true"></connected-apps>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <h4>API Token</h4>
 
-                <form @submit.prevent="generateToken()">
-                    <p v-if="notice">This is your new API token, <strong>keep it someplace safe</strong>.</p>
-                    <text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
+        <h4>Connected Apps</h4>
+        <connected-apps title="Connected Apps" :show-stripe="true"></connected-apps>
 
-                    <input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
-                    <input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
+        <hr>
 
-                    <div class="spinner" v-if="loading"></div>
-                </form>
-            </div>
-        </div>
+        <h4>API Token</h4>
+
+        <form @submit.prevent="generateToken()">
+            <p v-if="notice">This is your new API token, <strong>keep it someplace safe</strong>.</p>
+            <text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
+
+            <input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
+            <input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
+
+            <div class="spinner" v-if="loading"></div>
+        </form>
     </div>
 </template>
 

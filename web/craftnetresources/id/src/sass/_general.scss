@@ -13,7 +13,7 @@ a:not(.btn) {
 }
 
 h1 {
-  @apply .text-2xl .mb-4 .text-grey-darkest;
+  @apply .text-2xl .mb-8 .text-grey-darkest;
 
   a {
     @apply .text-grey;
@@ -22,6 +22,10 @@ h1 {
       @apply .text-grey-darker .no-underline;
     }
   }
+}
+
+h2 {
+  @apply .text-xl .mb-2;
 }
 
 h4 {
