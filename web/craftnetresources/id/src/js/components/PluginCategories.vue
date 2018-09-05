@@ -9,7 +9,9 @@
                     <div class="flex">
                         <div>{{category.title}}</div>
                         <div class="ml-3 mt-1">
-                            <a class="" href="#" @click.prevent="unselectCategory(category.id)"><i class="fas fa-times text-red"></i></a>
+                            <a class="" href="#" @click.prevent="unselectCategory(category.id)">
+                                <font-awesome-icon icon="times" class="text-red" />
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -19,7 +21,10 @@
 
             <div>
                 <div class="inline-block" v-for="category in availableCategories">
-                    <a class="btn btn-outline-secondary mb-2 mr-2" :class="{disabled: pluginDraft.categoryIds.length >= maxCategories }" href="#" @click.prevent="selectCategory(category.id)"><i class="fa fa-plus"></i> {{category.title}}</a>
+                    <a class="btn btn-outline-secondary mb-2 mr-2" :class="{disabled: pluginDraft.categoryIds.length >= maxCategories }" href="#" @click.prevent="selectCategory(category.id)">
+                        <font-awesome-icon icon="plus" />
+                        {{category.title}}
+                    </a>
                 </div>
             </div>
         </div>

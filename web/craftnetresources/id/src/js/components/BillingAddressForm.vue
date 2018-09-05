@@ -26,7 +26,7 @@
                 <button @click="edit()" type="button"
                         class="btn btn-secondary btn-sm"
                         data-facebox="#billing-contact-info-modal">
-                    <i class="fas fa-pencil-alt"></i>
+                    <font-awesome-icon icon="pencil-alt" />
                     Edit
                 </button>
             </div>

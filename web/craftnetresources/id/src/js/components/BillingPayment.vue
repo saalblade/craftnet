@@ -28,14 +28,14 @@
             <div v-if="!editing" class="pl-4">
                 <p>
                     <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
-                        <i class="fa fa-plus"></i>
+                        <font-awesome-icon icon="plus" />
                         New Card
                     </button>
                 </p>
 
                 <p v-if="card">
                     <button @click="removeCard()" class="btn btn-sm btn-danger">
-                        <i class="fas fa-times"></i>
+                        <font-awesome-icon icon="times" />
                         Remove
                     </button>
 

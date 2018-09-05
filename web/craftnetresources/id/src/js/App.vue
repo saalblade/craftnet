@@ -22,7 +22,9 @@
                 <div class="header-container">
                     <div class="header">
                         <div class="header-left">
-                            <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()"><i class="fas fa-bars"></i></a>
+                            <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()">
+                                <font-awesome-icon :icon="showingSidebar ? 'times' : 'bars'" />
+                            </a>
 
                             <div class="header-brand">
                                 <router-link to="/">Craft ID</router-link>
@@ -33,7 +35,7 @@
                             <ul>
                                 <li class="global-menu" v-on-clickaway="awayGlobalMenu">
                                     <a class="toggle" @click="globalMenuToggle">
-                                        <i class="fas fa-th"></i>
+                                        <font-awesome-icon icon="th" />
                                     </a>
 
                                     <div class="popover" :class="{hidden: !showingGlobalMenu}">
@@ -75,7 +77,12 @@
                 <div class="content-container">
                     <div id="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
                         <div class="sidenav">
-                            <h5><router-link @click.native="closeSidebar()" to="/account/licenses"><i class="fa fa-key"></i> Licenses</router-link></h5>
+                            <h5>
+                                <router-link @click.native="closeSidebar()" to="/account/licenses">
+                                    <font-awesome-icon icon="key" />
+                                    Licenses
+                                </router-link>
+                            </h5>
                             <ul>
                                 <li><router-link @click.native="closeSidebar()" to="/account/licenses/cms">Craft CMS</router-link></li>
                                 <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
@@ -85,7 +92,12 @@
                             </ul>
 
                             <template v-if="userIsInGroup('developers')">
-                                <h5><router-link @click.native="closeSidebar()" to="/developer"><i class="fa fa-plug"></i> Developer</router-link></h5>
+                                <h5>
+                                    <router-link @click.native="closeSidebar()" to="/developer">
+                                        <font-awesome-icon icon="plug" />
+                                        Developer
+                                    </router-link>
+                                </h5>
                                 <ul>
                                     <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
                                     <li><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
@@ -95,7 +107,12 @@
                             </template>
 
                             <template v-if="userIsInGroup('staff') && currentUser.enableShowcaseFeatures">
-                                <h5><a class="disabled" href="#"><i class="fa fa-image"></i> Showcase</a></h5>
+                                <h5>
+                                    <a class="disabled" href="#">
+                                        <font-awesome-icon icon="image" />
+                                        Showcase
+                                    </a>
+                                </h5>
                                 <ul>
                                     <li><a class="disabled" href="#">Activity</a></li>
                                     <li><a class="disabled" href="#">Projects</a></li>
@@ -103,7 +120,12 @@
                                 </ul>
                             </template>
 
-                            <h5><router-link @click.native="closeSidebar()" to="/account"><i class="fas fa-user"></i> Account</router-link></h5>
+                            <h5>
+                                <router-link @click.native="closeSidebar()" to="/account">
+                                    <font-awesome-icon icon="user" />
+                                    Account
+                                </router-link>
+                            </h5>
                             <ul>
                                 <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
                                 <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>

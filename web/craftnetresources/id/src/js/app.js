@@ -10,6 +10,28 @@ import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 import '../sass/element-variables.scss'
 
+// Font Awesome
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCoffee, faTimes, faTh, faBars, faPlus, faKey, faPlug, faImage, faUser, faPencilAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+library.add([
+    faCoffee,
+    faTimes,
+    faTh,
+    faBars,
+    faPlus,
+    faKey,
+    faPlug,
+    faImage,
+    faUser,
+    faPencilAlt,
+    faExclamationTriangle
+])
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.config.productionTip = false
+
+
 Vue.filter('currency', currency);
 Vue.filter('formatCmsLicense', formatCmsLicense);
 Vue.filter('formatPluginLicense', formatPluginLicense);
