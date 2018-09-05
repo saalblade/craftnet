@@ -74,6 +74,8 @@ return [
     'the-neighbourhood-staging.com',
     'umstesting.com',
     'vrielingdev.nl',
+    'wave-dev.com',
+    'wave-stage.com',
     'websitetestlink.com',
     'xip.io',
     'yourstruly.space',
