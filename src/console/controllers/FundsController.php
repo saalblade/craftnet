@@ -151,7 +151,7 @@ class FundsController extends Controller
             'required' => true,
         ]);
 
-        $this->stdout('Account will go from ' . $this->_currency($balance) . 'to ' . $this->_currency($balance - $amount) . '.' . PHP_EOL, Console::FG_YELLOW);
+        $this->stdout('Account will go from ' . $this->_currency($balance) . ' to ' . $this->_currency($balance - $amount) . '.' . PHP_EOL, Console::FG_YELLOW);
 
         if (!$this->confirm('Proceed?')) {
             return ExitCode::OK;
