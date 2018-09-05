@@ -31,10 +31,42 @@
 
                         <div class="actions-right">
                             <ul>
-                                <li><a href="http://localhost:3000/" target="_blank">Craft Plugins</a></li>
-                                <li><a href="/">Craft ID</a></li>
-                                <li><a href="/logout">Logout</a></li>
-                                <!--<li><img :src="currentUser.photoUrl" width="20" /></li>-->
+                                <li class="global-menu" v-on-clickaway="awayGlobalMenu">
+                                    <a class="toggle" @click="globalMenuToggle">
+                                        <i class="fas fa-th"></i>
+                                    </a>
+
+                                    <div class="popover" :class="{hidden: !showingGlobalMenu}">
+                                        <div>
+                                            <p><a href="http://localhost:3000/" target="_blank">Craft Plugins</a></p>
+                                            <p><router-link @click.native="showingGlobalMenu = false" to="/">Craft ID</router-link></p>
+                                        </div>
+
+                                        <div class="popover-arrow"></div>
+                                    </div>
+                                </li>
+                                <li class="user-menu" v-on-clickaway="awayUserMenu">
+                                    <a class="toggle" @click="userMenuToggle">
+                                        <img :src="currentUser.photoUrl" />
+                                    </a>
+
+                                    <div class="popover" :class="{hidden: !showingUserMenu}">
+                                        <div>
+                                            {{currentUser.email}}
+                                        </div>
+
+                                        <div>
+                                            <router-link @click.native="showingUserMenu = false" to="/account/settings">Account Settings</router-link>
+                                        </div>
+
+                                        <hr>
+
+                                        <div>
+                                            <a href="/logout">Logout</a>
+                                        </div>
+                                        <div class="popover-arrow"></div>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -95,8 +127,14 @@
     import router from './router';
     import AuthManager from './components/AuthManager';
     import RenewLicensesModal from './components/renew-licenses/RenewLicensesModal';
+    import { directive as onClickaway } from 'vue-clickaway';
+
 
     export default {
+
+        directives: {
+            onClickaway: onClickaway,
+        },
 
         router,
 
@@ -110,6 +148,8 @@
         data() {
             return {
                 showingSidebar: false,
+                showingUserMenu: false,
+                showingGlobalMenu: false,
             }
         },
 
@@ -139,6 +179,32 @@
              */
             closeSidebar() {
                 this.showingSidebar = false;
+            },
+
+            awayUserMenu: function(event) {
+                if(this.showingUserMenu === true) {
+                    console.log('away', this.showingUserMenu, event.target)
+
+                    this.showingUserMenu = false
+                }
+            },
+
+            awayGlobalMenu: function(event) {
+                if(this.showingGlobalMenu === true) {
+                    console.log('away', this.showingGlobalMenu, event.target)
+
+                    this.showingGlobalMenu = false
+                }
+            },
+
+            userMenuToggle() {
+                console.log('userMenuToggle');
+                this.showingUserMenu = !this.showingUserMenu
+            },
+
+            globalMenuToggle() {
+                console.log('userMenuToggle');
+                this.showingGlobalMenu = !this.showingGlobalMenu
             }
 
         },
