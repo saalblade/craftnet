@@ -4,13 +4,13 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h4>Email &amp; password</h4>
-                <el-form>
+                <!--<el-form>
                     <el-form-item label="Current Password">
                         <el-input type="password" v-model="password"></el-input>
                     </el-form-item>
-                </el-form>
+                </el-form>-->
 
-                <!--<password-field id="password" label="Current Password" v-model="password" :errors="errors.currentPassword" />-->
+                <password-field id="password" label="Current Password" v-model="password" :errors="errors.currentPassword" />
                 <text-field id="email" label="Email" v-model="userDraft.email" :errors="errors.email" />
                 <password-field id="newPassword" label="New Password" v-model="newPassword" :errors="errors.newPassword" />
             </div>
