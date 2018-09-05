@@ -5,7 +5,7 @@ namespace craftnet\partners;
 
 use craft\base\Model;
 
-class PartnerLocationModel extends Model
+class PartnerLocation extends Model
 {
     const SCENARIO_LIVE = 'live';
 

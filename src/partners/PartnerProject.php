@@ -6,7 +6,7 @@ namespace craftnet\partners;
 use craft\base\Model;
 use craft\elements\Asset;
 
-class PartnerProjectModel extends Model
+class PartnerProject extends Model
 {
     const SCENARIO_LIVE = 'live';
 

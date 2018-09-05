@@ -385,9 +385,9 @@ class Partner extends Element
     }
 
     /**
-     * Sets the `locations` attribute to a list of PartnerLocationModel
+     * Sets the `locations` attribute to a list of PartnerLocation
      * instances given an array of models or data arrays suitable for
-     * PartnerLocationModel instantiation.
+     * PartnerLocation instantiation.
      * @param array $locations
      */
     public function setLocations(array $locations)
@@ -454,9 +454,9 @@ class Partner extends Element
     }
 
     /**
-     * Sets the `projects` attribute to a list of PartnerProjectModel
+     * Sets the `projects` attribute to a list of PartnerProject
      * instances given an array of models or data arrays suitable for
-     * PartnerProjectModel instantiation.
+     * PartnerProject instantiation.
      * @param array $projects
      * @param bool $eagerLoad
      */
@@ -535,7 +535,7 @@ class Partner extends Element
     }
 
     /**
-     * @param PartnerProjectModel $project
+     * @param PartnerProject $project
      * @throws \yii\db\Exception
      */
     private function _saveProjectScreenshots($project)

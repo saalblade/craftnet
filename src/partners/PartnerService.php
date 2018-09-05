@@ -20,7 +20,7 @@ class PartnerService
     }
 
     /**
-     * @param array|PartnerProjectModel[] $projects
+     * @param array|PartnerProject[] $projects
      */
     public function eagerLoadProjectScreenshots(&$projects)
     {
@@ -91,18 +91,18 @@ class PartnerService
     }
 
     /**
-     * Accepts an array of location data arrays or PartnerLocationModel instances
-     * and returns an array of PartnerLocationModel instances.
+     * Accepts an array of location data arrays or PartnerLocation instances
+     * and returns an array of PartnerLocation instances.
      *
      * @param array $locations
      * @param Partner $partner
-     * @return PartnerLocationModel[]
+     * @return PartnerLocation[]
      */
     public function normalizeLocations(array $locations, $partner): array
     {
         $locations = array_map(function($location) use ($partner) {
-            if (!$location instanceof PartnerLocationModel) {
-                $location = new PartnerLocationModel($location);
+            if (!$location instanceof PartnerLocation) {
+                $location = new PartnerLocation($location);
             }
 
             $location->partnerId = $partner->id;
@@ -114,13 +114,13 @@ class PartnerService
     }
 
     /**
-     * Accepts an array of project data arrays or PartnerProjectModel instances
-     * and returns an array of PartnerProjectModel instances.
+     * Accepts an array of project data arrays or PartnerProject instances
+     * and returns an array of PartnerProject instances.
      *
      * @param array $projects
      * @param Partner $partner
      * @param bool $eagerLoad
-     * @return PartnerProjectModel[]
+     * @return PartnerProject[]
      */
     public function normalizeProjects(array $projects, $partner, $eagerLoad = false): array
     {
@@ -131,8 +131,8 @@ class PartnerService
         $ids = [];
 
         foreach ($projects as &$project) {
-            if (!$project instanceof PartnerProjectModel) {
-                $project = new PartnerProjectModel($project);
+            if (!$project instanceof PartnerProject) {
+                $project = new PartnerProject($project);
             }
 
             $project->partnerId = $partner->id;
