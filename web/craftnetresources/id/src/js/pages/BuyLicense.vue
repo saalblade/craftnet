@@ -8,12 +8,12 @@
 
                 <div class="flex items-center mb-4">
                     <div>
-                        <select v-model="selectedPluginHandle">
-                            <option value="">Select a plugin</option>
-                            <option v-for="plugin in commercialPlugins" :value="plugin.handle">
+                        <el-select v-model="selectedPluginHandle" placeholder="Select a plugin" class="w-full" filterable>
+                            <el-option value="">Select a plugin</el-option>
+                            <el-option v-for="(plugin, key) in commercialPlugins" :key="key" :value="plugin.handle">
                                     {{ plugin.name }} (Starting at ${{plugin.editions[0].price}})
-                            </option>
-                        </select>
+                            </el-option>
+                        </el-select>
                     </div>
 
                     <div>

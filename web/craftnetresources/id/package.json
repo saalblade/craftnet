@@ -11,6 +11,7 @@
     "@benjamindavid/craftcomponents": "file:../../../../repos/craftcomponents",
     "axios": "^0.17.1",
     "cross-env": "^5.1.1",
+    "element-ui": "^2.4.6",
     "humanize-duration": "^3.12.0",
     "inputmask": "^3.3.8",
     "limax": "^1.5.0",

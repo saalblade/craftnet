@@ -5,11 +5,17 @@ import store from './store'
 import {currency} from './filters/currency';
 import {formatCmsLicense, formatPluginLicense} from './filters/licenses';
 import App from './App.vue';
+import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
+// import 'element-ui/lib/theme-chalk/index.css';
+import '../sass/element-variables.scss'
 
 Vue.filter('currency', currency);
 Vue.filter('formatCmsLicense', formatCmsLicense);
 Vue.filter('formatPluginLicense', formatPluginLicense);
 Vue.use(require('vue-moment'));
+
+Vue.use(ElementUI);
 
 window.craftIdApp = new Vue({
 
