@@ -14,7 +14,8 @@
         @apply .flex .items-center;
 
         #sidebar-toggle {
-          @apply .mr-4 .text-grey-darker;
+          @apply .mr-4 .text-grey-darker .text-center;
+          width: 14px;
 
           &:hover {
             @apply .text-black;
