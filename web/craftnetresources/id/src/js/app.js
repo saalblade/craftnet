@@ -36,7 +36,7 @@ Vue.filter('formatCmsLicense', formatCmsLicense);
 Vue.filter('formatPluginLicense', formatPluginLicense);
 Vue.use(require('vue-moment'));
 
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 
 window.craftIdApp = new Vue({
 
