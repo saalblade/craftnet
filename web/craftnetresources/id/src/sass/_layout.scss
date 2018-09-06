@@ -127,7 +127,7 @@
   .app {
     .sidebar {
       &.showing-sidebar {
-        @apply .block .bg-grey-lighter .absolute .pin .z-10;
+        @apply .block .bg-white .absolute .pin .z-10;
         top: 61px;
       }
     }
