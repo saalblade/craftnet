@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h1>Craft CMS</h1>
         <license-renew-alert type="CMS" :expiring-licenses="expiringCmsLicenses"></license-renew-alert>
 
+        <h1>Craft CMS</h1>
 
         <div v-if="cmsLicenses.length > 0" class="card card-table responsive-content">
             <cms-licenses-table type="craft" :licenses="cmsLicenses"></cms-licenses-table>

@@ -1,7 +1,8 @@
 <template>
     <div>
-        <h1>Plugins</h1>
         <license-renew-alert type="plugin" :expiring-licenses="expiringPluginLicenses"></license-renew-alert>
+
+        <h1>Plugins</h1>
 
         <div v-if="pluginLicenses.length > 0" class="card card-table responsive-content">
             <plugin-licenses-table :licenses="pluginLicenses"></plugin-licenses-table>
