@@ -9,7 +9,7 @@
                 <text-input class="form-control" id="searchQuery" name="searchQuery" type="text" placeholder="Search sales" v-model="searchQuery" />
             </div>
 
-            <div class="responsive-content">
+            <div class="card card-table responsive-content">
                 <table class="table">
                     <thead>
                     <tr>

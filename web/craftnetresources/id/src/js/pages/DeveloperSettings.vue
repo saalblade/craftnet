@@ -2,22 +2,28 @@
     <div>
         <h1>Developer Settings</h1>
 
-        <h4>Connected Apps</h4>
-        <connected-apps title="Connected Apps" :show-stripe="true"></connected-apps>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4>Connected Apps</h4>
+                <connected-apps title="Connected Apps" :show-stripe="true"></connected-apps>
+            </div>
+        </div>
 
-        <hr>
+        <div class="card">
+            <div class="card-body">
+                <form @submit.prevent="generateToken()">
+                    <h4>API Token</h4>
 
-        <h4>API Token</h4>
+                    <p v-if="notice">This is your new API token, <strong>keep it someplace safe</strong>.</p>
+                    <text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
 
-        <form @submit.prevent="generateToken()">
-            <p v-if="notice">This is your new API token, <strong>keep it someplace safe</strong>.</p>
-            <text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
+                    <input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
+                    <input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
 
-            <input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
-            <input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
-
-            <div class="spinner" v-if="loading"></div>
-        </form>
+                    <div class="spinner" v-if="loading"></div>
+                </form>
+            </div>
+        </div>
     </div>
 </template>
 

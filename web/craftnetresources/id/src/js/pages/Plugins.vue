@@ -12,7 +12,7 @@
 
         <stripe-account-alert></stripe-account-alert>
 
-        <div v-if="computedPlugins.length > 0" class="responsive-content">
+        <div v-if="computedPlugins.length > 0" class="card card-table responsive-content">
             <table class="table">
                 <thead>
                 <tr>

@@ -3,9 +3,9 @@
         <h1>Plugins</h1>
         <license-renew-alert type="plugin" :expiring-licenses="expiringPluginLicenses"></license-renew-alert>
 
-        <template v-if="pluginLicenses.length > 0">
+        <div v-if="pluginLicenses.length > 0" class="card card-table responsive-content">
             <plugin-licenses-table :licenses="pluginLicenses"></plugin-licenses-table>
-        </template>
+        </div>
 
         <div v-else class="card card-empty">
             <div class="card-body">

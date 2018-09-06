@@ -1,7 +1,7 @@
 /* HTML Basics */
 
 body {
-  @apply .leading-normal .bg-grey-lighter;
+  @apply .leading-normal .bg-white;
 }
 
 a:not(.btn) {
@@ -13,7 +13,7 @@ a:not(.btn) {
 }
 
 h1 {
-  @apply .text-2xl .mb-8 .text-grey-darkest;
+  @apply .text-2xl .mb-6 .text-grey-darkest;
 
   a {
     @apply .text-grey;

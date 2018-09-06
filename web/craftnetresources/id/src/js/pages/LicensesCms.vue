@@ -3,9 +3,10 @@
         <h1>Craft CMS</h1>
         <license-renew-alert type="CMS" :expiring-licenses="expiringCmsLicenses"></license-renew-alert>
 
-        <template v-if="cmsLicenses.length > 0">
+
+        <div v-if="cmsLicenses.length > 0" class="card card-table responsive-content">
             <cms-licenses-table type="craft" :licenses="cmsLicenses"></cms-licenses-table>
-        </template>
+        </div>
 
         <div v-else class="card card-empty">
             <div class="card-body">
