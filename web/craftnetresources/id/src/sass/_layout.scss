@@ -87,7 +87,7 @@
       li {
         a {
           @apply .block .text-grey-darker .px-6 .py-2 .no-underline;
-          padding-left: 46px;
+          padding-left: 47px;
 
           &:hover {
             @apply .text-black;
@@ -115,7 +115,7 @@
       @apply .mx-auto;
       max-width: 1440px;
       .license-renew-alert {
-        @apply .-mx-8 .-mt-6 .rounded-none .px-8;
+        @apply .-mx-8 .-mt-6 .rounded-none .px-8 .mb-6;
         border: 0;
       }
     }
