@@ -207,10 +207,6 @@ return [
         'statusColor' => 'orange',
         'status' => 'Coming soon'
     ],
-    'Retour' => [
-        'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Redirect Manager](https://github.com/Dolphiq/craft3-plugin-redirect) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) could be used instead'
-    ],
     'Scraper' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development.'
@@ -233,7 +229,7 @@ return [
     'Sitemap' => [
         'handle' => 'sitemap-tmp',
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) could be used instead',
+        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) or [SEOmatic](https://github.com/nystudio107/craft-seomatic) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) could be used instead',
     ],
     'SproutInvisibleCaptcha' => [
         'statusColor' => 'orange',
