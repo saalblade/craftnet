@@ -53,7 +53,6 @@
                     zipCode: '',
                 },
                 billingInfoErrors: {},
-                card: null,
                 cardToken: null,
                 paymentMode: 'newCard',
                 replaceCard: false,
@@ -71,6 +70,7 @@
 
             ...mapState({
                 cart: state => state.cart.cart,
+                card: state => state.account.card,
             }),
 
             ...mapGetters({
@@ -112,6 +112,10 @@
         },
 
         mounted() {
+            if (this.card) {
+                this.paymentMode = 'existingCard'
+            }
+
             if(this.cart.items.length === 0) {
                 this.$router.push({path: '/buy'});
             }
