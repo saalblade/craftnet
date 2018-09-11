@@ -18,6 +18,7 @@ import BuyLicense from '../pages/BuyLicense'
 import Cart from '../pages/Cart'
 import Payment from '../pages/Payment'
 import BuyPlugin from '../pages/BuyPlugin'
+import ThankYou from '../pages/ThankYou'
 
 Vue.use(VueRouter);
 
@@ -133,6 +134,11 @@ const router = new VueRouter({
             path: '/payment',
             name: 'Payment',
             component: Payment
+        },
+        {
+            path: '/thank-you',
+            name: 'ThankYou',
+            component: ThankYou
         },
     ]
 });
