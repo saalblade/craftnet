@@ -23,8 +23,7 @@
                 </div>
             </div>
 
-            <input type="button" class="btn btn-primary"
-                   :value="'Pay $'+cartTotal" @click="pay"/>
+            <input type="button" class="btn btn-primary" :value="'Pay $'+cartTotal" @click="pay"/>
         </div>
     </div>
 </template>
