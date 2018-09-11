@@ -153,15 +153,21 @@
                     });
                 }
 
-                this.$store.dispatch('saveBillingInfo', data).then(response => {
-                    this.$root.displayNotice('Billing address saved.');
-                    this.showForm = false;
-                    this.errors = {};
-                }).catch(response => {
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save billing address.';
-                    this.$root.displayError(errorMessage);
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                });
+                this.$store.dispatch('saveBillingInfo', data)
+					.then(response => {
+					    if (response.data.error) {
+                            const errorMessage = response.data.error
+                            this.$root.displayError(errorMessage)
+						} else {
+							this.$root.displayNotice('Billing address saved.');
+							this.showForm = false;
+							this.errors = {};
+                        }
+					}).catch(response => {
+						const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save billing address.';
+						this.$root.displayError(errorMessage);
+						this.errors = response.data && response.data.errors ? response.data.errors : {};
+					});
             },
 
             /**
