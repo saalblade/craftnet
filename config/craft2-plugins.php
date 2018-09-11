@@ -235,14 +235,6 @@ return [
         'statusColor' => 'orange',
         'status' => 'Features have been rolled into Sprout Forms which is available in the Plugin Store. Invisible Captcha will no longer be a standalone plugin in Craft 3.'
     ],
-    'SproutEmail' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
-    'SproutSeo' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
     'SquareBitMaps' => [
         'statusColor' => 'orange',
         'status' => 'Craft 3 upgrade path will be available via [Smart Map](https://www.doublesecretagency.com/plugins/smart-map).'
