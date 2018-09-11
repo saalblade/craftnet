@@ -103,15 +103,8 @@
         },
 
         mounted() {
-            if(this.renewableLicenses(this.license, this.renew).length === 1) {
+            if(this.renewableLicenses(this.license, this.renew).length === 1 || this.checkedLicenses.length === 0) {
                 this.$refs.checkAll.click();
-                // this.$parent.step = 'payment'
-                this.$router.push({path: '/cart'})
-                this.$emit('cancel')
-            } else {
-                if(this.checkedLicenses.length === 0) {
-                    this.$refs.checkAll.click();
-                }
             }
         }
 
