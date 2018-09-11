@@ -23,7 +23,11 @@
                 </div>
             </div>
 
-            <input type="button" class="btn btn-primary" :value="'Pay $'+cartTotal" @click="pay"/>
+            <input type="button" class="btn btn-primary" :value="'Pay '+$options.filters.currency(cartTotal)" @click="pay"/>
+
+            <div class="mt-4">
+                <img src="/craftnetresources/id/dist/images/powered_by_stripe.svg" height="18" />
+            </div>
         </div>
     </div>
 </template>
@@ -31,9 +35,9 @@
 <script>
     import {mapState, mapGetters} from 'vuex'
     import CraftComponents from "@benjamindavid/craftcomponents";
-    import PaymentMethod from '../payment/PaymentMethod'
-    import CouponCode from '../payment/CouponCode'
-    import BillingInfos from '../payment/BillingInfos'
+    import PaymentMethod from './payment/PaymentMethod'
+    import CouponCode from './payment/CouponCode'
+    import BillingInfos from './payment/BillingInfos'
 
     export default {
 

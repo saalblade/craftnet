@@ -60,19 +60,23 @@ const actions = {
             })
     },
 
-    addToCart({commit}, {plugin, pluginEditionHandle}) {
-        const pluginEdition = plugin.editions.find(edition => edition.handle === pluginEditionHandle)
-
-        const item = {
-            plugin,
-            pluginEditionHandle,
-            lineItem: {
-                total: pluginEdition.price
-            }
-        }
-
+    addToCart({commit}, {item}) {
         commit('addToCart', {item})
     },
+
+    // addToCart({commit}, {plugin, pluginEditionHandle}) {
+    //     const pluginEdition = plugin.editions.find(edition => edition.handle === pluginEditionHandle)
+    //
+    //     const item = {
+    //         plugin,
+    //         pluginEditionHandle,
+    //         lineItem: {
+    //             total: pluginEdition.price
+    //         }
+    //     }
+    //
+    //     commit('addToCart', {item})
+    // },
 
     removeFromCart({commit, state}, lineItemKey) {
         commit('removeFromCart', {lineItemKey})

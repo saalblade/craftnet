@@ -55,10 +55,18 @@
             addToCart() {
                 this.plugin = this.getPluginByHandle(this.handle)
 
-                this.$store.dispatch('cart/addToCart', {
-                        plugin: this.plugin,
-                        pluginEditionHandle: this.edition,
-                    })
+                const pluginEdition = this.plugin.editions.find(edition => edition.handle === this.edition)
+
+                const item = {
+                    type: 'plugin-edition',
+                    plugin: this.plugin,
+                    pluginEditionHandle: this.edition,
+                    lineItem: {
+                        total: pluginEdition.price
+                    }
+                }
+
+                this.$store.dispatch('cart/addToCart', {item})
                     .then(response => {
                         this.$router.push({path: '/cart'})
                     })

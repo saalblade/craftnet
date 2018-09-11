@@ -15,22 +15,33 @@
                 </thead>
                 <tbody>
                 <tr v-for="(item, itemKey) in cart.items">
-                    <td>
-                        <img :src="item.plugin.iconUrl" width="32" height="32" alt="">
-                    </td>
-                    <td>{{item.plugin.name}}</td>
-                    <td>{{item.pluginEditionHandle}}</td>
-                    <td>
-                        <select>
-                            <option>Updates Until x/x/xxxx (+$00.00)</option>
-                        </select>
-                    </td>
-                    <td>${{item.lineItem.total}}</td>
+                    <template v-if="item.type === 'renewal'">
+                        <td></td>
+                        <td colspan="3">Renewal</td>
+                    </template>
+
+                    <template v-else>
+                        <td>
+                            <img :src="item.plugin.iconUrl" width="32" height="32" alt="">
+                        </td>
+                        <td>
+                            {{item.plugin.name}}<br />
+                            <small class="text-grey">{{item.type}}</small>
+                        </td>
+                        <td>{{item.pluginEditionHandle}}</td>
+                        <td>
+                            <select>
+                                <option>Updates Until x/x/xxxx (+$00.00)</option>
+                            </select>
+                        </td>
+                    </template>
+
+                    <td>{{item.lineItem.total|currency}}</td>
                     <td><input type="button" class="btn btn-secondary" @click="removeFromCart(itemKey)" value="Remove" /></td>
                 </tr>
                 <tr>
                     <th colspan="4" class="text-right">Total</th>
-                    <th>${{cartTotal}}</th>
+                    <th>{{cartTotal|currency}}</th>
                     <th></th>
                 </tr>
                 </tbody>

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import Cart from '../components/buy-license/Cart'
+    import Cart from '../components/Cart'
 
     export default {
 

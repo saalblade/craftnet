@@ -37,7 +37,7 @@
         </table>
 
         <button @click="$emit('back')" class="btn btn-secondary">Back</button>
-        <button @click="$emit('checkout')" class="btn btn-primary" :disabled="renewableLicensesTotal(license, renew, checkedLicenses) === 0" :class="{disabled: renewableLicensesTotal(license, renew, checkedLicenses) === 0}">Checkout</button>
+        <button @click="addToCart()" class="btn btn-primary" :disabled="renewableLicensesTotal(license, renew, checkedLicenses) === 0" :class="{disabled: renewableLicensesTotal(license, renew, checkedLicenses) === 0}">Add to cart</button>
     </div>
 </template>
 
@@ -82,6 +82,22 @@
                 }
 
                 this.$emit('update:checkedLicenses', checkedLicenses)
+            },
+
+            addToCart() {
+                const item = {
+                    type: 'renewal',
+                    lineItem: {
+                        total: this.renewableLicensesTotal(this.license, this.renew, this.checkedLicenses)
+                    }
+                }
+
+                this.$store.dispatch('cart/addToCart', {item})
+                    .then(response => {
+                        this.$router.push({path: '/cart'})
+                    })
+
+                this.$emit('addToCart')
             }
 
         },
@@ -89,7 +105,9 @@
         mounted() {
             if(this.renewableLicenses(this.license, this.renew).length === 1) {
                 this.$refs.checkAll.click();
-                this.$parent.step = 'payment'
+                // this.$parent.step = 'payment'
+                this.$router.push({path: '/cart'})
+                this.$emit('cancel')
             } else {
                 if(this.checkedLicenses.length === 0) {
                     this.$refs.checkAll.click();

@@ -15,20 +15,7 @@
                 :license="license"
                 :renew="renew"
                 @back="step = 'extend-updates'"
-                @checkout="step = 'payment'" />
-
-        <payment
-                v-if="step === 'payment'"
-                :checkedLicenses="checkedLicenses"
-                :license="license"
-                :renew="renew"
-                @back="step = renewableLicenses(license, renew).length > 1 ? 'plugins' : 'extend-updates'"
-                @pay="step = 'thank-you'" />
-
-        <thank-you
-                v-if="step === 'thank-you'"
-                @done="step = 'extend-updates'; $emit('cancel')" />
-
+                @addToCart="$emit('cancel')" />
     </div>
 </template>
 
@@ -36,8 +23,6 @@
     import {mapGetters} from 'vuex'
     import Plugins from './steps/Plugins'
     import ExtendUpdates from '../renew-licenses/steps/ExtendUpdates'
-    import Payment from '../renew-licenses/steps/Payment'
-    import ThankYou from '../renew-licenses/steps/ThankYou'
 
     export default {
 
@@ -46,8 +31,6 @@
         components: {
             Plugins,
             ExtendUpdates,
-            Payment,
-            ThankYou,
         },
 
         data() {

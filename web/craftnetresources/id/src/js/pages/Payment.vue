@@ -7,7 +7,7 @@
 
 <script>
     import {mapState} from 'vuex'
-    import Payment from '../components/buy-license/Payment'
+    import Payment from '../components/Payment'
 
     export default {
 
