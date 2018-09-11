@@ -310,7 +310,7 @@
                 const item = {
                     type: 'renewal',
                     lineItem: {
-                        total: '49.0000'
+                        total: this.newExpiresOn.diff(this.license.expiresOn.date, 'years', true) * this.license.edition.renewalPrice
                     }
                 }
 
