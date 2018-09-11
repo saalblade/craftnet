@@ -134,6 +134,7 @@
                         <ul>
                             <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
                             <li><router-link @click.native="closeSidebar()" to="/cart">Cart</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/payment">Payment</router-link></li>
                         </ul>
                     </div>
 

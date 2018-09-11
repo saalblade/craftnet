@@ -114,10 +114,6 @@
             if (this.card) {
                 this.paymentMode = 'existingCard'
             }
-
-            if(this.cart.items.length === 0) {
-                this.$router.push({path: '/buy'});
-            }
         }
 
     }

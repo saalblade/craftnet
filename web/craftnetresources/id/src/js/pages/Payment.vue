@@ -6,6 +6,7 @@
 </template>
 
 <script>
+    import {mapState, mapGetters} from 'vuex'
     import Payment from '../components/buy-license/Payment'
 
     export default {
@@ -14,5 +15,16 @@
             Payment,
         },
 
+        computed: {
+            ...mapState({
+                cart: state => state.cart.cart,
+            }),
+        },
+
+        mounted() {
+            // if(this.cart.items.length === 0) {
+            //     this.$router.push({path: '/buy'});
+            // }
+        }
     }
 </script>
