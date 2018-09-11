@@ -200,11 +200,11 @@ class JsonDumper extends Component
             Console::output('done');
         }
 
-        if (!empty($oldPaths)) {
-            Craft::$app->getQueue()->delay(60 * 5)->push(new DeletePaths([
-                'paths' => $oldPaths,
-            ]));
-        }
+//        if (!empty($oldPaths)) {
+//            Craft::$app->getQueue()->delay(60 * 5)->push(new DeletePaths([
+//                'paths' => $oldPaths,
+//            ]));
+//        }
     }
 
     /**

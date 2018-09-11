@@ -8,7 +8,7 @@
                         <div class="md:w-1/2 px-4">
                             <dl>
                                 <dt>Edition</dt>
-                                <dd>{{ license.edition }}</dd>
+                                <dd>{{ license.edition|capitalize }}</dd>
 
                                 <dt>License Key</dt>
                                 <dd>

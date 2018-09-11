@@ -69,7 +69,10 @@
              */
             editInvoiceDetails() {
                 this.showForm = true;
-                this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress));
+
+                if (this.billingAddress) {
+                    this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress));
+                }
             },
 
             /**
@@ -95,16 +98,21 @@
                     });
                 }
 
-                this.$store.dispatch('account/saveBillingInfo', data).then(response => {
-                    this.$root.displayNotice('Invoice details saved.');
-                    this.showForm = false;
-                    this.errors = {};
-                }).catch(response => {
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.';
-                    this.$root.displayError(errorMessage);
-
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                });
+                this.$store.dispatch('account/saveBillingInfo', data)
+                    .then(response => {
+                        if (response.data.error) {
+                            const errorMessage = response.data.error
+                            this.$root.displayError(errorMessage)
+                        } else {
+                            this.$root.displayNotice('Invoice details saved.');
+                            this.showForm = false;
+                            this.errors = {};
+                        }
+                    }).catch(response => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.';
+                        this.$root.displayError(errorMessage);
+                        this.errors = response.data && response.data.errors ? response.data.errors : {};
+                    });
             },
 
             /**
