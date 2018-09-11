@@ -123,7 +123,7 @@
                     </tbody>
                 </table>
 
-                <a href="#" class="btn btn-primary">Renew Your License</a>
+                <input type="button" class="btn btn-primary" @click="addToCart()" value="Add to cart" />
             </div>
         </div>
     </div>
@@ -306,6 +306,19 @@
                 });
             },
 
+            addToCart() {
+                const item = {
+                    type: 'renewal',
+                    lineItem: {
+                        total: '49.0000'
+                    }
+                }
+
+                this.$store.dispatch('cart/addToCart', {item})
+                    .then(response => {
+                        this.$router.push({path: '/cart'})
+                    })
+            }
         },
 
         mounted() {
