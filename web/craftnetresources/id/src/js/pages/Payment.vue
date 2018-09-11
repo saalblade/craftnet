@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import Payment from '../components/buy-license/Payment'
 
     export default {
