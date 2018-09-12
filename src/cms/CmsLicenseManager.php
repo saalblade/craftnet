@@ -193,44 +193,7 @@ class CmsLicenseManager extends Component
             ->one();
 
         if ($result === null) {
-            // try the inactive licenses table
-            $data = (new Query())
-                ->select(['data'])
-                ->from(['craftnet_inactivecmslicenses'])
-                ->where(['key' => $key])
-                ->scalar();
-
-            if ($data === false) {
-                throw new LicenseNotFoundException($key);
-            }
-
-            $data = Json::decode($data);
-            $data['editionHandle'] = 'solo';
-            unset($data['edition']);
-            $license = new CmsLicense($data);
-
-            if (!$license->ownerId) {
-                $license->ownerId = User::find()
-                    ->select('elements.id')
-                    ->email($license->email)
-                    ->scalar() ?: null;
-            }
-
-            $this->saveLicense($license, false);
-
-            Craft::$app->getDb()->createCommand()
-                ->delete('craftnet_inactivecmslicenses', [
-                    'key' => $key
-                ])
-                ->execute();
-
-            $note = "created by {$license->email}";
-            if ($license->domain) {
-                $note .= " for domain {$license->domain}";
-            }
-            $this->addHistory($license->id, $note, $data['dateCreated']);
-
-            return $license;
+            throw new LicenseNotFoundException($key);
         }
 
         return new CmsLicense($result);

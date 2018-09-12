@@ -7,6 +7,7 @@ use craft\db\Migration;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\Console;
+use craft\helpers\Json;
 use craftnet\cms\CmsLicense;
 use craftnet\Module;
 
@@ -20,23 +21,51 @@ class m180912_040313_reactivate_all_cmslicenses extends Migration
      */
     public function safeUp()
     {
+        $userIdsByEmail = (new Query())
+            ->select(['lower(email)', 'id'])
+            ->from(['users'])
+            ->pairs();
+
         $query = (new Query())
-            ->select(['key'])
-            ->from(['craftnet_inactivecmslicenses']);
+            ->select(['key', 'data'])
+            ->from(['craftnet_inactivecmslicenses'])
+            ->limit(1000);
 
         $cmsLicenseManager = Module::getInstance()->getCmsLicenseManager();
 
-        foreach ($query->each() as $result) {
-            Console::stdout('    > Reactivating ' . substr($result['key'], 0, 10) . ' ... ');
-            $cmsLicenseManager->getLicenseByKey($result['key']);
-            Console::output(Console::ansiFormat('done', [Console::FG_GREEN]));
-        }
+        do {
+            $results = $query->all();
+            foreach ($results as $result) {
+                Console::stdout('    > Reactivating ' . substr($result['key'], 0, 10) . ' ... ');
 
-        $totalRemaining = $query->count();
-        if ($totalRemaining != 0) {
-            Console::error(Console::ansiFormat($totalRemaining . ' remaining rows in craftnet_inactivecmslicenses. Expected 0.', [Console::FG_RED]));
-            return false;
-        }
+                $data = Json::decode($result['data']);
+                $data['editionHandle'] = 'solo';
+                unset($data['edition'], $data['ownerId']);
+                $license = new CmsLicense($data);
+                $license->ownerId = $userIdsByEmail[mb_strtolower($data['email'])] ?? null;
+                $cmsLicenseManager->saveLicense($license, false);
+
+                Console::stdout('deleting inactive row ... ');
+
+                Craft::$app->getDb()->createCommand()
+                    ->delete('craftnet_inactivecmslicenses', [
+                        'key' => $result['key']
+                    ])
+                    ->execute();
+
+                Console::stdout('adding note ... ');
+
+                $note = "created by {$license->email}";
+                if ($license->domain) {
+                    $note .= " for domain {$license->domain}";
+                }
+                $cmsLicenseManager->addHistory($license->id, $note, $data['dateCreated']);
+
+                Console::output(Console::ansiFormat('done', [Console::FG_GREEN]));
+            }
+        } while (!empty($results));
+
+        $this->dropTable('craftnet_inactivecmslicenses');
     }
 
     /**
