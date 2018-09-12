@@ -314,7 +314,7 @@
                     }
                 }
 
-                this.$store.dispatch('cart/addToCart', {item})
+                this.$store.dispatch('cart/addToCartMock', {item})
                     .then(response => {
                         this.$router.push({path: '/cart'})
                     })

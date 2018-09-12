@@ -15,9 +15,11 @@ import Plugins from '../pages/Plugins'
 import Settings from '../pages/Settings'
 import DeveloperSettings from '../pages/DeveloperSettings'
 import BuyLicense from '../pages/BuyLicense'
+import MockCart from '../pages/MockCart'
 import Cart from '../pages/Cart'
 import Payment from '../pages/Payment'
 import BuyPlugin from '../pages/BuyPlugin'
+import BuyPluginMock from '../pages/BuyPluginMock'
 import ThankYou from '../pages/ThankYou'
 
 Vue.use(VueRouter);
@@ -121,9 +123,19 @@ const router = new VueRouter({
             component: BuyLicense
         },
         {
+            path: '/buy-plugin-mock/:handle/:edition',
+            name: 'BuyPluginMock',
+            component: BuyPluginMock
+        },
+        {
             path: '/buy-plugin/:handle/:edition',
             name: 'BuyPlugin',
             component: BuyPlugin
+        },
+        {
+            path: '/mock-cart',
+            name: 'MockCart',
+            component: MockCart
         },
         {
             path: '/cart',

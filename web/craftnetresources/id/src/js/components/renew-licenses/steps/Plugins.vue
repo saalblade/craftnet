@@ -92,9 +92,9 @@
                     }
                 }
 
-                this.$store.dispatch('cart/addToCart', {item})
+                this.$store.dispatch('cart/addToCartMock', {item})
                     .then(response => {
-                        this.$router.push({path: '/cart'})
+                        this.$router.push({path: '/mock-cart'})
                     })
 
                 this.$emit('addToCart')

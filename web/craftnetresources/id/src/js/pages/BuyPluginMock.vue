@@ -55,16 +55,20 @@
             addToCart() {
                 this.plugin = this.getPluginByHandle(this.handle)
 
+                const pluginEdition = this.plugin.editions.find(edition => edition.handle === this.edition)
+
                 const item = {
                     type: 'plugin-edition',
-                    plugin: this.handle,
-                    edition: this.edition,
-                    autoRenew: false,
+                    plugin: this.plugin,
+                    pluginEditionHandle: this.edition,
+                    lineItem: {
+                        total: pluginEdition.price
+                    }
                 }
 
-                this.$store.dispatch('cart/addToCart', [item])
-                    .then(() => {
-                        this.$router.push({path: '/cart'})
+                this.$store.dispatch('cart/addToCartMock', {item})
+                    .then(response => {
+                        this.$router.push({path: '/mock-cart'})
                     })
             }
         },

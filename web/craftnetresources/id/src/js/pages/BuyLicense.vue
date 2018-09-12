@@ -4,6 +4,49 @@
 
         <div class="card mb-4">
             <div class="card-body">
+                <h2>Plugin License (Mock)</h2>
+
+                <div class="flex items-center mb-4">
+                    <div>
+                        <select v-model="selectedPluginHandleMock" placeholder="Select a plugin" class="w-full">
+                            <option value="">Select a plugin</option>
+                            <option v-for="(plugin, key) in commercialPlugins" :key="key" :value="plugin.handle">
+                                {{ plugin.name }} (Starting at ${{plugin.editions[0].price}})
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div class="spinner" v-if="loading"></div>
+                    </div>
+                </div>
+
+                <ul v-if="selectedPluginMock" class="list-reset mb-4">
+                   <li v-for="edition in selectedPluginMock.editions" class="flex">
+                       <input type="radio" checked="checked" :value="edition.handle" class="mt-1" v-model="pluginEditionHandleMock">
+                       <div class="ml-2">
+                           <h3>{{edition.name}}</h3>
+                           <p>
+                               ${{edition.price}} (License + 1 year of updates)<br />
+                               <em>Then ${{edition.renewalPrice}}/year</em>
+                           </p>
+                       </div>
+                   </li>
+                </ul>
+
+                <div class="buttons mb-4">
+                    <input type="button" class="btn btn-primary"
+                           :class="{disabled: !selectedPluginHandleMock}"
+                           @click="addToCartMock(selectedPluginHandleMock)"
+                           :disabled="!selectedPluginHandleMock" value="Add to cart"/>
+                </div>
+
+                <p>(Redirects to /buy-plugin-mock/{{selectedPluginHandleMock}}/{{pluginEditionHandleMock}})</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
                 <h2>Plugin License</h2>
 
                 <div class="flex items-center mb-4">
@@ -14,12 +57,6 @@
                                 {{ plugin.name }} (Starting at ${{plugin.editions[0].price}})
                             </option>
                         </select>
-                        <!--<el-select v-model="selectedPluginHandle" placeholder="Select a plugin" class="w-full" filterable>
-                            <el-option value="">Select a plugin</el-option>
-                            <el-option v-for="(plugin, key) in commercialPlugins" :key="key" :value="plugin.handle">
-                                    {{ plugin.name }} (Starting at ${{plugin.editions[0].price}})
-                            </el-option>
-                        </el-select>-->
                     </div>
 
                     <div>
@@ -61,7 +98,9 @@
         data() {
             return {
                 loading: false,
+                selectedPluginHandleMock: '',
                 selectedPluginHandle: '',
+                pluginEditionHandleMock: 'standard',
                 pluginEditionHandle: 'standard',
             }
         },
@@ -78,6 +117,10 @@
 
             handle() {
                 return this.$route.params.handle
+            },
+
+            selectedPluginMock() {
+                return this.getPluginByHandle(this.selectedPluginHandleMock)
             },
 
             selectedPlugin() {
@@ -101,16 +144,15 @@
                 getPluginStoreData: 'pluginStore/getPluginStoreData',
             }),
 
+            addToCartMock() {
+                this.$router.push({path: '/buy-plugin-mock/' + this.selectedPluginHandleMock + '/' + this.pluginEditionHandleMock})
+            },
+
             addToCart() {
                 this.$router.push({path: '/buy-plugin/' + this.selectedPluginHandle + '/' + this.pluginEditionHandle})
+            },
 
-                // const plugin = this.getPluginByHandle(this.selectedPluginHandle)
-                // const pluginEditionHandle = this.pluginEditionHandle
-                // this.$store.dispatch('cart/addToCart', {plugin, pluginEditionHandle})
-                //     .then(response => {
-                //         this.$router.push({path: '/cart'})
-                //     })
-            }
+
 
         },
 

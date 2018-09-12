@@ -32,7 +32,7 @@ const getters = {
 const actions = {
 
     getPluginStoreData({commit}) {
-        return axios.get(Craft.actionUrl + '/craftnet/id/craft-id/plugin-store-data', '', {
+        return axios.get('https://api.craftcms.test/v1/plugin-store', '', {
                 headers: {
                     'X-CSRF-Token': Craft.csrfTokenValue,
                 }
