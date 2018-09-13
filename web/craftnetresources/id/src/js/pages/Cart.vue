@@ -5,7 +5,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div v-if="loading" class="spinner"></div>
-                
+
                 <template v-if="cart">
                     <template v-if="cartItems.length">
                         <table class="table">
