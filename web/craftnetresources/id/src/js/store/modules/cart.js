@@ -146,37 +146,29 @@ const actions = {
         return new Promise((resolve, reject) => {
             dispatch('getCart')
                 .then(() => {
-                    dispatch('_addToCart', newItems)
-                        .then(resolve)
-                        .catch(reject)
+                    const cart = state.cart
+                    let items = utils.getCartItemsData(cart)
+
+                    newItems.forEach(newItem => {
+                        const alreadyInCart = items.find(item => item.plugin === newItem.plugin)
+
+                        if (!alreadyInCart) {
+                            items.push(newItem)
+                        }
+                    })
+
+                    let data = {
+                        items,
+                    }
+
+                    api.updateCart(cart.number, data, response => {
+                        commit('updateCart', {response})
+                        resolve(response)
+                    }, response => {
+                        reject(response)
+                    })
                 })
                 .catch(reject)
-        })
-    },
-
-    _addToCart({commit, state, dispatch}, newItems) {
-        return new Promise((resolve, reject) => {
-            const cart = state.cart
-            let items = utils.getCartItemsData(cart)
-
-            newItems.forEach(newItem => {
-                const alreadyInCart = items.find(item => item.plugin === newItem.plugin)
-
-                if (!alreadyInCart) {
-                    items.push(newItem)
-                }
-            })
-
-            let data = {
-                items,
-            }
-
-            api.updateCart(cart.number, data, response => {
-                commit('updateCart', {response})
-                resolve(response)
-            }, response => {
-                reject(response)
-            })
         })
     },
 
