@@ -60,10 +60,6 @@
                         <p>{{ "Your cart is empty." }} <a @click="$emit('continue-shopping')">{{ "Continue shopping" }}</a></p>
                     </div>
                 </template>
-
-                <div class="mb-6">
-                    <input type="button" class="btn btn-secondary" value="Get Cart" @click="getCart" />
-                </div>
             </div>
         </div>
     </div>
@@ -89,6 +85,10 @@
             ...mapActions({
                 getCart: 'cart/getCart',
             }),
-        }
+        },
+
+        mounted() {
+            // this.getCart()
+        },
     }
 </script>

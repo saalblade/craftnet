@@ -138,7 +138,39 @@ const actions = {
             })
     },
 
-    addToCart({commit, state}, newItems) {
+    addToCart({commit, state, dispatch}, newItems) {
+        return new Promise((resolve, reject) => {
+            // get cart if it has not already been loaded
+            if (!state.cart) {
+                dispatch('getCart')
+                    .then(() => {
+                        // add to cart
+                        dispatch('_addToCart', newItems)
+                            .then(() => {
+                                resolve()
+                            })
+                            .catch(() => {
+                                reject()
+                            })
+                    })
+                    .catch(() => {
+                        // can't retrieve cart
+                        reject()
+                    })
+            } else {
+                // add to cart
+                dispatch('_addToCart', newItems)
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+            }
+        })
+    },
+
+    _addToCart({commit, state, dispatch}, newItems) {
         return new Promise((resolve, reject) => {
             const cart = state.cart
             let items = utils.getCartItemsData(cart)
