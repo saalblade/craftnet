@@ -68,7 +68,7 @@
 
                 this.$store.dispatch('cart/addToCartMock', {item})
                     .then(response => {
-                        this.$router.push({path: '/mock-cart'})
+                        this.$router.push({path: '/cart'})
                     })
             }
         },

@@ -133,7 +133,6 @@
                         </h5>
                         <ul>
                             <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/mock-cart">Mock Cart</router-link></li>
                             <li><router-link @click.native="closeSidebar()" to="/cart">Cart</router-link></li>
                             <li><router-link @click.native="closeSidebar()" to="/payment">Payment</router-link></li>
                             <li><router-link @click.native="closeSidebar()" to="/thank-you">Thank You</router-link></li>

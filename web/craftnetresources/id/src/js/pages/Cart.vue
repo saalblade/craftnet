@@ -7,6 +7,7 @@
                 <div v-if="loading" class="spinner"></div>
 
                 <template v-if="cart">
+                    <h2>Items in your cart</h2>
                     <template v-if="cartItems.length">
                         <table class="table">
                             <thead>
@@ -45,19 +46,41 @@
                                     <!--<select-input v-model="itemUpdates[itemKey]" :options="itemUpdateOptions[itemKey]" />-->
                                 </td>
                                 <td class="rightalign"><strong>{{ item.lineItem.total|currency }}</strong></td>
-                                <td class="thin">
+                                <td class="thin text-right">
                                     <a @click="removeFromCart(itemKey)"><font-awesome-icon icon="times" /></a>
                                 </td>
                             </tr>
+
                             <tr>
-                                <th class="rightalign" colspan="3">Total Price</th>
+                                <th class="text-right" colspan="3">Items Total Price</th>
                                 <td class="rightalign"><strong>{{ cart.totalPrice|currency }}</strong></td>
                                 <td class="thin"></td>
                             </tr>
+
+                            <template v-if="mockCart.items.length > 0">
+                                <tr>
+                                    <th colspan="5">Renewals</th>
+                                </tr>
+
+                                <tr v-for="(item, itemKey) in mockCart.items">
+                                    <td></td>
+                                    <td colspan="2">Renewal</td>
+                                    <td>{{item.lineItem.total|currency}}</td>
+                                    <td class="text-right"><a @click="removeFromCartMock(itemKey)"><font-awesome-icon icon="times" /></a></td>
+                                </tr>
+
+                                <tr>
+                                    <th colspan="3" class="text-right">Renewal Total</th>
+                                    <th>{{cartTotal|currency}}</th>
+                                    <td class="thin"></td>
+                                </tr>
+                            </template>
+
+
                             </tbody>
                         </table>
 
-                        <p><input type="button" class="btn btn-primary" @click="payment()" value="Checkout" /></p>
+                        <p><input type="button" class="btn btn-primary" @click="checkout()" value="Checkout" /></p>
                     </template>
 
                     <div v-else>
@@ -84,18 +107,28 @@
 
             ...mapState({
                 cart: state => state.cart.cart,
+                mockCart: state => state.cart.mockCart,
             }),
 
             ...mapGetters({
                 cartItems: 'cart/cartItems',
+                cartTotal: 'cart/cartTotal',
             }),
         },
 
         methods: {
+
             ...mapActions({
                 getCart: 'cart/getCart',
                 removeFromCart: 'cart/removeFromCart',
+                createCart: 'cart/createCart',
+                removeFromCartMock: 'cart/removeFromCartMock',
             }),
+
+            checkout() {
+                this.$router.push({path: '/payment'})
+            }
+
         },
 
         mounted() {

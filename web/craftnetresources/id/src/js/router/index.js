@@ -15,7 +15,6 @@ import Plugins from '../pages/Plugins'
 import Settings from '../pages/Settings'
 import DeveloperSettings from '../pages/DeveloperSettings'
 import BuyLicense from '../pages/BuyLicense'
-import MockCart from '../pages/MockCart'
 import Cart from '../pages/Cart'
 import Payment from '../pages/Payment'
 import BuyPlugin from '../pages/BuyPlugin'
@@ -131,11 +130,6 @@ const router = new VueRouter({
             path: '/buy-plugin/:handle/:edition',
             name: 'BuyPlugin',
             component: BuyPlugin
-        },
-        {
-            path: '/mock-cart',
-            name: 'MockCart',
-            component: MockCart
         },
         {
             path: '/cart',
