@@ -98,7 +98,7 @@
             addToCart() {
                 this.$router.push({path: '/buy-plugin/' + this.selectedPluginHandle + '/' + this.pluginEditionHandle})
             },
-            
+
         },
 
         mounted() {
