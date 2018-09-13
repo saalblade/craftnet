@@ -4,11 +4,17 @@ body {
   @apply .leading-normal .bg-white;
 }
 
-a:not(.btn) {
-  @apply .text-blue .no-underline;
-
+a {
   &:hover {
-    @apply .text-blue-darker .underline;
+    cursor: pointer;
+  }
+
+  &:not(.btn) {
+    @apply .text-blue .no-underline;
+
+    &:hover {
+      @apply .text-blue-darker .underline;
+    }
   }
 }
 
