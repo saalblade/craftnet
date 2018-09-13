@@ -62,56 +62,48 @@ const actions = {
     getCart({dispatch, commit, rootState, state}) {
         return new Promise((resolve, reject) => {
             if (!state.cart) {
-                dispatch('_getCart')
-                    .then(resolve)
-                    .catch(reject)
+                dispatch('getOrderNumber')
+                    .then(orderNumber => {
+                        if (orderNumber) {
+                            api.getCart(orderNumber, response => {
+                                if (!response.error) {
+                                    commit('updateCart', {response})
+                                    resolve(response)
+                                } else {
+                                    // Couldn’t get cart for this order number? Try to create a new one.
+                                    const data = {
+                                        email: rootState.account.currentUser.email
+                                    }
+
+                                    api.createCart(data, response2 => {
+                                        commit('updateCart', {response: response2})
+                                        dispatch('saveOrderNumber', {orderNumber: response2.cart.number})
+                                        resolve(response)
+                                    }, response => {
+                                        reject(response)
+                                    })
+                                }
+                            }, response => {
+                                reject(response)
+                            })
+                        } else {
+                            // No order number yet? Create a new cart.
+                            const data = {
+                                email: rootState.account.currentUser.email
+                            }
+
+                            api.createCart(data, response => {
+                                commit('updateCart', {response})
+                                dispatch('saveOrderNumber', {orderNumber: response.cart.number})
+                                resolve(response)
+                            }, response => {
+                                reject(response)
+                            })
+                        }
+                    })
             } else {
                 resolve()
             }
-        })
-    },
-
-    _getCart({dispatch, commit, rootState}) {
-        return new Promise((resolve, reject) => {
-            dispatch('getOrderNumber')
-                .then(orderNumber => {
-                    if (orderNumber) {
-                        api.getCart(orderNumber, response => {
-                            if (!response.error) {
-                                commit('updateCart', {response})
-                                resolve(response)
-                            } else {
-                                // Couldn’t get cart for this order number? Try to create a new one.
-                                const data = {
-                                    email: rootState.account.currentUser.email
-                                }
-
-                                api.createCart(data, response2 => {
-                                    commit('updateCart', {response: response2})
-                                    dispatch('saveOrderNumber', {orderNumber: response2.cart.number})
-                                    resolve(response)
-                                }, response => {
-                                    reject(response)
-                                })
-                            }
-                        }, response => {
-                            reject(response)
-                        })
-                    } else {
-                        // No order number yet? Create a new cart.
-                        const data = {
-                            email: rootState.account.currentUser.email
-                        }
-
-                        api.createCart(data, response => {
-                            commit('updateCart', {response})
-                            dispatch('saveOrderNumber', {orderNumber: response.cart.number})
-                            resolve(response)
-                        }, response => {
-                            reject(response)
-                        })
-                    }
-                })
         })
     },
 
