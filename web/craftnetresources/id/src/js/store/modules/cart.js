@@ -59,7 +59,19 @@ const getters = {
  */
 const actions = {
 
-    getCart({dispatch, commit, rootState}) {
+    getCart({dispatch, commit, rootState, state}) {
+        return new Promise((resolve, reject) => {
+            if (!state.cart) {
+                dispatch('_getCart')
+                    .then(resolve)
+                    .catch(reject)
+            } else {
+                resolve()
+            }
+        })
+    },
+
+    _getCart({dispatch, commit, rootState}) {
         return new Promise((resolve, reject) => {
             dispatch('getOrderNumber')
                 .then(orderNumber => {
@@ -140,33 +152,13 @@ const actions = {
 
     addToCart({commit, state, dispatch}, newItems) {
         return new Promise((resolve, reject) => {
-            // get cart if it has not already been loaded
-            if (!state.cart) {
-                dispatch('getCart')
-                    .then(() => {
-                        // add to cart
-                        dispatch('_addToCart', newItems)
-                            .then(() => {
-                                resolve()
-                            })
-                            .catch(() => {
-                                reject()
-                            })
-                    })
-                    .catch(() => {
-                        // can't retrieve cart
-                        reject()
-                    })
-            } else {
-                // add to cart
-                dispatch('_addToCart', newItems)
-                    .then(() => {
-                        resolve()
-                    })
-                    .catch(() => {
-                        reject()
-                    })
-            }
+            dispatch('getCart')
+                .then(() => {
+                    dispatch('_addToCart', newItems)
+                        .then(resolve)
+                        .catch(reject)
+                })
+                .catch(reject)
         })
     },
 
