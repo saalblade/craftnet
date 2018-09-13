@@ -11,6 +11,7 @@ const state = {
     categories: [],
     featuredPlugins: [],
     plugins: [],
+    pluginStoreDataLoaded: false,
 }
 
 /**
@@ -31,11 +32,19 @@ const getters = {
  */
 const actions = {
 
-    getPluginStoreData({commit}) {
-        return axios.get('https://api.craftcms.test/v1/plugin-store')
-            .then(response => {
-                commit('updatePluginStoreData', {response})
-            })
+    getPluginStoreData({commit, state}) {
+        return new Promise((resolve, reject) => {
+            if (!state.pluginStoreDataLoaded) {
+                axios.get('https://api.craftcms.test/v1/plugin-store')
+                    .then(response => {
+                        commit('updatePluginStoreData', {response})
+                        resolve()
+                    })
+                    .catch(reject)
+            } else {
+                resolve();
+            }
+        })
     },
 
 }
@@ -49,6 +58,7 @@ const mutations = {
         state.categories = response.data.categories
         state.featuredPlugins = response.data.featuredPlugins
         state.plugins = response.data.plugins
+        state.pluginStoreDataLoaded = true
     },
 
 }

@@ -42,9 +42,9 @@ const getters = {
 
                 cartItem.lineItem = lineItem
 
-                // if (lineItem.purchasable.type === 'plugin-edition') {
-                //     cartItem.plugin = rootState.pluginStore.plugins.find(p => p.handle === lineItem.purchasable.plugin.handle)
-                // }
+                if (lineItem.purchasable.type === 'plugin-edition') {
+                    cartItem.plugin = rootState.pluginStore.plugins.find(p => p.handle === lineItem.purchasable.plugin.handle)
+                }
 
                 cartItems.push(cartItem)
             })

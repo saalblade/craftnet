@@ -33,7 +33,7 @@
                                 <template v-else="item.lineItem.purchasable.type === 'plugin-edition'">
                                     <td class="thin">
                                         <div class="plugin-icon">
-                                            <!--<img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" height="32" />-->
+                                            <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="32" height="32" />
                                         </div>
                                     </td>
                                     <td>
@@ -123,6 +123,7 @@
                 removeFromCart: 'cart/removeFromCart',
                 createCart: 'cart/createCart',
                 removeFromCartMock: 'cart/removeFromCartMock',
+                getPluginStoreData: 'pluginStore/getPluginStoreData',
             }),
 
             checkout() {
@@ -134,9 +135,15 @@
         mounted() {
             this.loading = true
 
-            this.getCart()
+            this.getPluginStoreData()
                 .then(() => {
-                    this.loading = false
+                    this.getCart()
+                        .then(() => {
+                            this.loading = false
+                        })
+                        .catch(() => {
+                            this.loading = false
+                        })
                 })
                 .catch(() => {
                     this.loading = false
