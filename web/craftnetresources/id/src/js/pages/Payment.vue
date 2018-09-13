@@ -26,7 +26,7 @@
                     </div>
                 </div>
 
-                <input type="button" class="btn btn-primary" :value="'Pay '+$options.filters.currency(cartTotal)" @click="pay"/>
+                <input type="button" class="btn btn-primary" :value="'Pay '+$options.filters.currency(cart.totalPrice)" @click="pay"/>
 
                 <div class="mt-4">
                     <img src="/craftnetresources/id/dist/images/powered_by_stripe.svg" height="18" />
@@ -76,7 +76,7 @@
         computed: {
 
             ...mapState({
-                cart: state => state.cart.mockCart,
+                cart: state => state.cart.cart,
                 card: state => state.account.card,
             }),
 
