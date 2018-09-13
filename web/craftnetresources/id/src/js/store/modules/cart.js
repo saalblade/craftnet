@@ -172,6 +172,29 @@ const actions = {
         })
     },
 
+    removeFromCart({commit, dispatch}, lineItemKey) {
+        return new Promise((resolve, reject) => {
+            dispatch('getCart')
+                .then(() => {
+                    const cart = state.cart
+                    let items = utils.getCartItemsData(cart)
+                    items.splice(lineItemKey, 1)
+
+                    let data = {
+                        items,
+                    }
+
+                    api.updateCart(cart.number, data, response => {
+                        commit('updateCart', {response})
+                        resolve(response)
+                    }, response => {
+                        reject(response)
+                    })
+                })
+                .catch(reject)
+        })
+    },
+
     addToCartMock({commit}, {item}) {
         commit('addToCartMock', {item})
     },

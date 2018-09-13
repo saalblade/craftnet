@@ -45,7 +45,9 @@
                                     <!--<select-input v-model="itemUpdates[itemKey]" :options="itemUpdateOptions[itemKey]" />-->
                                 </td>
                                 <td class="rightalign"><strong>{{ item.lineItem.total|currency }}</strong></td>
-                                <td class="thin"><a class="delete icon" role="button" @click="removeFromCart(itemKey)"></a></td>
+                                <td class="thin">
+                                    <a @click="removeFromCart(itemKey)"><font-awesome-icon icon="times" /></a>
+                                </td>
                             </tr>
                             <tr>
                                 <th class="rightalign" colspan="3">Total Price</th>
@@ -59,7 +61,7 @@
                     </template>
 
                     <div v-else>
-                        <p>{{ "Your cart is empty." }} <a @click="$emit('continue-shopping')">{{ "Continue shopping" }}</a></p>
+                        <p>{{ "Your cart is empty." }}</p>
                     </div>
                 </template>
             </div>
@@ -92,6 +94,7 @@
         methods: {
             ...mapActions({
                 getCart: 'cart/getCart',
+                removeFromCart: 'cart/removeFromCart',
             }),
         },
 
