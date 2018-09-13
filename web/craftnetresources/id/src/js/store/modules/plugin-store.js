@@ -32,11 +32,7 @@ const getters = {
 const actions = {
 
     getPluginStoreData({commit}) {
-        return axios.get('https://api.craftcms.test/v1/plugin-store', '', {
-                headers: {
-                    'X-CSRF-Token': Craft.csrfTokenValue,
-                }
-            })
+        return axios.get('https://api.craftcms.test/v1/plugin-store')
             .then(response => {
                 commit('updatePluginStoreData', {response})
             })
