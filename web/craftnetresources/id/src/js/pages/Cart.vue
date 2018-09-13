@@ -56,28 +56,9 @@
                                 <td class="rightalign"><strong>{{ cart.totalPrice|currency }}</strong></td>
                                 <td class="thin"></td>
                             </tr>
-
-                            <template v-if="mockCart.items.length > 0">
-                                <tr>
-                                    <th colspan="5">Renewals</th>
-                                </tr>
-
-                                <tr v-for="(item, itemKey) in mockCart.items">
-                                    <td></td>
-                                    <td colspan="2">Renewal</td>
-                                    <td>{{item.lineItem.total|currency}}</td>
-                                    <td class="text-right"><a @click="removeFromCartMock(itemKey)"><font-awesome-icon icon="times" /></a></td>
-                                </tr>
-
-                                <tr>
-                                    <th colspan="3" class="text-right">Renewal Total</th>
-                                    <th>{{cartTotal|currency}}</th>
-                                    <td class="thin"></td>
-                                </tr>
-                            </template>
-
-
                             </tbody>
+
+                            <cart-mock />
                         </table>
 
                         <p><input type="button" class="btn btn-primary" @click="checkout()" value="Checkout" /></p>
@@ -94,8 +75,13 @@
 
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
+    import CartMock from '../components/CartMock'
 
     export default {
+
+        components: {
+            CartMock,
+        },
 
         data() {
             return {
@@ -107,12 +93,10 @@
 
             ...mapState({
                 cart: state => state.cart.cart,
-                mockCart: state => state.cart.mockCart,
             }),
 
             ...mapGetters({
                 cartItems: 'cart/cartItems',
-                cartTotal: 'cart/cartTotal',
             }),
         },
 
