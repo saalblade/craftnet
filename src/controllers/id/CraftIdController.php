@@ -92,6 +92,7 @@ class CraftIdController extends BaseController
                 'hasApiToken' => ($currentUser->apiToken !== null),
             ],
             'card' => $this->_card($currentUser),
+            'cardToken' => $this->_cardToken($currentUser),
             'billingAddress' => $billingAddressArray,
             'countries' => Craft::$app->getApi()->getCountries(),
             'apps' => Module::getInstance()->getOauth()->getApps(),
@@ -139,6 +140,23 @@ class CraftIdController extends BaseController
         }
 
         return null;
+    }
+
+    /**
+     * @param User $user
+     * @return null|string
+     */
+    private function _cardToken(User $user)
+    {
+        $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
+
+        if (\count($paymentSources) === 0) {
+            return null;
+        }
+
+        $paymentSource = $paymentSources[0];
+
+        return $paymentSource->token;
     }
 
     /**

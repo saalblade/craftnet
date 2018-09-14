@@ -222,6 +222,10 @@
   @apply .relative;
 
   .toggle {
+    @apply .bg-grey-light .rounded-full;
+    width: 36px;
+    height: 36px;
+
     &:hover {
       @apply .cursor-pointer;
     }
