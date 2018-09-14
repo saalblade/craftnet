@@ -32,7 +32,7 @@
 
                                 <template v-else="item.lineItem.purchasable.type === 'plugin-edition'">
                                     <td class="thin">
-                                        <div class="plugin-icon">
+                                        <div v-if="item.plugin" class="plugin-icon">
                                             <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="32" height="32" />
                                         </div>
                                     </td>
