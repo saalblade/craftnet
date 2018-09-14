@@ -11,6 +11,7 @@ const state = {
     apps: {},
     billingAddress: null,
     card: null,
+    cardToken: null,
     currentUser: null,
     invoices: [],
     stripeAccount: null,
@@ -195,6 +196,10 @@ const actions = {
                 reject(response);
             })
         })
+    },
+
+    getAccountData({commit}) {
+
     }
 
 }
@@ -258,6 +263,10 @@ const mutations = {
 
     updateCard(state, {card}) {
         state.card = card
+    },
+
+    updateCardToken(state, {cardToken}) {
+        state.cardToken = cardToken
     },
 
     updateCurrentUser(state, {currentUser}) {

@@ -17,10 +17,10 @@
         </div>
         <div class="md:flex -mx-2">
             <div class="md:w-1/2 px-2">
-                <select-field :fullwidth="true" :options="[{label: 'State', value: 0}]" :value="0" id="state" />
+                <select-field :fullwidth="true" :options="[{label: 'Country', value: 0}, {label: 'France', value: 'FR'}]" v-model="billingInfo.country" id="country" :errors="errors['billingAddress.country']" />
             </div>
             <div class="md:w-1/2 px-2">
-                <select-field :fullwidth="true" :options="[{label: 'Country', value: 0}]" :value="0" id="country" />
+                <select-field :fullwidth="true" :options="[{label: 'State', value: 0}]" v-model="billingInfo.state" id="state" :errors="errors['billingAddress.state']" />
             </div>
         </div>
     </div>

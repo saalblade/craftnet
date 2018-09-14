@@ -31,12 +31,14 @@ export default {
      * Update cart.
      */
     updateCart(orderNumber, data, cb, errorCb) {
-        data.items.forEach((item, index) => {
-            // Todo: Support updating an item with cmsLicenseKey
-            if(!item.cmsLicenseKey) {
-                delete item["cmsLicenseKey"]
-            }
-        })
+        if (data.items) {
+            data.items.forEach((item, index) => {
+                // Todo: Support updating an item with cmsLicenseKey
+                if(!item.cmsLicenseKey) {
+                    delete item["cmsLicenseKey"]
+                }
+            })
+        }
 
         axios.post('https://api.craftcms.test/v1/carts/' + orderNumber, data)
             .then(response => {
@@ -45,6 +47,13 @@ export default {
             .catch(response => {
                 return errorCb(response)
             })
+    },
+
+    /**
+     * Checkout.
+     */
+    checkout(data) {
+        return axios.post('https://api.craftcms.test/v1/payments', data, {withCredentials: true})
     },
 
     /**

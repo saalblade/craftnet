@@ -1,10 +1,10 @@
 <template>
     <div>
         <template v-if="card">
-            <p><label><input type="radio" value="existingCard" v-model="paymentMode" /> Use card <span>{{ card.brand }} •••• •••• •••• {{ card.last4 }} — {{ card.exp_month }}/{{ card.exp_year }}</span></label></p>
+            <p><label><input type="radio" value="existingCard" :checked="paymentMode === 'existingCard'" name="paymentMode" @input="$emit('update:paymentMode', $event.target.value)" /> Use card <span>{{ card.brand }} •••• •••• •••• {{ card.last4 }} — {{ card.exp_month }}/{{ card.exp_year }}</span></label></p>
         </template>
 
-        <p><label><input type="radio" value="newCard" v-model="paymentMode" /> Use a new credit card</label></p>
+        <p><label><input type="radio" value="newCard" :checked="paymentMode === 'newCard'" name="paymentMode" @input="$emit('update:paymentMode', $event.target.value)" /> Use a new credit card</label></p>
 
         <template v-if="paymentMode === 'newCard'">
             <card-element v-if="!cardToken" ref="newCard" />

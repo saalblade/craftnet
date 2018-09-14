@@ -107,6 +107,53 @@ const actions = {
         })
     },
 
+    saveCart({commit, state}, data) {
+        return new Promise((resolve, reject) => {
+            const cart = state.cart
+
+            api.updateCart(cart.number, data, response => {
+                if (!response.errors) {
+                    commit('updateCart', {response})
+                    resolve(response)
+                } else {
+                    reject(response)
+                }
+            }, response => {
+                reject(response)
+            })
+        })
+    },
+
+    resetCart({commit, dispatch}) {
+        return new Promise((resolve, reject) => {
+            commit('resetCart')
+            dispatch('resetOrderNumber')
+            dispatch('getCart')
+                .then(response => {
+                    resolve(response)
+                })
+                .catch(response => {
+                    reject(response)
+                })
+        })
+    },
+
+    resetOrderNumber() {
+        api.resetOrderNumber()
+    },
+
+    checkout({dispatch, commit}, data) {
+        return new Promise((resolve, reject) => {
+            api.checkout(data)
+                .then(response => {
+                    resolve(response)
+                })
+                .catch(response => {
+                    reject(response)
+                })
+        })
+    },
+
     getOrderNumber({state}) {
         return new Promise((resolve, reject) => {
             if (state.cart && state.cart.number) {
@@ -221,7 +268,11 @@ const mutations = {
 
     removeFromCartMock(state, {lineItemKey}) {
         state.mockCart.items.splice(lineItemKey, 1)
-    }
+    },
+
+    resetCart(state) {
+        state.cart = null
+    },
 
 }
 
@@ -247,7 +298,7 @@ const utils = {
 
     getCartItemsData(cart) {
         let lineItems = []
-        // debugger;
+
         for (let i = 0; i < cart.lineItems.length; i++) {
             let lineItem = cart.lineItems[i]
 
@@ -273,7 +324,8 @@ const utils = {
         }
 
         return lineItems
-    }
+    },
+
 }
 
 export default {
