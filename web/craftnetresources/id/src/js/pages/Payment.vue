@@ -29,9 +29,7 @@
                                     :errors="errors"></billing-infos>
                         </div>
                     </div>
-
-                    <pre>{{billingInfo}}</pre>
-
+                    
                     <input type="button" class="btn btn-primary" :value="'Pay '+$options.filters.currency(cart.totalPrice)" @click="pay"/>
 
                     <div v-if="payLoading" class="spinner"></div>
