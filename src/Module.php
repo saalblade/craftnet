@@ -198,7 +198,7 @@ class Module extends \yii\base\Module
             $e->navItems[] = [
                 'url' => 'plugins',
                 'label' => 'Plugins',
-                'icon' => 'plugin',
+                'fontIcon' => 'plugin',
             ];
         });
 
