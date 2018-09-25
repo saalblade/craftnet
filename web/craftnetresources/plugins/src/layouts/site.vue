@@ -32,7 +32,6 @@
                     <!--<div v-if="computedShowingSidebar" class="sidebar showing-sidebar">-->
                     <div class="sidebar" :class="{'showing-sidebar': computedShowingSidebar, sticky: stickyHeader}">
                         <div class="sidebar-main">
-                            <h3 class="first">{{ "Categories" }}</h3>
                             <ul class="categories">
                                 <li v-for="category in categories">
                                     <nuxt-link :to="'/categories/'+category.slug">
