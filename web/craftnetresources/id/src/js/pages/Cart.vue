@@ -7,13 +7,12 @@
                 <div v-if="loading" class="spinner"></div>
 
                 <template v-if="cart">
-                    <h2>Items in your cart</h2>
                     <template v-if="cartItems.length">
+                        <h2>Items in your cart</h2>
                         <table class="table">
                             <thead>
                             <tr>
-                                <th></th>
-                                <th>Item</th>
+                                <th colspan="2">Item</th>
                                 <th>Updates</th>
                                 <th></th>
                                 <th></th>
@@ -24,7 +23,7 @@
                                 <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
                                     <td class="thin">
                                         <div class="plugin-icon">
-                                            <img :src="craftLogo" width="32" height="32" />
+                                            <img :src="craftLogo" width="42" height="42" />
                                         </div>
                                     </td>
                                     <td>Craft {{ item.lineItem.purchasable.name }}</td>
@@ -33,17 +32,19 @@
                                 <template v-else="item.lineItem.purchasable.type === 'plugin-edition'">
                                     <td class="thin">
                                         <div v-if="item.plugin" class="plugin-icon">
-                                            <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="32" height="32" />
+                                            <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
                                         </div>
                                     </td>
                                     <td>
-                                        {{item.lineItem.purchasable.plugin.name}}
-                                        <!--{{ item.plugin.name}}-->
+                                        <strong>{{item.lineItem.purchasable.plugin.name}}</strong><br />
+                                        <div class="text-secondary">
+                                            {{item.lineItem.purchasable.name}}
+                                        </div>
                                     </td>
                                 </template>
 
                                 <td>
-                                    <!--<select-input v-model="itemUpdates[itemKey]" :options="itemUpdateOptions[itemKey]" />-->
+                                    <select-field v-model="itemUpdates[itemKey]" :options="itemUpdateOptions(itemKey)" />
                                 </td>
                                 <td class="rightalign"><strong>{{ item.lineItem.total|currency }}</strong></td>
                                 <td class="thin text-right">
@@ -52,7 +53,7 @@
                             </tr>
 
                             <tr>
-                                <th class="text-right" colspan="3">Items Total Price</th>
+                                <th class="text-right" colspan="3">Total Price</th>
                                 <td class="rightalign"><strong>{{ cart.totalPrice|currency }}</strong></td>
                                 <td class="thin"></td>
                             </tr>
@@ -61,7 +62,7 @@
                             <cart-mock />
                         </table>
 
-                        <p><input type="button" class="btn btn-primary" @click="checkout()" value="Checkout" /></p>
+                        <p class="text-right"><input type="button" class="btn btn-lg btn-primary" @click="checkout()" value="Check Out" /></p>
                     </template>
 
                     <div v-else>
@@ -74,18 +75,21 @@
 </template>
 
 <script>
+    import CraftComponents from "@benjamindavid/craftcomponents";
     import {mapState, mapGetters, mapActions} from 'vuex'
     import CartMock from '../components/CartMock'
 
     export default {
 
         components: {
+            ...CraftComponents,
             CartMock,
         },
 
         data() {
             return {
                 loading: false,
+                itemUpdates: {},
             }
         },
 
@@ -98,6 +102,7 @@
             ...mapGetters({
                 cartItems: 'cart/cartItems',
             }),
+
         },
 
         methods: {
@@ -112,7 +117,16 @@
 
             checkout() {
                 this.$router.push({path: '/payment'})
-            }
+            },
+
+            itemUpdateOptions(itemKey) {
+                return [
+                    {
+                        label: 'Updates Until 9/28/2019 (Free)',
+                        value: '',
+                    }
+                ]
+            },
 
         },
 
