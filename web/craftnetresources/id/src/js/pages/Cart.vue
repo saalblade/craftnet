@@ -34,11 +34,11 @@
                                 </div>
                             </td>
                             <td>
-                                <strong>{{item.lineItem.purchasable.plugin.name}}</strong><br />
+                                <strong>{{item.lineItem.purchasable.plugin.name}}</strong>
+
                                 <div class="text-secondary">
-                                    Standard Edition
+                                    {{item.lineItem.purchasable.name}}
                                 </div>
-                                <!--{{ item.plugin.name}}-->
                             </td>
                         </template>
 
