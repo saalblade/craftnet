@@ -91,6 +91,19 @@ export const getters = {
         return plugin => {
             return !!plugin.editions.find(edition => edition.price > 0)
         }
+    },
+
+    getPluginEditions(state) {
+        return plugin => {
+            return plugin.editions
+
+            // Todo: Remove plugin edition mocking
+            //
+            // return [
+            //     {name:'Standard', price: '99.0000', renewalPrice: '39.000'},
+            //     {name:'Pro', price: '149.0000', renewalPrice: '59.000'},
+            // ]
+        }
     }
 
 }

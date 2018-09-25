@@ -293,3 +293,43 @@
     left: 100px;
   }
 }
+
+
+/* Plugin Editions */
+
+.plugin-editions {
+  @apply .border .rounded;
+
+  &-edition {
+    @apply .p-6;
+
+    &:not(:last-child) {
+      @apply .border-b;
+    }
+
+    h4 {
+      @apply .mb-4;
+
+      .edition-name {
+        @apply .border .border-blue .rounded .inline-block .px-2 .py-1 .uppercase .font-normal .text-blue .mr-3;
+      }
+    }
+
+    ul {
+      @apply .list-reset;
+
+      li {
+        svg[data-icon="check"] {
+          @apply .text-blue;
+        }
+        svg[data-icon="info-circle"] {
+          @apply .text-grey-light;
+        }
+      }
+    }
+
+    .buttons {
+      @apply .mt-6;
+    }
+  }
+}

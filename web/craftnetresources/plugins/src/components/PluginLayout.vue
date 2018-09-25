@@ -26,14 +26,10 @@
                 <ul class="nav" :class="{hidden: !showNav}">
                     <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle" exact>Features</nuxt-link></li>
 
-                    <template v-if="pluginSnippet.editions[0].price != null">
-                        <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/pricing'">Pricing</nuxt-link></li>
-                    </template>
-
                     <li><nuxt-link :to="'/plugin/'+pluginSnippet.handle+'/changelog'">Changelog</nuxt-link></li>
 
-                    <template v-if="isCommercial(pluginSnippet)">
-                        <li class="buy"><a :href="craftIdUrl+'/buy-plugin/'+pluginSnippet.handle+'/standard'" class="btn btn-primary" target="_blank">Buy</a></li>
+                    <template v-if="isCommercial(pluginSnippet) && getPluginEditions(pluginSnippet).length === 1">
+                        <li class="buy"><a :href="craftIdUrl+'/buy-plugin/'+pluginSnippet.handle+'/standard'" class="btn btn-primary" target="_blank">{{pluginSnippet.editions[0].price|currency}}</a></li>
                     </template>
                 </ul>
             </div>
@@ -69,6 +65,7 @@
 
             ...mapGetters({
                 isCommercial: 'pluginStore/isCommercial',
+                getPluginEditions: 'pluginStore/getPluginEditions',
             }),
 
             pluginSnippet() {
@@ -85,7 +82,7 @@
 
             craftIdUrl() {
                 return process.env.craftIdUrl
-            }
+            },
 
         },
 

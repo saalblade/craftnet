@@ -16,6 +16,7 @@
                             <li v-if="plugin.activeInstalls > 0"><span>{{ "Active Installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
                             <li><span>{{ "Compatibility"|t('app') }}</span> <strong>{{ plugin.compatibility }}</strong></li>
                             <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
+
                             <li v-if="pluginCategories.length > 0">
                                 <span>{{ "Categories"|t('app') }}</span>
                                 <strong>
@@ -26,8 +27,56 @@
                             </li>
                         </ul>
                         <div class="clearfix"></div>
+
+                        <p v-if="isCommercial(pluginSnippet) && editions.length === 1" class="text-grey-dark">
+                            Price includes 1 year of updates.<br />
+                            {{ editions[0].renewalPrice|currency }}/year per site for updates after that.
+                        </p>
                     </div>
 
+                    <template v-if="isCommercial(pluginSnippet) && editions.length > 1">
+                        <h3>Editions</h3>
+
+                        <div class="plugin-editions mb-4">
+                            <div class="plugin-editions-edition">
+                                <h4><span class="edition-name">Standard</span></h4>
+                                <ul>
+                                    <li><font-awesome-icon :icon="icon('check')"></font-awesome-icon> Drag and drop interface <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                    <li><font-awesome-icon :icon="icon('check')"></font-awesome-icon> Multi-page forms <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                    <li><font-awesome-icon :icon="icon('check')"></font-awesome-icon> GDPR compliant <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                    <li><font-awesome-icon :icon="icon('check')"></font-awesome-icon> Data export <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                </ul>
+
+                                <div class="buttons">
+                                    <a href="#" class="btn btn-primary">{{ editions[0].price|currency }}</a>
+                                </div>
+
+                                <p class="mt-4 text-grey-dark mb-0">
+                                    Price includes 1 year of updates.<br />
+                                    {{ editions[0].renewalPrice|currency }}/year per site for updates after that.
+                                </p>
+                            </div>
+
+                            <div class="plugin-editions-edition">
+                                <h4><span class="edition-name">Pro</span></h4>
+                                <ul>
+                                    <li><font-awesome-icon :icon="icon('check')" /> API integrations <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                    <li><font-awesome-icon :icon="icon('check')" /> reCAPTCHA <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                    <li><font-awesome-icon :icon="icon('check')" /> Advanced exporting <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                    <li><font-awesome-icon :icon="icon('check')" /> Widgets <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                </ul>
+
+                                <div class="buttons">
+                                    <a href="#" class="btn btn-primary">$149</a>
+                                </div>
+
+                                <p class="mt-4 text-grey-dark mb-0">
+                                    Price includes 1 year of updates.<br />
+                                    $59/year per site for updates after that.
+                                </p>
+                            </div>
+                        </div>
+                    </template>
 
                     <h3>Package Name</h3>
                     <p>To install this plugin, search for its package name on the Plugin Store and click “Install”.</p>
@@ -53,7 +102,7 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import PluginPricing from '../../../components/PluginPricing'
     import PluginLayout from '../../../components/PluginLayout'
     import CopyPackage from '../../../components/CopyPackage'
@@ -61,6 +110,8 @@
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faBook from '@fortawesome/fontawesome-free-solid/faBook'
     import faCertificate from '@fortawesome/fontawesome-free-solid/faCertificate'
+    import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
+    import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
 
     export default {
 
@@ -134,6 +185,11 @@
                 plugin: state => state.pluginStore.plugin,
             }),
 
+            ...mapGetters({
+                isCommercial: 'pluginStore/isCommercial',
+                getPluginEditions: 'pluginStore/getPluginEditions',
+            }),
+
             lastUpdate() {
                 const date = new Date(this.plugin.lastUpdate.replace(/\s/, 'T'))
                 return this.$moment(date).format('l')
@@ -165,6 +221,10 @@
                 return this.$store.getters['pluginStore/getPluginByHandle'](this.$route.params.handle)
             },
 
+            editions() {
+                return this.$store.getters['pluginStore/getPluginEditions'](this.pluginSnippet)
+            }
+
         },
 
         methods: {
@@ -175,6 +235,12 @@
                         break;
                     case 'certificate':
                         return faCertificate;
+                        break;
+                    case 'check':
+                        return faCheck;
+                        break;
+                    case 'infoCircle':
+                        return faInfoCircle;
                         break;
                 }
 
