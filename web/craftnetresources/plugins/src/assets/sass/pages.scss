@@ -47,9 +47,7 @@
 /* Plugin Details (plugin/_id) */
 
 .plugin-details-header {
-  @apply .bg-white .mt-0 .py-2;
-  -webkit-box-shadow: 0 4px 2px -2px rgba(0,0,0,.1);
-  box-shadow: 0 4px 2px -2px rgba(0,0,0,.1);
+  @apply .bg-white .mt-0 .py-6 .border-b;
 
   .description {
     @apply .flex;
@@ -65,10 +63,10 @@
     }
 
    .name {
-     @apply .ml-3 .self-center;
+     @apply .ml-4 .self-center;
 
      h1 {
-       @apply .self-center .pb-0 .border-b-0 .text-2xl;
+       @apply .self-center .pb-0 .border-b-0 .text-2xl .mb-1;
      }
    }
 
@@ -92,8 +90,10 @@
   }
 
   &.scrolled {
-    @apply .py-2 .sticky .pin-t .z-30 .w-full;
+    @apply .py-2 .sticky .pin-t .z-30 .w-full .border-b-0;
     margin-top: 30px;
+    -webkit-box-shadow: 0 4px 2px -2px rgba(0,0,0,.1);
+    box-shadow: 0 4px 2px -2px rgba(0,0,0,.1);
 
     .description {
       .icon {
