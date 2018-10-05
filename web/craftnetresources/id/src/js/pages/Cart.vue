@@ -4,72 +4,74 @@
 
         <div v-if="loading" class="spinner"></div>
 
-        <template v-if="cart">
-            <template v-if="cartItems.length">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th colspan="2">Item</th>
-                        <th>Updates</th>
-                        <th>Quantity</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(item, itemKey) in cartItems">
-                        <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
-                            <td class="thin">
-                                <div class="plugin-icon">
-                                    <img :src="craftLogo" width="42" height="42" />
-                                </div>
-                            </td>
-                            <td>Craft {{ item.lineItem.purchasable.name }}</td>
-                        </template>
+        <template v-else>
+            <template v-if="cart">
+                <template v-if="cartItems.length">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th colspan="2">Item</th>
+                            <th>Updates</th>
+                            <th>Quantity</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(item, itemKey) in cartItems">
+                            <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
+                                <td class="thin">
+                                    <div class="plugin-icon">
+                                        <img :src="craftLogo" width="42" height="42" />
+                                    </div>
+                                </td>
+                                <td>Craft {{ item.lineItem.purchasable.name }}</td>
+                            </template>
 
-                        <template v-else="item.lineItem.purchasable.type === 'plugin-edition'">
-                            <td class="thin">
-                                <div v-if="item.plugin" class="plugin-icon">
-                                    <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
-                                </div>
+                            <template v-else="item.lineItem.purchasable.type === 'plugin-edition'">
+                                <td class="thin">
+                                    <div v-if="item.plugin" class="plugin-icon">
+                                        <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong>{{item.lineItem.purchasable.plugin.name}}</strong>
+
+                                    <div class="text-secondary">
+                                        {{item.lineItem.purchasable.name}}
+                                    </div>
+                                </td>
+                            </template>
+
+                            <td>
+                                <select-field v-model="itemUpdates[itemKey]" :options="itemUpdateOptions(itemKey)" />
                             </td>
                             <td>
-                                <strong>{{item.lineItem.purchasable.plugin.name}}</strong>
-
-                                <div class="text-secondary">
-                                    {{item.lineItem.purchasable.name}}
-                                </div>
+                                <select-field value="1" :options="quantityOptions"></select-field>
                             </td>
-                        </template>
+                            <td class="rightalign"><strong>{{ item.lineItem.total|currency }}</strong></td>
+                            <td class="thin text-right">
+                                <a @click="removeFromCart(itemKey)"><font-awesome-icon icon="times" /></a>
+                            </td>
+                        </tr>
 
-                        <td>
-                            <select-field v-model="itemUpdates[itemKey]" :options="itemUpdateOptions(itemKey)" />
-                        </td>
-                        <td>
-                            <select-field value="1" :options="quantityOptions"></select-field>
-                        </td>
-                        <td class="rightalign"><strong>{{ item.lineItem.total|currency }}</strong></td>
-                        <td class="thin text-right">
-                            <a @click="removeFromCart(itemKey)"><font-awesome-icon icon="times" /></a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th class="text-right" colspan="4">Total Price</th>
+                            <td class="rightalign"><strong>{{ cart.totalPrice|currency }}</strong></td>
+                            <td class="thin"></td>
+                        </tr>
+                        </tbody>
 
-                    <tr>
-                        <th class="text-right" colspan="4">Total Price</th>
-                        <td class="rightalign"><strong>{{ cart.totalPrice|currency }}</strong></td>
-                        <td class="thin"></td>
-                    </tr>
-                    </tbody>
+                        <cart-mock />
+                    </table>
 
-                    <cart-mock />
-                </table>
+                    <p class="text-right"><input type="button" class="btn btn-lg btn-primary" @click="checkout()" value="Check Out" /></p>
+                </template>
 
-                <p class="text-right"><input type="button" class="btn btn-lg btn-primary" @click="checkout()" value="Check Out" /></p>
+                <div v-else>
+                    <p>{{ "Your cart is empty." }}</p>
+                </div>
             </template>
-
-            <div v-else>
-                <p>{{ "Your cart is empty." }}</p>
-            </div>
         </template>
     </div>
 </template>
