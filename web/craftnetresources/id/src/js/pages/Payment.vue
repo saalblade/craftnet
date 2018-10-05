@@ -134,9 +134,10 @@
                                 this.payLoading = false
                             })
                     })
-                    .catch(() => {
+                    .catch((error) => {
                         this.$root.displayError('Couldn’t save payment method.')
                         this.payLoading = false
+                        throw error;
                     })
             },
 
