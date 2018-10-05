@@ -11,6 +11,7 @@
                     <h2>Payment Method</h2>
 
                     <payment-method
+                            ref="paymentMethod"
                             :card="card"
                             :cardToken="cardToken"
                             :paymentMode.sync="paymentMode"
@@ -147,11 +148,13 @@
                         if (this.paymentMode === 'newCard') {
                             // Save new card
                             if (!this.cardToken) {
-                                this.$refs.newCard.save(response => {
+                                this.$refs.paymentMethod.$refs.newCard.save(response => {
+                                    console.log('success', response)
                                     this.cardToken = response
                                     resolve()
                                 }, () => {
                                     reject()
+                                    console.log('failure')
                                 })
                             } else {
                                 resolve()
