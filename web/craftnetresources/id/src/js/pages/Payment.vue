@@ -88,6 +88,7 @@
                 cart: state => state.cart.cart,
                 card: state => state.account.card,
                 existingCardToken: state => state.account.cardToken,
+                accountBillingAddress: state => state.account.billingAddress,
             }),
 
             ...mapGetters({
@@ -236,6 +237,10 @@
             if (this.card) {
                 this.paymentMode = 'existingCard'
             }
+
+            this.$nextTick(() => {
+                this.billingInfo = JSON.parse(JSON.stringify(this.accountBillingAddress))
+            })
         }
 
     }
