@@ -1,49 +1,45 @@
 <template>
     <div>
-        <h1>Buy License</h1>
+        <h1>Buy a license</h1>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <h2>Plugin License</h2>
+        <h2>Buy a plugin license</h2>
 
-                <div class="flex items-center mb-4">
-                    <div>
-                        <select v-model="selectedPluginHandle" placeholder="Select a plugin" class="w-full">
-                            <option value="">Select a plugin</option>
-                            <option v-for="(plugin, key) in commercialPlugins" :key="key" :value="plugin.handle">
-                                {{ plugin.name }} (Starting at ${{plugin.editions[0].price}})
-                            </option>
-                        </select>
-                    </div>
+        <div class="flex items-center mb-4">
+            <div>
+                <select v-model="selectedPluginHandle" placeholder="Select a plugin" class="w-full">
+                    <option value="">Select a plugin</option>
+                    <option v-for="(plugin, key) in commercialPlugins" :key="key" :value="plugin.handle">
+                        {{ plugin.name }} (Starting at ${{plugin.editions[0].price}})
+                    </option>
+                </select>
+            </div>
 
-                    <div>
-                        <div class="spinner" v-if="loading"></div>
-                    </div>
-                </div>
-
-                <ul v-if="selectedPlugin" class="list-reset mb-4">
-                   <li v-for="edition in selectedPlugin.editions" class="flex">
-                       <input type="radio" checked="checked" :value="edition.handle" class="mt-1" v-model="pluginEditionHandle">
-                       <div class="ml-2">
-                           <h3>{{edition.name}}</h3>
-                           <p>
-                               ${{edition.price}} (License + 1 year of updates)<br />
-                               <em>Then ${{edition.renewalPrice}}/year</em>
-                           </p>
-                       </div>
-                   </li>
-                </ul>
-
-                <div class="buttons mb-4">
-                    <input type="button" class="btn btn-primary"
-                           :class="{disabled: !selectedPluginHandle}"
-                           @click="addToCart(selectedPluginHandle)"
-                           :disabled="!selectedPluginHandle" value="Add to cart"/>
-                </div>
-
-                <p>(Redirects to /buy-plugin/{{selectedPluginHandle}}/{{pluginEditionHandle}})</p>
+            <div>
+                <div class="spinner" v-if="loading"></div>
             </div>
         </div>
+
+        <ul v-if="selectedPlugin" class="list-reset mb-4">
+           <li v-for="edition in selectedPlugin.editions" class="flex">
+               <input type="radio" checked="checked" :value="edition.handle" class="mt-1" v-model="pluginEditionHandle">
+               <div class="ml-2">
+                   <h3>{{edition.name}}</h3>
+                   <p>
+                       ${{edition.price}} (License + 1 year of updates)<br />
+                       <em>Then ${{edition.renewalPrice}}/year</em>
+                   </p>
+               </div>
+           </li>
+        </ul>
+
+        <div class="buttons mb-4">
+            <input type="button" class="btn btn-primary"
+                   :class="{disabled: !selectedPluginHandle}"
+                   @click="addToCart(selectedPluginHandle)"
+                   :disabled="!selectedPluginHandle" value="Add to cart"/>
+        </div>
+
+        <p>(Redirects to /buy-plugin/{{selectedPluginHandle}}/{{pluginEditionHandle}})</p>
     </div>
 </template>
 
