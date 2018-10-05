@@ -37,7 +37,7 @@
         @apply .list-reset .flex .items-center;
 
         li {
-          @apply .block .ml-3;
+          @apply .block .ml-6;
 
           & > a {
             @apply .block .text-grey-darker;
@@ -195,6 +195,20 @@
   }
 }
 
+/* Cart menu */
+
+.cart-menu {
+  a {
+    @apply .relative;
+
+    .badge {
+      @apply .rounded-full .leading-none .absolute .border .border-grey-lighter .border-2 .text-xs .bg-red;
+      padding: 2px 6px;
+      top: -6px;
+      left: 22px;
+    }
+  }
+}
 
 /* Global menu */
 

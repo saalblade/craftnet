@@ -31,6 +31,14 @@ const getters = {
         return total
     },
 
+    cartTotalItems(state) {
+        if(state.cart && state.cart.lineItems) {
+            return state.cart.lineItems.length;
+        }
+
+        return 0
+    },
+
     cartItems(state, getters, rootState) {
         let cartItems = []
 

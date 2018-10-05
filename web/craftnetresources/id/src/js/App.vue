@@ -32,6 +32,12 @@
 
                     <div class="header-right">
                         <ul>
+                            <li class="cart-menu">
+                                <router-link to="/cart">
+                                    <font-awesome-icon icon="shopping-cart" />
+                                    <div v-if="cartTotalItems" class="badge">{{cartTotalItems}}</div>
+                                </router-link>
+                            </li>
                             <li class="global-menu" v-on-clickaway="awayGlobalMenu">
                                 <a class="toggle" @click="globalMenuToggle">
                                     <font-awesome-icon icon="th" />
@@ -189,6 +195,7 @@
 
             ...mapGetters({
                 userIsInGroup: 'account/userIsInGroup',
+                cartTotalItems: 'cart/cartTotalItems',
             }),
 
         },
