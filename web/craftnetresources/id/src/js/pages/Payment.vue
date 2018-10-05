@@ -117,6 +117,7 @@
                                     .then(() => {
                                         this.$root.displayNotice('Payment processed.')
                                         this.payLoading = false
+                                        this.$router.push({path: '/thank-you'});
                                     })
                                     .catch(() => {
                                         this.$root.displayError('Couldn’t process payment.')
