@@ -14,7 +14,6 @@
                             <th>Updates</th>
                             <th>Quantity</th>
                             <th></th>
-                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -35,7 +34,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <strong>{{item.lineItem.purchasable.plugin.name}}</strong>
+                                    <strong class="text-xl">{{item.lineItem.purchasable.plugin.name}}</strong>
 
                                     <div class="text-secondary">
                                         {{item.lineItem.purchasable.name}}
@@ -49,23 +48,22 @@
                             <td>
                                 <select-field value="1" :options="quantityOptions"></select-field>
                             </td>
-                            <td class="rightalign"><strong>{{ item.lineItem.total|currency }}</strong></td>
-                            <td class="thin text-right">
-                                <a @click="removeFromCart(itemKey)"><font-awesome-icon icon="times" /></a>
+                            <td class="text-right">
+                                <strong class="block text-xl">{{ item.lineItem.total|currency }}</strong>
+                                <a @click="removeFromCart(itemKey)">Remove</a>
                             </td>
                         </tr>
 
                         <tr>
-                            <th class="text-right" colspan="4">Total Price</th>
-                            <td class="rightalign"><strong>{{ cart.totalPrice|currency }}</strong></td>
-                            <td class="thin"></td>
+                            <th class="text-right text-xl" colspan="4">Total</th>
+                            <td class="text-right text-xl"><strong>{{ cart.totalPrice|currency }}</strong></td>
                         </tr>
                         </tbody>
 
                         <cart-mock />
                     </table>
 
-                    <p class="text-right"><input type="button" class="btn btn-lg btn-primary" @click="checkout()" value="Check Out" /></p>
+                    <div class="mt-4 text-right"><input type="button" class="btn btn-lg btn-primary" @click="checkout()" value="Check Out" /></div>
                 </template>
 
                 <div v-else>
