@@ -15,6 +15,7 @@ use craftnet\plugins\PluginLicense;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
 use yii\validators\EmailValidator;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
@@ -30,16 +31,26 @@ class PluginLicensesController extends BaseApiController
     /**
      * Lists licenses for a plugin developer’s plugins.
      *
-     * @param int $page
-     * @param int $perPage
+     * @param int|null $page
+     * @param int|null $perPage
      * @return Response
+     * @throws BadRequestHttpException if the `page` or `perPage` params are set but not integers
      * @throws UnauthorizedHttpException
      */
-    public function actionList(int $page = 1, int $perPage = 100): Response
+    public function actionList($page = null, $perPage = null): Response
     {
         if (($user = Craft::$app->getUser()->getIdentity(false)) === null) {
             throw new UnauthorizedHttpException('Not Authorized');
         }
+
+        if (
+            ($page && !is_numeric($page)) ||
+            ($perPage && !is_numeric($perPage))
+        ) {
+            throw new BadRequestHttpException('page and perPage must be integers');
+        }
+        $page = $page ? (int)$page : 1;
+        $perPage = $perPage ? (int)$perPage : 100;
 
         list($offset, $limit) = $this->page2offset($page, $perPage);
         $licenses = $this->module->getPluginLicenseManager()->getLicensesByDeveloper($user->id, $offset, $limit, $total);
