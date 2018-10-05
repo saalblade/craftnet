@@ -33,10 +33,10 @@
     &-right {
       @apply .ml-4;
 
-      ul {
+      & > ul {
         @apply .list-reset .flex .items-center;
 
-        li {
+        & > li {
           @apply .block .ml-6;
 
           & > a {

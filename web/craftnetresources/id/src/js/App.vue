@@ -62,8 +62,13 @@
                                         {{currentUser.email}}
                                     </div>
 
+                                    <hr>
+
                                     <div>
-                                        <router-link @click.native="showingUserMenu = false" to="/account/settings">Account Settings</router-link>
+                                        <ul class="list-reset">
+                                            <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/billing">Billing</router-link></li>
+                                            <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/settings">Account Settings</router-link></li>
+                                        </ul>
                                     </div>
 
                                     <hr>
@@ -71,6 +76,7 @@
                                     <div>
                                         <a href="/logout">Logout</a>
                                     </div>
+
                                     <div class="popover-arrow"></div>
                                 </div>
                             </li>
@@ -107,6 +113,19 @@
                             </ul>
                         </template>
 
+                        <h5>
+                            <router-link @click.native="closeSidebar()" to="/buy">
+                                <font-awesome-icon icon="bug" />
+                                Tests
+                            </router-link>
+                        </h5>
+                        <ul>
+                            <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/cart">Cart</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/payment">Payment</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/thank-you">Thank You</router-link></li>
+                        </ul>
+
                         <template v-if="userIsInGroup('staff') && currentUser.enableShowcaseFeatures">
                             <h5>
                                 <a class="disabled" href="#">
@@ -121,28 +140,6 @@
                             </ul>
                         </template>
 
-                        <h5>
-                            <router-link @click.native="closeSidebar()" to="/account">
-                                <font-awesome-icon icon="user" />
-                                Account
-                            </router-link>
-                        </h5>
-                        <ul>
-                            <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
-                        </ul>
-                        <h5>
-                            <router-link @click.native="closeSidebar()" to="/buy">
-                                <font-awesome-icon icon="bug" />
-                                Tests
-                            </router-link>
-                        </h5>
-                        <ul>
-                            <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/cart">Cart</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/payment">Payment</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/thank-you">Thank You</router-link></li>
-                        </ul>
                     </div>
 
                     <div class="main">
