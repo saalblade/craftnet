@@ -204,8 +204,8 @@
     .badge {
       @apply .rounded-full .leading-none .absolute .border .border-grey-lighter .border-2 .text-xs .bg-red;
       padding: 2px 6px;
-      top: -6px;
-      left: 22px;
+      top: -12px;
+      right: -20px;
     }
   }
 }

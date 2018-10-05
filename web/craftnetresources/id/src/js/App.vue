@@ -35,7 +35,7 @@
                             <li class="cart-menu">
                                 <router-link to="/cart">
                                     <font-awesome-icon icon="shopping-cart" />
-                                    <div v-if="cartTotalItems" class="badge">{{cartTotalItems}}</div>
+                                    <div class="badge" :class="{invisible: !cartTotalItems}">{{cartTotalItems}}</div>
                                 </router-link>
                             </li>
                             <li class="global-menu" v-on-clickaway="awayGlobalMenu">
