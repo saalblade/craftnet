@@ -149,9 +149,8 @@
                         if (this.paymentMode === 'newCard') {
                             // Save new card
                             if (!this.cardToken) {
-                                this.$refs.paymentMethod.$refs.newCard.save(response => {
-                                    console.log('success', response)
-                                    this.cardToken = response
+                                this.$refs.paymentMethod.$refs.newCard.save(source => {
+                                    this.cardToken = source
                                     resolve()
                                 }, () => {
                                     reject()
