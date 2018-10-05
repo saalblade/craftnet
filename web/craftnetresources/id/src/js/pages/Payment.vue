@@ -6,37 +6,39 @@
         <div v-if="!cart" class="spinner"></div>
 
         <template v-else>
-            <div class="md:flex -mx-8">
-                <div class="md:w-1/2 px-8">
-                    <h2>Payment Method</h2>
+            <form @submit.prevent="pay()">
+                <div class="md:flex -mx-8">
+                    <div class="md:w-1/2 px-8">
+                        <h2>Payment Method</h2>
 
-                    <payment-method
-                            ref="paymentMethod"
-                            :card="card"
-                            :cardToken="cardToken"
-                            :paymentMode.sync="paymentMode"
-                            :replaceCard.sync="replaceCard"></payment-method>
+                        <payment-method
+                                ref="paymentMethod"
+                                :card="card"
+                                :cardToken="cardToken"
+                                :paymentMode.sync="paymentMode"
+                                :replaceCard.sync="replaceCard"></payment-method>
 
-                    <h2 class="mt-4">Coupon Code</h2>
-                    <coupon-code></coupon-code>
+                        <h2 class="mt-4">Coupon Code</h2>
+                        <coupon-code></coupon-code>
+                    </div>
+                    <div class="md:w-1/2 px-8 border-l">
+                        <h2>Billing Informations</h2>
+                        <billing-infos
+                                :billingInfo="billingInfo"
+                                :errors="errors"></billing-infos>
+                    </div>
                 </div>
-                <div class="md:w-1/2 px-8 border-l">
-                    <h2>Billing Informations</h2>
-                    <billing-infos
-                            :billingInfo="billingInfo"
-                            :errors="errors"></billing-infos>
+
+                <div class="text-center mt-8">
+                    <input type="submit" class="btn btn-lg btn-primary" :value="'Pay '+$options.filters.currency(cart.totalPrice)" />
+
+                    <div v-if="payLoading" class="spinner"></div>
+
+                    <div class="mt-4">
+                        <img src="/craftnetresources/id/dist/images/powered_by_stripe.svg" height="18" />
+                    </div>
                 </div>
-            </div>
-
-            <div class="text-center mt-8">
-                <input type="button" class="btn btn-lg btn-primary" :value="'Pay '+$options.filters.currency(cart.totalPrice)" @click="pay"/>
-
-                <div v-if="payLoading" class="spinner"></div>
-
-                <div class="mt-4">
-                    <img src="/craftnetresources/id/dist/images/powered_by_stripe.svg" height="18" />
-                </div>
-            </div>
+            </form>
         </template>
     </div>
 </template>
