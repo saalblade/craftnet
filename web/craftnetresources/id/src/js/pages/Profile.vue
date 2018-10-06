@@ -7,7 +7,7 @@
         <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
 
         <hr />
-        
+
         <h2>Photo</h2>
 
         <div class="flex">
