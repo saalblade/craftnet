@@ -12,7 +12,7 @@
                     <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !cmsLicenseValidates }" :disabled="!cmsLicenseValidates" />
                     <div class="spinner" v-if="cmsLicenseLoading"></div>
                 </form>
-                
+
                 <form @submit.prevent="claimCmsLicenseFile()">
                     <div class="form-group mb-4">
                         <label for="licenseFile" class="block">Or upload your license.key file</label>
