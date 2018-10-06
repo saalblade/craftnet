@@ -1,9 +1,9 @@
 <template>
     <div>
-        <h1>Sales</h1>
-
         <stripe-account-alert></stripe-account-alert>
 
+        <h1>Sales</h1>
+        
         <template v-if="salesToRender.length > 0">
             <div class="field">
                 <text-input class="form-control" id="searchQuery" name="searchQuery" type="text" placeholder="Search sales" v-model="searchQuery" />

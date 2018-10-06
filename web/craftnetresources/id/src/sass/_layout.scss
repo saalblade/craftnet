@@ -104,7 +104,8 @@
     .main-content {
       @apply .mx-auto;
       max-width: 1440px;
-      .license-renew-alert {
+
+      .top-alert {
         @apply .-mx-8 .-mt-6 .rounded-none .px-8 .mb-6;
         border: 0;
       }

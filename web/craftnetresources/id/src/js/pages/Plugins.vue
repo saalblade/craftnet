@@ -1,5 +1,7 @@
 <template>
     <div>
+        <stripe-account-alert></stripe-account-alert>
+
         <div class="flex justify-between mb-2">
             <h1>Plugins</h1>
             <div>
@@ -9,8 +11,6 @@
                 </router-link>
             </div>
         </div>
-
-        <stripe-account-alert></stripe-account-alert>
 
         <div v-if="computedPlugins.length > 0" class="card card-table responsive-content">
             <table class="table">
