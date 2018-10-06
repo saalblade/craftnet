@@ -10,6 +10,7 @@
 
         <div v-else class="card card-empty">
             <div class="card-body">
+                <font-awesome-icon icon="key" class="text-5xl mb-4 text-grey-light" />
                 <div class="font-bold">No plugin licenses</div>
                 <div>You don’t have any plugin licenses yet.</div>
             </div>

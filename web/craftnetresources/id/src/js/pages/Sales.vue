@@ -35,7 +35,13 @@
             </div>
         </template>
         <template v-else>
-            <p>No sales yet.</p>
+            <div class="card card-empty">
+                <div class="card-body">
+                    <font-awesome-icon icon="dollar-sign" class="text-5xl mb-4 text-grey-light" />
+                    <div class="font-bold">No sales</div>
+                    <div>You don’t have any sales yet.</div>
+                </div>
+            </div>
         </template>
     </div>
 </template>

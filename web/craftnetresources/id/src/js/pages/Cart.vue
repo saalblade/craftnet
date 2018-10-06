@@ -67,7 +67,7 @@
                 </template>
 
                 <div v-else>
-                    <p>{{ "Your cart is empty." }}</p>
+                    <p>Your cart is empty, <router-link to="/buy">buy a license</router-link>.</p>
                 </div>
             </template>
         </template>
