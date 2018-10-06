@@ -4,7 +4,7 @@
 
         <h2>Connected Apps</h2>
         <connected-apps title="Connected Apps" :show-stripe="true"></connected-apps>
-        
+
         <form class="mt-8" @submit.prevent="generateToken()">
             <h4>API Token</h4>
 
