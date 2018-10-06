@@ -30,16 +30,16 @@
                         </div>
                     </div>
 
-                    <div class="header-right">
-                        <ul>
-                            <li class="cart-menu">
-                                <router-link to="/cart">
+                    <div class="header-right ml-4">
+                        <ul class="list-reset flex items-center">
+                            <li class="block ml-6 cart-menu">
+                                <router-link class="block" to="/cart">
                                     <font-awesome-icon icon="shopping-cart" />
                                     <div class="badge" :class="{invisible: !cartTotalItems}">{{cartTotalItems}}</div>
                                 </router-link>
                             </li>
-                            <li class="global-menu" v-on-clickaway="awayGlobalMenu">
-                                <a class="toggle" @click="globalMenuToggle">
+                            <li class="block ml-6 global-menu" v-on-clickaway="awayGlobalMenu">
+                                <a class="block toggle" @click="globalMenuToggle">
                                     <font-awesome-icon icon="th" />
                                 </a>
 
@@ -52,8 +52,8 @@
                                     <div class="popover-arrow"></div>
                                 </div>
                             </li>
-                            <li class="user-menu" v-on-clickaway="awayUserMenu">
-                                <a class="toggle" @click="userMenuToggle">
+                            <li class="block ml-6 user-menu" v-on-clickaway="awayUserMenu">
+                                <a class="block toggle" @click="userMenuToggle">
                                     <img :src="currentUser.photoUrl" />
                                 </a>
 
@@ -64,12 +64,10 @@
 
                                     <hr>
 
-                                    <div>
-                                        <ul class="list-reset">
-                                            <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/billing">Billing</router-link></li>
-                                            <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/settings">Account Settings</router-link></li>
-                                        </ul>
-                                    </div>
+                                    <ul class="list-reset">
+                                        <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/billing">Billing</router-link></li>
+                                        <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/settings">Account Settings</router-link></li>
+                                    </ul>
 
                                     <hr>
 

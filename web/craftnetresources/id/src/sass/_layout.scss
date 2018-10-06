@@ -31,21 +31,11 @@
     }
 
     &-right {
-      @apply .ml-4;
+      & > ul > li > a {
+        @apply .text-grey-darker;
 
-      & > ul {
-        @apply .list-reset .flex .items-center;
-
-        & > li {
-          @apply .block .ml-6;
-
-          & > a {
-            @apply .block .text-grey-darker;
-
-            &:hover {
-              @apply .cursor-pointer .text-black;
-            }
-          }
+        &:hover {
+          @apply .text-black;
         }
       }
     }
