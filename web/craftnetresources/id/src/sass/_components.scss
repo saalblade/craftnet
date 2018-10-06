@@ -110,7 +110,7 @@
   @apply .inline-block .py-2 .px-4 .rounded .no-underline;
 
   &:hover {
-    @apply .no-underline;
+    @apply .cursor-pointer .no-underline;
   }
 
   &.disabled {
