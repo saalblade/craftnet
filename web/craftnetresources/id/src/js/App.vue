@@ -94,6 +94,7 @@
                             <li><router-link @click.native="closeSidebar()" to="/account/licenses/cms">Craft CMS</router-link></li>
                             <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
                             <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
                         </ul>
 
                         <template v-if="userIsInGroup('developers')">
@@ -110,19 +111,6 @@
                                 <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
                             </ul>
                         </template>
-
-                        <h5>
-                            <router-link @click.native="closeSidebar()" to="/buy">
-                                <font-awesome-icon icon="bug" />
-                                Tests
-                            </router-link>
-                        </h5>
-                        <ul>
-                            <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/cart">Cart</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/payment">Payment</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/thank-you">Thank You</router-link></li>
-                        </ul>
 
                         <template v-if="userIsInGroup('staff') && currentUser.enableShowcaseFeatures">
                             <h5>
