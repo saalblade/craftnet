@@ -2,45 +2,41 @@
     <form v-if="userDraft" @submit.prevent="save()">
         <h1>Profile</h1>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
-                <url-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
-                <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
+        <text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
+        <url-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
+        <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
+
+        <hr />
+        
+        <h2>Photo</h2>
+
+        <div class="flex">
+            <div class="">
+                <img ref="photo" :src="userDraft.photoUrl" style="width: 150px; height: 150px;" class="img-thumbnail mr-3" />
+            </div>
+            <div>
+                <template v-if="userDraft.photoId">
+                    <div class="field">
+                        <input type="button" class="btn btn-secondary" value="Change Photo" @click="changePhoto" :disabled="photoLoading" />
+                    </div>
+                    <div class="field">
+                        <a href="#" class="btn btn-danger" @click.prevent="deletePhoto" :disabled="photoLoading">
+                            <font-awesome-icon icon="times" />
+                            Delete
+                        </a>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="field">
+                        <input type="button" class="btn btn-secondary" value="Upload a photo" @click="changePhoto" :disabled="photoLoading" />
+                    </div>
+                </template>
+                <div v-if="photoLoading" class="spinner"></div>
+                <input type="file" ref="photoFile" class="hidden" @change="onChangePhoto" />
             </div>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <h2>Photo</h2>
-
-                <div class="flex">
-                    <div class="">
-                        <img ref="photo" :src="userDraft.photoUrl" style="width: 150px; height: 150px;" class="img-thumbnail mr-3" />
-                    </div>
-                    <div>
-                        <template v-if="userDraft.photoId">
-                            <div class="field">
-                                <input type="button" class="btn btn-secondary" value="Change Photo" @click="changePhoto" :disabled="photoLoading" />
-                            </div>
-                            <div class="field">
-                                <a href="#" class="btn btn-danger" @click.prevent="deletePhoto" :disabled="photoLoading">
-                                    <font-awesome-icon icon="times" />
-                                    Delete
-                                </a>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div class="field">
-                                <input type="button" class="btn btn-secondary" value="Upload a photo" @click="changePhoto" :disabled="photoLoading" />
-                            </div>
-                        </template>
-                        <div v-if="photoLoading" class="spinner"></div>
-                        <input type="file" ref="photoFile" class="hidden" @change="onChangePhoto" />
-                    </div>
-                </div>
-            </div>
-        </div>
+        <hr />
 
         <p class="text-secondary"><em>Your profile data is being used for your developer page on the Plugin Store.</em></p>
 
