@@ -51,14 +51,14 @@
             </div>
 
             <form @submit.prevent="save()">
-                <div class="card mb-3">
+                <div class="card mb-6">
                     <div class="card-header">GitHub Repository</div>
                     <div class="card-body">
                         <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
                     </div>
                 </div>
 
-                <div class="card mb-3">
+                <div class="card mb-6">
                     <div class="card-header">Plugin Icon</div>
                     <div class="card-body">
                         <div class="flex">
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class="card mb-3">
+                <div class="card mb-6">
                     <div class="card-header">Plugin Details</div>
                     <div class="card-body">
                         <div class="flex flex-wrap -mx-4">
@@ -118,7 +118,7 @@
                     </div>
                 </div>
 
-                <div class="card mb-3">
+                <div class="card mb-6">
                     <div class="card-header">Screenshots</div>
                     <div class="card-body">
                         <div class="field">
@@ -143,7 +143,7 @@
                     </div>
                 </div>
 
-                <div v-if="showPriceFields" class="card mb-3">
+                <div v-if="showPriceFields" class="card mb-6">
                     <div class="card-header">Pricing</div>
                     <div class="card-body">
                         <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />

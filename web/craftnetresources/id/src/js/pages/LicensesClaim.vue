@@ -2,7 +2,7 @@
     <div>
         <h1>Claim license</h1>
 
-        <div class="card mb-4">
+        <div class="card mb-6">
             <div class="card-body">
                 <h3>Claim a Craft CMS license</h3>
                 <p class="text-secondary">Attach a Craft CMS license to your Craft ID account.</p>
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="card mb-4">
+        <div class="card mb-6">
             <div class="card-body">
                 <h3>Claim a plugin license</h3>
                 <p class="text-secondary">Attach a plugin license to your Craft ID account.</p>

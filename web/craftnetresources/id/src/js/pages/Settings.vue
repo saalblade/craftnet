@@ -1,7 +1,7 @@
 <template>
     <form v-if="userDraft" @submit.prevent="save()">
         <h1>Settings</h1>
-        <div class="card mb-3">
+        <div class="card mb-6">
             <div class="card-body">
                 <h4>Email &amp; password</h4>
                 <!--<el-form>
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="card mb-3">
+        <div class="card mb-6">
             <div class="card-body">
                 <h4>Account Settings</h4>
 
