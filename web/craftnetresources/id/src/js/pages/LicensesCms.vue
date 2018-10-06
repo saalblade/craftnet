@@ -11,8 +11,8 @@
         <div v-else class="empty">
             <div class="empty-body">
                 <font-awesome-icon icon="key" class="text-5xl mb-4 text-grey-light" />
-                <div class="font-bold">No Craft licenses</div>
-                <div>You don’t have any Craft licenses yet.</div>
+                <div class="font-bold">No Craft CMS licenses</div>
+                <div>You don’t have any Craft CMS licenses yet.</div>
             </div>
         </div>
     </div>
