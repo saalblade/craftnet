@@ -8,6 +8,7 @@ window.craftIdSite = new Vue({
 
     data() {
         return {
+            loading: true,
             registerFormLoading: false,
         }
     },
@@ -24,6 +25,10 @@ window.craftIdSite = new Vue({
             this.$refs.registerform.submit()
         }
 
+    },
+
+    mounted() {
+        this.loading = false
     }
 
 });
