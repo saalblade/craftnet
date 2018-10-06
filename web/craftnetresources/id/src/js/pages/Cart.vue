@@ -69,9 +69,11 @@
                 <div v-else>
                     <div class="empty">
                         <div class="empty-body">
-                            <font-awesome-icon icon="shopping-cart" class="text-5xl mb-4 text-grey-light" />
+                            <font-awesome-icon icon="shopping-cart" class="text-5xl mb-4 text-grey" />
                             <div class="font-bold">Your cart is empty</div>
-                            <div><router-link to="/buy">Buy a license</router-link></div>
+                            <div class="mt-4">
+                                <router-link class="btn btn-primary" to="/buy">Buy a license</router-link>
+                            </div>
                         </div>
                     </div>
                 </div>
