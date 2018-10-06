@@ -24,6 +24,9 @@ Vue.filter('formatPluginLicense', formatPluginLicense);
 Vue.filter('capitalize', capitalize);
 Vue.use(require('vue-moment'));
 
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
+
 window.craftIdApp = new Vue({
 
     el: '#app',

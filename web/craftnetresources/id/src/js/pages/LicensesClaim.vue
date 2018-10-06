@@ -45,7 +45,7 @@
 
                 <form @submit.prevent="claimLicensesByEmail()">
                     <text-field id="email" label="Email Address" v-model="email" placeholder="user@example.com" />
-                    <input type="submit" class="btn btn-primary" value="Claim Licenses">
+                    <input type="submit" class="btn btn-primary" value="Claim Licenses" :class="{disabled: $v.email.$invalid }" :disabled="$v.email.$invalid" />
                     <div class="spinner" v-if="emailLoading"></div>
                 </form>
             </div>
@@ -55,6 +55,7 @@
 
 <script>
     import CraftComponents from "@benjamindavid/craftcomponents"
+    import { required, email } from 'vuelidate/lib/validators'
 
     export default {
 
@@ -72,6 +73,13 @@
                 email: '',
                 emailLoading: false,
             }
+        },
+
+        validations: {
+            email: {
+                required,
+                email,
+            },
         },
 
         components: {
@@ -192,7 +200,7 @@
                 this.pluginLicenseValidates = this.checkPluginLicense();
             }
 
-        }
+        },
 
     }
 </script>
