@@ -67,7 +67,13 @@
                 </template>
 
                 <div v-else>
-                    <p>Your cart is empty, <router-link to="/buy">buy a license</router-link>.</p>
+                    <div class="empty">
+                        <div class="empty-body">
+                            <font-awesome-icon icon="shopping-cart" class="text-5xl mb-4 text-grey-light" />
+                            <div class="font-bold">Your cart is empty</div>
+                            <div><router-link to="/buy">Buy a license</router-link></div>
+                        </div>
+                    </div>
                 </div>
             </template>
         </template>
