@@ -92,7 +92,21 @@ const actions = {
                                     })
                                 }
                             }, response => {
-                                reject(response)
+                                if(response.response.data.message && response.response.data.message === 'Cart Already Completed') {
+                                    const data = {
+                                        email: rootState.account.currentUser.email
+                                    }
+
+                                    api.createCart(data, response2 => {
+                                        commit('updateCart', {response: response2})
+                                        dispatch('saveOrderNumber', {orderNumber: response2.cart.number})
+                                        resolve(response)
+                                    }, response => {
+                                        reject(response)
+                                    })
+                                } else {
+                                    reject(response)
+                                }
                             })
                         } else {
                             // No order number yet? Create a new cart.
