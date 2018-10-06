@@ -69,8 +69,8 @@
             </table>
         </div>
 
-        <div v-else class="card card-empty">
-            <div class="card-body">
+        <div v-else class="empty">
+            <div class="empty-body">
                 <font-awesome-icon icon="plug" class="text-5xl mb-4 text-grey-light" />
                 <div class="font-bold">No plugins</div>
                 <div>You haven’t added any plugins yet.</div>

@@ -8,8 +8,8 @@
             <cms-licenses-table type="craft" :licenses="cmsLicenses"></cms-licenses-table>
         </div>
 
-        <div v-else class="card card-empty">
-            <div class="card-body">
+        <div v-else class="empty">
+            <div class="empty-body">
                 <font-awesome-icon icon="key" class="text-5xl mb-4 text-grey-light" />
                 <div class="font-bold">No Craft licenses</div>
                 <div>You don’t have any Craft licenses yet.</div>

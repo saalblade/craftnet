@@ -221,11 +221,14 @@
   }
 }
 
-.card-empty {
+
+/* Empty */
+
+.empty {
   @apply .flex .items-center justify-center;
   min-height: 500px;
 
-  .card-body {
+  .empty-body {
     @apply .text-center .text-grey-dark .py-8;
   }
 }
