@@ -5,20 +5,24 @@
         <h2>Connected Apps</h2>
         <connected-apps title="Connected Apps" :show-stripe="true"></connected-apps>
 
-        <form class="mt-8" @submit.prevent="generateToken()">
-            <h4>API Token</h4>
+        <div class="card mt-6">
+            <div class="card-body">
+                <form @submit.prevent="generateToken()">
+                    <h4>API Token</h4>
 
-            <p v-if="notice">This is your new API token, <strong>keep it someplace safe</strong>.</p>
+                    <p v-if="notice">This is your new API token, <strong>keep it someplace safe</strong>.</p>
 
-            <div class="max-w-sm">
-                <text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
+                    <div class="max-w-sm">
+                        <text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
+                    </div>
+
+                    <input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
+                    <input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
+
+                    <div class="spinner" v-if="loading"></div>
+                </form>
             </div>
-
-            <input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
-            <input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
-
-            <div class="spinner" v-if="loading"></div>
-        </form>
+        </div>
     </div>
 </template>
 
