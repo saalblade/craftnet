@@ -2,25 +2,25 @@
     <div>
         <h1>Billing</h1>
 
-        <div class="card mb-3">
+        <div class="card mb-6">
             <div class="card-body">
                 <billing-payment></billing-payment>
             </div>
         </div>
 
-        <div class="card mb-3">
+        <div class="card mb-6">
             <div class="card-body">
                 <billing-address-form></billing-address-form>
             </div>
         </div>
 
-        <div class="card mb-3">
+        <div class="card mb-6">
             <div class="card-body">
                 <billing-invoice-details></billing-invoice-details>
             </div>
         </div>
 
-        <div class="card mb-3">
+        <div class="card mb-6">
             <div class="card-body">
                 <h4>Upcoming Invoice</h4>
 
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="card mb-3">
+        <div class="card mb-6">
             <div class="card-body">
                 <h4>Invoices</h4>
 
