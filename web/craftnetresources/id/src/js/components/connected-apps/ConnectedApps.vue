@@ -1,41 +1,28 @@
 <template>
     <div class="list-group">
-        <stripe-account v-if="showStripe"></stripe-account>
+        <stripe-app v-if="showStripe"></stripe-app>
 
-        <div v-for="appType, index in appTypes" class="list-group-item">
-            <div class="flex items-start">
-                <img class="flex mr-3" :src="'/craftnetresources/id/dist/images/' + appType.handle + '.svg'" height="48" />
-                <div class="flex-1">
-                    <template v-if="apps[appType.handle]">
-                        <h5>{{ accountName(appType.handle) }}</h5>
-                        <p class="mb-0">
-                            <span class="text-secondary">{{ appType.name }}</span>
-                        </p>
-                    </template>
-
-                    <template v-else>
-                        <h5>{{ appType.name }}</h5>
-                        <p class="mb-0">Connect to your {{ appType.name }} account.</p>
-                    </template>
-                </div>
-                <div>
-                    <a v-if="apps[appType.handle]" href="#" class="btn btn-danger" @click.prevent="disconnect(appType.handle)">Disconnect</a>
-                    <a v-else="" href="#" class="btn btn-primary" @click.prevent="connect(appType.handle)">Connect</a>
-
-                    <div v-if="loading && loading[appType.handle]" class="mt-2 text-right">
-                        <div class="spinner"></div>
-                    </div>
-                </div>
-            </div>
+        <template v-for="appType, index in appTypes">
+            <connected-app
+                    :name="appType.name"
+                    :description="'Connect to your ' + appType.name + ' account.'"
+                    :icon="'/craftnetresources/id/dist/images/' + appType.handle + '.svg'"
+                    :account-name="accountName(appType.handle)"
+                    :connected="apps[appType.handle]"
+                    :buttonLoading="(loading && loading[appType.handle])"
+                    @connect="connect(appType.handle)"
+                    @disconnect="disconnect(appType.handle)"
+            ></connected-app>
 
             <hr v-if="index != (appTypes.length - 1)">
-        </div>
+        </template>
     </div>
 </template>
 
 <script>
     import {mapState, mapGetters} from 'vuex'
-    import StripeAccount from '../components/StripeAccount'
+    import StripeApp from './StripeApp'
+    import ConnectedApp from './ConnectedApp'
 
     export default {
 
@@ -61,7 +48,8 @@
         },
 
         components: {
-            StripeAccount,
+            StripeApp,
+            ConnectedApp,
         },
 
         computed: {

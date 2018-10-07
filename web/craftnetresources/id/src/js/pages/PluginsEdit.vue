@@ -163,7 +163,7 @@
 <script>
     import {mapState, mapGetters} from 'vuex'
     import CraftComponents from "@benjamindavid/craftcomponents";
-    import ConnectedApps from '../components/ConnectedApps'
+    import ConnectedApps from '../components/connected-apps/ConnectedApps'
     import Repositories from '../components/Repositories'
     import PluginCategories from '../components/PluginCategories'
     import slug from 'limax'
