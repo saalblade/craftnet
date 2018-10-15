@@ -4,12 +4,7 @@
     "dev": "HOST=plugins.craftcms.test PORT=3333 nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate",
-    "mix:dev": "cross-env NODE_ENV=development node ./node_modules/webpack/bin/webpack.js --progress --hide-modules --config=./node_modules/laravel-mix/setup/webpack.config.js",
-    "mix:watch": "cross-env NODE_ENV=development node ./node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=./node_modules/laravel-mix/setup/webpack.config.js",
-    "mix:hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=./node_modules/laravel-mix/setup/webpack.config.js --https  --key ../../../ssl/id.craftcms.test.key --cert ../../../ssl/id.craftcms.test.crt",
-    "mix:production": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js --progress --hide-modules --config=./node_modules/laravel-mix/setup/webpack.config.js",
-    "mix:production:watch": "cross-env NODE_ENV=production node ./node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=./node_modules/laravel-mix/setup/webpack.config.js"
+    "generate": "nuxt generate"
   },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
@@ -27,7 +22,6 @@
     "vue-moment": "^4.0.0-0"
   },
   "devDependencies": {
-    "laravel-mix": "^2.0.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.3",
     "tailwindcss": "^0.5.3",
