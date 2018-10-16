@@ -36,7 +36,7 @@ const getters = {
     stateOptions(state) {
         return iso => {
             let options = [];
-            
+
             if (!state.countries[iso] || (state.countries[iso] && !state.countries[iso].states)) {
                 return [];
             }
