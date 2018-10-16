@@ -17,6 +17,51 @@ const state = {
  */
 const getters = {
 
+    countryOptions(state) {
+        let options = [];
+
+        for (let iso in state.countries) {
+            if (state.countries.hasOwnProperty(iso)) {
+                options.push({
+                    label: state.countries[iso].name,
+                    value: iso,
+                })
+            }
+        }
+
+        return options;
+    },
+
+
+    stateOptions(state) {
+        return iso => {
+            let options = [];
+            
+            if (!state.countries[iso] || (state.countries[iso] && !state.countries[iso].states)) {
+                return [];
+            }
+
+            const states = state.countries[iso].states
+
+            for (let stateIso in states) {
+                if (states.hasOwnProperty(stateIso)) {
+                    options.push({
+                        label: states[stateIso],
+                        value: stateIso,
+                    })
+                }
+            }
+
+            return options
+        }
+    },
+
+    userIsInGroup(state) {
+        return handle => {
+            return state.currentUser.groups.find(g => g.handle === handle)
+        }
+    },
+
 }
 
 /**

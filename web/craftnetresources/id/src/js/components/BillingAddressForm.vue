@@ -40,7 +40,7 @@
             <text-field id="address2" label="Address Line 2" v-model="invoiceDetailsDraft.address2" :errors="errors.address2" />
             <text-field id="city" label="City" v-model="invoiceDetailsDraft.city" :errors="errors.city" />
             <select-field id="country" label="Country" v-model="invoiceDetailsDraft.country" :options="countryOptions" @input="onCountryChange" />
-            <select-field id="state" label="State" v-model="invoiceDetailsDraft.state" :options="stateOptions" />
+            <select-field id="state" label="State" v-model="invoiceDetailsDraft.state" :options="stateOptions(invoiceDetailsDraft.country)" />
             <text-field id="zipCode" label="Zip Code" v-model="invoiceDetailsDraft.zipCode" :errors="errors.zipCode" />
 
             <input type="submit" class="btn btn-primary" value="Save" />
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import CraftComponents from "@benjamindavid/craftcomponents";
 
     export default {
@@ -76,43 +76,11 @@
                 countries: state => state.craftId.countries,
             }),
 
-            countryOptions() {
-                let options = [];
+            ...mapGetters({
+                countryOptions: 'craftId/countryOptions',
+                stateOptions: 'craftId/stateOptions',
+            }),
 
-                for (let iso in this.countries) {
-                    if (this.countries.hasOwnProperty(iso)) {
-                        options.push({
-                            label: this.countries[iso].name,
-                            value: iso,
-                        })
-                    }
-                }
-
-                return options;
-            },
-
-            stateOptions() {
-                let options = [];
-
-                const iso = this.invoiceDetailsDraft.country
-
-                if (!this.countries[iso] || (this.countries[iso] && !this.countries[iso].states)) {
-                    return [];
-                }
-
-                const states = this.countries[iso].states
-
-                for (let stateIso in states) {
-                    if (states.hasOwnProperty(stateIso)) {
-                        options.push({
-                            label: states[stateIso],
-                            value: stateIso,
-                        })
-                    }
-                }
-
-                return options
-            }
         },
 
         methods: {
@@ -178,9 +146,10 @@
 
             onCountryChange() {
                 this.invoiceDetailsDraft.state = null
+                const stateOptions = this.stateOptions(this.invoiceDetailsDraft.country);
 
-                if(this.stateOptions.length) {
-                    this.invoiceDetailsDraft.state = this.stateOptions[0].value
+                if(stateOptions.length) {
+                    this.invoiceDetailsDraft.state = stateOptions[0].value
                 }
             }
         }
