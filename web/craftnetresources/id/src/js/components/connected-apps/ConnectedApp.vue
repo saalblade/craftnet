@@ -5,7 +5,7 @@
         </template>
         <template v-else>
             <div class="flex items-start">
-                <img class="flex mr-3" :src="icon" height="48" />
+                <img class="flex mr-3" :src="icon" height="48" width="48" />
                 <div class="flex-1">
                     <template v-if="connected">
                         <h5>{{ accountName }}</h5>
