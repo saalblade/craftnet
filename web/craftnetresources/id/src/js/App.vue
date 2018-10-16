@@ -211,7 +211,7 @@
             /**
              * Click away from the user menu.
              */
-            awayUserMenu: function(event) {
+            awayUserMenu: function() {
                 if(this.showingUserMenu === true) {
                     this.showingUserMenu = false
                 }
@@ -220,7 +220,7 @@
             /**
              * Click away from the global menu.
              */
-            awayGlobalMenu: function(event) {
+            awayGlobalMenu: function() {
                 if(this.showingGlobalMenu === true) {
                     this.showingGlobalMenu = false
                 }
@@ -248,20 +248,21 @@
             });
 
             if (window.stripeAccessToken) {
-                this.$store.dispatch('account/getStripeAccount').then(response => {
-                    this.$root.stripeAccountLoading = false;
-                }, error => {
-                    this.$root.stripeAccountLoading = false;
-                });
+                this.$store.dispatch('account/getStripeAccount')
+                    .then(() => {
+                        this.$root.stripeAccountLoading = false;
+                    }, () => {
+                        this.$root.stripeAccountLoading = false;
+                    });
             } else {
                 this.$root.stripeAccountLoading = false;
             }
 
             this.$store.dispatch('account/getInvoices')
-                .then(response => {
+                .then(() => {
                     this.$root.invoicesLoading = false;
                 })
-                .catch(response => {
+                .catch(() => {
                     this.$root.invoicesLoading = false;
                 });
 
