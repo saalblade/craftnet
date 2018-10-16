@@ -208,24 +208,34 @@
                 this.showingSidebar = false;
             },
 
+            /**
+             * Click away from the user menu.
+             */
             awayUserMenu: function(event) {
                 if(this.showingUserMenu === true) {
-
                     this.showingUserMenu = false
                 }
             },
 
+            /**
+             * Click away from the global menu.
+             */
             awayGlobalMenu: function(event) {
                 if(this.showingGlobalMenu === true) {
-
                     this.showingGlobalMenu = false
                 }
             },
 
+            /**
+             * User menu toggle.
+             */
             userMenuToggle() {
                 this.showingUserMenu = !this.showingUserMenu
             },
 
+            /**
+             * Global menu toggle.
+             */
             globalMenuToggle() {
                 this.showingGlobalMenu = !this.showingGlobalMenu
             }
