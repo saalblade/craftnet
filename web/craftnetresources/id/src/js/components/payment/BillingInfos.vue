@@ -17,16 +17,17 @@
         </div>
         <div class="md:flex -mx-2">
             <div class="md:w-1/2 px-2">
-                <select-field :fullwidth="true" :options="[{label: 'Country', value: 0}, {label: 'France', value: 'FR'}, {label: 'Angola', value: 'AO'}]" v-model="billingInfo.country" id="country" :errors="errors['billingAddress.country']" />
+                <select-field :fullwidth="true" :options="countryOptions" v-model="billingInfo.country" id="country" :errors="errors['billingAddress.country']" @input="onCountryChange" />
             </div>
             <div class="md:w-1/2 px-2">
-                <select-field :fullwidth="true" :options="[{label: 'State', value: 0}]" v-model="billingInfo.state" id="state" :errors="errors['billingAddress.state']" />
+                <select-field :fullwidth="true" :options="stateOptions(billingInfo.country)" v-model="billingInfo.state" id="state" :errors="errors['billingAddress.state']" @input="onStateChange" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     import CraftComponents from "@benjamindavid/craftcomponents";
 
     export default {
@@ -36,6 +37,35 @@
         components: {
             ...CraftComponents,
         },
+
+        computed: {
+
+            ...mapGetters({
+                countryOptions: 'craftId/countryOptions',
+                stateOptions: 'craftId/stateOptions',
+            }),
+
+        },
+
+        methods: {
+
+            onCountryChange() {
+                this.billingInfo.state = null
+                const stateOptions = this.stateOptions(this.billingInfo.country);
+
+                if(stateOptions.length) {
+                    this.billingInfo.state = stateOptions[0].value
+                }
+            },
+
+            onStateChange(value) {
+                const billingInfo = JSON.parse(JSON.stringify(this.billingInfo));
+                billingInfo.state = value
+
+                this.$emit('update:billingInfo', billingInfo);
+            }
+
+        }
 
     }
 </script>

@@ -24,7 +24,7 @@
                     <div class="md:w-1/2 px-8 border-l">
                         <h2>Billing Informations</h2>
                         <billing-infos
-                                :billingInfo="billingInfo"
+                                :billingInfo.sync="billingInfo"
                                 :errors="errors"></billing-infos>
                     </div>
                 </div>
