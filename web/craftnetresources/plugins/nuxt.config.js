@@ -1,4 +1,13 @@
+require('dotenv').config()
+
 module.exports = {
+    modules: [
+        '@nuxtjs/dotenv',
+    ],
+    server: {
+        port: process.env.NUXT_DEV_PORT,
+        host: process.env.NUXT_DEV_HOST,
+    },
     srcDir: 'src/',
     css: [
         '@/assets/sass/app.scss',
@@ -26,5 +35,5 @@ module.exports = {
         meta: [
             {name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'}
         ]
-    }
+    },
 }
