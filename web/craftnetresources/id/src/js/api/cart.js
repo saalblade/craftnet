@@ -53,7 +53,7 @@ export default {
      * Checkout.
      */
     checkout(data) {
-        return axios.post('https://api.craftcms.test/v1/payments', data, {withCredentials: true})
+        return axios.post('https://api.craftcms.test/v1/payments', data, {withCredentials: false})
     },
 
     /**

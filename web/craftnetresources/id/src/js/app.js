@@ -29,13 +29,8 @@ Vue.use(Vuelidate)
 
 window.craftIdApp = new Vue({
 
-    el: '#app',
-
     store,
-
-    components: {
-        App,
-    },
+    render: h => h(App),
 
     data() {
         return {
@@ -98,36 +93,4 @@ window.craftIdApp = new Vue({
 
     },
 
-    created() {
-        this.$store.dispatch('craftId/getCraftIdData').then(() => {
-            this.loading = false;
-        });
-
-        if (window.stripeAccessToken) {
-            this.$store.dispatch('account/getStripeAccount').then(response => {
-                this.stripeAccountLoading = false;
-            }, error => {
-                this.stripeAccountLoading = false;
-            });
-        } else {
-            this.stripeAccountLoading = false;
-        }
-
-        this.$store.dispatch('account/getInvoices')
-            .then(response => {
-                this.invoicesLoading = false;
-            })
-            .catch(response => {
-                this.invoicesLoading = false;
-            });
-
-        if(window.sessionNotice) {
-            this.$root.displayNotice(window.sessionNotice);
-        }
-
-        if(window.sessionError) {
-            this.$root.displayError(window.sessionError);
-        }
-    }
-
-});
+}).$mount('#app')

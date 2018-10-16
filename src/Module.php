@@ -225,10 +225,6 @@ class Module extends \yii\base\Module
 
     private function _initSiteRequest()
     {
-        // Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
-
-        // Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', 'http://plugins.craftcms.test:3333');
-        Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', 'https://id.craftcms.test');
-        Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Credentials', 'true');
+        Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
     }
 }

@@ -4,7 +4,7 @@ import LoginForm from './components/LoginForm';
 
 window.craftIdSite = new Vue({
 
-    el: '#site',
+    render: h => h(LoginForm),
 
     data() {
         return {
@@ -31,6 +31,6 @@ window.craftIdSite = new Vue({
         this.loading = false
     }
 
-});
+}).$mount('#site');
 
 

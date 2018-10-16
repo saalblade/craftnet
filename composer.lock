@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b21cbb5b0fc3431c37bca49ce2d39be0",
+    "content-hash": "03f00a4dc57d638adcd03c2e619bfc28",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -2443,66 +2443,6 @@
             "time": "2018-07-07T07:35:36+00:00"
         },
         {
-            "name": "misterbk/mix",
-            "version": "1.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mister-bk/craft-plugin-mix.git",
-                "reference": "c30704f07f84d81f018fbbc4c617eb8652ee2d48"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mister-bk/craft-plugin-mix/zipball/c30704f07f84d81f018fbbc4c617eb8652ee2d48",
-                "reference": "c30704f07f84d81f018fbbc4c617eb8652ee2d48",
-                "shasum": ""
-            },
-            "require": {
-                "craftcms/cms": "^3.0.0-RC1"
-            },
-            "type": "craft-plugin",
-            "extra": {
-                "name": "Mix",
-                "handle": "mix",
-                "schemaVersion": "1.0.0",
-                "developerEmail": "dev@mister-bk.de",
-                "documentationUrl": "https://github.com/mister-bk/craft-plugin-mix/blob/master/README.md",
-                "changelogUrl": "https://raw.githubusercontent.com/mister-bk/craft-plugin-mix/master/CHANGELOG.md",
-                "downloadUrl": "https://github.com/mister-bk/craft-plugin-mix/archive/master.zip",
-                "hasCpSettings": true,
-                "hasCpSection": false,
-                "components": {
-                    "mix": "misterbk\\mix\\services\\MixService"
-                },
-                "class": "misterbk\\mix\\Mix"
-            },
-            "autoload": {
-                "psr-4": {
-                    "misterbk\\mix\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "mister bk! GmbH",
-                    "email": "info@mister-bk.de",
-                    "homepage": "https://www.mister-bk.de/"
-                }
-            ],
-            "description": "Helper plugin for Laravel Mix in Craft CMS templates",
-            "keywords": [
-                "Craft",
-                "craft-plugin",
-                "craft3",
-                "craftcms",
-                "laravel-mix",
-                "mix"
-            ],
-            "time": "2018-07-20T14:32:06+00:00"
-        },
-        {
             "name": "moccalotto/eu",
             "version": "0.3.0",
             "source": {
@@ -2678,6 +2618,62 @@
                 "jsonpath"
             ],
             "time": "2016-12-03T22:08:25+00:00"
+        },
+        {
+            "name": "nystudio107/craft-twigpack",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nystudio107/craft-twigpack.git",
+                "reference": "5b6156b6340d4dfe0e3b44942c520cc139a90a6c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nystudio107/craft-twigpack/zipball/5b6156b6340d4dfe0e3b44942c520cc139a90a6c",
+                "reference": "5b6156b6340d4dfe0e3b44942c520cc139a90a6c",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "^3.0.0"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Twigpack",
+                "handle": "twigpack",
+                "hasCpSettings": false,
+                "hasCpSection": false,
+                "changelogUrl": "https://raw.githubusercontent.com/craft-nystudio107/twigpack/v1/CHANGELOG.md",
+                "components": {
+                    "manifest": "nystudio107\\twigpack\\services\\Manifest"
+                },
+                "class": "nystudio107\\twigpack\\Twigpack"
+            },
+            "autoload": {
+                "psr-4": {
+                    "nystudio107\\twigpack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "nystudio107",
+                    "homepage": "https://nystudio107.com/"
+                }
+            ],
+            "description": "Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support",
+            "keywords": [
+                "craft-plugin",
+                "craftcms",
+                "hmr-support",
+                "manifest-json",
+                "twig",
+                "webpack",
+                "webpack-dev-server"
+            ],
+            "time": "2018-10-16T14:21:35+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -5270,6 +5266,66 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "misterbk/mix",
+            "version": "1.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mister-bk/craft-plugin-mix.git",
+                "reference": "c30704f07f84d81f018fbbc4c617eb8652ee2d48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mister-bk/craft-plugin-mix/zipball/c30704f07f84d81f018fbbc4c617eb8652ee2d48",
+                "reference": "c30704f07f84d81f018fbbc4c617eb8652ee2d48",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "^3.0.0-RC1"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Mix",
+                "handle": "mix",
+                "schemaVersion": "1.0.0",
+                "developerEmail": "dev@mister-bk.de",
+                "documentationUrl": "https://github.com/mister-bk/craft-plugin-mix/blob/master/README.md",
+                "changelogUrl": "https://raw.githubusercontent.com/mister-bk/craft-plugin-mix/master/CHANGELOG.md",
+                "downloadUrl": "https://github.com/mister-bk/craft-plugin-mix/archive/master.zip",
+                "hasCpSettings": true,
+                "hasCpSection": false,
+                "components": {
+                    "mix": "misterbk\\mix\\services\\MixService"
+                },
+                "class": "misterbk\\mix\\Mix"
+            },
+            "autoload": {
+                "psr-4": {
+                    "misterbk\\mix\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "mister bk! GmbH",
+                    "email": "info@mister-bk.de",
+                    "homepage": "https://www.mister-bk.de/"
+                }
+            ],
+            "description": "Helper plugin for Laravel Mix in Craft CMS templates",
+            "keywords": [
+                "Craft",
+                "craft-plugin",
+                "craft3",
+                "craftcms",
+                "laravel-mix",
+                "mix"
+            ],
+            "time": "2018-07-20T14:32:06+00:00"
+        },
         {
             "name": "vlucas/phpdotenv",
             "version": "v2.5.1",

@@ -1,8 +1,5 @@
 {% extends "_layouts/base" %}
 
-{% do view.registerJsFile(mix('/js/site.js')) %}
-{% do view.registerCssFile(mix('/css/app.css')) %}
-
 {% set bodyClass = 'bg-light' %}
 
 {% set config = craft.app.config.getConfigFromFile('craftid') %}
@@ -25,6 +22,8 @@
 {% endjs %}
 
 {% block body %}
+    {{ craft.twigpack.includeCssModule("site.css") }}
+
     <div id="site">
         <div id="notifications-wrapper">
             <div id="notifications">
@@ -43,4 +42,7 @@
         {% endblock %}
     </div>
 
+    {{ craft.twigpack.includeJsModule("chunk-common.js") }}
+    {{ craft.twigpack.includeJsModule("chunk-vendors.js") }}
+    {{ craft.twigpack.includeJsModule("site.js") }}
 {% endblock %}

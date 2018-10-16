@@ -35,7 +35,7 @@ const actions = {
     getPluginStoreData({commit, state}) {
         return new Promise((resolve, reject) => {
             if (!state.pluginStoreDataLoaded) {
-                axios.get('https://api.craftcms.test/v1/plugin-store', {withCredentials: true})
+                axios.get('https://api.craftcms.test/v1/plugin-store', {withCredentials: false})
                     .then(response => {
                         commit('updatePluginStoreData', {response})
                         resolve()

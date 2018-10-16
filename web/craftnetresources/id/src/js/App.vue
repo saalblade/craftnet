@@ -1,17 +1,17 @@
 <template>
-    <div>
+    <div id="app">
         <auth-manager ref="authManager"></auth-manager>
         <renew-licenses-modal v-if="$root.showRenewLicensesModal" :license="$root.renewLicense" @cancel="$root.showRenewLicensesModal = false" />
 
-        <template v-if="notification">
-            <div id="notifications-wrapper" :class="{'hide': !notification }">
+        <template v-if="$root.notification">
+            <div id="notifications-wrapper" :class="{'hide': !$root.notification }">
                 <div id="notifications">
-                    <div class="notification" :class="notification.type">{{ notification.message }}</div>
+                    <div class="notification" :class="$root.notification.type">{{ $root.notification.message }}</div>
                 </div>
             </div>
         </template>
 
-        <template v-if="loading">
+        <template v-if="$root.loading">
             <div class="text-center">
                 <div class="spinner big mt-8"></div>
             </div>
@@ -171,8 +171,6 @@
             RenewLicensesModal,
         },
 
-        props: ['notification', 'loading'],
-
         data() {
             return {
                 showingSidebar: false,
@@ -212,7 +210,6 @@
 
             awayUserMenu: function(event) {
                 if(this.showingUserMenu === true) {
-                    console.log('away', this.showingUserMenu, event.target)
 
                     this.showingUserMenu = false
                 }
@@ -220,24 +217,52 @@
 
             awayGlobalMenu: function(event) {
                 if(this.showingGlobalMenu === true) {
-                    console.log('away', this.showingGlobalMenu, event.target)
 
                     this.showingGlobalMenu = false
                 }
             },
 
             userMenuToggle() {
-                console.log('userMenuToggle');
                 this.showingUserMenu = !this.showingUserMenu
             },
 
             globalMenuToggle() {
-                console.log('userMenuToggle');
                 this.showingGlobalMenu = !this.showingGlobalMenu
             }
 
         },
 
+        created() {
+            this.$store.dispatch('craftId/getCraftIdData').then(() => {
+                this.$root.loading = false;
+            });
+
+            if (window.stripeAccessToken) {
+                this.$store.dispatch('account/getStripeAccount').then(response => {
+                    this.$root.stripeAccountLoading = false;
+                }, error => {
+                    this.$root.stripeAccountLoading = false;
+                });
+            } else {
+                this.$root.stripeAccountLoading = false;
+            }
+
+            this.$store.dispatch('account/getInvoices')
+                .then(response => {
+                    this.$root.invoicesLoading = false;
+                })
+                .catch(response => {
+                    this.$root.invoicesLoading = false;
+                });
+
+            if(window.sessionNotice) {
+                this.$root.displayNotice(window.sessionNotice);
+            }
+
+            if(window.sessionError) {
+                this.$root.displayError(window.sessionError);
+            }
+        }
     }
 </script>
 

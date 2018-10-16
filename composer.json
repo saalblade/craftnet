@@ -22,8 +22,8 @@
     "ddeboer/vatin": "^2.1",
     "moccalotto/eu": "^0.3.0",
     "tecnickcom/tcpdf": "^6.2",
-    "misterbk/mix": "1.5.0",
-    "spacedealer/yii2-loggly": "^0.2.0"
+    "spacedealer/yii2-loggly": "^0.2.0",
+    "nystudio107/craft-twigpack": "^1.1"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
