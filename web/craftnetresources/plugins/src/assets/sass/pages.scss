@@ -1,7 +1,7 @@
 /* Developer Details (developer/_id) */
 
 .developer-card {
-  @apply .border-b .flex .pb-6;
+  @apply .flex;
 
   .photo {
     @apply .mr-6 .rounded-full .bg-grey-lighter;

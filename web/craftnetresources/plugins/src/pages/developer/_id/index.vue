@@ -1,6 +1,6 @@
 <template>
     <div class="xcontainer">
-        <div class="developer-card">
+        <div class="developer-card py-6 border-b">
             <div class="photo">
                 <template v-if="!loading && developer">
                     <img :src="developer.photoUrl" />
