@@ -73,10 +73,6 @@ th {
   text-align: inherit;
 }
 
-img {
-  max-width: none;
-}
-
 
 /* Classes */
 
@@ -97,6 +93,8 @@ img {
   }
 
   td.icon-col {
+    width: 0.01% !important;
+
     img {
       width: 40px;
       height: 40px;

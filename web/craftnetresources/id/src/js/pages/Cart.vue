@@ -19,7 +19,7 @@
                         <tbody>
                         <tr v-for="(item, itemKey) in cartItems">
                             <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
-                                <td class="thin">
+                                <td class="icon-col">
                                     <div class="plugin-icon">
                                         <img :src="craftLogo" width="42" height="42" />
                                     </div>
@@ -28,7 +28,7 @@
                             </template>
 
                             <template v-else="item.lineItem.purchasable.type === 'plugin-edition'">
-                                <td class="thin">
+                                <td class="icon-col">
                                     <div v-if="item.plugin" class="plugin-icon">
                                         <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
                                     </div>
