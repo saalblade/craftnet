@@ -12,7 +12,7 @@
 
         computed: {
             craftIdUrl() {
-                return process.env.NODE_ENV === 'development' ? 'https://id.craftcms.test/' : 'https://id.craftcms.com/'
+                return process.env.VUE_APP_CRAFT_ID_URL
             }
         }
 
