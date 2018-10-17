@@ -24,7 +24,7 @@ module.exports = {
     env: {
         actionUrl: process.env.NODE_ENV === 'production' ? 'https://plugins.craftcms.com/index.php/actions' : 'https://plugins.craftcms.test/index.php/actions',
         showSeoMeta: false,
-        craftIdUrl: process.env.NODE_ENV === 'production' ? 'https://id.craftcms.com' : 'https://id.craftcms.test',
+        craftIdUrl: process.env.NUXT_CRAFT_ID_URL,
     },
     router: {
         middleware: 'route'
