@@ -45,7 +45,7 @@
 
                                 <div class="popover" :class="{hidden: !showingGlobalMenu}">
                                     <div>
-                                        <p><a href="http://localhost:3000/" target="_blank">Craft Plugins</a></p>
+                                        <p><a :href="craftPluginsUrl" target="_blank">Craft Plugins</a></p>
                                         <p><router-link @click.native="showingGlobalMenu = false" to="/">Craft ID</router-link></p>
                                     </div>
 
@@ -189,6 +189,10 @@
                 userIsInGroup: 'account/userIsInGroup',
                 cartTotalItems: 'cart/cartTotalItems',
             }),
+
+            craftPluginsUrl() {
+                return process.env.VUE_APP_CRAFT_PLUGINS_URL;
+            }
 
         },
 
