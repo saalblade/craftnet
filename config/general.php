@@ -8,6 +8,9 @@
 
 return [
     '*' => [
+        'aliases' => [
+            '@nodeModules' => dirname(__FILE__) . '/../node_modules'
+        ],
         'omitScriptNameInUrls' => true,
         'cpTrigger' => getenv('CRAFT_CP_TRIGGER'),
         'imageDriver' => 'imagick',

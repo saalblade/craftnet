@@ -157,4 +157,16 @@
             on: partner.enabled,
         }) }}
     </div>
+
+    <div class="partner-history">
+        <div id="partnerHistoryApp"></div>
+    </div>
+
 {% endblock %}
+
+{% js %}
+    Craft = Craft || {};
+    Craft.Partners = Craft.Partners || {};
+    Craft.Partners.partnerId = {{ partner.id ?? 'null' }};
+    Craft.Partners.currentUserId = {{ craft.app.user().id }}
+{% endjs %}

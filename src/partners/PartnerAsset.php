@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sam
- * Date: 8/23/18
- * Time: 2:06 PM
- */
 
 namespace craftnet\partners;
 
-
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\assets\vue\VueAsset;
+
 
 class PartnerAsset extends AssetBundle
 {
@@ -20,10 +15,12 @@ class PartnerAsset extends AssetBundle
 
         $this->depends = [
             CpAsset::class,
+            VueAsset::class,
         ];
 
         $this->js = [
             'partners.js',
+            'partnerhistory.js',
         ];
 
         $this->css = [

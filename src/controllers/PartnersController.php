@@ -9,9 +9,12 @@ use craftnet\Module;
 use craftnet\partners\Partner;
 use craftnet\partners\PartnerAsset;
 use craftnet\partners\PartnerCapabilitiesQuery;
+use craftnet\partners\PartnerHistory;
 use craftnet\partners\PartnerService;
+use GuzzleHttp\Exception\RequestException;
 use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -147,6 +150,55 @@ class PartnersController extends Controller
         }
 
         return $this->redirectToPostedUrl($partner);
+    }
+
+    public function actionFetchHistory($partnerId)
+    {
+        $history = PartnerHistory::findByPartnerId($partnerId) ;
+        return $this->asJson(compact('history', 'parnerId'));
+    }
+
+    public function actionSaveHistory()
+    {
+        $request = Craft::$app->getRequest();
+
+        $params = [
+            'id' => $request->getBodyParam('id'),
+            'message' => $request->getBodyParam('message'),
+            'partnerId' => $request->getBodyParam('partnerId'),
+            'authorId' => Craft::$app->getUser()->id,
+        ];
+
+        $partnerHistory = PartnerHistory::firstOrNew($params);
+
+        $success = $partnerHistory->save();
+
+        if (!$success) {
+            return $this->asJson([
+                'success' => false,
+                'payload' => $params,
+                'errors' => $partnerHistory->getErrors(),
+            ]);
+        }
+
+        return $this->asJson([
+            'success' => true,
+            'history' => $partnerHistory
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return Response
+     * @throws RequestException
+     */
+    public function actionDeleteHistory($id)
+    {
+        $rowsAffected = PartnerHistory::deleteById((int) $id);
+
+        return $this->asJson([
+            'success' => (bool) $rowsAffected
+        ]);
     }
 
     public function actionFoo()

@@ -31,6 +31,7 @@ use craftnet\cms\CmsEdition;
 use craftnet\cms\CmsLicenseManager;
 use craftnet\composer\JsonDumper;
 use craftnet\composer\PackageManager;
+use craftnet\controllers\PartnersController;
 use craftnet\developers\UserBehavior;
 use craftnet\developers\UserQueryBehavior;
 use craftnet\fields\Plugins;
@@ -217,6 +218,9 @@ class Module extends \yii\base\Module
                 'partners/new' => 'craftnet/partners/edit',
                 'partners/<partnerId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/partners/edit',
                 'partners/foo' => 'craftnet/partners/foo',
+                'GET partners/history/<partnerId:\d+>' => 'craftnet/partners/fetch-history',
+                'POST partners/history' => 'craftnet/partners/save-history',
+                'DELETE partners/history/<id:\d+>' => 'craftnet/partners/delete-history',
             ]);
         });
 
