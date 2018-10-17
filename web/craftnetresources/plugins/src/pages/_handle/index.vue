@@ -103,10 +103,10 @@
 
 <script>
     import {mapState, mapGetters} from 'vuex'
-    import PluginPricing from '../../../components/PluginPricing'
-    import PluginLayout from '../../../components/PluginLayout'
-    import CopyPackage from '../../../components/CopyPackage'
-    import Carousel from '../../../components/Carousel'
+    import PluginPricing from '../../components/PluginPricing'
+    import PluginLayout from '../../components/PluginLayout'
+    import CopyPackage from '../../components/CopyPackage'
+    import Carousel from '../../components/Carousel'
 
     export default {
 

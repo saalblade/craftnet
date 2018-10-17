@@ -142,8 +142,8 @@
 
 <script>
     import {mapState} from 'vuex'
-    import PluginLayout from '../../../components/PluginLayout'
-    import ChangelogRelease from '../../../components/ChangelogRelease'
+    import PluginLayout from '../../components/PluginLayout'
+    import ChangelogRelease from '../../components/ChangelogRelease'
 
     export default {
 

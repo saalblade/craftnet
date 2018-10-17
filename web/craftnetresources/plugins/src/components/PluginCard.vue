@@ -1,6 +1,6 @@
 <template>
     <div>
-        <router-link v-if="plugin" class="plugin-card" :to="'/plugin/'+plugin.handle">
+        <router-link v-if="plugin" class="plugin-card" :to="'/'+plugin.handle">
             <div class="plugin-icon">
                 <img v-if="plugin.iconUrl" :src="plugin.iconUrl" />
                 <img v-else :src="defaultPluginSvg" />

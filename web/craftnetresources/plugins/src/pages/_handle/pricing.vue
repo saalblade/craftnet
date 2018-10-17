@@ -6,8 +6,8 @@
 
 <script>
     import {mapState} from 'vuex'
-    import PluginLayout from '../../../components/PluginLayout'
-    import PluginPricing from '../../../components/PluginPricing'
+    import PluginLayout from '../../components/PluginLayout'
+    import PluginPricing from '../../components/PluginPricing'
 
     export default {
 
@@ -51,7 +51,7 @@
         mounted() {
             if (!this.pluginSnippet.editions[0].price) {
                 // Redirect to the plugin’s features section if plugin is free.
-                this.$router.push({path: '/plugin/' + this.pluginSnippet.handle});
+                this.$router.push({path: '/' + this.pluginSnippet.handle});
             }
         },
 

@@ -7,7 +7,7 @@
                 <font-awesome-icon :icon="icon" />
             </a>
 
-            <h2><router-link to="/">Craft Plugins</router-link></h2>
+            <h2><router-link to="/">Craft Plugin Store</router-link></h2>
 
             <div class="search" :class="{open: searchVisible}">
                 <search-form ref="searchForm" @searchQueryBlur="searchQueryBlur()" />
