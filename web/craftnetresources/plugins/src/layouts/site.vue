@@ -13,7 +13,7 @@
                 <search-form ref="searchForm" @searchQueryBlur="searchQueryBlur()" />
                 
                 <a class="search-toggle" @click="showSearch()">
-                    <font-awesome-icon :icon="iconSearch" />
+                    <font-awesome-icon icon="search" />
                 </a>
             </div>
 
@@ -68,10 +68,6 @@
     import Navigation from '../components/Navigation'
     import SearchForm from '../components/SearchForm'
     import ScreenshotModal from '../components/ScreenshotModal'
-    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-    import faBars from '@fortawesome/fontawesome-free-solid/faBars'
-    import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
-    import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
 
     export default {
 
@@ -86,7 +82,6 @@
         components: {
             Navigation,
             SearchForm,
-            FontAwesomeIcon,
             ScreenshotModal,
         },
 
@@ -94,14 +89,10 @@
 
             icon () {
                 if (this.showingSidebar) {
-                    return faTimes
+                    return 'times'
                 }
 
-                return faBars
-            },
-
-            iconSearch() {
-                return faSearch
+                return 'bars'
             },
 
             ...mapState({

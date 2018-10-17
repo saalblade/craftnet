@@ -37,34 +37,34 @@
             </tr>
             <tr>
                 <th class="feature">Content Modeling</th>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
 
             </tr>
             <tr>
                 <th class="feature">Multi-site Multi-lingual</th>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
             </tr>
             <tr>
                 <th class="feature">Cloud Storage Integration</th>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
             </tr>
             <tr>
                 <th class="feature">User Accounts</th>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
             </tr>
             <tr>
                 <th class="feature">System Branding</th>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
             </tr>
             <tr>
                 <th colspan="4" class="group">Support</th>
@@ -72,44 +72,29 @@
             <tr>
                 <th class="feature">Security & Bug Fixes</th>
                 <td></td>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
             </tr>
             <tr>
                 <th class="feature">Community Support (Slack, Stack Exchange)</th>
                 <td></td>
-                <td><font-awesome-icon :icon="icon" /></td>
-                <td><font-awesome-icon :icon="icon" /></td>
+                <td><font-awesome-icon icon="check" /></td>
+                <td><font-awesome-icon icon="check" /></td>
             </tr>
             <tr>
                 <th class="feature">Developer Support</th>
                 <td></td>
                 <td></td>
-                <td><font-awesome-icon :icon="icon" /></td>
+                <td><font-awesome-icon icon="check" /></td>
             </tr>
         </table>
     </div>
 </template>
 
 <script>
-    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-    import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
-
     export default {
 
         props: ['pluginSnippet'],
-
-        components: {
-            FontAwesomeIcon,
-        },
-
-        computed: {
-
-            icon() {
-                return faCheck
-            },
-
-        }
 
     }
 </script>

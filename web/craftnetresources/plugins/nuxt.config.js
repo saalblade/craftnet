@@ -14,6 +14,7 @@ module.exports = {
         'swiper/dist/css/swiper.css',
     ],
     plugins: [
+        '~plugins/fontAwesome.js',
         '~plugins/filters.js',
         '~plugins/moment.js',
         '~plugins/shave.js',

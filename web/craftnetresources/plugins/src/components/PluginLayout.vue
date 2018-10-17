@@ -18,7 +18,10 @@
                         </div>
                     </div>
 
-                    <a class="nav-toggle" @click="showNav=!showNav"><font-awesome-icon :icon="navIcon" /></a>
+                    <a class="nav-toggle" @click="showNav=!showNav">
+                        <template v-if="showNav"><font-awesome-icon icon="chevron-up" /></template>
+                        <template v-else><font-awesome-icon icon="chevron-down" /></template>
+                    </a>
                     <!--<div class="short-description">{{ pluginSnippet.shortDescription }}</div>-->
                     <!--<div><router-link :to="'/developer/'+pluginSnippet.developerId">{{ pluginSnippet.developerName }}</router-link></div>-->
                 </div>
@@ -44,9 +47,6 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-    import faChevronDown from '@fortawesome/fontawesome-free-solid/faChevronDown'
-    import faChevronUp from '@fortawesome/fontawesome-free-solid/faChevronUp'
 
     export default {
 
@@ -55,10 +55,6 @@
                 scrolled: false,
                 showNav: false,
             }
-        },
-
-        components: {
-            FontAwesomeIcon,
         },
 
         computed: {
@@ -70,14 +66,6 @@
 
             pluginSnippet() {
                 return this.$store.getters['pluginStore/getPluginByHandle'](this.$route.params.handle)
-            },
-
-            navIcon() {
-                if(this.showNav) {
-                    return faChevronUp
-                }
-
-                return faChevronDown
             },
 
             craftIdUrl() {

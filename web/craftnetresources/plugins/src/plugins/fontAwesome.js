@@ -1,0 +1,10 @@
+import Vue from 'vue'
+
+// Font Awesome
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faBars, faTimes, faSearch, faBook, faCertificate, faCheck, faInfoCircle, faLink, faChevronDown, faChevronUp, faCopy } from '@fortawesome/free-solid-svg-icons'
+library.add([ faBars, faTimes, faSearch, faBook, faCertificate, faCheck, faInfoCircle, faLink, faChevronDown, faChevronUp, faCopy ])
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.config.productionTip = false

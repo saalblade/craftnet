@@ -41,10 +41,10 @@
                             <div class="plugin-editions-edition">
                                 <h4><span class="edition-name">Standard</span></h4>
                                 <ul>
-                                    <li><font-awesome-icon :icon="icon('check')"></font-awesome-icon> Drag and drop interface <font-awesome-icon :icon="icon('infoCircle')" /></li>
-                                    <li><font-awesome-icon :icon="icon('check')"></font-awesome-icon> Multi-page forms <font-awesome-icon :icon="icon('infoCircle')" /></li>
-                                    <li><font-awesome-icon :icon="icon('check')"></font-awesome-icon> GDPR compliant <font-awesome-icon :icon="icon('infoCircle')" /></li>
-                                    <li><font-awesome-icon :icon="icon('check')"></font-awesome-icon> Data export <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                    <li><font-awesome-icon icon="check"></font-awesome-icon> Drag and drop interface <font-awesome-icon icon="infoCircle" /></li>
+                                    <li><font-awesome-icon icon="check"></font-awesome-icon> Multi-page forms <font-awesome-icon icon="infoCircle" /></li>
+                                    <li><font-awesome-icon icon="check"></font-awesome-icon> GDPR compliant <font-awesome-icon icon="infoCircle" /></li>
+                                    <li><font-awesome-icon icon="check"></font-awesome-icon> Data export <font-awesome-icon icon="infoCircle" /></li>
                                 </ul>
 
                                 <div class="buttons">
@@ -60,10 +60,10 @@
                             <div class="plugin-editions-edition">
                                 <h4><span class="edition-name">Pro</span></h4>
                                 <ul>
-                                    <li><font-awesome-icon :icon="icon('check')" /> API integrations <font-awesome-icon :icon="icon('infoCircle')" /></li>
-                                    <li><font-awesome-icon :icon="icon('check')" /> reCAPTCHA <font-awesome-icon :icon="icon('infoCircle')" /></li>
-                                    <li><font-awesome-icon :icon="icon('check')" /> Advanced exporting <font-awesome-icon :icon="icon('infoCircle')" /></li>
-                                    <li><font-awesome-icon :icon="icon('check')" /> Widgets <font-awesome-icon :icon="icon('infoCircle')" /></li>
+                                    <li><font-awesome-icon icon="check" /> API integrations <font-awesome-icon icon="infoCircle" /></li>
+                                    <li><font-awesome-icon icon="check" /> reCAPTCHA <font-awesome-icon icon="infoCircle" /></li>
+                                    <li><font-awesome-icon icon="check" /> Advanced exporting <font-awesome-icon icon="infoCircle" /></li>
+                                    <li><font-awesome-icon icon="check" /> Widgets <font-awesome-icon icon="infoCircle" /></li>
                                 </ul>
 
                                 <div class="buttons">
@@ -88,8 +88,8 @@
                     <div class="plugin-meta-links">
                         <h3>Links</h3>
                         <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)">
-                            <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl" target="_blank"><font-awesome-icon :icon="icon('book')" /> {{ "Documentation"|t('app') }}</a></li>
-                            <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl" target="_blank"><font-awesome-icon :icon="icon('certificate')" /> {{ "Changelog"|t('app') }}</a></li>
+                            <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl" target="_blank"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
+                            <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl" target="_blank"><font-awesome-icon icon="certificate" /> {{ "Changelog"|t('app') }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -107,11 +107,6 @@
     import PluginLayout from '../../../components/PluginLayout'
     import CopyPackage from '../../../components/CopyPackage'
     import Carousel from '../../../components/Carousel'
-    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-    import faBook from '@fortawesome/fontawesome-free-solid/faBook'
-    import faCertificate from '@fortawesome/fontawesome-free-solid/faCertificate'
-    import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
-    import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
 
     export default {
 
@@ -167,7 +162,6 @@
             PluginLayout,
             CopyPackage,
             Carousel,
-            FontAwesomeIcon,
         },
 
         data() {
@@ -226,26 +220,6 @@
             }
 
         },
-
-        methods: {
-            icon(icon) {
-                switch(icon) {
-                    case 'book':
-                        return faBook;
-                        break;
-                    case 'certificate':
-                        return faCertificate;
-                        break;
-                    case 'check':
-                        return faCheck;
-                        break;
-                    case 'infoCircle':
-                        return faInfoCircle;
-                        break;
-                }
-
-            }
-        }
 
     }
 </script>

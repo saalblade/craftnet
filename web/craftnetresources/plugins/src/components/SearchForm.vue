@@ -3,26 +3,15 @@
         <input ref="searchQuery" class="text w-full" id="searchQuery" name="searchQuery" type="text" :placeholder="'Search plugins'" v-model="searchQuery" autocomplete="off" @blur="$emit('searchQueryBlur')">
         <div class="clear" :class="{ hidden: searchQuery.length == 0 }" @click="searchQuery = ''" title="Clear"></div>
         <div class="search-icon">
-            <font-awesome-icon :icon="icon" />
+            <font-awesome-icon icon="search" />
         </div>
     </form>
 </template>
 
 <script>
-    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-    import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
-
     export default {
 
-        components: {
-            FontAwesomeIcon,
-        },
-
         computed: {
-
-            icon () {
-                return faSearch
-            },
 
             searchQuery: {
                 get () {
