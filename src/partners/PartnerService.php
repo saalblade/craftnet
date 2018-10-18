@@ -163,7 +163,7 @@ class PartnerService
                 ->select('f.id, v.handle')
                     ->from('volumes v')
                     ->rightJoin('volumefolders f', '[[v.id]] = [[f.volumeId]]')
-                    ->where(['handle' => ['partnerDocuments', 'partnerScreenshots']])
+                    ->where(['handle' => ['partnerDocuments', 'partnerImages']])
                     ->andWhere(['f.parentId' => null]) // root folders only
                     ->all();
 
@@ -190,7 +190,7 @@ class PartnerService
                 ->select('f.id')
                 ->from('volumes v')
                 ->rightJoin('volumefolders f', '[[v.id]] = [[f.volumeId]]')
-                ->where(['handle' => 'partnerScreenshots'])
+                ->where(['handle' => 'partnerImages'])
                 ->scalar();
 
             if (!$folderId) {

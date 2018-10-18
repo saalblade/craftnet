@@ -151,7 +151,7 @@ class PartnersController extends Controller
         $partner = Partner::find()->id($partnerId)->status(null)->one();
 
         if (!$partner) {
-            throw new NotFoundHttpException('Plugin not found');
+            throw new NotFoundHttpException('Partner not found');
         }
 
         return $this->redirectToPostedUrl($partner);

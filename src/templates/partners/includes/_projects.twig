@@ -73,12 +73,12 @@
         {# Template for adding new projects dynamically #}
         {% import _self as self %}
         <script class="subform-template" type="text/html">
-            {{ self.projectForm('__new__', null, folderIds.partnerScreenshots, true) }}
+            {{ self.projectForm('__new__', null, folderIds.partnerImages, true) }}
         </script>
 
         <div class="subforms">
             {% for key, project in partner.projects | default([]) %}
-                {{ self.projectForm(key, project, folderIds.partnerScreenshots) }}
+                {{ self.projectForm(key, project, folderIds.partnerImages) }}
             {% endfor %}
         </div>
 
