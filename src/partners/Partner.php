@@ -242,6 +242,21 @@ class Partner extends Element
     }
 
     /**
+     * @return bool
+     * @throws \yii\db\Exception
+     */
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        Craft::$app->getDb()->createCommand()
+            ->delete('craftnet_partners', ['id' => $this->id])
+            ->execute();
+
+        return true;
+    }
+
+    /**
      * @inheritdoc
      */
     public function afterSave(bool $isNew)

@@ -88,17 +88,17 @@ class PartnersController extends Controller
     {
         $request = Craft::$app->getRequest();
         $partnerId = $request->getBodyParam('partnerId');
+        $isNew = $partnerId === null;
 
         // Get existing or new Partner
         if ($partnerId) {
             $partner = Partner::find()->id($partnerId)->status(null)->one();
+
+            if ($partner === null) {
+                throw new NotFoundHttpException('Invalid partner ID: ' . $partnerId);
+            }
         } else {
             $partner = new Partner();
-        }
-
-        // Ensure Partner
-        if ($partner === null) {
-            throw new NotFoundHttpException('Invalid partner ID: ' . $partnerId);
         }
 
         $partner->enabled = $request->getBodyParam('enabled');
@@ -137,6 +137,11 @@ class PartnersController extends Controller
             return null;
         }
 
+        // "Save & continue" on a new entry tries to go to `partners/-`
+        if ($isNew) {
+            return $this->redirect('partners/' . $partner->id);
+        }
+
         return $this->redirectToPostedUrl($partner);
     }
 
@@ -154,7 +159,9 @@ class PartnersController extends Controller
             throw new NotFoundHttpException('Partner not found');
         }
 
-        return $this->redirectToPostedUrl($partner);
+        Craft::$app->getElements()->deleteElement($partner);
+
+        return $this->redirect('partners');
     }
 
     public function actionFetchHistory($partnerId)
