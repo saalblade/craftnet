@@ -158,6 +158,26 @@ class Partner extends Element
     public $minimumBudget;
 
     /**
+     * @var bool
+     */
+    public $hasFullTimeDev;
+
+    /**
+     * @var bool
+     */
+    public $isCraftVerified;
+
+    /**
+     * @var bool
+     */
+    public $isCommerceVerified;
+
+    /**
+     * @var bool
+     */
+    public $isEnterpriseVerified;
+
+    /**
      * @var int Master Service Agreement PDF asset id
      */
     public $msaAssetId;
@@ -234,6 +254,10 @@ class Partner extends Element
             'primaryContactPhone',
             'businessSummary',
             'minimumBudget',
+            'hasFullTimeDev',
+            'isCraftVerified',
+            'isCommerceVerified',
+            'isEnterpriseVerified',
             'msaAssetId',
         ]);
 

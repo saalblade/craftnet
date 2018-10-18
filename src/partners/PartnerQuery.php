@@ -50,6 +50,27 @@ class PartnerQuery extends ElementQuery
     public $minimumBudget;
 
     /**
+     * @var bool
+     */
+    public $hasFullTimeDev;
+
+    /**
+     * @var bool
+     */
+    public $isCraftVerified;
+
+    /**
+     * @var bool
+     */
+    public $isCommerceVerified;
+
+    /**
+     * @var bool
+     */
+    public $isEnterpriseVerified;
+
+
+    /**
      * @var int Master Service Agreement PDF asset id
      */
     public $msaAssetId;
@@ -171,6 +192,10 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.primaryContactPhone',
             'craftnet_partners.businessSummary',
             'craftnet_partners.minimumBudget',
+            'craftnet_partners.hasFullTimeDev',
+            'craftnet_partners.isCraftVerified',
+            'craftnet_partners.isCommerceVerified',
+            'craftnet_partners.isEnterpriseVerified',
             'craftnet_partners.msaAssetId',
         ]);
 
@@ -182,11 +207,14 @@ class PartnerQuery extends ElementQuery
             'primaryContactPhone',
             'businessSummary',
             'minimumBudget',
+            'isCraftVerified',
+            'isCommerceVerified',
+            'isEnterpriseVerified',
             'msaAssetId',
         ];
 
         foreach($andColumns as $column) {
-            if ($this->{$column}) {
+            if (isset($this->{$column})) {
                 $this->subQuery->andWhere(Db::parseParam('craftnet_partners.' . $column, $this->{$column}));
             }
         }
