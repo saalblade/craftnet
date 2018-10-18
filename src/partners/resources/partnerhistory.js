@@ -273,9 +273,13 @@
     };
 
     $(function() {
-        new Vue({
-            render: h => h(App),
-        }).$mount(`#partnerHistoryApp`);
+        let el = document.getElementById('partnerHistoryApp');
+
+        if (el) {
+            new Vue({
+                render: h => h(App),
+            }).$mount(el);
+        }
     });
 
 })(window, document, jQuery);

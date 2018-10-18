@@ -186,9 +186,11 @@
         }) }}
     </div>
 
-    <div class="partner-history">
-        <div id="partnerHistoryApp"></div>
-    </div>
+    {% if partner.id %}
+        <div class="partner-history">
+            <div id="partnerHistoryApp"></div>
+        </div>
+    {% endif %}
 
 {% endblock %}
 
