@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b21cbb5b0fc3431c37bca49ce2d39be0",
+    "content-hash": "c86678b31af696669162f399a5b28c40",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.69.0",
+            "version": "3.69.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d6ba5f9250fc8a9cbc1cc11bc80c452b144ab215"
+                "reference": "1a7baa9aea970b103a7651a3898002e1a9f0eef1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d6ba5f9250fc8a9cbc1cc11bc80c452b144ab215",
-                "reference": "d6ba5f9250fc8a9cbc1cc11bc80c452b144ab215",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/1a7baa9aea970b103a7651a3898002e1a9f0eef1",
+                "reference": "1a7baa9aea970b103a7651a3898002e1a9f0eef1",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +142,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-10-04T21:43:42+00:00"
+            "time": "2018-10-17T20:39:50+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -258,16 +258,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "46afded9720f40b9dc63542af4e3e43a1177acb0"
+                "reference": "8afa52cd417f4ec417b4bfe86b68106538a87660"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/46afded9720f40b9dc63542af4e3e43a1177acb0",
-                "reference": "46afded9720f40b9dc63542af4e3e43a1177acb0",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/8afa52cd417f4ec417b4bfe86b68106538a87660",
+                "reference": "8afa52cd417f4ec417b4bfe86b68106538a87660",
                 "shasum": ""
             },
             "require": {
@@ -310,7 +310,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2018-08-08T08:57:40+00:00"
+            "time": "2018-10-18T06:09:13+00:00"
         },
         {
             "name": "composer/composer",
@@ -648,23 +648,24 @@
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.0.0-beta.11",
+            "version": "2.0.0-beta.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "360832f958521941ac2dbf7313463aebeaa3eaab"
+                "reference": "fa7a67a6faed943eb1206eef6b5d19fa28022f71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/360832f958521941ac2dbf7313463aebeaa3eaab",
-                "reference": "360832f958521941ac2dbf7313463aebeaa3eaab",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/fa7a67a6faed943eb1206eef6b5d19fa28022f71",
+                "reference": "fa7a67a6faed943eb1206eef6b5d19fa28022f71",
                 "shasum": ""
             },
             "require": {
                 "craftcms/cms": "^3.0.13",
                 "dannyvankooten/vat.php": "^1.1.2",
                 "dompdf/dompdf": "~0.8.2",
-                "moneyphp/money": "^3.1.3"
+                "moneyphp/money": "^3.1.3",
+                "phpoffice/phpspreadsheet": "^1.4"
             },
             "type": "craft-plugin",
             "extra": {
@@ -690,25 +691,25 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-09-26T06:21:48+00:00"
+            "time": "2018-10-18T18:34:41+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
-            "version": "1.0.7",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce-stripe.git",
-                "reference": "957f8b63f3f37f3e221b754e1240b3f79ad28669"
+                "reference": "f614ab0f74a02f1f250174ba7a8ccc37b46598c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/957f8b63f3f37f3e221b754e1240b3f79ad28669",
-                "reference": "957f8b63f3f37f3e221b754e1240b3f79ad28669",
+                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/f614ab0f74a02f1f250174ba7a8ccc37b46598c5",
+                "reference": "f614ab0f74a02f1f250174ba7a8ccc37b46598c5",
                 "shasum": ""
             },
             "require": {
                 "craftcms/cms": "^3.0.0",
-                "craftcms/commerce": "^2.0.0-beta.11",
+                "craftcms/commerce": "^2.0.0-beta.12",
                 "stripe/stripe-php": "^6.1"
             },
             "type": "craft-plugin",
@@ -740,7 +741,7 @@
                 "stripe",
                 "yii2"
             ],
-            "time": "2018-09-26T06:26:32+00:00"
+            "time": "2018-10-18T18:35:44+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -1424,65 +1425,22 @@
             "time": "2018-02-23T01:58:20+00:00"
         },
         {
-            "name": "flipboxdigital/swiftmailer-postmark",
-            "version": "3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/flipbox/swiftmailer-postmark.git",
-                "reference": "10425a2a8871353428e197efd7c44210b3003692"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/flipbox/swiftmailer-postmark/zipball/10425a2a8871353428e197efd7c44210b3003692",
-                "reference": "10425a2a8871353428e197efd7c44210b3003692",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "~6.0",
-                "swiftmailer/swiftmailer": "~6.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.5"
-            },
-            "suggest": {
-                "wildbit/laravel-postmark-provider": "~1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Postmark\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Postmark",
-                    "email": "support@postmarkapp.com"
-                }
-            ],
-            "description": "A Swiftmailer Transport for Postmark.",
-            "time": "2017-12-04T14:37:58+00:00"
-        },
-        {
             "name": "flipboxfactory/craft-postmark",
-            "version": "1.0.0-rc.1.2",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flipboxfactory/craft-postmark.git",
-                "reference": "4fa02cef5ac86911f3ca58410de44cd3b1c38191"
+                "reference": "5cb8b1c00469560fe727b09d6f3c280c396340d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flipboxfactory/craft-postmark/zipball/4fa02cef5ac86911f3ca58410de44cd3b1c38191",
-                "reference": "4fa02cef5ac86911f3ca58410de44cd3b1c38191",
+                "url": "https://api.github.com/repos/flipboxfactory/craft-postmark/zipball/5cb8b1c00469560fe727b09d6f3c280c396340d8",
+                "reference": "5cb8b1c00469560fe727b09d6f3c280c396340d8",
                 "shasum": ""
             },
             "require": {
-                "craftcms/cms": "^3.0.0-RC1",
-                "flipboxdigital/swiftmailer-postmark": "^3.0"
+                "craftcms/cms": "^3.0",
+                "wildbit/swiftmailer-postmark": "^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.0",
@@ -1513,7 +1471,7 @@
                 "postmark",
                 "yii2"
             ],
-            "time": "2017-12-13T23:37:42+00:00"
+            "time": "2018-10-15T20:16:17+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1831,16 +1789,16 @@
         },
         {
             "name": "layershifter/tld-database",
-            "version": "1.0.62",
+            "version": "1.0.63",
             "source": {
                 "type": "git",
                 "url": "https://github.com/layershifter/TLDDatabase.git",
-                "reference": "145d51f6788b3ac7a5b7d3e2710ef22f8d945fe5"
+                "reference": "ab6cf2c91c4e89da1404b7f74f6ca709882dac1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/layershifter/TLDDatabase/zipball/145d51f6788b3ac7a5b7d3e2710ef22f8d945fe5",
-                "reference": "145d51f6788b3ac7a5b7d3e2710ef22f8d945fe5",
+                "url": "https://api.github.com/repos/layershifter/TLDDatabase/zipball/ab6cf2c91c4e89da1404b7f74f6ca709882dac1c",
+                "reference": "ab6cf2c91c4e89da1404b7f74f6ca709882dac1c",
                 "shasum": ""
             },
             "require": {
@@ -1878,7 +1836,7 @@
                 "domain database",
                 "tld database"
             ],
-            "time": "2018-08-28T07:05:25+00:00"
+            "time": "2018-10-08T19:20:50+00:00"
         },
         {
             "name": "layershifter/tld-extract",
@@ -2084,16 +2042,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.47",
+            "version": "1.0.48",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "a11e4a75f256bdacf99d20780ce42d3b8272975c"
+                "reference": "a6ded5b2f6055e2db97b4b859fdfca2b952b78aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a11e4a75f256bdacf99d20780ce42d3b8272975c",
-                "reference": "a11e4a75f256bdacf99d20780ce42d3b8272975c",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a6ded5b2f6055e2db97b4b859fdfca2b952b78aa",
+                "reference": "a6ded5b2f6055e2db97b4b859fdfca2b952b78aa",
                 "shasum": ""
             },
             "require": {
@@ -2164,20 +2122,20 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2018-09-14T15:30:29+00:00"
+            "time": "2018-10-15T13:53:10+00:00"
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "1.0.20",
+            "version": "1.0.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "398c56027e49653712a8fba1eb12600d2a83f3b7"
+                "reference": "43523fec10a831ea48bedb3277e3f3fa218f4e49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/398c56027e49653712a8fba1eb12600d2a83f3b7",
-                "reference": "398c56027e49653712a8fba1eb12600d2a83f3b7",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/43523fec10a831ea48bedb3277e3f3fa218f4e49",
+                "reference": "43523fec10a831ea48bedb3277e3f3fa218f4e49",
                 "shasum": ""
             },
             "require": {
@@ -2211,7 +2169,7 @@
                 }
             ],
             "description": "Flysystem adapter for the AWS S3 SDK v3.x",
-            "time": "2018-09-25T12:02:44+00:00"
+            "time": "2018-10-08T07:53:55+00:00"
         },
         {
             "name": "league/oauth2-client",
@@ -2402,6 +2360,101 @@
                 "server"
             ],
             "time": "2017-12-23T23:33:42+00:00"
+        },
+        {
+            "name": "markbaker/complex",
+            "version": "1.4.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MarkBaker/PHPComplex.git",
+                "reference": "1ea674a8308baf547cbcbd30c5fcd6d301b7c000"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MarkBaker/PHPComplex/zipball/1ea674a8308baf547cbcbd30c5fcd6d301b7c000",
+                "reference": "1ea674a8308baf547cbcbd30c5fcd6d301b7c000",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6.0|^7.0.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
+                "phpcompatibility/php-compatibility": "^8.0",
+                "phpdocumentor/phpdocumentor": "2.*",
+                "phploc/phploc": "2.*",
+                "phpmd/phpmd": "2.*",
+                "phpunit/phpunit": "^4.8.35|^5.4.0",
+                "sebastian/phpcpd": "2.*",
+                "squizlabs/php_codesniffer": "^3.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Complex\\": "classes/src/"
+                },
+                "files": [
+                    "classes/src/functions/abs.php",
+                    "classes/src/functions/acos.php",
+                    "classes/src/functions/acosh.php",
+                    "classes/src/functions/acot.php",
+                    "classes/src/functions/acoth.php",
+                    "classes/src/functions/acsc.php",
+                    "classes/src/functions/acsch.php",
+                    "classes/src/functions/argument.php",
+                    "classes/src/functions/asec.php",
+                    "classes/src/functions/asech.php",
+                    "classes/src/functions/asin.php",
+                    "classes/src/functions/asinh.php",
+                    "classes/src/functions/atan.php",
+                    "classes/src/functions/atanh.php",
+                    "classes/src/functions/conjugate.php",
+                    "classes/src/functions/cos.php",
+                    "classes/src/functions/cosh.php",
+                    "classes/src/functions/cot.php",
+                    "classes/src/functions/coth.php",
+                    "classes/src/functions/csc.php",
+                    "classes/src/functions/csch.php",
+                    "classes/src/functions/exp.php",
+                    "classes/src/functions/inverse.php",
+                    "classes/src/functions/ln.php",
+                    "classes/src/functions/log2.php",
+                    "classes/src/functions/log10.php",
+                    "classes/src/functions/negative.php",
+                    "classes/src/functions/pow.php",
+                    "classes/src/functions/rho.php",
+                    "classes/src/functions/sec.php",
+                    "classes/src/functions/sech.php",
+                    "classes/src/functions/sin.php",
+                    "classes/src/functions/sinh.php",
+                    "classes/src/functions/sqrt.php",
+                    "classes/src/functions/tan.php",
+                    "classes/src/functions/tanh.php",
+                    "classes/src/functions/theta.php",
+                    "classes/src/operations/add.php",
+                    "classes/src/operations/subtract.php",
+                    "classes/src/operations/multiply.php",
+                    "classes/src/operations/divideby.php",
+                    "classes/src/operations/divideinto.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Baker",
+                    "email": "mark@lange.demon.co.uk"
+                }
+            ],
+            "description": "PHP Class for working with complex numbers",
+            "homepage": "https://github.com/MarkBaker/PHPComplex",
+            "keywords": [
+                "complex",
+                "mathematics"
+            ],
+            "time": "2018-10-13T23:28:42+00:00"
         },
         {
             "name": "mikehaertl/php-shellcommand",
@@ -2863,16 +2916,16 @@
         },
         {
             "name": "php-http/client-common",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/client-common.git",
-                "reference": "949ee8a8cba5fa2abe839c87bf7b885ac3330589"
+                "reference": "0b9ce659aa46aee106f8c66597ea0c070fcd9dff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/client-common/zipball/949ee8a8cba5fa2abe839c87bf7b885ac3330589",
-                "reference": "949ee8a8cba5fa2abe839c87bf7b885ac3330589",
+                "url": "https://api.github.com/repos/php-http/client-common/zipball/0b9ce659aa46aee106f8c66597ea0c070fcd9dff",
+                "reference": "0b9ce659aa46aee106f8c66597ea0c070fcd9dff",
                 "shasum": ""
             },
             "require": {
@@ -2920,7 +2973,7 @@
                 "http",
                 "httplug"
             ],
-            "time": "2018-06-22T12:36:17+00:00"
+            "time": "2018-10-09T06:46:29+00:00"
         },
         {
             "name": "php-http/discovery",
@@ -3273,6 +3326,93 @@
             "time": "2016-01-26T13:27:02+00:00"
         },
         {
+            "name": "phpoffice/phpspreadsheet",
+            "version": "1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
+                "reference": "57404f43742a8164b5eac3ab03b962d8740885c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/57404f43742a8164b5eac3ab03b962d8740885c1",
+                "reference": "57404f43742a8164b5eac3ab03b962d8740885c1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-dom": "*",
+                "ext-gd": "*",
+                "ext-iconv": "*",
+                "ext-libxml": "*",
+                "ext-mbstring": "*",
+                "ext-simplexml": "*",
+                "ext-xml": "*",
+                "ext-xmlreader": "*",
+                "ext-xmlwriter": "*",
+                "ext-zip": "*",
+                "ext-zlib": "*",
+                "markbaker/complex": "^1.4.1",
+                "php": "^5.6|^7.0",
+                "psr/simple-cache": "^1.0"
+            },
+            "require-dev": {
+                "dompdf/dompdf": "^0.8.0",
+                "friendsofphp/php-cs-fixer": "@stable",
+                "jpgraph/jpgraph": "^4.0",
+                "mpdf/mpdf": "^7.0.0",
+                "phpunit/phpunit": "^5.7",
+                "squizlabs/php_codesniffer": "^3.3",
+                "tecnickcom/tcpdf": "^6.2"
+            },
+            "suggest": {
+                "dompdf/dompdf": "Option for rendering PDF with PDF Writer",
+                "jpgraph/jpgraph": "Option for rendering charts, or including charts with PDF or HTML Writers",
+                "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
+                "tecnickcom/tcpdf": "Option for rendering PDF with PDF Writer"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpOffice\\PhpSpreadsheet\\": "src/PhpSpreadsheet"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Maarten Balliauw",
+                    "homepage": "http://blog.maartenballiauw.be"
+                },
+                {
+                    "name": "Erik Tilt"
+                },
+                {
+                    "name": "Franck Lefevre",
+                    "homepage": "http://rootslabs.net"
+                },
+                {
+                    "name": "Mark Baker",
+                    "homepage": "http://markbakeruk.net"
+                }
+            ],
+            "description": "PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+            "homepage": "https://github.com/PHPOffice/PhpSpreadsheet",
+            "keywords": [
+                "OpenXML",
+                "excel",
+                "gnumeric",
+                "ods",
+                "php",
+                "spreadsheet",
+                "xls",
+                "xlsx"
+            ],
+            "time": "2018-09-30T03:57:24+00:00"
+        },
+        {
             "name": "pixelandtonic/imagine",
             "version": "v0.7.1.3",
             "source": {
@@ -3527,12 +3667,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "67643fa62d521fb76855b0a4cc9a3de7ba38f85b"
+                "reference": "cba9a022f6e44e3a8779874570372c56cd51b145"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/67643fa62d521fb76855b0a4cc9a3de7ba38f85b",
-                "reference": "67643fa62d521fb76855b0a4cc9a3de7ba38f85b",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/cba9a022f6e44e3a8779874570372c56cd51b145",
+                "reference": "cba9a022f6e44e3a8779874570372c56cd51b145",
                 "shasum": ""
             },
             "conflict": {
@@ -3572,6 +3712,8 @@
                 "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.3|>=5.4,<5.4.11.3|>=2017.8,<2017.8.1.1|>=2017.12,<2017.12.2.1",
                 "ezyang/htmlpurifier": "<4.1.1",
                 "firebase/php-jwt": "<2",
+                "fooman/tcpdf": "<6.2.22",
+                "fossar/tcpdf-parser": "<6.2.22",
                 "friendsofsymfony/rest-bundle": ">=1.2,<1.2.2",
                 "friendsofsymfony/user-bundle": ">=1.2,<1.3.5",
                 "fuel/core": "<1.8.1",
@@ -3588,11 +3730,12 @@
                 "jsmitty12/phpwhois": "<5.1",
                 "kazist/phpwhois": "<=4.2.6",
                 "kreait/firebase-php": ">=3.2,<3.8.1",
+                "la-haute-societe/tcpdf": "<6.2.22",
                 "laravel/framework": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.42|>=5.6,<5.6.30",
                 "laravel/socialite": ">=1,<1.0.99|>=2,<2.0.10",
                 "magento/magento1ce": "<1.9.3.9",
                 "magento/magento1ee": ">=1.9,<1.14.3.2",
-                "magento/product-community-edition": ">=2,<2.2.5",
+                "magento/product-community-edition": ">=2,<2.2.6",
                 "monolog/monolog": ">=1.8,<1.12",
                 "namshi/jose": "<2.2",
                 "onelogin/php-saml": "<2.10.4",
@@ -3610,6 +3753,7 @@
                 "propel/propel": ">=2.0.0-alpha1,<=2.0.0-alpha7",
                 "propel/propel1": ">=1,<=1.7.1",
                 "pusher/pusher-php-server": "<2.2.1",
+                "robrichards/xmlseclibs": ">=1,<3.0.2",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "sensiolabs/connect": "<4.2.3",
                 "serluck/phpwhois": "<=4.2.6",
@@ -3625,6 +3769,7 @@
                 "slim/slim": "<2.6",
                 "smarty/smarty": "<3.1.33",
                 "socalnick/scn-social-auth": "<1.15.2",
+                "spoonity/tcpdf": "<6.2.22",
                 "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
                 "stormpath/sdk": ">=0,<9.9.99",
                 "swiftmailer/swiftmailer": ">=4,<5.4.5",
@@ -3649,6 +3794,7 @@
                 "symfony/validator": ">=2,<2.0.24|>=2.1,<2.1.12|>=2.2,<2.2.5|>=2.3,<2.3.3",
                 "symfony/web-profiler-bundle": ">=2,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
+                "tecnickcom/tcpdf": "<6.2.22",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
                 "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "theonedemon/phpwhois": "<=4.2.5",
@@ -3659,6 +3805,7 @@
                 "typo3/cms-core": ">=8,<8.7.17|>=9,<9.3.2",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
+                "wallabag/tcpdf": "<6.2.22",
                 "willdurand/js-translation-bundle": "<2.1.1",
                 "yiisoft/yii": ">=1.1.14,<1.1.15",
                 "yiisoft/yii2": "<2.0.15",
@@ -3706,7 +3853,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-10-02T16:19:22+00:00"
+            "time": "2018-10-15T15:36:51+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -3996,16 +4143,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.19.1",
+            "version": "v6.19.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "b1e9f8a25253de2cd527a5c776011ba9120f355a"
+                "reference": "1ab5c54fae4c16e9cc47d60c7454e6c3b6bbcb85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/b1e9f8a25253de2cd527a5c776011ba9120f355a",
-                "reference": "b1e9f8a25253de2cd527a5c776011ba9120f355a",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/1ab5c54fae4c16e9cc47d60c7454e6c3b6bbcb85",
+                "reference": "1ab5c54fae4c16e9cc47d60c7454e6c3b6bbcb85",
                 "shasum": ""
             },
             "require": {
@@ -4047,7 +4194,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2018-09-25T12:21:14+00:00"
+            "time": "2018-10-17T14:58:41+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4497,16 +4644,16 @@
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "6.2.25",
+            "version": "6.2.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "a5135e2cf02f8c935b71e9e7d676f0f1d31b1b9d"
+                "reference": "367241059ca166e3a76490f4448c284e0a161f15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/a5135e2cf02f8c935b71e9e7d676f0f1d31b1b9d",
-                "reference": "a5135e2cf02f8c935b71e9e7d676f0f1d31b1b9d",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/367241059ca166e3a76490f4448c284e0a161f15",
+                "reference": "367241059ca166e3a76490f4448c284e0a161f15",
                 "shasum": ""
             },
             "require": {
@@ -4555,7 +4702,7 @@
                 "pdf417",
                 "qrcode"
             ],
-            "time": "2018-09-23T07:52:24+00:00"
+            "time": "2018-10-16T17:24:05+00:00"
         },
         {
             "name": "true/punycode",
@@ -4669,6 +4816,46 @@
                 "templating"
             ],
             "time": "2018-07-13T07:18:09+00:00"
+        },
+        {
+            "name": "wildbit/swiftmailer-postmark",
+            "version": "3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wildbit/swiftmailer-postmark.git",
+                "reference": "1cf0fd1aa6cbacd5ca6ff87425c02f0e17bb7519"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wildbit/swiftmailer-postmark/zipball/1cf0fd1aa6cbacd5ca6ff87425c02f0e17bb7519",
+                "reference": "1cf0fd1aa6cbacd5ca6ff87425c02f0e17bb7519",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0.0",
+                "swiftmailer/swiftmailer": "^6.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Postmark\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Postmark",
+                    "email": "support@postmarkapp.com"
+                }
+            ],
+            "description": "A Swiftmailer Transport for Postmark.",
+            "time": "2018-07-20T15:34:31+00:00"
         },
         {
             "name": "yiisoft/yii2",
