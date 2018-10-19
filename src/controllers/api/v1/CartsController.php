@@ -262,6 +262,9 @@ class CartsController extends BaseApiController
                             $lineItem->note = $item->note;
                         }
 
+                        // Todo: Update quantity from payload instead of forcing it to 1.
+                        $lineItem->qty = 1;
+
                         $cart->addLineItem($lineItem);
                     }
                 }
