@@ -149,7 +149,12 @@ class Partner extends Element
     /**
      * @var string
      */
-    public $businessSummary;
+    public $fullBio;
+
+    /**
+     * @var string
+     */
+    public $shortBio;
 
     /**
      * @var string|string[]|null
@@ -229,7 +234,8 @@ class Partner extends Element
                 'primaryContactName',
                 'primaryContactEmail',
                 'primaryContactPhone',
-                'businessSummary',
+                'fullBio',
+                'shortBio',
                 'agencySize',
                 'msaAssetId',
                 'capabilities',
@@ -271,7 +277,8 @@ class Partner extends Element
             'primaryContactName',
             'primaryContactEmail',
             'primaryContactPhone',
-            'businessSummary',
+            'fullBio',
+            'shortBio',
             'agencySize',
             'hasFullTimeDev',
             'isCraftVerified',

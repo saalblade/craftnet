@@ -107,7 +107,8 @@ class PartnersController extends Controller
         $partner->primaryContactName = $request->getBodyParam('primaryContactName');
         $partner->primaryContactEmail = $request->getBodyParam('primaryContactEmail');
         $partner->primaryContactPhone = $request->getBodyParam('primaryContactPhone');
-        $partner->businessSummary = $request->getBodyParam('businessSummary');
+        $partner->fullBio = $request->getBodyParam('fullBio');
+        $partner->shortBio = $request->getBodyParam('shortBio');
         $partner->hasFullTimeDev = $request->getBodyParam('hasFullTimeDev');
         $partner->isCraftVerified = $request->getBodyParam('isCraftVerified');
         $partner->isCommerceVerified = $request->getBodyParam('isCommerceVerified');

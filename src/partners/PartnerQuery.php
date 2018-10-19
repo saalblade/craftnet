@@ -42,7 +42,12 @@ class PartnerQuery extends ElementQuery
     /**
      * @var string|string[]|null Short description of the business
      */
-    public $businessSummary;
+    public $fullBio;
+
+    /**
+     * @var string|string[]|null Short description of the business
+     */
+    public $shortBio;
 
     /**
      * @var int|int[]|null
@@ -145,19 +150,6 @@ class PartnerQuery extends ElementQuery
     }
 
     /**
-     * Sets the [[businessSummary]] property.
-     *
-     * @param string|string[]|null $value The property value
-     *
-     * @return static self reference
-     */
-    public function businessSummary($value)
-    {
-        $this->businessSummary = $value;
-        return $this;
-    }
-
-    /**
      * Sets the [[msaAssetId]] property.
      *
      * @param int $value The Asset id
@@ -181,7 +173,8 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.primaryContactName',
             'craftnet_partners.primaryContactEmail',
             'craftnet_partners.primaryContactPhone',
-            'craftnet_partners.businessSummary',
+            'craftnet_partners.fullBio',
+            'craftnet_partners.shortBio',
             'craftnet_partners.agencySize',
             'craftnet_partners.hasFullTimeDev',
             'craftnet_partners.isCraftVerified',
@@ -197,7 +190,6 @@ class PartnerQuery extends ElementQuery
             'primaryContactName',
             'primaryContactEmail',
             'primaryContactPhone',
-            'businessSummary',
             'isCraftVerified',
             'isCommerceVerified',
             'isEnterpriseVerified',

@@ -106,13 +106,25 @@
         }) }}
 
         {{ forms.textareaField({
-            label: 'Business Summary',
+            label: 'Short Bio',
+            instructions: 'For the card view, short sentence, no line breaks',
+            required: true,
+            rows: 2,
+            id: 'shortBio',
+            name: 'shortBio',
+            value: partner.shortBio,
+            errors: partner.getErrors('shortBio'),
+        }) }}
+
+        {{ forms.textareaField({
+            label: 'Full Bio',
+            instructions: 'Markdown allowed',
             required: true,
             rows: 4,
-            id: 'businessSummary',
-            name: 'businessSummary',
-            value: partner.businessSummary,
-            errors: partner.getErrors('businessSummary'),
+            id: 'fullBio',
+            name: 'fullBio',
+            value: partner.fullBio,
+            errors: partner.getErrors('fullBio'),
         }) }}
 
         {{ forms.lightswitchField({
