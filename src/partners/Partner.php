@@ -102,7 +102,6 @@ class Partner extends Element
             'primaryContactName' => 'Primary Name',
             'primaryContactEmail' => 'Primary Email',
             'primaryContactPhone' => 'Primary Phone',
-            'minimumBudget' => 'Minimum Budget',
         ];
     }
 
@@ -151,11 +150,6 @@ class Partner extends Element
      * @var string
      */
     public $businessSummary;
-
-    /**
-     * @var int Minimum budget in USD
-     */
-    public $minimumBudget;
 
     /**
      * @var string|string[]|null
@@ -236,7 +230,6 @@ class Partner extends Element
                 'primaryContactEmail',
                 'primaryContactPhone',
                 'businessSummary',
-                'minimumBudget',
                 'agencySize',
                 'msaAssetId',
                 'capabilities',
@@ -247,7 +240,7 @@ class Partner extends Element
         ];
 
         $rules[] = ['primaryContactEmail', 'email'];
-        $rules[] = [['minimumBudget', 'agencySize'], 'number'];
+        $rules[] = ['agencySize', 'number'];
 
         return $rules;
     }
@@ -279,7 +272,6 @@ class Partner extends Element
             'primaryContactEmail',
             'primaryContactPhone',
             'businessSummary',
-            'minimumBudget',
             'agencySize',
             'hasFullTimeDev',
             'isCraftVerified',

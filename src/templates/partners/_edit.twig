@@ -130,17 +130,6 @@
         }) }}
 
         {{ forms.textField({
-            type: 'text',
-            label: 'Minimum Budget',
-            instructions: 'Amount in USD',
-            required: true,
-            id: 'minimumBudget',
-            name: 'minimumBudget',
-            value: partner.minimumBudget,
-            errors: partner.getErrors('minimumBudget'),
-        }) }}
-
-        {{ forms.textField({
             type: 'number',
             label: 'Agency Size',
             required: true,

@@ -45,11 +45,6 @@ class PartnerQuery extends ElementQuery
     public $businessSummary;
 
     /**
-     * @var int|int[]|null Minimum budget in USD
-     */
-    public $minimumBudget;
-
-    /**
      * @var int|int[]|null
      */
     public $agencySize;
@@ -163,19 +158,6 @@ class PartnerQuery extends ElementQuery
     }
 
     /**
-     * Sets the [[$this->minimumBudget]] property.
-     *
-     * @param int|int[]|null $value The property value
-     *
-     * @return static self reference
-     */
-    public function minimumBudget($value)
-    {
-        $this->minimumBudget = $value;
-        return $this;
-    }
-
-    /**
      * Sets the [[msaAssetId]] property.
      *
      * @param int $value The Asset id
@@ -200,7 +182,6 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.primaryContactEmail',
             'craftnet_partners.primaryContactPhone',
             'craftnet_partners.businessSummary',
-            'craftnet_partners.minimumBudget',
             'craftnet_partners.agencySize',
             'craftnet_partners.hasFullTimeDev',
             'craftnet_partners.isCraftVerified',
@@ -217,7 +198,6 @@ class PartnerQuery extends ElementQuery
             'primaryContactEmail',
             'primaryContactPhone',
             'businessSummary',
-            'minimumBudget',
             'isCraftVerified',
             'isCommerceVerified',
             'isEnterpriseVerified',
