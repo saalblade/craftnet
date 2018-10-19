@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <ul>
+        <ul class="list-reset">
             <li class="global-menu" v-on-clickaway="globalMenuClickaway">
                 <a class="block toggle" @click="globalMenuToggle">
                     <font-awesome-icon icon="th" />
