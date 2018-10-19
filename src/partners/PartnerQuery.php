@@ -50,6 +50,11 @@ class PartnerQuery extends ElementQuery
     public $minimumBudget;
 
     /**
+     * @var int|int[]|null
+     */
+    public $agencySize;
+
+    /**
      * @var bool
      */
     public $hasFullTimeDev;
@@ -196,6 +201,7 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.primaryContactPhone',
             'craftnet_partners.businessSummary',
             'craftnet_partners.minimumBudget',
+            'craftnet_partners.agencySize',
             'craftnet_partners.hasFullTimeDev',
             'craftnet_partners.isCraftVerified',
             'craftnet_partners.isCommerceVerified',

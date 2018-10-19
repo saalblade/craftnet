@@ -113,6 +113,7 @@ class PartnersController extends Controller
         $partner->isCommerceVerified = $request->getBodyParam('isCommerceVerified');
         $partner->isEnterpriseVerified = $request->getBodyParam('isEnterpriseVerified');
         $partner->isRegisteredBusiness = $request->getBodyParam('isRegisteredBusiness');
+        $partner->agencySize = $request->getBodyParam('agencySize');
         $partner->hasFullTimeDev = $request->getBodyParam('hasFullTimeDev');
         $partner->minimumBudget = $request->getBodyParam('minimumBudget');
         $partner->setMsaAssetIdFromPost($request->getBodyParam('msa'));

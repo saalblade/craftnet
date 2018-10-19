@@ -158,6 +158,11 @@ class Partner extends Element
     public $minimumBudget;
 
     /**
+     * @var string|string[]|null
+     */
+    public $agencySize;
+
+    /**
      * @var bool
      */
     public $hasFullTimeDev;
@@ -232,6 +237,7 @@ class Partner extends Element
                 'primaryContactPhone',
                 'businessSummary',
                 'minimumBudget',
+                'agencySize',
                 'msaAssetId',
                 'capabilities',
                 'locations',
@@ -241,7 +247,7 @@ class Partner extends Element
         ];
 
         $rules[] = ['primaryContactEmail', 'email'];
-        $rules[] = ['minimumBudget', 'number'];
+        $rules[] = [['minimumBudget', 'agencySize'], 'number'];
 
         return $rules;
     }
@@ -274,6 +280,7 @@ class Partner extends Element
             'primaryContactPhone',
             'businessSummary',
             'minimumBudget',
+            'agencySize',
             'hasFullTimeDev',
             'isCraftVerified',
             'isCommerceVerified',

@@ -140,6 +140,16 @@
             errors: partner.getErrors('minimumBudget'),
         }) }}
 
+        {{ forms.textField({
+            type: 'number',
+            label: 'Agency Size',
+            required: true,
+            id: 'agencySize',
+            name: 'agencySize',
+            value: partner.agencySize,
+            errors: partner.getErrors('agencySize'),
+        }) }}
+
         {{ forms.checkboxGroupField({
             label: 'Capabilities',
             options: allCapabilities,
