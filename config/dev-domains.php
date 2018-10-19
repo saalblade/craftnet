@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'aanpqa.com',
     'alwaysdata.net',
     'amazonaws.com',
     'azure.com',
