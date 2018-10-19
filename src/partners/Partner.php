@@ -178,6 +178,11 @@ class Partner extends Element
     public $isEnterpriseVerified;
 
     /**
+     * @var bool
+     */
+    public $isRegisteredBusiness;
+
+    /**
      * @var int Master Service Agreement PDF asset id
      */
     public $msaAssetId;
@@ -273,6 +278,7 @@ class Partner extends Element
             'isCraftVerified',
             'isCommerceVerified',
             'isEnterpriseVerified',
+            'isRegisteredBusiness',
             'msaAssetId',
         ]);
 

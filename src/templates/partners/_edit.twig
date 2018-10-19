@@ -46,6 +46,15 @@
         <input type="hidden" name="redirect" value="{{ 'partners/{id}'|hash }}">
         {% if partner.id %}<input type="hidden" name="partnerId" value="{{ partner.id }}">{% endif %}
 
+        {{ forms.textField({
+            label: 'Business Name',
+            required: true,
+            id: 'businessName',
+            name: 'businessName',
+            value: partner.businessName,
+            errors: partner.getErrors('businessName'),
+        }) }}
+
         {{ forms.lightswitchField({
             label: 'Is Craft Verfied',
             id: 'isCraftVerified',
@@ -65,15 +74,6 @@
             id: 'isEnterpriseVerified',
             name: 'isEnterpriseVerified',
             on: partner.isEnterpriseVerified
-        }) }}
-
-        {{ forms.textField({
-            label: 'Business Name',
-            required: true,
-            id: 'businessName',
-            name: 'businessName',
-            value: partner.businessName,
-            errors: partner.getErrors('businessName'),
         }) }}
 
         {{ forms.textField({
@@ -113,6 +113,13 @@
             name: 'businessSummary',
             value: partner.businessSummary,
             errors: partner.getErrors('businessSummary'),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Is a registered business',
+            id: 'isRegisteredBusiness',
+            name: 'isRegisteredBusiness',
+            on: partner.isRegisteredBusiness,
         }) }}
 
         {{ forms.lightswitchField({

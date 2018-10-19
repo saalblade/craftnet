@@ -69,6 +69,10 @@ class PartnerQuery extends ElementQuery
      */
     public $isEnterpriseVerified;
 
+    /**
+     * @var bool
+     */
+    public $isRegisteredBusiness;
 
     /**
      * @var int Master Service Agreement PDF asset id
@@ -196,6 +200,7 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.isCraftVerified',
             'craftnet_partners.isCommerceVerified',
             'craftnet_partners.isEnterpriseVerified',
+            'craftnet_partners.isRegisteredBusiness',
             'craftnet_partners.msaAssetId',
         ]);
 
