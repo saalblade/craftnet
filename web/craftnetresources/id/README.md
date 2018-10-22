@@ -13,10 +13,10 @@
 ## Install
     npm install
     
-## Build for development
+## Build for Development
     npm run serve
 
-## Build for production
+## Build for Production
     npm run build
 
 ## Lint

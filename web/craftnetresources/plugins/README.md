@@ -7,10 +7,10 @@
 ## Install
     npm install
     
-## Build for development
+## Build for Development
     npm run dev
 
-## Build for production
+## Build for Production
     npm run build
     npm run start
     
