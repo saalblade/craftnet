@@ -17,12 +17,32 @@
 
             {{ forms.textField({
                 type: 'text',
+                label: 'Project Name',
+                required: true,
+                id: 'name-' ~ id,
+                name: 'projects[' ~ id ~ '][name]',
+                value: project.name ?? '',
+                errors: project.getErrors('name') ?? [],
+            }) }}
+
+            {{ forms.textField({
+                type: 'text',
                 label: 'Project URL',
                 required: true,
                 id: 'url-' ~ id,
                 name: 'projects[' ~ id ~ '][url]',
                 value: project.url ?? '',
                 errors: project.getErrors('url') ?? [],
+            }) }}
+
+            {{ forms.textField({
+                type: 'text',
+                label: 'Role',
+                instructions: 'e.g. “Design and Development”',
+                id: 'role-' ~ id,
+                name: 'projects[' ~ id ~ '][role]',
+                value: project.role ?? '',
+                errors: project.getErrors('role') ?? [],
             }) }}
 
             {{ forms.elementSelectField({
@@ -36,13 +56,6 @@
                 sources: ['folder:' ~ folderId],
                 elements: project.screenshots ?? [],
                 errors: project.getErrors('screenshots') ?? [],
-            }) }}
-
-            {{ forms.lightswitchField({
-                label: 'Private',
-                id: 'private-' ~ id,
-                name: 'projects[' ~ id ~ '][private]',
-                on: project.private ?? false,
             }) }}
 
         </div>
