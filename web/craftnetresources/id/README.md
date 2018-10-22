@@ -2,12 +2,12 @@
 
 ### Site
 - https://id.craftcms.com
-- /web/craftnetresources/id/site.js
+- ./src/js/site.js
 - Vue App
 
 ### App
 - https://id.craftcms.com/account
-- /web/craftnetresources/id/app.js
+- ./src/js/app.js
 - Vue App
 
 ## Install

@@ -1,7 +1,6 @@
 # Craft Plugins Resources
 
 - https://plugins.craftcms.com
-- /web/craftnetresources/plugins/
 - Nuxt App
 
 ## Install
