@@ -35,6 +35,10 @@ return [
     'AmCommand' => [
         'handle' => 'command-palette',
     ],
+    'AmNav' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
+    ],
     'TheArchitect' => [
         'handle' => 'architect',
     ],
@@ -67,6 +71,10 @@ return [
     ],
     'CpFieldLinks' => [
         'handle' => 'cp-field-inspect'
+    ],
+    'Craftnav' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
     ],
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
@@ -116,6 +124,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
     ],
+    'LanguageLink' => [
+        'statusColor' => 'green',
+        'status' => 'Renamed to “Site Switcher” for Craft 3.'
+    ],
     'LinkVault' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development'
@@ -124,11 +136,18 @@ return [
         'statusColor' => 'orange',
         'status' => 'Craft 3 upgrade path will be available via [Smart Map](https://www.doublesecretagency.com/plugins/smart-map).'
     ],
+    'Menus' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
+    ],
     'MnBreakAndContinue' => [
         'handle' => 'twig-perversion'
     ],
     'MnEager' => [
         'handle' => 'agnostic-fetch'
+    ],
+    'MnSnitch' => [
+        'handle' => 'snitch'
     ],
     'MnTwigPerversion' => [
         'handle' => 'twig-perversion'
@@ -136,6 +155,10 @@ return [
     'Moltin' => [
         'statusColor' => 'red',
         'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
+    ],
+    'Navee' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
     ],
     'Neo' => [
         'statusColor' => 'orange',
@@ -147,6 +170,10 @@ return [
     'Oauth' => [
         'statusColor' => 'red',
         'status' => 'Unnecessary thanks to Craft 3’s inclusion of an OAuth 2 client library'
+    ],
+    'Olivemenus' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
     ],
     'OneDashboard' => [
         'statusColor' => 'orange',
@@ -183,10 +210,6 @@ return [
         'statusColor' => 'orange',
         'status' => 'Coming soon'
     ],
-    'Retour' => [
-        'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Redirect Manager](https://github.com/Dolphiq/craft3-plugin-redirect) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) could be used instead'
-    ],
     'Scraper' => [
         'statusColor' => 'orange',
         'status' => 'Currently in development.'
@@ -209,19 +232,11 @@ return [
     'Sitemap' => [
         'handle' => 'sitemap-tmp',
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) could be used instead',
+        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) or [SEOmatic](https://github.com/nystudio107/craft-seomatic) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) could be used instead',
     ],
     'SproutInvisibleCaptcha' => [
         'statusColor' => 'orange',
         'status' => 'Features have been rolled into Sprout Forms which is available in the Plugin Store. Invisible Captcha will no longer be a standalone plugin in Craft 3.'
-    ],
-    'SproutEmail' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
-    ],
-    'SproutSeo' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development'
     ],
     'SquareBitMaps' => [
         'statusColor' => 'orange',

@@ -4,11 +4,13 @@ import Vue from 'vue';
 import store from './store'
 import {currency} from './filters/currency';
 import {formatCmsLicense, formatPluginLicense} from './filters/licenses';
+import {capitalize} from './filters/capitalize';
 import App from './App.vue';
 
 Vue.filter('currency', currency);
 Vue.filter('formatCmsLicense', formatCmsLicense);
 Vue.filter('formatPluginLicense', formatPluginLicense);
+Vue.filter('capitalize', capitalize);
 Vue.use(require('vue-moment'));
 
 window.craftIdApp = new Vue({

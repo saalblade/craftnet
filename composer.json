@@ -3,7 +3,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.0.0",
-    "craftcms/cms": "dev-develop#22d435c83148c779532ec487c6e2832af4dec933 as 3.0.16",
+    "craftcms/cms": "3.0.21",
     "roave/security-advisories": "dev-master",
     "justinrainbow/json-schema": "^5.2",
     "yiisoft/yii2-redis": "^2.0.6",
@@ -16,8 +16,8 @@
     "stripe/stripe-php": "^6.1",
     "stevenmaguire/oauth2-bitbucket": "^2.0",
     "flipboxfactory/craft-postmark": "^1.0.0-rc.1",
-    "craftcms/commerce": "dev-develop#4da6aabbab920b1964ecfaf712f0cd91d59a8f7a as 2.0.0-beta.6",
-    "craftcms/commerce-stripe": "^1.0.0",
+    "craftcms/commerce": "2.0.0-beta.12",
+    "craftcms/commerce-stripe": "1.0.8",
     "layershifter/tld-extract": "^1.2",
     "ddeboer/vatin": "^2.1",
     "moccalotto/eu": "^0.3.0",
@@ -28,16 +28,6 @@
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/craftcms/commerce"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/craftcms/commerce-stripe"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "craftnet\\": "src/",

@@ -14,6 +14,7 @@ use craftnet\plugins\Plugin;
 use Github\Client as GithubClient;
 
 /**
+ * @property bool $isPlugin
  * @property Plugin|null $plugin
  * @property VcsInterface $vcs
  */
@@ -101,13 +102,23 @@ class Package extends Model
     }
 
     /**
+     * Returns whether this pcakage is for a Craft plugin.
+     *
+     * @return bool
+     */
+    public function getIsPlugin(): bool
+    {
+        return $this->type === 'craft-plugin';
+    }
+
+    /**
      * Returns the plugin associated with this package, if any.
      *
      * @return Plugin|null
      */
     public function getPlugin()
     {
-        if ($this->type !== 'craft-plugin') {
+        if (!$this->getIsPlugin()) {
             return null;
         }
 
@@ -139,7 +150,7 @@ class Package extends Model
             $token = null;
             if ($plugin = $this->getPlugin()) {
                 $token = Module::getInstance()->getOauth()->getAuthTokenByUserId('Github', $plugin->developerId);
-                Craft::info('Using package token for '.$plugin->name.' : '.$token, __METHOD__);
+                Craft::info('Using package token for '.$plugin->name.': '.substr($token, 0, 10) . '...', __METHOD__);
 
                 if (!$token) {
                     if (Module::getInstance()->getPackageManager()->requirePluginVcsTokens) {
@@ -151,7 +162,7 @@ class Package extends Model
             if (!$token) {
                 // Just use a fallback token
                 $token = Module::getInstance()->getPackageManager()->getRandomGitHubFallbackToken();
-                Craft::info('Using fallback token for '.($plugin ? $plugin->name : $this->name).' : '.$token, __METHOD__);
+                Craft::info('Using fallback token for '.($plugin ? $plugin->name : $this->name).': '.substr($token, 0, 10) . '...', __METHOD__);
             }
 
             if ($token) {

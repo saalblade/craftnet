@@ -2,6 +2,7 @@
 
 namespace craftnet\controllers\api\v1;
 
+use Composer\Semver\Comparator;
 use craft\db\Query;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\Module;
@@ -41,6 +42,11 @@ class ComposerWhitelistController extends BaseApiController
             'hhvm' => true,
             'craftcms/cms' => true,
         ];
+
+        // Ignore composer/ca-bundle if they're running < Craft 3.0.22
+        if (Comparator::lessThan($this->cmsVersion, '3.0.22')) {
+            $this->_ignoreDeps['composer/ca-bundle'] = true;
+        }
 
         // Start by setting specific versions on the to-be-installed requirements
         $install = (array)$payload->install;
