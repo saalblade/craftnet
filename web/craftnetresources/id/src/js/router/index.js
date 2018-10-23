@@ -52,7 +52,7 @@ const router = new VueRouter({
 
 
         // Pages
-        
+
         {
             path: '/account/billing',
             name: 'Billing',
