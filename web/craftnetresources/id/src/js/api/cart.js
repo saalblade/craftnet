@@ -1,11 +1,31 @@
 import axios from 'axios'
 
 export default {
+
+    /**
+     * Axios instance.
+     */
+    _axios: null,
+
+    /**
+     * Returns the axios instance for calls to the Craft API.
+     */
+    axios() {
+        if(!this._axios) {
+            this._axios = axios.create({
+                baseURL: 'https://api.craftcms.test/v1/',
+                // params: {XDEBUG_SESSION_START: 16433}
+            });
+        }
+
+        return this._axios;
+    },
+
     /**
      * Get cart.
      */
     getCart(orderNumber, cb, errorCb) {
-        axios.get('https://api.craftcms.test/v1/carts/' + orderNumber)
+        this.axios().get('carts/' + orderNumber)
             .then(response => {
                 return cb(response.data)
             })
@@ -18,7 +38,7 @@ export default {
      * Create cart.
      */
     createCart(data, cb, errorCb) {
-        axios.post('https://api.craftcms.test/v1/carts', data)
+        this.axios().post('carts', data)
             .then(response => {
                 return cb(response.data)
             })
@@ -40,7 +60,7 @@ export default {
             })
         }
 
-        axios.post('https://api.craftcms.test/v1/carts/' + orderNumber, data)
+        this.axios().post('carts/' + orderNumber, data)
             .then(response => {
                 return cb(response.data)
             })
@@ -53,7 +73,9 @@ export default {
      * Checkout.
      */
     checkout(data) {
-        return axios.post('https://api.craftcms.test/v1/payments', data, {withCredentials: false})
+        return this.axios().post('payments', data, {
+            withCredentials: true,
+        })
     },
 
     /**
