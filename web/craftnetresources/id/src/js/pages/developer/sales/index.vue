@@ -14,8 +14,8 @@
                     <thead>
                     <tr>
                         <th>Item</th>
-                        <th>Type</th>
                         <th>Customer</th>
+                        <th>Type</th>
                         <th>Gross Amount</th>
                         <th>Net Amount</th>
                         <th>Date</th>
@@ -24,8 +24,8 @@
                     <tbody>
                     <tr v-for="sale in salesToRender">
                         <td>{{ sale.plugin.name }}</td>
-                        <td class="text-secondary">{{ sale.type }}</td>
                         <td><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></td>
+                        <td class="text-secondary">License Purchase</td>
                         <td>{{ sale.grossAmount|currency }}</td>
                         <td>{{ sale.netAmount|currency }}</td>
                         <td class="date-col">{{ sale.saleTime|moment("LLL") }}</td>
