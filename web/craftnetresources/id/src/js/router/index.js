@@ -1,19 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Profile from '../pages/Profile'
-import Billing from '../pages/Billing'
-import BillingInvoiceDetails from '../pages/BillingInvoiceDetails'
-import LicensesClaim from '../pages/LicensesClaim'
-import LicensesCms from '../pages/LicensesCms'
-import LicensesCmsDetails from '../pages/LicensesCmsDetails'
-import LicensesPlugins from '../pages/LicensesPlugins'
-import LicensesPluginsDetails from '../pages/LicensesPluginsDetails'
-import Sales from '../pages/Sales'
-import SalesDetails from '../pages/SalesDetails'
-import PluginsEdit from '../pages/PluginsEdit'
-import Plugins from '../pages/Plugins'
-import Settings from '../pages/Settings'
-import DeveloperSettings from '../pages/DeveloperSettings'
+import BillingIndex from '../pages/account/billing/index'
+import AccountBillingInvoiceNumber from '../pages/account/billing/invoices/_number'
+import AccountLicensesClaim from '../pages/account/licenses/claim'
+import AccountLicensesCmsIndex from '../pages/account/licenses/cms/index'
+import AccountLicensesCmsId from '../pages/account/licenses/cms/_id'
+import AccountLicensesPluginsIndex from '../pages/account/licenses/plugins/index'
+import AccountLicensesPluginsId from '../pages/account/licenses/plugins/_id'
+import DeveloperSalesIndex from '../pages/developer/sales/index'
+import DeveloperSalesId from '../pages/developer/sales/_id'
+import DeveloperPluginsId from '../pages/developer/plugins/_id'
+import DeveloperPlugins from '../pages/developer/plugins/index'
+import DeveloperProfile from '../pages/developer/profile'
+import DeveloperSettings from '../pages/developer/settings'
+import AccountSettings from '../pages/account/settings'
 import BuyLicense from '../pages/BuyLicense'
 import Cart from '../pages/Cart'
 import Payment from '../pages/Payment'
@@ -31,6 +31,8 @@ const router = new VueRouter({
         return savedPosition || { x: 0, y: 0 };
     },
     routes: [
+        // Redirects
+
         {
             path: '/',
             redirect: '/account/licenses',
@@ -44,72 +46,76 @@ const router = new VueRouter({
             redirect: '/account/licenses/cms',
         },
         {
-            path: '/account/licenses/cms',
-            component: LicensesCms,
+            path: '/developer',
+            redirect: '/developer/plugins',
         },
-        {
-            path: '/account/licenses/cms/:id',
-            component: LicensesCmsDetails
-        },
-        {
-            path: '/account/licenses/plugins',
-            component: LicensesPlugins
-        },
-        {
-            path: '/account/licenses/plugins/:id',
-            component: LicensesPluginsDetails
-        },
-        {
-            path: '/account/licenses/claim',
-            component: LicensesClaim
-        },
+
+
+        // Pages
+        
         {
             path: '/account/billing',
             name: 'Billing',
-            component: Billing
+            component: BillingIndex
         },
         {
             path: '/account/billing/invoices/:number',
-            name: 'BillingInvoiceDetails',
-            component: BillingInvoiceDetails
+            name: 'AccountBillingInvoiceNumber',
+            component: AccountBillingInvoiceNumber
         },
         {
-            path: '/account/profile',
-            name: 'Profile',
-            component: Profile
+            path: '/account/licenses/cms',
+            component: AccountLicensesCmsIndex,
+        },
+        {
+            path: '/account/licenses/cms/:id',
+            component: AccountLicensesCmsId
+        },
+        {
+            path: '/account/licenses/plugins',
+            component: AccountLicensesPluginsIndex
+        },
+        {
+            path: '/account/licenses/plugins/:id',
+            component: AccountLicensesPluginsId
+        },
+        {
+            path: '/account/licenses/claim',
+            component: AccountLicensesClaim
         },
         {
             path: '/account/settings',
-            name: 'Settings',
-            component: Settings
-        },
-        {
-            path: '/developer',
-            redirect: '/developer/plugins',
+            name: 'AccountSettings',
+            component: AccountSettings
         },
         {
             path: '/developer/plugins',
             name: 'Plugins',
-            component: Plugins
+            component: DeveloperPlugins
         },
         {
             path: '/developer/add-plugin',
-            component: PluginsEdit,
+            component: DeveloperPluginsId,
         },
         {
             path: '/developer/plugins/:id',
-            name: 'PluginsEdit',
-            component: PluginsEdit,
+            name: 'DeveloperPluginsId',
+            component: DeveloperPluginsId,
         },
         {
             path: '/developer/sales',
-            name: 'Sales',
-            component: Sales
+            name: 'DeveloperSalesIndex',
+            component: DeveloperSalesIndex
         },
         {
             path: '/developer/sales/:id',
-            name: 'SalesDetails',
-            component: SalesDetails,
+            name: 'DeveloperSalesId',
+            component: DeveloperSalesId,
+        },
+        {
+            path: '/developer/profile',
+            name: 'DeveloperProfile',
+            component: DeveloperProfile
         },
         {
             path: '/developer/settings',

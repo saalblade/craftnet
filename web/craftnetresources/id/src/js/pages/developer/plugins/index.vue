@@ -81,7 +81,7 @@
 
 <script>
     import {mapState} from 'vuex'
-    import StripeAccountAlert from '../components/StripeAccountAlert'
+    import StripeAccountAlert from '../../../components/StripeAccountAlert'
 
     export default {
 

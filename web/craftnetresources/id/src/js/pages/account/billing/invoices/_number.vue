@@ -99,10 +99,10 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import BillingAddress from '../components/BillingAddress'
-    import CardIcon from '../components/CardIcon'
-    import CmsLicensesTable from '../components/CmsLicensesTable'
-    import PluginLicensesTable from '../components/PluginLicensesTable'
+    import BillingAddress from '../../../../components/BillingAddress'
+    import CardIcon from '../../../../components/CardIcon'
+    import CmsLicensesTable from '../../../../components/CmsLicensesTable'
+    import PluginLicensesTable from '../../../../components/PluginLicensesTable'
 
     export default {
 

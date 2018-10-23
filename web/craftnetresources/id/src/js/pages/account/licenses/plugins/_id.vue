@@ -20,9 +20,9 @@
 
 <script>
     import {mapState} from 'vuex'
-    import CmsLicensesTable from '../components/CmsLicensesTable';
-    import PluginLicenseDetails from '../components/PluginLicenseDetails';
-    import LicenseHistory from '../components/LicenseHistory';
+    import CmsLicensesTable from '../../../../components/CmsLicensesTable';
+    import PluginLicenseDetails from '../../../../components/PluginLicenseDetails';
+    import LicenseHistory from '../../../../components/LicenseHistory';
 
     export default {
 

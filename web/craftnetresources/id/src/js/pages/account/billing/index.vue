@@ -45,10 +45,10 @@
 
 <script>
     import {mapState} from 'vuex'
-    import BillingPayment from '../components/BillingPayment'
-    import BillingInvoiceDetails from '../components/BillingInvoiceDetails'
-    import BillingAddressForm from '../components/BillingAddressForm'
-    import InvoicesTable from '../components/InvoicesTable'
+    import BillingPayment from '../../../components/BillingPayment'
+    import BillingInvoiceDetails from '../../../components/BillingInvoiceDetails'
+    import BillingAddressForm from '../../../components/BillingAddressForm'
+    import InvoicesTable from '../../../components/InvoicesTable'
 
 
     export default {
