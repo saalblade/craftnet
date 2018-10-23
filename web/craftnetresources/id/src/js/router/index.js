@@ -14,12 +14,12 @@ import DeveloperPlugins from '../pages/developer/plugins/index'
 import DeveloperProfile from '../pages/developer/profile'
 import DeveloperSettings from '../pages/developer/settings'
 import AccountSettings from '../pages/account/settings'
-import BuyLicense from '../pages/BuyLicense'
-import Cart from '../pages/Cart'
-import Payment from '../pages/Payment'
-import BuyPlugin from '../pages/BuyPlugin'
-import BuyPluginMock from '../pages/BuyPluginMock'
-import ThankYou from '../pages/ThankYou'
+import Buy from '../pages/buy'
+import Cart from '../pages/cart'
+import Payment from '../pages/payment'
+import BuyPlugin from '../pages/buy-plugin/index'
+import BuyPluginMock from '../pages/buy-plugin/_mock'
+import ThankYou from '../pages/thank-you'
 
 Vue.use(VueRouter);
 
@@ -124,8 +124,8 @@ const router = new VueRouter({
         },
         {
             path: '/buy',
-            name: 'BuyLicense',
-            component: BuyLicense
+            name: 'Buy',
+            component: Buy
         },
         {
             path: '/buy-plugin-mock/:handle/:edition',
