@@ -241,7 +241,9 @@
             }
 
             this.$nextTick(() => {
-                this.billingInfo = JSON.parse(JSON.stringify(this.accountBillingAddress))
+                if(this.accountBillingAddress) {
+                    this.billingInfo = JSON.parse(JSON.stringify(this.accountBillingAddress))
+                }
             })
         }
 
