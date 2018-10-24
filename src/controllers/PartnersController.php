@@ -120,6 +120,7 @@ class PartnersController extends Controller
         $partner->setCapabilities($request->getBodyParam('capabilities', []));
         $partner->setLocationsFromPost($request->getBodyParam('locations', []));
         $partner->setProjectsFromPost($request->getBodyParam('projects', []));
+        $partner->setVerificationStartDateFromPost($request->getBodyParam('verificationStartDate'));
 
         if ($partner->enabled) {
             $partner->setScenario(Element::SCENARIO_LIVE);

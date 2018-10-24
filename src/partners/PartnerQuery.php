@@ -75,6 +75,11 @@ class PartnerQuery extends ElementQuery
     public $isEnterpriseVerified;
 
     /**
+     * @var string
+     */
+    public $verificationStartDate;
+
+    /**
      * @var bool
      */
     public $isRegisteredBusiness;
@@ -180,6 +185,7 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.isCraftVerified',
             'craftnet_partners.isCommerceVerified',
             'craftnet_partners.isEnterpriseVerified',
+            'craftnet_partners.verificationStartDate',
             'craftnet_partners.isRegisteredBusiness',
             'craftnet_partners.msaAssetId',
         ]);

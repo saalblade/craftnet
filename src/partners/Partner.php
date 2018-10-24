@@ -8,7 +8,9 @@ use craft\base\Model;
 use craft\elements\actions\SetStatus;
 use craft\elements\Asset;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\DateTimeHelper;
 use craft\helpers\UrlHelper;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 
 /**
@@ -192,6 +194,11 @@ class Partner extends Element
     public $msaAssetId;
 
     /**
+     * @var
+     */
+    public $verificationStartDate;
+
+    /**
      * @var array
      */
     private $_capabilities = null;
@@ -247,6 +254,7 @@ class Partner extends Element
 
         $rules[] = ['primaryContactEmail', 'email'];
         $rules[] = ['agencySize', 'number'];
+        $rules[] = ['verificationStartDate', 'date', 'format' => 'Y-m-d'];
 
         return $rules;
     }
@@ -284,6 +292,7 @@ class Partner extends Element
             'isCraftVerified',
             'isCommerceVerified',
             'isEnterpriseVerified',
+            'verificationStartDate',
             'isRegisteredBusiness',
             'msaAssetId',
         ]);
@@ -582,6 +591,20 @@ class Partner extends Element
             $db->createCommand()
                 ->delete($table, $condition)
                 ->execute();
+        }
+    }
+
+    public function getVerificationStartDate()
+    {
+        return $this->verificationStartDate ? DateTimeHelper::toDateTime($this->verificationStartDate) : null;
+    }
+
+    public function setVerificationStartDateFromPost($value)
+    {
+        if ($value['date']) {
+            $this->verificationStartDate = DateTimeHelper::toDateTime($value)->format('Y-m-d');
+        } else {
+            $this->verificationStartDate = null;
         }
     }
 

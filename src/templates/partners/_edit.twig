@@ -76,6 +76,14 @@
             on: partner.isEnterpriseVerified
         }) }}
 
+        {{ forms.dateField({
+            label: 'Verification Start Date',
+            id: 'verificationStartDate',
+            name: 'verificationStartDate',
+            value: partner.verificationStartDate | date('short'),
+            errors: partner.getErrors('verificationStartDate'),
+        }) }}
+
         {{ forms.textField({
             label: 'Primary Contact Name',
             required: true,
