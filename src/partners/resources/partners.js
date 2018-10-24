@@ -20,6 +20,7 @@
     var Subforms = function(element) {
         this.$el = $(element);
         this.template = this.$el.find('.subform-template').html();
+        this.limit = this.$el.data('limit');
         this.$subforms = this.$el.find('.subforms');
 
         this.init();
@@ -28,7 +29,7 @@
     Subforms.prototype = {
         init: function() {
             this.$el.on('click', '.js-subform-add', this.onAddClick.bind(this));
-            this.$subforms.on('click', '.js-subform-delete', this.onDeleteClick);
+            this.$subforms.on('click', '.js-subform-delete', this.onDeleteClick.bind(this));
             this.$subforms.on('click', '.js-subform-up', this.onUpClick);
             this.$subforms.on('click', '.js-subform-down', this.onDownClick);
         },
@@ -40,10 +41,12 @@
                 .replace(/__(\/?script)__/g, '<$1>'); // template initializes itself
 
             this.$subforms.append(template);
+            this.checkLimit(e);
         },
         onDeleteClick: function(e) {
             e.preventDefault();
-            $(this).first().parents('.subform').remove();
+            $(e.target).first().parents('.subform').remove();
+            this.checkLimit(e);
         },
         onUpClick: function(e) {
             e.preventDefault();
@@ -71,6 +74,17 @@
             });
 
             return 'new' + ++previousNewId;
+        },
+        /**
+         * Hide
+         * @param ClickEvent
+         */
+        checkLimit(e) {
+            if (this.limit && this.$subforms.find('.subform').length >= this.limit) {
+                this.$el.find('.js-subform-add').hide();
+            } else {
+                this.$el.find('.js-subform-add').show();
+            }
         }
     };
 
