@@ -199,6 +199,18 @@ class Partner extends Element
     public $verificationStartDate;
 
     /**
+     * Based on region category titles in craftcms.com:
+     *
+     * - "North America"
+     * - "South America"
+     * - "Europe"
+     * - "Asia Pacific"
+     *
+     * @var string
+     */
+    public $region;
+
+    /**
      * @var array
      */
     private $_capabilities = null;
@@ -238,6 +250,7 @@ class Partner extends Element
 
         $rules[] = [
             [
+                'region',
                 'primaryContactName',
                 'primaryContactEmail',
                 'primaryContactPhone',
@@ -282,6 +295,7 @@ class Partner extends Element
         $partnerData = $this->getAttributes([
             'ownerId',
             'businessName',
+            'region',
             'primaryContactName',
             'primaryContactEmail',
             'primaryContactPhone',

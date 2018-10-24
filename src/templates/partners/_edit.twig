@@ -55,6 +55,22 @@
             errors: partner.getErrors('businessName'),
         }) }}
 
+        {{ forms.selectField({
+            label: 'Regions',
+            required: true,
+            id: 'region',
+            name: 'region',
+            options: {
+                null: 'Select a region',
+                'Asia Pacific': 'Asia Pacific',
+                'Europe': 'Europe',
+                'North America': 'North America',
+                'South America': 'South America'
+            },
+            value: partner.region,
+            errors: partner.getErrors('region'),
+        }) }}
+
         {{ forms.lightswitchField({
             label: 'Is Craft Verfied',
             id: 'isCraftVerified',

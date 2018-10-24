@@ -90,6 +90,11 @@ class PartnerQuery extends ElementQuery
     public $msaAssetId;
 
     /**
+     * @var string
+     */
+    public $region;
+
+    /**
      * Sets the [[ownerId]] property.
      *
      * @param int|int[]|null $value The property value
@@ -168,6 +173,13 @@ class PartnerQuery extends ElementQuery
         return $this;
     }
 
+    public function region($value)
+    {
+        $this->region = $value;
+
+        return $this;
+    }
+
     protected function beforePrepare(): bool
     {
         $this->joinElementTable('craftnet_partners');
@@ -188,6 +200,7 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.verificationStartDate',
             'craftnet_partners.isRegisteredBusiness',
             'craftnet_partners.msaAssetId',
+            'craftnet_partners.region',
         ]);
 
         $andColumns = [
@@ -200,6 +213,7 @@ class PartnerQuery extends ElementQuery
             'isCommerceVerified',
             'isEnterpriseVerified',
             'msaAssetId',
+            'region',
         ];
 
         foreach($andColumns as $column) {
