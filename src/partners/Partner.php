@@ -194,6 +194,13 @@ class Partner extends Element
     public $msaAssetId;
 
     /**
+     * Line-separated list: areas of expertise.
+     * e.g. "Full service", "Design", "Custom Development"
+     * @var string
+     */
+    public $expertise;
+
+    /**
      * @var
      */
     public $verificationStartDate;
@@ -309,6 +316,7 @@ class Partner extends Element
             'verificationStartDate',
             'isRegisteredBusiness',
             'msaAssetId',
+            'expertise',
         ]);
 
         if ($isNew) {

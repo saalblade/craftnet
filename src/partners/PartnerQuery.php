@@ -201,6 +201,7 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.isRegisteredBusiness',
             'craftnet_partners.msaAssetId',
             'craftnet_partners.region',
+            'craftnet_partners.expertise',
         ]);
 
         $andColumns = [
