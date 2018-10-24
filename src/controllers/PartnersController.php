@@ -118,7 +118,6 @@ class PartnersController extends Controller
         $partner->hasFullTimeDev = $request->getBodyParam('hasFullTimeDev');
         $partner->region = $request->getBodyParam('region');
         $partner->expertise = $request->getBodyParam('expertise');
-        $partner->setMsaAssetIdFromPost($request->getBodyParam('msa'));
         $partner->setCapabilities($request->getBodyParam('capabilities', []));
         $partner->setLocationsFromPost($request->getBodyParam('locations', []));
         $partner->setProjectsFromPost($request->getBodyParam('projects', []));

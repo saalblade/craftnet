@@ -183,19 +183,13 @@
             errors: partner.getErrors('capabilities'),
         }) }}
 
-        {% set msaElement = partner.getMsa() %}
-
-        {{ forms.elementSelectField({
-            label: 'Master Service Agreement PDF',
-            id: 'msa',
-            name: 'msa',
-            required: true,
-            elementType: 'craft\\elements\\Asset',
-            criteria: {kind: 'pdf'},
-            limit: 1,
-            sources: ['folder:' ~ folderIds.partnerDocuments],
-            elements: msaElement ? [msaElement] : [],
-            errors: partner.getErrors('msaAssetId') ?? [],
+        {{ forms.textAreaField({
+            rows: 4,
+            label: 'Areas of Expertise',
+            id: 'expertise',
+            name: 'expertise',
+            instructions: 'Line-separated list; e.g. Full service, Design, Custom Development',
+            value: partner.expertise,
         }) }}
 
         {% include 'craftnet/partners/includes/_locations' %}

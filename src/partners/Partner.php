@@ -189,11 +189,6 @@ class Partner extends Element
     public $isRegisteredBusiness;
 
     /**
-     * @var int Master Service Agreement PDF asset id
-     */
-    public $msaAssetId;
-
-    /**
      * Line-separated list: areas of expertise.
      * e.g. "Full service", "Design", "Custom Development"
      * @var string
@@ -232,11 +227,6 @@ class Partner extends Element
      */
     private $_projects = null;
 
-    /**
-     * @var Asset Master Service Agreement asset model
-     */
-    public $_msa;
-
     // Public Methods
     // =========================================================================
 
@@ -264,7 +254,6 @@ class Partner extends Element
                 'fullBio',
                 'shortBio',
                 'agencySize',
-                'msaAssetId',
                 'capabilities',
                 'locations',
             ],
@@ -315,7 +304,6 @@ class Partner extends Element
             'isEnterpriseVerified',
             'verificationStartDate',
             'isRegisteredBusiness',
-            'msaAssetId',
             'expertise',
         ]);
 
@@ -489,28 +477,6 @@ class Partner extends Element
         }
 
         $this->setLocations($locations);
-    }
-
-    /**
-     * Not worried about eager loading atm because this is only for
-     * Control Panel and Craft ID dashboard.
-     * @return Asset|null
-     */
-    public function getMsa()
-    {
-        if ($this->msaAssetId) {
-            return Asset::findOne($this->msaAssetId);
-        }
-
-        return null;
-    }
-
-    /**
-     * @param array|string $ids
-     */
-    public function setMsaAssetIdFromPost($ids)
-    {
-        $this->msaAssetId = $ids ? $ids[0] : null;
     }
 
     /**
