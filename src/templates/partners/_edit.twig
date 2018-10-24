@@ -165,12 +165,18 @@
             on: partner.hasFullTimeDev,
         }) }}
 
-        {{ forms.textField({
-            type: 'number',
+        {{ forms.selectField({
             label: 'Agency Size',
             required: true,
             id: 'agencySize',
             name: 'agencySize',
+            options: {
+                '': 'Select one',
+                'XS': '1-2',
+                'S': '3-9',
+                'M': '10-29',
+                'L': '30+'
+            },
             value: partner.agencySize,
             errors: partner.getErrors('agencySize'),
         }) }}

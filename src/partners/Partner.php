@@ -262,7 +262,6 @@ class Partner extends Element
         ];
 
         $rules[] = ['primaryContactEmail', 'email'];
-        $rules[] = ['agencySize', 'number'];
         $rules[] = ['verificationStartDate', 'date', 'format' => 'Y-m-d'];
 
         return $rules;
