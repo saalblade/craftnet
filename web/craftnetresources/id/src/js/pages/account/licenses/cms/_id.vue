@@ -83,7 +83,7 @@
         },
 
         mounted() {
-            this.$root.renewLicense = this.license
+            this.$store.dispatch('app/setRenewLicense', this.license)
         }
 
     }

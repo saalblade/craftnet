@@ -7,8 +7,12 @@ Vue.use(Vuex)
  * State
  */
 const state = {
+    loading: true,
     notification: null,
     stripeAccountLoading: true,
+    invoicesLoading: true,
+    showRenewLicensesModal: false,
+    renewLicense: null,
 }
 
 /**
@@ -25,6 +29,22 @@ const actions = {
 
     setStripeAccountLoading({commit}, loading) {
         commit('updateStripeAccountLoading', loading)
+    },
+
+    setInvoicesLoading({commit}, loading) {
+        commit('updateInvoicesLoading', loading)
+    },
+
+    setShowRenewLicensesModal({commit}, loading) {
+        commit('updateShowRenewLicensesModal', loading)
+    },
+
+    setLoading({commit}, loading) {
+        commit('updateLoading', loading)
+    },
+
+    setRenewLicense({commit}, loading) {
+        commit('updateRenewLicense', loading)
     },
 
     /**
@@ -72,6 +92,22 @@ const mutations = {
 
     updateStripeAccountLoading(state, loading) {
         state.stripeAccountLoading = loading
+    },
+
+    updateInvoicesLoading(state, loading) {
+        state.invoicesLoading = loading
+    },
+
+    updateShowRenewLicensesModal(state, show) {
+        state.showRenewLicensesModal = show
+    },
+
+    updateLoading(state, loading) {
+        state.loading = loading
+    },
+
+    updateRenewLicense(state, license) {
+        state.renewLicense = license
     },
 
     updateNotification(state, notification) {

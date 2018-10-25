@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="$root.invoicesLoading" class="spinner"></div>
+        <div v-if="invoicesLoading" class="spinner"></div>
 
         <template v-else>
             <p><router-link class="nav-link" to="/account/billing" exact>← Billing</router-link></p>
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import BillingAddress from '../../../../components/BillingAddress'
     import CardIcon from '../../../../components/CardIcon'
     import CmsLicensesTable from '../../../../components/CmsLicensesTable'
@@ -114,6 +114,10 @@
         },
 
         computed: {
+
+            ...mapState({
+                invoicesLoading: state => state.app.invoicesLoading,
+            }),
 
             ...mapGetters({
                 getInvoiceByNumber: 'account/getInvoiceByNumber',

@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <auth-manager ref="authManager"></auth-manager>
-        <renew-licenses-modal v-if="$root.showRenewLicensesModal" :license="$root.renewLicense" @cancel="$root.showRenewLicensesModal = false" />
+        <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$dispatch('setShowRenewLicensesModal', false)" />
 
         <template v-if="notification">
             <div id="notifications-wrapper" :class="{'hide': !notification }">
@@ -11,7 +11,7 @@
             </div>
         </template>
 
-        <template v-if="$root.loading">
+        <template v-if="loading">
             <div class="text-center">
                 <div class="spinner big mt-8"></div>
             </div>
@@ -184,6 +184,9 @@
             ...mapState({
                 currentUser: state => state.account.currentUser,
                 notification: state => state.app.notification,
+                showRenewLicensesModal: state => state.app.showRenewLicensesModal,
+                loading: state => state.app.loading,
+                renewLicense: state => state.app.renewLicense,
             }),
 
             ...mapGetters({
@@ -249,7 +252,7 @@
 
         created() {
             this.$store.dispatch('craftId/getCraftIdData').then(() => {
-                this.$root.loading = false;
+                this.$store.dispatch('app/setLoading', false)
             });
 
             if (window.stripeAccessToken) {
@@ -265,10 +268,10 @@
 
             this.$store.dispatch('account/getInvoices')
                 .then(() => {
-                    this.$root.invoicesLoading = false;
+                    this.$store.dispatch('app/setInvoicesLoading', false)
                 })
                 .catch(() => {
-                    this.$root.invoicesLoading = false;
+                    this.$store.dispatch('app/setInvoicesLoading', false)
                 });
 
             if(window.sessionNotice) {

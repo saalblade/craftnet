@@ -32,7 +32,7 @@
             <div class="card-body">
                 <h4>Invoices</h4>
 
-                <div v-if="$root.invoicesLoading" class="spinner"></div>
+                <div v-if="invoicesLoading" class="spinner"></div>
 
                 <template v-else>
                     <invoices-table v-if="invoices && invoices.length > 0" :invoices="invoices"></invoices-table>
@@ -65,6 +65,7 @@
             ...mapState({
                 invoices: state => state.account.invoices,
                 upcomingInvoice: state => state.account.upcomingInvoice,
+                invoicesLoading: state => state.account.invoicesLoading,
             }),
 
         },

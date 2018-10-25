@@ -33,11 +33,7 @@ window.craftIdApp = new Vue({
 
     data() {
         return {
-            invoicesLoading: true,
-            loading: true,
             notification: null,
-            renewLicense: null,
-            showRenewLicensesModal: false,
         }
     },
 

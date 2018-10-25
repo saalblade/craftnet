@@ -99,7 +99,7 @@
                 <h4>Updates</h4>
                 <license-update-message :license="license" />
 
-                <button @click="$root.showRenewLicensesModal = true" class="btn btn-secondary">Renew your license…</button>
+                <button @click="$dispatch('app/setShowRenewLicensesModal', true)" class="btn btn-secondary">Renew your license…</button>
 
                 <!--<template v-else>-->
                     <!--<hr>-->
