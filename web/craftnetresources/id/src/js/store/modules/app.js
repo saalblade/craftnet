@@ -8,6 +8,7 @@ Vue.use(Vuex)
  */
 const state = {
     notification: null,
+    stripeAccountLoading: true,
 }
 
 /**
@@ -21,6 +22,10 @@ const getters = {
  * Actions
  */
 const actions = {
+
+    setStripeAccountLoading({commit}, loading) {
+        commit('updateStripeAccountLoading', loading)
+    },
 
     /**
      *  Displays an error.
@@ -64,6 +69,10 @@ const actions = {
  * Mutations
  */
 const mutations = {
+
+    updateStripeAccountLoading(state, loading) {
+        state.stripeAccountLoading = loading
+    },
 
     updateNotification(state, notification) {
         state.notification = notification;

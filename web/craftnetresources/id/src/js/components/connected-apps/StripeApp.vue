@@ -6,7 +6,7 @@
             :account-name="(stripeAccount ? stripeAccount.display_name : '')"
             :connected="stripeAccount"
             :buttonLoading="disconnectLoading"
-            :loading="loading"
+            :loading="stripeAccountLoading"
             @connect="connect()"
             @disconnect="disconnect()"
     ></connected-app>
@@ -36,11 +36,8 @@
 
             ...mapState({
                 stripeAccount: state => state.account.stripeAccount,
+                stripeAccountLoading: state => state.app.stripeAccountLoading,
             }),
-
-            loading() {
-                return this.$root.stripeAccountLoading;
-            },
 
             stripeConnectUrl() {
                 return window.stripeConnectUrl;

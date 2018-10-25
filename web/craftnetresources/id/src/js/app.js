@@ -34,7 +34,6 @@ window.craftIdApp = new Vue({
     data() {
         return {
             invoicesLoading: true,
-            stripeAccountLoading: true,
             loading: true,
             notification: null,
             renewLicense: null,

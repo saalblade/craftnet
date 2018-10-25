@@ -255,12 +255,12 @@
             if (window.stripeAccessToken) {
                 this.$store.dispatch('account/getStripeAccount')
                     .then(() => {
-                        this.$root.stripeAccountLoading = false;
+                        this.$store.dispatch('app/setStripeAccountLoading', false)
                     }, () => {
-                        this.$root.stripeAccountLoading = false;
+                        this.$store.dispatch('app/setStripeAccountLoading', false)
                     });
             } else {
-                this.$root.stripeAccountLoading = false;
+                this.$store.dispatch('app/setStripeAccountLoading', false)
             }
 
             this.$store.dispatch('account/getInvoices')
