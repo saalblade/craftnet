@@ -101,9 +101,9 @@
 
                     if (newEmail) {
                         this.userDraft.email = this.currentUser.email;
-                        this.$root.displayNotice('You’ve been sent an email to verify your new email address.');
+                        this.$store.dispatch('app/displayNotice', 'You’ve been sent an email to verify your new email address.');
                     } else {
-                        this.$root.displayNotice('Settings saved.');
+                        this.$store.dispatch('app/displayNotice', 'Settings saved.');
                     }
 
                     this.password = '';
@@ -113,7 +113,7 @@
                     this.loading = false;
 
                     const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.';
-                    this.$root.displayError(errorMessage);
+                    this.$store.dispatch('app/displayError', errorMessage);
 
                     this.errors = response.data && response.data.errors ? response.data.errors : {};
                 });

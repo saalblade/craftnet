@@ -123,7 +123,7 @@
                 const invoice = this.getInvoiceByNumber(this.$route.params.number)
 
                 if(!invoice) {
-                    this.$root.displayError("Couldn’t find invoice.")
+                    this.$store.dispatch('app/displayError', "Couldn’t find invoice.")
                     this.$router.push({path: '/account/billing'})
                 }
 

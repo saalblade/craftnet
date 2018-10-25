@@ -72,12 +72,12 @@
 
                         this.notice = true
                         this.loading = false
-                        this.$root.displayNotice('API token generated.')
+                        this.$store.dispatch('app/displayNotice', 'API token generated.')
                     })
                     .catch(response => {
                         this.loading = false
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t generate API token.'
-                        this.$root.displayError(errorMessage)
+                        this.$store.dispatch('app/displayError', errorMessage)
                     });
             },
 

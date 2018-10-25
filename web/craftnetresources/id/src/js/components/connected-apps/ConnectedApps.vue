@@ -127,12 +127,12 @@
                 this.$store.dispatch('account/disconnectApp', provider)
                     .then(response => {
                         this.loading[provider] = false;
-                        this.$root.displayNotice('App disconnected.');
+                        this.$store.dispatch('app/displayNotice', 'App disconnected.');
                     }).catch(response => {
                     this.loading[provider] = false;
 
                     const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t disconnect app.';
-                    this.$root.displayError(errorMessage);
+                    this.$store.dispatch('app/displayError', errorMessage);
 
                     this.errors = response.data && response.data.errors ? response.data.errors : {};
                 });

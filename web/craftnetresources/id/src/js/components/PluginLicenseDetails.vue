@@ -276,11 +276,11 @@
                     notes: this.licenseDraft.notes,
                 }).then(data => {
                     cb();
-                    this.$root.displayNotice('License saved.');
+                    this.$store.dispatch('app/displayNotice', 'License saved.');
                 }).catch(response => {
                     cbError();
                     const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
-                    this.$root.displayError(errorMessage)
+                    this.$store.dispatch('app/displayError', errorMessage)
                 });
             },
 
@@ -294,14 +294,14 @@
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then((data) => {
                     if (this.licenseDraft.autoRenew) {
-                        this.$root.displayNotice('Auto renew enabled.');
+                        this.$store.dispatch('app/displayNotice', 'Auto renew enabled.');
                     } else {
-                        this.$root.displayNotice('Auto renew disabled.');
+                        this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
                     }
 
                     this.$store.dispatch('licenses/getCmsLicenses');
                 }).catch((data) => {
-                    this.$root.displayError('Couldn’t save license.');
+                    this.$store.dispatch('app/displayError', 'Couldn’t save license.');
                     this.errors = data.errors;
                 });
             },

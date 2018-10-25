@@ -110,6 +110,7 @@
         },
 
         methods: {
+
             savePluginLicenseAutoRenew(license, $event) {
                 if(!license.key) {
                     return false;
@@ -125,17 +126,18 @@
                 this.$store.dispatch('licenses/savePluginLicense', data)
                     .then(response => {
                         if (autoRenew) {
-                            this.$root.displayNotice('Auto renew enabled.');
+                            this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
                         } else {
-                            this.$root.displayNotice('Auto renew disabled.');
+                            this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
                         }
 
                         this.$store.dispatch('licenses/getCmsLicenses');
                     }).catch(response => {
-                    this.$root.displayError('Couldn’t save license.');
+                    this.$store.dispatch('app/displayError', 'Couldn’t save license.');
                     this.errors = response.errors;
                 });
             }
+
         },
 
         mounted() {

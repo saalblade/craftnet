@@ -87,6 +87,7 @@
         },
 
         methods: {
+
             checkCmsLicense() {
                 if(this.cmsLicenseKey.length === 258) {
                     return true;
@@ -114,13 +115,13 @@
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('account/getInvoices');
-                        this.$root.displayNotice('CMS license claimed.');
+                        this.$store.dispatch('app/displayNotice', 'CMS license claimed.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })
                     .catch(response => {
                         this.cmsLicenseLoading = false;
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim CMS license.';
-                        this.$root.displayError(errorMessage);
+                        this.$store.dispatch('app/displayError', errorMessage);
                     });
             },
 
@@ -131,13 +132,13 @@
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('account/getInvoices');
-                        this.$root.displayNotice('CMS license claimed.');
+                        this.$store.dispatch('app/displayNotice', 'CMS license claimed.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })
                     .catch(response => {
                         this.cmsLicenseFileLoading = false;
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim CMS license.';
-                        this.$root.displayError(errorMessage);
+                        this.$store.dispatch('app/displayError', errorMessage);
                     });
             },
 
@@ -150,12 +151,12 @@
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('account/getInvoices');
-                        this.$root.displayNotice('Verification email sent to ' + this.email + '.');
+                        this.$store.dispatch('app/displayNotice', 'Verification email sent to ' + this.email + '.');
                     })
                     .catch(response => {
                         this.emailLoading = false;
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim licenses.';
-                        this.$root.displayError(errorMessage);
+                        this.$store.dispatch('app/displayError', errorMessage);
                     });
             },
 
@@ -168,13 +169,13 @@
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('account/getInvoices');
-                        this.$root.displayNotice('Plugin license claimed.');
+                        this.$store.dispatch('app/displayNotice', 'Plugin license claimed.');
                         this.$router.push({path: '/account/licenses/plugins'});
                     })
                     .catch(response => {
                         this.pluginLicenseLoading = false;
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim plugin license.';
-                        this.$root.displayError(errorMessage);
+                        this.$store.dispatch('app/displayError', errorMessage);
                     });
             },
 

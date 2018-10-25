@@ -65,7 +65,7 @@
 
                 this.$store.dispatch('account/disconnectStripeAccount').then(() => {
                     this.disconnectLoading = false;
-                    this.$root.displayNotice('Stripe account removed.');
+                    this.$store.dispatch('app/displayNotice', 'Stripe account removed.');
                 });
             }
 

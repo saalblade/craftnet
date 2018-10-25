@@ -87,7 +87,7 @@
                     card.clear();
                     this.cardFormloading = false;
                     this.editing = false;
-                    this.$root.displayNotice('Card saved.');
+                    this.$store.dispatch('app/displayNotice', 'Card saved.');
                 });
             },
 
@@ -98,7 +98,7 @@
                 this.removeCardLoading = true;
                 this.$store.dispatch('account/removeCard').then(response => {
                     this.removeCardLoading = false;
-                    this.$root.displayNotice('Card removed.')
+                    this.$store.dispatch('app/displayNotice', 'Card removed.')
                 })
             },
 

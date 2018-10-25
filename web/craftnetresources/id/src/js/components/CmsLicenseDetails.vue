@@ -176,12 +176,12 @@
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
                 }).then(response => {
                     if (this.licenseDraft.autoRenew) {
-                        this.$root.displayNotice('Auto renew enabled.')
+                        this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
                     } else {
-                        this.$root.displayNotice('Auto renew disabled.')
+                        this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
                     }
                 }).catch(response => {
-                    this.$root.displayError('Couldn’t save license.')
+                    this.$store.dispatch('app/displayError', 'Couldn’t save license.')
                     this.errors = response.data.errors
                 })
             },
@@ -200,12 +200,12 @@
                         this.licenseDraft.domain = newDomain
 
                         if(!newDomain) {
-                            this.$root.displayNotice(oldDomain + ' is not a public domain.');
+                            this.$store.dispatch('app/displayNotice', oldDomain + ' is not a public domain.');
                         } else {
-                            this.$root.displayNotice('Domain changed to ' + newDomain + '.')
+                            this.$store.dispatch('app/displayNotice', 'Domain changed to ' + newDomain + '.')
                         }
                     } else {
-                        this.$root.displayNotice('Domain saved.');
+                        this.$store.dispatch('app/displayNotice', 'Domain saved.');
                     }
 
                     this.domainLoading = false;
@@ -224,7 +224,7 @@
                 this.saveCmsLicense(() => {
                     this.notesLoading = false;
                     this.notesEditing = false;
-                    this.$root.displayNotice('Notes saved.');
+                    this.$store.dispatch('app/displayNotice', 'Notes saved.');
                 }, () => {
                     this.notesLoading = false;
                 });
@@ -246,7 +246,7 @@
                 }).catch(response => {
                     cbError();
                     const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
-                    this.$root.displayError(errorMessage)
+                    this.$store.dispatch('app/displayError', errorMessage)
                 });
             },
 
@@ -299,7 +299,7 @@
                 document.execCommand("copy");
                 $temp.remove();
 
-                this.$root.displayNotice('License key copied.');
+                this.$store.dispatch('app/displayNotice', 'License key copied.');
             },
 
         },

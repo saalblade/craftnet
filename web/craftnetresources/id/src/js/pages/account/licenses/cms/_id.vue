@@ -71,12 +71,12 @@
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('account/getInvoices');
-                        this.$root.displayNotice('CMS license released.');
+                        this.$store.dispatch('app/displayNotice', 'CMS license released.');
                         this.$router.push({path: '/account/licenses/cms'});
                     })
                     .catch(response => {
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release CMS license.';
-                        this.$root.displayError(errorMessage);
+                        this.$store.dispatch('app/displayError', errorMessage);
                     });
             }
 

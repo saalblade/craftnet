@@ -93,7 +93,7 @@
 
                     this.$store.dispatch('account/deleteUserPhoto')
                         .then(response => {
-                            this.$root.displayNotice('Photo deleted.');
+                            this.$store.dispatch('app/displayNotice', 'Photo deleted.');
                             this.userDraft.photoId = response.data.photoId;
                             this.userDraft.photoUrl = response.data.photoUrl;
                             this.photoLoading = false;
@@ -102,7 +102,7 @@
                             this.photoLoading = false;
 
                             const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t delete photo.';
-                            this.$root.displayError(errorMessage);
+                            this.$store.dispatch('app/displayError', errorMessage);
 
                             this.errors = response.data && response.data.errors ? response.data.errors : {};
                         })
@@ -139,7 +139,7 @@
 
                 this.$store.dispatch('account/uploadUserPhoto', data)
                     .then(response => {
-                        this.$root.displayNotice('Photo uploaded.');
+                        this.$store.dispatch('app/displayNotice', 'Photo uploaded.');
                         let photoUrl = response.data.photoUrl
                         this.userDraft.photoId = response.data.photoId;
                         this.userDraft.photoUrl = photoUrl + (photoUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000);
@@ -151,7 +151,7 @@
                         this.photoLoading = false;
 
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t upload photo.';
-                        this.$root.displayError(errorMessage);
+                        this.$store.dispatch('app/displayError', errorMessage);
 
                         this.errors = response.data && response.data.errors ? response.data.errors : {};
                     });
@@ -171,7 +171,7 @@
                         photoUrl: this.userDraft.photoUrl,
                     })
                     .then(response => {
-                        this.$root.displayNotice('Settings saved.');
+                        this.$store.dispatch('app/displayNotice', 'Settings saved.');
                         this.errors = {};
                         this.loading = false;
                     })
@@ -179,7 +179,7 @@
                         this.loading = false;
 
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save profile.';
-                        this.$root.displayError(errorMessage);
+                        this.$store.dispatch('app/displayError', errorMessage);
 
                         this.errors = response.data && response.data.errors ? response.data.errors : {};
                     });

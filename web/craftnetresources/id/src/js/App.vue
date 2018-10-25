@@ -3,10 +3,10 @@
         <auth-manager ref="authManager"></auth-manager>
         <renew-licenses-modal v-if="$root.showRenewLicensesModal" :license="$root.renewLicense" @cancel="$root.showRenewLicensesModal = false" />
 
-        <template v-if="$root.notification">
-            <div id="notifications-wrapper" :class="{'hide': !$root.notification }">
+        <template v-if="notification">
+            <div id="notifications-wrapper" :class="{'hide': !notification }">
                 <div id="notifications">
-                    <div class="notification" :class="$root.notification.type">{{ $root.notification.message }}</div>
+                    <div class="notification" :class="notification.type">{{ notification.message }}</div>
                 </div>
             </div>
         </template>
@@ -183,6 +183,7 @@
 
             ...mapState({
                 currentUser: state => state.account.currentUser,
+                notification: state => state.app.notification,
             }),
 
             ...mapGetters({
@@ -271,11 +272,11 @@
                 });
 
             if(window.sessionNotice) {
-                this.$root.displayNotice(window.sessionNotice);
+                this.$store.dispatch('app/displayNotice', window.sessionNotice);
             }
 
             if(window.sessionError) {
-                this.$root.displayError(window.sessionError);
+                this.$store.dispatch('app/displayError', window.sessionError);
             }
         }
     }

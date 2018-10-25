@@ -383,7 +383,7 @@
                         this.loadingRepository = null;
 
                         if (response.data.error) {
-                            this.$root.displayError(response.data.error);
+                            this.$store.dispatch('app/displayError', response.data.error);
                         } else {
                             this.pluginDraft.repository = repositoryUrl;
 
@@ -430,7 +430,7 @@
                     })
                     .catch(response => {
                         this.repositoryLoading = false;
-                        this.$root.displayError("Couldn’t load repository");
+                        this.$store.dispatch('app/displayError', "Couldn’t load repository");
                     });
             },
 
@@ -484,13 +484,13 @@
 
                 this.$store.dispatch('developers/savePlugin', {plugin}).then(response => {
                     this.loading = false;
-                    this.$root.displayNotice('Plugin saved.');
+                    this.$store.dispatch('app/displayNotice', 'Plugin saved.');
                     this.$router.push({path: '/developer/plugins'});
                 }).catch(response => {
                     this.loading = false;
 
                     const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save plugin.';
-                    this.$root.displayError(errorMessage);
+                    this.$store.dispatch('app/displayError', errorMessage);
 
                     this.errors = response.data && response.data.errors ? response.data.errors : {};
                 });
@@ -503,12 +503,12 @@
                 this.pluginSubmitLoading = true;
                 this.$store.dispatch('developers/submitPlugin', this.plugin.id).then(response => {
                     this.pluginSubmitLoading = false;
-                    this.$root.displayNotice('Plugin submitted for approval.');
+                    this.$store.dispatch('app/displayNotice', 'Plugin submitted for approval.');
                 }).catch(response => {
                     this.pluginSubmitLoading = false;
 
                     const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t submit plugin for approval.';
-                    this.$root.displayError(errorMessage);
+                    this.$store.dispatch('app/displayError', errorMessage);
 
                     this.errors = response.data && response.data.errors ? response.data.errors : {};
                 })

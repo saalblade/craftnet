@@ -52,7 +52,7 @@ window.craftIdApp = new Vue({
         connectAppCallback(apps) {
             this.$store.dispatch('account/connectAppCallback', apps);
 
-            this.$root.displayNotice('App connected.');
+            this.$store.dispatch('app/displayNotice', 'App connected.');
         },
 
         /**

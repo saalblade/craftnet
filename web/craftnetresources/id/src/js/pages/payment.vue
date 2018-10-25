@@ -115,12 +115,12 @@
                             .then(() => {
                                 this.processPayment()
                                     .then(() => {
-                                        this.$root.displayNotice('Payment processed.')
+                                        this.$store.dispatch('app/displayNotice', 'Payment processed.')
                                         this.payLoading = false
                                         this.$router.push({path: '/thank-you'});
                                     })
                                     .catch(() => {
-                                        this.$root.displayError('Couldn’t process payment.')
+                                        this.$store.dispatch('app/displayError', 'Couldn’t process payment.')
                                         this.payLoading = false
                                     })
                             })
@@ -135,12 +135,12 @@
 
                                 this.errors = errors;
 
-                                this.$root.displayError('Couldn’t save billing infos.')
+                                this.$store.dispatch('app/displayError', 'Couldn’t save billing infos.')
                                 this.payLoading = false
                             })
                     })
                     .catch((error) => {
-                        this.$root.displayError('Couldn’t save payment method.')
+                        this.$store.dispatch('app/displayError', 'Couldn’t save payment method.')
                         this.payLoading = false
                         throw error;
                     })
