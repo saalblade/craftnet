@@ -33,7 +33,6 @@ window.craftIdApp = new Vue({
 
     data() {
         return {
-            notification: null,
         }
     },
 
@@ -48,41 +47,6 @@ window.craftIdApp = new Vue({
             this.$store.dispatch('account/connectAppCallback', apps);
 
             this.$store.dispatch('app/displayNotice', 'App connected.');
-        },
-
-        /**
-         *  Displays an error.
-         *
-         * @param {string} message
-         */
-        displayNotice(message) {
-            this.displayNotification('success', message);
-        },
-
-        /**
-         *  Displays an error.
-         *
-         * @param {string} message
-         */
-        displayError(message) {
-            this.displayNotification('error', message);
-        },
-
-        /**
-         *  Displays a notification.
-         *
-         * @param {string} type
-         * @param {string} message
-         */
-        displayNotification(type, message) {
-            this.notification = {
-                type: type,
-                message: message
-            };
-
-            setTimeout(function() {
-                this.notification = null;
-            }.bind(this), 2000);
         },
 
     },
