@@ -244,7 +244,6 @@ class Partner extends Element
 
         $rules[] = [
             [
-                'businessName',
                 'ownerId'
             ],
             'required',
@@ -252,6 +251,7 @@ class Partner extends Element
 
         $rules[] = [
             [
+                'businessName',
                 'region',
                 'primaryContactName',
                 'primaryContactEmail',
@@ -634,6 +634,6 @@ class Partner extends Element
      */
     public function __toString()
     {
-        return $this->businessName;
+        return $this->businessName ?? $this->getOwner()->getName();
     }
 }
