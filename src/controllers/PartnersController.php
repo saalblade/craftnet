@@ -4,7 +4,9 @@ namespace craftnet\controllers;
 
 use Craft;
 use craft\base\Element;
+use craft\elements\User;
 use craft\web\Controller;
+use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use craftnet\partners\Partner;
 use craftnet\partners\PartnerAsset;
@@ -51,11 +53,9 @@ class PartnersController extends Controller
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
-        $partner = Partner::find()->ownerId(Craft::$app->getUser()->id);
-
-        if (!$partner) {
-            throw new NotFoundHttpException('Partner not found');
-        }
+        /** @var User|UserBehavior $user */
+        $user = Craft::$app->getUser()->getIdentity();
+        $partner = $user->getPartner();
 
         return $this->asJson($partner);
     }
