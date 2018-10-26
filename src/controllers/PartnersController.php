@@ -51,12 +51,7 @@ class PartnersController extends Controller
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
-        $criteria = [
-            'enabledForSite' => null,
-            'ownerId' => Craft::$app->getUser()->id
-        ];
-
-        $partner = Partner::findOne($criteria);
+        $partner = Partner::find()->ownerId(Craft::$app->getUser()->id);
 
         if (!$partner) {
             throw new NotFoundHttpException('Partner not found');
