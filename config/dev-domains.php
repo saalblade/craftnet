@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'aanpqa.com',
     'alwaysdata.net',
     'amazonaws.com',
     'azure.com',
@@ -16,6 +17,7 @@ return [
     'craftcms.com',
     'crudecode.com',
     'designandbuildsandbox.com',
+    'development-client-server.com',
     'devhandle.com',
     'devprevu.com',
     'digitalliondev.com',
@@ -73,6 +75,8 @@ return [
     'the-neighbourhood-staging.com',
     'umstesting.com',
     'vrielingdev.nl',
+    'wave-dev.com',
+    'wave-stage.com',
     'websitetestlink.com',
     'xip.io',
     'yourstruly.space',

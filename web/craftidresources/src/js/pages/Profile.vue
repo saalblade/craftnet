@@ -4,8 +4,6 @@
 
 		<div class="card mb-3">
 			<div class="card-body">
-				<h4>Informations</h4>
-
 				<text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
 				<url-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
 				<text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />

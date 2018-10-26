@@ -107,6 +107,10 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
             // make sure all the constraints are valid
             $vp = new VersionParser();
             foreach ($release->require as $depName => $constraints) {
+                if (trim($constraints) === 'self.version') {
+                    $constraints = $release->version;
+                }
+
                 try {
                     $vp->parseConstraints($constraints);
                 } catch (\UnexpectedValueException $e) {
@@ -115,6 +119,12 @@ abstract class BaseVcs extends BaseObject implements VcsInterface
                     return false;
                 }
             }
+        }
+
+        if ($this->package->getIsPlugin() && !isset($release->require['craftcms/cms'])) {
+            Craft::warning("Ignoring package version {$this->package->name}:{$release->version} due to missing craftcms/cms constraints in composer.json", __METHOD__);
+            $release->invalidate('missing craftcms/cms constraints');
+            return false;
         }
 
         if (isset($config['conflict'])) {

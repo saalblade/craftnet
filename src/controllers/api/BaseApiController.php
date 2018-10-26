@@ -13,6 +13,7 @@ use craft\web\Controller;
 use craftnet\cms\CmsLicense;
 use craftnet\cms\CmsLicenseManager;
 use craftnet\developers\UserBehavior;
+use craftnet\errors\ExpiredTokenException;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\errors\ValidationException;
 use craftnet\helpers\KeyHelper;
@@ -23,6 +24,7 @@ use craftnet\plugins\PluginLicense;
 use JsonSchema\Validator;
 use stdClass;
 use yii\base\Exception;
+use yii\base\InvalidArgumentException;
 use yii\base\Model;
 use yii\base\UserException;
 use yii\db\Expression;
@@ -471,9 +473,9 @@ abstract class BaseApiController extends Controller
                 ], false)
                 ->execute();
 
-            if ($response->getStatusCode() != 400) {
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 500 && $statusCode < 600) {
                 try {
-
                     $body = 'RequestId: '.$this->requestId.PHP_EOL.PHP_EOL.
                         'Type: '.$exceptionType.PHP_EOL.PHP_EOL.
                         'Message: '.$exceptionMessage.PHP_EOL.PHP_EOL.
@@ -521,11 +523,17 @@ abstract class BaseApiController extends Controller
      * @param string|null $schema JSON schema to validate the body with (optional)
      *
      * @return stdClass|array
+     * @throws BadRequestHttpException if the request body isn't valid JSON
      * @throws ValidationException if the data doesn't validate
      */
     protected function getPayload(string $schema = null)
     {
-        $payload = (object)Json::decode(Craft::$app->getRequest()->getRawBody(), false);
+        $body = Craft::$app->getRequest()->getRawBody();
+        try {
+            $payload = (object)Json::decode($body, false);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException('Request body is not valid JSON', 0, $e);
+        }
 
         if ($schema !== null && !$this->validatePayload($payload, $schema, $errors)) {
             throw new ValidationException($errors);
@@ -671,6 +679,10 @@ abstract class BaseApiController extends Controller
      */
     protected function getAuthUser()
     {
+        if ($user = Craft::$app->getUser()->getIdentity()) {
+            return $user;
+        }
+
         try {
             if (
                 ($accessToken = OauthServer::getInstance()->getAccessTokens()->getAccessTokenFromRequest()) &&
@@ -679,6 +691,8 @@ abstract class BaseApiController extends Controller
             ) {
                 return $user;
             }
+        } catch (ExpiredTokenException $e) {
+            throw new BadRequestHttpException($e->getMessage());
         } catch (\InvalidArgumentException $e) {
         }
 

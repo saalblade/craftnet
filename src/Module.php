@@ -68,13 +68,13 @@ class Module extends \yii\base\Module
 
         // define custom behaviors
         Event::on(UserQuery::class, UserQuery::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
-            $e->behaviors[] = UserQueryBehavior::class;
+            $e->behaviors['cn.userQuery'] = UserQueryBehavior::class;
         });
         Event::on(User::class, User::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
-            $e->behaviors[] = UserBehavior::class;
+            $e->behaviors['cn.user'] = UserBehavior::class;
         });
         Event::on(Order::class, Order::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
-            $e->behaviors[] = OrderBehavior::class;
+            $e->behaviors['cn.order'] = OrderBehavior::class;
         });
 
         // register custom component types
@@ -199,7 +199,7 @@ class Module extends \yii\base\Module
             $e->navItems[] = [
                 'url' => 'plugins',
                 'label' => 'Plugins',
-                'icon' => 'plugin',
+                'fontIcon' => 'plugin',
             ];
 
             $e->navItems[] = [

@@ -75,7 +75,7 @@ return [
         'components' => [
             'errorHandler' => [
                 'memoryReserveSize' => 1024000
-            ]
+            ],
         ],
     ],
     'prod' => [
@@ -100,6 +100,7 @@ return [
             'queue' => [
                 'class' => pixelandtonic\yii\queue\sqs\Queue::class,
                 'url' => getenv('SQS_URL'),
+                'messageGroupId' => getenv('SQS_MESSAGE_GROUP_ID'),
                 'client' => [
                     'region' => getenv('REGION'),
                     'version' => '2012-11-05',
@@ -128,7 +129,12 @@ return [
                             'class' => craftnet\logs\DbTarget::class,
                             'logTable' => 'apilog.logs',
                             'levels' => !YII_DEBUG ? yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING : yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING | yii\log\Logger::LEVEL_INFO | yii\log\Logger::LEVEL_TRACE | yii\log\Logger::LEVEL_PROFILE,
-                        ]
+                        ],
+                        [
+                            'class' => craft\log\FileTarget::class,
+                            'logFile' => getenv('CRAFT_STORAGE_PATH').'/logs/web.log',
+                            'levels' => !YII_DEBUG ? yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING : yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING | yii\log\Logger::LEVEL_INFO | yii\log\Logger::LEVEL_TRACE | yii\log\Logger::LEVEL_PROFILE,
+                        ],
                     ],
                 ]);
 

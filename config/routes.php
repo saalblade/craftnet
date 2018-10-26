@@ -34,6 +34,7 @@ return [
         'GET     v1/countries' => 'craftnet/api/v1/countries',
         'GET     v1/developer/<userId:\d+>' => 'craftnet/api/v1/developer',
         'POST    v1/optimize-composer-reqs' => 'craftnet/api/v1/optimize-composer-reqs',
+        'POST    v1/composer-whitelist' => 'craftnet/api/v1/composer-whitelist',
         'POST    v1/payments' => 'craftnet/api/v1/payments/pay',
         'GET     v1/plugin-licenses' => 'craftnet/api/v1/plugin-licenses/list',
         'POST    v1/plugin-licenses' => 'craftnet/api/v1/plugin-licenses/create',
@@ -66,6 +67,8 @@ return [
         'oauth/authorize' => 'oauth-server/oauth/authorize',
         'oauth/access-token' => 'oauth-server/oauth/access-token',
         'oauth/revoke' => 'oauth-server/oauth/revoke',
+
+        'GET     sync-staging' => 'craftnet/jobs/sync-staging',
 
         // Catch-all route for Vue when people reload the page.
         'login'=> ['template' => 'login'],

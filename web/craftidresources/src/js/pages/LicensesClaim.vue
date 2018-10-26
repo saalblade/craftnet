@@ -4,10 +4,9 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <h3>Claim CMS license</h3>
+                <h3>Claim a Craft CMS license</h3>
                 <p class="text-secondary">Attach a Craft CMS license to your Craft ID account.</p>
 
-                <h5>By license key</h5>
                 <form class="mb-6" @submit.prevent="claimCmsLicense()">
                     <textarea-field id="cmsLicenseKey" class="mono" spellcheck="false" v-model="cmsLicenseKey" @input="cmsLicenseKeyChange" label="Craft CMS License Key" rows="5" />
                     <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !cmsLicenseValidates }" :disabled="!cmsLicenseValidates" />
@@ -16,10 +15,9 @@
 
                 <hr>
 
-                <h5>By license file</h5>
                 <form @submit.prevent="claimCmsLicenseFile()">
                     <div class="form-group">
-                        <label for="licenseFile" class="block">Craft CMS License File</label>
+                        <label for="licenseFile" class="block">Or upload your license.key file</label>
                         <input class="form-control" type="file" id="licenseFile" name="licenseFile" ref="licenseFile" @change="cmsLicenseFileChange" />
                     </div>
 
@@ -31,7 +29,7 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <h3>Claim Plugin license</h3>
+                <h3>Claim a plugin license</h3>
                 <p class="text-secondary">Attach a plugin license to your Craft ID account.</p>
 
                 <form @submit.prevent="claimPluginLicense()">
@@ -44,7 +42,7 @@
 
         <div class="card">
             <div class="card-body">
-                <h3>Claim licenses by email address</h3>
+                <h3>Claim licenses by your email address</h3>
                 <p class="text-secondary">Use an email address to attach Craft CMS and plugin licenses to your Craft ID account.</p>
 
                 <form @submit.prevent="claimLicensesByEmail()">

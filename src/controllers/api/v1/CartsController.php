@@ -55,7 +55,7 @@ class CartsController extends BaseApiController
             'currency' => 'USD',
             'paymentCurrency' => 'USD',
             'gatewayId' => getenv('STRIPE_GATEWAY_ID'),
-            'orderLocale' => Craft::$app->language
+            'orderLanguage' => Craft::$app->language,
         ]);
 
         $this->_updateCart($cart, $payload);
@@ -262,6 +262,9 @@ class CartsController extends BaseApiController
                             $lineItem->note = $item->note;
                         }
 
+                        // Todo: Update quantity from payload instead of forcing it to 1.
+                        $lineItem->qty = 1;
+
                         $cart->addLineItem($lineItem);
                     }
                 }
@@ -272,11 +275,6 @@ class CartsController extends BaseApiController
                 throw new ValidationException($errors);
             }
 
-            if (isset($payload->items)) {
-                // Since we are replacing all line items (not updating) we could be breaking uniqueness validation on the orders line items.
-                // We need to delete the line items in the database to stop the error.
-                $commerce->getLineItems()->deleteAllLineItemsByOrderId($cart->id);
-            }
             // save the cart
             if (!Craft::$app->getElements()->saveElement($cart)) {
                 throw new Exception('Could not save the cart: '.implode(', ', $cart->getErrorSummary(true)));
