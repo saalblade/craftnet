@@ -39,6 +39,33 @@ class PartnersController extends Controller
     }
 
     /**
+     * Fetches the parter for the currently logged in user.
+     * @return Response
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionFetchPartner()
+    {
+        $this->requireLogin();
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $criteria = [
+            'enabledForSite' => null,
+            'ownerId' => Craft::$app->getUser()->id
+        ];
+
+        $partner = Partner::findOne($criteria);
+
+        if (!$partner) {
+            throw new NotFoundHttpException('Partner not found');
+        }
+
+        return $this->asJson($partner);
+    }
+
+    /**
      * @param int|null $partnerId
      * @param Partner|null $partner
      * @return Response
