@@ -129,6 +129,11 @@ class Partner extends Element
     public $ownerId;
 
     /**
+     * @var string|null The partner business name
+     */
+    public $businessName;
+
+    /**
      * @var bool Partner profile is pending approval
      */
     public $pendingApproval;
