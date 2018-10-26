@@ -71,7 +71,7 @@ class PartnersController extends Controller
     {
         if ($partner === null) {
             if ($partnerId !== null) {
-                $partner = Partner::find()->id($partnerId)->status(null)->one();
+                $partner = Partner::find()->id($partnerId)->anyStatus()->one();
 
                 if ($partner === null) {
                     throw new NotFoundHttpException('Invalid partner ID: '.$partnerId);
