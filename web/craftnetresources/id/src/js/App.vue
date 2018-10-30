@@ -85,16 +85,16 @@
                 <div class="flex-container">
                     <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
                         <h5>
-                            <router-link @click.native="closeSidebar()" to="/account/licenses">
+                            <router-link @click.native="closeSidebar()" to="/licenses">
                                 <font-awesome-icon icon="key" />
                                 Licenses
                             </router-link>
                         </h5>
                         <ul>
-                            <li><router-link @click.native="closeSidebar()" to="/account/licenses/cms">Craft CMS</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/account/licenses/plugins">Plugins</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/account/licenses/claim">Claim License</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/buy">Buy License</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/licenses/cms">Craft CMS</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/licenses/plugins">Plugins</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/licenses/claim">Claim License</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/licenses/buy">Buy License</router-link></li>
                         </ul>
 
                         <template v-if="userIsInGroup('developers')">

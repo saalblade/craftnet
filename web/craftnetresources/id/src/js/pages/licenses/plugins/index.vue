@@ -20,8 +20,8 @@
 
 <script>
     import {mapState, mapGetters} from 'vuex'
-    import LicenseRenewAlert from '../../../../components/LicenseRenewAlert';
-    import PluginLicensesTable from '../../../../components/PluginLicensesTable';
+    import LicenseRenewAlert from '../../../components/LicenseRenewAlert';
+    import PluginLicensesTable from '../../../components/PluginLicensesTable';
 
     export default {
 

@@ -1,24 +1,24 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import BillingIndex from '../pages/account/billing/index'
+import AccountBillingIndex from '../pages/account/billing/index'
 import AccountBillingInvoiceNumber from '../pages/account/billing/invoices/_number'
-import AccountLicensesClaim from '../pages/account/licenses/claim'
-import AccountLicensesCmsIndex from '../pages/account/licenses/cms/index'
-import AccountLicensesCmsId from '../pages/account/licenses/cms/_id'
-import AccountLicensesPluginsIndex from '../pages/account/licenses/plugins/index'
-import AccountLicensesPluginsId from '../pages/account/licenses/plugins/_id'
-import DeveloperSalesIndex from '../pages/developer/sales/index'
-import DeveloperSalesId from '../pages/developer/sales/_id'
-import DeveloperPluginsId from '../pages/developer/plugins/_id'
-import DeveloperPlugins from '../pages/developer/plugins/index'
-import DeveloperProfile from '../pages/developer/profile'
-import DeveloperSettings from '../pages/developer/settings'
 import AccountSettings from '../pages/account/settings'
-import Buy from '../pages/buy'
-import Cart from '../pages/cart'
-import Payment from '../pages/payment'
 import BuyPlugin from '../pages/buy-plugin/index'
 import BuyPluginMock from '../pages/buy-plugin/_mock'
+import Cart from '../pages/cart'
+import DeveloperPlugins from '../pages/developer/plugins/index'
+import DeveloperPluginsId from '../pages/developer/plugins/_id'
+import DeveloperProfile from '../pages/developer/profile'
+import DeveloperSalesId from '../pages/developer/sales/_id'
+import DeveloperSalesIndex from '../pages/developer/sales/index'
+import DeveloperSettings from '../pages/developer/settings'
+import LicensesBuy from '../pages/licenses/buy'
+import LicensesClaim from '../pages/licenses/claim'
+import LicensesCmsId from '../pages/licenses/cms/_id'
+import LicensesCmsIndex from '../pages/licenses/cms/index'
+import LicensesPluginsId from '../pages/licenses/plugins/_id'
+import LicensesPluginsIndex from '../pages/licenses/plugins/index'
+import Payment from '../pages/payment'
 import ThankYou from '../pages/thank-you'
 
 Vue.use(VueRouter);
@@ -35,15 +35,15 @@ const router = new VueRouter({
 
         {
             path: '/',
-            redirect: '/account/licenses',
+            redirect: '/licenses',
         },
         {
             path: '/account',
             redirect: '/account/billing',
         },
         {
-            path: '/account/licenses',
-            redirect: '/account/licenses/cms',
+            path: '/licenses',
+            redirect: '/licenses/cms',
         },
         {
             path: '/developer',
@@ -56,7 +56,7 @@ const router = new VueRouter({
         {
             path: '/account/billing',
             name: 'Billing',
-            component: BillingIndex
+            component: AccountBillingIndex
         },
         {
             path: '/account/billing/invoices/:number',
@@ -64,29 +64,24 @@ const router = new VueRouter({
             component: AccountBillingInvoiceNumber
         },
         {
-            path: '/account/licenses/cms',
-            component: AccountLicensesCmsIndex,
-        },
-        {
-            path: '/account/licenses/cms/:id',
-            component: AccountLicensesCmsId
-        },
-        {
-            path: '/account/licenses/plugins',
-            component: AccountLicensesPluginsIndex
-        },
-        {
-            path: '/account/licenses/plugins/:id',
-            component: AccountLicensesPluginsId
-        },
-        {
-            path: '/account/licenses/claim',
-            component: AccountLicensesClaim
-        },
-        {
             path: '/account/settings',
             name: 'AccountSettings',
             component: AccountSettings
+        },
+        {
+            path: '/buy-plugin/:handle/:edition',
+            name: 'BuyPlugin',
+            component: BuyPlugin
+        },
+        {
+            path: '/buy-plugin-mock/:handle/:edition',
+            name: 'BuyPluginMock',
+            component: BuyPluginMock
+        },
+        {
+            path: '/cart',
+            name: 'Cart',
+            component: Cart
         },
         {
             path: '/developer/plugins',
@@ -123,24 +118,29 @@ const router = new VueRouter({
             component: DeveloperSettings
         },
         {
-            path: '/buy',
-            name: 'Buy',
-            component: Buy
+            path: '/licenses/buy',
+            name: 'LicensesBuy',
+            component: LicensesBuy
         },
         {
-            path: '/buy-plugin-mock/:handle/:edition',
-            name: 'BuyPluginMock',
-            component: BuyPluginMock
+            path: '/licenses/claim',
+            component: LicensesClaim
         },
         {
-            path: '/buy-plugin/:handle/:edition',
-            name: 'BuyPlugin',
-            component: BuyPlugin
+            path: '/licenses/cms',
+            component: LicensesCmsIndex,
         },
         {
-            path: '/cart',
-            name: 'Cart',
-            component: Cart
+            path: '/licenses/cms/:id',
+            component: LicensesCmsId
+        },
+        {
+            path: '/licenses/plugins',
+            component: LicensesPluginsIndex
+        },
+        {
+            path: '/licenses/plugins/:id',
+            component: LicensesPluginsId
         },
         {
             path: '/payment',

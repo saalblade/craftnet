@@ -1,6 +1,6 @@
 <template>
     <div v-if="license">
-        <p><router-link class="nav-link" to="/account/licenses/plugins" exact>← Plugins</router-link></p>
+        <p><router-link class="nav-link" to="/licenses/plugins" exact>← Plugins</router-link></p>
         <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
 
         <plugin-license-details :license="license"></plugin-license-details>
@@ -20,9 +20,9 @@
 
 <script>
     import {mapState} from 'vuex'
-    import CmsLicensesTable from '../../../../components/CmsLicensesTable';
-    import PluginLicenseDetails from '../../../../components/PluginLicenseDetails';
-    import LicenseHistory from '../../../../components/LicenseHistory';
+    import CmsLicensesTable from '../../../components/CmsLicensesTable';
+    import PluginLicenseDetails from '../../../components/PluginLicenseDetails';
+    import LicenseHistory from '../../../components/LicenseHistory';
 
     export default {
 
@@ -60,7 +60,7 @@
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('account/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'Plugin license released.');
-                        this.$router.push({path: '/account/licenses/plugins'});
+                        this.$router.push({path: '/licenses/plugins'});
                     })
                     .catch(response => {
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release plugin license.';

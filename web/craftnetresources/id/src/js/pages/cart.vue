@@ -72,7 +72,7 @@
                             <font-awesome-icon icon="shopping-cart" class="text-5xl mb-4 text-grey" />
                             <div class="font-bold">Your cart is empty</div>
                             <div class="mt-4">
-                                <router-link class="btn btn-primary" to="/buy">Buy a license</router-link>
+                                <router-link class="btn btn-primary" to="/licenses/buy">Buy a license</router-link>
                             </div>
                         </div>
                     </div>
