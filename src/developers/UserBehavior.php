@@ -69,6 +69,7 @@ class UserBehavior extends Behavior
     {
         $partner = Partner::find()
             ->ownerId($this->owner->id)
+            ->status(null)
             ->one();
 
         if (!$partner) {
