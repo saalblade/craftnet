@@ -35,13 +35,14 @@ const devProfile = {
 }
 
 export default {
-    getPartnerProfile(id, cb, cbError) {
-        let response = {data: {}}
-        response.data.partnerProfile = Object.assign({}, devProfile)
-
-        setTimeout(() => {
-            cb(response)
-        }, 500)
+    getPartnerProfile(cb, cbError) {
+        axios.post(Craft.actionUrl + '/craftnet/partners/fetch-partner', null, {
+            headers: {
+                'X-CSRF-Token': Craft.csrfTokenValue,
+            }
+        })
+        .then(response => cb(response))
+        .catch(error => cbError(error.response));
     },
 
     patchPartnerProfile(patchObj, cb, cbError) {

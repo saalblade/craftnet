@@ -200,4 +200,72 @@ class PartnerService
 
         return $folderId;
     }
+
+    /**
+     * Returns an array representation of a Partner with all related data
+     * suitable for a public JSON response.
+     * @param Partner $partner
+     * @return array
+     */
+    public function serializePartner($partner)
+    {
+        $data = $partner->getAttributes([
+            'id',
+            'enabled',
+            'ownerId',
+            'businessName',
+            'pendingApproval',
+            'primaryContactName',
+            'primaryContactEmail',
+            'primaryContactPhone',
+            'fullBio',
+            'shortBio',
+            'agencySize',
+            'hasFullTimeDev',
+            'isCraftVerified',
+            'isCommerceVerified',
+            'isEnterpriseVerified',
+            'isRegisteredBusiness',
+            'expertise',
+            'verificationStartDate',
+            'region',
+            'capabilities',
+            'locations',
+            'projects',
+        ]);
+
+        // locations
+        /** @var PartnerLocation $location */
+        foreach($data['locations'] as $i => $location) {
+            $data['locations'][$i] = $location->getAttributes([
+                'title',
+                'addressLine1',
+                'addressLine2',
+                'city',
+                'state',
+                'zip',
+                'country',
+                'phone',
+                'email',
+            ]);
+        }
+
+        // projects
+        $this->eagerLoadProjectScreenshots($data['projects']);
+
+        /** @var PartnerProject $project */
+        foreach ($data['projects'] as $i => $project) {
+            $data['projects'][$i] = $project->getAttributes(['id', 'name', 'role', 'url', 'screenshots']);
+
+            /** @var Asset $screenshot */
+            foreach($data['projects'][$i]['screenshots'] as $ii => $screenshot) {
+                $data['projects'][$i]['screenshots'][$ii] = [
+                    'id' => $screenshot->id,
+                    'thumbUrl' => $screenshot->getThumbUrl(300),
+                ];
+            }
+        }
+
+        return $data;
+    }
 }

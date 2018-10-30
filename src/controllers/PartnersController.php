@@ -16,7 +16,6 @@ use craftnet\partners\PartnerService;
 use GuzzleHttp\Exception\RequestException;
 use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
-use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -56,8 +55,9 @@ class PartnersController extends Controller
         /** @var User|UserBehavior $user */
         $user = Craft::$app->getUser()->getIdentity();
         $partner = $user->getPartner();
+        $data = PartnerService::getInstance()->serializePartner($partner);
 
-        return $this->asJson($partner);
+        return $this->asJson($data);
     }
 
     /**
@@ -71,7 +71,7 @@ class PartnersController extends Controller
     {
         if ($partner === null) {
             if ($partnerId !== null) {
-                $partner = Partner::find()->id($partnerId)->anyStatus()->one();
+                $partner = Partner::find()->id($partnerId)->status(null)->one();
 
                 if ($partner === null) {
                     throw new NotFoundHttpException('Invalid partner ID: '.$partnerId);
