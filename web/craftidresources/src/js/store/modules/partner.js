@@ -30,9 +30,9 @@ const actions = {
             if (state.partnerProfile) {
                 resolve({data: {profile: state.partnerProfile}})
             } else {
-                partnerApi.getPartnerProfile(1, response => {
+                partnerApi.getPartnerProfile(response => {
                     if (response.data && !response.data.error) {
-                        commit(types.RECEIVE_PARTNER_PROFILE, response.data.partnerProfile)
+                        commit(types.RECEIVE_PARTNER_PROFILE, response.data.partner)
                         resolve(response)
                     } else {
                         reject(response)
@@ -49,7 +49,7 @@ const actions = {
                 patchObj,
                 response => {
                     if (response.data && !response.data.error) {
-                        commit(types.RECEIVE_PARTNER_PROFILE, response.data.partnerProfile)
+                        commit(types.RECEIVE_PARTNER_PROFILE, response.data.partner)
                         resolve(response)
                     } else {
                         reject(response)
@@ -67,8 +67,8 @@ const actions = {
 * Mutations
 */
 const mutations = {
-    [types.RECEIVE_PARTNER_PROFILE](state, partnerProfile) {
-        state.partnerProfile = partnerProfile
+    [types.RECEIVE_PARTNER_PROFILE](state, profile) {
+        state.profile = profile
     }
 }
 

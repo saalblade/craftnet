@@ -9,8 +9,9 @@
         <p v-if="loadState == LOAD_ERROR">{{ loadError }}</p>
 
         <div v-if="loadState == LOADED">
+            {{ partner }}
             <partner-business-info></partner-business-info>
-            <partner-locations></partner-locations>
+            <!-- <partner-locations></partner-locations> -->
         </div>
 	</div>
 </template>

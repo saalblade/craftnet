@@ -64,11 +64,11 @@
                                     </ul>
                                 </template>
 
-                                <template v-if="userIsInGroup('staff') && currentUser.enablePartnerFeatures">
+                                <template v-if="currentUser.enablePartnerFeatures">
                                     <h5><router-link @click.native="closeSidebar()" to="/partner"><i class="fa fa-handshake"></i> Partner</router-link></h5>
                                     <ul>
                                         <li><router-link @click.native="closeSidebar()" to="/partner/overview">Overview</router-link></li>
-                                        <li><router-link @click.native="closeSidebar()" to="/partner/info">Info</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/partner/profile">Profile</router-link></li>
                                     </ul>
                                 </template>
 

@@ -16,7 +16,7 @@ import Plugins from '../pages/Plugins'
 import Settings from '../pages/Settings'
 import DeveloperSettings from '../pages/DeveloperSettings'
 import PartnerOverview from '../pages/PartnerOverview'
-import PartnerInfo from '../pages/PartnerInfo'
+import PartnerProfile from '../pages/PartnerProfile'
 
 Vue.use(VueRouter);
 
@@ -127,9 +127,9 @@ const router = new VueRouter({
             component: PartnerOverview
         },
         {
-            path: '/partner/info',
-            name: 'PartnerInfo',
-            component: PartnerInfo
+            path: '/partner/profile',
+            name: 'PartnerProfile',
+            component: PartnerProfile
         }
     ]
 });

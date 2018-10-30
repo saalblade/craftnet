@@ -1,39 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const devProfile = {
-    agencySize: null,
-    businessName: '',
-    businessSummary: '',
-    capabilities: ['Commerce'],
-    craftSites: [],
-    locations: [{
-        title: 'First Location',
-        addressLine1: '100 Any Street',
-        addressLine2: 'Suite A',
-        businessCity: 'Any Town',
-        businessState: 'FL',
-        businessCountry: 'USA',
-        phone: '999-999-9999',
-        email: 'hello@sayhi.com',
-    },
-    {
-        title: 'First Location',
-        addressLine1: '100 Any Street',
-        addressLine2: 'Suite A',
-        businessCity: 'Any Town',
-        businessState: 'FL',
-        businessCountry: 'USA',
-        phone: '999-999-9999',
-        email: 'hello@sayhi.com',
-    }],
-    minimumBudget: null,
-    msaLink: '',
-    primaryContactName: '',
-    primaryEmail: '',
-    primaryPhone: '',
-}
-
 export default {
     getPartnerProfile(cb, cbError) {
         axios.post(Craft.actionUrl + '/craftnet/partners/fetch-partner', null, {
