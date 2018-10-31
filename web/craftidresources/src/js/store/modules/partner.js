@@ -9,7 +9,7 @@ Vue.use(Vuex)
 * State
 */
 const state = {
-    partnerProfile: null
+    partner: null
 }
 
 /**
@@ -25,14 +25,14 @@ const getters = {
 * Actions
 */
 const actions = {
-    initPartnerProfile({commit, state}) {
+    initPartner({commit, state}) {
         return new Promise((resolve, reject) => {
-            if (state.partnerProfile) {
-                resolve({data: {profile: state.partnerProfile}})
+            if (state.partner) {
+                resolve({data: {partner: state.partner}})
             } else {
-                partnerApi.getPartnerProfile(response => {
+                partnerApi.getPartner(response => {
                     if (response.data && !response.data.error) {
-                        commit(types.RECEIVE_PARTNER_PROFILE, response.data.partner)
+                        commit(types.RECEIVE_PARTNER, response.data.partner)
                         resolve(response)
                     } else {
                         reject(response)
@@ -42,24 +42,6 @@ const actions = {
                 })
             }
         })
-    },
-    patchPartnerProfile({commit, state}, patchObj) {
-        return new Promise((resolve, reject) => {
-            partnerApi.patchPartnerProfile(
-                patchObj,
-                response => {
-                    if (response.data && !response.data.error) {
-                        commit(types.RECEIVE_PARTNER_PROFILE, response.data.partner)
-                        resolve(response)
-                    } else {
-                        reject(response)
-                    }
-                },
-                response => {
-                    reject(response)
-                }
-            )
-        })
     }
 }
 
@@ -67,8 +49,8 @@ const actions = {
 * Mutations
 */
 const mutations = {
-    [types.RECEIVE_PARTNER_PROFILE](state, profile) {
-        state.profile = profile
+    [types.RECEIVE_PARTNER](state, partner) {
+        state.partner = partner
     }
 }
 

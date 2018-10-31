@@ -3,11 +3,13 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="flex">
-                    <div class="flex-1"><h4>Business Info</h4></div>
+                    <div class="flex-1"><h4>Profile</h4></div>
                     <div class="pl-4" v-if="!isEditing">
                         <button class="btn btn-secondary" @click="onEditClick"><i class="fa fa-pencil-alt"></i> Edit</button>
                     </div>
                 </div>
+
+                <!-- <pre>{{ partner }}</pre> -->
 
                 <div v-if="!isEditing">
                     <ul class="info-list list-reset">
@@ -23,37 +25,54 @@
                         <li v-if="partner.primaryContactPhone">
                             {{ partner.primaryContactPhone }}
                         </li>
-                        <li v-if="partner.businessSummary" class="mt-4">
-                            Business Summary:
-                            <p class="text-grey-darker text-sm p-2">
-                                {{ partner.businessSummary }}
-                            </p>
+                        <li v-if="partner.region">
+                            {{ partner.region }}
                         </li>
-                        <li v-if="partner.minimumBudget" class="mt-2">
-                            Minimum Budget: {{ partner.minimumBudget }}
+                        <li v-if="basicRequirementsList.length" class="mt-2">
+                            Basic Requirements:
+                            <ul class="text-sm text-grey-darker mt-2">
+                                <li v-for="(value, index) in basicRequirementsList" :key="index">{{ value }}</li>
+                            </ul>
+                        </li>
+                        <li v-if="partner.capabilities" class="mt-2 mb-2">
+                            Capabilities:
+                            <ul class="text-sm text-grey-darker mt-2">
+                                <li v-for="(value, index) in partner.capabilities" :key="index">
+                                    {{ value }}
+                                </li>
+                            </ul>
+                        </li>
+                        <li v-if="expertiseList.length" class="mt-2 mb-2">
+                            Areas of Expertise:
+                            <ul class="text-sm text-grey-darker mt-2">
+                                <li v-for="(value, index) in expertiseList" :key="index">
+                                    {{ value }}
+                                </li>
+                            </ul>
                         </li>
                         <li v-if="partner.agencySize" class="mt-2">
-                            Agency Size: {{ partner.agencySize }}
+                            Agency Size: <span class="text-grey-darker">{{ agencySizeDisplay }}</span>
                         </li>
-                        <li v-if="partner.msaLink" class="mt-2">
-                            MSA Link: <a :href="partner.msaLink" target="_blank" class="mt-2">{{ partner.msaLink }}</a>
+                        <li v-if="partner.fullBio" class="mt-4">
+                            Full Bio:
+                            <pre class="text-grey-darker text-sm p-2 whitespace-pre-wrap">{{ partner.fullBio }}</pre>
                         </li>
-                        <li v-if="capabilitiesJoined" class="mt-2">
-                            Capabilities: {{ capabilitiesJoined }}
+                        <li v-if="partner.shortBio" class="mt-4">
+                            Short Bio:
+                            <pre class="text-grey-darker text-sm p-2 whitespace-pre-wrap">{{ partner.shortBio }}</pre>
                         </li>
                     </ul>
                 </div>
 
                 <div v-else>
-                    <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
+                    <!-- <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
                     <text-field id="primaryContactName" label="Primary Contact Name" v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
                     <text-field id="primaryContactEmail" label="Primary Contact Email" v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
                     <text-field id="primaryContactPhone" label="Primary Contact Phone" v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
                     <textarea-field id="businessSummary" label="Business Summary/Description (one paragraph)" v-model="draft.businessSummary" :errors="errors.businessSummary" />
-                    <text-field id="minimumBudget" label="Minimum Budget" v-model="draft.minimumBudget" :errors="errors.minimumBudget" />
                     <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agency" :errors="errors.agencySize" />
                     <url-field id="msaLink" label="Link to MSA or Equivalent paperwork" v-model="draft.msaLink" :errors="errors.msaLink" />
-                    <checkbox-set id="capabilities" label="Capabilities" v-model="draft.capabilities" :options="options.capabilities" :errors="errors.capabilities" />
+                    <checkbox-set id="capabilities" label="Capabilities" v-model="draft.capabilities" :options="options.capabilities" :errors="errors.capabilities" /> -->
 
                     <div class="pt-4">
                         <button
@@ -85,7 +104,7 @@
     import UrlField from '../components/fields/UrlField'
 
     export default {
-
+        props: ['partner'],
         data() {
             return {
                 draft: {},
@@ -103,16 +122,23 @@
                 errors: {},
                 isEditing: false,
                 options: {
-                    agency: [
-                        {label: "Boutique", value: "Boutique"},
-                        {label: "Agency (10-50)", value: "Agency"},
-                        {label: "Large Agency (50+)", value: "Large Agency"}
+                    agencySize: [
+                        {label: "1-2", value: "XS"},
+                        {label: "3-9", value: "S"},
+                        {label: "10-29", value: "M"},
+                        {label: "30+", value: "L"}
                     ],
                     capabilities: [
                         {label: 'Commerce', value: 'Commerce'},
                         {label: 'Full Service', value: 'Full Service'},
                         {label: 'Custom Development', value: 'Custom Development'},
-                        {label: 'Contract Work', value: 'Contract Work'},
+                        {label: 'Contract Work', value: 'Contract Work'}
+                    ],
+                    region: [
+                        {label: 'Asia Pacific', value: 'Asia Pacific'},
+                        {label: 'Europe', value: 'Europe'},
+                        {label: 'North America', value: 'North America'},
+                        {label: 'South America', value: 'South America'}
                     ]
                 },
                 requestPending: false
@@ -128,12 +154,33 @@
         },
 
         computed: {
-            capabilitiesJoined() {
-                return this.partner.capabilities.join(', ').trim()
+            agencySizeDisplay() {
+                for (let i = 0; i < this.options.agencySize.length; i++) {
+                    const item = this.options.agencySize[i]
+                    if (item.value === this.partner.agencySize) {
+                        return item.label
+                    }
+                }
+
+                return this.partner.agencySize
             },
-            ...mapState({
-                partner: state => state.partner.partnerProfile,
-            }),
+            basicRequirementsList() {
+                let list = []
+
+                if (this.partner.isRegisteredBusiness) {
+                    list.push('Is a registered business')
+                }
+
+                if (this.partner.hasFullTimeDev) {
+                    list.push('Has a full-time Craft developer')
+                }
+
+                return list
+            },
+            expertiseList() {
+                let list = this.partner.expertise.trim().split("\n")
+                return list
+            }
         },
 
         methods: {
@@ -158,6 +205,6 @@
                         this.requestPending = false
                     })
             }
-        }
+        },
     }
 </script>

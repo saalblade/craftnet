@@ -6,19 +6,18 @@
             <div class="spinner big mt-8"></div>
         </div>
 
-        <p v-if="loadState == LOAD_ERROR">{{ loadError }}</p>
+        <p v-if="loadState == LOAD_ERROR">Error: {{ loadError }}</p>
 
         <div v-if="loadState == LOADED">
-            {{ partner }}
-            <partner-business-info></partner-business-info>
-            <!-- <partner-locations></partner-locations> -->
+            <partner-business-info :partner="partner"></partner-business-info>
+            <partner-locations></partner-locations>
         </div>
 	</div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
-    import PartnerBusinessInfo from '../components/PartnerBusinessInfo'
+    import PartnerBusinessInfo from '../components/PartnerInfo'
     import PartnerLocations from '../components/PartnerLocations'
 
     export default {
@@ -41,23 +40,19 @@
 
         computed: {
             ...mapState({
-                partner: state => state.partner.partnerProfile,
+                partner: state => state.partner.partner,
             }),
         },
 
         mounted() {
-            if (this.partner) {
-                this.loadState = this.LOADED
-            } else {
-                this.$store.dispatch('initPartnerProfile')
-                    .then(() => {
-                        this.loadState = this.LOADED
-                    })
-                    .catch((response) => {
-                        this.loadState = this.LOAD_ERROR
-                        this.loadError = response.data.error || 'Couldn’t load partner profile'
-                    })
-            }
+            this.$store.dispatch('initPartner')
+                .then(() => {
+                    this.loadState = this.LOADED
+                })
+                .catch((response) => {
+                    this.loadState = this.LOAD_ERROR
+                    this.loadError = response.data.error || 'Couldn’t load partner profile'
+                })
         }
     }
 </script>
