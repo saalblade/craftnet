@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import qs from 'qs'
 import api from '../../api/cart'
+import CartHelper from '../../helpers/cart'
 
 Vue.use(Vuex)
 
@@ -216,7 +217,7 @@ const actions = {
             dispatch('getCart')
                 .then(() => {
                     const cart = state.cart
-                    let items = utils.getCartItemsData(cart)
+                    let items = CartHelper.getCartItemsData(cart)
 
                     newItems.forEach(newItem => {
                         const alreadyInCart = items.find(item => item.plugin === newItem.plugin)
@@ -246,7 +247,7 @@ const actions = {
             dispatch('getCart')
                 .then(() => {
                     const cart = state.cart
-                    let items = utils.getCartItemsData(cart)
+                    let items = CartHelper.getCartItemsData(cart)
                     items.splice(lineItemKey, 1)
 
                     let data = {
@@ -294,58 +295,6 @@ const mutations = {
 
     resetCart(state) {
         state.cart = null
-    },
-
-}
-
-/**
- * Utils
- */
-const utils = {
-
-    getCartData(cart) {
-        let data = {
-            email: cart.email,
-            billingAddress: {
-                firstName: cart.billingAddress.firstName,
-                lastName: cart.billingAddress.lastName,
-            },
-            items: [],
-        }
-
-        data.items = this.getCartItemsData(cart)
-
-        return data
-    },
-
-    getCartItemsData(cart) {
-        let lineItems = []
-
-        for (let i = 0; i < cart.lineItems.length; i++) {
-            let lineItem = cart.lineItems[i]
-
-            switch (lineItem.purchasable.type) {
-                case 'plugin-edition':
-                    lineItems.push({
-                        type: lineItem.purchasable.type,
-                        plugin: lineItem.purchasable.plugin.handle,
-                        edition: lineItem.purchasable.handle,
-                        autoRenew: lineItem.options.autoRenew,
-                        cmsLicenseKey: lineItem.options.cmsLicenseKey,
-                    })
-                    break
-                case 'cms-edition':
-                    lineItems.push({
-                        type: lineItem.purchasable.type,
-                        edition: lineItem.purchasable.handle,
-                        licenseKey: lineItem.options.licenseKey,
-                        autoRenew: lineItem.options.autoRenew,
-                    })
-                    break
-            }
-        }
-
-        return lineItems
     },
 
 }
