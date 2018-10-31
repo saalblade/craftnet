@@ -1,5 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
+import FormDataHelper from '../helpers/form-data'
 
 export default {
 
@@ -17,9 +18,11 @@ export default {
         let formData = new FormData();
 
         for (let attribute in user) {
+            const value = user[attribute];
+
             switch (attribute) {
                 case 'id':
-                    formData.append('userId', user[attribute]);
+                    FormDataHelper.append(formData, 'userId', value);
                     break;
                 case 'email':
                 case 'username':
@@ -28,10 +31,10 @@ export default {
                 case 'password':
                 case 'newPassword':
                 case 'photo':
-                    formData.append(attribute, user[attribute]);
+                    FormDataHelper.append(formData, attribute, value);
                     break;
                 default:
-                    formData.append('fields[' + attribute + ']', user[attribute]);
+                    FormDataHelper.append(formData, 'fields[' + attribute + ']', value);
             }
         }
 
@@ -58,7 +61,7 @@ export default {
         let formData = new FormData();
 
         for (let attribute in data) {
-            formData.append(attribute, data[attribute]);
+            FormDataHelper.append(formData, attribute, data[attribute]);
         }
 
         axios.post(Craft.actionUrl + '/craftnet/id/account/upload-user-photo', formData, {

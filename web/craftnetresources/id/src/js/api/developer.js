@@ -1,5 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
+import FormDataHelper from '../helpers/form-data'
 
 export default {
 
@@ -15,12 +16,12 @@ export default {
                     case 'screenshotUrls':
                     case 'screenshotIds':
                         for (let i = 0; i < plugin[attribute].length; i++) {
-                            formData.append(attribute + '[]', plugin[attribute][i]);
+                            FormDataHelper.append(formData, attribute + '[]', plugin[attribute][i]);
                         }
                         break;
 
                     default:
-                        formData.append(attribute, plugin[attribute]);
+                        FormDataHelper.append(formData, attribute, plugin[attribute]);
                 }
             }
         }

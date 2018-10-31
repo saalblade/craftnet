@@ -1,6 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
-
+import FormDataHelper from '../helpers/form-data'
 export default {
 
     claimCmsLicense(licenseKey, cb, cbError) {
@@ -19,7 +19,7 @@ export default {
 
     claimCmsLicenseFile(licenseFile, cb, cbError) {
         let formData = new FormData();
-        formData.append('licenseFile', licenseFile);
+        FormDataHelper.append(formData, 'licenseFile', licenseFile);
 
         axios.post(Craft.actionUrl + '/craftnet/id/cms-licenses/claim', formData, {
                 headers: {
