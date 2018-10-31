@@ -1,20 +1,5 @@
 export default {
 
-    getCartData(cart) {
-        let data = {
-            email: cart.email,
-            billingAddress: {
-                firstName: cart.billingAddress.firstName,
-                lastName: cart.billingAddress.lastName,
-            },
-            items: [],
-        }
-
-        data.items = this.getCartItemsData(cart)
-
-        return data
-    },
-
     getCartItemsData(cart) {
         let lineItems = []
 
