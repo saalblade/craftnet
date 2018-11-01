@@ -2,11 +2,8 @@
 	<div>
         <div class="card mb-4">
             <div class="card-body">
-                <div class="flex">
-                    <div class="flex-1"><h4>Profile</h4></div>
-                    <div class="pl-4" v-if="!isEditing">
-                        <button class="btn btn-secondary" @click="onEditClick"><i class="fa fa-pencil-alt"></i> Edit</button>
-                    </div>
+                <div class="text-right" v-if="!isEditing">
+                    <button class="btn btn-secondary" @click="onEditClick"><i class="fa fa-pencil-alt"></i> Edit</button>
                 </div>
 
                 <div v-if="!isEditing">
@@ -105,7 +102,7 @@
     import TextareaField from '../components/fields/TextareaField'
     import TextField from '../components/fields/TextField'
     import UrlField from '../components/fields/UrlField'
-    import helpers from '../mixins/helpers';
+    import helpers from '../mixins/helpers'
 
     export default {
         props: ['partner'],
