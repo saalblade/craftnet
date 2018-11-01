@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <auth-manager ref="authManager"></auth-manager>
-        <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.dispatch('setShowRenewLicensesModal', false)" />
+        <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.dispatch('app/setShowRenewLicensesModal', false)" />
 
         <template v-if="notification">
             <div id="notifications-wrapper" :class="{'hide': !notification }">
