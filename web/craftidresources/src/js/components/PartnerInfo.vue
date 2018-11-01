@@ -1,5 +1,6 @@
 <template>
 	<div>
+        <p class="text-grey-darker">Basic business information and adminstrative contact information for Pixel &amp; Tonic to reach you.</p>
         <div class="card mb-4">
             <div class="card-body">
                 <div class="text-right" v-if="!isEditing">
@@ -66,7 +67,7 @@
                     <text-field id="primaryContactPhone" label="Primary Contact Phone" v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
                     <select-field id="region" label="Region" v-model="draft.region" :options="options.region" :errors="errors.region" />
                     <checkbox-field id="isRegisteredBusiness" label="This is a registered business" v-model="draft.isRegisteredBusiness" :checked-value="1" :errors="errors.isRegisteredBusiness" />
-                    <checkbox-field id="hasFullTimeDev" label="Buisness has at least one full-time Craft developer" v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
+                    <checkbox-field id="hasFullTimeDev" label="Buisiness has at least one full-time Craft developer" v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
                     <checkbox-set id="capabilities" label="Capabilities" v-model="draft.capabilities" :options="options.capabilities" :errors="errors.capabilities" />
                     <textarea-field id="expertise" label="Areas of Expertise (each on new line)" v-model="draft.expertise" />
                     <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agencySize" :errors="errors.agencySize" />
@@ -84,7 +85,7 @@
                             class="btn btn-primary"
                             :class="{'disabled': requestPending}"
                             :disabled="requestPending"
-                            @click="onSubmit">Submit</button>
+                            @click="onSubmit">Save</button>
 
                         <div class="spinner" :class="{'invisible': !requestPending}"></div>
                     </div>
@@ -95,7 +96,6 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
     import CheckboxField from '../components/fields/CheckboxField'
     import CheckboxSet from '../components/fields/CheckboxSet'
     import SelectField from '../components/fields/SelectField'
@@ -106,7 +106,18 @@
 
     export default {
         props: ['partner'],
+
         mixins: [helpers],
+
+        components: {
+            CheckboxField,
+            CheckboxSet,
+            SelectField,
+            TextareaField,
+            TextField,
+            UrlField
+        },
+
         data() {
             return {
                 draft: {},
@@ -149,15 +160,6 @@
                 },
                 requestPending: false
             }
-        },
-
-        components: {
-            CheckboxField,
-            CheckboxSet,
-            SelectField,
-            TextareaField,
-            TextField,
-            UrlField
         },
 
         computed: {

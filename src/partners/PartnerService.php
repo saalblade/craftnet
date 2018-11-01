@@ -261,6 +261,7 @@ class PartnerService
         /** @var PartnerLocation $location */
         foreach($data['locations'] as $i => $location) {
             $data['locations'][$i] = $location->getAttributes([
+                'id',
                 'title',
                 'addressLine1',
                 'addressLine2',

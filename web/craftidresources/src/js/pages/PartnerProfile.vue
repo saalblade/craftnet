@@ -9,15 +9,15 @@
         <p v-if="loadState == LOAD_ERROR">Error: {{ loadError }}</p>
 
         <div v-if="loadState == LOADED">
-            <partner-business-info :partner="partner"></partner-business-info>
-            <!-- <partner-locations></partner-locations> -->
+            <partner-info :partner="partner"></partner-info>
+            <partner-locations :partner="partner"></partner-locations>
         </div>
 	</div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
-    import PartnerBusinessInfo from '../components/PartnerInfo'
+    import PartnerInfo from '../components/PartnerInfo'
     import PartnerLocations from '../components/PartnerLocations'
 
     export default {
@@ -34,7 +34,7 @@
         },
 
         components: {
-            PartnerBusinessInfo,
+            PartnerInfo,
             PartnerLocations
         },
 

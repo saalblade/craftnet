@@ -1,30 +1,24 @@
 <template>
-    <div class="card mb-4">
-        <div class="card-body">
-            <div class="flex">
-                <div class="flex-1">
-                    <h4>Locations</h4>
-                </div>
-                <div class="pl-4">
-                    <button class="btn btn-secondary btn-sm" @click="onAddLocationClick"><i class="fa fa-plus"></i> Add a Location</button>
-                </div>
-            </div>
+    <div>
+        <h4>Locations</h4>
 
-            <partner-location
-                v-for="(location, key) in partner.locations"
-                :location="location"
-                :key="key"
-                :index="key"
-                @editClick="onLocationEditClick"
-            ></partner-location>
+        <p class="text-grey-darker">Location and sales contact information for potential clients.</p>
 
-            <partner-location-form
-                :locations="draftLocations"
-                :edit-index="editIndex"
-                @cancel="onFormCancel"
-                @done="onFormDone"
-            ></partner-location-form>
+        <partner-location
+            v-for="(location, index) in draftLocations"
+            :location="location"
+            :key="index"
+            :index="index"
+            :edit-index="editIndex"
+            :request-pending="requestPending"
+            @edit="onEdit"
+            @cancel="onCancel"
+        ></partner-location>
+
+        <div class="pl-4">
+            <button class="btn btn-secondary btn-sm" @click="onAddLocationClick"><i class="fa fa-plus"></i> Add a Location</button>
         </div>
+
     </div>
 </template>
 
@@ -32,44 +26,74 @@
     import {mapState} from 'vuex'
     import helpers from '../mixins/helpers'
     import PartnerLocation from './PartnerLocation'
-    import PartnerLocationForm from './PartnerLocationForm'
 
     export default {
+        props: ['partner'],
+        mixins: [helpers],
+
         components: {
             PartnerLocation,
-            PartnerLocationForm
         },
 
         data() {
             return {
-                draftLocations: null,
+                draftLocations: [],
+                draftLocationProps: [
+                    'id',
+                    'title',
+                    'addressLine1',
+                    'addressLine2',
+                    'city',
+                    'state',
+                    'zip',
+                    'country',
+                    'phone',
+                    'email',
+                ],
                 editIndex: null,
+                requestPending: false,
             }
-        },
-
-        computed: {
-            ...mapState({
-                partner: state => state.partner.partnerProfile,
-            }),
         },
 
         methods: {
             onAddLocationClick() {
-                this.draftLocations.push({isNew: true})
-                this.editIndex = this.draftLocations.length - 1
+                this.draftLocations.push({
+                    id: 'new',
+                    title: '',
+                    addressLine1: '',
+                    addressLine2: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    country: '',
+                    phone: '',
+                    email: '',
+                })
             },
-            onFormCancel() {
-                this.editIndex = null
-            },
-            onFormDone() {
-                this.editIndex = null
-            },
-            onLocationEditClick(index) {
-                this.editIndex = index
-            },
+
             cloneLocations() {
-                let locations = this.partner.locations || []
-                this.draftLocations = helpers.simpleClone(locations)
+                let locations = []
+
+                for (let i = 0; i < this.partner.locations.length; i++) {
+                    const location = this.partner.locations[i]
+                    locations.push(this.simpleClone(location, this.draftLocationProps))
+                }
+
+                this.draftLocations = locations
+            },
+
+            onCancel() {
+                // reset
+                this.cloneLocations()
+                this.editIndex = null
+            },
+
+            onDelete(index) {
+                this.editIndex = null
+            },
+
+            onEdit(index) {
+                this.editIndex = index
             },
         },
 
@@ -79,7 +103,6 @@
 
         watch: {
             partner() {
-                console.warn('partner updated')
                 this.cloneLocations()
             }
         }
