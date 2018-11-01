@@ -6,11 +6,9 @@ use Craft;
 use craft\base\Element;
 use craft\base\Model;
 use craft\elements\actions\SetStatus;
-use craft\elements\Asset;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\UrlHelper;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 
 /**
@@ -28,6 +26,8 @@ class Partner extends Element
     const STATUS_PENDING_APPROVAL = 'statusPendingApproval';
     const STATUS_APPROVED = 'statusApproved';
     const STATUS_REJECTED = 'statusRejected';
+
+    const SCENARIO_BASE_INFO = 'scenarioBaseInfo';
 
     // Static
     // =========================================================================
@@ -252,18 +252,31 @@ class Partner extends Element
         $rules[] = [
             [
                 'businessName',
-                'region',
                 'primaryContactName',
                 'primaryContactEmail',
                 'primaryContactPhone',
+                'region',
+                'capabilities',
+                'agencySize',
                 'fullBio',
                 'shortBio',
-                'agencySize',
-                'capabilities',
-                'locations',
             ],
             'required',
-            'on' => self::SCENARIO_LIVE
+            'on' => [
+                self::SCENARIO_BASE_INFO,
+                self::SCENARIO_LIVE,
+            ]
+        ];
+
+        // When submitting from Craft ID, these requirements
+        // must apply to the business
+        $rules[] = [
+            ['isRegisteredBusiness', 'hasFullTimeDev'],
+            'required',
+            'strict' => true,
+            'requiredValue' => true,
+            'message' => '{attribute} is required',
+            'on' => self::SCENARIO_BASE_INFO
         ];
 
         $rules[] = ['primaryContactEmail', 'email'];
@@ -335,10 +348,11 @@ class Partner extends Element
 
         if (count($this->_capabilities) > 0) {
             $partnerId = $this->id;
+            $rows = [];
 
-            $rows = array_map(function($capability) use ($partnerId) {
-                return [$partnerId, $capability['id']];
-            }, $this->_capabilities);
+            foreach ($this->_capabilities as $id => $title) {
+                $rows[] = [$partnerId, $id];
+            }
 
             $db->createCommand()
                 ->batchInsert(
@@ -350,11 +364,14 @@ class Partner extends Element
                 ->execute();
         }
 
-        $this->_saveOneToManyRelations($this->_locations, 'craftnet_partnerlocations');
-        $this->_saveOneToManyRelations($this->_projects, 'craftnet_partnerprojects', true, ['screenshots']);
+        // Skip the rest if just saving basic info from Craft ID page
+        if ($this->getScenario() !== self::SCENARIO_BASE_INFO) {
+            $this->_saveOneToManyRelations($this->_locations, 'craftnet_partnerlocations');
+            $this->_saveOneToManyRelations($this->_projects, 'craftnet_partnerprojects', true, ['screenshots']);
 
-        foreach ($this->_projects as $project) {
-            $this->_saveProjectScreenshots($project);
+            foreach ($this->_projects as $project) {
+                $this->_saveProjectScreenshots($project);
+            }
         }
     }
 
@@ -364,6 +381,12 @@ class Partner extends Element
      */
     public function afterValidate()
     {
+        // Don't validate locations or projects when patching from
+        // Craft ID account pages.
+        if ($this->getScenario() === self::SCENARIO_BASE_INFO) {
+            return parent::afterValidate();
+        }
+
         foreach ($this->_locations as $location) {
             // Same scenarios on Partner and ParnerLocationModel:
             // SCENARIO_DEFAULT, SCENARIO_LIVE

@@ -9,8 +9,6 @@
                     </div>
                 </div>
 
-                <!-- <pre>{{ partner }}</pre> -->
-
                 <div v-if="!isEditing">
                     <ul class="info-list list-reset">
                         <li v-if="partner.businessName">
@@ -42,7 +40,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li v-if="expertiseList.length" class="mt-2 mb-2">
+                        <li v-if="expertiseList.length" class="mt-2 mb-2 pt-2">
                             Areas of Expertise:
                             <ul class="text-sm text-grey-darker mt-2">
                                 <li v-for="(value, index) in expertiseList" :key="index">
@@ -65,14 +63,18 @@
                 </div>
 
                 <div v-else>
-                    <!-- <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
+                    <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
                     <text-field id="primaryContactName" label="Primary Contact Name" v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
                     <text-field id="primaryContactEmail" label="Primary Contact Email" v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
                     <text-field id="primaryContactPhone" label="Primary Contact Phone" v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
-                    <textarea-field id="businessSummary" label="Business Summary/Description (one paragraph)" v-model="draft.businessSummary" :errors="errors.businessSummary" />
-                    <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agency" :errors="errors.agencySize" />
-                    <url-field id="msaLink" label="Link to MSA or Equivalent paperwork" v-model="draft.msaLink" :errors="errors.msaLink" />
-                    <checkbox-set id="capabilities" label="Capabilities" v-model="draft.capabilities" :options="options.capabilities" :errors="errors.capabilities" /> -->
+                    <select-field id="region" label="Region" v-model="draft.region" :options="options.region" :errors="errors.region" />
+                    <checkbox-field id="isRegisteredBusiness" label="This is a registered business" v-model="draft.isRegisteredBusiness" :checked-value="1" :errors="errors.isRegisteredBusiness" />
+                    <checkbox-field id="hasFullTimeDev" label="Buisness has at least one full-time Craft developer" v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
+                    <checkbox-set id="capabilities" label="Capabilities" v-model="draft.capabilities" :options="options.capabilities" :errors="errors.capabilities" />
+                    <textarea-field id="expertise" label="Areas of Expertise (each on new line)" v-model="draft.expertise" />
+                    <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agencySize" :errors="errors.agencySize" />
+                    <textarea-field id="fullBio" label="Full Bio" v-model="draft.fullBio" :errors="errors.fullBio" />
+                    <textarea-field id="shortBio" label="Short Bio for Card" v-model="draft.shortBio" :errors="errors.shortBio" />
 
                     <div class="pt-4">
                         <button
@@ -97,28 +99,35 @@
 
 <script>
     import {mapState} from 'vuex'
+    import CheckboxField from '../components/fields/CheckboxField'
     import CheckboxSet from '../components/fields/CheckboxSet'
     import SelectField from '../components/fields/SelectField'
     import TextareaField from '../components/fields/TextareaField'
     import TextField from '../components/fields/TextField'
     import UrlField from '../components/fields/UrlField'
+    import helpers from '../mixins/helpers';
 
     export default {
         props: ['partner'],
+        mixins: [helpers],
         data() {
             return {
                 draft: {},
-                defaultDraft: {
-                    businessName: '',
-                    primaryContactName: '',
-                    primaryContactEmail: '',
-                    primaryContactPhone: '',
-                    businessSummary: '',
-                    minimumBudget: '',
-                    agencySize: '',
-                    msaLink: '',
-                    capabilities: []
-                },
+                draftProps: [
+                    'id',
+                    'businessName',
+                    'primaryContactName',
+                    'primaryContactEmail',
+                    'primaryContactPhone',
+                    'region',
+                    'isRegisteredBusiness',
+                    'hasFullTimeDev',
+                    'capabilities',
+                    'expertise',
+                    'agencySize',
+                    'fullBio',
+                    'shortBio',
+                ],
                 errors: {},
                 isEditing: false,
                 options: {
@@ -146,6 +155,7 @@
         },
 
         components: {
+            CheckboxField,
             CheckboxSet,
             SelectField,
             TextareaField,
@@ -185,23 +195,29 @@
 
         methods: {
             onEditClick() {
-                // Set the draft object
-                for (let key in this.defaultDraft) {
-                    this.draft[key] = this.partner[key] || this.defaultDraft[key]
-                }
-
+                this.draft = this.simpleClone(this.partner, this.draftProps)
                 this.isEditing = true
             },
 
             onSubmit() {
+                this.errors = {}
+                this.errorMessage = ''
                 this.requestPending = true
 
-                this.$store.dispatch('patchPartnerProfile', this.draft)
-                    .then(() => {
+                this.$store.dispatch('patchPartner', this.draft)
+                    .then(response => {
                         this.requestPending = false
-                        this.isEditing = false
+
+                        if (!response.data.success) {
+                            this.errors = response.data.errors
+                            this.$root.displayError('Validation errors')
+                        } else {
+                            this.$root.displayNotice('Updated')
+                            this.isEditing = false
+                        }
                     })
-                    .catch(() => {
+                    .catch(errorMessage => {
+                        this.$root.displayError(errorMessage)
                         this.requestPending = false
                     })
             }

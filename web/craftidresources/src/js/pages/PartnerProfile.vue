@@ -10,7 +10,7 @@
 
         <div v-if="loadState == LOADED">
             <partner-business-info :partner="partner"></partner-business-info>
-            <partner-locations></partner-locations>
+            <!-- <partner-locations></partner-locations> -->
         </div>
 	</div>
 </template>

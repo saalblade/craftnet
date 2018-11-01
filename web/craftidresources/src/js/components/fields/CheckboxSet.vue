@@ -4,15 +4,15 @@
 			<legend>{{ label }}</legend>
 
 			<ul class="list-reset pl-4 pt-2">
-				<li v-for="option in this.options">
+				<li v-for="(option, index) in this.options" :key="index">
 					<label>
-						<input type="checkbox" class="mr-2" v-model="localValue" :value="option.value" @change="onChange">
+						<input type="checkbox" class="mr-2" v-model="localValue" :value="option.value" @change="$emit('input', localValue)">
 						{{ option.label }}
 					</label>
 				</li>
 			</ul>
 
-			<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
+			<div class="invalid-feedback" v-for="(error, index) in errors" :key="index">{{ error }}</div>
 		</fieldset>
 	</div>
 </template>
@@ -28,15 +28,8 @@
 			}
 		},
 
-		methods: {
-			onChange(e) {
-				this.$emit('input', this.localValue)
-			}
-		},
-
 		mounted() {
-			// clone not to manipulate prop
-			this.localValue = (this.value || []).slice(0)
+			this.localValue = JSON.parse(JSON.stringify(this.value));
 		}
     }
 </script>

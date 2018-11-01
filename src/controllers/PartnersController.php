@@ -61,6 +61,62 @@ class PartnersController extends Controller
     }
 
     /**
+     * From Craft ID, only allowed to edit own Partner Profile
+     * @return Response
+     * @throws Exception
+     * @throws ForbiddenHttpException
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionPatchPartner()
+    {
+        $this->requireLogin();
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $request = Craft::$app->getRequest();
+        $partnerId = $request->getBodyParam('id');
+
+        /** @var User|UserBehavior $user */
+        $user = Craft::$app->getUser()->getIdentity();
+        $partner = $user->getPartner();
+
+        if ($partner->id !== (int) $partnerId) {
+            throw new ForbiddenHttpException();
+        }
+
+        PartnerService::getInstance()->mergeRequestParams($partner, $request, [
+            'businessName',
+            'primaryContactName',
+            'primaryContactEmail',
+            'primaryContactPhone',
+            'region',
+            'isRegisteredBusiness',
+            'hasFullTimeDev',
+            'capabilities',
+            'expertise',
+            'agencySize',
+            'fullBio',
+            'shortBio',
+        ]);
+
+        $partner->setScenario(Partner::SCENARIO_BASE_INFO);
+
+        if (!Craft::$app->getElements()->saveElement($partner)) {
+            return $this->asJson([
+                'errors' => $partner->getErrors(),
+                'success' => false,
+            ]);
+        }
+
+        $data = PartnerService::getInstance()->serializePartner($partner);
+
+        return $this->asJson([
+            'partner' => $data,
+            'success' => true
+        ]);
+    }
+
+    /**
      * @param int|null $partnerId
      * @param Partner|null $partner
      * @return Response
@@ -123,27 +179,30 @@ class PartnersController extends Controller
             $partner = new Partner();
         }
 
-        $partner->enabled = $request->getBodyParam('enabled');
-        $partner->ownerId = ((array) $request->getBodyParam('ownerId'))[0];
-        $partner->businessName = $request->getBodyParam('businessName');
-        $partner->primaryContactName = $request->getBodyParam('primaryContactName');
-        $partner->primaryContactEmail = $request->getBodyParam('primaryContactEmail');
-        $partner->primaryContactPhone = $request->getBodyParam('primaryContactPhone');
-        $partner->fullBio = $request->getBodyParam('fullBio');
-        $partner->shortBio = $request->getBodyParam('shortBio');
-        $partner->hasFullTimeDev = $request->getBodyParam('hasFullTimeDev');
-        $partner->isCraftVerified = $request->getBodyParam('isCraftVerified');
-        $partner->isCommerceVerified = $request->getBodyParam('isCommerceVerified');
-        $partner->isEnterpriseVerified = $request->getBodyParam('isEnterpriseVerified');
-        $partner->isRegisteredBusiness = $request->getBodyParam('isRegisteredBusiness');
-        $partner->agencySize = $request->getBodyParam('agencySize');
-        $partner->hasFullTimeDev = $request->getBodyParam('hasFullTimeDev');
-        $partner->region = $request->getBodyParam('region');
-        $partner->expertise = $request->getBodyParam('expertise');
-        $partner->setCapabilities($request->getBodyParam('capabilities', []));
-        $partner->setLocationsFromPost($request->getBodyParam('locations', []));
-        $partner->setProjectsFromPost($request->getBodyParam('projects', []));
-        $partner->setVerificationStartDateFromPost($request->getBodyParam('verificationStartDate'));
+        PartnerService::getInstance()->mergeRequestParams($partner, $request, [
+                'enabled',
+                'ownerId',
+                'businessName',
+                'primaryContactName',
+                'primaryContactEmail',
+                'primaryContactPhone',
+                'fullBio',
+                'shortBio',
+                'hasFullTimeDev',
+                'isCraftVerified',
+                'isCommerceVerified',
+                'isEnterpriseVerified',
+                'isRegisteredBusiness',
+                'agencySize',
+                'hasFullTimeDev',
+                'region',
+                'expertise',
+                'capabilities',
+                'locations',
+                'projects',
+                'verificationStartDate',
+            ]
+        );
 
         if ($partner->enabled) {
             $partner->setScenario(Element::SCENARIO_LIVE);

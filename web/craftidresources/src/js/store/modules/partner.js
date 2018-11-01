@@ -42,6 +42,23 @@ const actions = {
                 })
             }
         })
+    },
+
+    patchPartner({commit, state}, draft) {
+        return new Promise((resolve, reject) => {
+            partnerApi.patchPartner(
+                draft,
+                response => {
+                    if (response.data && !response.data.error) {
+                        commit(types.RECEIVE_PARTNER, response.data.partner)
+                        resolve(response)
+                    } else {
+                        reject('Validation errors')
+                    }
+                }, error => {
+                    reject(error.statusText)
+                })
+        })
     }
 }
 

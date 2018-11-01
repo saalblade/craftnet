@@ -4,6 +4,7 @@ namespace craftnet\partners;
 
 use craft\db\Query;
 use craft\elements\Asset;
+use craft\web\Request;
 use yii\helpers\ArrayHelper;
 
 class PartnerService
@@ -50,14 +51,20 @@ class PartnerService
     }
 
     /**
-     * Capabilities are represented by simple associative arrays rather than
-     * by models. This accepts an array of numeric Capability IDs or valid
-     * Capability arrays and returns an array of all capabilites as arrays
-     * from a query:
+     * This accepts an array of Capability ids or titles and returns them
+     * as `Partner::getCapabilities()` would:
+     *
      * ```
+     * $normalized = PartnerService::getInstance()->normalizeCapabilities([
+     *     1, // integer id
+     *     'Full Service', // title
+     *     '3', // numeric string id
+     * ]);
+     * // result:
      * [
-     *     ['id' => 1, 'title' => 'Commerce'],
-     *     ['id' => 3, 'title' => 'Custom Development'],
+     *     [1 => 'Commerce'],
+     *     [2 => 'Full Service'],
+     *     [3 => 'Custom Development'],
      * ]
      * ```
      *
@@ -66,6 +73,7 @@ class PartnerService
      */
     public function normalizeCapabilities($capabilities)
     {
+        $found = [];
         $normalized = [];
 
         if (empty($capabilities)) {
@@ -74,20 +82,32 @@ class PartnerService
 
         $allCapabilities = (new PartnerCapabilitiesQuery())->asIndexedTitles()->all();
 
-        $normalized = array_map(function($capability) use ($allCapabilities) {
-            $id = is_numeric($capability) ? $capability : ($capability['id'] ?? null);
+        $normalized = array_map(function($capability) use ($allCapabilities, $found) {
+            $id = null;
 
-            if ($id === null || !array_key_exists((int) $id, $allCapabilities)) {
+            if (is_numeric($capability)) {
+                // We have a numeric id
+                $id = (int) $capability;
+            } else {
+                // We probably have a title so find the id if it exists
+                $id = array_search($capability, $allCapabilities);
+            }
+
+            // $id could be `null`, `false`, or a numeric value
+            if (!$id || in_array($id, $found)) {
                 return null;
             }
 
+            $found[] = $id;
+
             return [
-                'id' => (int) $id,
+                'id' => $id,
                 'title' => $allCapabilities[$id]
             ];
         }, $capabilities);
 
-        return array_filter($normalized);
+        // return as indexed titles just like `Partner@getCapabilities()`
+        return ArrayHelper::map($normalized, 'id', 'title');
     }
 
     /**
@@ -234,6 +254,9 @@ class PartnerService
             'projects',
         ]);
 
+        // capabilities - titles only
+        $data['capabilities'] = array_values($data['capabilities']);
+
         // locations
         /** @var PartnerLocation $location */
         foreach($data['locations'] as $i => $location) {
@@ -267,5 +290,49 @@ class PartnerService
         }
 
         return $data;
+    }
+
+    /**
+     * @param Partner $partner
+     * @param Request $request
+     * @param array $properties
+     */
+    public function mergeRequestParams(Partner $partner, Request $request, array $properties)
+    {
+        foreach($properties as $property) {
+            switch ($property) {
+                case 'ownerId':
+                    $partner->ownerId = ((array) $request->getBodyParam('ownerId'))[0];
+                    break;
+
+                case 'capabilities':
+                    $partner->setCapabilities($request->getBodyParam('capabilities', []));
+                    break;
+
+                case 'locations':
+                    $partner->setLocationsFromPost($request->getBodyParam('locations', []));
+                    break;
+
+                case 'projects':
+                    $partner->setProjectsFromPost($request->getBodyParam('projects', []));
+                    break;
+
+                case 'verificationStartDate':
+                    $partner->setVerificationStartDateFromPost($request->getBodyParam('verificationStartDate'));
+                    break;
+
+                case 'hasFullTimeDev':
+                case 'isRegisteredBusiness':
+                    // There must be a built-in Yii way to cast 'true' and 'false'
+                    // to boolean in validation rules but for now...
+                    $value = $request->getBodyParam($property);
+                    $partner->{$property} = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                    break;
+
+                default:
+                    $partner->{$property} = $request->getBodyParam($property);
+                    break;
+            }
+        }
     }
 }
