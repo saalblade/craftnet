@@ -274,6 +274,7 @@ class PartnerService
             ]);
         }
 
+        // For Craft ID Vue, the array must not be indexed by id
         $data['locations'] = array_values($data['locations']);
 
         // projects
@@ -283,14 +284,21 @@ class PartnerService
         foreach ($data['projects'] as $i => $project) {
             $data['projects'][$i] = $project->getAttributes(['id', 'name', 'role', 'url', 'screenshots']);
 
-            /** @var Asset $screenshot */
-            foreach($data['projects'][$i]['screenshots'] as $ii => $screenshot) {
-                $data['projects'][$i]['screenshots'][$ii] = [
-                    'id' => $screenshot->id,
-                    'thumbUrl' => $screenshot->getThumbUrl(300),
-                ];
+            if (is_array($data['projects'][$i]['screenshots'])) {
+                /** @var Asset $screenshot */
+                foreach($data['projects'][$i]['screenshots'] as $ii => $screenshot) {
+                    $data['projects'][$i]['screenshots'][$ii] = [
+                        'id' => $screenshot->id,
+                        'url' => $screenshot->getUrl(),
+                    ];
+                }
+            } else {
+                $data['projects'][$i]['screenshots'] = [];
             }
         }
+
+        // For Craft ID Vue, the array must not be indexed by id
+        $data['projects'] = array_values($data['projects']);
 
         return $data;
     }

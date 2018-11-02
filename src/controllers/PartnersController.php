@@ -111,6 +111,13 @@ class PartnersController extends Controller
                 ]);
                 break;
 
+            case Partner::SCENARIO_PROJECTS:
+                $partner->setScenario(Partner::SCENARIO_PROJECTS);
+                PartnerService::getInstance()->mergeRequestParams($partner, $request, [
+                    'projects',
+                ]);
+                break;
+
             default:
                 throw new BadRequestHttpException('Invalid partner scenario');
                 break;

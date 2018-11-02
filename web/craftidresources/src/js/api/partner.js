@@ -64,5 +64,32 @@ export default {
         })
             .then(response => cb(response))
             .catch(error => cbError(error.response));
+    },
+
+    patchPartnerProjects(projects, partnerId, cb, cbError) {
+        let formData = new FormData()
+        formData.append('id', partnerId)
+        formData.append('scenario', 'scenarioProjects')
+
+        projects.forEach(project => {
+            const id = project.id
+
+            for (let prop in project) {
+                if (prop !== 'id') {
+                    formData.append(
+                        `projects[${ project.id }][${prop}]`,
+                        project[prop]
+                    )
+                }
+            }
+        })
+
+        axios.post(Craft.actionUrl + '/craftnet/partners/patch-partner', formData, {
+            headers: {
+                'X-CSRF-Token': Craft.csrfTokenValue,
+            }
+        })
+            .then(response => cb(response))
+            .catch(error => cbError(error.response));
     }
 }

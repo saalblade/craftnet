@@ -40,7 +40,7 @@ class PartnerProject extends Model
         $rules[] = ['url', 'url'];
 
         $rules[] = [
-            ['screenshots', 'url'],
+            ['url'],
             'required',
             'on' => self::SCENARIO_LIVE,
         ];

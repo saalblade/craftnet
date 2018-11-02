@@ -76,6 +76,22 @@ const actions = {
                 })
         })
     },
+
+    patchPartnerProjects({commit, state}, projects) {
+        return new Promise((resolve, reject) => {
+            partnerApi.patchPartnerProjects(
+                projects,
+                state.partner.id,
+                response => {
+                    if (response.data.success) {
+                        commit(types.RECEIVE_PARTNER_PROJECTS, response.data.partner.projects)
+                    }
+                    resolve(response)
+                }, error => {
+                    reject(error.statusText)
+                })
+        })
+    },
 }
 
 /**
@@ -87,6 +103,9 @@ const mutations = {
     },
     [types.RECEIVE_PARTNER_LOCATIONS](state, locations) {
         state.partner.locations = locations
+    },
+    [types.RECEIVE_PARTNER_PROJECTS](state, projects) {
+        state.partner.projects = projects
     },
 }
 

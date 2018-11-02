@@ -292,6 +292,16 @@ class Partner extends Element
             ]
         ];
 
+        $rules[] = [
+            'projects',
+            'required',
+            'message' => 'projects',
+            'on' => [
+                self::SCENARIO_PROJECTS,
+                self::SCENARIO_LIVE,
+            ]
+        ];
+
         $rules[] = ['primaryContactEmail', 'email'];
         $rules[] = ['verificationStartDate', 'date', 'format' => 'Y-m-d'];
 
@@ -450,9 +460,9 @@ class Partner extends Element
             }
         }
 
-        if (in_array($scenario, [self::SCENARIO_LIVE])) {
+        if (in_array($scenario, [self::SCENARIO_LIVE, self::SCENARIO_PROJECTS])) {
             foreach ($this->_projects as $project) {
-                $project->setScenario($this->getScenario());
+                $project->setScenario(Element::SCENARIO_LIVE);
                 $isValid = $project->validate();
 
                 if (!$isValid && !$this->hasErrors('projects')) {

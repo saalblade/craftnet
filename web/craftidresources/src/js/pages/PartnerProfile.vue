@@ -11,6 +11,7 @@
         <div v-if="loadState == LOADED">
             <partner-info :partner="partner"></partner-info>
             <partner-locations :partner="partner"></partner-locations>
+            <partner-projects :partner="partner"></partner-projects>
         </div>
 	</div>
 </template>
@@ -19,6 +20,7 @@
     import {mapState} from 'vuex'
     import PartnerInfo from '../components/PartnerInfo'
     import PartnerLocations from '../components/PartnerLocations'
+    import PartnerProjects from '../components/PartnerProjects'
 
     export default {
 
@@ -35,7 +37,8 @@
 
         components: {
             PartnerInfo,
-            PartnerLocations
+            PartnerLocations,
+            PartnerProjects
         },
 
         computed: {
