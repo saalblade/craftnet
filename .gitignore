@@ -1,7 +1,7 @@
 .DS_Store
 /vendor
 /.idea
-/.env
+.env
 /node_modules/
 
 # Elastic Beanstalk Files
@@ -14,3 +14,6 @@
 /config/license.key
 /templates/test.twig
 /web/test.php
+
+/tests/_data/*
+/tests/_output/*
