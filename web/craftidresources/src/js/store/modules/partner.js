@@ -59,7 +59,23 @@ const actions = {
                     reject(error.statusText)
                 })
         })
-    }
+    },
+
+    patchPartnerLocations({commit, state}, locations) {
+        return new Promise((resolve, reject) => {
+            partnerApi.patchPartnerLocations(
+                locations,
+                state.partner.id,
+                response => {
+                    if (response.data.success) {
+                        commit(types.RECEIVE_PARTNER_LOCATIONS, response.data.partner.locations)
+                    }
+                    resolve(response)
+                }, error => {
+                    reject(error.statusText)
+                })
+        })
+    },
 }
 
 /**
@@ -68,7 +84,10 @@ const actions = {
 const mutations = {
     [types.RECEIVE_PARTNER](state, partner) {
         state.partner = partner
-    }
+    },
+    [types.RECEIVE_PARTNER_LOCATIONS](state, locations) {
+        state.partner.locations = locations
+    },
 }
 
 export default {

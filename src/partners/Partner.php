@@ -28,6 +28,8 @@ class Partner extends Element
     const STATUS_REJECTED = 'statusRejected';
 
     const SCENARIO_BASE_INFO = 'scenarioBaseInfo';
+    const SCENARIO_LOCATIONS = 'scenarioLocations';
+    const SCENARIO_PROJECTS = 'scenarioProjects';
 
     // Static
     // =========================================================================
@@ -236,6 +238,7 @@ class Partner extends Element
     // =========================================================================
 
     /**
+     * Note that `locations` and `projects` are validated in `self::afterSave()`
      * @inheritdoc
      */
     public function rules()
@@ -279,6 +282,16 @@ class Partner extends Element
             'on' => self::SCENARIO_BASE_INFO
         ];
 
+        $rules[] = [
+            'locations',
+            'required',
+            'message' => 'Please provide at least one location',
+            'on' => [
+                self::SCENARIO_LOCATIONS,
+                self::SCENARIO_LIVE,
+            ]
+        ];
+
         $rules[] = ['primaryContactEmail', 'email'];
         $rules[] = ['verificationStartDate', 'date', 'format' => 'Y-m-d'];
 
@@ -304,6 +317,38 @@ class Partner extends Element
      * @inheritdoc
      */
     public function afterSave(bool $isNew)
+    {
+        switch ($this->getScenario()) {
+            // Only save basic Partner (Craft ID)
+            case self::SCENARIO_BASE_INFO:
+                $this->saveBaseInfo($isNew);
+                break;
+
+            // Only save locations (Craft ID)
+            case self::SCENARIO_LOCATIONS:
+                $this->saveLocations();
+                break;
+
+            // Only save projects (Craft ID)
+            case self::SCENARIO_PROJECTS:
+                $this->saveProjects();
+                break;
+
+            // Else save it all
+            default:
+                $this->saveBaseInfo($isNew);
+                $this->saveLocations();
+                $this->saveProjects();
+                break;
+        }
+    }
+
+    /**
+     * Saves everything but locations and projects
+     * @param bool $isNew
+     * @throws \yii\db\Exception
+     */
+    protected function saveBaseInfo(bool $isNew)
     {
         $partnerData = $this->getAttributes([
             'ownerId',
@@ -363,15 +408,26 @@ class Partner extends Element
                 )
                 ->execute();
         }
+    }
 
-        // Skip the rest if just saving basic info from Craft ID page
-        if ($this->getScenario() !== self::SCENARIO_BASE_INFO) {
-            $this->_saveOneToManyRelations($this->_locations, 'craftnet_partnerlocations');
-            $this->_saveOneToManyRelations($this->_projects, 'craftnet_partnerprojects', true, ['screenshots']);
+    /**
+     * Saves locations
+     */
+    protected function saveLocations()
+    {
+        $this->_saveOneToManyRelations($this->_locations, 'craftnet_partnerlocations');
+    }
 
-            foreach ($this->_projects as $project) {
-                $this->_saveProjectScreenshots($project);
-            }
+    /**
+     * Saves projects
+     * @throws \yii\db\Exception
+     */
+    protected function saveProjects()
+    {
+        $this->_saveOneToManyRelations($this->_projects, 'craftnet_partnerprojects', true, ['screenshots']);
+
+        foreach ($this->_projects as $project) {
+            $this->_saveProjectScreenshots($project);
         }
     }
 
@@ -381,31 +437,27 @@ class Partner extends Element
      */
     public function afterValidate()
     {
-        // Don't validate locations or projects when patching from
-        // Craft ID account pages.
-        if ($this->getScenario() === self::SCENARIO_BASE_INFO) {
-            return parent::afterValidate();
-        }
+        $scenario = $this->getScenario();
 
-        foreach ($this->_locations as $location) {
-            // Same scenarios on Partner and ParnerLocationModel:
-            // SCENARIO_DEFAULT, SCENARIO_LIVE
-            $location->setScenario($this->getScenario());
-            $isValid = $location->validate();
+        if (in_array($scenario, [self::SCENARIO_LIVE, self::SCENARIO_LOCATIONS])) {
+            foreach ($this->_locations as $location) {
+                $location->setScenario(Element::SCENARIO_LIVE);
+                $isValid = $location->validate();
 
-            if (!$isValid && !$this->hasErrors('locations')) {
-                $this->addError('locations', 'Please fix location errors');
+                if (!$isValid && !$this->hasErrors('locations')) {
+                    $this->addError('locations', 'Please fix location errors');
+                }
             }
         }
 
-        foreach ($this->_projects as $project) {
-            // Same scenarios on Partner and ParnerLocationModel:
-            // SCENARIO_DEFAULT, SCENARIO_LIVE
-            $project->setScenario($this->getScenario());
-            $isValid = $project->validate();
+        if (in_array($scenario, [self::SCENARIO_LIVE])) {
+            foreach ($this->_projects as $project) {
+                $project->setScenario($this->getScenario());
+                $isValid = $project->validate();
 
-            if (!$isValid && !$this->hasErrors('projects')) {
-                $this->addError('projects', 'Please fix projects errors');
+                if (!$isValid && !$this->hasErrors('projects')) {
+                    $this->addError('projects', 'Please fix projects errors');
+                }
             }
         }
 

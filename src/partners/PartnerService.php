@@ -274,6 +274,8 @@ class PartnerService
             ]);
         }
 
+        $data['locations'] = array_values($data['locations']);
+
         // projects
         $this->eagerLoadProjectScreenshots($data['projects']);
 
@@ -291,6 +293,37 @@ class PartnerService
         }
 
         return $data;
+    }
+
+    /**
+     * @param Partner $partner
+     * @return array
+     */
+    public function getSerializedPartnerErrors(Partner $partner)
+    {
+        $errors = $partner->getErrors();
+
+        $locationErrors = [];
+        /** @var PartnerLocation $location */
+        foreach ($partner->getLocations() as $location) {
+            $locationErrors[] = $location->getErrors();
+        }
+
+        if ($locationErrors) {
+            $errors['locations'] = $locationErrors;
+        }
+
+        $projectErrors = [];
+        /** @var PartnerProject $project */
+        foreach ($partner->getProjects() as $project) {
+            $projectErrors[] = $project->getErrors();
+        }
+
+        if ($projectErrors) {
+            $errors['projects'] = $projectErrors;
+        }
+
+        return $errors;
     }
 
     /**

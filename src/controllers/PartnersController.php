@@ -15,6 +15,7 @@ use craftnet\partners\PartnerHistory;
 use craftnet\partners\PartnerService;
 use GuzzleHttp\Exception\RequestException;
 use yii\base\Exception;
+use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -84,26 +85,42 @@ class PartnersController extends Controller
             throw new ForbiddenHttpException();
         }
 
-        PartnerService::getInstance()->mergeRequestParams($partner, $request, [
-            'businessName',
-            'primaryContactName',
-            'primaryContactEmail',
-            'primaryContactPhone',
-            'region',
-            'isRegisteredBusiness',
-            'hasFullTimeDev',
-            'capabilities',
-            'expertise',
-            'agencySize',
-            'fullBio',
-            'shortBio',
-        ]);
+        switch($request->getBodyParam('scenario')) {
+            case Partner::SCENARIO_BASE_INFO:
+                $partner->setScenario(Partner::SCENARIO_BASE_INFO);
+                PartnerService::getInstance()->mergeRequestParams($partner, $request, [
+                    'businessName',
+                    'primaryContactName',
+                    'primaryContactEmail',
+                    'primaryContactPhone',
+                    'region',
+                    'isRegisteredBusiness',
+                    'hasFullTimeDev',
+                    'capabilities',
+                    'expertise',
+                    'agencySize',
+                    'fullBio',
+                    'shortBio',
+                ]);
+                break;
 
-        $partner->setScenario(Partner::SCENARIO_BASE_INFO);
+            case Partner::SCENARIO_LOCATIONS:
+                $partner->setScenario(Partner::SCENARIO_LOCATIONS);
+                PartnerService::getInstance()->mergeRequestParams($partner, $request, [
+                    'locations',
+                ]);
+                break;
+
+            default:
+                throw new BadRequestHttpException('Invalid partner scenario');
+                break;
+        }
 
         if (!Craft::$app->getElements()->saveElement($partner)) {
+            $errors = PartnerService::getInstance()->getSerializedPartnerErrors($partner);
+
             return $this->asJson([
-                'errors' => $partner->getErrors(),
+                'errors' => $errors,
                 'success' => false,
             ]);
         }

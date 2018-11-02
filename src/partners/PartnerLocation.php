@@ -40,6 +40,8 @@ class PartnerLocation extends Model
                 'state',
                 'zip',
                 'country',
+                'phone',
+                'email',
             ],
             'required',
             'on' => self::SCENARIO_LIVE,

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4>Locations</h4>
+        <h4>Location</h4>
 
         <p class="text-grey-darker">Location and sales contact information for potential clients.</p>
 
@@ -11,24 +11,27 @@
             :index="index"
             :edit-index="editIndex"
             :request-pending="requestPending"
-            @edit="onEdit"
+            :errors="errors[index]"
             @cancel="onCancel"
+            @delete="onDelete"
+            @edit="onEdit"
+            @save="onSave"
         ></partner-location>
 
-        <div class="pl-4">
+        <!-- Multiple locations not currently enabled -->
+        <div v-if="draftLocations.length === 0" class="pl-4">
             <button class="btn btn-secondary btn-sm" @click="onAddLocationClick"><i class="fa fa-plus"></i> Add a Location</button>
         </div>
-
     </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
     import helpers from '../mixins/helpers'
     import PartnerLocation from './PartnerLocation'
 
     export default {
         props: ['partner'],
+
         mixins: [helpers],
 
         components: {
@@ -37,6 +40,7 @@
 
         data() {
             return {
+                errors: [],
                 draftLocations: [],
                 draftLocationProps: [
                     'id',
@@ -71,40 +75,74 @@
                 })
             },
 
-            cloneLocations() {
-                let locations = []
+            cloneLocations(locations) {
+                let clone = []
 
-                for (let i = 0; i < this.partner.locations.length; i++) {
+                for (let i = 0; i < locations.length; i++) {
                     const location = this.partner.locations[i]
-                    locations.push(this.simpleClone(location, this.draftLocationProps))
+                    clone.push(this.simpleClone(location, this.draftLocationProps))
                 }
 
-                this.draftLocations = locations
+                return clone
             },
 
             onCancel() {
                 // reset
-                this.cloneLocations()
+                this.setDraftLocations()
                 this.editIndex = null
             },
 
             onDelete(index) {
-                this.editIndex = null
+                if (this.draftLocations.length === 1) {
+                    this.$root.displayError('Must have at least one location');
+                    return;
+                }
+
+                // we can't splice `draftLocations` or the modal for the
+                // spliced out location will disappear
+                let locations = this.cloneLocations(this.draftLocations)
+                locations.splice(index, 1)
+                this.save(locations)
             },
 
             onEdit(index) {
+                this.errors = []
                 this.editIndex = index
             },
+
+            onSave() {
+                this.save(this.draftLocations);
+            },
+
+            save(locations) {
+                this.requestPending = true
+
+                this.$store.dispatch('patchPartnerLocations', locations)
+                    .then(response => {
+                        this.requestPending = false
+
+                        if (!response.data.success) {
+                            this.errors = response.data.errors.locations
+                            this.$root.displayError('Validation errors')
+                        } else {
+                            this.setDraftLocations();
+                            this.$root.displayNotice('Updated')
+                            this.editIndex = null
+                        }
+                    })
+                    .catch(errorMessage => {
+                        this.$root.displayError(errorMessage)
+                        this.requestPending = false
+                    })
+            },
+
+            setDraftLocations() {
+                this.draftLocations = this.cloneLocations(this.partner.locations)
+            }
         },
 
         mounted() {
-            this.cloneLocations()
+            this.setDraftLocations()
         },
-
-        watch: {
-            partner() {
-                this.cloneLocations()
-            }
-        }
     }
 </script>
