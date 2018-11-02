@@ -26,37 +26,61 @@ class CmsLicensesController extends Controller
      */
     public function actionCreate(): int
     {
-        $license = new CmsLicense();
         $edition = null;
+        $note = null;
+        $expiresOn = null;
+        $autoRenew = null;
 
-        $license->editionHandle = $this->editionHandlePrompt('solo');
-        $license->email = $this->emailPrompt();
+        $quantity = $this->quantityPrompt('1');
 
-        if ($license->expirable = $this->confirm('Expirable?')) {
-            $license->expiresOn = $this->expiresOnPrompt();
-            $license->autoRenew = $this->confirm('Auto-renew?');
+        $editionHandle = $this->editionHandlePrompt('pro');
+        $email = $this->emailPrompt();
+
+        if ($expirable = $this->confirm('Expirable?', true)) {
+            $expiresOn = $this->expiresOnPrompt();
+            $autoRenew = $this->confirm('Auto-renew?');
         }
 
-        $license->notes = $this->prompt('Owner-facing notes:') ?: null;
-        $license->privateNotes = $this->prompt('Private notes:') ?: null;
-
-        $license->key = KeyHelper::generateCmsKey();
-        $license->ownerId = User::find()->select(['elements.id'])->email($license->email)->scalar() ?: null;
-        $license->expired = $license->expiresOn !== null ? $license->expiresOn->getTimestamp() < time() : false;
-
-        if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
-            $this->stderr('Could not save license: '.implode(', ', $license->getFirstErrors().PHP_EOL), Console::FG_RED);
-            return 1;
-        }
-
-        $this->stdout('License saved: '.PHP_EOL.chunk_split($license->key, 50).PHP_EOL, Console::FG_GREEN);
+        $notes = $this->prompt('Owner-facing notes:') ?: null;
+        $privateNotes = $this->prompt('Private notes:') ?: null;
+        $ownerId = User::find()->select(['elements.id'])->email($email)->scalar() ?: null;
+        $expired = $expiresOn !== null ? $expiresOn->getTimestamp() < time() : false;
 
         if ($this->confirm('Create a history record for the license?', true)) {
             $note = $this->prompt('Note: ', [
                 'required' => true,
-                'default' => "created by {$license->email}"
+                'default' => "created by {$email}"
             ]);
-            $this->module->getCmsLicenseManager()->addHistory($license->id, $note);
+        }
+
+        for ($counter = 1; $counter <= $quantity; $counter++) {
+            $key = KeyHelper::generateCmsKey();
+
+            $license = new CmsLicense();
+            $license->key = $key;
+            $license->editionHandle = $editionHandle;
+            $license->email = $email;
+            $license->expirable = $expirable;
+            $license->notes = $notes;
+            $license->privateNotes = $privateNotes;
+            $license->ownerId = $ownerId;
+            $license->expired = $expired;
+
+            if ($expirable) {
+                $license->expiresOn = $expiresOn;
+                $license->autoRenew = $autoRenew;
+            }
+
+            if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
+                $this->stderr('Could not save license: '.implode(', ', $license->getFirstErrors().PHP_EOL), Console::FG_RED);
+                return 1;
+            }
+
+            $this->stdout("License #{$counter} saved: ".PHP_EOL.chunk_split($license->key, 50).PHP_EOL, Console::FG_GREEN);
+
+            if ($note) {
+                $this->module->getCmsLicenseManager()->addHistory($license->id, $note);
+            }
         }
 
         return 0;
@@ -138,6 +162,21 @@ class CmsLicensesController extends Controller
         }
 
         return 0;
+    }
+
+    protected function quantityPrompt(string $default = null): string
+    {
+        return $this->prompt('How many licenses?:', [
+            'required' => true,
+            'default' => $default,
+            'validator' => function(string $quantity, string &$error = null) {
+                if (!is_numeric($quantity) || (int)$quantity < 1) {
+                    $error = 'Must be a number greater than 0.';
+                    return false;
+                }
+                return true;
+            }
+        ]);
     }
 
     protected function editionHandlePrompt(string $default = null): string
