@@ -28,11 +28,7 @@
                 </p>
                 <input v-else type="hidden" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures" />
 
-                <p v-if="userIsInGroup('staff')">
-                    <input id="enablePartnerFeatures" type="checkbox" name="fields[enablePartnerFeatures]" v-model="userDraft.enablePartnerFeatures">
-                    <label for="enablePartnerFeatures">Enable partner features</label>
-                </p>
-                <input v-else type="hidden" name="fields[enablePartnerFeatures]" v-model="userDraft.enablePartnerFeatures" />
+                <input type="hidden" name="fields[enablePartnerFeatures]" v-model="userDraft.enablePartnerFeatures" />
             </div>
         </div>
 
