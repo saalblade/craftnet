@@ -71,18 +71,29 @@ export default {
         formData.append('id', partnerId)
         formData.append('scenario', 'scenarioProjects')
 
-        projects.forEach(project => {
+        debugger
+
+        for (let i in projects) {
+            let project = projects[i]
+
             const id = project.id
 
             for (let prop in project) {
-                if (prop !== 'id') {
+                if (prop !== 'id' && prop !== 'screenshots') {
                     formData.append(
                         `projects[${ project.id }][${prop}]`,
                         project[prop]
                     )
                 }
             }
-        })
+
+            for (let i in project.screenshots) {
+                formData.append(
+                    `projects[${project.id}][screenshots][]`,
+                    project.screenshots[i]['id']
+                )
+            }
+        }
 
         axios.post(Craft.actionUrl + '/craftnet/partners/patch-partner', formData, {
             headers: {

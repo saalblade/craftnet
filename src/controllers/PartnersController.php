@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\elements\User;
 use craft\web\Controller;
+use craft\web\UploadedFile;
 use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use craftnet\partners\Partner;
@@ -138,6 +139,36 @@ class PartnersController extends Controller
             'partner' => $data,
             'success' => true
         ]);
+    }
+
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     * @throws Exception
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \craft\errors\UploadFailedException
+     */
+    public function actionUploadScreenshots()
+    {
+        $this->requireLogin();
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        /** @var User|UserBehavior $user */
+        $user = Craft::$app->getUser()->getIdentity();
+        $partner = $user->getPartner();
+
+        $screenshots = PartnerService::getInstance()->handleUploadedScreenshots($partner);
+
+        $screenshots = array_map(function($sreenshot) {
+            return [
+                'id' => $sreenshot->id,
+                'url' => $sreenshot->url
+            ];
+        }, $screenshots);
+
+        return $this->asJson(compact('screenshots'));
     }
 
     /**

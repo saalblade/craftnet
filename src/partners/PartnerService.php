@@ -2,9 +2,17 @@
 
 namespace craftnet\partners;
 
+use Craft;
+use craft\base\Volume;
 use craft\db\Query;
 use craft\elements\Asset;
+use craft\errors\AssetDisallowedExtensionException;
+use craft\errors\ImageException;
+use craft\helpers\ConfigHelper;
+use craft\helpers\StringHelper;
 use craft\web\Request;
+use craft\web\UploadedFile;
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 
 class PartnerService
@@ -376,5 +384,99 @@ class PartnerService
                     break;
             }
         }
+    }
+
+    /**
+     * Derived from `PluginsController`
+     *
+     * @param Partner $partner
+     * @return Asset[]
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \yii\base\Exception
+     */
+    public function handleUploadedScreenshots(Partner $partner)
+    {
+        $screenshots = [];
+        $allowedFileExtensions = ['jp2', 'jpeg', 'jpg', 'jpx', 'png'];
+        $imageService = Craft::$app->getImages();
+        $assetsService = Craft::$app->getAssets();
+        $volumesService = Craft::$app->getVolumes();
+
+        $iniMaxUpload = ConfigHelper::sizeInBytes(ini_get('upload_max_filesize'));
+        $configMaxUpload = Craft::$app->getConfig()->getGeneral()->maxUploadFileSize;
+        $maxUpload = min($iniMaxUpload, $configMaxUpload);
+        $maxUploadM = round($maxUpload / 1000 / 1000);
+
+        $screenshotFiles = UploadedFile::getInstancesByName('screenshots');
+
+        foreach ($screenshotFiles as $screenshotFile) {
+            if ($screenshotFile->error != UPLOAD_ERR_OK) {
+                if ($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
+                    throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
+                }
+
+                throw new Exception('Couldn’t upload screenshot. (Error '.$screenshotFile->error.')');
+            }
+
+            if ($screenshotFile->size > $maxUpload) {
+                throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
+            }
+
+            $extension = $screenshotFile->getExtension();
+
+            if (!in_array(strtolower($extension), $allowedFileExtensions, true)) {
+                throw new AssetDisallowedExtensionException("Screenshot was not uploaded because extension “{$extension}” is not allowed.");
+            }
+
+            $handle = $partner->id;
+            $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$screenshotFile->getExtension();
+            move_uploaded_file($screenshotFile->tempName, $tempPath);
+
+            if (!$imageService->checkMemoryForImage($tempPath)) {
+                throw new ImageException(Craft::t('app',
+                    'Not enough memory available to perform this image operation.'));
+            }
+
+            $imageService->cleanImage($tempPath);
+
+            // Save as an asset
+
+            /** @var Volume $volume */
+            $volume = $volumesService->getVolumeByHandle('partnerImages');
+            $volumeId = $volumesService->ensureTopFolder($volume);
+
+            $subpath = '/'.$handle;
+
+            $folder = $assetsService->findFolder([
+                'volumeId' => $volumeId,
+                'path' => $subpath.'/'
+            ]);
+
+            if (!$folder) {
+                $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
+            } else {
+                $folderId = $folder->id;
+            }
+
+            $targetFilename = $screenshotFile->name;
+
+            $screenshot = new Asset([
+                'title' => $partner->businessName,
+                'tempFilePath' => $tempPath,
+                'newLocation' => "{folder:{$folderId}}".$targetFilename,
+                'avoidFilenameConflicts' => true,
+            ]);
+
+            $screenshot->validate(['newLocation']);
+
+            if ($screenshot->hasErrors() || !Craft::$app->getElements()->saveElement($screenshot, false)) {
+                throw new Exception('Could not save image asset: '.implode(', ', $screenshot->getErrorSummary(true)));
+            }
+
+            $screenshots[] = $screenshot;
+        }
+
+        return $screenshots;
     }
 }
