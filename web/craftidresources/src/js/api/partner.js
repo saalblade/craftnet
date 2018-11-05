@@ -71,8 +71,6 @@ export default {
         formData.append('id', partnerId)
         formData.append('scenario', 'scenarioProjects')
 
-        debugger
-
         for (let i in projects) {
             let project = projects[i]
 

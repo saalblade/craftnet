@@ -9,7 +9,9 @@ use craft\elements\Asset;
 use craft\errors\AssetDisallowedExtensionException;
 use craft\errors\ImageException;
 use craft\helpers\ConfigHelper;
+use craft\helpers\ElementHelper;
 use craft\helpers\StringHelper;
+use craft\helpers\UrlHelper;
 use craft\web\Request;
 use craft\web\UploadedFile;
 use yii\base\Exception;
@@ -260,6 +262,7 @@ class PartnerService
             'capabilities',
             'locations',
             'projects',
+            'websiteSlug',
         ]);
 
         // capabilities - titles only
@@ -377,6 +380,14 @@ class PartnerService
                     // to boolean in validation rules but for now...
                     $value = $request->getBodyParam($property);
                     $partner->{$property} = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                    break;
+
+                case 'websiteSlug':
+                    $partner->websiteSlug = $request->getBodyParam($property);
+
+                    if (empty($partner->websiteSlug) && !empty($partner->businessName)) {
+                        $partner->websiteSlug = ElementHelper::createSlug($partner->businessName);
+                    }
                     break;
 
                 default:

@@ -97,9 +97,10 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.isRegisteredBusiness',
             'craftnet_partners.region',
             'craftnet_partners.expertise',
+            'craftnet_partners.websiteSlug',
         ]);
 
-        $andColumns = [
+        $andWhereColumns = [
             'ownerId',
             'agencySize',
             'isCraftVerified',
@@ -108,7 +109,7 @@ class PartnerQuery extends ElementQuery
             'region',
         ];
 
-        foreach($andColumns as $column) {
+        foreach($andWhereColumns as $column) {
             if (isset($this->{$column})) {
                 $this->subQuery->andWhere(Db::parseParam('craftnet_partners.' . $column, $this->{$column}));
             }

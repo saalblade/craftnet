@@ -14,14 +14,6 @@
 
         <div class="btn submit menubtn"></div>
         <div class="menu">
-            {% if partner.pendingApproval %}
-                <hr>
-                <ul>
-                    <li><a class="formsubmit" data-param="approve" data-value="1"><span class="status green"></span>Approve</a></li>
-                    <li><a class="formsubmit" data-param="reject" data-value="1"><span class="status red"></span>Request changes</a></li>
-                </ul>
-                <hr>
-            {% endif %}
             <ul>
                 <li><a class="formsubmit" data-redirect="{{ saveShortcutRedirect|hash }}">
                         {{ forms.optionShortcutLabel('S') }}
@@ -53,6 +45,15 @@
             name: 'businessName',
             value: partner.businessName,
             errors: partner.getErrors('businessName'),
+        }) }}
+
+        {{ forms.textField({
+            label: 'Website Slug',
+            required: true,
+            id: 'websiteSlug',
+            name: 'websiteSlug',
+            value: partner.websiteSlug,
+            errors: partner.getErrors('websiteSlug'),
         }) }}
 
         {{ forms.selectField({

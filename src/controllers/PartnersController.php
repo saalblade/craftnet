@@ -102,6 +102,7 @@ class PartnersController extends Controller
                     'agencySize',
                     'fullBio',
                     'shortBio',
+                    'websiteSlug',
                 ]);
                 break;
 
@@ -256,6 +257,7 @@ class PartnersController extends Controller
                 'locations',
                 'projects',
                 'verificationStartDate',
+                'websiteSlug',
             ]
         );
 

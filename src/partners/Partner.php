@@ -9,6 +9,7 @@ use craft\elements\actions\SetStatus;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\UrlHelper;
+use craftnet\partners\validators\PartnerSlugValidator;
 use yii\helpers\Inflector;
 
 /**
@@ -220,6 +221,11 @@ class Partner extends Element
     public $region;
 
     /**
+     * @var string
+     */
+    public $websiteSlug;
+
+    /**
      * @var array
      */
     private $_capabilities = null;
@@ -249,6 +255,15 @@ class Partner extends Element
         $rules[] = ['shortBio', 'string', 'max' => '255'];
 
         $rules[] = [
+            'websiteSlug',
+            PartnerSlugValidator::class,
+            'on' => [
+                self::SCENARIO_BASE_INFO,
+                self::SCENARIO_LIVE,
+            ]
+        ];
+
+        $rules[] = [
             [
                 'businessName',
                 'primaryContactName',
@@ -259,6 +274,7 @@ class Partner extends Element
                 'agencySize',
                 'fullBio',
                 'shortBio',
+                'websiteSlug',
             ],
             'required',
             'on' => [
@@ -373,6 +389,7 @@ class Partner extends Element
             'verificationStartDate',
             'isRegisteredBusiness',
             'expertise',
+            'websiteSlug'
         ]);
 
         if ($isNew) {

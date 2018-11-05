@@ -61,7 +61,7 @@
                 </div>
 
                 <div v-else>
-                    <text-field id="businessName" label="Business Name" instructions="The URL slug will be generated from this title." v-model="draft.businessName" :errors="errors.businessName" />
+                    <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
                     <text-field id="primaryContactName" label="Primary Contact Name" v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
                     <text-field id="primaryContactEmail" label="Primary Contact Email" v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
                     <text-field id="primaryContactPhone" label="Primary Contact Phone" v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
@@ -73,6 +73,7 @@
                     <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agencySize" :errors="errors.agencySize" />
                     <textarea-field id="fullBio" label="Full Bio" instructions="Markdown OK. Shown on your detail page." v-model="draft.fullBio" :errors="errors.fullBio" />
                     <textarea-field id="shortBio" label="Short Bio" instructions="Max 255 characters. Shown on your listing card." v-model="draft.shortBio" :errors="errors.shortBio" />
+                    <text-field id="websiteSlug" label="Website Slug" instructions="Generated from Business Name if blank. Not editable once your page is live." v-model="draft.websiteSlug" :errors="errors.websiteSlug" :disabled="partner.enabled" />
 
                     <div class="pt-4">
                         <button
@@ -124,6 +125,7 @@
                 draftProps: [
                     'id',
                     'businessName',
+                    'websiteSlug',
                     'primaryContactName',
                     'primaryContactEmail',
                     'primaryContactPhone',
