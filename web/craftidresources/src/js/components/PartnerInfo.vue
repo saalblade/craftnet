@@ -207,12 +207,12 @@
                     .then(response => {
                         this.requestPending = false
 
-                        if (!response.data.success) {
-                            this.errors = response.data.errors
-                            this.$root.displayError('Validation errors')
-                        } else {
+                        if (response.data.success) {
                             this.$root.displayNotice('Updated')
                             this.isEditing = false
+                        } else {
+                            this.errors = response.data.errors
+                            this.$root.displayError('Validation errors')
                         }
                     })
                     .catch(errorMessage => {

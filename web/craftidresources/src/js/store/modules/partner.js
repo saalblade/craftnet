@@ -49,12 +49,11 @@ const actions = {
             partnerApi.patchPartner(
                 draft,
                 response => {
-                    if (response.data && !response.data.error) {
+                    if (response.data.success) {
                         commit(types.RECEIVE_PARTNER, response.data.partner)
-                        resolve(response)
-                    } else {
-                        reject('Validation errors')
                     }
+                    resolve(response)
+
                 }, error => {
                     reject(error.statusText)
                 })
