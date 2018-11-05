@@ -83,37 +83,65 @@ const getters = {
             let renewableLicenses = []
 
             // CMS license
+            let cmsBaseExpiresOn = license.expiresOn.date
+
+            if (license.expired) {
+                cmsBaseExpiresOn = new Date()
+            }
+
+            let cmsNewExpiresOn = VueApp.$moment(cmsBaseExpiresOn)
+            cmsNewExpiresOn = cmsNewExpiresOn.add(renew, 'years')
 
             renewableLicenses.push({
                 description: 'Craft ' + license.editionDetails.name,
                 expiresOn: license.expiresOn,
+                newBaseExpiresOn: cmsBaseExpiresOn,
+                newExpiresOn: cmsNewExpiresOn.format(),
                 edition: license.editionDetails,
             })
 
 
             // Plugin licenses
 
-            if(license.pluginLicenses.length > 0) {
-                let renewablePluginLicenses = license.pluginLicenses.filter(license => !!license.key)
-
-                const cmsExpiresOn = VueApp.$moment(license.expiresOn.date)
-                let cmsNewExpiresOn = cmsExpiresOn.add(renew, 'years')
-
-                renewablePluginLicenses = state.pluginLicenses.filter(license => {
-                    const pluginExpiresOn = VueApp.$moment(license.expiresOn.date)
-                    if(pluginExpiresOn > cmsNewExpiresOn) {
+            if (license.pluginLicenses.length > 0) {
+                // Renewable plugin licenses
+                const renewablePluginLicenses = state.pluginLicenses.filter(pluginLicense => {
+                    // Only keep plugin licenses related to this CMS license
+                    if (pluginLicense.cmsLicenseId !== license.id) {
                         return false
                     }
-                    return renewablePluginLicenses.find(renewablePluginLicense => renewablePluginLicense.id === license.id)
+
+                    // Plugin licenses with no `expiresOn` are not renewable
+                    if (!pluginLicense.expiresOn) {
+                        return false
+                    }
+
+                    // Ignore the plugin license if it expires after the CMS license
+
+                    if (!pluginLicense.expired) {
+                        const pluginExpiresOn = VueApp.$moment(pluginLicense.expiresOn.date)
+
+                        if(pluginExpiresOn > cmsNewExpiresOn) {
+                            return false
+                        }
+                    }
+
+                    return true
                 })
 
+
+                // Add renewable plugin licenses to the `renewableLicenses` array
                 renewablePluginLicenses.forEach(function(renewablePluginLicense) {
+                    const newBaseExpiresOn = cmsBaseExpiresOn
+                    const newExpiresOn = cmsNewExpiresOn
                     renewableLicenses.push({
                         description: renewablePluginLicense.plugin.name,
                         expiresOn: renewablePluginLicense.expiresOn,
+                        newBaseExpiresOn: newBaseExpiresOn,
+                        newExpiresOn: newExpiresOn.format(),
                         edition: renewablePluginLicense.edition,
                     })
-                }.bind(this))
+                })
             }
 
             return renewableLicenses
@@ -132,13 +160,16 @@ const getters = {
         return (license, renew, checkedLicenses) => {
             let total = 0
 
-            getters.renewableLicenses(license, renew).forEach(function(renewableLicense, key) {
+            const renewableLicenses = getters.renewableLicenses(license, renew)
+
+            renewableLicenses.forEach(function(renewableLicense, key) {
                 const isChecked = checkedLicenses[key]
 
                 if (isChecked) {
-                    total += getters.newExpiresOn(license, renew).diff(renewableLicense.expiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice
+                    const years = VueApp.$moment(renewableLicense.newExpiresOn).diff(renewableLicense.newBaseExpiresOn.date, 'years', true)
+                    total += years * renewableLicense.edition.renewalPrice
                 }
-            })
+            }.bind(this))
 
             return total
         }
