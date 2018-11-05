@@ -45,6 +45,13 @@
                 errors: project.getErrors('role') ?? [],
             }) }}
 
+            {#
+                Don't know why but this needs to be set or else `project.screenshots`
+                passed to the macro makes it throw an error saying it's an empty
+                array when it's not.
+            #}
+            {% set screenshots = project.screenshots | default([]) %}
+
             {{ forms.elementSelectField({
                 label: 'Screenshot',
                 id: 'projects-' ~ id ~ '-screenshots',
@@ -54,7 +61,7 @@
                 criteria: {kind: 'image'},
                 limit: 0,
                 sources: ['folder:' ~ folderId],
-                elements: project.screenshots ?? [],
+                elements: screenshots,
                 errors: project.getErrors('screenshots') ?? [],
             }) }}
 
