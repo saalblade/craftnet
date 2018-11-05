@@ -10,6 +10,7 @@ return [
     'buildwithcraft.com',
     'builtbymighty.com',
     'chiefstaging.com',
+    'ckstaging.com',
     'clearfiredev.net',
     'cloudwaysapps.com',
     'clover.show',
