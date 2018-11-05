@@ -3,6 +3,10 @@
 		<fieldset class="checkboxes">
 			<legend>{{ label }}</legend>
 
+			<div v-if="instructions" class="instructions">
+				<p>{{ instructions }}</p>
+			</div>
+
 			<ul class="list-reset pl-4 pt-2">
 				<li v-for="(option, index) in this.options" :key="index">
 					<label>
@@ -20,7 +24,7 @@
 <script>
     export default {
 
-		props: ['options', 'label', 'value', 'errors'],
+		props: ['options', 'label', 'instructions', 'value', 'errors'],
 
 		data() {
 			return {

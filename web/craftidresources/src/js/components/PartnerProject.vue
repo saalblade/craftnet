@@ -8,8 +8,10 @@
                         <li v-if="project.role">{{ project.role }}</li>
                         <li v-if="project.url">{{ project.url }}</li>
                         <li v-if="project.screenshots.length" class="mt-3"><strong>Screenshots</strong></li>
-                        <li v-for="(screenshot, index) in project.screenshots" :key="index" class="p-1 mt-2">
-                            <img :src="screenshot.url" style="max-width: 300px; max-height: 300px;">
+                        <li class="flex">
+                            <div v-for="(screenshot, index) in project.screenshots" :key="index" class="p-1 mt-2 inline-block bg-grey-lightest flex align-middle justify-center" style="height: 150px; width: 150px;">
+                                <img :src="screenshot.url" style="max-width: 100%; max-height: 100%;">
+                            </div>
                         </li>
                     </ul>
                     <div>
@@ -23,6 +25,9 @@
                 <text-field id="name" label="Project Name" v-model="project.name" :errors="localErrors.name" placeholder="Main Office" />
                 <text-field id="role" label="Role" v-model="project.role" :errors="localErrors.role" />
                 <text-field id="url" label="URL" v-model="project.url" :errors="localErrors.url" />
+
+                <label>Screenshots</label>
+                <p class="instructions">Up to five screenshots will be displayed. Drag to re-order.</p>
 
                 <draggable v-model="project.screenshots">
                     <div v-for="(screenshot, index) in project.screenshots" :key="index" class="screenshot mt-6">
@@ -43,8 +48,6 @@
                         <span v-show="isUploading" class="spinner"></span>
                     </button>
                 </div>
-
-                <pre class="mt-2 mb-2">{{ project.screenshots }}</pre>
 
                 <div class="mt-4 flex">
                     <div class="flex-1">

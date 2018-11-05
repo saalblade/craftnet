@@ -1,6 +1,11 @@
 <template>
 	<div class="form-group">
 		<label v-if="label" :id="id+'-label'" :for="id">{{ label }}</label>
+
+		<div v-if="instructions" class="instructions">
+			<p>{{ instructions }}</p>
+		</div>
+
 		<textarea-input
 			:autocapitalize="autocapitalize"
 			:class="{'is-invalid': errors }"
@@ -12,7 +17,7 @@
 			:spellcheck="spellcheck"
 			:value="value"
 			@input="$emit('input', $event)"/>
-		<div class="invalid-feedback" v-for="error in errors">{{ error }}</div>
+		<div class="invalid-feedback" v-for="(error, key) in errors" :key="key">{{ error }}</div>
 	</div>
 </template>
 
@@ -21,7 +26,7 @@
 
     export default {
 
-        props: ['label', 'id', 'placeholder', 'value', 'cols', 'rows', 'errors', 'disabled', 'autocapitalize', 'spellcheck'],
+        props: ['label', 'instructions', 'id', 'placeholder', 'value', 'cols', 'rows', 'errors', 'disabled', 'autocapitalize', 'spellcheck'],
 
         components: {
             TextareaInput,

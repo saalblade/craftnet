@@ -61,18 +61,18 @@
                 </div>
 
                 <div v-else>
-                    <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
+                    <text-field id="businessName" label="Business Name" instructions="The URL slug will be generated from this title." v-model="draft.businessName" :errors="errors.businessName" />
                     <text-field id="primaryContactName" label="Primary Contact Name" v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
                     <text-field id="primaryContactEmail" label="Primary Contact Email" v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
                     <text-field id="primaryContactPhone" label="Primary Contact Phone" v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
                     <select-field id="region" label="Region" v-model="draft.region" :options="options.region" :errors="errors.region" />
-                    <checkbox-field id="isRegisteredBusiness" label="This is a registered business" v-model="draft.isRegisteredBusiness" :checked-value="1" :errors="errors.isRegisteredBusiness" />
-                    <checkbox-field id="hasFullTimeDev" label="Buisiness has at least one full-time Craft developer" v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
+                    <checkbox-field id="isRegisteredBusiness" label="This is a registered business" instructions="Required for consideration." v-model="draft.isRegisteredBusiness" :checked-value="1" :errors="errors.isRegisteredBusiness" />
+                    <checkbox-field id="hasFullTimeDev" label="Buisiness has at least one full-time Craft developer" instructions="Required for consideration." v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
                     <checkbox-set id="capabilities" label="Capabilities" v-model="draft.capabilities" :options="options.capabilities" :errors="errors.capabilities" />
-                    <textarea-field id="expertise" label="Areas of Expertise (each on new line)" v-model="draft.expertise" />
+                    <textarea-field id="expertise" label="Areas of Expertise" instructions="Tags for relevant expertise (e.g. SEO), each on a new line" v-model="draft.expertise" />
                     <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agencySize" :errors="errors.agencySize" />
-                    <textarea-field id="fullBio" label="Full Bio" v-model="draft.fullBio" :errors="errors.fullBio" />
-                    <textarea-field id="shortBio" label="Short Bio for Card" v-model="draft.shortBio" :errors="errors.shortBio" />
+                    <textarea-field id="fullBio" label="Full Bio" instructions="Markdown OK. Shown on your detail page." v-model="draft.fullBio" :errors="errors.fullBio" />
+                    <textarea-field id="shortBio" label="Short Bio" instructions="Max 255 characters. Shown on your listing card." v-model="draft.shortBio" :errors="errors.shortBio" />
 
                     <div class="pt-4">
                         <button

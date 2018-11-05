@@ -2,7 +2,10 @@
     <div>
         <h4>Projects</h4>
 
-        <p class="text-grey-darker">Add 5 projects.</p>
+        <p class="instructions">
+            Five projects are required, up to six will be displayed.
+            Each must have a public URL for a case study or website.
+        </p>
 
         <partner-project
             v-for="(project, index) in draftProjects"
