@@ -21,6 +21,7 @@ use DateTime;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\helpers\Markdown;
+use yii\validators\CompareValidator;
 
 /**
  * @property User $developer
@@ -702,6 +703,17 @@ class Plugin extends Element
             'required',
             'when' => [$this, 'isRenewalPriceRequired'],
             'isEmpty' => [$this, 'isPriceEmpty']
+        ];
+
+        $rules[] = [
+            [
+                'renewalPrice'
+            ],
+            'compare',
+            'compareAttribute' => 'price',
+            'type' => CompareValidator::TYPE_NUMBER,
+            'operator' => '<=',
+            'when' => [$this, 'isRenewalPriceRequired']
         ];
 
         $rules[] = [
