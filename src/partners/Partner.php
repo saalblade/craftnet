@@ -245,12 +245,8 @@ class Partner extends Element
     {
         $rules = parent::rules();
 
-        $rules[] = [
-            [
-                'ownerId'
-            ],
-            'required',
-        ];
+        $rules[] = ['ownerId', 'required'];
+        $rules[] = ['shortBio', 'string', 'max' => '255'];
 
         $rules[] = [
             [
