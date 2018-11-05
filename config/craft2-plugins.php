@@ -146,6 +146,9 @@ return [
     'MnEager' => [
         'handle' => 'agnostic-fetch'
     ],
+    'MnSnitch' => [
+        'handle' => 'snitch'
+    ],
     'MnTwigPerversion' => [
         'handle' => 'twig-perversion'
     ],

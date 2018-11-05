@@ -18,11 +18,9 @@ export default {
         let formData = new FormData();
 
         for (let attribute in user) {
-            const value = user[attribute];
-
             switch (attribute) {
                 case 'id':
-                    FormDataHelper.append(formData, 'userId', value);
+                    FormDataHelper.append(formData, 'userId', user[attribute]);
                     break;
                 case 'email':
                 case 'username':
@@ -31,10 +29,10 @@ export default {
                 case 'password':
                 case 'newPassword':
                 case 'photo':
-                    FormDataHelper.append(formData, attribute, value);
+                    FormDataHelper.append(formData, attribute, user[attribute]);
                     break;
                 default:
-                    FormDataHelper.append(formData, 'fields[' + attribute + ']', value);
+                    FormDataHelper.append(formData, 'fields[' + attribute + ']', user[attribute]);
             }
         }
 
