@@ -4,7 +4,7 @@
         <table class="table mb-2">
             <thead>
             <tr>
-                <td><input type="checkbox" ref="checkAll" @change="checkAll"></td>
+                <td><input type="checkbox" v-model="checkAllChecked" ref="checkAll" @change="checkAll"></td>
                 <th>Item</th>
                 <th>Renewal Date</th>
                 <th>New Renewal Date</th>
@@ -48,6 +48,12 @@
 
         props: ['license', 'renew', 'checkedLicenses'],
 
+        data() {
+            return {
+                checkAllChecked: false
+            }
+        },
+
         computed: {
 
             ...mapState({
@@ -67,6 +73,14 @@
                 let checkedLicenses = JSON.parse(JSON.stringify(this.checkedLicenses))
                 checkedLicenses[key] = $event.target.checked ? 1 : 0
 
+                const allChecked = checkedLicenses.find(license => license === 0)
+
+                if (allChecked === undefined) {
+                    this.checkAllChecked = true
+                } else {
+                    this.checkAllChecked = false
+                }
+                
                 this.$emit('update:checkedLicenses', checkedLicenses)
             },
 
@@ -103,9 +117,7 @@
         },
 
         mounted() {
-            if(this.renewableLicenses(this.license, this.renew).length === 1 || this.checkedLicenses.length === 0) {
-                this.$refs.checkAll.click();
-            }
+            this.$refs.checkAll.click();
         }
 
     }
