@@ -239,31 +239,46 @@ class PartnerService
      */
     public function serializePartner($partner)
     {
-        $data = $partner->getAttributes([
-            'id',
-            'enabled',
-            'ownerId',
+        $strings = [
             'businessName',
-            'pendingApproval',
             'primaryContactName',
             'primaryContactEmail',
             'primaryContactPhone',
             'fullBio',
             'shortBio',
             'agencySize',
+            'expertise',
+            'region',
+            'websiteSlug',
+        ];
+
+        $booleans = [
+            'enabled',
             'hasFullTimeDev',
             'isCraftVerified',
             'isCommerceVerified',
             'isEnterpriseVerified',
             'isRegisteredBusiness',
-            'expertise',
-            'verificationStartDate',
-            'region',
+        ];
+
+        $others = [
+            'id',
+            'ownerId',
             'capabilities',
             'locations',
             'projects',
-            'websiteSlug',
-        ]);
+            'verificationStartDate',
+        ];
+
+        $data = $partner->getAttributes(array_merge($strings, $booleans, $others));
+
+        foreach ($strings as $stringAttribute) {
+            $data[$stringAttribute] = (string)$data[$stringAttribute];
+        }
+
+        foreach ($booleans as $booleanAttribute) {
+            $data[$booleanAttribute] = (bool)$data[$booleanAttribute];
+        }
 
         // capabilities - titles only
         $data['capabilities'] = array_values($data['capabilities']);
