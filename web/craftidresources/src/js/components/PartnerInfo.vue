@@ -62,6 +62,7 @@
                 </div>
 
                 <div v-else>
+                    <p>Note: Logo upload is coming soon! Please check back and complete when it’s ready.</p>
                     <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
                     <text-field id="primaryContactName" label="Primary Contact Name" v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
                     <text-field id="primaryContactEmail" label="Primary Contact Email" v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
