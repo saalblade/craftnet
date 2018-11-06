@@ -251,9 +251,12 @@
         },
 
         created() {
-            this.$store.dispatch('craftId/getCraftIdData').then(() => {
-                this.$store.dispatch('app/setLoading', false)
-            });
+            this.$store.dispatch('craftId/getCraftIdData')
+                .then(() => {
+                    this.$store.dispatch('app/setLoading', false)
+                });
+
+            this.$store.dispatch('cart/getCart');
 
             if (window.stripeAccessToken) {
                 this.$store.dispatch('account/getStripeAccount')
