@@ -238,6 +238,7 @@ class PartnersController extends Controller
         PartnerService::getInstance()->mergeRequestParams($partner, $request, [
                 'enabled',
                 'ownerId',
+                'logoAssetId',
                 'businessName',
                 'primaryContactName',
                 'primaryContactEmail',

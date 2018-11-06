@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\Model;
 use craft\elements\actions\SetStatus;
+use craft\elements\Asset;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\UrlHelper;
@@ -130,6 +131,16 @@ class Partner extends Element
      * @var int The owner’s user ID
      */
     public $ownerId;
+
+    /**
+     * @var int|null
+     */
+    public $logoAssetId;
+
+    /**
+     * @var Asset|null
+     */
+    protected $_logo;
 
     /**
      * @var string|null The partner business name
@@ -265,6 +276,7 @@ class Partner extends Element
 
         $rules[] = [
             [
+                'logoAssetId',
                 'businessName',
                 'primaryContactName',
                 'primaryContactEmail',
@@ -374,6 +386,7 @@ class Partner extends Element
     {
         $partnerData = $this->getAttributes([
             'ownerId',
+            'logoAssetId',
             'businessName',
             'region',
             'primaryContactName',
@@ -487,6 +500,18 @@ class Partner extends Element
         }
 
         return parent::afterValidate();
+    }
+
+    /**
+     * @return Asset|null
+     */
+    public function getLogo()
+    {
+        if (!isset($this->_logo) && (bool)$this->logoAssetId) {
+            $this->_logo = Craft::$app->getAssets()->getAssetById($this->logoAssetId);
+        }
+
+        return $this->_logo;
     }
 
     /**

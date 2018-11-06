@@ -47,6 +47,24 @@
             errors: partner.getErrors('businessName'),
         }) }}
 
+        {% set logo = partner.getLogo() %}
+
+        {{ forms.elementSelectField({
+            label: 'Logo',
+            instructions: 'Must be an SVG',
+            id: 'partner-logo',
+            name: 'logoAssetId',
+            required: true,
+            elementType: 'craft\\elements\\Asset',
+            criteria: {kind: 'image'},
+            limit: 1,
+            sources: ['folder:' ~ folderIds.partnerImages],
+            elements: logo ? [logo] : [],
+            errors: project.getErrors('logo') ?? [],
+        }) }}
+
+
+
         {{ forms.textField({
             label: 'Website Slug',
             required: true,

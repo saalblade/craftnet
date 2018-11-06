@@ -11,7 +11,6 @@ use craft\errors\ImageException;
 use craft\helpers\ConfigHelper;
 use craft\helpers\ElementHelper;
 use craft\helpers\StringHelper;
-use craft\helpers\UrlHelper;
 use craft\web\Request;
 use craft\web\UploadedFile;
 use yii\base\Exception;
@@ -403,6 +402,12 @@ class PartnerService
                     if (empty($partner->websiteSlug) && !empty($partner->businessName)) {
                         $partner->websiteSlug = ElementHelper::createSlug($partner->businessName);
                     }
+                    break;
+
+                case 'logoAssetId':
+                    $value = $request->getBodyParam('logoAssetId');
+
+                    $partner->logoAssetId = is_array($value) ? $value[0] : null;
                     break;
 
                 default:

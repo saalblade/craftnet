@@ -98,6 +98,7 @@ class PartnerQuery extends ElementQuery
             'craftnet_partners.region',
             'craftnet_partners.expertise',
             'craftnet_partners.websiteSlug',
+            'craftnet_partners.logoAssetId',
         ]);
 
         $andWhereColumns = [
