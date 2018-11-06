@@ -309,6 +309,9 @@
             addToCart() {
                 const item = {
                     type: 'renewal',
+                    pluginLicenses: [
+                        this.license.key,
+                    ],
                     lineItem: {
                         total: this.newExpiresOn.diff(this.license.expiresOn.date, 'years', true) * this.license.edition.renewalPrice
                     }

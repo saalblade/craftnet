@@ -93,6 +93,7 @@ const getters = {
             cmsNewExpiresOn = cmsNewExpiresOn.add(renew, 'years')
 
             renewableLicenses.push({
+                key: license.key,
                 description: 'Craft ' + license.editionDetails.name,
                 expiresOn: license.expiresOn,
                 newBaseExpiresOn: cmsBaseExpiresOn,
@@ -135,6 +136,7 @@ const getters = {
                     const newBaseExpiresOn = cmsBaseExpiresOn
                     const newExpiresOn = cmsNewExpiresOn
                     renewableLicenses.push({
+                        key: renewablePluginLicense.key,
                         description: renewablePluginLicense.plugin.name,
                         expiresOn: renewablePluginLicense.expiresOn,
                         newBaseExpiresOn: newBaseExpiresOn,

@@ -80,7 +80,7 @@
                 } else {
                     this.checkAllChecked = false
                 }
-                
+
                 this.$emit('update:checkedLicenses', checkedLicenses)
             },
 
@@ -99,8 +99,21 @@
             },
 
             addToCart() {
+                const license = this.license
+                const checkedLicenses = this.checkedLicenses
+                const renewableLicenses = this.renewableLicenses(this.license, this.renew)
+                let pluginLicenses = []
+
+                renewableLicenses.forEach(function(renewableLicense, key) {
+                    if(key > 0 && checkedLicenses[key]) {
+                        pluginLicenses.push(renewableLicense.key)
+                    }
+                })
+
                 const item = {
                     type: 'renewal',
+                    cmsLicense: license.key,
+                    pluginLicenses: pluginLicenses,
                     lineItem: {
                         total: this.renewableLicensesTotal(this.license, this.renew, this.checkedLicenses)
                     }

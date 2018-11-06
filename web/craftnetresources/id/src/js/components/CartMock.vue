@@ -5,8 +5,12 @@
         </tr>
 
         <tr v-for="(item, itemKey) in mockCart.items">
-            <td></td>
-            <td colspan="3">Renewal</td>
+            <td colspan="4">
+                <ul>
+                    <li v-if="item.cmsLicense">CMS: <code>{{item.cmsLicense.substr(0, 20)}}</code></li>
+                    <li v-for="pluginLicense in item.pluginLicenses">Plugin: <code>{{pluginLicense}}</code></li>
+                </ul>
+            </td>
             <td class="text-right">
                 <strong class="block text-xl">{{ item.lineItem.total|currency }}</strong>
                 <a @click="removeFromCartMock(itemKey)">Remove</a>

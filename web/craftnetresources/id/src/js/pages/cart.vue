@@ -6,59 +6,62 @@
 
         <template v-else>
             <template v-if="cart">
-                <template v-if="cartItems.length">
+                <template v-if="cartItems.length || mockCart.items.length">
                     <table class="table">
-                        <thead>
-                        <tr>
-                            <th colspan="2">Item</th>
-                            <th>Updates</th>
-                            <th>Quantity</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="(item, itemKey) in cartItems">
-                            <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
-                                <td class="icon-col">
-                                    <div class="plugin-icon">
-                                        <img :src="craftLogo" width="42" height="42" />
-                                    </div>
-                                </td>
-                                <td>Craft {{ item.lineItem.purchasable.name }}</td>
-                            </template>
+                        <template v-if="cartItems.length">
+                            <thead>
+                            <tr>
+                                <th colspan="2">Item</th>
+                                <th>Updates</th>
+                                <th>Quantity</th>
+                                <th></th>
+                            </tr>
+                            </thead>
 
-                            <template v-else="item.lineItem.purchasable.type === 'plugin-edition'">
-                                <td class="icon-col">
-                                    <div v-if="item.plugin" class="plugin-icon">
-                                        <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
-                                    </div>
+                            <tbody>
+                            <tr v-for="(item, itemKey) in cartItems">
+                                <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
+                                    <td class="icon-col">
+                                        <div class="plugin-icon">
+                                            <img :src="craftLogo" width="42" height="42" />
+                                        </div>
+                                    </td>
+                                    <td>Craft {{ item.lineItem.purchasable.name }}</td>
+                                </template>
+
+                                <template v-else="item.lineItem.purchasable.type === 'plugin-edition'">
+                                    <td class="icon-col">
+                                        <div v-if="item.plugin" class="plugin-icon">
+                                            <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <strong class="text-xl">{{item.lineItem.purchasable.plugin.name}}</strong>
+
+                                        <div class="text-secondary">
+                                            {{item.lineItem.purchasable.name}}
+                                        </div>
+                                    </td>
+                                </template>
+
+                                <td>
+                                    <select-field v-model="itemUpdates[itemKey]" :options="itemUpdateOptions(itemKey)" />
                                 </td>
                                 <td>
-                                    <strong class="text-xl">{{item.lineItem.purchasable.plugin.name}}</strong>
-
-                                    <div class="text-secondary">
-                                        {{item.lineItem.purchasable.name}}
-                                    </div>
+                                    <select-field v-model="itemQuantity[itemKey]" :options="quantityOptions"></select-field>
                                 </td>
-                            </template>
+                                <td class="text-right">
+                                    <strong class="block text-xl">{{ itemTotal(itemKey)|currency }}</strong>
+                                    <a @click="removeFromCart(itemKey)">Remove</a>
+                                </td>
+                            </tr>
 
-                            <td>
-                                <select-field v-model="itemUpdates[itemKey]" :options="itemUpdateOptions(itemKey)" />
-                            </td>
-                            <td>
-                                <select-field v-model="itemQuantity[itemKey]" :options="quantityOptions"></select-field>
-                            </td>
-                            <td class="text-right">
-                                <strong class="block text-xl">{{ itemTotal(itemKey)|currency }}</strong>
-                                <a @click="removeFromCart(itemKey)">Remove</a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th class="text-right text-xl" colspan="4">Total</th>
-                            <td class="text-right text-xl"><strong>{{ total|currency }}</strong></td>
-                        </tr>
-                        </tbody>
+                            <tr>
+                                <th class="text-right text-xl" colspan="4">Total</th>
+                                <td class="text-right text-xl"><strong>{{ total|currency }}</strong></td>
+                            </tr>
+                            </tbody>
+                        </template>
 
                         <cart-mock />
                     </table>
@@ -106,6 +109,7 @@
 
             ...mapState({
                 cart: state => state.cart.cart,
+                mockCart: state => state.cart.mockCart,
             }),
 
             ...mapGetters({
