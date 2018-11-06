@@ -31,6 +31,7 @@ use craftnet\cms\CmsEdition;
 use craftnet\cms\CmsLicenseManager;
 use craftnet\composer\JsonDumper;
 use craftnet\composer\PackageManager;
+use craftnet\controllers\PartnersController;
 use craftnet\developers\UserBehavior;
 use craftnet\developers\UserQueryBehavior;
 use craftnet\fields\Plugins;
@@ -200,6 +201,12 @@ class Module extends \yii\base\Module
                 'label' => 'Plugins',
                 'fontIcon' => 'plugin',
             ];
+
+            $e->navItems[] = [
+                'url' => 'partners',
+                'label' => 'Partners',
+                'icon' => 'users',
+            ];
         });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $e) {
@@ -207,6 +214,13 @@ class Module extends \yii\base\Module
                 'plugins' => ['template' => 'craftnet/plugins/_index'],
                 'plugins/new' => 'craftnet/plugins/edit',
                 'plugins/<pluginId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/plugins/edit',
+                'partners' => ['template' => 'craftnet/partners/_index'],
+                'partners/new' => 'craftnet/partners/edit',
+                'partners/<partnerId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/partners/edit',
+                'partners/foo' => 'craftnet/partners/foo',
+                'GET partners/history/<partnerId:\d+>' => 'craftnet/partners/fetch-history',
+                'POST partners/history' => 'craftnet/partners/save-history',
+                'DELETE partners/history/<id:\d+>' => 'craftnet/partners/delete-history',
             ]);
         });
 

@@ -1,0 +1,7 @@
+{% extends "_layouts/elementindex" %}
+{% set title = "Partners"|t('app') %}
+{% set elementType = 'craftnet\\partners\\Partner' %}
+
+{% block actionButton %}
+    <a href="{{ url('partners/new') }}" class="btn submit">{{ 'New partner'|t('app') }}</a>
+{% endblock %}
