@@ -27,7 +27,7 @@
                 <text-field id="url" label="URL" v-model="project.url" :errors="localErrors.url" />
 
                 <label>Screenshots</label>
-                <p class="instructions">Up to five screenshots will be displayed. Drag to re-order.</p>
+                <p class="instructions">Up to five screenshots will be displayed. 12:7 aspect ratio. 1200px wide will do. Drag to re-order.</p>
 
                 <draggable v-model="project.screenshots">
                     <div v-for="(screenshot, index) in project.screenshots" :key="index" class="screenshot mt-6">
