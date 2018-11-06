@@ -438,7 +438,7 @@ class Partner extends Element
      */
     protected function saveLocations()
     {
-        $this->_saveOneToManyRelations($this->_locations, 'craftnet_partnerlocations');
+        $this->_saveOneToManyRelations($this->_locations ?? [], 'craftnet_partnerlocations');
     }
 
     /**
@@ -447,9 +447,11 @@ class Partner extends Element
      */
     protected function saveProjects()
     {
-        $this->_saveOneToManyRelations($this->_projects, 'craftnet_partnerprojects', true, ['screenshots']);
+        $projects = $this->_projects ?? [];
 
-        foreach ($this->_projects as $project) {
+        $this->_saveOneToManyRelations($projects, 'craftnet_partnerprojects', true, ['screenshots']);
+
+        foreach ($projects as $project) {
             $this->_saveProjectScreenshots($project);
         }
     }
