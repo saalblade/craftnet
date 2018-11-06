@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1>Partner</h1>
+		<h1>Partner Profile</h1>
 
         <div v-if="loadState == LOADING" class="text-center">
             <div class="spinner big mt-8"></div>

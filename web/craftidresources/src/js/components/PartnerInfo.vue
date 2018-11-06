@@ -1,6 +1,7 @@
 <template>
 	<div>
         <p class="text-grey-darker">Basic business information and adminstrative contact information for Pixel &amp; Tonic to reach you.</p>
+
         <div class="card mb-4">
             <div class="card-body">
                 <div class="text-right" v-if="!isEditing">
@@ -30,7 +31,7 @@
                                 <li v-for="(value, index) in basicRequirementsList" :key="index">{{ value }}</li>
                             </ul>
                         </li>
-                        <li v-if="partner.capabilities" class="mt-2 mb-2">
+                        <li v-if="partner.capabilities.length" class="mt-2 mb-2">
                             Capabilities:
                             <ul class="text-sm text-grey-darker mt-2">
                                 <li v-for="(value, index) in partner.capabilities" :key="index">
@@ -38,7 +39,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li v-if="expertiseList.length" class="mt-2 mb-2 pt-2">
+                        <li v-if="partner.expertise.trim().length" class="mt-2 mb-2 pt-2">
                             Areas of Expertise:
                             <ul class="text-sm text-grey-darker mt-2">
                                 <li v-for="(value, index) in expertiseList" :key="index">
@@ -67,7 +68,7 @@
                     <text-field id="primaryContactPhone" label="Primary Contact Phone" v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
                     <select-field id="region" label="Region" v-model="draft.region" :options="options.region" :errors="errors.region" />
                     <checkbox-field id="isRegisteredBusiness" label="This is a registered business" instructions="Required for consideration." v-model="draft.isRegisteredBusiness" :checked-value="1" :errors="errors.isRegisteredBusiness" />
-                    <checkbox-field id="hasFullTimeDev" label="Buisiness has at least one full-time Craft developer" instructions="Required for consideration." v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
+                    <checkbox-field id="hasFullTimeDev" label="Business has at least one full-time Craft developer" instructions="Required for consideration." v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
                     <checkbox-set id="capabilities" label="Capabilities" v-model="draft.capabilities" :options="options.capabilities" :errors="errors.capabilities" />
                     <textarea-field id="expertise" label="Areas of Expertise" instructions="Tags for relevant expertise (e.g. SEO), each on a new line" v-model="draft.expertise" />
                     <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agencySize" :errors="errors.agencySize" />
@@ -189,14 +190,21 @@
                 return list
             },
             expertiseList() {
-                let list = this.partner.expertise.trim().split("\n")
-                return list
+                if (typeof this.partner.expertise !== 'string') {
+                    return ''
+                }
+
+                return this.partner.expertise.trim().split("\n")
             }
         },
 
         methods: {
             onEditClick() {
-                this.draft = this.simpleClone(this.partner, this.draftProps)
+                let clone = this.simpleClone(this.partner, this.draftProps)
+                clone.region = clone.region || 'North America'
+                clone.agencySize = clone.agencySize || 'XS'
+
+                this.draft = clone
                 this.isEditing = true
             },
 
