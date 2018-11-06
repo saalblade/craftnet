@@ -28,7 +28,7 @@
     import filter from 'lodash/filter';
     import includes from 'lodash/includes';
     import {mapState, mapGetters} from 'vuex';
-    import CraftComponents from "@benjamindavid/craftcomponents";
+    import CraftComponents from "../../../../../../../../repos/craftcomponents/src/components/index";
 
     export default {
 

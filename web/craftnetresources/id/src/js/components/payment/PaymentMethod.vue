@@ -21,7 +21,7 @@
 
 <script>
     import CraftComponents from "@benjamindavid/craftcomponents";
-    import CardElement from '../CardElement'
+    import CardElement from '../card/CardElement'
 
     export default {
 

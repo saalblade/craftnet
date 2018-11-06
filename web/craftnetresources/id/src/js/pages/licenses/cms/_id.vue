@@ -34,9 +34,9 @@
 
 <script>
     import {mapState} from 'vuex'
-    import CmsLicenseDetails from '../../../components/CmsLicenseDetails'
-    import PluginLicensesTable from '../../../components/PluginLicensesTable';
-    import LicenseHistory from '../../../components/LicenseHistory';
+    import CmsLicenseDetails from '../../../components/licenses/CmsLicenseDetails'
+    import PluginLicensesTable from '../../../components/licenses/PluginLicensesTable';
+    import LicenseHistory from '../../../components/licenses/LicenseHistory';
 
     export default {
 

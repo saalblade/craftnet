@@ -48,8 +48,8 @@
 
 <script>
     import {mapState} from 'vuex'
-    import CardForm from './CardForm'
-    import CardIcon from './CardIcon'
+    import CardForm from '../card/CardForm'
+    import CardIcon from '../card/CardIcon'
 
     export default {
 

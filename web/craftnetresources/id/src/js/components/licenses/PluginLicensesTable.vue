@@ -85,7 +85,7 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import CraftComponents from "@benjamindavid/craftcomponents";
+    import CraftComponents from "../../../../../../../../repos/craftcomponents/src/components/index";
 
     export default {
 

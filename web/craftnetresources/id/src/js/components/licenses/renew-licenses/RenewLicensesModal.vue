@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import Modal from '../Modal';
+    import Modal from '../../Modal';
     import RenewLicensesForm from './RenewLicensesForm'
 
     export default {

@@ -22,7 +22,7 @@
 <script>
     import {mapGetters} from 'vuex'
     import Plugins from './steps/Plugins'
-    import ExtendUpdates from '../renew-licenses/steps/ExtendUpdates'
+    import ExtendUpdates from './steps/ExtendUpdates'
 
     export default {
 

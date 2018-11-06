@@ -154,7 +154,7 @@
     import {mapState, mapGetters} from 'vuex'
     import router from './router';
     import AuthManager from './components/AuthManager';
-    import RenewLicensesModal from './components/renew-licenses/RenewLicensesModal';
+    import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal';
     import { directive as onClickaway } from 'vue-clickaway';
 
 

@@ -163,9 +163,9 @@
 <script>
     import {mapState, mapGetters} from 'vuex'
     import CraftComponents from "@benjamindavid/craftcomponents";
-    import ConnectedApps from '../../../components/connected-apps/ConnectedApps'
-    import Repositories from '../../../components/Repositories'
-    import PluginCategories from '../../../components/PluginCategories'
+    import ConnectedApps from '../../../components/developer/connected-apps/ConnectedApps'
+    import Repositories from '../../../components/developer/Repositories'
+    import PluginCategories from '../../../components/developer/PluginCategories'
     import slug from 'limax'
     import draggable from 'vuedraggable'
     import axios from 'axios'
