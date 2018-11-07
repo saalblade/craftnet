@@ -12,9 +12,12 @@ export default {
         .catch(error => cbError(error.response))
     },
 
-    patchPartner(data, cb, cbError) {
+    patchPartner(data, files, partnerId, cb, cbError) {
         let formData = new FormData()
         formData.append('scenario', 'scenarioBaseInfo')
+        formData.append('id', partnerId)
+
+        console.warn('api patchPartner()', files)
 
         for (let prop in data) {
             switch (prop) {
@@ -28,6 +31,12 @@ export default {
                     formData.append(prop, data[prop])
                     break
             }
+        }
+
+        formData.append('logoAssetId[]', data.logo.id)
+
+        if (files.length) {
+            formData.append('logo', files[0])
         }
 
         axios.post(Craft.actionUrl + '/craftnet/partners/patch-partner', formData, {

@@ -90,6 +90,7 @@ class PartnersController extends Controller
             case Partner::SCENARIO_BASE_INFO:
                 $partner->setScenario(Partner::SCENARIO_BASE_INFO);
                 PartnerService::getInstance()->mergeRequestParams($partner, $request, [
+                    'logoAssetId',
                     'businessName',
                     'primaryContactName',
                     'primaryContactEmail',
@@ -104,6 +105,12 @@ class PartnersController extends Controller
                     'shortBio',
                     'websiteSlug',
                 ]);
+
+                if (substr((string)$partner->logoAssetId, 0, 3) === 'new') {
+                    $logo = PartnerService::getInstance()->handleUploadedLogo($partner);
+                    $partner->setLogo($logo);
+                }
+
                 break;
 
             case Partner::SCENARIO_LOCATIONS:
@@ -125,7 +132,8 @@ class PartnersController extends Controller
                 break;
         }
 
-        if (!Craft::$app->getElements()->saveElement($partner)) {
+        // Errors added to partner on invalid logo upload
+        if ($partner->hasErrors() || !Craft::$app->getElements()->saveElement($partner)) {
             $errors = PartnerService::getInstance()->getSerializedPartnerErrors($partner);
 
             return $this->asJson([

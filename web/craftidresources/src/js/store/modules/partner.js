@@ -44,10 +44,14 @@ const actions = {
         })
     },
 
-    patchPartner({commit, state}, draft) {
+    patchPartner({commit, state}, {draft, files}) {
+        console.warn('store patchPartner()', files)
+        console.warn('store patchPartner() partnerId', state.partner.id)
         return new Promise((resolve, reject) => {
             partnerApi.patchPartner(
                 draft,
+                files,
+                state.partner.id,
                 response => {
                     if (response.data.success) {
                         commit(types.RECEIVE_PARTNER, response.data.partner)
@@ -55,6 +59,10 @@ const actions = {
                     resolve(response)
 
                 }, error => {
+                    if (error.data) {
+                        reject(error.data.error)
+                    }
+
                     reject(error.statusText)
                 })
         })

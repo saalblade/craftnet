@@ -279,6 +279,14 @@ class PartnerService
             $data[$booleanAttribute] = (bool)$data[$booleanAttribute];
         }
 
+        // logo
+        $logo = $partner->getLogo();
+
+        $data['logo'] = [
+            'id' => $logo ? $logo->id : null,
+            'url' => $logo ? $logo->getUrl() : '',
+        ];
+
         // capabilities - titles only
         $data['capabilities'] = array_values($data['capabilities']);
 
@@ -406,8 +414,9 @@ class PartnerService
 
                 case 'logoAssetId':
                     $value = $request->getBodyParam('logoAssetId');
+                    $id = is_array($value) ? $value[0] : null;
 
-                    $partner->logoAssetId = is_array($value) ? $value[0] : null;
+                    $partner->logoAssetId = $id === 'null' ? null : $id;
                     break;
 
                 default:
@@ -509,5 +518,105 @@ class PartnerService
         }
 
         return $screenshots;
+    }
+
+    /**
+     * I am so sorry for the copy/paste. In a hurry.
+     *
+     * @param Partner $partner
+     * @return Asset
+     * @throws AssetDisallowedExtensionException
+     * @throws Exception
+     * @throws ImageException
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \craft\errors\VolumeException
+     */
+    public function handleUploadedLogo(Partner $partner)
+    {
+        $allowedFileExtensions = ['svg'];
+        $imageService = Craft::$app->getImages();
+        $assetsService = Craft::$app->getAssets();
+        $volumesService = Craft::$app->getVolumes();
+
+        $iniMaxUpload = ConfigHelper::sizeInBytes(ini_get('upload_max_filesize'));
+        $configMaxUpload = Craft::$app->getConfig()->getGeneral()->maxUploadFileSize;
+        $maxUpload = min($iniMaxUpload, $configMaxUpload);
+        $maxUploadM = round($maxUpload / 1000 / 1000);
+
+        $logoFile = UploadedFile::getInstanceByName('logo');
+
+        if (!$logoFile) {
+            return null;
+        }
+
+        if ($logoFile->error != UPLOAD_ERR_OK) {
+            if ($logoFile->error == UPLOAD_ERR_INI_SIZE) {
+                $partner->addError('logo', 'Couldn’t upload logo because it exceeds the limit of '.$maxUploadM.'MB.');
+            } else {
+                $partner->addError('logo', 'Couldn’t upload logo. (Error '.$logoFile->error.')');
+            }
+
+            return null;
+        }
+
+        if ($logoFile->size > $maxUpload) {
+            $partner->addError('logo', 'Couldn’t upload logo because it exceeds the limit of '.$maxUploadM.'MB.');
+            return null;
+        }
+
+        $extension = $logoFile->getExtension();
+
+        if (!in_array(strtolower($extension), $allowedFileExtensions, true)) {
+            $partner->addError('logo', "Logo was not uploaded because extension “{$extension}” is not allowed.");
+            return null;
+        }
+
+        $handle = $partner->id;
+        $tempPath = Craft::$app->getPath()->getTempPath()."/logo-{$handle}-".StringHelper::randomString().'.'.$logoFile->getExtension();
+        move_uploaded_file($logoFile->tempName, $tempPath);
+
+        if (!$imageService->checkMemoryForImage($tempPath)) {
+            $partner->addError('logo', 'Not enough memory to perform image operation.');
+            return null;
+        }
+
+        $imageService->cleanImage($tempPath);
+
+        // Save as an asset
+
+        /** @var Volume $volume */
+        $volume = $volumesService->getVolumeByHandle('partnerImages');
+        $volumeId = $volumesService->ensureTopFolder($volume);
+
+        $subpath = '/'.$handle;
+
+        $folder = $assetsService->findFolder([
+            'volumeId' => $volumeId,
+            'path' => $subpath.'/'
+        ]);
+
+        if (!$folder) {
+            $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
+        } else {
+            $folderId = $folder->id;
+        }
+
+        $targetFilename = $logoFile->name;
+
+        $logo = new Asset([
+            'title' => $partner->businessName,
+            'tempFilePath' => $tempPath,
+            'newLocation' => "{folder:{$folderId}}".$targetFilename,
+            'avoidFilenameConflicts' => true,
+        ]);
+
+        $logo->validate(['newLocation']);
+
+        if ($logo->hasErrors() || !Craft::$app->getElements()->saveElement($logo, false)) {
+            throw new Exception('Could not save image asset: '.implode(', ', $logo->getErrorSummary(true)));
+        }
+
+        return $logo;
     }
 }
