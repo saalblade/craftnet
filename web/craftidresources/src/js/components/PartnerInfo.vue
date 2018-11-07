@@ -65,7 +65,6 @@
                 </div>
 
                 <div v-else>
-                    <p>Note: Logo upload is coming soon! Please check back and complete when it’s ready.</p>
                     <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
 
                     <div class="form-group">
