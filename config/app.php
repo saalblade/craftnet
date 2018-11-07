@@ -100,7 +100,6 @@ return [
             'queue' => [
                 'class' => pixelandtonic\yii\queue\sqs\Queue::class,
                 'url' => getenv('SQS_URL'),
-                'messageGroupId' => getenv('SQS_MESSAGE_GROUP_ID'),
                 'client' => [
                     'region' => getenv('REGION'),
                     'version' => '2012-11-05',
