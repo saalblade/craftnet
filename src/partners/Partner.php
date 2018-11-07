@@ -475,6 +475,12 @@ class Partner extends Element
      */
     public function afterValidate()
     {
+        if ($this->hasErrors('logoAssetId')) {
+            // The only error is that it's required
+            // "logo" is used in Craft ID
+            $this->addError('logo', 'Logo is required.');
+        }
+
         $scenario = $this->getScenario();
 
         if (in_array($scenario, [self::SCENARIO_LIVE, self::SCENARIO_LOCATIONS])) {
@@ -512,6 +518,20 @@ class Partner extends Element
         }
 
         return $this->_logo;
+    }
+
+    /**
+     * @param Asset|null $logo
+     */
+    public function setLogo(Asset $logo = null)
+    {
+        if ($logo) {
+            $this->_logo = $logo;
+            $this->logoAssetId = $logo->id;
+        } else {
+            $this->_logo = null;
+            $this->logoAssetId = null;
+        }
     }
 
     /**

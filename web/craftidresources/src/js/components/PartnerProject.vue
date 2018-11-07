@@ -136,7 +136,7 @@
                     this.isUploading = false
                     this.$root.displayNotice('Uploaded')
 
-                    let screenshots = response.data.screenshots || [];
+                    let screenshots = response.data.screenshots || []
 
                     for (let i in screenshots) {
                         this.project.screenshots.push(screenshots[i])

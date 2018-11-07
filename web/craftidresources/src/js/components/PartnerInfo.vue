@@ -10,6 +10,9 @@
 
                 <div v-if="!isEditing">
                     <ul class="info-list list-reset">
+                        <li v-if="partner.logo.url" class="mb-4">
+                            <img :src="partner.logo.url" style="width: 200px;">
+                        </li>
                         <li v-if="partner.businessName">
                             <strong>{{ partner.businessName }}</strong>
                         </li>
@@ -64,6 +67,21 @@
                 <div v-else>
                     <p>Note: Logo upload is coming soon! Please check back and complete when it’s ready.</p>
                     <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
+
+                    <div class="form-group">
+                        <label>Logo</label>
+
+                        <div>
+                            <img v-if="draft.logo.url" :src="draft.logo.url" style="width: 250px;" class="block mt-2 mb-2">
+                            <a v-if="draft.logo.url" href="#" class="remove btn btn-sm btn-danger" @click.prevent="draft.logo = {id: null, url: null}">
+                                <i class="fas fa-times"></i>
+                            </a>
+                            <!-- accept=".svg"  -->
+                            <input v-if="!draft.logo.url" type="file" @change="onLogoChange" ref="logoFile" class="mt-6 mb-6">
+                        </div>
+                        <div v-if="errors.logo" class="invalid-feedback" v-for="(error, index) in errors.logo" :key="index">{{ error }}</div>
+                    </div>
+
                     <text-field id="primaryContactName" label="Primary Contact Name" v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
                     <text-field id="primaryContactEmail" label="Primary Contact Email" v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
                     <text-field id="primaryContactPhone" label="Primary Contact Phone" v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
@@ -126,6 +144,7 @@
                 draft: {},
                 draftProps: [
                     'id',
+                    'logo',
                     'businessName',
                     'websiteSlug',
                     'primaryContactName',
@@ -141,7 +160,9 @@
                     'shortBio',
                 ],
                 errors: {},
+                logoFiles: [],
                 isEditing: false,
+                isUploading: false,
                 options: {
                     agencySize: [
                         {label: "1-2", value: "XS"},
@@ -209,13 +230,37 @@
                 this.isEditing = true
             },
 
+            onLogoChange(event) {
+                let reader = new FileReader();
+
+                reader.onload = e => {
+                    let url = e.target.result
+                    this.draft.logo.url = e.target.result
+                    this.draft.logo.id = 'new'
+                }
+
+                reader.readAsDataURL(event.target.files[0])
+
+                this.logoFiles = event.target.files
+                console.warn('change', this.logoFiles)
+            },
+
             onSubmit() {
+                console.warn('onSubmit')
                 this.errors = {}
                 this.errorMessage = ''
                 this.requestPending = true
+                console.warn('onSubmit', this.logoFiles)
 
-                this.$store.dispatch('patchPartner', this.draft)
+                let data = {
+                    draft: this.draft,
+                    files: this.logoFiles
+                }
+
+                this.$store.dispatch('patchPartner', data)
                     .then(response => {
+                        console.warn('.then()')
+                        console.warn(response)
                         this.requestPending = false
 
                         if (response.data.success) {
@@ -227,6 +272,8 @@
                         }
                     })
                     .catch(errorMessage => {
+                        console.warn('.catch()')
+                        console.warn(errorMessage)
                         this.$root.displayError(errorMessage)
                         this.requestPending = false
                     })
