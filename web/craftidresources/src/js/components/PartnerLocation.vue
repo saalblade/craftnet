@@ -20,7 +20,7 @@
         </div>
         <modal v-if="isEditing" :show="isEditing" transition="fade" modal-type="wide" >
             <div slot="body" class="p-4">
-                <text-field id="title" label="Location Title" v-model="location.title" :errors="localErrors.title" />
+                <text-field id="title" label="Location Title" v-model="location.title" :errors="localErrors.title" placeholder="e.g. Main Office" />
                 <text-field id="addressLine1" label="Address" v-model="location.addressLine1" :errors="localErrors.addressLine1" />
                 <text-field id="addressLine2" v-model="location.addressLine2" :errors="localErrors.addressLine2" />
                 <text-field id="city" label="City" v-model="location.city" :errors="localErrors.city" />
@@ -28,7 +28,7 @@
                 <text-field id="zip" label="Zip" v-model="location.zip" :errors="localErrors.zip" />
                 <text-field id="country" label="Country" v-model="location.country" :errors="localErrors.country" />
                 <text-field id="phone" label="Sales Phone" v-model="location.phone" :errors="localErrors.phone" />
-                <text-field id="email" label="Sales Email" instructions="The Hire Me button will send email here." v-model="location.email" :errors="localErrors.email" />
+                <text-field id="email" label="Sales Email" instructions="The “Work With” button will send email here." v-model="location.email" :errors="localErrors.email" />
 
                 <div class="mt-4 flex">
                     <div class="flex-1">
