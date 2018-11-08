@@ -22,8 +22,8 @@
         </div>
         <modal v-if="isEditing" :show="isEditing" transition="fade" modal-type="wide" style="max-height: 100vh; overflow: scroll;">
             <div slot="body" class="p-4">
-                <text-field id="name" label="Project Name" v-model="project.name" :errors="localErrors.name" placeholder="Main Office" />
-                <text-field id="role" label="Role" v-model="project.role" :errors="localErrors.role" />
+                <text-field id="name" label="Project Name" v-model="project.name" :errors="localErrors.name" />
+                <text-field id="role" label="Role" instructions="e.g. “Craft Commerce with custom Hubspot integration” or “Design and custom plugin development”. Max 55 characters." v-model="project.role" :errors="localErrors.role" />
                 <text-field id="url" label="URL" v-model="project.url" :errors="localErrors.url" />
 
                 <label>Screenshots</label>

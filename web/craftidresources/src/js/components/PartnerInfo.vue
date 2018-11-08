@@ -70,6 +70,10 @@
                     <div class="form-group">
                         <label>Logo</label>
 
+                        <div class="instructions">
+                            <p>Must be an SVG</p>
+                        </div>
+
                         <div>
                             <img v-if="draft.logo.url" :src="draft.logo.url" style="width: 250px;" class="block mt-2 mb-2">
                             <a v-if="draft.logo.url" href="#" class="remove btn btn-sm btn-danger" @click.prevent="draft.logo = {id: null, url: null}">
@@ -81,9 +85,9 @@
                         <div v-if="errors.logo" class="invalid-feedback" v-for="(error, index) in errors.logo" :key="index">{{ error }}</div>
                     </div>
 
-                    <text-field id="primaryContactName" label="Primary Contact Name" v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
-                    <text-field id="primaryContactEmail" label="Primary Contact Email" v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
-                    <text-field id="primaryContactPhone" label="Primary Contact Phone" v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
+                    <text-field id="primaryContactName" label="Primary Contact Name" instructions="For Pixel &amp; Tonic use only. This will not be visible on your profile." v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
+                    <text-field id="primaryContactEmail" label="Primary Contact Email" instructions="For Pixel &amp; Tonic use only. This will not be visible on your profile." v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
+                    <text-field id="primaryContactPhone" label="Primary Contact Phone" instructions="For Pixel &amp; Tonic use only. This will not be visible on your profile." v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
                     <select-field id="region" label="Region" v-model="draft.region" :options="options.region" :errors="errors.region" />
                     <checkbox-field id="isRegisteredBusiness" label="This is a registered business" instructions="Required for consideration." v-model="draft.isRegisteredBusiness" :checked-value="1" :errors="errors.isRegisteredBusiness" />
                     <checkbox-field id="hasFullTimeDev" label="Business has at least one full-time Craft developer" instructions="Required for consideration." v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
@@ -173,7 +177,8 @@
                         {label: 'Commerce', value: 'Commerce'},
                         {label: 'Full Service', value: 'Full Service'},
                         {label: 'Custom Development', value: 'Custom Development'},
-                        {label: 'Contract Work', value: 'Contract Work'}
+                        {label: 'Contract Work', value: 'Contract Work'},
+                        {label: 'Ongoing Maintenance', value: 'Ongoing Maintenance'}
                     ],
                     region: [
                         {label: 'Asia Pacific', value: 'Asia Pacific'},

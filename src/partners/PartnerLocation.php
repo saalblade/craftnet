@@ -40,7 +40,6 @@ class PartnerLocation extends Model
                 'state',
                 'zip',
                 'country',
-                'phone',
                 'email',
             ],
             'required',

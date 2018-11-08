@@ -38,6 +38,7 @@ class PartnerProject extends Model
 
         $rules[] = ['name', 'required'];
         $rules[] = ['url', 'url'];
+        $rules[] = ['role', 'string', 'max' => 55];
 
         $rules[] = [
             ['url'],
