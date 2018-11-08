@@ -85,7 +85,7 @@ class CraftIdController extends BaseController
                 'location' => $currentUser->location,
                 'enablePluginDeveloperFeatures' => ($currentUser->isInGroup('developers') ? true : false),
                 'enableShowcaseFeatures' => ($currentUser->enableShowcaseFeatures == 1 ? true : false),
-                'enablePartnerFeatures' => ($currentUser->enablePartnerFeatures == 1 ? true : false),
+                'enablePartnerFeatures' => false, //($currentUser->enablePartnerFeatures == 1 ? true : false),
                 'groups' => $currentUser->getGroups(),
                 'photoId' => $currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null,
                 'photoUrl' => $photoUrl,
