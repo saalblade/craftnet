@@ -225,9 +225,21 @@
         },
 
         methods: {
+            // default to North America
+            filterRegionValue(region) {
+                if (region) {
+                    for (let i in this.options.region) {
+                        if (region === this.options.region[i].value) {
+                            return region
+                        }
+                    }
+                }
+
+                return 'North America'
+            },
             onEditClick() {
                 let clone = this.simpleClone(this.partner, this.draftProps)
-                clone.region = clone.region || 'North America'
+                clone.region = this.filterRegionValue(clone.region)
                 clone.agencySize = clone.agencySize || 'XS'
 
                 this.draft = clone
