@@ -104,6 +104,7 @@ class PartnersController extends Controller
                     'fullBio',
                     'shortBio',
                     'websiteSlug',
+                    'website',
                 ]);
 
                 if (substr((string)$partner->logoAssetId, 0, 3) === 'new') {
@@ -267,6 +268,7 @@ class PartnersController extends Controller
                 'projects',
                 'verificationStartDate',
                 'websiteSlug',
+                'website',
             ]
         );
 

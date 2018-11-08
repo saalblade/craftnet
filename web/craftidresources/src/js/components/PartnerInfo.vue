@@ -16,6 +16,9 @@
                         <li v-if="partner.businessName">
                             <strong>{{ partner.businessName }}</strong>
                         </li>
+                        <li v-if="partner.website">
+                            <a :href="partner.website" target="_blank">{{ partner.website }}</a>
+                        </li>
                         <li v-if="partner.primaryContactName">
                             {{ partner.primaryContactName }}
                         </li>
@@ -66,6 +69,8 @@
 
                 <div v-else>
                     <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
+                    <text-field id="websiteSlug" label="Website Slug" instructions="Automatically generated from Business Name if blank. Not editable once your page is live. (e.g. https://craftcms.com/partners/business-name)" v-model="draft.websiteSlug" :errors="errors.websiteSlug" :disabled="partner.enabled" />
+                    <text-field id="website" label="Business Website URL" v-model="draft.website" :errors="errors.website" />
 
                     <div class="form-group">
                         <label>Logo</label>
@@ -96,7 +101,6 @@
                     <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agencySize" :errors="errors.agencySize" />
                     <textarea-field id="fullBio" label="Full Bio" instructions="Markdown OK. Shown on your detail page." v-model="draft.fullBio" :errors="errors.fullBio" />
                     <textarea-field id="shortBio" label="Short Bio" instructions="Max 255 characters. Shown on your listing card." v-model="draft.shortBio" :errors="errors.shortBio" />
-                    <text-field id="websiteSlug" label="Website Slug" instructions="Generated from Business Name if blank. Not editable once your page is live." v-model="draft.websiteSlug" :errors="errors.websiteSlug" :disabled="partner.enabled" />
 
                     <div class="pt-4">
                         <button
@@ -161,6 +165,7 @@
                     'agencySize',
                     'fullBio',
                     'shortBio',
+                    'website',
                 ],
                 errors: {},
                 logoFiles: [],

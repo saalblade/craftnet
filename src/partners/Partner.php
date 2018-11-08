@@ -148,6 +148,11 @@ class Partner extends Element
     public $businessName;
 
     /**
+     * @var string|null The partner agency website url
+     */
+    public $website;
+
+    /**
      * @var bool Partner profile is pending approval
      */
     public $pendingApproval;
@@ -264,6 +269,7 @@ class Partner extends Element
 
         $rules[] = ['ownerId', 'required'];
         $rules[] = ['shortBio', 'string', 'max' => '255'];
+        $rules[] = ['website', 'url'];
 
         $rules[] = [
             'websiteSlug',
@@ -287,6 +293,7 @@ class Partner extends Element
                 'fullBio',
                 'shortBio',
                 'websiteSlug',
+                'website',
             ],
             'required',
             'on' => [
@@ -402,7 +409,8 @@ class Partner extends Element
             'verificationStartDate',
             'isRegisteredBusiness',
             'expertise',
-            'websiteSlug'
+            'websiteSlug',
+            'website',
         ]);
 
         if ($isNew) {

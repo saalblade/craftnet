@@ -249,6 +249,7 @@ class PartnerService
             'expertise',
             'region',
             'websiteSlug',
+            'website',
         ];
 
         $booleans = [

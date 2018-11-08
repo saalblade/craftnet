@@ -47,6 +47,15 @@
             errors: partner.getErrors('businessName'),
         }) }}
 
+        {{ forms.textField({
+            label: 'Business Website URL',
+            required: true,
+            id: 'website',
+            name: 'website',
+            value: partner.website,
+            errors: partner.getErrors('website'),
+        }) }}
+
         {% set logo = partner.getLogo() %}
 
         {{ forms.elementSelectField({
@@ -63,10 +72,9 @@
             errors: project.getErrors('logo') ?? [],
         }) }}
 
-
-
         {{ forms.textField({
             label: 'Website Slug',
+            instructions: 'e.g. craft.cms.com/partners/your-slug (Will be automatically generated from Business Name if blank)',
             required: true,
             id: 'websiteSlug',
             name: 'websiteSlug',
