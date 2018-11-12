@@ -2,7 +2,8 @@
 	<div>
         <div class="form-group">
             <label>
-                <input :id="id" type="checkbox" class="mr-2" :value="value" :checked="value" @input="$emit('input', $event.target.checked)">
+                <!--Must be @change, not @input (Safari issue)-->
+                <input :id="id" type="checkbox" class="mr-2" :value="value" :checked="value" @change="$emit('input', $event.target.checked)">
                 {{ label }}
             </label>
             <p v-if="instructions" class="text-grey-dark text-sm" v-html="instructions"></p>
