@@ -17,10 +17,10 @@ class PdfRenderer extends BaseObject
     public function render(Order $order): string
     {
         // TCPDF config
-        $imagesPath = __DIR__.'/receipt/images';
+        $imagesPath = __DIR__ . '/receipt/images';
         if (!defined('K_PATH_IMAGES')) {
             define('K_PATH_IMAGES', $imagesPath);
-            require_once __DIR__.'/receipt/tcpdf_config.php';
+            require_once __DIR__ . '/receipt/tcpdf_config.php';
         }
 
         // Create a new PDF document
@@ -36,7 +36,7 @@ class PdfRenderer extends BaseObject
 
         foreach ($order->getLineItems() as $lineItem) {
             if ($purchasable = $lineItem->getPurchasable()) {
-                $keywords .= ', '.$purchasable->getDescription();
+                $keywords .= ', ' . $purchasable->getDescription();
             }
         }
 
@@ -74,7 +74,7 @@ class PdfRenderer extends BaseObject
         // Set some content to print
         $view = Craft::$app->getView();
         $oldTemplatesPath = $view->getTemplatesPath();
-        $view->setTemplatesPath(__DIR__.'/receipt/templates');
+        $view->setTemplatesPath(__DIR__ . '/receipt/templates');
         $html = $view->renderTemplate('pdf', [
             'order' => $order,
             'imagesPath' => $imagesPath,

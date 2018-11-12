@@ -4,7 +4,7 @@ namespace craftnet\partners;
 
 
 use craft\db\Query;
-use \Exception;
+use Exception;
 
 class PartnerProjectScreenshotsQuery extends Query
 {
@@ -12,7 +12,7 @@ class PartnerProjectScreenshotsQuery extends Query
 
     public function project($projects): Query
     {
-        $projects = (array) $projects;
+        $projects = (array)$projects;
         $this->_projectIds = [];
 
         foreach ($projects as $project) {

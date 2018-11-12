@@ -6,7 +6,6 @@ use Craft;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\Db;
-use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
@@ -53,7 +52,7 @@ class CmsLicenseManager extends Component
     {
         $normalized = trim(preg_replace('/[\r\n]+/', '', $key));
         if (strlen($normalized) !== 250) {
-            throw new InvalidArgumentException('Invalid license key: '.$key);
+            throw new InvalidArgumentException('Invalid license key: ' . $key);
         }
 
         return $normalized;
@@ -325,7 +324,7 @@ class CmsLicenseManager extends Component
         $license->email = $user->email;
 
         if (!$this->saveLicense($license)) {
-            throw new Exception('Could not save Craft license: '.implode(', ', $license->getErrorSummary(true)));
+            throw new Exception('Could not save Craft license: ' . implode(', ', $license->getErrorSummary(true)));
         }
 
         $this->addHistory($license->id, "claimed by {$user->email}");

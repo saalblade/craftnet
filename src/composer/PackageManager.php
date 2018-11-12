@@ -429,7 +429,7 @@ class PackageManager extends Component
             ->where(['name' => $name])
             ->one();
         if (!$result) {
-            throw new Exception('Invalid package name: '.$name);
+            throw new Exception('Invalid package name: ' . $name);
         }
         return new Package($result);
     }
@@ -446,7 +446,7 @@ class PackageManager extends Component
             ->where(['id' => $id])
             ->one();
         if (!$result) {
-            throw new Exception('Invalid package ID: '.$id);
+            throw new Exception('Invalid package ID: ' . $id);
         }
         return new Package($result);
     }
@@ -827,7 +827,7 @@ class PackageManager extends Component
                     $vcs->populateRelease($release);
 
                     if ($isConsole && !$release->valid) {
-                        Console::stdout(Console::ansiFormat('invalid'.($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
+                        Console::stdout(Console::ansiFormat('invalid' . ($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
                         Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
                     }
 
@@ -872,7 +872,7 @@ class PackageManager extends Component
                 }
 
                 if ($isConsole) {
-                    Console::output('Done processing '.count($newVersions).' versions.');
+                    Console::output('Done processing ' . count($newVersions) . ' versions.');
                 }
             } else {
                 if ($isConsole) {
@@ -958,8 +958,7 @@ class PackageManager extends Component
             }
 
             $transaction->commit();
-        }
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             $transaction->rollBack();
             $mutex->release(__METHOD__);
             throw $e;

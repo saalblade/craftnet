@@ -215,6 +215,7 @@ class Partner extends Element
     /**
      * Line-separated list: areas of expertise.
      * e.g. "Full service", "Design", "Custom Development"
+     *
      * @var string
      */
     public $expertise;
@@ -261,6 +262,7 @@ class Partner extends Element
 
     /**
      * Note that `locations` and `projects` are validated in `self::afterSave()`
+     *
      * @inheritdoc
      */
     public function rules()
@@ -386,6 +388,7 @@ class Partner extends Element
 
     /**
      * Saves everything but locations and projects
+     *
      * @param bool $isNew
      * @throws \yii\db\Exception
      */
@@ -464,6 +467,7 @@ class Partner extends Element
 
     /**
      * Saves projects
+     *
      * @throws \yii\db\Exception
      */
     protected function saveProjects()
@@ -479,6 +483,7 @@ class Partner extends Element
 
     /**
      * Validate locations.
+     *
      * @inheritdoc
      */
     public function afterValidate()
@@ -615,6 +620,7 @@ class Partner extends Element
      * Sets the `locations` attribute to a list of PartnerLocation
      * instances given an array of models or data arrays suitable for
      * PartnerLocation instantiation.
+     *
      * @param array $locations
      */
     public function setLocations(array $locations)
@@ -662,6 +668,7 @@ class Partner extends Element
      * Sets the `projects` attribute to a list of PartnerProject
      * instances given an array of models or data arrays suitable for
      * PartnerProject instantiation.
+     *
      * @param array $projects
      * @param bool $eagerLoad
      */
@@ -694,6 +701,7 @@ class Partner extends Element
 
     /**
      * Generic method to save one-to-many relations like projects and locations.
+     *
      * @param Model[] $models
      * @param string $table
      * @param bool $prune Prune rows not belonging to `$models`
@@ -705,7 +713,7 @@ class Partner extends Element
         $savedIds = [];
         $without = array_unique(array_merge($without, ['dateCreated', 'dateUpdated', 'uid']));
 
-        foreach($models as &$model) {
+        foreach ($models as &$model) {
             $model->partnerId = $this->id;
 
             if (!$model->id) {
@@ -714,7 +722,7 @@ class Partner extends Element
                     ->insert($table, $data)
                     ->execute();
 
-                $model->id = (int) $db->getLastInsertID();
+                $model->id = (int)$db->getLastInsertID();
                 $savedIds[] = $model->id;
             } else {
                 $data = $model->getAttributes(null, $without);

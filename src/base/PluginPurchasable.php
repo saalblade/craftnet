@@ -60,7 +60,7 @@ abstract class PluginPurchasable extends Purchasable
             throw new InvalidConfigException('Plugin edition is missing its plugin ID');
         }
         if (($plugin = Plugin::find()->id($this->pluginId)->status(null)->one()) === null) {
-            throw new InvalidConfigException('Invalid plugin ID: '.$this->pluginId);
+            throw new InvalidConfigException('Invalid plugin ID: ' . $this->pluginId);
         }
         return $this->_plugin = $plugin;
     }

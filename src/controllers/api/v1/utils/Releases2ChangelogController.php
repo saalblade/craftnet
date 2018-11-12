@@ -57,7 +57,7 @@ class Releases2ChangelogController extends BaseApiController
 
             $changelog .= "\n## {$release['version']}";
             if ($date) {
-                $changelog .= ' - '.$date->format('Y-m-d');
+                $changelog .= ' - ' . $date->format('Y-m-d');
             }
             if ($critical) {
                 $changelog .= ' [CRITICAL]';

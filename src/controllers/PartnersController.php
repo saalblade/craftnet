@@ -6,7 +6,6 @@ use Craft;
 use craft\base\Element;
 use craft\elements\User;
 use craft\web\Controller;
-use craft\web\UploadedFile;
 use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use craftnet\partners\Partner;
@@ -43,6 +42,7 @@ class PartnersController extends Controller
 
     /**
      * Fetches the parter for the currently logged in user.
+     *
      * @return Response
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
@@ -64,6 +64,7 @@ class PartnersController extends Controller
 
     /**
      * From Craft ID, only allowed to edit own Partner Profile
+     *
      * @return Response
      * @throws Exception
      * @throws ForbiddenHttpException
@@ -82,11 +83,11 @@ class PartnersController extends Controller
         $user = Craft::$app->getUser()->getIdentity();
         $partner = $user->getPartner();
 
-        if ($partner->id !== (int) $partnerId) {
+        if ($partner->id !== (int)$partnerId) {
             throw new ForbiddenHttpException();
         }
 
-        switch($request->getBodyParam('scenario')) {
+        switch ($request->getBodyParam('scenario')) {
             case Partner::SCENARIO_BASE_INFO:
                 $partner->setScenario(Partner::SCENARIO_BASE_INFO);
                 PartnerService::getInstance()->mergeRequestParams($partner, $request, [
@@ -195,7 +196,7 @@ class PartnersController extends Controller
                 $partner = Partner::find()->id($partnerId)->status(null)->one();
 
                 if ($partner === null) {
-                    throw new NotFoundHttpException('Invalid partner ID: '.$partnerId);
+                    throw new NotFoundHttpException('Invalid partner ID: ' . $partnerId);
                 }
             } else {
                 $partner = new Partner([
@@ -222,6 +223,7 @@ class PartnersController extends Controller
 
     /**
      * TODO: Implement user permissions for editing partners
+     *
      * @return Response
      * @throws Exception
      * @throws ForbiddenHttpException
@@ -319,7 +321,7 @@ class PartnersController extends Controller
 
     public function actionFetchHistory($partnerId)
     {
-        $history = PartnerHistory::findByPartnerId($partnerId) ;
+        $history = PartnerHistory::findByPartnerId($partnerId);
         return $this->asJson(compact('history', 'parnerId'));
     }
 
@@ -359,10 +361,10 @@ class PartnersController extends Controller
      */
     public function actionDeleteHistory($id)
     {
-        $rowsAffected = PartnerHistory::deleteById((int) $id);
+        $rowsAffected = PartnerHistory::deleteById((int)$id);
 
         return $this->asJson([
-            'success' => (bool) $rowsAffected
+            'success' => (bool)$rowsAffected
         ]);
     }
 

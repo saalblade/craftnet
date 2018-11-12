@@ -152,7 +152,7 @@ class CmsEdition extends Purchasable
      */
     public function getDescription(): string
     {
-        return 'Craft '.$this->name;
+        return 'Craft ' . $this->name;
     }
 
     /**
@@ -168,7 +168,7 @@ class CmsEdition extends Purchasable
      */
     public function getSku(): string
     {
-        return 'CRAFT-'.strtoupper($this->handle);
+        return 'CRAFT-' . strtoupper($this->handle);
     }
 
     /**
@@ -275,7 +275,7 @@ class CmsEdition extends Purchasable
         try {
             // save the license
             if (!$manager->saveLicense($license, false)) {
-                Craft::error("Could not save Craft license {$license->key} for order {$order->number}: ".implode(', ', $license->getErrorSummary(true)));
+                Craft::error("Could not save Craft license {$license->key} for order {$order->number}: " . implode(', ', $license->getErrorSummary(true)));
                 return;
             }
 

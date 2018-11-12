@@ -24,6 +24,7 @@ class PartnerProject extends Model
      * api and templates. During a POST request this will
      * be an array of Asset ids. When a GET request, this
      * will be an array of Asset instances.
+     *
      * @var array
      */
     public $screenshots;
@@ -52,6 +53,7 @@ class PartnerProject extends Model
     /**
      * Depending on the request method, `screenshots` will be either
      * an array of Asset ids or an array of Asset instances.
+     *
      * @return array
      */
     public function getScreenshotIds()
@@ -61,7 +63,7 @@ class PartnerProject extends Model
         }
 
         $ids = array_map(function($val) {
-           return ($val instanceof Asset) ? $val->id : $val;
+            return ($val instanceof Asset) ? $val->id : $val;
         }, $this->screenshots);
 
         return $ids;

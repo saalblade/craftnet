@@ -7,7 +7,6 @@ use Composer\Semver\VersionParser;
 use Craft;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
-use craft\helpers\Html;
 use craft\helpers\HtmlPurifier;
 use craft\models\Update;
 use craftnet\controllers\api\BaseApiController;

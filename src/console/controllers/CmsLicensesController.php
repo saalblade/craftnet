@@ -72,11 +72,11 @@ class CmsLicensesController extends Controller
             }
 
             if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
-                $this->stderr('Could not save license: '.implode(', ', $license->getFirstErrors().PHP_EOL), Console::FG_RED);
+                $this->stderr('Could not save license: ' . implode(', ', $license->getFirstErrors() . PHP_EOL), Console::FG_RED);
                 return 1;
             }
 
-            $this->stdout("License #{$counter} saved: ".PHP_EOL.chunk_split($license->key, 50).PHP_EOL, Console::FG_GREEN);
+            $this->stdout("License #{$counter} saved: " . PHP_EOL . chunk_split($license->key, 50) . PHP_EOL, Console::FG_GREEN);
 
             if ($note) {
                 $this->module->getCmsLicenseManager()->addHistory($license->id, $note);
@@ -148,11 +148,11 @@ class CmsLicensesController extends Controller
         $license->expired = $license->expiresOn !== null ? $license->expiresOn->getTimestamp() < time() : false;
 
         if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
-            $this->stderr('Could not save license: '.implode(', ', $license->getFirstErrors().PHP_EOL), Console::FG_RED);
+            $this->stderr('Could not save license: ' . implode(', ', $license->getFirstErrors() . PHP_EOL), Console::FG_RED);
             return 1;
         }
 
-        $this->stdout('License saved: '.PHP_EOL.chunk_split($license->key, 50).PHP_EOL, Console::FG_GREEN);
+        $this->stdout('License saved: ' . PHP_EOL . chunk_split($license->key, 50) . PHP_EOL, Console::FG_GREEN);
 
         if ($this->confirm('Create a history record for the license?', true)) {
             $note = $this->prompt('Note: ', [

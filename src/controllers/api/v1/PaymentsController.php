@@ -195,7 +195,7 @@ class PaymentsController extends CartsController
         ]);
 
         if (!$paymentSourcesService->savePaymentSource($paymentSource)) {
-            throw new PaymentSourceException('Could not create the payment source: '.implode(', ', $paymentSource->getErrorSummary(true)));
+            throw new PaymentSourceException('Could not create the payment source: ' . implode(', ', $paymentSource->getErrorSummary(true)));
         }
 
         // update the payment token and customer

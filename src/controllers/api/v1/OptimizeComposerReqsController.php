@@ -56,7 +56,7 @@ class OptimizeComposerReqsController extends BaseApiController
                 throw new BadRequestHttpException("Unknown package/constraint: {$name}@{$constraint}");
             }
 
-            $optimized[$name] = $release->version.$alias;
+            $optimized[$name] = $release->version . $alias;
             $this->_ignore[$name] = true;
             $releaseIds[] = $release->id;
         }

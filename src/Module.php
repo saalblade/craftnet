@@ -31,7 +31,6 @@ use craftnet\cms\CmsEdition;
 use craftnet\cms\CmsLicenseManager;
 use craftnet\composer\JsonDumper;
 use craftnet\composer\PackageManager;
-use craftnet\controllers\PartnersController;
 use craftnet\developers\UserBehavior;
 use craftnet\developers\UserQueryBehavior;
 use craftnet\fields\Plugins;
@@ -99,19 +98,19 @@ class Module extends \yii\base\Module
                 'key' => self::MESSAGE_KEY_RECEIPT,
                 'heading' => 'When someone places an order:',
                 'subject' => 'Your receipt from {{ fromName }}',
-                'body' => file_get_contents(__DIR__.'/emails/receipt.txt'),
+                'body' => file_get_contents(__DIR__ . '/emails/receipt.txt'),
             ]);
             $e->messages[] = new SystemMessage([
                 'key' => self::MESSAGE_KEY_VERIFY,
                 'heading' => 'When someone wants to claim licenses by an email address:',
                 'subject' => 'Verify your email',
-                'body' => file_get_contents(__DIR__.'/emails/verify.txt'),
+                'body' => file_get_contents(__DIR__ . '/emails/verify.txt'),
             ]);
             $e->messages[] = new SystemMessage([
                 'key' => self::MESSAGE_KEY_DEVELOPER_SALE,
                 'heading' => 'When a plugin developer makes a sale:',
                 'subject' => 'Craft Plugin Store Sale',
-                'body' => file_get_contents(__DIR__.'/emails/developer_sale.txt'),
+                'body' => file_get_contents(__DIR__ . '/emails/developer_sale.txt'),
             ]);
         });
 
@@ -225,7 +224,7 @@ class Module extends \yii\base\Module
         });
 
         Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
-            $e->roots['craftnet'] = __DIR__.'/templates';
+            $e->roots['craftnet'] = __DIR__ . '/templates';
         });
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $e) {

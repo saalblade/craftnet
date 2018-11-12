@@ -46,7 +46,7 @@ class PluginStoreController extends BaseApiController
 
             if ($enablePluginStoreCache) {
                 Craft::$app->getCache()->set($cacheKey, $pluginStoreData, null, new FileDependency([
-                    'fileName' => $this->module->getJsonDumper()->composerWebroot.'/packages.json',
+                    'fileName' => $this->module->getJsonDumper()->composerWebroot . '/packages.json',
                 ]));
             }
         }
@@ -73,7 +73,7 @@ class PluginStoreController extends BaseApiController
                 'id' => $category->id,
                 'title' => $category->title,
                 'slug' => $category->slug,
-                'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
+                'iconUrl' => $icon ? $icon->getUrl() . '?' . $icon->dateModified->getTimestamp() : null,
             ];
         }
 

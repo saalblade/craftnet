@@ -85,7 +85,7 @@ class PluginLicensesController extends BaseApiController
             throw new ValidationException([
                 [
                     'param' => 'plugin',
-                    'message' => 'Invalid plugin handle: '.$payload->plugin,
+                    'message' => 'Invalid plugin handle: ' . $payload->plugin,
                     'code' => self::ERROR_CODE_MISSING,
                 ]
             ]);
@@ -161,7 +161,7 @@ class PluginLicensesController extends BaseApiController
         $manager = $this->module->getPluginLicenseManager();
 
         if (!$manager->saveLicense($license)) {
-            throw new Exception('Could not create plugin license: '.implode(', ', $license->getErrorSummary(true)));
+            throw new Exception('Could not create plugin license: ' . implode(', ', $license->getErrorSummary(true)));
         }
 
         $manager->addHistory($license->id, "created for {$license->email} by {$user->email}");

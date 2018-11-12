@@ -40,7 +40,7 @@ abstract class BaseController extends Controller
         $screenshotIds = [];
 
         foreach ($plugin->getScreenshots() as $screenshot) {
-            $screenshotUrls[] = $screenshot->getUrl().'?'.$screenshot->dateModified->getTimestamp();
+            $screenshotUrls[] = $screenshot->getUrl() . '?' . $screenshot->dateModified->getTimestamp();
             $screenshotIds[] = $screenshot->getId();
         }
 
@@ -62,7 +62,7 @@ abstract class BaseController extends Controller
             'pendingApproval' => $plugin->pendingApproval,
             'status' => $plugin->status,
             'iconId' => $plugin->iconId,
-            'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
+            'iconUrl' => $icon ? $icon->getUrl() . '?' . $icon->dateModified->getTimestamp() : null,
             'packageName' => $plugin->packageName,
             'handle' => $plugin->handle,
             'name' => $plugin->name,

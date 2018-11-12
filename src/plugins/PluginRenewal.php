@@ -104,7 +104,7 @@ class PluginRenewal extends PluginPurchasable
             throw new InvalidConfigException('Plugin renewal is missing its edition ID');
         }
         if (($edition = PluginEdition::findOne($this->editionId)) === null) {
-            throw new InvalidConfigException('Invalid edition ID: '.$this->editionId);
+            throw new InvalidConfigException('Invalid edition ID: ' . $this->editionId);
         };
         return $edition;
     }
@@ -123,7 +123,7 @@ class PluginRenewal extends PluginPurchasable
     public function getDescription(): string
     {
         // todo: include the edition name when we start supporting editions
-        return $this->getPlugin()->name.' Renewal';
+        return $this->getPlugin()->name . ' Renewal';
     }
 
     /**
@@ -139,6 +139,6 @@ class PluginRenewal extends PluginPurchasable
      */
     public function getSku(): string
     {
-        return $this->getEdition()->getSku().'-RENEWAL';
+        return $this->getEdition()->getSku() . '-RENEWAL';
     }
 }

@@ -139,7 +139,7 @@ class PartnerHistory extends Model implements JsonSerializable
             return '';
         }
 
-        $fullName = trim((string) $this->author['firstName'] . ' ' . (string) $this->author['lastName']);
+        $fullName = trim((string)$this->author['firstName'] . ' ' . (string)$this->author['lastName']);
 
         return $fullName ?: $this->author['username'];
     }
@@ -171,6 +171,7 @@ class PartnerHistory extends Model implements JsonSerializable
 
     /**
      * Sets the `partnerId` attribute by Partner model
+     *
      * @param Partner $partner
      */
     public function setPartner(Partner $partner)
@@ -195,7 +196,7 @@ class PartnerHistory extends Model implements JsonSerializable
                 ->insert(self::$table, $data)
                 ->execute();
 
-            $this->id = (int) $this->db->getLastInsertID();
+            $this->id = (int)$this->db->getLastInsertID();
         } else {
             $data = $this->getAttributes(['id', 'partnerId', 'authorId', 'message']);
 
@@ -212,6 +213,7 @@ class PartnerHistory extends Model implements JsonSerializable
 
     /**
      * Refresh this model from the database if `id` is set.
+     *
      * @return bool
      */
     public function reload()

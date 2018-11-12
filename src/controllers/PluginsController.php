@@ -82,7 +82,7 @@ class PluginsController extends Controller
             $response = $api->contents()->show($owner, $repo, 'composer.json', $ref);
             $config = Json::decode(base64_decode($response['content']));
         } catch (\Throwable $e) {
-            return $this->asErrorJson('There was an error loading composer.json: '.$e->getMessage());
+            return $this->asErrorJson('There was an error loading composer.json: ' . $e->getMessage());
         }
 
         // Make sure it's a Craft plugin
@@ -168,7 +168,7 @@ class PluginsController extends Controller
             if ($pluginId !== null) {
                 $plugin = Plugin::find()->id($pluginId)->status(null)->one();
                 if ($plugin === null) {
-                    throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
+                    throw new NotFoundHttpException('Invalid plugin ID: ' . $pluginId);
                 }
 
                 if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
@@ -202,7 +202,7 @@ class PluginsController extends Controller
         if ($pluginId = $request->getBodyParam('pluginId')) {
             $plugin = Plugin::find()->id($pluginId)->status(null)->one();
             if ($plugin === null) {
-                throw new NotFoundHttpException('Invalid plugin ID: '.$pluginId);
+                throw new NotFoundHttpException('Invalid plugin ID: ' . $pluginId);
             }
 
             if (!Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && Craft::$app->getUser()->getId() !== $plugin->developerId) {
@@ -298,19 +298,19 @@ class PluginsController extends Controller
             if ($iconFile) {
                 if ($iconFile->error != UPLOAD_ERR_OK) {
                     if ($iconFile->error == UPLOAD_ERR_INI_SIZE) {
-                        throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
+                        throw new Exception('Couldn’t upload screenshot because it exceeds the limit of ' . $maxUploadM . 'MB.');
                     }
 
-                    throw new Exception('Couldn’t upload icon. (Error '.$iconFile->error.')');
+                    throw new Exception('Couldn’t upload icon. (Error ' . $iconFile->error . ')');
                 }
 
                 if ($iconFile->size > $maxUpload) {
-                    throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
+                    throw new Exception('Couldn’t upload screenshot because it exceeds the limit of ' . $maxUploadM . 'MB.');
                 }
 
                 $name = $plugin->name;
                 $handle = $plugin->handle;
-                $tempPath = Craft::$app->getPath()->getTempPath()."/icon-{$handle}-".StringHelper::randomString().'.svg';
+                $tempPath = Craft::$app->getPath()->getTempPath() . "/icon-{$handle}-" . StringHelper::randomString() . '.svg';
                 move_uploaded_file($iconFile->tempName, $tempPath);
 
                 if (!$imageService->checkMemoryForImage($tempPath)) {
@@ -343,7 +343,7 @@ class PluginsController extends Controller
                     ]);
 
                     if (!Craft::$app->getElements()->saveElement($icon, false)) {
-                        throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
+                        throw new Exception('Could not save icon asset: ' . implode(', ', $icon->getErrorSummary(true)));
                     }
 
                     $plugin->iconId = $icon->id;
@@ -381,14 +381,14 @@ class PluginsController extends Controller
                 foreach ($screenshotFiles as $screenshotFile) {
                     if ($screenshotFile->error != UPLOAD_ERR_OK) {
                         if ($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
-                            throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
+                            throw new Exception('Couldn’t upload screenshot because it exceeds the limit of ' . $maxUploadM . 'MB.');
                         }
 
-                        throw new Exception('Couldn’t upload screenshot. (Error '.$screenshotFile->error.')');
+                        throw new Exception('Couldn’t upload screenshot. (Error ' . $screenshotFile->error . ')');
                     }
 
                     if ($screenshotFile->size > $maxUpload) {
-                        throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
+                        throw new Exception('Couldn’t upload screenshot because it exceeds the limit of ' . $maxUploadM . 'MB.');
                     }
 
                     $extension = $screenshotFile->getExtension();
@@ -398,7 +398,7 @@ class PluginsController extends Controller
                     }
 
                     $handle = $plugin->handle;
-                    $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$screenshotFile->getExtension();
+                    $tempPath = Craft::$app->getPath()->getTempPath() . "/screenshot-{$handle}-" . StringHelper::randomString() . '.' . $screenshotFile->getExtension();
                     move_uploaded_file($screenshotFile->tempName, $tempPath);
 
                     if (!$imageService->checkMemoryForImage($tempPath)) {
@@ -415,11 +415,11 @@ class PluginsController extends Controller
                     $volume = $volumesService->getVolumeByHandle('screenshots');
                     $volumeId = $volumesService->ensureTopFolder($volume);
 
-                    $subpath = '/'.$handle;
+                    $subpath = '/' . $handle;
 
                     $folder = $assetsService->findFolder([
                         'volumeId' => $volumeId,
-                        'path' => $subpath.'/'
+                        'path' => $subpath . '/'
                     ]);
 
                     if (!$folder) {
@@ -433,14 +433,14 @@ class PluginsController extends Controller
                     $screenshot = new Asset([
                         'title' => $plugin->name,
                         'tempFilePath' => $tempPath,
-                        'newLocation' => "{folder:{$folderId}}".$targetFilename,
+                        'newLocation' => "{folder:{$folderId}}" . $targetFilename,
                         'avoidFilenameConflicts' => true,
                     ]);
 
                     $screenshot->validate(['newLocation']);
 
                     if ($screenshot->hasErrors() || !Craft::$app->getElements()->saveElement($screenshot, false)) {
-                        throw new Exception('Could not save icon asset: '.implode(', ', $screenshot->getErrorSummary(true)));
+                        throw new Exception('Could not save icon asset: ' . implode(', ', $screenshot->getErrorSummary(true)));
                     }
 
                     $screenshotIds[] = $screenshot->id;
@@ -486,11 +486,11 @@ class PluginsController extends Controller
                 }
 
                 if ($newHandle) {
-                    $icon->newFilename = $plugin->handle.'.'.$icon->getExtension();
+                    $icon->newFilename = $plugin->handle . '.' . $icon->getExtension();
                 }
 
                 if (!Craft::$app->getElements()->saveElement($icon, false)) {
-                    throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
+                    throw new Exception('Could not save icon asset: ' . implode(', ', $icon->getErrorSummary(true)));
                 }
             }
 
@@ -501,11 +501,11 @@ class PluginsController extends Controller
                 $volume = $volumesService->getVolumeByHandle('screenshots');
                 $volumeId = $volumesService->ensureTopFolder($volume);
 
-                $subpath = '/'.$plugin->handle;
+                $subpath = '/' . $plugin->handle;
 
                 $folder = $assetsService->findFolder([
                     'volumeId' => $volumeId,
-                    'path' => $subpath.'/'
+                    'path' => $subpath . '/'
                 ]);
 
                 if (!$folder) {
@@ -515,7 +515,7 @@ class PluginsController extends Controller
 
                 foreach ($plugin->screenshots as $screenshot) {
                     if (!$assetsService->moveAsset($screenshot, $folder)) {
-                        throw new Exception('Could not save screenshot asset: '.implode(', ', $screenshot->getErrorSummary(true)));
+                        throw new Exception('Could not save screenshot asset: ' . implode(', ', $screenshot->getErrorSummary(true)));
                     }
                 }
             }
@@ -644,13 +644,13 @@ class PluginsController extends Controller
 
         try {
             Craft::$app->getMailer()->compose()
-                ->setSubject('A plugin is waiting for approval: '.$plugin->name)
-                ->setTextBody('https://id.craftcms.com/'.getenv('CRAFT_CP_TRIGGER').'/plugins/'.$plugin->id)
+                ->setSubject('A plugin is waiting for approval: ' . $plugin->name)
+                ->setTextBody('https://id.craftcms.com/' . getenv('CRAFT_CP_TRIGGER') . '/plugins/' . $plugin->id)
                 ->setTo(explode(',', getenv('PLUGIN_APPROVAL_RECIPIENTS')))
                 ->send();
         } catch (\Exception $e) {
             // Just log and move on.
-            Craft::error('There was a problem sending the plugin approval email: '.$e->getMessage(), __METHOD__);
+            Craft::error('There was a problem sending the plugin approval email: ' . $e->getMessage(), __METHOD__);
         }
 
         // Return
@@ -692,7 +692,7 @@ class PluginsController extends Controller
         }
 
         // See if we already happen to have an icon for this handle
-        $filename = $handle.'.svg';
+        $filename = $handle . '.svg';
         if ($icon = Asset::find()->volume('icons')->filename($filename)->one()) {
             return $icon;
         }
@@ -712,18 +712,18 @@ class PluginsController extends Controller
 
             // If basePath is defined, we only care about namespace path(s) that include it
             if ($basePath !== null) {
-                $alias = '@'.str_replace('\\', '/', $namespace);
-                if (strpos($basePath.'/', $alias.'/') === 0) {
-                    $testPath = $path.substr($config['extra']['basePath'], strlen($alias));
+                $alias = '@' . str_replace('\\', '/', $namespace);
+                if (strpos($basePath . '/', $alias . '/') === 0) {
+                    $testPath = $path . substr($config['extra']['basePath'], strlen($alias));
                     if ($icon = $this->_getIconInPath($api, $owner, $repo, $ref, $handle, $name, $testPath)) {
                         return $icon;
                     };
                 }
             } // If the plugin class is defined, we only care about namespace path(s) that include its directory
             else if ($pluginClass !== null) {
-                if (strpos($pluginClass, $namespace.'\\') === 0) {
+                if (strpos($pluginClass, $namespace . '\\') === 0) {
                     $subPath = str_replace('\\', '/', substr($pluginClass, strlen($namespace) + 1));
-                    $testPath = $path.(dirname($subPath) !== '.' ? '/'.dirname($subPath) : '');
+                    $testPath = $path . (dirname($subPath) !== '.' ? '/' . dirname($subPath) : '');
                     if ($icon = $this->_getIconInPath($api, $owner, $repo, $ref, $handle, $name, $testPath)) {
                         return $icon;
                     };
@@ -757,14 +757,14 @@ class PluginsController extends Controller
     private function _getIconInPath(Repo $api, string $owner, string $repo, string $ref = null, string $handle, string $name = null, string $testPath)
     {
         try {
-            $response = $api->contents()->show($owner, $repo, $testPath.'/icon.svg', $ref);
+            $response = $api->contents()->show($owner, $repo, $testPath . '/icon.svg', $ref);
         } catch (RuntimeException $e) {
             return null;
         }
 
         // Decode and save it
         $contents = base64_decode($response['content']);
-        $tempPath = Craft::$app->getPath()->getTempPath()."/icon-{$handle}-".StringHelper::randomString().'.svg';
+        $tempPath = Craft::$app->getPath()->getTempPath() . "/icon-{$handle}-" . StringHelper::randomString() . '.svg';
         FileHelper::writeToFile($tempPath, $contents);
 
         // Save as an asset
@@ -775,11 +775,11 @@ class PluginsController extends Controller
         $icon = new Asset([
             'title' => $name,
             'tempFilePath' => $tempPath,
-            'newLocation' => "{folder:{$folderId}}{$handle}".StringHelper::randomString().".svg",
+            'newLocation' => "{folder:{$folderId}}{$handle}" . StringHelper::randomString() . ".svg",
         ]);
 
         if (!Craft::$app->getElements()->saveElement($icon, false)) {
-            throw new Exception('Could not save icon asset: '.implode(', ', $icon->getErrorSummary(true)));
+            throw new Exception('Could not save icon asset: ' . implode(', ', $icon->getErrorSummary(true)));
         }
 
         return $icon;

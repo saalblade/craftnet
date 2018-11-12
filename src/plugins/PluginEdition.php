@@ -256,7 +256,7 @@ class PluginEdition extends PluginPurchasable
      */
     public function getSku(): string
     {
-        return strtoupper($this->getPlugin()->handle.'-'.$this->handle);
+        return strtoupper($this->getPlugin()->handle . '-' . $this->handle);
     }
 
     /**
@@ -394,7 +394,7 @@ class PluginEdition extends PluginPurchasable
         try {
             // save the license
             if (!$manager->saveLicense($license)) {
-                Craft::error("Could not save plugin license {$license->key} for order {$order->number}: ".implode(', ', $license->getErrorSummary(true)));
+                Craft::error("Could not save plugin license {$license->key} for order {$order->number}: " . implode(', ', $license->getErrorSummary(true)));
                 return;
             }
 

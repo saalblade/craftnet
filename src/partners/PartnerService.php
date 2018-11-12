@@ -23,7 +23,7 @@ class PartnerService
     public static function getInstance()
     {
         if (!isset(self::$_instance)) {
-            self::$_instance= new self();
+            self::$_instance = new self();
         }
 
         return self::$_instance;
@@ -98,7 +98,7 @@ class PartnerService
 
             if (is_numeric($capability)) {
                 // We have a numeric id
-                $id = (int) $capability;
+                $id = (int)$capability;
             } else {
                 // We probably have a title so find the id if it exists
                 $id = array_search($capability, $allCapabilities);
@@ -192,11 +192,11 @@ class PartnerService
         if (!isset($folderIds)) {
             $rows = (new Query())
                 ->select('f.id, v.handle')
-                    ->from('volumes v')
-                    ->rightJoin('volumefolders f', '[[v.id]] = [[f.volumeId]]')
-                    ->where(['handle' => ['partnerDocuments', 'partnerImages']])
-                    ->andWhere(['f.parentId' => null]) // root folders only
-                    ->all();
+                ->from('volumes v')
+                ->rightJoin('volumefolders f', '[[v.id]] = [[f.volumeId]]')
+                ->where(['handle' => ['partnerDocuments', 'partnerImages']])
+                ->andWhere(['f.parentId' => null])// root folders only
+                ->all();
 
             $folderIds = ArrayHelper::map($rows, 'handle', 'id');
         }
@@ -235,6 +235,7 @@ class PartnerService
     /**
      * Returns an array representation of a Partner with all related data
      * suitable for a public JSON response.
+     *
      * @param Partner $partner
      * @return array
      */
@@ -295,7 +296,7 @@ class PartnerService
 
         // locations
         /** @var PartnerLocation $location */
-        foreach($data['locations'] as $i => $location) {
+        foreach ($data['locations'] as $i => $location) {
             $data['locations'][$i] = $location->getAttributes([
                 'id',
                 'title',
@@ -322,7 +323,7 @@ class PartnerService
 
             if (is_array($data['projects'][$i]['screenshots'])) {
                 /** @var Asset $screenshot */
-                foreach($data['projects'][$i]['screenshots'] as $ii => $screenshot) {
+                foreach ($data['projects'][$i]['screenshots'] as $ii => $screenshot) {
                     $data['projects'][$i]['screenshots'][$ii] = [
                         'id' => $screenshot->id,
                         'url' => $screenshot->getUrl(),
@@ -377,10 +378,10 @@ class PartnerService
      */
     public function mergeRequestParams(Partner $partner, Request $request, array $properties)
     {
-        foreach($properties as $property) {
+        foreach ($properties as $property) {
             switch ($property) {
                 case 'ownerId':
-                    $partner->ownerId = ((array) $request->getBodyParam('ownerId'))[0];
+                    $partner->ownerId = ((array)$request->getBodyParam('ownerId'))[0];
                     break;
 
                 case 'capabilities':
@@ -456,14 +457,14 @@ class PartnerService
         foreach ($screenshotFiles as $screenshotFile) {
             if ($screenshotFile->error != UPLOAD_ERR_OK) {
                 if ($screenshotFile->error == UPLOAD_ERR_INI_SIZE) {
-                    throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
+                    throw new Exception('Couldn’t upload screenshot because it exceeds the limit of ' . $maxUploadM . 'MB.');
                 }
 
-                throw new Exception('Couldn’t upload screenshot. (Error '.$screenshotFile->error.')');
+                throw new Exception('Couldn’t upload screenshot. (Error ' . $screenshotFile->error . ')');
             }
 
             if ($screenshotFile->size > $maxUpload) {
-                throw new Exception('Couldn’t upload screenshot because it exceeds the limit of '.$maxUploadM.'MB.');
+                throw new Exception('Couldn’t upload screenshot because it exceeds the limit of ' . $maxUploadM . 'MB.');
             }
 
             $extension = $screenshotFile->getExtension();
@@ -473,7 +474,7 @@ class PartnerService
             }
 
             $handle = $partner->id;
-            $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$screenshotFile->getExtension();
+            $tempPath = Craft::$app->getPath()->getTempPath() . "/screenshot-{$handle}-" . StringHelper::randomString() . '.' . $screenshotFile->getExtension();
             move_uploaded_file($screenshotFile->tempName, $tempPath);
 
             if (!$imageService->checkMemoryForImage($tempPath)) {
@@ -489,11 +490,11 @@ class PartnerService
             $volume = $volumesService->getVolumeByHandle('partnerImages');
             $volumeId = $volumesService->ensureTopFolder($volume);
 
-            $subpath = '/'.$handle;
+            $subpath = '/' . $handle;
 
             $folder = $assetsService->findFolder([
                 'volumeId' => $volumeId,
-                'path' => $subpath.'/'
+                'path' => $subpath . '/'
             ]);
 
             if (!$folder) {
@@ -507,14 +508,14 @@ class PartnerService
             $screenshot = new Asset([
                 'title' => $partner->businessName,
                 'tempFilePath' => $tempPath,
-                'newLocation' => "{folder:{$folderId}}".$targetFilename,
+                'newLocation' => "{folder:{$folderId}}" . $targetFilename,
                 'avoidFilenameConflicts' => true,
             ]);
 
             $screenshot->validate(['newLocation']);
 
             if ($screenshot->hasErrors() || !Craft::$app->getElements()->saveElement($screenshot, false)) {
-                throw new Exception('Could not save image asset: '.implode(', ', $screenshot->getErrorSummary(true)));
+                throw new Exception('Could not save image asset: ' . implode(', ', $screenshot->getErrorSummary(true)));
             }
 
             $screenshots[] = $screenshot;
@@ -555,16 +556,16 @@ class PartnerService
 
         if ($logoFile->error != UPLOAD_ERR_OK) {
             if ($logoFile->error == UPLOAD_ERR_INI_SIZE) {
-                $partner->addError('logo', 'Couldn’t upload logo because it exceeds the limit of '.$maxUploadM.'MB.');
+                $partner->addError('logo', 'Couldn’t upload logo because it exceeds the limit of ' . $maxUploadM . 'MB.');
             } else {
-                $partner->addError('logo', 'Couldn’t upload logo. (Error '.$logoFile->error.')');
+                $partner->addError('logo', 'Couldn’t upload logo. (Error ' . $logoFile->error . ')');
             }
 
             return null;
         }
 
         if ($logoFile->size > $maxUpload) {
-            $partner->addError('logo', 'Couldn’t upload logo because it exceeds the limit of '.$maxUploadM.'MB.');
+            $partner->addError('logo', 'Couldn’t upload logo because it exceeds the limit of ' . $maxUploadM . 'MB.');
             return null;
         }
 
@@ -576,7 +577,7 @@ class PartnerService
         }
 
         $handle = $partner->id;
-        $tempPath = Craft::$app->getPath()->getTempPath()."/logo-{$handle}-".StringHelper::randomString().'.'.$logoFile->getExtension();
+        $tempPath = Craft::$app->getPath()->getTempPath() . "/logo-{$handle}-" . StringHelper::randomString() . '.' . $logoFile->getExtension();
         move_uploaded_file($logoFile->tempName, $tempPath);
 
         if (!$imageService->checkMemoryForImage($tempPath)) {
@@ -592,11 +593,11 @@ class PartnerService
         $volume = $volumesService->getVolumeByHandle('partnerImages');
         $volumeId = $volumesService->ensureTopFolder($volume);
 
-        $subpath = '/'.$handle;
+        $subpath = '/' . $handle;
 
         $folder = $assetsService->findFolder([
             'volumeId' => $volumeId,
-            'path' => $subpath.'/'
+            'path' => $subpath . '/'
         ]);
 
         if (!$folder) {
@@ -610,14 +611,14 @@ class PartnerService
         $logo = new Asset([
             'title' => $partner->businessName,
             'tempFilePath' => $tempPath,
-            'newLocation' => "{folder:{$folderId}}".$targetFilename,
+            'newLocation' => "{folder:{$folderId}}" . $targetFilename,
             'avoidFilenameConflicts' => true,
         ]);
 
         $logo->validate(['newLocation']);
 
         if ($logo->hasErrors() || !Craft::$app->getElements()->saveElement($logo, false)) {
-            throw new Exception('Could not save image asset: '.implode(', ', $logo->getErrorSummary(true)));
+            throw new Exception('Could not save image asset: ' . implode(', ', $logo->getErrorSummary(true)));
         }
 
         return $logo;

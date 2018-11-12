@@ -111,7 +111,7 @@ class PartnerQuery extends ElementQuery
             'region',
         ];
 
-        foreach($andWhereColumns as $column) {
+        foreach ($andWhereColumns as $column) {
             if (isset($this->{$column})) {
                 $this->subQuery->andWhere(Db::parseParam('craftnet_partners.' . $column, $this->{$column}));
             }

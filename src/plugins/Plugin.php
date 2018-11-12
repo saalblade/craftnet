@@ -168,7 +168,7 @@ class Plugin extends Element
 
         foreach ($categories as $category) {
             $source = [
-                'key' => 'category:'.$category->id,
+                'key' => 'category:' . $category->id,
                 'label' => $category->title,
                 'criteria' => ['categoryId' => $category->id],
             ];
@@ -522,7 +522,7 @@ class Plugin extends Element
             throw new InvalidConfigException('Plugin is missing its developer ID');
         }
         if (($user = User::find()->id($this->developerId)->status(null)->one()) === null) {
-            throw new InvalidConfigException('Invalid developer ID: '.$this->developerId);
+            throw new InvalidConfigException('Invalid developer ID: ' . $this->developerId);
         }
         return $this->_developer = $user;
     }
@@ -563,7 +563,7 @@ class Plugin extends Element
             return null;
         }
         if (($asset = Asset::find()->id($this->iconId)->one()) === null) {
-            throw new InvalidConfigException('Invalid asset ID: '.$this->iconId);
+            throw new InvalidConfigException('Invalid asset ID: ' . $this->iconId);
         }
         return $this->_icon = $asset;
     }
@@ -958,9 +958,9 @@ class Plugin extends Element
         $emailMessage = null;
 
         if ($this->_submittedForApproval) {
-            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username.' submitted the plugin for approval');
+            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username . ' submitted the plugin for approval');
         } else if ($this->_approved) {
-            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username.' approved the plugin', $this->devComments);
+            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username . ' approved the plugin', $this->devComments);
             $sendDevEmail = true;
             $emailSubject = "{$this->name} has been approved!";
             $emailMessage = <<<EOD
@@ -971,7 +971,7 @@ Congratulations, {$this->name} has been approved, and is now available in the Cr
 Thanks for submitting it!
 EOD;
         } else if ($this->_rejected) {
-            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username.' rejected the plugin', $this->devComments);
+            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username . ' rejected the plugin', $this->devComments);
             $sendDevEmail = true;
             $emailSubject = "{$this->name} isn't quite ready for prime time yet...";
             $emailMessage = <<<EOD
@@ -984,7 +984,7 @@ Before we can approve it, please fix the following:
 Once you've taken care of that, re-submit your plugin and we'll give it another look. If you have any questions, just reply to this email and we'll get back to you.
 EOD;
         } else if ($this->devComments) {
-            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username.' sent the developer a note', $this->devComments);
+            $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username . ' sent the developer a note', $this->devComments);
             $sendDevEmail = true;
             $emailSubject = "Quick note about {$this->name}...";
             $emailMessage = $this->devComments;
@@ -1060,7 +1060,7 @@ EOD;
             case 'repository':
             case 'documentationUrl':
                 $url = $this->$attribute;
-                return $url ? "<a href='{$url}' target='_blank'>".preg_replace('/^https?:\/\/(?:www\.)?github\.com\//', '', $url).'</a>' : '';
+                return $url ? "<a href='{$url}' target='_blank'>" . preg_replace('/^https?:\/\/(?:www\.)?github\.com\//', '', $url) . '</a>' : '';
             case 'price':
             case 'renewalPrice':
                 return $this->$attribute ? Craft::$app->getFormatter()->asCurrency($this->$attribute, 'USD') : 'Free';

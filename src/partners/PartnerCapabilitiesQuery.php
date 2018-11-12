@@ -25,6 +25,7 @@ class PartnerCapabilitiesQuery extends Query
      *     ...
      * ]
      * ```
+     *
      * @return static
      */
     public function asIndexedTitles()
