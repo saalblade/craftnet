@@ -55,7 +55,9 @@ class PartnerService
         }
 
         foreach ($projects as &$project) {
-            $project->screenshots = $assetsByProjectId[$project->id] ?: [];
+            if (array_key_exists($project->id, $assetsByProjectId)) {
+                $project->screenshots = $assetsByProjectId[$project->id];
+            }
         }
     }
 
