@@ -9,6 +9,7 @@
         <p v-if="loadState == LOAD_ERROR">Error: {{ loadError }}</p>
 
         <div v-if="loadState == LOADED">
+            <partner-completion :partner="partner"></partner-completion>
             <partner-info :partner="partner"></partner-info>
             <partner-locations :partner="partner"></partner-locations>
             <partner-projects :partner="partner"></partner-projects>
@@ -18,6 +19,7 @@
 
 <script>
     import {mapState} from 'vuex'
+    import PartnerCompletion from '../components/PartnerCompletion'
     import PartnerInfo from '../components/PartnerInfo'
     import PartnerLocations from '../components/PartnerLocations'
     import PartnerProjects from '../components/PartnerProjects'
@@ -36,6 +38,7 @@
         },
 
         components: {
+            PartnerCompletion,
             PartnerInfo,
             PartnerLocations,
             PartnerProjects

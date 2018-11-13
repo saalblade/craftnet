@@ -84,8 +84,7 @@
                             <a v-if="draft.logo.url" href="#" class="remove btn btn-sm btn-danger" @click.prevent="draft.logo = {id: null, url: null}">
                                 <i class="fas fa-times"></i>
                             </a>
-                            <!-- accept=".svg"  -->
-                            <input v-if="!draft.logo.url" type="file" @change="onLogoChange" ref="logoFile" class="mt-6 mb-6">
+                            <input v-if="!draft.logo.url" accept=".svg" type="file" @change="onLogoChange" ref="logoFile" class="mt-6 mb-6">
                         </div>
                         <div v-if="errors.logo" class="invalid-feedback" v-for="(error, index) in errors.logo" :key="index">{{ error }}</div>
                     </div>
