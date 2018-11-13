@@ -10,8 +10,10 @@ use craft\elements\Asset;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\UrlHelper;
+use craftnet\partners\jobs\UpdatePartner;
 use craftnet\partners\validators\PartnerSlugValidator;
 use yii\helpers\Inflector;
+use yii\queue\sqs\Queue;
 
 /**
  * Class Partner
@@ -383,6 +385,15 @@ class Partner extends Element
                 $this->saveLocations();
                 $this->saveProjects();
                 break;
+        }
+
+        // Add it to the queue?
+        if (Craft::$app->has('partnerQueue')) {
+            /** @var Queue $queue */
+            $queue = Craft::$app->get('partnerQueue');
+            $queue->push(new UpdatePartner([
+                'partnerId' => $this->id,
+            ]));
         }
     }
 
