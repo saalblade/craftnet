@@ -528,6 +528,27 @@ class PartnerService
      * I am so sorry for the copy/paste. In a hurry.
      *
      * @param Partner $partner
+     * @return Asset|null
+     */
+    public function handleUploadedLogo(Partner $partner)
+    {
+        $logoFile = UploadedFile::getInstanceByName('logo');
+        $image = null;
+
+        try {
+            $image = $this->savePartnerImage($logoFile, $partner, ['svg']);
+        }
+        catch(Exception $e) {
+            $partner->addError('logo', 'Upload error: ' . $e->getMessage());
+        }
+
+        return $image;
+    }
+
+    /**
+     * @param UploadedFile $uploadedFile
+     * @param Partner $partner
+     * @param array $allowedFileExtensions
      * @return Asset
      * @throws AssetDisallowedExtensionException
      * @throws Exception
@@ -536,53 +557,45 @@ class PartnerService
      * @throws \craft\errors\ElementNotFoundException
      * @throws \craft\errors\VolumeException
      */
-    public function handleUploadedLogo(Partner $partner)
+    protected function savePartnerImage(UploadedFile $uploadedFile, Partner $partner, array $allowedFileExtensions = [])
     {
-        $allowedFileExtensions = ['svg'];
-        $imageService = Craft::$app->getImages();
-        $assetsService = Craft::$app->getAssets();
-        $volumesService = Craft::$app->getVolumes();
+        static $maxUpload, $maxUploadM, $imageService, $assetsService, $volumesService;
 
-        $iniMaxUpload = ConfigHelper::sizeInBytes(ini_get('upload_max_filesize'));
-        $configMaxUpload = Craft::$app->getConfig()->getGeneral()->maxUploadFileSize;
-        $maxUpload = min($iniMaxUpload, $configMaxUpload);
-        $maxUploadM = round($maxUpload / 1000 / 1000);
+        if (!isset($maxUpload)) {
+            $iniMaxUpload = ConfigHelper::sizeInBytes(ini_get('upload_max_filesize'));
+            $configMaxUpload = Craft::$app->getConfig()->getGeneral()->maxUploadFileSize;
+            $maxUpload = min($iniMaxUpload, $configMaxUpload);
+            $maxUploadM = round($maxUpload / 1000 / 1000);
 
-        $logoFile = UploadedFile::getInstanceByName('logo');
-
-        if (!$logoFile) {
-            return null;
+            $imageService = Craft::$app->getImages();
+            $assetsService = Craft::$app->getAssets();
+            $volumesService = Craft::$app->getVolumes();
         }
 
-        if ($logoFile->error != UPLOAD_ERR_OK) {
-            if ($logoFile->error == UPLOAD_ERR_INI_SIZE) {
-                $partner->addError('logo', 'Couldn’t upload logo because it exceeds the limit of ' . $maxUploadM . 'MB.');
-            } else {
-                $partner->addError('logo', 'Couldn’t upload logo. (Error ' . $logoFile->error . ')');
+        if ($uploadedFile->error != UPLOAD_ERR_OK) {
+            if ($uploadedFile->error == UPLOAD_ERR_INI_SIZE) {
+                throw new Exception($maxUploadM.'MB upload limit exceeded.');
             }
 
-            return null;
+            throw new Exception($uploadedFile->error);
         }
 
-        if ($logoFile->size > $maxUpload) {
-            $partner->addError('logo', 'Couldn’t upload logo because it exceeds the limit of ' . $maxUploadM . 'MB.');
-            return null;
+        if ($uploadedFile->size > $maxUpload) {
+            throw new Exception($maxUploadM.'MB upload limit exceeded.');
         }
 
-        $extension = $logoFile->getExtension();
+        $extension = $uploadedFile->getExtension();
 
         if (!in_array(strtolower($extension), $allowedFileExtensions, true)) {
-            $partner->addError('logo', "Logo was not uploaded because extension “{$extension}” is not allowed.");
-            return null;
+            throw new AssetDisallowedExtensionException("“{$extension}” is not allowed.");
         }
 
         $handle = $partner->id;
-        $tempPath = Craft::$app->getPath()->getTempPath() . "/logo-{$handle}-" . StringHelper::randomString() . '.' . $logoFile->getExtension();
-        move_uploaded_file($logoFile->tempName, $tempPath);
+        $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$uploadedFile->getExtension();
+        move_uploaded_file($uploadedFile->tempName, $tempPath);
 
         if (!$imageService->checkMemoryForImage($tempPath)) {
-            $partner->addError('logo', 'Not enough memory to perform image operation.');
-            return null;
+            throw new ImageException('Not enough memory available to process the file.');
         }
 
         $imageService->cleanImage($tempPath);
@@ -606,21 +619,21 @@ class PartnerService
             $folderId = $folder->id;
         }
 
-        $targetFilename = $logoFile->name;
+        $targetFilename = $uploadedFile->name;
 
-        $logo = new Asset([
+        $image = new Asset([
             'title' => $partner->businessName,
             'tempFilePath' => $tempPath,
             'newLocation' => "{folder:{$folderId}}" . $targetFilename,
             'avoidFilenameConflicts' => true,
         ]);
 
-        $logo->validate(['newLocation']);
+        $image->validate(['newLocation']);
 
-        if ($logo->hasErrors() || !Craft::$app->getElements()->saveElement($logo, false)) {
-            throw new Exception('Could not save image asset: ' . implode(', ', $logo->getErrorSummary(true)));
+        if ($image->hasErrors() || !Craft::$app->getElements()->saveElement($image, false)) {
+            throw new Exception('Could not save image asset: '.implode(', ', $image->getErrorSummary(true)));
         }
 
-        return $logo;
+        return $image;
     }
 }
