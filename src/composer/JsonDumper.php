@@ -7,6 +7,7 @@ use craft\db\Query;
 use craft\helpers\Console;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
+use craftnet\composer\jobs\DeletePaths;
 use craftnet\composer\jobs\DumpJson;
 use yii\base\Component;
 
@@ -199,11 +200,11 @@ class JsonDumper extends Component
             Console::output('done');
         }
 
-//        if (!empty($oldPaths)) {
-//            Craft::$app->getQueue()->delay(60 * 5)->push(new DeletePaths([
-//                'paths' => $oldPaths,
-//            ]));
-//        }
+        if (!empty($oldPaths)) {
+            Craft::$app->getQueue()->delay(60 * 5)->push(new DeletePaths([
+                'paths' => $oldPaths,
+            ]));
+        }
     }
 
     /**

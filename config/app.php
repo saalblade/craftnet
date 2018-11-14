@@ -105,6 +105,11 @@ return [
                     'version' => '2012-11-05',
                 ]
             ],
+            'partnerQueue' => [
+                'class' => \yii\queue\sqs\Queue::class,
+                'url' => getenv('PARTNER_QUEUE_URL'),
+                'region' => getenv('PARTNER_QUEUE_REGION')
+            ],
             'session' => function() {
                 $stateKeyPrefix = md5('Craft.'.craft\web\Session::class.'.'.Craft::$app->id);
 

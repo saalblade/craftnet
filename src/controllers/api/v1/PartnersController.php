@@ -23,7 +23,6 @@ class PartnersController extends BaseApiController
     public function actionList(): Response
     {
         $ids = Partner::find()
-            ->anyStatus() // todo: remove this!
             ->ids();
         return $this->asJson(['ids' => $ids]);
     }
@@ -31,7 +30,6 @@ class PartnersController extends BaseApiController
     public function actionGet(int $id): Response
     {
         $partner = Partner::find()
-            ->anyStatus() // todo: remove this!
             ->id($id)
             ->one();
 
