@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "91ecae757f32d056edea8c5370489801",
+    "content-hash": "5e29e03db1207691f47573e8a45956c2",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -565,16 +565,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.0.29",
+            "version": "3.0.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "da54a15c9ac0e2d67d9ac7653c32493d0829788f"
+                "reference": "8491fa871a7f58bd1023f3882acf4865b5601143"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/da54a15c9ac0e2d67d9ac7653c32493d0829788f",
-                "reference": "da54a15c9ac0e2d67d9ac7653c32493d0829788f",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/8491fa871a7f58bd1023f3882acf4865b5601143",
+                "reference": "8491fa871a7f58bd1023f3882acf4865b5601143",
                 "shasum": ""
             },
             "require": {
@@ -644,7 +644,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-10-30T18:13:23+00:00"
+            "time": "2018-11-13T17:44:42+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -1789,16 +1789,16 @@
         },
         {
             "name": "layershifter/tld-database",
-            "version": "1.0.63",
+            "version": "1.0.64",
             "source": {
                 "type": "git",
                 "url": "https://github.com/layershifter/TLDDatabase.git",
-                "reference": "ab6cf2c91c4e89da1404b7f74f6ca709882dac1c"
+                "reference": "16d9b7cd195eda57c08c64f75e9dbc175320e0cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/layershifter/TLDDatabase/zipball/ab6cf2c91c4e89da1404b7f74f6ca709882dac1c",
-                "reference": "ab6cf2c91c4e89da1404b7f74f6ca709882dac1c",
+                "url": "https://api.github.com/repos/layershifter/TLDDatabase/zipball/16d9b7cd195eda57c08c64f75e9dbc175320e0cc",
+                "reference": "16d9b7cd195eda57c08c64f75e9dbc175320e0cc",
                 "shasum": ""
             },
             "require": {
@@ -1836,7 +1836,7 @@
                 "domain database",
                 "tld database"
             ],
-            "time": "2018-10-08T19:20:50+00:00"
+            "time": "2018-11-09T09:12:04+00:00"
         },
         {
             "name": "layershifter/tld-extract",
@@ -1934,16 +1934,16 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "3.2.4",
+            "version": "3.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "c9704b751315d21735dc98d78d4f37bd73596da7"
+                "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/c9704b751315d21735dc98d78d4f37bd73596da7",
-                "reference": "c9704b751315d21735dc98d78d4f37bd73596da7",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/82be04b4753f8b7693b62852b7eab30f97524f9b",
+                "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b",
                 "shasum": ""
             },
             "require": {
@@ -1988,7 +1988,7 @@
                 "JWS",
                 "jwt"
             ],
-            "time": "2018-08-03T11:23:50+00:00"
+            "time": "2018-11-11T12:22:26+00:00"
         },
         {
             "name": "league/event",
@@ -4145,16 +4145,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.20.0",
+            "version": "v6.21.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "eef8383c1b54417c470f3f60f14ffdd6f04773d4"
+                "reference": "c9f1c61bcf91f47cc85b4cb94dcf8113eeb5a891"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/eef8383c1b54417c470f3f60f14ffdd6f04773d4",
-                "reference": "eef8383c1b54417c470f3f60f14ffdd6f04773d4",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/c9f1c61bcf91f47cc85b4cb94dcf8113eeb5a891",
+                "reference": "c9f1c61bcf91f47cc85b4cb94dcf8113eeb5a891",
                 "shasum": ""
             },
             "require": {
@@ -4196,7 +4196,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2018-10-30T17:02:13+00:00"
+            "time": "2018-11-12T22:23:04+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4259,16 +4259,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.1.6",
+            "version": "v4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "dc7122fe5f6113cfaba3b3de575d31112c9aa60b"
+                "reference": "432122af37d8cd52fba1b294b11976e0d20df595"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/dc7122fe5f6113cfaba3b3de575d31112c9aa60b",
-                "reference": "dc7122fe5f6113cfaba3b3de575d31112c9aa60b",
+                "url": "https://api.github.com/repos/symfony/console/zipball/432122af37d8cd52fba1b294b11976e0d20df595",
+                "reference": "432122af37d8cd52fba1b294b11976e0d20df595",
                 "shasum": ""
             },
             "require": {
@@ -4323,20 +4323,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-03T08:15:46+00:00"
+            "time": "2018-10-31T09:30:44+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.1.6",
+            "version": "v4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "596d12b40624055c300c8b619755b748ca5cf0b5"
+                "reference": "fd7bd6535beb1f0a0a9e3ee960666d0598546981"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/596d12b40624055c300c8b619755b748ca5cf0b5",
-                "reference": "596d12b40624055c300c8b619755b748ca5cf0b5",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/fd7bd6535beb1f0a0a9e3ee960666d0598546981",
+                "reference": "fd7bd6535beb1f0a0a9e3ee960666d0598546981",
                 "shasum": ""
             },
             "require": {
@@ -4373,11 +4373,11 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-02T12:40:59+00:00"
+            "time": "2018-10-30T13:18:25+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v4.1.6",
+            "version": "v4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -4426,7 +4426,7 @@
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v4.1.6",
+            "version": "v4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
@@ -4597,16 +4597,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.1.6",
+            "version": "v4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "ee33c0322a8fee0855afcc11fff81e6b1011b529"
+                "reference": "3e83acef94d979b1de946599ef86b3a352abcdc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/ee33c0322a8fee0855afcc11fff81e6b1011b529",
-                "reference": "ee33c0322a8fee0855afcc11fff81e6b1011b529",
+                "url": "https://api.github.com/repos/symfony/process/zipball/3e83acef94d979b1de946599ef86b3a352abcdc9",
+                "reference": "3e83acef94d979b1de946599ef86b3a352abcdc9",
                 "shasum": ""
             },
             "require": {
@@ -4642,7 +4642,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-02T12:40:59+00:00"
+            "time": "2018-10-14T20:48:13+00:00"
         },
         {
             "name": "tecnickcom/tcpdf",
