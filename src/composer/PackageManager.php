@@ -958,22 +958,25 @@ class PackageManager extends Component
             }
 
             $transaction->commit();
-        } catch (\Throwable $e) {
+        } catch (\Throwable $exception) {
             $transaction->rollBack();
-            $mutex->release(__METHOD__);
-            throw $e;
+            // throw the exception later
         }
 
         if ($acquiredLock) {
-            if ($isConsole) {
+            if ($isConsole && !isset($exception)) {
                 Console::stdout('Releasing the lock ... ');
             }
 
             $mutex->release(__METHOD__);
 
-            if ($isConsole) {
+            if ($isConsole && !isset($exception)) {
                 Console::output('done');
             }
+        }
+
+        if (isset($exception)) {
+            throw $exception;
         }
 
         return $totalAffected;
