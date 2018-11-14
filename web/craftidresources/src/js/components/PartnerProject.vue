@@ -26,8 +26,8 @@
                 <text-field id="role" label="Role" instructions="e.g. “Craft Commerce with custom Hubspot integration” or “Design and custom plugin development”. Max 55 characters." v-model="project.role" :max="55" :errors="localErrors.role" />
                 <text-field id="url" label="URL" v-model="project.url" :errors="localErrors.url" />
 
-                <label>Screenshots</label>
-                <p class="instructions">Up to five screenshots will be displayed. 12:7 aspect ratio. 1200px wide will do. Drag to re-order.</p>
+                <label>Screenshots<span class="text-red">*</span></label>
+                <p class="instructions">1 to 5 JPG screenshots required with a 12:7 aspect ratio. 1200px wide will do. Drag to re-order.</p>
 
                 <draggable v-model="project.screenshots">
                     <div v-for="(screenshot, index) in project.screenshots" :key="index" class="screenshot mt-6">
@@ -37,6 +37,8 @@
                         </a>
                     </div>
                 </draggable>
+
+                <div class="invalid-feedback" v-for="error in localErrors.screenshots">{{ error }}</div>
 
                 <!-- JPEG with 12x7 1200 x 700 -->
 

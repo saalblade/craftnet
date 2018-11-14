@@ -273,8 +273,6 @@ class Partner extends Element
         $rules[] = ['ownerId', 'required'];
         $rules[] = ['shortBio', 'string', 'max' => '255'];
         $rules[] = ['website', 'url'];
-        $rules[] = ['locations', ModelsValidator::class, 'message' => 'Location errors found'];
-        $rules[] = ['projects', ModelsValidator::class, 'message' => 'Project errors found'];
 
         $rules[] = [
             'websiteSlug',
@@ -315,7 +313,28 @@ class Partner extends Element
             'strict' => true,
             'requiredValue' => true,
             'message' => '{attribute} is required for consideration',
-            'on' => self::SCENARIO_BASE_INFO
+            'on' => [
+                self::SCENARIO_BASE_INFO,
+                self::SCENARIO_LIVE,
+            ]
+        ];
+
+        $rules[] = ['locations',
+            ModelsValidator::class,
+            'message' => 'Location errors found',
+            'on' => [
+                self::SCENARIO_LOCATIONS,
+                self::SCENARIO_LIVE,
+            ]
+        ];
+
+        $rules[] = ['projects',
+            ModelsValidator::class,
+            'message' => 'Project errors found',
+            'on' => [
+                self::SCENARIO_PROJECTS,
+                self::SCENARIO_LIVE,
+            ]
         ];
 
         $rules[] = ['primaryContactEmail', 'email'];
