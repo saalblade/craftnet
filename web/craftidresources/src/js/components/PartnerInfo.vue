@@ -99,7 +99,7 @@
                     <textarea-field id="expertise" label="Areas of Expertise" instructions="Tags for relevant expertise (e.g. SEO), each on a new line" v-model="draft.expertise" />
                     <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agencySize" :errors="errors.agencySize" />
                     <textarea-field id="fullBio" label="Full Bio" instructions="Markdown OK. Shown on your detail page." v-model="draft.fullBio" :errors="errors.fullBio" />
-                    <textarea-field id="shortBio" label="Short Bio" instructions="Max 255 characters. Shown on your listing card." v-model="draft.shortBio" :max="130" :errors="errors.shortBio" />
+                    <textarea-field id="shortBio" label="Short Bio" instructions="Max 130 characters. Shown on your listing card." v-model="draft.shortBio" :max="130" :errors="errors.shortBio" />
 
                     <div class="pt-4">
                         <button
