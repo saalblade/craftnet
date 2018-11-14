@@ -273,7 +273,7 @@ class Partner extends Element
         $rules = parent::rules();
 
         $rules[] = ['ownerId', 'required'];
-        $rules[] = ['shortBio', 'string', 'max' => '130', on => self::SCENARIO_LIVE];
+        $rules[] = ['shortBio', 'string', 'max' => '130', 'on' => self::SCENARIO_LIVE];
         $rules[] = ['website', 'url'];
 
         $rules[] = [
