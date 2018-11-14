@@ -10,7 +10,7 @@ use craft\elements\Asset;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\UrlHelper;
-use craftnet\partners\jobs\UpdatePartner;
+use craftcom\jobs\UpdatePartner;
 use craftnet\partners\validators\PartnerSlugValidator;
 use yii\helpers\Inflector;
 use yii\queue\sqs\Queue;

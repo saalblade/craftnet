@@ -1,6 +1,6 @@
 <?php
 
-namespace craftnet\partners\jobs;
+namespace craftcom\jobs;
 
 use craft\queue\BaseJob;
 use craft\queue\QueueInterface;
