@@ -5,6 +5,7 @@ namespace craftnet\partners;
 
 use craft\base\Model;
 use craft\elements\Asset;
+use craft\validators\ArrayValidator;
 
 class PartnerProject extends Model
 {
@@ -42,9 +43,20 @@ class PartnerProject extends Model
         $rules[] = ['role', 'string', 'max' => 55];
 
         $rules[] = [
-            ['url'],
+            'url',
             'required',
             'on' => self::SCENARIO_LIVE,
+        ];
+
+        $rules[] = [
+            'screenshots',
+            ArrayValidator::class,
+            'skipOnEmpty' => false,
+            'min' => 1,
+            'max' => 5,
+            'tooFew' => 'Please provide at least one screenshot',
+            'tooMany' => 'Please limit to 5 screenshots',
+            'on' => self::SCENARIO_LIVE
         ];
 
         return $rules;
@@ -63,7 +75,7 @@ class PartnerProject extends Model
         }
 
         $ids = array_map(function($val) {
-            return ($val instanceof Asset) ? $val->id : $val;
+            return ($val instanceof Asset) ? $val->id : (int)$val;
         }, $this->screenshots);
 
         return $ids;

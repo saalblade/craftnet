@@ -177,6 +177,54 @@ class PartnerService
         return $projects;
     }
 
+    /**
+     * Unlike eager loading screenshots that are already associated in the
+     * database, this eager loads all missing assets on the `$projects` array.
+     * This is important for Post requests where `$project->screenshots` is
+     * an array of numeric strings that might not have been saved yet.
+     *
+     * @param PartnerProject[] $projects
+     */
+    public function ensureProjectScreenshotAssets(&$projects)
+    {
+        $ids = [];
+
+        foreach ($projects as &$project) {
+            // could be from post, empty strings, ugly stuff
+            if (empty($project->screenshots)) {
+                $project->screenshots = [];
+            }
+
+            for ($i = 0; $i < count($project->screenshots); $i++) {
+                $screenshot = $project->screenshots[$i];
+
+                if (is_numeric($screenshot)) {
+                    $project->screenshots[$i] = (int)$screenshot;
+                    $ids[] = $project->screenshots[$i];
+                }
+            }
+        }
+
+        if ($ids === []) {
+            return;
+        }
+
+        $assets = Asset::findAll(['id' => array_unique($ids)]);
+
+        if ($assets) {
+            $assets = ArrayHelper::index($assets, 'id');
+
+            foreach ($projects as &$project) {
+                for ($i = 0; $i < count($project->screenshots); $i++) {
+                    $screenshot = $project->screenshots[$i];
+
+                    if (is_int($screenshot) && array_key_exists($screenshot, $assets)) {
+                        $project->screenshots[$i] = $assets[$screenshot];
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Partner volumes are created from migrations so the reliable way to get

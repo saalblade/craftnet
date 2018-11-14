@@ -10,6 +10,7 @@ use craft\elements\Asset;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\UrlHelper;
+use craftnet\partners\validators\ModelsValidator;
 use craftnet\partners\validators\PartnerSlugValidator;
 use yii\helpers\Inflector;
 
@@ -272,6 +273,8 @@ class Partner extends Element
         $rules[] = ['ownerId', 'required'];
         $rules[] = ['shortBio', 'string', 'max' => '255'];
         $rules[] = ['website', 'url'];
+        $rules[] = ['locations', ModelsValidator::class, 'message' => 'Location errors found'];
+        $rules[] = ['projects', ModelsValidator::class, 'message' => 'Project errors found'];
 
         $rules[] = [
             'websiteSlug',
@@ -311,28 +314,8 @@ class Partner extends Element
             'required',
             'strict' => true,
             'requiredValue' => true,
-            'message' => '{attribute} is required',
+            'message' => '{attribute} is required for consideration',
             'on' => self::SCENARIO_BASE_INFO
-        ];
-
-        $rules[] = [
-            'locations',
-            'required',
-            'message' => 'Please provide at least one location',
-            'on' => [
-                self::SCENARIO_LOCATIONS,
-                self::SCENARIO_LIVE,
-            ]
-        ];
-
-        $rules[] = [
-            'projects',
-            'required',
-            'message' => 'projects',
-            'on' => [
-                self::SCENARIO_PROJECTS,
-                self::SCENARIO_LIVE,
-            ]
         ];
 
         $rules[] = ['primaryContactEmail', 'email'];
@@ -496,25 +479,13 @@ class Partner extends Element
 
         $scenario = $this->getScenario();
 
-        if (in_array($scenario, [self::SCENARIO_LIVE, self::SCENARIO_LOCATIONS])) {
-            foreach ($this->_locations as $location) {
-                $location->setScenario(Element::SCENARIO_LIVE);
-                $isValid = $location->validate();
-
-                if (!$isValid && !$this->hasErrors('locations')) {
-                    $this->addError('locations', 'Please fix location errors');
-                }
+        if ($scenario === self::SCENARIO_LIVE) {
+            if (count($this->_locations) === 0) {
+                $this->addError('locations', 'Please provide a location');
             }
-        }
 
-        if (in_array($scenario, [self::SCENARIO_LIVE, self::SCENARIO_PROJECTS])) {
-            foreach ($this->_projects as $project) {
-                $project->setScenario(Element::SCENARIO_LIVE);
-                $isValid = $project->validate();
-
-                if (!$isValid && !$this->hasErrors('projects')) {
-                    $this->addError('projects', 'Please fix projects errors');
-                }
+            if (count($this->_projects) < 5) {
+                $this->addError('projects', 'Please provide 5 projects');
             }
         }
 
@@ -688,7 +659,10 @@ class Partner extends Element
             }
         }
 
-        $this->setProjects($projects);
+        $projects = PartnerService::getInstance()->normalizeProjects($projects, $this);
+        PartnerService::getInstance()->ensureProjectScreenshotAssets($projects);
+
+        $this->_projects = $projects;
     }
 
     /**
