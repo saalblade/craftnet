@@ -35,6 +35,19 @@
                 errors: project.getErrors('url') ?? [],
             }) }}
 
+
+            {{ forms.selectField({
+                label: 'Link Type',
+                required: true,
+                id: 'linkType',
+                name: 'projects[' ~ id ~ '][linkType]',
+                options: {
+                    'website': 'Website',
+                    'caseStudy': 'Case Study'
+                },
+                value: project.linkType ?? 'website',
+            }) }}
+
             {{ forms.textField({
                 type: 'text',
                 label: 'Role',
