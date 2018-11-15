@@ -48,16 +48,19 @@ class PartnerProject extends Model
             'on' => self::SCENARIO_LIVE,
         ];
 
-        $rules[] = [
-            'screenshots',
-            ArrayValidator::class,
-            'skipOnEmpty' => false,
-            'min' => 1,
-            'max' => 5,
-            'tooFew' => 'Please provide at least one screenshot',
-            'tooMany' => 'Please limit to 5 screenshots',
-            'on' => self::SCENARIO_LIVE
-        ];
+        // Disabling for now because some profiles do not have
+        // all required screenshots. (2018-11-15 SH)
+
+//        $rules[] = [
+//            'screenshots',
+//            ArrayValidator::class,
+//            'skipOnEmpty' => false,
+//            'min' => 1,
+//            'max' => 5,
+//            'tooFew' => 'Please provide at least one screenshot',
+//            'tooMany' => 'Please limit to 5 screenshots',
+//            'on' => self::SCENARIO_LIVE
+//        ];
 
         return $rules;
     }
