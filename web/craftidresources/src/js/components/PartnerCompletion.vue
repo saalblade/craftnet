@@ -97,6 +97,13 @@
                     }
                 }
 
+                if (this.partner.shortBio && this.partner.shortBio.length > 130 && statuses.basicInfo.valid) {
+                    statuses.basicInfo = {
+                        valid: false,
+                        message: 'Short Bio is more than 130 characters'
+                    }
+                }
+
                 return statuses
             }
         }
