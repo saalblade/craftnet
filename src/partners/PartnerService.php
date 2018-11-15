@@ -380,6 +380,8 @@ class PartnerService
             } else {
                 $data['projects'][$i]['screenshots'] = [];
             }
+
+            $data['projects'][$i]['linkType'] = 'website';
         }
 
         // For Craft ID Vue, the array must not be indexed by id
