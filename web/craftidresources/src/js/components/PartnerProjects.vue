@@ -49,6 +49,7 @@
                     'name',
                     'role',
                     'url',
+                    'linkType',
                     'screenshots',
                 ],
                 editIndex: null,

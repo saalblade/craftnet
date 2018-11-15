@@ -367,7 +367,7 @@ class PartnerService
 
         /** @var PartnerProject $project */
         foreach ($data['projects'] as $i => $project) {
-            $data['projects'][$i] = $project->getAttributes(['id', 'name', 'role', 'url', 'screenshots']);
+            $data['projects'][$i] = $project->getAttributes(['id', 'name', 'role', 'url', 'linkType', 'screenshots']);
 
             if (is_array($data['projects'][$i]['screenshots'])) {
                 /** @var Asset $screenshot */
@@ -381,7 +381,9 @@ class PartnerService
                 $data['projects'][$i]['screenshots'] = [];
             }
 
-            $data['projects'][$i]['linkType'] = 'website';
+            if (!$data['projects'][$i]['linkType']) {
+                $data['projects'][$i]['linkType'] = 'website';
+            }
         }
 
         // For Craft ID Vue, the array must not be indexed by id

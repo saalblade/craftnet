@@ -14,6 +14,7 @@ class PartnerProject extends Model
     public $partnerId;
     public $name;
     public $url;
+    public $linkType;
     public $role;
     public $dateCreated;
     public $dateUpdated;
