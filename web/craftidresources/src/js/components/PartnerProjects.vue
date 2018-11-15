@@ -3,7 +3,7 @@
         <h4>Projects</h4>
 
         <p class="instructions">
-            Five projects are required, up to six will be displayed.
+            Five projects are required, up to eight will be displayed.
             Each must have a public URL for a case study or website.
         </p>
 
@@ -21,7 +21,7 @@
             @save="onSave"
         ></partner-project>
 
-        <div class="pl-4">
+        <div  v-if="partner.projects.length < 8 " class="pl-4">
             <button class="btn btn-secondary btn-sm" @click="onAddProjectClick"><i class="fa fa-plus"></i> Add a Project</button>
         </div>
     </div>
