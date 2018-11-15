@@ -264,7 +264,9 @@ class Partner extends Element
     // =========================================================================
 
     /**
-     * Note that `locations` and `projects` are validated in `self::afterSave()`
+     * Important: Set a scenario on every rule set. Craft ID needs to validate
+     * in chunks: basic info, locations, and projects. Validation errors on an
+     * unlreated chunk will cause problems.
      *
      * @inheritdoc
      */
@@ -273,8 +275,27 @@ class Partner extends Element
         $rules = parent::rules();
 
         $rules[] = ['ownerId', 'required'];
-        $rules[] = ['shortBio', 'string', 'max' => '130'];
-        $rules[] = ['website', 'url'];
+
+        $rules[] = [
+            'shortBio',
+            'string',
+            'max' => '130',
+            'on' => [
+                self::SCENARIO_BASE_INFO,
+                self::SCENARIO_DEFAULT,
+                self::SCENARIO_LIVE,
+            ]
+        ];
+
+        $rules[] = [
+            'website',
+            'url',
+            'on' => [
+                self::SCENARIO_BASE_INFO,
+                self::SCENARIO_DEFAULT,
+                self::SCENARIO_LIVE,
+            ]
+        ];
 
         $rules[] = [
             'websiteSlug',
@@ -321,26 +342,46 @@ class Partner extends Element
             ]
         ];
 
+        // Always validate locations
         $rules[] = ['locations',
             ModelsValidator::class,
             'message' => 'Location errors found',
             'on' => [
-                self::SCENARIO_LOCATIONS,
+                self::SCENARIO_DEFAULT,
                 self::SCENARIO_LIVE,
+                self::SCENARIO_LOCATIONS,
             ]
         ];
 
+        // Always validate projects
         $rules[] = ['projects',
             ModelsValidator::class,
             'message' => 'Project errors found',
             'on' => [
-                self::SCENARIO_PROJECTS,
+                self::SCENARIO_DEFAULT,
                 self::SCENARIO_LIVE,
+                self::SCENARIO_PROJECTS,
             ]
         ];
 
-        $rules[] = ['primaryContactEmail', 'email'];
-        $rules[] = ['verificationStartDate', 'date', 'format' => 'Y-m-d'];
+        $rules[] = [
+            'primaryContactEmail',
+            'email',
+            'on' => [
+                self::SCENARIO_BASE_INFO,
+                self::SCENARIO_DEFAULT,
+                self::SCENARIO_LIVE,
+            ]
+        ];
+        $rules[] = [
+            'verificationStartDate',
+            'date',
+            'format' => 'Y-m-d',
+            'on' => [
+                self::SCENARIO_DEFAULT,
+                self::SCENARIO_LIVE,
+            ]
+        ];
 
         return $rules;
     }

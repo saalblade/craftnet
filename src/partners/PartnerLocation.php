@@ -3,12 +3,11 @@
 namespace craftnet\partners;
 
 
+use craft\base\Element;
 use craft\base\Model;
 
 class PartnerLocation extends Model
 {
-    const SCENARIO_LIVE = 'live';
-
     public $id;
     public $partnerId;
     public $title;
@@ -31,10 +30,9 @@ class PartnerLocation extends Model
     {
         $rules = parent::rules();
 
-        $rules[] = ['title', 'required'];
-
         $rules[] = [
             [
+                'title',
                 'addressLine1',
                 'city',
                 'state',
@@ -43,7 +41,11 @@ class PartnerLocation extends Model
                 'email',
             ],
             'required',
-            'on' => self::SCENARIO_LIVE,
+            'on' => [
+                Element::SCENARIO_DEFAULT,
+                Element::SCENARIO_LIVE,
+                Partner::SCENARIO_LOCATIONS,
+            ]
         ];
 
         $rules[] = ['email', 'email'];

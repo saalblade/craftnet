@@ -3,14 +3,13 @@
 namespace craftnet\partners;
 
 
+use craft\base\Element;
 use craft\base\Model;
 use craft\elements\Asset;
 use craft\validators\ArrayValidator;
 
 class PartnerProject extends Model
 {
-    const SCENARIO_LIVE = 'live';
-
     public $id;
     public $partnerId;
     public $name;
@@ -38,29 +37,33 @@ class PartnerProject extends Model
     {
         $rules = parent::rules();
 
-        $rules[] = ['name', 'required'];
-        $rules[] = ['url', 'url'];
-        $rules[] = ['role', 'string', 'max' => 55];
-
         $rules[] = [
-            'url',
+            ['name','url'],
             'required',
-            'on' => self::SCENARIO_LIVE,
+            'on' => [
+                Element::SCENARIO_DEFAULT,
+                Element::SCENARIO_LIVE,
+                Partner::SCENARIO_PROJECTS,
+            ]
         ];
 
-        // Disabling for now because some profiles do not have
-        // all required screenshots. (2018-11-15 SH)
+        $rules[] = [
+            'screenshots',
+            ArrayValidator::class,
+            'skipOnEmpty' => false,
+            'min' => 1,
+            'max' => 5,
+            'tooFew' => 'Please provide at least one screenshot',
+            'tooMany' => 'Please limit to 5 screenshots',
+            'on' => [
+                Element::SCENARIO_DEFAULT,
+                Element::SCENARIO_LIVE,
+                Partner::SCENARIO_PROJECTS,
+            ]
+        ];
 
-//        $rules[] = [
-//            'screenshots',
-//            ArrayValidator::class,
-//            'skipOnEmpty' => false,
-//            'min' => 1,
-//            'max' => 5,
-//            'tooFew' => 'Please provide at least one screenshot',
-//            'tooMany' => 'Please limit to 5 screenshots',
-//            'on' => self::SCENARIO_LIVE
-//        ];
+        $rules[] = ['url', 'url'];
+        $rules[] = ['role', 'string', 'max' => 55];
 
         return $rules;
     }

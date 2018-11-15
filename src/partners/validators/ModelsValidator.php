@@ -17,9 +17,11 @@ use yii\validators\Validator;
 class ModelsValidator extends Validator
 {
     public $message = '{attribute} errors found';
+    protected $scenario;
 
     public function validateAttribute($model, $attribute)
     {
+        $this->scenario = $model->getScenario();
         return parent::validateAttribute($model, $attribute);
     }
 
@@ -39,7 +41,7 @@ class ModelsValidator extends Validator
 
         /** @var Model $model */
         foreach ($value as $model) {
-            $model->setScenario(Element::SCENARIO_LIVE);
+            $model->setScenario($this->scenario);
             $modelErrorFound += !$model->validate();
         }
 
