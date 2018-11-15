@@ -1,8 +1,8 @@
 <template>
     <div class="mb-4">
-        <h3>Profile Completion:</h3>
+        <h3 v-if="!partner.enabled">Profile Completion:</h3>
         <ul class="list-reset pl-4">
-            <li v-for="(status, key) in statuses" :index="key"
+            <li v-for="(status, key) in statuses" :key="key"
                 :class="{'text-orange-dark': !status.valid, 'text-green-dark': status.valid}">
                 <span v-if="status.valid">&#10004;</span>
                 <span v-else>&#10008;</span>
@@ -18,6 +18,16 @@
 
         computed: {
             statuses() {
+
+                if (this.partner.enabled) {
+                    return {
+                        enabled: {
+                            valid: true,
+                            message: 'Your profile is live'
+                        }
+                    }
+                }
+
                 let statuses = {
                     basicInfo: {
                         valid: true,

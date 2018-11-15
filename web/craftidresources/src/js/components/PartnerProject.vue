@@ -175,6 +175,10 @@
             if (this.project.id === 'new') {
                 this.$emit('edit', this.index)
             }
+
+            if (!this.project.linkType) {
+                this.project.linkType = 'website'
+            }
         },
     }
 </script>

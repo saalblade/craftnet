@@ -144,6 +144,16 @@ class PartnersController extends Controller
             ]);
         }
 
+        // Attempt to enable disabled entries.
+        // It goes live when it fully validates on Craft ID
+        if (!$partner->enabled) {
+            $partner->enabled = true;
+            $partner->setScenario(Partner::SCENARIO_LIVE);
+            if (!Craft::$app->getElements()->saveElement($partner)) {
+                $partner->enabled = false;
+            }
+        }
+
         $data = PartnerService::getInstance()->serializePartner($partner);
 
         return $this->asJson([
