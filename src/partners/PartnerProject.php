@@ -16,6 +16,7 @@ class PartnerProject extends Model
     public $url;
     public $linkType;
     public $role;
+    public $withCraftCommerce;
     public $dateCreated;
     public $dateUpdated;
     public $uid;
@@ -65,6 +66,7 @@ class PartnerProject extends Model
 
         $rules[] = ['url', 'url'];
         $rules[] = ['role', 'string', 'max' => 55];
+        $rules[] = ['withCraftCommerce', 'default', 'value' => false];
 
         return $rules;
     }

@@ -50,6 +50,7 @@
                     'role',
                     'url',
                     'linkType',
+                    'withCraftCommerce',
                     'screenshots',
                 ],
                 editIndex: null,

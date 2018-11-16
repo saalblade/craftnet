@@ -168,6 +168,11 @@ class PartnerService
 
             $project->partnerId = $partner->id;
             $ids[] = $project->id;
+
+            // Could be string "true" or "false"
+            if (!is_bool($project->withCraftCommerce)) {
+                $project->withCraftCommerce = filter_var($project->withCraftCommerce, FILTER_VALIDATE_BOOLEAN);
+            }
         }
 
         if ($eagerLoad) {
@@ -367,7 +372,15 @@ class PartnerService
 
         /** @var PartnerProject $project */
         foreach ($data['projects'] as $i => $project) {
-            $data['projects'][$i] = $project->getAttributes(['id', 'name', 'role', 'url', 'linkType', 'screenshots']);
+            $data['projects'][$i] = $project->getAttributes([
+                'id',
+                'name',
+                'role',
+                'url',
+                'linkType',
+                'withCraftCommerce',
+                'screenshots'
+            ]);
 
             if (is_array($data['projects'][$i]['screenshots'])) {
                 /** @var Asset $screenshot */

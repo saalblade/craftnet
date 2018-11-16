@@ -8,6 +8,7 @@
                         <li v-if="project.role">{{ project.role }}</li>
                         <li v-if="project.url">{{ project.url }}</li>
                         <li v-if="linkTypeDisplay">{{ linkTypeDisplay }}</li>
+                        <li v-if="project.withCraftCommerce">This project includes Craft Commerce</li>
                         <li v-if="project.screenshots.length" class="mt-3"><strong>Screenshots</strong></li>
                         <li class="flex">
                             <div v-for="(screenshot, index) in project.screenshots" :key="index" class="p-1 mt-2 inline-block bg-grey-lightest flex align-middle justify-center" style="height: 150px; width: 150px;">
@@ -27,6 +28,7 @@
                 <text-field id="role" label="Role" instructions="e.g. “Craft Commerce with custom Hubspot integration” or “Design and custom plugin development”. Max 55 characters." v-model="project.role" :max="55" :errors="localErrors.role" />
                 <text-field id="url" label="URL" v-model="project.url" :errors="localErrors.url" />
                 <select-field id="linkType" label="Link Type" v-model="project.linkType" :options="options.linkType" :errors="localErrors.linkType" />
+                <checkbox-field id="withCraftCommerce" label="This project includes Craft Commerce" v-model="project.withCraftCommerce" :checked-value="1" />
 
                 <label>Screenshots<span class="text-red">*</span></label>
                 <p class="instructions">1 to 5 JPG screenshots required with a 12:7 aspect ratio. 1200px wide will do. Drag to re-order.</p>
@@ -86,6 +88,7 @@
 <script>
     import axios from 'axios'
     import draggable from 'vuedraggable'
+    import CheckboxField from '../components/fields/CheckboxField'
     import Modal from '../components/Modal'
     import SelectField from '../components/fields/SelectField'
     import TextField from '../components/fields/TextField'
@@ -95,6 +98,7 @@
 
         components: {
             draggable,
+            CheckboxField,
             Modal,
             SelectField,
             TextField,

@@ -58,6 +58,13 @@
                 errors: project.getErrors('role') ?? [],
             }) }}
 
+            {{ forms.lightswitchField({
+                label: 'With Craft Commerce',
+                id: 'withCraftCommerce-' ~ id,
+                name: 'projects[' ~ id ~ '][withCraftCommerce]',
+                on: project.withCraftCommerce ?? false,
+            }) }}
+
             {#
                 Don't know why but this needs to be set or else `project.screenshots`
                 passed to the macro makes it throw an error saying it's an empty
