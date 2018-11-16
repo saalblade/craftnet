@@ -4,14 +4,13 @@
             <div v-show="!isEditing" class="card-body">
                 <div class="flex">
                     <ul class="flex-1 list-reset">
-                        <li v-if="project.name"><strong>{{ project.name }}</strong></li>
-                        <li v-if="project.role">{{ project.role }}</li>
-                        <li v-if="project.url">{{ project.url }}</li>
-                        <li v-if="linkTypeDisplay">{{ linkTypeDisplay }}</li>
-                        <li v-if="project.withCraftCommerce">This project includes Craft Commerce</li>
+                        <li v-if="project.name" class="mb-3"><strong class="text-2xl">{{ project.name }}</strong></li>
+                        <li v-if="project.role">Role: {{ project.role }}</li>
+                        <li v-if="project.url">{{ linkTypeDisplay }} Link: <a :href="project.url" target="_blank">{{ project.url }}</a></li>
+                        <li v-if="project.withCraftCommerce" class="mt-3">&#10004; This project includes Craft Commerce</li>
                         <li v-if="project.screenshots.length" class="mt-3"><strong>Screenshots</strong></li>
                         <li class="flex">
-                            <div v-for="(screenshot, index) in project.screenshots" :key="index" class="p-1 mt-2 inline-block bg-grey-lightest flex align-middle justify-center" style="height: 150px; width: 150px;">
+                            <div v-for="(screenshot, index) in project.screenshots" :key="index" class="p-1 mt-2 inline-block bg-grey-lightest flex align-middle justify-center" style="height: 140px; width: 240px;">
                                 <img :src="screenshot.url" style="max-width: 100%; max-height: 100%;">
                             </div>
                         </li>

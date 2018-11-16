@@ -14,7 +14,7 @@
                             <img :src="partner.logo.url" style="width: 200px;">
                         </li>
                         <li v-if="partner.businessName">
-                            <strong>{{ partner.businessName }}</strong>
+                            <strong class="text-2xl">{{ partner.businessName }}</strong>
                         </li>
                         <li v-if="partner.website">
                             <a :href="partner.website" target="_blank">{{ partner.website }}</a>
