@@ -40,6 +40,10 @@ class PartnerProject extends Model
         $rules = parent::rules();
 
         $rules[] = [
+            ['name', 'url'], 'trim'
+        ];
+
+        $rules[] = [
             ['name','url'],
             'required',
             'on' => [
