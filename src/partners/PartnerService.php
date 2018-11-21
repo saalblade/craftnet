@@ -541,7 +541,7 @@ class PartnerService
 
             $handle = $partner->id;
             $tempPath = Craft::$app->getPath()->getTempPath() . "/screenshot-{$handle}-" . StringHelper::randomString() . '.' . $screenshotFile->getExtension();
-            move_uploaded_file($screenshotFile->tempName, $tempPath);
+            $screenshotFile->saveAs($tempPath);
 
             if (!$imageService->checkMemoryForImage($tempPath)) {
                 throw new ImageException(Craft::t('app',
