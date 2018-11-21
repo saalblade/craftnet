@@ -558,10 +558,6 @@ class Partner extends Element
             if (count($this->_projects) < 5) {
                 $this->addError('projects', 'Please provide 5 projects');
             }
-
-            if (count($this->_projects) > 8) {
-                $this->addError('projects', 'Please limit to 8 projects');
-            }
         }
 
         return parent::afterValidate();

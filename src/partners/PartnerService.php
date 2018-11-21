@@ -368,6 +368,7 @@ class PartnerService
         $data['locations'] = array_values($data['locations']);
 
         // projects
+        $data['projects'] = array_slice($data['projects'], 0, 8);
         $this->eagerLoadProjectScreenshots($data['projects']);
 
         /** @var PartnerProject $project */
