@@ -47,8 +47,11 @@ class UnavailablePlugins extends Utility
             ->orderBy(['hits' => SORT_DESC])
             ->pairs();
 
+        $craft2Plugins = require(Craft::getAlias('@config/craft2-plugins.php'));
+
         return Craft::$app->getView()->renderTemplate('craftnet/unavailable-plugins/_content', [
             'plugins' => $plugins,
+            'craft2Plugins' => $craft2Plugins,
         ]);
     }
 }
