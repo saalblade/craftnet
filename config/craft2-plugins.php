@@ -19,9 +19,24 @@
  *
  * - handle:      The plugin's new Craft 3 handle. Only set this if the handle
  *                has changed beyond moving from CamelCase to kebab-case.
- * - statusColor: The status color to give the plugin (green, orange, or red).
+ * - statusColor: The status color to give the plugin (see below).
  * - status:      The status message to give the plugin. This can include
  *                Markdown formatting.
+ *
+ * Use one of the following status colors:
+ *
+ * - green:  Indicates that an upgrade path exists that requires little to no
+ *           effort. This should generally be reserved for plugins that have a
+ *           direct upgrade available, unless an alternative plugin exists that
+ *           won’t involve manual data migration or template changes.
+ * - orange: Indicates that an upgrade path exists, but it requires moderate
+ *           effort. Use this when an alternative plugin is available, but it
+ *           will involve some manual data migration and/or template changes.
+ * - red:    Indicates that the plugin has been discontinued and no practical
+ *           upgrade path exists yet.
+ *
+ * Don't specify a status color if Craft 3 compatibility is planned (or even
+ * in development), but no upgrade path exists yet.
  */
 
 return [
@@ -30,117 +45,263 @@ return [
     ],
     'Algolia' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Scout](https://github.com/rias500/craft-scout) could be used instead'
+        'status' => 'Not available yet, but [Scout](https://github.com/Rias500/craft-scout) can be used instead.'
     ],
     'AmCommand' => [
         'handle' => 'command-palette',
     ],
+    'AmForms' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Freeform](https://github.com/solspace/craft3-freeform) or [Sprout Forms](https://github.com/barrelstrength/craft-sprout-forms) can be used instead.',
+    ],
     'AmNav' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) can be used instead.'
     ],
-    'TheArchitect' => [
-        'handle' => 'architect',
+    'AssetPreview' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to built-in asset previewing support in Craft 3.'
     ],
     'AssetRev' => [
         'handle' => 'assetrev',
     ],
+    'AssetUsage' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Entry Relations Manager](https://github.com/Frontwise/craft-entryrelationsmanager) can be used instead.'
+    ],
     'AuditLog' => [
-        'statusColor' => 'red',
-        'status' => 'Discontinued (use [Audit](https://github.com/sjelfull/craft-audit) instead)'
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Audit](https://github.com/sjelfull/craft-audit) can be used instead.'
+    ],
+    'Automin' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [SCSS](https://github.com/chasegiunta/craft-scss) can be used instead.'
+    ],
+    'BackupPro' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Enupal Backup](https://github.com/enupal/backup) can be used instead.'
+    ],
+    'Brief' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Notifications](https://github.com/Rias500/craft-notifications) or [Notification](https://github.com/fatfishdigital/Craft3-Notification) can be used instead.'
     ],
     'BusinessLogic' => [
-        'statusColor' => 'red',
-        'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to [pluginfactory.io](https://pluginfactory.io/).'
+    ],
+    'ButtonBox' => [
+        'handle' => 'buttonbox'
+    ],
+    'CacheBuster' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Asset Rev](https://github.com/clubstudioltd/craft-asset-rev) or [Assets Autoversioning](https://github.com/codemonauts/craft-asset-autoversioning) can be used instead.'
     ],
     'Calendars' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Solspace Calendar](https://solspace.com/craft/calendar/) could be used instead.'
+        'status' => 'Not available yet, but [Calendar by Solspace](https://solspace.com/craft/calendar/) can be used instead.'
     ],
     'Charge' => [
-        'statusColor' => 'orange',
         'status' => 'Currently in development.'
     ],
     'CodeBlock' => [
-        'statusColor' => 'red',
-        'status' => 'Discontinued (use [Simple Text](https://github.com/craftcms/simple-text) instead)'
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Simple Text](https://github.com/craftcms/simple-text) can be used instead.'
+    ],
+    'ColdCache' => [
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Cache Flag](https://github.com/mmikkel/CacheFlag-Craft3) can be used instead.'
+    ],
+    'ColorMixer' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Craft Color Mixer](https://github.com/whoisjuan/craft-color-mixer) can be used instead.'
     ],
     'ColorSwatches' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Colour Swatches](https://github.com/rias500/craft-colour-swatches) could be used instead'
+        'status' => 'Not available yet, but [Colour Swatches](https://github.com/rias500/craft-colour-swatches) can be used instead.'
+    ],
+    'CommerceFriendlyOrderNumbers' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to custom order reference formats in Commerce 2.'
+    ],
+    'CommerceRegisterOnCheckout' => [
+        'status' => 'Not available, but similar functionality is coming to Commerce 2.'
+    ],
+    'Compressor' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Minify](https://github.com/nystudio107/craft-minify) can be used instead.'
+    ],
+    'Coordinates' => [
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Smart Map](https://www.doublesecretagency.com/plugins/smart-map) can be used instead.'
     ],
     'CpFieldLinks' => [
         'handle' => 'cp-field-inspect'
     ],
+    'CraftCookieConsent' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Cookie Consent Banner](https://github.com/a-digital/cookie-consent-banner) can be used instead.'
+    ],
     'Craftnav' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) can be used instead.'
     ],
     'DeleteAllEntryVersions' => [
         'handle' => 'delete-entry-versions'
     ],
+    'Detect' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Mobile Detect](https://github.com/sjelfull/craft3-mobiledetect) can be used instead.'
+    ],
+    'Dump' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Enupal Backup](https://github.com/enupal/backup) can be used instead.'
+    ],
     'DuplicateUserDashboard' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Default Dashboard](https://github.com/verbb/default-dashboard) could be used instead.'
+        'status' => 'Not available yet, but [Default Dashboard](https://github.com/verbb/default-dashboard) can be used instead.'
+    ],
+    'EmailObfuscate' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Obfuscator](https://github.com/miranj/craft-obfuscator) or [Craft Email Obfuscator](https://github.com/luke-nehemedia/craft-emailobfuscator) can be used instead.'
     ],
     'EmbeddedAssets' => [
         'handle' => 'embeddedassets',
     ],
-    'Entitle' => [
+    'Embedder' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/casing.html#apTitleize) could be used instead.'
+        'status' => 'Not available yet, but [Video Embedder](https://github.com/mikestecker/craft-videoembedder) or [Videos](https://github.com/dukt/videos) can be used instead.'
     ],
     'EntriesSubset' => [
         'handle' => 'entriessubset'
     ],
+    'Export' => [
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Beam](https://github.com/sjelfull/craft3-beam) or [Export CSV](https://github.com/kffein/Craft-export-Csv) can be used instead,'
+    ],
+    'FieldGuide' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Field Manager](https://github.com/verbb/field-manager) can be used instead.'
+    ],
+    'FocusPoint' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to Craft 3’s built-in focal point support. (See Dan Hoerr’s [migration guide](https://github.com/ad-dc/focalpoint_migration).)'
+    ],
+    'FocalPointField' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to Craft 3’s built-in focal point support.'
+    ],
+    'FormBuilder2' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Freeform](https://github.com/solspace/craft3-freeform) or [Sprout Forms](https://github.com/barrelstrength/craft-sprout-forms) can be used instead.',
+    ],
+    'Formerly' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Freeform](https://github.com/solspace/craft3-freeform) or [Sprout Forms](https://github.com/barrelstrength/craft-sprout-forms) can be used instead.',
+    ],
+    'FruitAviaryImageEditor' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but Craft 3 offers some [image editing features](https://docs.craftcms.com/v3/assets.html#image-editor).'
+    ],
+    'FruitIcons' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Iconpicker](https://github.com/Dolphiq/craft3-iconpicker) can be used instead.'
+    ],
     'FruitLinkIt' => [
         'handle' => 'linkit',
     ],
+    'GoogleMaps' => [
+        'status' => 'orange',
+        'status' => 'Discontinued, but [SimpleMap](https://github.com/ethercreative/simplemap) or [Smart Map](https://www.doublesecretagency.com/plugins/smart-map) can be used instead.'
+    ],
+    'Geo' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [GeoMate](https://github.com/vaersaagod/geomate) or [Country Detect](https://github.com/serieseight/country-detect) can be used instead.'
+    ],
+    'GeoAddress' => [
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Smart Map](https://www.doublesecretagency.com/plugins/smart-map) can be used instead.'
+    ],
     'Hacksaw' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/truncation.html#hacksaw) or [Typogrify](https://github.com/nystudio107/craft3-typogrify) could be used instead.'
+        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/truncation.html#hacksaw) or [Typogrify](https://github.com/nystudio107/craft3-typogrify) can be used instead.'
     ],
     'Help' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Guide](https://github.com/wbrowar/craft-3-guide) could be used instead'
+        'status' => 'Not available yet, but [Guide](https://github.com/wbrowar/craft-3-guide) can be used instead.'
+    ],
+    'Htmlcache' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [HTML Cache](https://github.com/boldenamsterdam/htmlcache) can be used instead.'
     ],
     'Hue' => [
-        'statusColor' => 'red',
-        'status' => 'Unnecessary thanks to [Color field improvements](https://github.com/craftcms/cms/issues/2059).'
-    ],
-    'Imager' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [ImageOptimize](https://github.com/nystudio107/craft3-imageoptimize) or [Imgix](https://github.com/sjelfull/craft3-imgix) could be used instead'
+        'status' => 'No longer needed thanks to [Color field improvements](https://github.com/craftcms/cms/issues/2059) in Craft 3.'
     ],
     'Import' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Feed Me](https://github.com/verbb/feed-me) or [Sprout Import](https://github.com/barrelstrength/craft-sprout-import) could be used instead'
+        'status' => 'Not available yet, but [Feed Me](https://github.com/verbb/feed-me) or [Sprout Import](https://github.com/barrelstrength/craft-sprout-import) can be used instead.'
     ],
     'Inflect' => [
         'statusColor' => 'orange',
-        'status' => '[Discontinued](https://github.com/lukeholder/craft-inflect/blob/master/readme.md#craft-2-only), but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
+        'status' => 'Discontinued, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) can be used instead.'
     ],
     'Inflector' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) could be used instead.'
+        'status' => 'Discontinued, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/inflection.html) can be used instead.'
+    ],
+    'InstagramFeed' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Pic Puller](https://github.com/jmx2inc/picpuller-for-craft3) can be used instead.'
+    ],
+    'Introvert' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Entry Relations Manager](https://github.com/Frontwise/craft-entryrelationsmanager) can be used instead.'
+    ],
+    'jSocial' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Simple Sharing](https://github.com/wrav/SimpleSharing) can be used instead.'
     ],
     'LanguageLink' => [
-        'statusColor' => 'green',
-        'status' => 'Renamed to “Site Switcher” for Craft 3.'
+        'handle' => 'site-switcher'
+    ],
+    'Like' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Upvote](https://github.com/doublesecretagency/craft-upvote) can be used instead.'
     ],
     'LinkVault' => [
+        'handle' => 'linkvault'
+    ],
+    'ListingSection' => [
         'statusColor' => 'orange',
-        'status' => 'Currently in development'
+        'status' => 'Not available yet, but [Craft Dynamic Fields](https://github.com/lewisjenkins/craft-dynamic-fields) can be used instead.'
+    ],
+    'Lj_cookies' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Cookies](https://github.com/nystudio107/craft-cookies) can be used instead.'
+    ],
+    'Lj_DynamicFields' => [
+        'handle' => 'craft-dynamic-fields'
     ],
     'Maps' => [
         'statusColor' => 'orange',
-        'status' => 'Craft 3 upgrade path will be available via [Smart Map](https://www.doublesecretagency.com/plugins/smart-map).'
+        'status' => 'Discontinued, but [SimpleMap](https://github.com/ethercreative/simplemap) or [Smart Map](https://www.doublesecretagency.com/plugins/smart-map) can be used instead.'
     ],
     'Menus' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) can be used instead.'
+    ],
+    'MigrationManager' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to Project Config support [coming in Craft 3.1](https://craftcms.com/blog/craft-3-1-dev-preview-is-here).'
+    ],
+    'Minimee' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Minify](https://github.com/nystudio107/craft-minify) can be used instead.'
     ],
     'MnBreakAndContinue' => [
+        'handle' => 'twig-perversion'
+    ],
+    'MNBreakAndContinue' => [
         'handle' => 'twig-perversion'
     ],
     'MnEager' => [
@@ -153,101 +314,197 @@ return [
         'handle' => 'twig-perversion'
     ],
     'Moltin' => [
-        'statusColor' => 'red',
-        'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-moltin) for additional details)'
+        'status' => 'Discontinued.'
     ],
     'Navee' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
-    ],
-    'Neo' => [
-        'statusColor' => 'orange',
-        'status' => 'Currently in development',
+        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) can be used instead.'
     ],
     'NpEditMultipleElements' => [
         'handle' => 'sequential-edit',
     ],
-    'Oauth' => [
-        'statusColor' => 'red',
-        'status' => 'Unnecessary thanks to Craft 3’s inclusion of an OAuth 2 client library'
-    ],
-    'Olivemenus' => [
+    'ObsoleteRedirect' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) could be used instead'
+        'status' => 'Not available yet, but [Retour](https://github.com/nystudio107/craft-retour) can be used instead.'
+    ],
+    'Oauth' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to Craft 3’s inclusion of an OAuth 2 client library.'
     ],
     'OneDashboard' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Default Dashboard](https://github.com/verbb/default-dashboard) could be used instead.'
+        'status' => 'Not available yet, but [Default Dashboard](https://github.com/verbb/default-dashboard) can be used instead.'
     ],
     'PhpTweak' => [
-        'statusColor' => 'red',
-        'status' => 'Discontinued (see the [readme](https://github.com/lindseydiloreto/craft-phptweak) for additional details)'
+        'status' => 'Discontinued.'
     ],
     'PimpMyMatrix' => [
         'handle' => 'spoon',
     ],
+    'Postmaster' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Notifications](https://github.com/Rias500/craft-notifications) or [Notification](https://github.com/fatfishdigital/Craft3-Notification) can be used instead.'
+    ],
     'Printmaker' => [
         'statusColor' => 'orange',
-        'status' => 'Currently in development.'
+        'status' => 'Not available yet, but [Enupal Snapshot](https://github.com/enupal/snapshot) can be used instead.'
     ],
-    'ReadTime' => [
+    'Prune' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/statistics.html#readTime) could be used instead.'
+        'status' => 'No longer needed thanks to [advanced element query features](https://docs.craftcms.com/v3/dev/element-queries/#advanced-element-queries) in Craft 3.'
+    ],
+    'Reasons' => [
+        'status' => 'Discontinued due to conditional field support [coming](https://github.com/craftcms/cms/issues/805#issuecomment-408128891) in Craft 3.2.'
+    ],
+    'RedactorColors' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to changes in the new [Redactor](https://github.com/craftcms/redactor) plugin.'
+    ],
+    'RedactorExtras' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to changes in the new [Redactor](https://github.com/craftcms/redactor) plugin.'
+    ],
+    'redactorExtras' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to changes in the new [Redactor](https://github.com/craftcms/redactor) plugin.'
     ],
     'RedactorInlineStyles' => [
         'handle' => 'redactor-custom-styles'
     ],
-    'RedactorExtras' => [
-        'statusColor' => 'orange',
-        'status' => 'Not available yet, but the new [Redactor](https://github.com/craftcms/redactor) plugin makes it easy to include Redactor plugins without a Craft plugin.'
-    ],
     'RedactorI' => [
-        'statusColor' => 'red',
-        'status' => 'Discontinued (use [Redactor](https://github.com/craftcms/redactor) instead)'
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Redactor](https://github.com/craftcms/redactor) can be used instead.'
+    ],
+    'RedactorImagePosition' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to built-in [image positioning support](https://imperavi.com/redactor/examples/images-and-files/image-resizing-and-positioning/).'
+    ],
+    'RedirectManager' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Retour](https://github.com/nystudio107/craft-retour) can be used instead.'
+    ],
+    'Reports' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Sprout Reports](https://github.com/barrelstrength/craft-sprout-reports) can be used instead.'
+    ],
+    'Reroute' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Retour](https://github.com/nystudio107/craft-retour) can be used instead.'
+    ],
+    'ReverseRelations' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Entry Relations Manager](https://github.com/Frontwise/craft-entryrelationsmanager) can be used instead.'
     ],
     'RetconHtml' => [
-        'handle' => 'retcon',
-        'statusColor' => 'orange',
-        'status' => 'Coming soon'
+        'handle' => 'retcon'
     ],
     'Scraper' => [
-        'statusColor' => 'orange',
         'status' => 'Currently in development.'
     ],
     'SearchPlus' => [
         'statusColor' => 'orange',
-        'status' => 'Currently in development.'
+        'status' => 'Not available yet, but [Scout](https://github.com/Rias500/craft-scout) can be used instead.'
     ],
     'Shortlist' => [
-        'statusColor' => 'orange',
         'status' => 'Currently in development.'
     ],
     'SmartyPants' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/typography.html#smartypants) could be used instead.'
+        'status' => 'Not available yet, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/typography.html#smartypants) can be used instead.'
     ],
     'SimpleMap' => [
         'handle' => 'simplemap',
     ],
-    'Sitemap' => [
-        'handle' => 'sitemap-tmp',
+    'SimpleSitemap' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) or [SEOmatic](https://github.com/nystudio107/craft-seomatic) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) could be used instead',
+        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) or [SEOmatic](https://github.com/nystudio107/craft-seomatic) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) can be used instead.',
+    ],
+    'Sitemap' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [XML Sitemap](https://github.com/Dolphiq/craft3-plugin-sitemap) or [SEOmatic](https://github.com/nystudio107/craft-seomatic) or [Sprout SEO](https://github.com/barrelstrength/craft-sprout-seo) can be used instead.',
+    ],
+    'Slugify' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Craft Slugify](https://github.com/guilty-as/craft-slugify) can be used instead.'
+    ],
+    'SocialPoster' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Simple Sharing](https://github.com/wrav/SimpleSharing) can be used instead.'
+    ],
+    'SpamGuard' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [reCAPTCHA](https://github.com/matt-west/craft-recaptcha) can be used instead.'
+    ],
+    'Spectrum' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Colorit](https://github.com/fruitstudios/craft-colorit) can be used instead.'
     ],
     'SproutInvisibleCaptcha' => [
         'statusColor' => 'orange',
-        'status' => 'Features have been rolled into Sprout Forms which is available in the Plugin Store. Invisible Captcha will no longer be a standalone plugin in Craft 3.'
+        'status' => 'Discontinued due to feature being rolled into [Sprout Forms](https://github.com/barrelstrength/craft-sprout-forms).'
     ],
     'SquareBitMaps' => [
         'statusColor' => 'orange',
-        'status' => 'Craft 3 upgrade path will be available via [Smart Map](https://www.doublesecretagency.com/plugins/smart-map).'
+        'status' => 'Discontinued, but [Smart Map](https://www.doublesecretagency.com/plugins/smart-map) can be used instead.'
     ],
     'SuperSort' => [
         'handle' => 'supersort',
     ],
-    'Widont' => [
-        'handle' => 'widontextension',
+    'SvgIcons' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/typography.html#widont) could be used instead.'
+        'status' => 'Not available yet, but [Iconpicker](https://github.com/Dolphiq/craft3-iconpicker) can be used instead.'
+    ],
+    'TableMaker' => [
+        'handle' => 'tablemaker'
+    ],
+    'TaskManager' => [
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Queue Manager](https://github.com/lukeyouell/craft-queue-manager) can be used instead.'
+    ],
+    'Territories' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Country Select](https://github.com/superbigco/craft-countryredirect) can be used instead.'
+    ],
+    'TheArchitect' => [
+        'handle' => 'architect',
+    ],
+    'TinyImage' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [ImageOptimize](https://github.com/nystudio107/craft-imageoptimize) can be used instead.'
+    ],
+    'Trimmer' => [
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://github.com/TopShelfCraft/Wordsmith) can be used instead.'
+    ],
+    'Truncate' => [
+        'statusColor' => 'orange',
+        'status' => 'Discontinued, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://github.com/TopShelfCraft/Wordsmith) can be used instead.'
+    ],
+    'UserManual' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Guide](https://github.com/wbrowar/craft-3-guide) can be used instead.'
+    ],
+    'Venti' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Calendar](https://solspace.com/craft/calendar/) can be used instead.'
+    ],
+    'VideoEmbed' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Video Embedder](https://github.com/mikestecker/craft-videoembedder) or [Videos](https://github.com/dukt/videos) can be used instead.'
+    ],
+    'VideoEmbedUtility' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Video Embedder](https://github.com/mikestecker/craft-videoembedder) or [Videos](https://github.com/dukt/videos) can be used instead.'
+    ],
+    'VzAddress' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Easy Address Field](https://github.com/studioespresso/craft3-easyaddressfield), [NSM Fields](https://github.com/newism/craft3-fields), or [Sprout Fields](https://github.com/barrelstrength/craft-sprout-fields) can be used instead.'
+    ],
+    'VzUrl' => [
+        'handle' => 'vzurl'
+    ],
+    'Widont' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/typography.html#widont) can be used instead.'
     ],
 ];

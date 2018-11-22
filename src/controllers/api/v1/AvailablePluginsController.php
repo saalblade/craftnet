@@ -42,13 +42,13 @@ class AvailablePluginsController extends BaseApiController
                     $newHandle = Inflector::camel2id($oldHandle);
                 }
 
+                $resInfo = [
+                    'statusColor' => '',
+                    'status' => 'Not available yet',
+                ];
+
                 if (!empty($craft2Plugins[$oldHandle])) {
-                    $resInfo = $craft2Plugins[$oldHandle];
-                } else {
-                    $resInfo = [
-                        'statusColor' => '',
-                        'status' => 'Not available yet',
-                    ];
+                    $resInfo = array_merge($resInfo, $craft2Plugins[$oldHandle]);
                 }
 
                 $newHandles[] = $newHandle;
@@ -81,7 +81,7 @@ class AvailablePluginsController extends BaseApiController
             $oldHandle = $oldHandlesByNew[$plugin->handle] ?? $plugin->handle;
             $icon = $plugin->getIcon();
             $developer = $plugin->getDeveloper();
-            $statusColor = $plugin->enabled ? 'green' : 'orange';
+            $statusColor = $plugin->enabled ? 'green' : 'red';
             $status = $plugin->enabled ? 'Available' : 'Coming soon';
 
             $res[$oldHandle] = [
