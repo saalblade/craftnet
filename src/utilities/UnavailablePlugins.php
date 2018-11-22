@@ -40,14 +40,22 @@ class UnavailablePlugins extends Utility
      */
     public static function contentHtml(): string
     {
+        $craft2Plugins = require(Craft::getAlias('@config/craft2-plugins.php'));
+
+        $ignore = [];
+        foreach ($craft2Plugins as $handle => $plugin) {
+            if (isset($plugin['handle'])) {
+                $ignore[] = $handle;
+            }
+        }
+
         $plugins = (new Query())
             ->select(['plugin', 'hits'])
             ->from(['craftnet_craft2pluginhits'])
             ->where(['available' => false])
+            ->andWhere(['not', ['plugin' => $ignore]])
             ->orderBy(['hits' => SORT_DESC])
             ->pairs();
-
-        $craft2Plugins = require(Craft::getAlias('@config/craft2-plugins.php'));
 
         return Craft::$app->getView()->renderTemplate('craftnet/unavailable-plugins/_content', [
             'plugins' => $plugins,
