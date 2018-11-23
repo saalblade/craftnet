@@ -316,6 +316,10 @@ return [
     'Moltin' => [
         'status' => 'Discontinued.'
     ],
+    'MultiAdd' => [
+        'statusColor' => 'orange',
+        'status' => 'Not needed anymore thanks to built-in support for multi-add-to-cart in Commerce 2.'
+    ],
     'Navee' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) can be used instead.'
