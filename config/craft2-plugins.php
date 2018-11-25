@@ -87,7 +87,7 @@ return [
     ],
     'BusinessLogic' => [
         'statusColor' => 'orange',
-        'status' => 'No longer needed thanks to [pluginfactory.io](https://pluginfactory.io/).'
+        'status' => 'Must be updated manually. Use [pluginfactory.io](https://pluginfactory.io/) to generate a Craft 3 plugin scaffolding.'
     ],
     'ButtonBox' => [
         'handle' => 'buttonbox'
