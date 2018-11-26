@@ -554,6 +554,7 @@ EOL;
                     Craft::$app->getMailer()->compose()
                         ->setSubject('Craftnet API Error')
                         ->setTextBody($body)
+                        ->setHtmlBody(Markdown::process($body, 'gfm'))
                         ->setTo(explode(',', getenv('API_ERROR_RECIPIENTS')))
                         ->send();
                 } catch (\Throwable $e) {
