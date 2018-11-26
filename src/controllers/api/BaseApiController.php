@@ -458,7 +458,7 @@ abstract class BaseApiController extends Controller
             $logException = $e;
 
             $statusCode = $response->getStatusCode();
-            $sendErrorEmail = true || ($statusCode >= 500 && $statusCode < 600);
+            $sendErrorEmail = $statusCode >= 500 && $statusCode < 600;
 
             if ($sendErrorEmail) {
                 $body = <<<EOL
