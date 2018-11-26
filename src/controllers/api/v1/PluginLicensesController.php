@@ -104,7 +104,7 @@ class PluginLicensesController extends BaseApiController
                     'message' => $e->getMessage(),
                     'code' => self::ERROR_CODE_MISSING,
                 ]
-            ]);
+            ], null, 0, $e);
         }
 
         // validation

@@ -54,7 +54,7 @@ class PaymentsController extends CartsController
                     'message' => $e->getMessage(),
                     'code' => $e->getCode() === 404 ? self::ERROR_CODE_MISSING : self::ERROR_CODE_INVALID,
                 ]
-            ]);
+            ], null, 0, $e);
         }
 
         $errors = [];
