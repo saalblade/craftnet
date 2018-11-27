@@ -11,7 +11,9 @@
                 <div v-if="!isEditing">
                     <ul class="info-list list-reset">
                         <li v-if="partner.logo.url" class="mb-4">
-                            <img :src="partner.logo.url" style="width: 200px;">
+                            <div class="partner-logo">
+                                <img :src="partner.logo.url">
+                            </div>
                         </li>
                         <li v-if="partner.businessName">
                             <strong class="text-2xl">{{ partner.businessName }}</strong>
@@ -76,11 +78,15 @@
                         <label>Logo</label>
 
                         <div class="instructions">
-                            <p>Must be an SVG</p>
+                            <p>Must be an SVG that fits within a circle. Be sure not to use unrasterized fonts or
+                                base64-encoded JPGs or PNGs inside the SVG or it will cause problems with image resizing for
+                                Twitter share cards and such.</p>
                         </div>
 
                         <div>
-                            <img v-if="draft.logo.url" :src="draft.logo.url" style="width: 250px;" class="block mt-2 mb-2">
+                            <div class="partner-logo">
+                                <img v-if="draft.logo.url" :src="draft.logo.url" style="width: 250px;" class="block mt-2 mb-2">
+                            </div>
                             <a v-if="draft.logo.url" href="#" class="remove btn btn-sm btn-danger" @click.prevent="draft.logo = {id: null, url: null}">
                                 <i class="fas fa-times"></i>
                             </a>
@@ -121,6 +127,25 @@
         </div>
 	</div>
 </template>
+
+<style scoped>
+    .partner-logo {
+        height: 120px;
+        width: 120px;
+        border-radius: 100%;
+        border: 1px solid #e5edfd;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        align-content: center;
+    }
+
+    .partner-logo img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+</style>
 
 <script>
     import CheckboxField from '../components/fields/CheckboxField'
