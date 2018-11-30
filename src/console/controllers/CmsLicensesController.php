@@ -11,6 +11,7 @@ use craftnet\helpers\KeyHelper;
 use craftnet\Module;
 use yii\base\InvalidArgumentException;
 use yii\console\Controller;
+use yii\console\ExitCode;
 use yii\helpers\Console;
 use yii\validators\EmailValidator;
 
@@ -73,7 +74,7 @@ class CmsLicensesController extends Controller
 
             if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
                 $this->stderr('Could not save license: ' . implode(', ', $license->getFirstErrors() . PHP_EOL), Console::FG_RED);
-                return 1;
+                return ExitCode::UNSPECIFIED_ERROR;
             }
 
             $this->stdout("License #{$counter} saved: " . PHP_EOL . chunk_split($license->key, 50) . PHP_EOL, Console::FG_GREEN);
@@ -83,15 +84,16 @@ class CmsLicensesController extends Controller
             }
         }
 
-        return 0;
+        return ExitCode::OK;
     }
 
     /**
      * Updates an existing Craft license.
      *
      * @param string $key The license key (or first few characters of it)
+     * @return int
      */
-    public function actionUpdate(string $key)
+    public function actionUpdate(string $key): int
     {
         $manager = $this->module->getCmsLicenseManager();
 
@@ -124,7 +126,7 @@ class CmsLicensesController extends Controller
             $license = $manager->getLicenseByKey($key);
         } catch (LicenseNotFoundException $e) {
             $this->stderr($e->getMessage() . PHP_EOL, Console::FG_RED);
-            return 1;
+            return ExitCode::UNSPECIFIED_ERROR;
         }
 
         $edition = null;
@@ -149,7 +151,7 @@ class CmsLicensesController extends Controller
 
         if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
             $this->stderr('Could not save license: ' . implode(', ', $license->getFirstErrors() . PHP_EOL), Console::FG_RED);
-            return 1;
+            return ExitCode::UNSPECIFIED_ERROR;
         }
 
         $this->stdout('License saved: ' . PHP_EOL . chunk_split($license->key, 50) . PHP_EOL, Console::FG_GREEN);
@@ -161,7 +163,7 @@ class CmsLicensesController extends Controller
             $this->module->getCmsLicenseManager()->addHistory($license->id, $note);
         }
 
-        return 0;
+        return ExitCode::OK;
     }
 
     protected function quantityPrompt(string $default = null): string
