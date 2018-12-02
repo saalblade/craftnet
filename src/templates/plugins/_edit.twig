@@ -49,11 +49,11 @@
 
 
 {% block content %}
-    <div id="info">
-        <input type="hidden" name="action" value="craftnet/plugins/save">
-        <input type="hidden" name="redirect" value="{{ 'plugins/{id}'|hash }}">
-        {% if plugin.id %}<input type="hidden" name="pluginId" value="{{ plugin.id }}">{% endif %}
+    <input type="hidden" name="action" value="craftnet/plugins/save">
+    <input type="hidden" name="redirect" value="{{ 'plugins/{id}'|hash }}">
+    {% if plugin.id %}<input type="hidden" name="pluginId" value="{{ plugin.id }}">{% endif %}
 
+    <div id="info">
         <div id="fields">
             {% set repositoryInput = forms.text({
                 id: 'repository',
@@ -174,13 +174,13 @@
                 errors: plugin.getErrors('changelogPath'),
             }) }}
 
-			{{ forms.textField({
-				label: 'Keywords',
-				id: 'keywords',
-				name: 'keywords',
-				value: plugin.keywords,
-				errors: plugin.getErrors('keywords'),
-			}) }}
+            {{ forms.textField({
+                label: 'Keywords',
+                id: 'keywords',
+                name: 'keywords',
+                value: plugin.keywords,
+                errors: plugin.getErrors('keywords'),
+            }) }}
         </div>
     </div>
 

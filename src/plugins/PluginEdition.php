@@ -117,6 +117,9 @@ class PluginEdition extends PluginPurchasable
      */
     public $renewalPrice;
 
+    // Public Methods
+    // =========================================================================
+
     /**
      * @return string
      */
@@ -128,9 +131,6 @@ class PluginEdition extends PluginPurchasable
             return $this->name;
         }
     }
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @inheritdoc

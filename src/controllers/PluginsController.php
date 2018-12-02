@@ -197,6 +197,7 @@ class PluginsController extends Controller
     public function actionSave()
     {
         $request = Craft::$app->getRequest();
+        $isCpRequest = $request->getIsCpRequest();
         $newPlugin = false;
 
         if ($pluginId = $request->getBodyParam('pluginId')) {
@@ -213,7 +214,10 @@ class PluginsController extends Controller
             $newPlugin = true;
         }
 
-        if ($request->getIsCpRequest()) {
+        // Approve/reject
+        // ---------------------------------------------------------------------
+
+        if ($isCpRequest) {
             if ($request->getBodyParam('approve', false)) {
                 $plugin->approve();
             } else if ($request->getBodyParam('reject', false)) {
@@ -223,29 +227,32 @@ class PluginsController extends Controller
             }
         }
 
-        if (!$plugin->developerId) {
-            $plugin->developerId = Craft::$app->getUser()->getId();
-        }
+        // Developer
+        // ---------------------------------------------------------------------
 
         // Only plugin managers are able to change developer for a plugin
         if (Craft::$app->getUser()->checkPermission('craftnet:managePlugins') && isset($request->getBodyParam('developerId')[0])) {
             $plugin->developerId = $request->getBodyParam('developerId')[0];
+        } else if (!$plugin->developerId) {
+            $plugin->developerId = Craft::$app->getUser()->getId();
         }
+
+        // Name & handle
+        // ---------------------------------------------------------------------
 
         $newName = false;
         $newHandle = false;
 
-        if ($plugin->name != $request->getBodyParam('name')) {
+        if ($plugin->name != ($plugin->name = $request->getBodyParam('name'))) {
             $newName = true;
         }
 
-        $plugin->name = $request->getBodyParam('name');
-
-        if ($plugin->handle != $request->getBodyParam('handle')) {
+        if ($plugin->handle != ($plugin->handle = $request->getBodyParam('handle'))) {
             $newHandle = true;
         }
 
-        $plugin->handle = $request->getBodyParam('handle');
+        // Basic plugin info
+        // ---------------------------------------------------------------------
 
         $plugin->iconId = $request->getBodyParam('iconId')[0] ?? null;
         $plugin->packageName = $request->getBodyParam('packageName');
@@ -267,6 +274,9 @@ class PluginsController extends Controller
             $plugin->renewalPrice = (float)$request->getBodyParam('renewalPrice');
         }
 
+        // Categories
+        // ---------------------------------------------------------------------
+
         if (!empty($categoryIds = $request->getBodyParam('categoryIds'))) {
             $categories = Category::find()->id($categoryIds)->fixedOrder()->all();
         } else {
@@ -274,8 +284,9 @@ class PluginsController extends Controller
         }
         $plugin->setCategories($categories);
 
-
         // Uploads
+        // ---------------------------------------------------------------------
+
         $imageService = Craft::$app->getImages();
         $assetsService = Craft::$app->getAssets();
         $volumesService = Craft::$app->getVolumes();
@@ -289,9 +300,10 @@ class PluginsController extends Controller
             $screenshotIds = [];
         }
 
-        if (!$request->getIsCpRequest()) {
+        if (!$isCpRequest) {
 
             // Icon
+            // -----------------------------------------------------------------
 
             $iconFile = UploadedFile::getInstanceByName('icon');
 
@@ -319,7 +331,6 @@ class PluginsController extends Controller
                 }
 
                 $imageService->cleanImage($tempPath);
-
 
                 // Save as an asset
                 $volume = $volumesService->getVolumeByHandle('icons');
@@ -350,11 +361,10 @@ class PluginsController extends Controller
                 }
             }
 
-
             // Screenshots
+            // -----------------------------------------------------------------
 
             // Remove old screenshots
-
             $existingScreenshots = $plugin->getScreenshots();
 
             foreach ($existingScreenshots as $existingScreenshot) {
@@ -370,11 +380,8 @@ class PluginsController extends Controller
                 }
             }
 
-
             // Upload new screenshots
-
             $allowedFileExtensions = ['jp2', 'jpeg', 'jpg', 'jpx', 'png'];
-
             $screenshotFiles = UploadedFile::getInstancesByName('screenshots');
 
             if (count($screenshotFiles) > 0) {
@@ -408,9 +415,7 @@ class PluginsController extends Controller
 
                     $imageService->cleanImage($tempPath);
 
-
                     // Save as an asset
-
                     $volumesService = Craft::$app->getVolumes();
                     $volume = $volumesService->getVolumeByHandle('screenshots');
                     $volumeId = $volumesService->ensureTopFolder($volume);
@@ -450,8 +455,8 @@ class PluginsController extends Controller
 
         $plugin->setScreenshots(Asset::find()->id($screenshotIds)->fixedOrder()->all());
 
-
         // Save plugin
+        // ---------------------------------------------------------------------
 
         if ($plugin->enabled) {
             $plugin->setScenario(Element::SCENARIO_LIVE);
@@ -471,13 +476,11 @@ class PluginsController extends Controller
             return null;
         }
 
-
         // Rename icon & screenshots with new name and filename
+        // ---------------------------------------------------------------------
 
         if (!$newPlugin && ($newName || $newHandle)) {
-
             // Icon
-
             if ($plugin->icon) {
                 $icon = $plugin->icon;
 
@@ -494,9 +497,7 @@ class PluginsController extends Controller
                 }
             }
 
-
             // Screenshots
-
             if ($newHandle) {
                 $volume = $volumesService->getVolumeByHandle('screenshots');
                 $volumeId = $volumesService->ensureTopFolder($volume);
