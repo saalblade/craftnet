@@ -12,8 +12,8 @@ return [
             'publicPath' => '/craftnetresources/id/dist/',
         ],
         'devServer' => [
-            'manifestPath' => 'https://localhost:8080/',
-            'publicPath' => 'https://localhost:8080/',
+            'manifestPath' => 'https://localhost:8081/',
+            'publicPath' => 'https://localhost:8081/',
         ],
     ],
     'dev' => [
