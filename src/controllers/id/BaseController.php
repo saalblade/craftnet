@@ -56,6 +56,17 @@ abstract class BaseController extends Controller
             }
         }
 
+        $editions = [];
+        foreach ($plugin->getEditions() as $edition) {
+            $editions[] = [
+                'name' => $edition->name,
+                'handle' => $edition->handle,
+                'price' => $edition->price,
+                'renewalPrice' => $edition->renewalPrice,
+                'features' => $edition->features ?? [],
+            ];
+        }
+
         return [
             'id' => $plugin->id,
             'enabled' => $plugin->enabled,
@@ -72,8 +83,7 @@ abstract class BaseController extends Controller
             'changelogPath' => $plugin->changelogPath,
             'repository' => $plugin->repository,
             'license' => $plugin->license,
-            'price' => $plugin->price,
-            'renewalPrice' => $plugin->renewalPrice,
+            'editions' => $editions,
             'keywords' => $plugin->keywords,
             'latestVersion' => $plugin->latestVersion,
 

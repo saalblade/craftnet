@@ -146,8 +146,6 @@ class PluginQuery extends ElementQuery
             'craftnet_plugins.repository',
             'craftnet_plugins.name',
             'craftnet_plugins.handle',
-            'craftnet_plugins.price',
-            'craftnet_plugins.renewalPrice',
             'craftnet_plugins.license',
             'craftnet_plugins.shortDescription',
             'craftnet_plugins.longDescription',
