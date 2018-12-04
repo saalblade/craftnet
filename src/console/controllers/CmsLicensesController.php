@@ -2,15 +2,18 @@
 
 namespace craftnet\console\controllers;
 
+use Craft;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\DateTimeHelper;
 use craftnet\cms\CmsLicense;
+use craftnet\developers\UserBehavior;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\helpers\KeyHelper;
 use craftnet\Module;
 use yii\base\InvalidArgumentException;
 use yii\console\Controller;
+use yii\console\ExitCode;
 use yii\helpers\Console;
 use yii\validators\EmailValidator;
 
@@ -72,59 +75,87 @@ class CmsLicensesController extends Controller
             }
 
             if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
-                $this->stderr('Could not save license: '.implode(', ', $license->getFirstErrors().PHP_EOL), Console::FG_RED);
-                return 1;
+                $this->stderr('Could not save license: ' . implode(', ', $license->getFirstErrors() . PHP_EOL), Console::FG_RED);
+                return ExitCode::UNSPECIFIED_ERROR;
             }
 
-            $this->stdout("License #{$counter} saved: ".PHP_EOL.chunk_split($license->key, 50).PHP_EOL, Console::FG_GREEN);
+            $this->stdout("License #{$counter} saved: " . PHP_EOL . chunk_split($license->key, 50) . PHP_EOL, Console::FG_GREEN);
 
             if ($note) {
                 $this->module->getCmsLicenseManager()->addHistory($license->id, $note);
             }
         }
 
-        return 0;
+        return ExitCode::OK;
+    }
+
+    /**
+     * Looks up a license.
+     *
+     * @param string $key The license key (or first few characters of it)
+     * @return int
+     */
+    public function actionLookup(string $key): int
+    {
+        try {
+            $license = $this->license($key);
+        } catch (LicenseNotFoundException $e) {
+            $this->stderr($e->getMessage() . PHP_EOL, Console::FG_RED);
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
+
+        if ($license->ownerId) {
+
+        }
+
+        $this->info('Edition', $license->editionHandle);
+        $this->boolean('Expirable', $license->expirable);
+        $this->boolean('Expired', $license->expired);
+        $this->datetime($license->expired ? 'Expired on' : 'Expires on', $license->expiresOn);
+        $this->boolean('Auto-renew', $license->autoRenew);
+        $this->info('Email', $license->email);
+        $this->info('Domain', $license->domain ?: '--');
+        $this->info('Notes', $license->notes ?: '--');
+        $this->info('Private notes', $license->privateNotes ?: '--');
+        $this->info('Last edition', $license->lastEdition ?: '--');
+        $this->info('Last version', $license->lastVersion ?: '--');
+        $this->info('Last allowed version', $license->lastAllowedVersion ?: '--');
+        $this->datetime('Last activity on', $license->lastActivityOn);
+        $this->datetime('Last renewed on', $license->lastRenewedOn);
+
+        if ($license->ownerId) {
+            $owner = User::find()
+                ->id($license->ownerId)
+                ->anyStatus()
+                ->one();
+
+            $this->info('Owner ID', $license->ownerId);
+            $this->info('Owner status', $owner ? $owner->getStatus() : Console::ansiFormat('nonexistent', [Console::FG_RED]));
+
+            if ($owner) {
+                /** @var UserBehavior|User $owner */
+                $this->info('Owner email', $owner->email);
+                $this->info('Owner username', $owner->username);
+                $this->info('Owner name', $owner->developerName ?: ($owner->getFullName() ?: '--'));
+            }
+        }
+
+        return ExitCode::OK;
     }
 
     /**
      * Updates an existing Craft license.
      *
      * @param string $key The license key (or first few characters of it)
+     * @return int
      */
-    public function actionUpdate(string $key)
+    public function actionUpdate(string $key): int
     {
-        $manager = $this->module->getCmsLicenseManager();
-
         try {
-            $key = $manager->normalizeKey($key);
-        } catch (InvalidArgumentException $e) {
-            $licenses = (new Query())
-                ->select(['key', 'domain'])
-                ->from(['craftnet_cmslicenses'])
-                ->where(['like', 'key', $key . '%', false])
-                ->all();
-
-            if (empty($licenses)) {
-                $this->stderr('No Craft licenses exist with a key that starts with "' . $key . '".' . PHP_EOL, Console::FG_RED);
-                return 1;
-            }
-
-            $options = [];
-            $keys = [];
-            foreach ($licenses as $i => $license) {
-                $index = (string)($i + 1);
-                $options[$index] = $license['key'] . ($license['domain'] ? "({$license['domain']})" : '');
-                $keys[$index] = $license['key'];
-            }
-            $choice = $this->select('Which license key?', $options);
-            $key = $keys[$choice];
-        }
-
-        try {
-            $license = $manager->getLicenseByKey($key);
+            $license = $this->license($key);
         } catch (LicenseNotFoundException $e) {
             $this->stderr($e->getMessage() . PHP_EOL, Console::FG_RED);
-            return 1;
+            return ExitCode::UNSPECIFIED_ERROR;
         }
 
         $edition = null;
@@ -148,11 +179,11 @@ class CmsLicensesController extends Controller
         $license->expired = $license->expiresOn !== null ? $license->expiresOn->getTimestamp() < time() : false;
 
         if (!$this->module->getCmsLicenseManager()->saveLicense($license)) {
-            $this->stderr('Could not save license: '.implode(', ', $license->getFirstErrors().PHP_EOL), Console::FG_RED);
-            return 1;
+            $this->stderr('Could not save license: ' . implode(', ', $license->getFirstErrors() . PHP_EOL), Console::FG_RED);
+            return ExitCode::UNSPECIFIED_ERROR;
         }
 
-        $this->stdout('License saved: '.PHP_EOL.chunk_split($license->key, 50).PHP_EOL, Console::FG_GREEN);
+        $this->stdout('License saved: ' . PHP_EOL . chunk_split($license->key, 50) . PHP_EOL, Console::FG_GREEN);
 
         if ($this->confirm('Create a history record for the license?', true)) {
             $note = $this->prompt('Note: ', [
@@ -161,7 +192,59 @@ class CmsLicensesController extends Controller
             $this->module->getCmsLicenseManager()->addHistory($license->id, $note);
         }
 
-        return 0;
+        return ExitCode::OK;
+    }
+
+    /**
+     * @param string $key
+     * @return CmsLicense
+     * @throws LicenseNotFoundException
+     */
+    protected function license(string $key): CmsLicense
+    {
+        $manager = $this->module->getCmsLicenseManager();
+
+        try {
+            $key = $manager->normalizeKey($key);
+        } catch (InvalidArgumentException $e) {
+            $licenses = (new Query())
+                ->select(['key', 'domain'])
+                ->from(['craftnet_cmslicenses'])
+                ->where(['like', 'key', $key . '%', false])
+                ->all();
+
+            if (empty($licenses)) {
+                $this->stderr('No Craft licenses exist with a key that starts with "' . $key . '".' . PHP_EOL, Console::FG_RED);
+                return ExitCode::UNSPECIFIED_ERROR;
+            }
+
+            $options = [];
+            $keys = [];
+            foreach ($licenses as $i => $license) {
+                $index = (string)($i + 1);
+                $options[$index] = $license['key'] . ($license['domain'] ? "({$license['domain']})" : '');
+                $keys[$index] = $license['key'];
+            }
+            $choice = $this->select('Which license key?', $options);
+            $key = $keys[$choice];
+        }
+
+        return $manager->getLicenseByKey($key);
+    }
+
+    protected function info(string $label, string $value)
+    {
+        Console::output(Console::ansiFormat($label . ': ', [Console::FG_YELLOW]) . $value);
+    }
+
+    protected function boolean(string $label, $value)
+    {
+        $this->info($label, $value ? 'yes' : 'no');
+    }
+
+    protected function datetime(string $label, $value)
+    {
+        $this->info($label, $value ? Craft::$app->formatter->asDatetime($value) : '--');
     }
 
     protected function quantityPrompt(string $default = null): string

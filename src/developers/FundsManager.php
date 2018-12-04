@@ -48,7 +48,7 @@ class FundsManager extends BaseObject
     public function __construct(User $developer, array $config = [])
     {
         $this->developer = $developer;
-        $this->_lockName = 'funds:'.$developer->id;
+        $this->_lockName = 'funds:' . $developer->id;
         parent::__construct($config);
     }
 
@@ -77,11 +77,11 @@ class FundsManager extends BaseObject
     public function credit(string $note, float $credit, float $fee = null, string $txnType = null): int
     {
         if ($credit <= 0) {
-            throw new InvalidArgumentException('Invalid credit amount: '.$credit);
+            throw new InvalidArgumentException('Invalid credit amount: ' . $credit);
         }
 
         if ($fee !== null && $fee <= 0) {
-            throw new InvalidArgumentException('Invalid fee amount: '.$credit);
+            throw new InvalidArgumentException('Invalid fee amount: ' . $credit);
         }
 
         return $this->_addTransaction($note, $credit, null, $fee, $txnType);
@@ -100,7 +100,7 @@ class FundsManager extends BaseObject
     public function debit(string $note, float $debit, string $txnType = null): int
     {
         if ($debit <= 0) {
-            throw new InvalidArgumentException('Invalid debit amount: '.$debit);
+            throw new InvalidArgumentException('Invalid debit amount: ' . $debit);
         }
 
         // no double-dipping
@@ -231,7 +231,7 @@ class FundsManager extends BaseObject
     private function _transferFunds(string $note, float $amount, array $params = []): Transfer
     {
         if ($amount <= 0) {
-            throw new InvalidArgumentException('Invalid transfer amount: '.$amount);
+            throw new InvalidArgumentException('Invalid transfer amount: ' . $amount);
         }
 
         if (($stripeAccount = $this->developer->stripeAccount) === null) {

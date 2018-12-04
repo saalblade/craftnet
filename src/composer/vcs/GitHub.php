@@ -68,7 +68,7 @@ class GitHub extends BaseVcs
     public function getChangelogUrl()
     {
         if (($plugin = $this->package->getPlugin()) && $plugin->changelogPath) {
-            return rtrim($this->package->repository, '/').'/blob/HEAD/'.$plugin->changelogPath;
+            return rtrim($this->package->repository, '/') . '/blob/HEAD/' . $plugin->changelogPath;
         }
         return null;
     }

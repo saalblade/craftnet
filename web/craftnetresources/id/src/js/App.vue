@@ -112,17 +112,6 @@
                             </ul>
                         </template>
 
-                        <h5>
-                            <router-link @click.native="closeSidebar()" to="/account">
-                                <font-awesome-icon icon="user" />
-                                Account
-                            </router-link>
-                        </h5>
-                        <ul>
-                            <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
-                            <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
-                        </ul>
-
                         <template v-if="userIsInGroup('staff') && currentUser.enableShowcaseFeatures">
                             <h5>
                                 <a class="disabled" href="#">
@@ -137,6 +126,29 @@
                             </ul>
                         </template>
 
+                        <template v-if="currentUser.enablePartnerFeatures">
+                            <h5>
+                                <router-link @click.native="closeSidebar()" to="/partner">
+                                    <font-awesome-icon icon="handshake" />
+                                    Partner
+                                </router-link>
+                            </h5>
+                            <ul>
+                                <li><router-link @click.native="closeSidebar()" to="/partner/overview">Overview</router-link></li>
+                                <li><router-link @click.native="closeSidebar()" to="/partner/profile">Profile</router-link></li>
+                            </ul>
+                        </template>
+
+                        <h5>
+                            <router-link @click.native="closeSidebar()" to="/account">
+                                <font-awesome-icon icon="user" />
+                                Account
+                            </router-link>
+                        </h5>
+                        <ul>
+                            <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
+                            <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
+                        </ul>
                     </div>
 
                     <div class="main">

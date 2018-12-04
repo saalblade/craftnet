@@ -2,7 +2,6 @@
 
 namespace craftnet\controllers\plugins;
 
-use Craft;
 use craft\web\Controller;
 use craftnet\plugins\Plugin;
 

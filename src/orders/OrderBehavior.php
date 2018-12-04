@@ -153,7 +153,7 @@ class OrderBehavior extends Behavior
     {
         // render the PDF
         $pdf = (new PdfRenderer())->render($this->owner);
-        $filename = 'Order-'.strtoupper($this->owner->getShortNumber()).'.pdf';
+        $filename = 'Order-' . strtoupper($this->owner->getShortNumber()) . '.pdf';
 
         $mailer = Craft::$app->getMailer();
         $mailer

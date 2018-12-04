@@ -28,15 +28,10 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import CraftComponents from "@benjamindavid/craftcomponents";
 
     export default {
 
         props: ['billingInfo', 'errors'],
-
-        components: {
-            ...CraftComponents,
-        },
 
         computed: {
 

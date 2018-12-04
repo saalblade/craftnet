@@ -207,7 +207,7 @@ class CartsController extends BaseApiController
 
             // save the cart if it's new so it gets an ID
             if (!$cart->id && !Craft::$app->getElements()->saveElement($cart)) {
-                throw new Exception('Could not save the cart: '.implode(', ', $cart->getErrorSummary(true)));
+                throw new Exception('Could not save the cart: ' . implode(', ', $cart->getErrorSummary(true)));
             }
 
             // billing address
@@ -232,7 +232,7 @@ class CartsController extends BaseApiController
 
                     // first make sure it validates
                     // todo: eventually we should be able to handle this from the root payload validation, if JSON schemas can do conditional validation
-                    if (!$this->validatePayload($item, 'line-item-types/'.$item->type, $errors, $paramPrefix)) {
+                    if (!$this->validatePayload($item, 'line-item-types/' . $item->type, $errors, $paramPrefix)) {
                         continue;
                     }
 
@@ -249,7 +249,7 @@ class CartsController extends BaseApiController
                             throw new NotSupportedException('Purchasing plugin renewals is not supported yet.');
                         default:
                             $errors[] = [
-                                'param' => $paramPrefix.'.type',
+                                'param' => $paramPrefix . '.type',
                                 'message' => "Invalid item type: {$item->type}",
                                 'code' => self::ERROR_CODE_INVALID,
                             ];
@@ -277,7 +277,7 @@ class CartsController extends BaseApiController
 
             // save the cart
             if (!Craft::$app->getElements()->saveElement($cart)) {
-                throw new Exception('Could not save the cart: '.implode(', ', $cart->getErrorSummary(true)));
+                throw new Exception('Could not save the cart: ' . implode(', ', $cart->getErrorSummary(true)));
             }
 
             $transaction->commit();
@@ -348,7 +348,7 @@ class CartsController extends BaseApiController
                 'userId' => $user->id ?? null,
             ]);
             if (!$customersService->saveCustomer($customer)) {
-                throw new Exception('Could not save the customer: '.implode(' ', $customer->getErrorSummary(true)));
+                throw new Exception('Could not save the customer: ' . implode(' ', $customer->getErrorSummary(true)));
             }
         }
 
@@ -452,7 +452,7 @@ class CartsController extends BaseApiController
 
         // save the address
         if (!$commerce->getCustomers()->saveAddress($address, $cart->getCustomer(), false)) {
-            throw new Exception('Could not save address: '.implode(', ', $address->getErrorSummary(true)));
+            throw new Exception('Could not save address: ' . implode(', ', $address->getErrorSummary(true)));
         }
 
         if (!empty($billingAddress->makePrimary) && $address->id) {
@@ -539,7 +539,7 @@ class CartsController extends BaseApiController
         } else {
             // generate a license key now to ensure that the line item options are unique
             $options = [
-                'licenseKey' => 'new:'.KeyHelper::generateCmsKey(),
+                'licenseKey' => 'new:' . KeyHelper::generateCmsKey(),
             ];
         }
 
@@ -623,7 +623,7 @@ class CartsController extends BaseApiController
 
             // generate a license key now to ensure that the line item options are unique
             $options = [
-                'licenseKey' => 'new:'.KeyHelper::generatePluginKey(),
+                'licenseKey' => 'new:' . KeyHelper::generatePluginKey(),
                 'cmsLicenseKey' => $cmsLicense->key ?? null,
             ];
         }

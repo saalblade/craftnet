@@ -51,7 +51,7 @@ class ClaimLicensesController extends Controller
         $user = Craft::$app->getUsers()->getUserByUsernameOrEmail($username);
 
         if (!$user) {
-            $this->stderr('Invalid username or email'.PHP_EOL, Console::FG_RED);
+            $this->stderr('Invalid username or email' . PHP_EOL, Console::FG_RED);
             return 1;
         }
 
@@ -78,7 +78,7 @@ class ClaimLicensesController extends Controller
                 ->all();
 
             if (empty($cmsLicenses) && empty($pluginLicenses)) {
-                $this->stdout("There are no unclaimed Craft or plugin licenses associated with @{$domain} emails.".PHP_EOL, Console::FG_YELLOW);
+                $this->stdout("There are no unclaimed Craft or plugin licenses associated with @{$domain} emails." . PHP_EOL, Console::FG_YELLOW);
                 return 0;
             }
 
@@ -125,7 +125,7 @@ class ClaimLicensesController extends Controller
             Commerce::getInstance()->getCustomers()->consolidateOrdersToUser($user);
         }
 
-        $this->stdout("{$num} licenses claimed".PHP_EOL, Console::FG_GREEN);
+        $this->stdout("{$num} licenses claimed" . PHP_EOL, Console::FG_GREEN);
         return 0;
     }
 }

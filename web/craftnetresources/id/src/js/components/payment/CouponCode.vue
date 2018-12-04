@@ -7,7 +7,6 @@
 
 <script>
     import {mapState} from 'vuex'
-    import CraftComponents from "@benjamindavid/craftcomponents";
 
     export default {
 
@@ -19,10 +18,6 @@
                 couponCodeError: false,
                 couponCodeTimeout: false,
             }
-        },
-
-        components: {
-            ...CraftComponents,
         },
 
         computed: {

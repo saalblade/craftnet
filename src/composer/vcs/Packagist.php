@@ -34,14 +34,14 @@ class Packagist extends BaseVcs
     {
         if ($cacheDuration !== false) {
             $cacheService = Craft::$app->getCache();
-            $cacheKey = __METHOD__.'--'.$uri;
+            $cacheKey = __METHOD__ . '--' . $uri;
             if (($data = $cacheService->get($cacheKey)) !== false) {
                 return $data;
             }
         }
 
-        $url = self::BASE_URL.$uri;
-        Craft::trace('Fetching '.$uri);
+        $url = self::BASE_URL . $uri;
+        Craft::trace('Fetching ' . $uri);
         $response = Craft::createGuzzleClient()->request('get', $url);
         $data = Json::decode((string)$response->getBody());
 
@@ -70,8 +70,8 @@ class Packagist extends BaseVcs
     public static function packageInfo(string $name): array
     {
         try {
-            $info = Craft::$app->getCache()->getOrSet(__METHOD__.'--'.$name, function() use ($name) {
-                Craft::trace('Fetching package info for '.$name);
+            $info = Craft::$app->getCache()->getOrSet(__METHOD__ . '--' . $name, function() use ($name) {
+                Craft::trace('Fetching package info for ' . $name);
                 $root = self::rootComposerInfo();
                 $includes = array_reverse($root['provider-includes'], true);
                 foreach ($includes as $uri => $include) {
@@ -90,13 +90,13 @@ class Packagist extends BaseVcs
                 // The JSON files probably shifted. Reload the composer root and try again
                 Craft::warning($e->getMessage(), __METHOD__);
                 self::$_rootComposerInfo = null;
-                Craft::$app->getCache()->delete(self::class.'::fetchPackagistData--packages.json');
+                Craft::$app->getCache()->delete(self::class . '::fetchPackagistData--packages.json');
                 return self::packageInfo($name);
             }
             throw $e;
         }
         if ($info === null) {
-            throw new Exception('Package not found on Packagist: '.$name);
+            throw new Exception('Package not found on Packagist: ' . $name);
         }
         return $info;
     }
@@ -112,7 +112,7 @@ class Packagist extends BaseVcs
             foreach ($packageInfo['packages'][$this->package->name] as $version => $info) {
                 $sha = $info['source']['reference'] ?? $info['dist']['reference'] ?? null;
                 if ($sha === null) {
-                    Craft::warning('Skipping package version due to unknown hash: '.$this->package->name.':'.$version);
+                    Craft::warning('Skipping package version due to unknown hash: ' . $this->package->name . ':' . $version);
                     continue;
                 }
                 $versions[$version] = $sha;

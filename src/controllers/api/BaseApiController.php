@@ -419,7 +419,7 @@ abstract class BaseApiController extends Controller
                 'method' => $request->getMethod(),
                 'uri' => $request->getUrl(),
                 'ip' => $request->getUserIP(),
-                'action' => $this->getUniqueId().'/'.$id,
+                'action' => $this->getUniqueId() . '/' . $id,
                 'body' => $request->getRawBody(),
                 'system' => $requestHeaders->get('X-Craft-System'),
                 'platform' => $requestHeaders->get('X-Craft-Platform'),
@@ -454,52 +454,112 @@ abstract class BaseApiController extends Controller
 
         // if there was an exception, log it and return the error response
         if ($e !== null) {
-            if ($e instanceof UserException && ($previous = $e->getPrevious()) !== null) {
-                $logException = $previous;
-            } else {
-                $logException = $e;
-            }
-
-            $exceptionType = get_class($logException);
-            $exceptionMessage = $logException->getMessage();
-            $exceptionStackTrace = $logException->getTraceAsString();
-
-            $db->createCommand()
-                ->insert('apilog.request_errors', [
-                    'requestId' => $this->requestId,
-                    'type' => $exceptionType,
-                    'message' => $exceptionMessage,
-                    'stackTrace' => $exceptionStackTrace,
-                ], false)
-                ->execute();
+            /** @var \Throwable $logException */
+            $logException = $e;
 
             $statusCode = $response->getStatusCode();
-            if ($statusCode >= 500 && $statusCode < 600) {
-                try {
-                    $body = 'RequestId: '.$this->requestId.PHP_EOL.PHP_EOL.
-                        'Type: '.$exceptionType.PHP_EOL.PHP_EOL.
-                        'Message: '.$exceptionMessage.PHP_EOL.PHP_EOL.
-                        'Stack Trace: '.$exceptionStackTrace.PHP_EOL.PHP_EOL.
-                        'Method: '.$request->getMethod().PHP_EOL.PHP_EOL.
-                        'URI: '.$request->getUrl().PHP_EOL.PHP_EOL.
-                        'IP: '.$request->getUserIP().PHP_EOL.PHP_EOL.
-                        'Action: '.$this->getUniqueId().'/'.$id.PHP_EOL.PHP_EOL.
-                        'Body: '.$request->getRawBody().PHP_EOL.PHP_EOL.
-                        'System: '.$requestHeaders->get('X-Craft-System').PHP_EOL.PHP_EOL.
-                        'Platform: '.$requestHeaders->get('X-Craft-Platform').PHP_EOL.PHP_EOL.
-                        'Host: '.$requestHeaders->get('X-Craft-Host').PHP_EOL.PHP_EOL.
-                        'User Email: '.$requestHeaders->get('X-Craft-User-Email').PHP_EOL.PHP_EOL.
-                        'User IP: '.$requestHeaders->get('X-Craft-User-Ip').PHP_EOL.PHP_EOL.
-                        'Response Code: '.$response->getStatusCode().PHP_EOL.PHP_EOL;
+            $sendErrorEmail = $statusCode >= 500 && $statusCode < 600;
 
+            if ($sendErrorEmail) {
+                $body = <<<EOL
+- Request ID: {$this->requestId}
+- Method: {$request->getMethod()}
+- URI: {$request->getUrl()}
+- IP: {$request->getUserIP()}
+- Action: {$this->getUniqueId()}
+- System: {$requestHeaders->get('X-Craft-System')}
+- Platform: {$requestHeaders->get('X-Craft-Platform')}
+- Host: {$requestHeaders->get('X-Craft-Host')}
+- User email: {$requestHeaders->get('X-Craft-User-Email')}
+- User IP: {$requestHeaders->get('X-Craft-User-Ip')}
+- Response code: {$response->getStatusCode()}
+
+Body:
+
+```
+{$request->getRawBody()}
+```
+EOL;
+            } else {
+                $body = '';
+            }
+
+            do {
+                $exceptionType = get_class($logException);
+                $stackTrace = $logException->getTraceAsString();
+
+                if ($logException instanceof ValidationException) {
+                    $errorJson = Json::encode($logException->errors, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+                } else {
+                    $errorJson = null;
+                }
+
+                $db->createCommand()
+                    ->insert('apilog.request_errors', [
+                        'requestId' => $this->requestId,
+                        'type' => $exceptionType,
+                        'message' => $logException->getMessage() . ($errorJson ? "\n\n" . $errorJson : ''),
+                        'stackTrace' => $stackTrace,
+                    ], false)
+                    ->execute();
+
+                if ($sendErrorEmail) {
+                    $body .= <<<EOL
+
+
+---
+
+- Type: {$exceptionType}
+- Message: {$logException->getMessage()}
+
+Stack trace:
+
+```
+{$stackTrace}
+```
+EOL;
+
+                    if ($errorJson) {
+                        $body .= <<<EOD
+
+
+Validation errors:
+
+```
+{$errorJson}
+```
+EOD;
+                    }
+                }
+
+                // Cue up the previous exception
+                $logException = $logException->getPrevious();
+
+                if ($logException && $sendErrorEmail) {
+                    $body .= <<<EOL
+
+
+---
+
+**Previous exception:**
+
+
+EOL;
+
+                }
+            } while ($logException !== null);
+
+            if ($sendErrorEmail) {
+                try {
                     Craft::$app->getMailer()->compose()
                         ->setSubject('Craftnet API Error')
                         ->setTextBody($body)
+                        ->setHtmlBody(Markdown::process($body, 'gfm'))
                         ->setTo(explode(',', getenv('API_ERROR_RECIPIENTS')))
                         ->send();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     // Just log and move on.
-                    Craft::error('There was a problem sending the API error email: '.$e->getMessage(), __METHOD__);
+                    Craft::error('There was a problem sending the API error email: ' . $e->getMessage(), __METHOD__);
                 }
             }
 
@@ -555,12 +615,12 @@ abstract class BaseApiController extends Controller
     {
         $validator = new Validator();
         $path = Craft::getAlias("@root/json-schemas/{$schema}.json");
-        $validator->validate($payload, (object)['$ref' => 'file://'.$path]);
+        $validator->validate($payload, (object)['$ref' => 'file://' . $path]);
 
         if (!$validator->isValid()) {
             foreach ($validator->getErrors() as $error) {
                 $errors[] = [
-                    'param' => ($paramPrefix ? $paramPrefix.'.' : '').$error['property'],
+                    'param' => ($paramPrefix ? $paramPrefix . '.' : '') . $error['property'],
                     'message' => $error['message'],
                     'code' => self::ERROR_CODE_INVALID,
                 ];
@@ -586,7 +646,7 @@ abstract class BaseApiController extends Controller
         foreach ($model->getErrors() as $attr => $attrErrors) {
             foreach ($attrErrors as $error) {
                 $errors[] = [
-                    'param' => ($paramPrefix !== null ? $paramPrefix.'.' : '').$attr,
+                    'param' => ($paramPrefix !== null ? $paramPrefix . '.' : '') . $attr,
                     'message' => $error,
                     'code' => self::ERROR_CODE_INVALID,
                 ];
@@ -614,7 +674,7 @@ abstract class BaseApiController extends Controller
         // Return data
         $data = [
             'id' => $plugin->id,
-            'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
+            'iconUrl' => $icon ? $icon->getUrl() . '?' . $icon->dateModified->getTimestamp() : null,
             'handle' => $plugin->handle,
             'name' => strip_tags($plugin->name),
             'shortDescription' => $plugin->shortDescription,
@@ -644,10 +704,10 @@ abstract class BaseApiController extends Controller
             $screenshotIds = [];
 
             foreach ($plugin->getScreenshots() as $screenshot) {
-                $screenshotUrls[] = $screenshot->getUrl().'?'.$screenshot->dateModified->getTimestamp();
+                $screenshotUrls[] = $screenshot->getUrl() . '?' . $screenshot->dateModified->getTimestamp();
                 $thumbnailUrls[] = $screenshot->getUrl([
                         'height' => 300,
-                    ]).'?'.$screenshot->dateModified->getTimestamp();
+                    ]) . '?' . $screenshot->dateModified->getTimestamp();
                 $screenshotIds[] = $screenshot->getId();
             }
 
@@ -767,7 +827,7 @@ abstract class BaseApiController extends Controller
 
         $manager = $this->module->getCmsLicenseManager();
         if (!$manager->saveLicense($license)) {
-            throw new Exception('Could not create CMS license: '.implode(', ', $license->getErrorSummary(true)));
+            throw new Exception('Could not create CMS license: ' . implode(', ', $license->getErrorSummary(true)));
         }
 
         $note = "created by {$license->email}";

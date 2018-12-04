@@ -86,14 +86,12 @@
 </template>
 
 <script>
-    import CraftComponents from "@benjamindavid/craftcomponents";
     import {mapState, mapGetters, mapActions} from 'vuex'
     import CartMock from '../components/CartMock'
 
     export default {
 
         components: {
-            ...CraftComponents,
             CartMock,
         },
 

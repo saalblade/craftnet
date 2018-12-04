@@ -85,7 +85,6 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import CraftComponents from "../../../../../../../../repos/craftcomponents/src/components/index";
 
     export default {
 
@@ -96,10 +95,6 @@
         },
 
         props: ['licenses', 'excludeCmsLicenseColumn', 'excludeNotesColumn', 'autoRenewSwitch'],
-
-        components: {
-            ...CraftComponents,
-        },
 
         computed: {
 

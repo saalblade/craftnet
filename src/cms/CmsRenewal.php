@@ -104,7 +104,7 @@ class CmsRenewal extends Purchasable
             throw new InvalidConfigException('CMS renewal is missing its edition ID');
         }
         if (($edition = CmsEdition::findOne($this->editionId)) === null) {
-            throw new InvalidConfigException('Invalid edition ID: '.$this->editionId);
+            throw new InvalidConfigException('Invalid edition ID: ' . $this->editionId);
         };
         return $edition;
     }
@@ -122,7 +122,7 @@ class CmsRenewal extends Purchasable
      */
     public function getDescription(): string
     {
-        return $this->getEdition()->name.' Renewal';
+        return $this->getEdition()->name . ' Renewal';
     }
 
     /**
@@ -138,6 +138,6 @@ class CmsRenewal extends Purchasable
      */
     public function getSku(): string
     {
-        return $this->getEdition()->getSku().'-RENEWAL';
+        return $this->getEdition()->getSku() . '-RENEWAL';
     }
 }

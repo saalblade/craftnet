@@ -37,13 +37,8 @@
 
 <script>
     import {mapState} from 'vuex'
-    import CraftComponents from "../../../../../../../../repos/craftcomponents/src/components/index";
 
     export default {
-
-        components: {
-            ...CraftComponents,
-        },
 
         data() {
             return {

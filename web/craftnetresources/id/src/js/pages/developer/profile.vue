@@ -48,13 +48,11 @@
 <script>
     import {mapState, mapGetters} from 'vuex'
     import ConnectedApps from '../../components/developer/connected-apps/ConnectedApps'
-    import CraftComponents from "@benjamindavid/craftcomponents";
 
     export default {
 
         components: {
             ConnectedApps,
-            ...CraftComponents
         },
 
         data() {

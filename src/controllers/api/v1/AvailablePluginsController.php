@@ -42,13 +42,13 @@ class AvailablePluginsController extends BaseApiController
                     $newHandle = Inflector::camel2id($oldHandle);
                 }
 
+                $resInfo = [
+                    'statusColor' => '',
+                    'status' => 'Not available yet',
+                ];
+
                 if (!empty($craft2Plugins[$oldHandle])) {
-                    $resInfo = $craft2Plugins[$oldHandle];
-                } else {
-                    $resInfo = [
-                        'statusColor' => '',
-                        'status' => 'Not available yet',
-                    ];
+                    $resInfo = array_merge($resInfo, $craft2Plugins[$oldHandle]);
                 }
 
                 $newHandles[] = $newHandle;
@@ -81,13 +81,13 @@ class AvailablePluginsController extends BaseApiController
             $oldHandle = $oldHandlesByNew[$plugin->handle] ?? $plugin->handle;
             $icon = $plugin->getIcon();
             $developer = $plugin->getDeveloper();
-            $statusColor = $plugin->enabled ? 'green' : 'orange';
+            $statusColor = $plugin->enabled ? 'green' : 'red';
             $status = $plugin->enabled ? 'Available' : 'Coming soon';
 
             $res[$oldHandle] = [
                 'statusColor' => $statusColor,
                 'status' => "[$status]({$plugin->repository})",
-                'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
+                'iconUrl' => $icon ? $icon->getUrl() . '?' . $icon->dateModified->getTimestamp() : null,
                 'name' => strip_tags($plugin->name),
                 'price' => $plugin->price,
                 'currency' => 'USD',
@@ -103,7 +103,7 @@ class AvailablePluginsController extends BaseApiController
             foreach ($clientInfo->plugins as $oldHandle) {
                 $available = in_array($res[$oldHandle]['statusColor'], ['green', 'orange'], true);
                 $db->createCommand(
-                    'INSERT INTO [[craftnet_craft2pluginhits]] as [[h]] ([[plugin]], [[hits]], [[available]]) VALUES (:plugin, 1, :available) '.
+                    'INSERT INTO [[craftnet_craft2pluginhits]] as [[h]] ([[plugin]], [[hits]], [[available]]) VALUES (:plugin, 1, :available) ' .
                     'ON CONFLICT ([[plugin]]) DO UPDATE SET [[hits]] = [[h.hits]] + 1, [[available]] = :available',
                     [
                         'plugin' => $oldHandle,

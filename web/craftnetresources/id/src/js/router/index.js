@@ -20,6 +20,8 @@ import LicensesPluginsId from '../pages/licenses/plugins/_id'
 import LicensesPluginsIndex from '../pages/licenses/plugins/index'
 import Payment from '../pages/payment'
 import ThankYou from '../pages/thank-you'
+import PartnerOverview from '../pages/PartnerOverview'
+import PartnerProfile from '../pages/PartnerProfile'
 
 Vue.use(VueRouter);
 
@@ -152,6 +154,24 @@ const router = new VueRouter({
             name: 'ThankYou',
             component: ThankYou
         },
+
+
+        // Partner
+
+        {
+            path: '/partner',
+            redirect: '/partner/overview',
+        },
+        {
+            path: '/partner/overview',
+            name: 'PartnerOverview',
+            component: PartnerOverview
+        },
+        {
+            path: '/partner/profile',
+            name: 'PartnerProfile',
+            component: PartnerProfile
+        }
     ]
 });
 

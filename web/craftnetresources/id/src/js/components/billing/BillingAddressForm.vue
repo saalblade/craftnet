@@ -52,13 +52,8 @@
 
 <script>
     import {mapState, mapGetters} from 'vuex'
-    import CraftComponents from "@benjamindavid/craftcomponents";
 
     export default {
-
-        components: {
-            ...CraftComponents,
-        },
 
         data() {
             return {

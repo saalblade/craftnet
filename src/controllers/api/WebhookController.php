@@ -21,19 +21,19 @@ class WebhookController extends BaseApiController
         $payload = $this->getPayload('github-webhook');
 
         $url = $payload->repository->html_url;
-        Craft::info('Incoming payload from Github from '.$url, __METHOD__);
+        Craft::info('Incoming payload from Github from ' . $url, __METHOD__);
 
         $packageManager = $this->module->getPackageManager();
         $name = $packageManager->getPackageNameByRepoUrl($url);
 
         if (!$name) {
-            throw new NotFoundHttpException('No package exists for the repository '.$url);
+            throw new NotFoundHttpException('No package exists for the repository ' . $url);
         }
 
         $package = $packageManager->getPackage($name);
         $this->_validateSecret($package->webhookSecret);
 
-        Craft::info('Updating package: '.$name, __METHOD__);
+        Craft::info('Updating package: ' . $name, __METHOD__);
         $packageManager->updatePackage($name, false, true, true);
     }
 
@@ -53,7 +53,7 @@ class WebhookController extends BaseApiController
         $payloadHash = hash_hmac($algo, Craft::$app->getRequest()->getRawBody(), $secret);
 
         if (!hash_equals($payloadHash, $hash)) {
-            Craft::error('Invalid secret from Github payload. Payload Hash: '.$payloadHash.' Hash: '.$hash, __METHOD__);
+            Craft::error('Invalid secret from Github payload. Payload Hash: ' . $payloadHash . ' Hash: ' . $hash, __METHOD__);
             throw new BadRequestHttpException('Invalid request body.');
         }
     }

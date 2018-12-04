@@ -111,7 +111,6 @@
 </template>
 
 <script>
-    import CraftComponents from "../../../../../../../../repos/craftcomponents/src/components/index";
     import LicenseUpdateMessage from './LicenseUpdateMessage'
     import RenewLicensesForm from './renew-licenses/RenewLicensesForm'
 
@@ -134,7 +133,6 @@
         },
 
         components: {
-            ...CraftComponents,
             LicenseUpdateMessage,
             RenewLicensesForm,
         },

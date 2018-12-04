@@ -130,7 +130,6 @@
 </template>
 
 <script>
-    import CraftComponents from "../../../../../../../../repos/craftcomponents/src/components/index";
     import LicenseUpdateMessage from './LicenseUpdateMessage'
 
     export default {
@@ -153,7 +152,6 @@
         },
 
         components: {
-            ...CraftComponents,
             LicenseUpdateMessage,
         },
 

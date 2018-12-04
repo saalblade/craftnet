@@ -50,7 +50,7 @@ class Oauth extends Component
                     // Remove the token locally.
                     if ($e->getCode() === 401) {
                         $this->deleteAccessToken($currentUser->id, $config['class']);
-                        Craft::warning('Got a 401 bad credentials response when attempting to validate a GitHub oAuth token for user ID: '.$currentUser->id.'. Likely our Github oAuth app has been removed or permissions revoked.', __METHOD__);
+                        Craft::warning('Got a 401 bad credentials response when attempting to validate a GitHub oAuth token for user ID: ' . $currentUser->id . '. Likely our Github oAuth app has been removed or permissions revoked.', __METHOD__);
                     }
                     continue;
                 }
@@ -63,7 +63,7 @@ class Oauth extends Component
                 try {
                     $repos = $paginator->fetchAll($api, 'repositories', ['public']);
                 } catch (RuntimeException $e) {
-                    Craft::error('Error fetching user repos: '.$e->getMessage());
+                    Craft::error('Error fetching user repos: ' . $e->getMessage());
                     Craft::$app->getErrorHandler()->logException($e);
                     continue;
                 }
@@ -99,7 +99,7 @@ class Oauth extends Component
         return new $config['oauthClass']([
             'clientId' => $config['clientIdKey'],
             'clientSecret' => $config['clientSecretKey'],
-            'redirectUri' => $craftIdConfig['craftIdUrl'].'/apps/callback'
+            'redirectUri' => $craftIdConfig['craftIdUrl'] . '/apps/callback'
         ]);
     }
 
@@ -112,7 +112,7 @@ class Oauth extends Component
     public function getAppTypeConfig(string $appTypeHandle): array
     {
         if (!isset($this->appTypes[$appTypeHandle])) {
-            throw new Exception('Invalid OAuth app type: '.$appTypeHandle);
+            throw new Exception('Invalid OAuth app type: ' . $appTypeHandle);
         }
 
         return $this->appTypes[$appTypeHandle];

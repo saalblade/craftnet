@@ -39,15 +39,9 @@
 </template>
 
 <script>
-    import CraftComponents from "@benjamindavid/craftcomponents";
-
     export default {
 
         props: ['rememberedUsername'],
-
-        components: {
-            ...CraftComponents
-        },
 
         data() {
             return {

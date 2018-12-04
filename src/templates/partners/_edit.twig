@@ -1,0 +1,271 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set crumbs = [
+    {label: 'Partners', url: url('partners')}
+] %}
+
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = partner.getCpEditUrl() %}
+
+{% block actionButton %}
+    <div class="btngroup">
+        <input type="submit" class="btn submit" value="Save">
+
+        <div class="btn submit menubtn"></div>
+        <div class="menu">
+            <ul>
+                <li><a class="formsubmit" data-redirect="{{ saveShortcutRedirect|hash }}">
+                        {{ forms.optionShortcutLabel('S') }}
+                        Save and continue editing
+                    </a></li>
+                <li><a class="formsubmit" data-redirect="{{ ('partners/new')|hash }}">Save and add another</a></li>
+            </ul>
+            {% if partner.id %}
+                <hr>
+                <ul>
+                    <li><a class="formsubmit error" data-action="craftnet/partners/delete" data-confirm="Are you sure you want to delete this partner?" data-redirect="{{ 'partners'|hash }}">Delete</a></li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="fields">
+        <input type="hidden" name="action" value="craftnet/partners/save">
+        <input type="hidden" name="redirect" value="{{ 'partners/{id}'|hash }}">
+        {% if partner.id %}<input type="hidden" name="partnerId" value="{{ partner.id }}">{% endif %}
+
+        {{ forms.textField({
+            label: 'Business Name',
+            required: true,
+            id: 'businessName',
+            name: 'businessName',
+            value: partner.businessName,
+            errors: partner.getErrors('businessName'),
+        }) }}
+
+        {{ forms.textField({
+            label: 'Business Website URL',
+            required: true,
+            id: 'website',
+            name: 'website',
+            value: partner.website,
+            errors: partner.getErrors('website'),
+        }) }}
+
+        {% set logo = partner.getLogo() %}
+
+        {{ forms.elementSelectField({
+            label: 'Logo',
+            instructions: 'Must be an SVG',
+            id: 'partner-logo',
+            name: 'logoAssetId',
+            required: true,
+            elementType: 'craft\\elements\\Asset',
+            criteria: {kind: 'image'},
+            limit: 1,
+            sources: ['folder:' ~ folderIds.partnerImages],
+            elements: logo ? [logo] : [],
+            errors: project.getErrors('logo') ?? [],
+        }) }}
+
+        {{ forms.textField({
+            label: 'Website Slug',
+            instructions: 'e.g. craft.cms.com/partners/your-slug (Will be automatically generated from Business Name if blank)',
+            required: true,
+            id: 'websiteSlug',
+            name: 'websiteSlug',
+            value: partner.websiteSlug,
+            errors: partner.getErrors('websiteSlug'),
+        }) }}
+
+        {{ forms.selectField({
+            label: 'Regions',
+            required: true,
+            id: 'region',
+            name: 'region',
+            options: {
+                null: 'Select a region',
+                'Asia Pacific': 'Asia Pacific',
+                'Europe': 'Europe',
+                'North America': 'North America',
+                'South America': 'South America'
+            },
+            value: partner.region,
+            errors: partner.getErrors('region'),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Is Craft Verfied',
+            id: 'isCraftVerified',
+            name: 'isCraftVerified',
+            on: partner.isCraftVerified
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Is Commerce Verfied',
+            id: 'isCommerceVerified',
+            name: 'isCommerceVerified',
+            on: partner.isCommerceVerified
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Is Enterprise Verfied',
+            id: 'isEnterpriseVerified',
+            name: 'isEnterpriseVerified',
+            on: partner.isEnterpriseVerified
+        }) }}
+
+        {{ forms.dateField({
+            label: 'Verification Start Date',
+            id: 'verificationStartDate',
+            name: 'verificationStartDate',
+            value: partner.verificationStartDate | date('short'),
+            errors: partner.getErrors('verificationStartDate'),
+        }) }}
+
+        {{ forms.textField({
+            label: 'Primary Contact Name',
+            required: true,
+            id: 'primaryContactName',
+            name: 'primaryContactName',
+            value: partner.primaryContactName,
+            errors: partner.getErrors('primaryContactName'),
+        }) }}
+
+        {{ forms.textField({
+            type: 'email',
+            label: 'Primary Contact Email',
+            required: true,
+            id: 'primaryContactEmail',
+            name: 'primaryContactEmail',
+            value: partner.primaryContactEmail,
+            errors: partner.getErrors('primaryContactEmail'),
+        }) }}
+
+        {{ forms.textField({
+            type: 'phone',
+            label: 'Primary Contact Phone',
+            required: true,
+            id: 'primaryContactPhone',
+            name: 'primaryContactPhone',
+            value: partner.primaryContactPhone,
+            errors: partner.getErrors('primaryContactPhone'),
+        }) }}
+
+        {{ forms.textareaField({
+            label: 'Short Bio',
+            instructions: 'For the card view, short sentence, no line breaks',
+            required: true,
+            rows: 2,
+            id: 'shortBio',
+            name: 'shortBio',
+            value: partner.shortBio,
+            errors: partner.getErrors('shortBio'),
+        }) }}
+
+        {{ forms.textareaField({
+            label: 'Full Bio',
+            instructions: 'Markdown allowed',
+            required: true,
+            rows: 4,
+            id: 'fullBio',
+            name: 'fullBio',
+            value: partner.fullBio,
+            errors: partner.getErrors('fullBio'),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Is a registered business',
+            id: 'isRegisteredBusiness',
+            name: 'isRegisteredBusiness',
+            on: partner.isRegisteredBusiness,
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Has a fulltime developer',
+            id: 'hasFullTimeDev',
+            name: 'hasFullTimeDev',
+            on: partner.hasFullTimeDev,
+        }) }}
+
+        {{ forms.selectField({
+            label: 'Agency Size',
+            required: true,
+            id: 'agencySize',
+            name: 'agencySize',
+            options: {
+                '': 'Select one',
+                'XS': '1-2',
+                'S': '3-9',
+                'M': '10-29',
+                'L': '30+'
+            },
+            value: partner.agencySize,
+            errors: partner.getErrors('agencySize'),
+        }) }}
+
+        {{ forms.checkboxGroupField({
+            label: 'Capabilities',
+            options: allCapabilities,
+            values: partner.getCapabilities() | keys,
+            name: 'capabilities',
+            errors: partner.getErrors('capabilities'),
+        }) }}
+
+        {{ forms.textAreaField({
+            rows: 4,
+            label: 'Areas of Expertise',
+            id: 'expertise',
+            name: 'expertise',
+            instructions: 'Line-separated list; e.g. Full service, Design, Custom Development',
+            value: partner.expertise,
+        }) }}
+
+        {% include 'craftnet/partners/includes/_locations' %}
+
+        {% include 'craftnet/partners/includes/_projects' %}
+
+    </div>
+{% endblock %}
+
+{% block details %}
+    <div id="settings" class="meta">
+        {{ forms.elementSelectField({
+            first: true,
+            label: 'Owner',
+            required: true,
+            id: 'ownerId',
+            name: 'ownerId',
+            elementType: 'craft\\elements\\User',
+            sources: ['group:'~(craft.app.userGroups.getGroupByHandle('developers').id)],
+            limit: 1,
+            elements: partner.ownerId ? [partner.owner] : null,
+            errors: partner.getErrors('ownerId'),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Enabled',
+            id: 'enabled',
+            name: 'enabled',
+            on: partner.enabled,
+        }) }}
+    </div>
+
+    {% if partner.id %}
+        <div class="partner-history">
+            <div id="partnerHistoryApp"></div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% js %}
+    Craft = Craft || {};
+    Craft.Partners = Craft.Partners || {};
+    Craft.Partners.partnerId = {{ partner.id ?? 'null' }};
+    Craft.Partners.currentUserId = {{ craft.app.user().id }}
+{% endjs %}

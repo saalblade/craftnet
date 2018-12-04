@@ -54,7 +54,7 @@ class PaymentsController extends CartsController
                     'message' => $e->getMessage(),
                     'code' => $e->getCode() === 404 ? self::ERROR_CODE_MISSING : self::ERROR_CODE_INVALID,
                 ]
-            ]);
+            ], null, 0, $e);
         }
 
         $errors = [];
@@ -195,7 +195,7 @@ class PaymentsController extends CartsController
         ]);
 
         if (!$paymentSourcesService->savePaymentSource($paymentSource)) {
-            throw new PaymentSourceException('Could not create the payment source: '.implode(', ', $paymentSource->getErrorSummary(true)));
+            throw new PaymentSourceException('Could not create the payment source: ' . implode(', ', $paymentSource->getErrorSummary(true)));
         }
 
         // update the payment token and customer

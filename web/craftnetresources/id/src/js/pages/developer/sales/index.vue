@@ -48,13 +48,11 @@
 
 <script>
     import {mapState} from 'vuex'
-    import CraftComponents from "@benjamindavid/craftcomponents";
     import StripeAccountAlert from '../../../components/developer/StripeAccountAlert'
 
     export default {
 
         components: {
-            ...CraftComponents,
             StripeAccountAlert
         },
 

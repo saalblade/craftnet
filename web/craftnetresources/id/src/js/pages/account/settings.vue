@@ -31,8 +31,9 @@
                     <input id="enableShowcaseFeatures" type="checkbox" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures">
                     <label for="enableShowcaseFeatures">Enable showcase features</label>
                 </p>
-
                 <input v-else type="hidden" name="fields[enableShowcaseFeatures]" v-model="userDraft.enableShowcaseFeatures" />
+
+                <input type="hidden" name="fields[enablePartnerFeatures]" v-model="userDraft.enablePartnerFeatures" />
             </div>
         </div>
 
@@ -43,13 +44,8 @@
 
 <script>
     import {mapState, mapGetters} from 'vuex'
-    import CraftComponents from "@benjamindavid/craftcomponents";
 
     export default {
-
-        components: {
-            ...CraftComponents
-        },
 
         data() {
             return {
@@ -94,6 +90,7 @@
                     username: this.userDraft.username,
                     enablePluginDeveloperFeatures: (this.userDraft.enablePluginDeveloperFeatures ? 1 : 0),
                     enableShowcaseFeatures: (this.userDraft.enableShowcaseFeatures ? 1 : 0),
+                    enablePartnerFeatures: (this.userDraft.enablePartnerFeatures ? 1 : 0),
                     password: this.password,
                     newPassword: this.newPassword,
                 }).then(response => {

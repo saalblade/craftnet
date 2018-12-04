@@ -20,7 +20,6 @@
 </template>
 
 <script>
-    import CraftComponents from "@benjamindavid/craftcomponents";
     import CardElement from '../card/CardElement'
 
     export default {
@@ -28,7 +27,6 @@
         props: ['card', 'cardToken', 'paymentMode', 'replaceCard'],
 
         components: {
-            ...CraftComponents,
             CardElement,
         },
 

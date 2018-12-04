@@ -29,7 +29,6 @@
 <script>
     import {mapState} from 'vuex'
     import ConnectedApps from '../../components/developer/connected-apps/ConnectedApps'
-    import CraftComponents from "@benjamindavid/craftcomponents";
 
     export default {
 
@@ -43,7 +42,6 @@
 
         components: {
             ConnectedApps,
-            ...CraftComponents
         },
 
         computed: {

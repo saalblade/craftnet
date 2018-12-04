@@ -7,15 +7,9 @@
 </template>
 
 <script>
-    import CraftComponents from "../../../../../../../../../../repos/craftcomponents/src/components/index";
-
     export default {
 
         props: ['license', 'renew'],
-
-        components: {
-            ...CraftComponents,
-        },
 
         computed: {
 

@@ -23,7 +23,7 @@ class Module extends \yii\base\Module
      */
     public function init()
     {
-        Craft::setAlias('@craftnet/oauthserver/controllers', __DIR__.'/controllers');
+        Craft::setAlias('@craftnet/oauthserver/controllers', __DIR__ . '/controllers');
 
         $this->setComponents([
             'accessTokens' => \craftnet\oauthserver\services\AccessTokens::class,
@@ -42,7 +42,7 @@ class Module extends \yii\base\Module
         });
 
         Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
-            $e->roots[$this->id] = __DIR__.'/templates';
+            $e->roots[$this->id] = __DIR__ . '/templates';
         });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {

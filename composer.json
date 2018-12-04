@@ -3,7 +3,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.0.0",
-    "craftcms/cms": "3.0.29",
+    "craftcms/cms": "3.0.31",
     "roave/security-advisories": "dev-master",
     "justinrainbow/json-schema": "^5.2",
     "yiisoft/yii2-redis": "^2.0.6",
@@ -23,7 +23,8 @@
     "moccalotto/eu": "^0.3.0",
     "tecnickcom/tcpdf": "^6.2",
     "spacedealer/yii2-loggly": "^0.2.0",
-    "nystudio107/craft-twigpack": "^1.1"
+    "nystudio107/craft-twigpack": "^1.1",
+    "aws/aws-sdk-php": "^3.71"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
@@ -31,6 +32,7 @@
   "autoload": {
     "psr-4": {
       "craftnet\\": "src/",
+      "craftcom\\": "craftcom/",
       "pixelandtonic\\yii\\queue\\sqs\\": "yii2-queue-sqs/"
     }
   },

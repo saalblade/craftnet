@@ -7,6 +7,7 @@ import licenses from './modules/licenses'
 import craftId from './modules/craft-id'
 import cart from './modules/cart'
 import pluginStore from './modules/plugin-store'
+import partner from './modules/partner'
 
 Vue.use(Vuex);
 
@@ -20,5 +21,6 @@ export default new Vuex.Store({
         licenses,
         cart,
         pluginStore,
+        partner
     }
 })

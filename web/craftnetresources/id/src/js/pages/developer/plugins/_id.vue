@@ -162,7 +162,6 @@
 
 <script>
     import {mapState, mapGetters} from 'vuex'
-    import CraftComponents from "@benjamindavid/craftcomponents";
     import ConnectedApps from '../../../components/developer/connected-apps/ConnectedApps'
     import Repositories from '../../../components/developer/Repositories'
     import PluginCategories from '../../../components/developer/PluginCategories'
@@ -178,7 +177,6 @@
             Repositories,
             PluginCategories,
             draggable,
-            ...CraftComponents,
         },
 
         data() {

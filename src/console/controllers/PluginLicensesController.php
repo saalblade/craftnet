@@ -54,7 +54,7 @@ class PluginLicensesController extends Controller
             'validator' => function(string $input, string &$error = null) use ($plugin) {
                 if (PluginEdition::find()->pluginId($plugin->id)->handle($input)->one() === null) {
                     $validEditions = PluginEdition::find()->pluginId($plugin->id)->select(['craftnet_plugineditions.handle'])->column();
-                    $error = 'Invalid edition handle. Valid options are: '.implode(', ', $validEditions);
+                    $error = 'Invalid edition handle. Valid options are: ' . implode(', ', $validEditions);
                     return false;
                 }
                 return true;
@@ -120,11 +120,11 @@ class PluginLicensesController extends Controller
         $license->expired = $license->expiresOn !== null ? $license->expiresOn->getTimestamp() < time() : false;
 
         if (!$this->module->getPluginLicenseManager()->saveLicense($license)) {
-            $this->stderr('Could not save license: '.implode(', ', $license->getFirstErrors().PHP_EOL), Console::FG_RED);
+            $this->stderr('Could not save license: ' . implode(', ', $license->getFirstErrors() . PHP_EOL), Console::FG_RED);
             return 1;
         }
 
-        $this->stdout('License saved: '.$license->key.PHP_EOL, Console::FG_GREEN);
+        $this->stdout('License saved: ' . $license->key . PHP_EOL, Console::FG_GREEN);
 
         if ($this->confirm('Associate the license with an order?')) {
             $orderNumber = $this->prompt('Order number:', [
@@ -155,7 +155,7 @@ class PluginLicensesController extends Controller
         if ($this->confirm('Create a history record for the license?', true)) {
             $note = $this->prompt('Note: ', [
                 'required' => true,
-                'default' => "created by {$license->email}".(isset($order) ? " per order {$order->number}" : '')
+                'default' => "created by {$license->email}" . (isset($order) ? " per order {$order->number}" : '')
             ]);
             $this->module->getPluginLicenseManager()->addHistory($license->id, $note);
         }

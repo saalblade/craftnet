@@ -45,7 +45,6 @@
 
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
-    import CraftComponents from "@benjamindavid/craftcomponents";
     import PaymentMethod from '../components/payment/PaymentMethod'
     import CouponCode from '../components/payment/CouponCode'
     import BillingInfos from '../components/payment/BillingInfos'
@@ -78,7 +77,6 @@
         },
 
         components: {
-            ...CraftComponents,
             PaymentMethod,
             CouponCode,
             BillingInfos,

@@ -54,7 +54,6 @@
 </template>
 
 <script>
-    import CraftComponents from "@benjamindavid/craftcomponents"
     import { required, email } from 'vuelidate/lib/validators'
 
     export default {
@@ -80,10 +79,6 @@
                 required,
                 email,
             },
-        },
-
-        components: {
-            ...CraftComponents
         },
 
         methods: {
