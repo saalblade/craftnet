@@ -28,6 +28,7 @@ use yii\validators\CompareValidator;
  * @property Package $package
  * @property string $eagerLoadedElements
  * @property Asset|null $icon
+ * @property PluginEdition[] $editions
  */
 class Plugin extends Element
 {
@@ -102,7 +103,8 @@ class Plugin extends Element
                 $query = (new Query())
                     ->select(['pluginId as source', 'id as target'])
                     ->from(['craftnet_plugineditions'])
-                    ->where(['pluginId' => ArrayHelper::getColumn($sourceElements, 'id')]);
+                    ->where(['pluginId' => ArrayHelper::getColumn($sourceElements, 'id')])
+                    ->orderBy(['price' => SORT_ASC]);
                 return ['elementType' => PluginEdition::class, 'map' => $query->all()];
 
             case 'developer':
@@ -213,8 +215,6 @@ class Plugin extends Element
             'handle' => 'Handle',
             'packageName' => 'Package Name',
             'repository' => 'Repository',
-            'price' => 'Price',
-            'renewalPrice' => 'Renewal Price',
             'license' => 'License',
             'primaryCategory' => 'Primary Category',
             'documentationUrl' => 'Documentation URL',
@@ -231,8 +231,6 @@ class Plugin extends Element
             'handle',
             'packageName',
             'repository',
-            'price',
-            'renewalPrice',
             'license',
             'primaryCategory',
         ];
@@ -350,6 +348,11 @@ class Plugin extends Element
      * @var PluginEdition[]|null
      */
     private $_editions;
+
+    /**
+     * @var PluginEdition[]|null
+     */
+    private $_originalEditions;
 
     /**
      * @var User|null
@@ -486,6 +489,18 @@ class Plugin extends Element
     }
 
     /**
+     * @param PluginEdition[] $editions
+     */
+    public function setEditions(array $editions)
+    {
+        if ($this->id !== null && $this->_originalEditions === null) {
+            $this->_originalEditions = ArrayHelper::index($this->getEditions(), 'id');
+        }
+
+        $this->_editions = $editions;
+    }
+
+    /**
      * @param string $handle
      * @return PluginEdition
      * @throws InvalidConfigException
@@ -497,16 +512,13 @@ class Plugin extends Element
             throw new InvalidConfigException('Plugin is missing its ID.');
         }
 
-        $edition = PluginEdition::find()
-            ->pluginId($this->id)
-            ->handle($handle)
-            ->one();
-
-        if (!$edition) {
-            throw new InvalidArgumentException("Invalid plugin edition: {$handle}");
+        foreach ($this->getEditions() as $edition) {
+            if ($edition->handle === $handle) {
+                return $edition;
+            }
         }
 
-        return $edition;
+        throw new InvalidArgumentException("Invalid plugin edition: {$handle}");
     }
 
     /**
@@ -665,6 +677,7 @@ class Plugin extends Element
 
         $rules[] = [
             [
+                'editions',
                 'developerId',
                 'packageName',
                 'repository',
@@ -684,46 +697,6 @@ class Plugin extends Element
             ],
             'number',
             'integerOnly' => true,
-        ];
-
-        $rules[] = [
-            [
-                'price',
-                'renewalPrice'
-            ],
-            'number',
-            'min' => 5,
-            'isEmpty' => [$this, 'isPriceEmpty'],
-        ];
-
-        $rules[] = [
-            [
-                'renewalPrice'
-            ],
-            'required',
-            'when' => [$this, 'isRenewalPriceRequired'],
-            'isEmpty' => [$this, 'isPriceEmpty']
-        ];
-
-        $rules[] = [
-            [
-                'renewalPrice'
-            ],
-            'compare',
-            'compareAttribute' => 'price',
-            'type' => CompareValidator::TYPE_NUMBER,
-            'operator' => '<=',
-            'when' => [$this, 'isRenewalPriceRequired']
-        ];
-
-        $rules[] = [
-            [
-                'renewalPrice'
-            ],
-            'number',
-            'min' => 0,
-            'max' => 0,
-            'when' => [$this, 'isRenewalPriceForbidden']
         ];
 
         $rules[] = [
@@ -768,6 +741,20 @@ class Plugin extends Element
     /**
      * @inheritdoc
      */
+    public function afterValidate()
+    {
+        parent::afterValidate();
+
+        foreach ($this->getEditions() as $i => $edition) {
+            if (!$edition->validate()) {
+                $this->addModelErrors($edition, "editions[$i]");
+            }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function validate($attributeNames = null, $clearErrors = true)
     {
         parent::validate($attributeNames, $clearErrors);
@@ -782,33 +769,6 @@ class Plugin extends Element
         }
 
         return !$this->hasErrors();
-    }
-
-    /**
-     * Returns whether a given price attribute should be validated.
-     *
-     * @param mixed $value
-     * @return bool
-     */
-    public function isPriceEmpty($value): bool
-    {
-        return $value === null || $value === [] || $value === '' || $value == 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRenewalPriceRequired(): bool
-    {
-        return $this->price != 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRenewalPriceForbidden(): bool
-    {
-        return $this->price == 0;
     }
 
     /**
@@ -851,8 +811,6 @@ class Plugin extends Element
             'repository' => $this->repository,
             'name' => $this->name,
             'handle' => $this->handle,
-            'price' => $this->price ?: null,
-            'renewalPrice' => $this->renewalPrice ?: null,
             'license' => $this->license,
             'shortDescription' => $this->shortDescription,
             'longDescription' => $this->longDescription,
@@ -906,44 +864,11 @@ class Plugin extends Element
             ->batchInsert('craftnet_pluginscreenshots', ['pluginId', 'assetId', 'sortOrder'], $screenshotData)
             ->execute();
 
-        // Save the edition
-        // todo: save all editions when we start supporting editions
-        $edition = null;
-        if (!$isNew) {
-            $edition = PluginEdition::find()
-                ->pluginId($this->id)
-                ->one();
-        }
-        if (!$edition) {
-            $edition = new PluginEdition([
-                'pluginId' => $this->id,
-                'name' => 'Standard',
-                'handle' => 'standard',
-            ]);
-        }
-        if (!$edition->id || $edition->price != $this->price || $edition->renewalPrice != $this->renewalPrice) {
-            $edition->price = $this->price;
-            $edition->renewalPrice = $this->price;
-            Craft::$app->getElements()->saveElement($edition);
-        }
-
-        // Save the edition
-        // todo: save all renewals when we start supporting editions
-        $renewal = null;
-        if (!$isNew) {
-            $renewal = PluginRenewal::find()
-                ->editionId($edition->id)
-                ->one();
-        }
-        if (!$renewal) {
-            $renewal = new PluginRenewal([
-                'pluginId' => $this->id,
-            ]);
-        }
-        if (!$renewal->id || $renewal->price !== $this->renewalPrice) {
-            $renewal->editionId = $edition->id;
-            $renewal->price = $edition->renewalPrice;
-            Craft::$app->getElements()->saveElement($renewal);
+        // Save the editions
+        $elementsService = Craft::$app->getElements();
+        foreach ($this->getEditions() as $edition) {
+            $edition->pluginId = $this->id;
+            $elementsService->saveElement($edition, false);
         }
 
         // If this is enabled, clear the plugin store cache.
@@ -1061,9 +986,6 @@ EOD;
             case 'documentationUrl':
                 $url = $this->$attribute;
                 return $url ? "<a href='{$url}' target='_blank'>" . preg_replace('/^https?:\/\/(?:www\.)?github\.com\//', '', $url) . '</a>' : '';
-            case 'price':
-            case 'renewalPrice':
-                return $this->$attribute ? Craft::$app->getFormatter()->asCurrency($this->$attribute, 'USD') : 'Free';
             case 'license':
                 return $this->license === 'craft' ? 'Craft' : 'MIT';
             case 'primaryCategory':

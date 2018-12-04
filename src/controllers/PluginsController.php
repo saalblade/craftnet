@@ -17,11 +17,14 @@ use craft\web\Controller;
 use craft\web\UploadedFile;
 use craftnet\Module;
 use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginEdition;
 use Github\Api\Repo;
 use Github\Client;
 use Github\Exception\RuntimeException;
 use yii\base\Exception;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
+use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -179,11 +182,38 @@ class PluginsController extends Controller
                     'enabled' => false,
                     'categories' => [],
                     'screenshots' => [],
+                    'editions' => [
+                        new PluginEdition([
+                            'name' => 'Standard',
+                            'handle' => 'standard',
+                            'price' => 0,
+                            'renewalPrice' => 0,
+                        ]),
+                    ],
                 ]);
             }
         }
 
         $title = $plugin->id ? $plugin->name : 'Add a new plugin';
+
+        $view = Craft::$app->getView();
+        $view->startJsBuffer();
+        $editionFieldHtml = Json::encode($view->renderTemplate('craftnet/plugins/_edition-fields', [
+            'edition' => new PluginEdition(),
+            'editionId' => '__EDITION_ID__',
+        ]));
+        $editionFieldJs = Json::encode($view->clearJsBuffer(false));
+
+        $js = <<<JS
+$('#add-edition-btn').on('click', function() {
+    var editionId = 'new'+Math.floor(Math.random()*1000000);
+    var html = {$editionFieldHtml}.replace(/__EDITION_ID__/g, editionId);
+    var js = {$editionFieldJs}.replace(/__EDITION_ID__/g, editionId);
+    $(html).insertBefore(this);
+    eval(js);
+});
+JS;
+        $view->registerJs($js);
 
         return $this->renderTemplate('craftnet/plugins/_edit', compact('plugin', 'title'));
     }
@@ -454,6 +484,37 @@ class PluginsController extends Controller
         }
 
         $plugin->setScreenshots(Asset::find()->id($screenshotIds)->fixedOrder()->all());
+
+        // Editions
+        // ---------------------------------------------------------------------
+
+        /** @var PluginEdition[] $currentEditions */
+        if ($newPlugin) {
+            $currentEditions = [
+                'standard' => new PluginEdition(),
+            ];
+        } else {
+            $currentEditions = ArrayHelper::index($plugin->getEditions(), 'id');
+        }
+
+        $editions = [];
+        foreach ($request->getBodyParam('editions', []) as $editionId => $editionInfo) {
+            if ($isCpRequest) {
+                $edition = $currentEditions[$editionId] ?? new PluginEdition();
+                $edition->setScenario(PluginEdition::SCENARIO_CP);
+            } else {
+                if (!isset($currentEditions[$editionId])) {
+                    throw new BadRequestHttpException('You’re not allowed to create new plugin editions.');
+                }
+                $edition = $currentEditions[$editionId];
+                $edition->setScenario(PluginEdition::SCENARIO_SITE);
+            }
+
+            $edition->setAttributes($editionInfo);
+            $editions[] = $edition;
+        }
+
+        $plugin->setEditions($editions);
 
         // Save plugin
         // ---------------------------------------------------------------------

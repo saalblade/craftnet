@@ -9,16 +9,24 @@ use craft\commerce\Plugin as Commerce;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
+use craft\helpers\Json;
 use craftnet\base\PluginPurchasable;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
 use yii\base\Exception;
+use yii\validators\CompareValidator;
 
 /**
  * @property-read string $fullName
  */
 class PluginEdition extends PluginPurchasable
 {
+    // Constants
+    // =========================================================================
+
+    const SCENARIO_CP = 'cp';
+    const SCENARIO_SITE = 'site';
+
     // Static
     // =========================================================================
 
@@ -117,6 +125,11 @@ class PluginEdition extends PluginPurchasable
      */
     public $renewalPrice;
 
+    /**
+     * @var array|null Edition feature list
+     */
+    public $features;
+
     // Public Methods
     // =========================================================================
 
@@ -135,9 +148,32 @@ class PluginEdition extends PluginPurchasable
     /**
      * @inheritdoc
      */
+    public function init()
+    {
+        parent::init();
+
+        if (is_string($this->features)) {
+            $this->features = Json::decode($this->features);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getType(): string
     {
         return 'plugin-edition';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_CP => ['name', 'handle', 'price', 'renewalPrice', 'features'],
+            self::SCENARIO_SITE => ['price', 'renewalPrice', 'features'],
+        ];
     }
 
     /**
@@ -194,9 +230,76 @@ class PluginEdition extends PluginPurchasable
     public function rules()
     {
         $rules = parent::rules();
-        $rules[] = [['name', 'handle', 'price', 'renewalPrice'], 'required'];
-        $rules[] = [['price', 'renewalPrice'], 'number'];
+        $rules[] = [['name', 'handle'], 'required'];
+
+        $rules[] = [
+            [
+                'price',
+                'renewalPrice'
+            ],
+            'number',
+            'min' => 5,
+            'isEmpty' => [$this, 'isPriceEmpty'],
+        ];
+
+        $rules[] = [
+            [
+                'renewalPrice'
+            ],
+            'required',
+            'when' => [$this, 'isRenewalPriceRequired'],
+            'isEmpty' => [$this, 'isPriceEmpty']
+        ];
+
+        $rules[] = [
+            [
+                'renewalPrice'
+            ],
+            'compare',
+            'compareAttribute' => 'price',
+            'type' => CompareValidator::TYPE_NUMBER,
+            'operator' => '<=',
+            'when' => [$this, 'isRenewalPriceRequired']
+        ];
+
+        $rules[] = [
+            [
+                'renewalPrice'
+            ],
+            'number',
+            'min' => 0,
+            'max' => 0,
+            'when' => [$this, 'isRenewalPriceForbidden']
+        ];
+
         return $rules;
+    }
+
+    /**
+     * Returns whether a given price attribute should be validated.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function isPriceEmpty($value): bool
+    {
+        return $value === null || $value === [] || $value === '' || $value == 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRenewalPriceRequired(): bool
+    {
+        return $this->price != 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRenewalPriceForbidden(): bool
+    {
+        return $this->price == 0;
     }
 
     /**
@@ -211,6 +314,7 @@ class PluginEdition extends PluginPurchasable
             'handle' => $this->handle,
             'price' => $this->price,
             'renewalPrice' => $this->renewalPrice,
+            'features' => Json::encode(array_values($this->features ?: [])),
         ];
 
         if ($isNew) {
@@ -222,6 +326,18 @@ class PluginEdition extends PluginPurchasable
                 ->update('craftnet_plugineditions', $data, ['id' => $this->id], [], false)
                 ->execute();
         }
+
+        // Save the renewal
+        $renewal = PluginRenewal::find()
+            ->editionId($this->id)
+            ->one();
+        if (!$renewal) {
+            $renewal = new PluginRenewal();
+            $renewal->editionId = $this->id;
+            $renewal->pluginId = $this->pluginId;
+        }
+        $renewal->price = $this->renewalPrice;
+        Craft::$app->getElements()->saveElement($renewal, false);
 
         parent::afterSave($isNew);
     }

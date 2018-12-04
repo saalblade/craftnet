@@ -4,6 +4,7 @@ namespace craftnet\plugins;
 
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
+use craftnet\EditionUpgradeDiscount;
 
 /**
  * @property string $shortKey
@@ -95,6 +96,16 @@ class PluginLicense extends Model
         return Plugin::find()
             ->id($this->pluginId)
             ->status(null)
+            ->one();
+    }
+
+    /**
+     * @return PluginEdition
+     */
+    public function getEdition(): PluginEdition
+    {
+        return PluginEdition::find()
+            ->id($this->editionId)
             ->one();
     }
 }
