@@ -87,7 +87,7 @@
 <script>
     import axios from 'axios'
     import draggable from 'vuedraggable'
-    import Modal from './Modal'
+    import Modal from '../Modal'
 
 
     export default {

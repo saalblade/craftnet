@@ -61,7 +61,7 @@
 </template>
 
 <script>
-    import Modal from './Modal'
+    import Modal from '../Modal'
 
     export default {
         props: ['index', 'location', 'editIndex', 'requestPending', 'errors'],

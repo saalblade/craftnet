@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import helpers from '../mixins/helpers'
+    import helpers from '../../mixins/helpers'
     import PartnerLocation from './PartnerLocation'
 
     export default {

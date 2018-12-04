@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import helpers from '../mixins/helpers'
+    import helpers from '../../mixins/helpers'
     import PartnerProject from './PartnerProject'
 
     export default {

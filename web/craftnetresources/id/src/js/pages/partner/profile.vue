@@ -19,10 +19,10 @@
 
 <script>
     import {mapState} from 'vuex'
-    import PartnerCompletion from '../components/PartnerCompletion'
-    import PartnerInfo from '../components/PartnerInfo'
-    import PartnerLocations from '../components/PartnerLocations'
-    import PartnerProjects from '../components/PartnerProjects'
+    import PartnerCompletion from '../../components/partner/PartnerCompletion'
+    import PartnerInfo from '../../components/partner/PartnerInfo'
+    import PartnerLocations from '../../components/partner/PartnerLocations'
+    import PartnerProjects from '../../components/partner/PartnerProjects'
 
     export default {
 

@@ -20,8 +20,8 @@ import LicensesPluginsId from '../pages/licenses/plugins/_id'
 import LicensesPluginsIndex from '../pages/licenses/plugins/index'
 import Payment from '../pages/payment'
 import ThankYou from '../pages/thank-you'
-import PartnerOverview from '../pages/PartnerOverview'
-import PartnerProfile from '../pages/PartnerProfile'
+import PartnerOverview from '../pages/partner/overview'
+import PartnerProfile from '../pages/partner/profile'
 
 Vue.use(VueRouter);
 
