@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Notification from './components/Notification';
 import LoginForm from './components/LoginForm';
+import './plugins/craftui'
 
 window.craftIdSite = new Vue({
 
