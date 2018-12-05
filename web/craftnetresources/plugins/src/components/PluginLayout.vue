@@ -97,7 +97,9 @@
             },
 
             onViewScroll(e) {
-                this.onScroll(e.target.scrollTop);
+                if(e) {
+                    this.onScroll(e.target.scrollTop);
+                }
             },
 
             onWindowResize() {
