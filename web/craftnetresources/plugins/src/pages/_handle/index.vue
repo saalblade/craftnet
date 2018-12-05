@@ -38,41 +38,30 @@
                         <h3>Editions</h3>
 
                         <div class="plugin-editions mb-4">
-                            <div class="plugin-editions-edition">
-                                <h4><span class="edition-name">Standard</span></h4>
+                            <div class="plugin-editions-edition" v-for="edition in plugin.editions">
+                                <h4><span class="edition-name">{{edition.name}}</span></h4>
                                 <ul>
-                                    <li><font-awesome-icon icon="check"></font-awesome-icon> Drag and drop interface <font-awesome-icon icon="infoCircle" /></li>
-                                    <li><font-awesome-icon icon="check"></font-awesome-icon> Multi-page forms <font-awesome-icon icon="infoCircle" /></li>
-                                    <li><font-awesome-icon icon="check"></font-awesome-icon> GDPR compliant <font-awesome-icon icon="infoCircle" /></li>
-                                    <li><font-awesome-icon icon="check"></font-awesome-icon> Data export <font-awesome-icon icon="infoCircle" /></li>
+                                    <li v-for="feature in edition.features">
+                                        <font-awesome-icon icon="check"></font-awesome-icon>
+                                        {{feature.name}}
+                                        <font-awesome-icon icon="info-circle" />
+                                        <!--
+                                        <template v-if="feature.description">
+                                            — {{feature.description}}
+                                        </template>
+                                        -->
+                                    </li>
                                 </ul>
 
                                 <div class="buttons">
-                                    <a href="#" class="btn btn-primary">{{ editions[0].price|currency }}</a>
+                                    <a :href="craftIdUrl + '/buy-plugin/' + pluginSnippet.handle + '/' + edition.handle" class="btn btn-primary" target="_blank">
+                                        {{edition.price|currency}}
+                                    </a>
                                 </div>
 
                                 <p class="mt-4 text-grey-dark mb-0">
                                     Price includes 1 year of updates.<br />
-                                    {{ editions[0].renewalPrice|currency }}/year per site for updates after that.
-                                </p>
-                            </div>
-
-                            <div class="plugin-editions-edition">
-                                <h4><span class="edition-name">Pro</span></h4>
-                                <ul>
-                                    <li><font-awesome-icon icon="check" /> API integrations <font-awesome-icon icon="infoCircle" /></li>
-                                    <li><font-awesome-icon icon="check" /> reCAPTCHA <font-awesome-icon icon="infoCircle" /></li>
-                                    <li><font-awesome-icon icon="check" /> Advanced exporting <font-awesome-icon icon="infoCircle" /></li>
-                                    <li><font-awesome-icon icon="check" /> Widgets <font-awesome-icon icon="infoCircle" /></li>
-                                </ul>
-
-                                <div class="buttons">
-                                    <a href="#" class="btn btn-primary">$149</a>
-                                </div>
-
-                                <p class="mt-4 text-grey-dark mb-0">
-                                    Price includes 1 year of updates.<br />
-                                    $59/year per site for updates after that.
+                                    {{ edition.renewalPrice|currency }}/year per site for updates after that.
                                 </p>
                             </div>
                         </div>
@@ -217,7 +206,11 @@
 
             editions() {
                 return this.$store.getters['pluginStore/getPluginEditions'](this.pluginSnippet)
-            }
+            },
+
+            craftIdUrl() {
+                return process.env.craftIdUrl
+            },
 
         },
 
