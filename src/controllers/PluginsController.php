@@ -491,7 +491,10 @@ JS;
         /** @var PluginEdition[] $currentEditions */
         if ($newPlugin) {
             $currentEditions = [
-                'standard' => new PluginEdition(),
+                'new' => new PluginEdition([
+                    'name' => 'Standard',
+                    'handle' => 'standard',
+                ]),
             ];
         } else {
             $currentEditions = ArrayHelper::index($plugin->getEditions(), 'id');
