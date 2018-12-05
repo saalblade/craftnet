@@ -59,6 +59,7 @@ abstract class BaseController extends Controller
         $editions = [];
         foreach ($plugin->getEditions() as $edition) {
             $editions[] = [
+                'id' => $edition->id,
                 'name' => $edition->name,
                 'handle' => $edition->handle,
                 'price' => $edition->price,

@@ -155,6 +155,8 @@ const mutations = {
         statePlugin.screenshotIds = screenshotIds;
         statePlugin.screenshotUrls = screenshotUrls;
 
+        statePlugin.editions = plugin.editions;
+
         if (newPlugin) {
             state.plugins.push(statePlugin);
         }

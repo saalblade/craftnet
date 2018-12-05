@@ -143,6 +143,59 @@
                     </div>
                 </div>
 
+                <div class="card mb-6">
+                    <div class="card-header">Editions</div>
+                    <div class="card-body">
+                        <template v-for="(edition, editionKey) in pluginDraft.editions">
+                            <div class="flex">
+                                <div class="w-1/4">
+                                    <h2>{{edition.name}}</h2>
+                                    <p class="text-grey"><code>{{edition.handle}}</code></p>
+                                </div>
+                                <div class="w-3/4">
+                                    <text-field :id="edition.handle+'-price'" label="License Price" v-model="edition.price" :errors="errors.price" />
+                                    <text-field :id="edition.handle+'-renewalPrice'" label="Renewal Price" v-model="edition.renewalPrice" :errors="errors.renewalPrice" />
+
+                                    <field id="features" label="Features">
+                                        <table v-if="edition.features.length > 0" id="features" class="table border mb-4">
+                                            <thead>
+                                            <tr>
+                                                <th class="w-1/3">Name</th>
+                                                <th>Description</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(feature, featureKey) in edition.features">
+                                                <td>
+                                                    <text-input :id="edition.handle+'-featureName'" v-model="feature.name" />
+                                                </td>
+                                                <td>
+                                                    <text-input :id="edition.handle+'-featureDescription'" v-model="feature.description" />
+                                                </td>
+                                                <td class="w-10 text-center">
+                                                    <a @click.prevent="removeFeature(editionKey, featureKey)"><font-awesome-icon icon="times" class="text-red" /></a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <div>
+                                            <a class="btn btn-secondary" @click.prevent="addFeature(editionKey)"><font-awesome-icon icon="plus" /> Add a feature</a>
+                                        </div>
+                                    </field>
+                                </div>
+                            </div>
+
+                            <hr>
+                        </template>
+
+                        <p class="text-center">To manage your editions, please <a href="mailto:hello@craftcms.com">contact us</a>.</p>
+                    </div>
+                </div>
+
+                <!--Old Price Fields-->
+                <!--
                 <div v-if="showPriceFields" class="card mb-6">
                     <div class="card-header">Pricing</div>
                     <div class="card-body">
@@ -150,6 +203,7 @@
                         <text-field id="renewalPrice" label="Renewal Price" v-model="pluginDraft.renewalPrice" :errors="errors.renewalPrice" />
                     </div>
                 </div>
+                -->
 
                 <div>
                     <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
@@ -190,6 +244,13 @@
                     icon: null,
                     iconId: null,
                     developerId: null,
+                    editions: [
+                        {
+                            name: 'Standard',
+                            handle: 'standard',
+                            features: []
+                        }
+                    ],
                     enabled: false,
                     handle: '',
                     packageName: '',
@@ -265,13 +326,13 @@
                 }
             },
 
-            showPriceFields() {
-                if (!this.plugin) {
-                    return true;
-                }
-
-                return !this.plugin.enabled || (this.plugin.enabled && this.plugin.price);
-            },
+            // showPriceFields() {
+            //     if (!this.plugin) {
+            //         return true;
+            //     }
+            //
+            //     return !this.plugin.enabled || (this.plugin.enabled && this.plugin.price);
+            // },
 
             maxUploadSize() {
                 return this.humanFileSize(Craft.maxUploadSize);
@@ -449,11 +510,10 @@
                     changelogPath: this.pluginDraft.changelogPath,
                     repository: this.pluginDraft.repository,
                     license: this.pluginDraft.license,
-                    price: this.pluginDraft.price,
-                    renewalPrice: this.pluginDraft.renewalPrice,
                     keywords: this.pluginDraft.keywords,
                     categoryIds: [],
                     screenshotIds: [],
+                    editions: this.pluginDraft.editions,
                 };
 
                 if (this.pluginDraft.iconId) {
@@ -537,6 +597,14 @@
 
                 return bytes.toFixed(1) + ' ' + units[u];
             },
+
+            addFeature(editionKey) {
+                this.pluginDraft.editions[editionKey].features.push({})
+            },
+
+            removeFeature(editionKey, featureKey) {
+                this.pluginDraft.editions[editionKey].features.splice(featureKey, 1)
+            }
         },
 
         mounted() {

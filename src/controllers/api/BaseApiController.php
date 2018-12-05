@@ -719,6 +719,7 @@ EOL;
 
         foreach ($plugin->getEditions() as $edition) {
             $data['editions'][] = [
+                'id' => $edition->id,
                 'name' => $edition->name,
                 'handle' => $edition->handle,
                 'price' => $edition->price,
