@@ -25,8 +25,6 @@ export default {
                             const edition = plugin[attribute][i]
                             const editionKey = edition.id ? edition.id : 'new';
 
-                            FormDataHelper.append(formData, 'editions['+editionKey+'][name]', edition.name);
-                            FormDataHelper.append(formData, 'editions['+editionKey+'][handle]', edition.handle);
                             FormDataHelper.append(formData, 'editions['+editionKey+'][price]', edition.price);
                             FormDataHelper.append(formData, 'editions['+editionKey+'][renewalPrice]', edition.renewalPrice);
 
