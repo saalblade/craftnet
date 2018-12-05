@@ -320,10 +320,13 @@ abstract class BaseApiController extends Controller
                 // no license key yet?
                 if (!isset($this->pluginLicenses[$pluginHandle])) {
                     // should there be?
-                    try {
-                        $edition = $plugin->getEdition($this->pluginEditions[$pluginHandle]);
-                    } catch (InvalidArgumentException $e) {
-                        $edition = $plugin->getEditions()[0];
+                    $edition = $plugin->getEditions()[0];
+                    if (isset($this->pluginEditions[$pluginHandle])) {
+                        try {
+                            $edition = $plugin->getEdition($this->pluginEditions[$pluginHandle]);
+                        } catch (InvalidArgumentException $e) {
+                            // just assume the first
+                        }
                     }
                     if ($edition->price != 0) {
                         $this->pluginLicenseStatuses[$pluginHandle] = self::LICENSE_STATUS_INVALID;
