@@ -24,7 +24,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="plugin in computedPlugins">
+                <tr v-for="(plugin, pluginKey) in computedPlugins">
                     <td class="icon-col">
                         <router-link :to="'/developer/plugins/' + plugin.id">
                             <img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" />
@@ -38,18 +38,26 @@
                     </td>
                     <td>{{ plugin.activeInstalls }}</td>
                     <td>
-                        <template v-if="!plugin.price || plugin.price == '0.00'">
-                            Free
-                        </template>
-
-                        <template v-else>
-                            {{ plugin.price|currency }}
-
-                            <template v-if="plugin.renewalPrice && plugin.renewalPrice != '0.00'">
-                                <br />
-                                <em class="text-secondary text-nowrap">{{ plugin.renewalPrice|currency }} per year</em>
+                        <div class="text-nowrap">
+                            <template v-if="priceRanges[pluginKey].min !== priceRanges[pluginKey].max">
+                                <template v-if="priceRanges[pluginKey].min > 0">
+                                    {{priceRanges[pluginKey].min|currency}}
+                                </template>
+                                <template v-else>
+                                    Free
+                                </template>
+                                -
+                                {{priceRanges[pluginKey].max|currency}}
                             </template>
-                        </template>
+                            <template v-else>
+                                <template v-if="priceRanges[pluginKey].min > 0">
+                                    {{priceRanges[pluginKey].min|currency}}
+                                </template>
+                                <template v-else>
+                                    Free
+                                </template>
+                            </template>
+                        </div>
                     </td>
                     <td>
                         <template v-if="plugin.enabled">
@@ -115,9 +123,56 @@
                 });
 
                 return plugins;
+            },
+
+            priceRanges() {
+                let priceRanges = []
+
+                for (let i = 0; i < this.plugins.length; i++) {
+                    const plugin = this.plugins[i]
+                    let priceRange = this.getPriceRange(plugin.editions)
+                    priceRanges.push(priceRange)
+                }
+
+                return priceRanges;
             }
 
         },
+
+        methods: {
+
+            getPriceRange(editions) {
+                let min = null;
+                let max = null;
+
+                for(let i = 0; i < editions.length; i++) {
+                    const edition = editions[i];
+                    const price = parseInt(edition.price)
+
+                    if(min === null) {
+                        min = price;
+                    }
+
+                    if(max === null) {
+                        max = price;
+                    }
+
+                    if(price < min) {
+                        min = price
+                    }
+
+                    if(price > max) {
+                        max = price
+                    }
+                }
+
+                return {
+                    min,
+                    max
+                }
+            }
+
+        }
 
     }
 </script>
