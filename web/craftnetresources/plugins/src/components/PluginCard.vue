@@ -14,11 +14,23 @@
                 </div>
                 <div class="description" v-shave="{ height: 45 }">{{ plugin.shortDescription }}</div>
                 <div class="price">
-                    <template v-if="plugin.editions[0].price != null && plugin.editions[0].price !== '0.00'">
-                        {{ plugin.editions[0].price|currency }}
+                    <template v-if="priceRange.min !== priceRange.max">
+                        <template v-if="priceRange.min > 0">
+                            {{priceRange.min|currency}}
+                        </template>
+                        <template v-else>
+                            Free
+                        </template>
+                        -
+                        {{priceRange.max|currency}}
                     </template>
                     <template v-else>
-                        Free
+                        <template v-if="priceRange.min > 0">
+                            {{priceRange.min|currency}}
+                        </template>
+                        <template v-else>
+                            Free
+                        </template>
                     </template>
                 </div>
             </div>
@@ -35,7 +47,46 @@
             defaultPluginSvg() {
                 return null;
                 // return window.defaultPluginSvg;
+            },
+
+            priceRange() {
+                return this.getPriceRange(this.plugin.editions)
             }
+        },
+
+        methods: {
+
+            getPriceRange(editions) {
+                let min = null;
+                let max = null;
+
+                for(let i = 0; i < editions.length; i++) {
+                    const edition = editions[i];
+                    const price = parseInt(edition.price)
+
+                    if(min === null) {
+                        min = price;
+                    }
+
+                    if(max === null) {
+                        max = price;
+                    }
+
+                    if(price < min) {
+                        min = price
+                    }
+
+                    if(price > max) {
+                        max = price
+                    }
+                }
+
+                return {
+                    min,
+                    max
+                }
+            }
+
         }
 
     }
