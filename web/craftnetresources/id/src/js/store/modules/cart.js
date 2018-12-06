@@ -220,11 +220,7 @@ const actions = {
                     let items = CartHelper.getCartItemsData(cart)
 
                     newItems.forEach(newItem => {
-                        const alreadyInCart = items.find(item => item.plugin === newItem.plugin)
-
-                        if (!alreadyInCart) {
-                            items.push(newItem)
-                        }
+                        items.push(newItem)
                     })
 
                     let data = {
