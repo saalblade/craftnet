@@ -52,6 +52,20 @@ export default {
             }
 
             return filteredClone;
-        }
+        },
+
+        /**
+         * Returns an URL that points to the dist folder.
+         *
+         * @param {String} url
+         * @returns {String}
+         */
+        staticUrl(url) {
+            if (process.env.NODE_ENV === 'development') {
+                return process.env.BASE_URL + url;
+            }
+
+            return '/craftnetresources/id/dist/' + url;
+        },
     }
 }

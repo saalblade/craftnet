@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <img src="/craftnetresources/id/dist/images/powered_by_stripe.svg" height="18" />
+                    <img src="~@/images/powered_by_stripe.svg" height="18" />
                 </div>
             </div>
 
@@ -50,8 +50,11 @@
     import {mapState} from 'vuex'
     import CardForm from '../card/CardForm'
     import CardIcon from '../card/CardIcon'
+    import helpers from '../../mixins/helpers'
 
     export default {
+
+        mixins: [helpers],
 
         components: {
             CardForm,

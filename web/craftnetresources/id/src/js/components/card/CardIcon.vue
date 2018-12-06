@@ -1,11 +1,16 @@
 <template>
     <div v-if="cardType" class="card-icon">
-        <img :src="'/craftnetresources/id/dist/images/cards/'+cardType+'.svg'" height="20" />
+        <img :src="staticUrl('images/cards/'+cardType+'.svg')" height="20" />
     </div>
 </template>
 
 <script>
+    import helpers from '../../mixins/helpers'
+
     export default {
+
+        mixins: [helpers],
+
         props: ['brand'],
 
         computed: {

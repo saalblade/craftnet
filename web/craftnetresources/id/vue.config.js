@@ -10,7 +10,7 @@ module.exports = {
             cert: process.env.DEV_SSL_CERT ? fs.readFileSync(process.env.DEV_SSL_CERT) : null,
         },
     },
-    baseUrl: process.env.NODE_ENV === 'development' ? process.env.DEV_BASE_URL : '',
+    baseUrl: process.env.NODE_ENV === 'development' ? process.env.DEV_BASE_URL : process.env.PROD_BASE_URL,
     configureWebpack: {
         plugins: [
             new ManifestPlugin({

@@ -35,7 +35,7 @@
                     <div v-if="payLoading" class="spinner"></div>
 
                     <div class="mt-4">
-                        <img src="/craftnetresources/id/dist/images/powered_by_stripe.svg" height="18" />
+                        <img src="~@/images/powered_by_stripe.svg" height="18" />
                     </div>
                 </div>
             </form>

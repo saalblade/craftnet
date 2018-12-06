@@ -6,7 +6,7 @@
             <connected-app
                     :name="appType.name"
                     :description="'Connect to your ' + appType.name + ' account.'"
-                    :icon="'/craftnetresources/id/dist/images/' + appType.handle + '.svg'"
+                    :icon="staticUrl('images/' + appType.handle + '.svg')"
                     :account-name="accountName(appType.handle)"
                     :connected="apps[appType.handle]"
                     :buttonLoading="(loading && loading[appType.handle])"
@@ -23,8 +23,11 @@
     import {mapState, mapGetters} from 'vuex'
     import StripeApp from './StripeApp'
     import ConnectedApp from './ConnectedApp'
+    import helpers from '../../../mixins/helpers'
 
     export default {
+
+        mixins: [helpers],
 
         props: ['title', 'showStripe'],
 
