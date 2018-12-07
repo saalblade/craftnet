@@ -144,7 +144,7 @@ class PackageManager extends Component
 
         // Restrict to certain stabilities?
         if ($minStability !== null) {
-            $allowedStabilities = $this->_allowedStabilities($minStability);
+            $allowedStabilities = $this->getStabilities($minStability);
             if (!empty($allowedStabilities)) {
                 $query->andWhere(['pv.stability' => $allowedStabilities]);
             }
@@ -266,7 +266,7 @@ class PackageManager extends Component
      *
      * @return string[] The allowed stabilities, or an empty array if all stabilities should be allowed
      */
-    private function _allowedStabilities(string $minStability = 'stable'): array
+    public function getStabilities(string $minStability = 'stable'): array
     {
         $allowedStabilities = [];
 
