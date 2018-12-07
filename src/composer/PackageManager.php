@@ -263,6 +263,7 @@ class PackageManager extends Component
     {
         $vp = new VersionParser();
         $from = $vp->normalize($from);
+        $to = $vp->normalize($to);
 
         // Get all the versions
         $versions = $this->getAllVersions($name, $minStability, $constraint, false);
