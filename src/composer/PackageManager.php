@@ -66,23 +66,6 @@ class PackageManager extends Component
 
     /**
      * @param string $name
-     * @param int $seconds
-     *
-     * @return bool
-     */
-    public function packageUpdatedWithin(string $name, int $seconds): bool
-    {
-        $timestamp = Db::prepareDateForDb(new \DateTime("-{$seconds} seconds"));
-        return (new Query())
-            ->from(['craftnet_packages'])
-            ->where(['name' => $name])
-            ->andWhere('[[dateUpdated]] != [[dateCreated]]')
-            ->andWhere(['>=', 'dateUpdated', $timestamp])
-            ->exists();
-    }
-
-    /**
-     * @param string $name
      * @param array $constraints
      *
      * @return bool
