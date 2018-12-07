@@ -7,16 +7,7 @@ import {formatCmsLicense, formatPluginLicense} from './filters/licenses';
 import {capitalize} from './filters/capitalize';
 import App from './App.vue';
 import './plugins/craftui'
-
-// Font Awesome
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCoffee, faTimes, faTh, faBars, faPlus, faKey, faPlug, faImage, faUser, faPencilAlt, faExclamationTriangle, faBug, faShoppingCart, faDollarSign, faHandshake } from '@fortawesome/free-solid-svg-icons'
-library.add([faCoffee, faTimes, faTh, faBars, faPlus, faKey, faPlug, faImage, faUser, faPencilAlt, faExclamationTriangle, faBug, faShoppingCart, faDollarSign, faHandshake])
-
-Vue.component('font-awesome-icon', FontAwesomeIcon)
-Vue.config.productionTip = false
-
+import './plugins/font-awesome'
 
 Vue.filter('currency', currency);
 Vue.filter('formatCmsLicense', formatCmsLicense);
