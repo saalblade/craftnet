@@ -31,17 +31,23 @@ class PluginStoreController extends BaseApiController
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
         $enablePluginStoreCache = $craftIdConfig['enablePluginStoreCache'];
-        $cacheKey = 'pluginStoreData';
+        $cacheKey = 'pluginStoreData--' . $this->cmsVersion;
 
         if ($enablePluginStoreCache) {
             $pluginStoreData = Craft::$app->getCache()->get($cacheKey);
         }
 
         if (!$pluginStoreData) {
+            $plugins = Plugin::find()
+                ->withLatestReleaseInfo(true, $this->cmsVersion)
+                ->with(['developer', 'categories', 'icon'])
+                ->indexBy('id')
+                ->all();
+
             $pluginStoreData = [
                 'categories' => $this->_categories(),
-                'featuredPlugins' => $this->_featuredPlugins(),
-                'plugins' => $this->_plugins(),
+                'featuredPlugins' => $this->_featuredPlugins($plugins),
+                'plugins' => $this->_plugins($plugins),
             ];
 
             if ($enablePluginStoreCache) {
@@ -80,14 +86,19 @@ class PluginStoreController extends BaseApiController
         return $ret;
     }
 
-    private function _featuredPlugins(): array
+    /**
+     * @param Plugin[] $plugins
+     * @return array
+     * @throws \yii\base\Exception
+     */
+    private function _featuredPlugins(array $plugins): array
     {
         $ret = [];
 
         $recents = Plugin::find()
             ->orderBy(['craftnet_plugins.dateApproved' => SORT_DESC])
             ->limit(10)
-            ->hasLatestVersion()
+            ->withLatestReleaseInfo(true, $this->cmsVersion)
             ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
             ->ids();
 
@@ -106,30 +117,35 @@ class PluginStoreController extends BaseApiController
             ->all();
 
         foreach ($entries as $entry) {
-            $ret[] = [
-                'id' => $entry->id,
-                'title' => $entry->title,
-                'plugins' => ArrayHelper::getColumn($entry->plugins, 'id'),
-                'limit' => $entry->limit,
-            ];
+            $pluginIds = [];
+            foreach ($entry->plugins as $plugin) {
+                /** @var Plugin $plugin */
+                if (isset($plugins[$plugin->id])) {
+                    $pluginIds[] = $plugin->id;
+                }
+            }
+            if (!empty($pluginIds)) {
+                $ret[] = [
+                    'id' => $entry->id,
+                    'title' => $entry->title,
+                    'plugins' => $pluginIds,
+                    'limit' => $entry->limit,
+                ];
+            }
         }
 
         return $ret;
     }
 
     /**
-     * @param bool $includePrices
-     *
+     * @param Plugin[] $plugins
      * @return array
+     * @throws \craftnet\errors\MissingTokenException
+     * @throws \yii\base\InvalidConfigException
      */
-    private function _plugins(): array
+    private function _plugins(array $plugins): array
     {
         $ret = [];
-
-        $plugins = Plugin::find()
-            ->andWhere(['not', ['craftnet_plugins.latestVersion' => null]])
-            ->with(['developer', 'categories', 'icon'])
-            ->all();
 
         foreach ($plugins as $plugin) {
             $ret[] = $this->transformPlugin($plugin, false);

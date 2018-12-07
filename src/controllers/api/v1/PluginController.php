@@ -24,6 +24,7 @@ class PluginController extends BaseApiController
         $plugin = Plugin::find()
             ->id($pluginId)
             ->anyStatus()
+            ->withLatestReleaseInfo(true, $this->cmsVersion)
             ->one();
 
         if (!$plugin) {

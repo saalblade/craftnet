@@ -46,7 +46,6 @@ class JsonDumper extends Component
         $packages = (new Query())
             ->select(['id', 'name', 'abandoned', 'replacementPackage'])
             ->from(['craftnet_packages'])
-            ->where(['not', ['latestVersion' => null]])
             ->indexBy('id')
             ->all();
 
