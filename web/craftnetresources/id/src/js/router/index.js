@@ -83,7 +83,8 @@ const router = new VueRouter({
         {
             path: '/cart',
             name: 'Cart',
-            component: Cart
+            component: Cart,
+            meta: { layout: "no-sidebar" }
         },
         {
             path: '/developer/plugins',
