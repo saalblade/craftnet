@@ -102,7 +102,7 @@ class UserBehavior extends Behavior
 
         return $this->_plugins = Plugin::find()
             ->developerId($this->owner->id)
-            ->status(null)
+            ->anyStatus()
             ->all();
     }
 

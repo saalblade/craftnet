@@ -950,7 +950,6 @@ class Plugin extends Element
         if ($this->enabled) {
             $cache = Craft::$app->getCache();
             $cache->delete('pluginStoreData');
-            $cache->delete('pluginStoreDataCraftId');
         }
 
         $sendDevEmail = false;

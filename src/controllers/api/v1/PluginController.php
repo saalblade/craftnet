@@ -21,7 +21,10 @@ class PluginController extends BaseApiController
      */
     public function actionIndex($pluginId): Response
     {
-        $plugin = Plugin::find()->id($pluginId)->status(null)->one();
+        $plugin = Plugin::find()
+            ->id($pluginId)
+            ->anyStatus()
+            ->one();
 
         if (!$plugin) {
             return $this->asErrorJson("Couldn't find plugin");

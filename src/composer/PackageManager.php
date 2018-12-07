@@ -8,7 +8,6 @@ use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
 use Craft;
 use craft\db\Query;
-use craft\helpers\Db;
 use craft\helpers\Json;
 use craftnet\composer\jobs\UpdatePackage;
 use craftnet\errors\MissingTokenException;
@@ -786,7 +785,7 @@ class PackageManager extends Component
             $latestVersion = null;
             $packageDeps = [];
 
-            // Bail early if there's nothing new
+            // Process new versions
             if (!empty($newVersions)) {
                 if ($isConsole) {
                     Console::output('Processing new versions ...');
