@@ -124,13 +124,13 @@ class PackageManager extends Component
 
     /**
      * @param string $name The package name
-     * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
+     * @param string|null $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
      * @param string|null $constraint The version constraint, if any
      * @param bool $sort Whether the versions should be sorted
      *
      * @return string[] The known package versions
      */
-    public function getAllVersions(string $name, string $minStability = 'stable', string $constraint = null, bool $sort = true): array
+    public function getAllVersions(string $name, $minStability = 'stable', string $constraint = null, bool $sort = true): array
     {
         $query = (new Query())
             ->select(['pv.version'])
@@ -143,9 +143,11 @@ class PackageManager extends Component
             ]);
 
         // Restrict to certain stabilities?
-        $allowedStabilities = $this->_allowedStabilities($minStability);
-        if (!empty($allowedStabilities)) {
-            $query->andWhere(['pv.stability' => $allowedStabilities]);
+        if ($minStability !== null) {
+            $allowedStabilities = $this->_allowedStabilities($minStability);
+            if (!empty($allowedStabilities)) {
+                $query->andWhere(['pv.stability' => $allowedStabilities]);
+            }
         }
 
         // Was a specific version requested by the constraint?
@@ -575,23 +577,13 @@ class PackageManager extends Component
 
     /**
      * @param string $name
-     * @param string|string[] $version
+     * @param string|string[]|null $version
      *
      * @return Query
      */
-    private function _createReleaseQuery(string $name, $version): Query
+    private function _createReleaseQuery(string $name, $version = null): Query
     {
-        $vp = new VersionParser();
-
-        if (is_array($version)) {
-            foreach ($version as $k => $v) {
-                $version[$k] = $vp->normalize($v);
-            }
-        } else {
-            $version = $vp->normalize($version);
-        }
-
-        return (new Query())
+        $query = (new Query())
             ->select([
                 'pv.id',
                 'pv.packageId',
@@ -622,9 +614,22 @@ class PackageManager extends Component
             ->innerJoin(['craftnet_packages p'], '[[p.id]] = [[pv.packageId]]')
             ->where([
                 'p.name' => $name,
-                'pv.normalizedVersion' => $version,
                 'pv.valid' => true,
             ]);
+
+        if ($version !== null) {
+            $vp = new VersionParser();
+            if (is_array($version)) {
+                foreach ($version as $k => $v) {
+                    $version[$k] = $vp->normalize($v);
+                }
+            } else if (is_string($version)) {
+                $version = $vp->normalize($version);
+            }
+            $query->andWhere(['pv.normalizedVersion' => $version]);
+        }
+
+        return $query;
     }
 
     /**
