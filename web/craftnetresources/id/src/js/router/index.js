@@ -148,12 +148,14 @@ const router = new VueRouter({
         {
             path: '/payment',
             name: 'Payment',
-            component: Payment
+            component: Payment,
+            meta: { layout: "no-sidebar" }
         },
         {
             path: '/thank-you',
             name: 'ThankYou',
-            component: ThankYou
+            component: ThankYou,
+            meta: { layout: "no-sidebar" }
         },
 
 
