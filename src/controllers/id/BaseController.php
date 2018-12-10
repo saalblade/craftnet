@@ -56,6 +56,13 @@ abstract class BaseController extends Controller
             }
         }
 
+        // Latest version
+        $latestVersion = Plugin::find()
+            ->id($plugin->id)
+            ->withLatestReleaseInfo()
+            ->select(['latestVersion'])
+            ->scalar();
+
         return [
             'id' => $plugin->id,
             'enabled' => $plugin->enabled,
@@ -75,7 +82,7 @@ abstract class BaseController extends Controller
             'price' => $plugin->price,
             'renewalPrice' => $plugin->renewalPrice,
             'keywords' => $plugin->keywords,
-            'latestVersion' => $plugin->latestVersion,
+            'latestVersion' => $latestVersion ?: null,
 
             // 'iconUrl' => $iconUrl,
             'developerId' => $developer->id,
