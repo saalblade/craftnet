@@ -73,12 +73,14 @@ const router = new VueRouter({
         {
             path: '/buy-plugin/:handle/:edition',
             name: 'BuyPlugin',
-            component: BuyPlugin
+            component: BuyPlugin,
+            meta: { layout: "no-sidebar" }
         },
         {
             path: '/buy-plugin-mock/:handle/:edition',
             name: 'BuyPluginMock',
-            component: BuyPluginMock
+            component: BuyPluginMock,
+            meta: { layout: "no-sidebar" }
         },
         {
             path: '/cart',
