@@ -80,7 +80,7 @@
                             <font-awesome-icon icon="shopping-cart" class="text-5xl mb-4 text-grey" />
                             <div class="font-bold">Your cart is empty</div>
                             <div class="mt-4">
-                                <router-link class="btn btn-primary" to="/licenses/buy">Buy a license</router-link>
+                                <p>Browse plugins on <a :href="craftPluginsUrl()" target="_blank">plugins.craftcms.com</a></p>
                             </div>
                         </div>
                     </div>
@@ -93,8 +93,10 @@
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
     import CartMock from '../components/CartMock'
+    import helpers from '../mixins/helpers'
 
     export default {
+        mixins: [helpers],
 
         components: {
             CartMock,

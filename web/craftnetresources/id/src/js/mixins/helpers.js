@@ -67,5 +67,14 @@ export default {
 
             return '/craftnetresources/id/dist/' + url;
         },
+
+        /**
+         * Returns the Craft Plugins URL.
+         *
+         * @returns {String}
+         */
+        craftPluginsUrl() {
+            return process.env.VUE_APP_CRAFT_PLUGINS_URL;
+        }
     }
 }
