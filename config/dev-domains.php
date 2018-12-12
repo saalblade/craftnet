@@ -27,6 +27,7 @@ return [
     'drivedev.net',
     'elasticbeanstalk.com',
     'epwebsites.co.uk',
+    'fauna.org',
     'fncdev.in.ua',
     'frb.io',
     'fusionarydev.com',
