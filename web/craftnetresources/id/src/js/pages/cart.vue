@@ -48,7 +48,12 @@
                                     <select-field v-model="itemUpdates[itemKey]" :options="itemUpdateOptions(itemKey)" />
                                 </td>
                                 <td>
-                                    <select-field v-model="itemQuantity[itemKey]" :options="quantityOptions"></select-field>
+                                    <number-input
+                                                  v-model="itemQuantity[itemKey]"
+                                                  min="0"
+                                                  step="1"
+                                                  @keypress="onQuantityKeyPress"
+                                                  @change="onQuantityChange($event, itemKey)"></number-input>
                                 </td>
                                 <td class="text-right">
                                     <strong class="block text-xl">{{ itemTotal(itemKey)|currency }}</strong>
@@ -113,16 +118,6 @@
             ...mapGetters({
                 cartItems: 'cart/cartItems',
             }),
-
-            quantityOptions() {
-                return [
-                    {label: 1, value: 1},
-                    {label: 2, value: 2},
-                    {label: 3, value: 3},
-                    {label: 4, value: 4},
-                    {label: 5, value: 5},
-                ]
-            },
 
             total() {
                 let total = 0
@@ -193,6 +188,28 @@
                 const quantity = this.itemQuantity[itemKey]
 
                 return (price + renewalsTotal) * quantity
+            },
+
+            onQuantityChange($event, itemKey) {
+                let value = 1;
+
+                if ($event.target.value) {
+                    value = $event.target.value
+                    value = value.replace(/[^0-9]+/g, '')
+                }
+
+                this.itemQuantity[itemKey] = value
+            },
+
+            onQuantityKeyPress($event) {
+                let charCode = ($event.which) ? $event.which : $event.keyCode;
+
+                if ((charCode > 31 && (charCode < 48 || charCode > 57))) {
+                    $event.preventDefault();
+                    return false;
+                } else {
+                    return true;
+                }
             }
 
         },
