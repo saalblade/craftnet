@@ -49,11 +49,14 @@
                                 </td>
                                 <td>
                                     <number-input
+                                                  ref="quantityInput"
                                                   v-model="itemQuantity[itemKey]"
-                                                  min="0"
+                                                  min="minQuantity"
+                                                  max="maxQuantity"
                                                   step="1"
-                                                  @keypress="onQuantityKeyPress"
-                                                  @change="onQuantityChange($event, itemKey)"></number-input>
+                                                  @keydown="onQuantityKeyDown($event, itemKey)"
+                                                  @input="onQuantityInput($event, itemKey)"
+                                    ></number-input>
                                 </td>
                                 <td class="text-right">
                                     <strong class="block text-xl">{{ itemTotal(itemKey)|currency }}</strong>
@@ -107,6 +110,8 @@
                 loading: false,
                 itemUpdates: {},
                 itemQuantity: {},
+                minQuantity: 1,
+                maxQuantity: 1000,
             }
         },
 
@@ -192,27 +197,29 @@
                 return (price + renewalsTotal) * quantity
             },
 
-            onQuantityChange($event, itemKey) {
-                let value = 1;
+            onQuantityInput(value, itemKey) {
+                value = parseInt(value)
 
-                if ($event.target.value) {
-                    value = $event.target.value
-                    value = value.replace(/[^0-9]+/g, '')
+                if (isNaN(value) || value < this.minQuantity) {
+                    value = this.minQuantity
+                } else if (value > this.maxQuantity) {
+                    value = this.maxQuantity
                 }
 
-                this.itemQuantity[itemKey] = value
+                this.$set(this.itemQuantity, itemKey, value)
+                this.$refs.quantityInput[itemKey].$el.value = value
             },
 
-            onQuantityKeyPress($event) {
+            onQuantityKeyDown($event) {
                 let charCode = ($event.which) ? $event.which : $event.keyCode;
 
-                if ((charCode > 31 && (charCode < 48 || charCode > 57))) {
+                // prevent `e` and `-` to prevent exponent and negative notations
+                if(charCode === 69 || charCode === 189) {
                     $event.preventDefault();
-                    return false;
-                } else {
-                    return true;
+
+                    return false
                 }
-            }
+            },
 
         },
 
