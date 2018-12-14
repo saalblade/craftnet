@@ -1,24 +1,37 @@
 # Craft ID Resources
 
+## Overview
+Craft ID resources have two endpoints:
+
 ### Site
-- https://id.craftcms.com
-- ./src/js/site.js
-- Vue App
+The site endpoint is being used when the user is not authenticated and mostly provides the login form.
+
+- **URL:** https://id.craftcms.com/
+- **Endpoint:** /src/js/site.js
+- **App Type:** Vue App
 
 ### App
-- https://id.craftcms.com/account
-- ./src/js/app.js
-- Vue App
+- **URL:** https://id.craftcms.com/account
+- **Endpoint:** /src/js/app.js
+- **App Type:** Vue App
 
-## Install
+## Setup
+1. Copy the `TWIGPACK_` environment variable from `/env.example` to your `/.env` file.
+2. Copy all of the environment variables from `/web/craftnetresources/id/.env.example` to your `/web/craftnetresources/id/.env` file.
+
+Make sure the URLs and ports don’t conflict with other projects your might be running at the same time.
+
+## Commands
+
+### Install
     npm install
     
-## Build for Development
+### Build for Development
     npm run serve
 
-## Build for Production
+### Build for Production
     npm run build
 
-## Lint
+### Lint
     npm run lint
     
