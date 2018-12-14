@@ -26,7 +26,7 @@
                     <div class="popover" :class="{hidden: !showingGlobalMenu}">
                         <div>
                             <p><router-link @click.native="showingGlobalMenu = false" to="/">Craft ID</router-link></p>
-                            <p><a :href="craftPluginsUrl" target="_blank">Craft Plugins</a></p>
+                            <p><a :href="craftPluginsUrl()" target="_blank">Craft Plugins</a></p>
                         </div>
 
                         <div class="popover-arrow"></div>
@@ -65,9 +65,12 @@
 
 <script>
     import {mapState, mapGetters} from 'vuex'
+    import helpers from '../mixins/helpers'
     import { directive as onClickaway } from 'vue-clickaway';
 
     export default {
+
+        mixins: [helpers],
 
         directives: {
             onClickaway: onClickaway,
@@ -91,10 +94,6 @@
                 userIsInGroup: 'account/userIsInGroup',
                 cartTotalItems: 'cart/cartTotalItems',
             }),
-
-            craftPluginsUrl() {
-                return process.env.VUE_APP_CRAFT_PLUGINS_URL;
-            }
 
         },
 
