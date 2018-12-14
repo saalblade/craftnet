@@ -4,13 +4,14 @@
 Craft ID resources have two endpoints:
 
 ### Site
-The site endpoint is being used when the user is not authenticated and mostly provides the login form.
+The **site** endpoint is being used when the user is not authenticated and mostly provides the login form.
 
 - **URL:** https://id.craftcms.com/
 - **Endpoint:** /src/js/site.js
 - **App Type:** Vue App
 
 ### App
+The **app** endpoint is being used when the user is authenticated and provides the Craft ID app.
 - **URL:** https://id.craftcms.com/account
 - **Endpoint:** /src/js/app.js
 - **App Type:** Vue App
