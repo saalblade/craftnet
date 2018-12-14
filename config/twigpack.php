@@ -8,12 +8,12 @@ return [
             'modern' => 'manifest.json',
         ],
         'server' => [
-            'manifestPath' => './craftnetresources/id/dist/',
-            'publicPath' => '/craftnetresources/id/dist/',
+            'manifestPath' => getenv('TWIGPACK_SERVER_MANIFEST_PATH'),
+            'publicPath' => getenv('TWIGPACK_SERVER_PUBLIC_PATH'),
         ],
         'devServer' => [
-            'manifestPath' => 'https://localhost:8081/',
-            'publicPath' => 'https://localhost:8081/',
+            'manifestPath' => getenv('TWIGPACK_DEV_SERVER_MANIFEST_PATH'),
+            'publicPath' => getenv('TWIGPACK_DEV_SERVER_PUBLIC_PATH'),
         ],
     ],
     'dev' => [
