@@ -8,79 +8,77 @@
                     <p v-else>No description.</p>
                 </div>
 
-                <div class="plugin-sidebar">
-                    <div class="plugin-meta">
-                        <ul class="plugin-meta-data">
-                            <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
-                            <li><span>{{ "Last Update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>
-                            <li v-if="plugin.activeInstalls > 0"><span>{{ "Active Installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
-                            <li><span>{{ "Compatibility"|t('app') }}</span> <strong>{{ plugin.compatibility }}</strong></li>
-                            <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
+                <div class="plugin-meta">
+                    <ul class="plugin-meta-data">
+                        <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
+                        <li><span>{{ "Last Update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>
+                        <li v-if="plugin.activeInstalls > 0"><span>{{ "Active Installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
+                        <li><span>{{ "Compatibility"|t('app') }}</span> <strong>{{ plugin.compatibility }}</strong></li>
+                        <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
 
-                            <li v-if="pluginCategories.length > 0">
-                                <span>{{ "Categories"|t('app') }}</span>
-                                <strong>
-                                    <template v-for="category, key in pluginCategories">
-                                        <a @click="viewCategory(category)">{{ category.title }}</a><template v-if="key < (pluginCategories.length - 1)">, </template>
+                        <li v-if="pluginCategories.length > 0">
+                            <span>{{ "Categories"|t('app') }}</span>
+                            <strong>
+                                <template v-for="category, key in pluginCategories">
+                                    <a @click="viewCategory(category)">{{ category.title }}</a><template v-if="key < (pluginCategories.length - 1)">, </template>
+                                </template>
+                            </strong>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+
+                    <p v-if="isCommercial(pluginSnippet) && editions.length === 1" class="text-grey-dark">
+                        Price includes 1 year of updates.<br />
+                        {{ editions[0].renewalPrice|currency }}/year per site for updates after that.
+                    </p>
+                </div>
+
+                <template v-if="isCommercial(pluginSnippet) && editions.length > 1">
+                    <h3>Editions</h3>
+
+                    <div class="plugin-editions mb-4">
+                        <div class="plugin-editions-edition" v-for="edition in plugin.editions">
+                            <h4><span class="edition-name">{{edition.name}}</span></h4>
+                            <ul>
+                                <li v-for="feature in edition.features">
+                                    <font-awesome-icon icon="check"></font-awesome-icon>
+                                    {{feature.name}}
+                                    <font-awesome-icon icon="info-circle" />
+                                    <!--
+                                    <template v-if="feature.description">
+                                        — {{feature.description}}
                                     </template>
-                                </strong>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+                                    -->
+                                </li>
+                            </ul>
 
-                        <p v-if="isCommercial(pluginSnippet) && editions.length === 1" class="text-grey-dark">
-                            Price includes 1 year of updates.<br />
-                            {{ editions[0].renewalPrice|currency }}/year per site for updates after that.
-                        </p>
-                    </div>
-
-                    <template v-if="isCommercial(pluginSnippet) && editions.length > 1">
-                        <h3>Editions</h3>
-
-                        <div class="plugin-editions mb-4">
-                            <div class="plugin-editions-edition" v-for="edition in plugin.editions">
-                                <h4><span class="edition-name">{{edition.name}}</span></h4>
-                                <ul>
-                                    <li v-for="feature in edition.features">
-                                        <font-awesome-icon icon="check"></font-awesome-icon>
-                                        {{feature.name}}
-                                        <font-awesome-icon icon="info-circle" />
-                                        <!--
-                                        <template v-if="feature.description">
-                                            — {{feature.description}}
-                                        </template>
-                                        -->
-                                    </li>
-                                </ul>
-
-                                <div class="buttons">
-                                    <a :href="craftIdUrl + '/buy-plugin/' + pluginSnippet.handle + '/' + edition.handle" class="btn btn-primary">
-                                        {{edition.price|currency}}
-                                    </a>
-                                </div>
-
-                                <p class="mt-4 text-grey-dark mb-0">
-                                    Price includes 1 year of updates.<br />
-                                    {{ edition.renewalPrice|currency }}/year per site for updates after that.
-                                </p>
+                            <div class="buttons">
+                                <a :href="craftIdUrl + '/buy-plugin/' + pluginSnippet.handle + '/' + edition.handle" class="btn btn-primary">
+                                    {{edition.price|currency}}
+                                </a>
                             </div>
+
+                            <p class="mt-4 text-grey-dark mb-0">
+                                Price includes 1 year of updates.<br />
+                                {{ edition.renewalPrice|currency }}/year per site for updates after that.
+                            </p>
                         </div>
-                    </template>
-
-                    <h3>Package Name</h3>
-                    <p>To install this plugin, search for its package name on the Plugin Store and click “Install”.</p>
-
-                    <copy-package :plugin="plugin"></copy-package>
-
-                    <hr>
-
-                    <div class="plugin-meta-links">
-                        <h3>Links</h3>
-                        <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)">
-                            <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
-                            <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl"><font-awesome-icon icon="certificate" /> {{ "Changelog"|t('app') }}</a></li>
-                        </ul>
                     </div>
+                </template>
+
+                <h3>Package Name</h3>
+                <p>To install this plugin, search for its package name on the Plugin Store and click “Install”.</p>
+
+                <copy-package :plugin="plugin"></copy-package>
+
+                <hr>
+
+                <div class="plugin-meta-links">
+                    <h3>Links</h3>
+                    <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)">
+                        <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
+                        <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl"><font-awesome-icon icon="certificate" /> {{ "Changelog"|t('app') }}</a></li>
+                    </ul>
                 </div>
             </div>
         </template>

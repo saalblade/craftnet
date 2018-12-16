@@ -220,15 +220,4 @@
       }
     }
   }
-
-  .plugin-details-body {
-    @apply .flex;
-
-    .plugin-description {
-      @apply .w-2/3 .px-4;
-    }
-    .plugin-sidebar {
-      @apply .w-1/3 .px-4;
-    }
-  }
 }
