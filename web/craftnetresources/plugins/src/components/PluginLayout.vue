@@ -33,7 +33,7 @@
 
                     <template v-if="isCommercial(pluginSnippet) && getPluginEditions(pluginSnippet).length === 1">
                         <li class="buy">
-                            <a :href="craftIdUrl+'/buy-plugin/'+pluginSnippet.handle+'/standard'" class="btn btn-primary" target="_blank">
+                            <a :href="craftIdUrl+'/buy-plugin/'+pluginSnippet.handle+'/standard'" class="btn btn-primary">
                                 {{pluginSnippet.editions[0].price|currency}}
                             </a>
                         </li>

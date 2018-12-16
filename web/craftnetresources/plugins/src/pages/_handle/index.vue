@@ -54,7 +54,7 @@
                                 </ul>
 
                                 <div class="buttons">
-                                    <a :href="craftIdUrl + '/buy-plugin/' + pluginSnippet.handle + '/' + edition.handle" class="btn btn-primary" target="_blank">
+                                    <a :href="craftIdUrl + '/buy-plugin/' + pluginSnippet.handle + '/' + edition.handle" class="btn btn-primary">
                                         {{edition.price|currency}}
                                     </a>
                                 </div>
@@ -77,8 +77,8 @@
                     <div class="plugin-meta-links">
                         <h3>Links</h3>
                         <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)">
-                            <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl" target="_blank"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
-                            <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl" target="_blank"><font-awesome-icon icon="certificate" /> {{ "Changelog"|t('app') }}</a></li>
+                            <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
+                            <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl"><font-awesome-icon icon="certificate" /> {{ "Changelog"|t('app') }}</a></li>
                         </ul>
                     </div>
                 </div>

@@ -7,7 +7,7 @@
                 </a>
                 <div class="popover" :class="{hidden: !showingGlobalMenu}">
                     <div>
-                        <p><a :href="craftIdUrl" target="_blank">Craft ID</a></p>
+                        <p><a :href="craftIdUrl">Craft ID</a></p>
                         <p><nuxt-link to="/" exact>Craft Plugins</nuxt-link></p>
                     </div>
 
