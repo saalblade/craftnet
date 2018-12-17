@@ -1,18 +1,20 @@
-# Craft Plugins Resources
+# Craft Plugin Store Resources
 
-- https://plugins.craftcms.com
-- Nuxt App
+- **URL:** https://plugins.craftcms.com
+- **App Type:** Nuxt App
 
-## Install
+## Commands
+
+### Install
     npm install
     
-## Build for Development
+### Build for Development
     npm run dev
 
-## Build for Production
+### Build for Production
     npm run build
     npm run start
     
-## Static Generated Deployment
+### Static Generated Deployment
     npm run generate
     
