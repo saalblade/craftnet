@@ -14,7 +14,3 @@
 ### Build for Production
     npm run build
     npm run start
-    
-### Static Generated Deployment
-    npm run generate
-    
