@@ -7,4 +7,4 @@ It is not meant to be self-installable. We’ve published it to a public repo fo
 ## Development
 
 - [Craft ID Resources](web/craftnetresources/id/README.md)
-- [Craft Plugin Store Resources](web/craftnetresources/id/README.md)
+- [Craft Plugin Store Resources](web/craftnetresources/plugins/README.md)
