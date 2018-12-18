@@ -91,6 +91,15 @@ input.text {
 }
 
 
+/* X Container */
+
+.xcontainer {
+  @apply .w-full .mx-auto;
+  padding: 0 2rem;
+  max-width: 1200px;
+}
+
+
 /* Transitions */
 
 @media (max-width: 991px) {
