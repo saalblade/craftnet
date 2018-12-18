@@ -35,7 +35,7 @@
                             <ul class="categories">
                                 <li v-for="category in categories">
                                     <nuxt-link :to="'/categories/'+category.slug">
-                                        <img :src="category.iconUrl" height="24" />
+                                        <img :src="category.iconUrl" width="24" height="24" />
                                         {{ category.title }}
                                     </nuxt-link>
                                 </li>
