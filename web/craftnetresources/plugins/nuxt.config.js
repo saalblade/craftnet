@@ -14,6 +14,7 @@ export default {
         'swiper/dist/css/swiper.css',
     ],
     plugins: [
+        { src: '~plugins/craft-ui.js', ssr: false },
         '~plugins/fontAwesome.js',
         '~plugins/filters.js',
         '~plugins/moment.js',
