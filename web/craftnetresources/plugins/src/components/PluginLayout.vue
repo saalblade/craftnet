@@ -51,8 +51,11 @@
 
 <script>
     import {mapGetters} from 'vuex'
+    import helpers from '../mixins/helpers'
 
     export default {
+
+        mixins: [helpers],
 
         data() {
             return {
@@ -70,10 +73,6 @@
 
             pluginSnippet() {
                 return this.$store.getters['pluginStore/getPluginByHandle'](this.$route.params.handle)
-            },
-
-            craftIdUrl() {
-                return process.env.craftIdUrl
             },
 
         },

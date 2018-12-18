@@ -64,6 +64,7 @@
     import CopyPackage from '../../components/CopyPackage'
     import PluginScreenshots from '../../components/PluginScreenshots'
     import PluginEditions from '../../components/PluginEditions'
+    import helpers from '../../mixins/helpers'
 
     export default {
 
@@ -115,6 +116,8 @@
         },
 
         layout: 'site',
+
+        mixins: [helpers],
 
         components: {
             PluginPricing,
@@ -176,10 +179,6 @@
 
             editions() {
                 return this.$store.getters['pluginStore/getPluginEditions'](this.pluginSnippet)
-            },
-
-            craftIdUrl() {
-                return process.env.craftIdUrl
             },
 
         },

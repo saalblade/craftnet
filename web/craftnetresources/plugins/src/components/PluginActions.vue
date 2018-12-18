@@ -5,17 +5,13 @@
 </template>
 
 <script>
+    import helpers from '../mixins/helpers'
+
     export default {
 
+        mixins: [helpers],
+
         props: ['plugin', 'edition'],
-
-        computed: {
-
-            craftIdUrl() {
-                return process.env.craftIdUrl
-            },
-
-        }
 
     }
 </script>

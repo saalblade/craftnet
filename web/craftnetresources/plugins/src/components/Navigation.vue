@@ -20,8 +20,11 @@
 
 <script>
     import { directive as onClickaway } from 'vue-clickaway';
+    import helpers from '../mixins/helpers'
 
     export default {
+
+        mixins: [helpers],
 
         data() {
             return {
@@ -31,14 +34,6 @@
 
         directives: {
             onClickaway: onClickaway,
-        },
-
-        computed: {
-
-            craftIdUrl() {
-                return process.env.craftIdUrl
-            }
-
         },
 
         methods: {
