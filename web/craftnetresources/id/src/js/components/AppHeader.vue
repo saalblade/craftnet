@@ -26,7 +26,7 @@
                     <div class="popover" :class="{hidden: !showingGlobalMenu}">
                         <div>
                             <p><router-link @click.native="showingGlobalMenu = false" to="/">Craft ID</router-link></p>
-                            <p><a :href="craftPluginsUrl()" target="_blank">Craft Plugins</a></p>
+                            <p><a :href="craftPluginsUrl()">Craft Plugins</a></p>
                         </div>
 
                         <div class="popover-arrow"></div>

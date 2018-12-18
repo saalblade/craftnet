@@ -83,7 +83,7 @@
                             <font-awesome-icon icon="shopping-cart" class="text-5xl mb-4 text-grey" />
                             <div class="font-bold">Your cart is empty</div>
                             <div class="mt-4">
-                                <p>Browse plugins on <a :href="craftPluginsUrl()" target="_blank">plugins.craftcms.com</a></p>
+                                <p>Browse plugins on <a :href="craftPluginsUrl()">plugins.craftcms.com</a></p>
                             </div>
                         </div>
                     </div>
