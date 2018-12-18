@@ -8,7 +8,6 @@
     </div>
 </template>
 
-
 <script>
     import PluginCard from './PluginCard'
 
@@ -30,3 +29,47 @@
 
     }
 </script>
+
+<style lang="scss">
+    .grid-plugins {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-auto-rows: 1fr;
+        grid-column-gap: 30px;
+        color: #444;
+        margin-bottom: 20px;
+
+        .grid-box {
+            @apply .border-b .py-6 .overflow-hidden;
+
+            &.responsive-limit {
+                @apply hidden;
+            }
+        }
+    }
+
+    @media (min-width: 576px) {
+        .grid-plugins {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .grid-plugins {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+
+    @media (min-width: 1600px) {
+        .grid-plugins {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+
+            .grid-box {
+                &.responsive-limit {
+                    @apply block;
+                }
+            }
+        }
+    }
+</style>
