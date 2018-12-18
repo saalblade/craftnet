@@ -44,6 +44,10 @@
 
                 <hr>
 
+                <plugin-changelog></plugin-changelog>
+
+                <hr>
+
                 <div class="plugin-meta-links">
                     <h3>Links</h3>
                     <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)">
@@ -66,6 +70,7 @@
     import CopyPackage from '../../components/CopyPackage'
     import PluginScreenshots from '../../components/PluginScreenshots'
     import PluginEditions from '../../components/PluginEditions'
+    import PluginChangelog from '../../components/PluginChangelog'
     import helpers from '../../mixins/helpers'
 
     export default {
@@ -127,6 +132,7 @@
             CopyPackage,
             PluginScreenshots,
             PluginEditions,
+            PluginChangelog,
         },
 
         data() {

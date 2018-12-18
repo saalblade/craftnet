@@ -25,20 +25,6 @@
                     <!--<div class="short-description">{{ pluginSnippet.shortDescription }}</div>-->
                     <!--<div><router-link :to="'/developer/'+pluginSnippet.developerId">{{ pluginSnippet.developerName }}</router-link></div>-->
                 </div>
-
-                <ul class="nav" :class="{hidden: !showNav}">
-                    <li><nuxt-link :to="'/'+pluginSnippet.handle" exact>Features</nuxt-link></li>
-
-                    <li><nuxt-link :to="'/'+pluginSnippet.handle+'/changelog'">Changelog</nuxt-link></li>
-
-                    <template v-if="isCommercial(pluginSnippet) && getPluginEditions(pluginSnippet).length === 1">
-                        <li class="buy">
-                            <a :href="craftIdUrl+'/buy-plugin/'+pluginSnippet.handle+'/standard'" class="btn btn-primary">
-                                {{pluginSnippet.editions[0].price|currency}}
-                            </a>
-                        </li>
-                    </template>
-                </ul>
             </div>
         </div>
 
