@@ -34,3 +34,24 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .search-form {
+        @apply .flex-1 .relative;
+
+        input.text {
+            padding-left: 32px;
+
+            &::placeholder {
+                @apply .text-grey-dark;
+            }
+        }
+
+        svg[data-icon="search"] {
+            @apply .absolute .text-grey-dark;
+            top: 10px;
+            left: 12px;
+            max-width: 16px;
+        }
+    }
+</style>

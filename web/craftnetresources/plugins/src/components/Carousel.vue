@@ -101,3 +101,42 @@
 
     }
 </script>
+
+<style lang="scss">
+    .carousel {
+        @apply .relative;
+
+        .swiper-container {
+            @apply .flex;
+
+            .swiper-wrapper {
+                @apply .flex-1 .flex .w-auto .h-auto;
+
+                .swiper-slide {
+                    @apply .flex-1 .flex .text-center .justify-center .items-center;
+
+                    .screenshot {
+                        @apply .flex .justify-center .items-center;
+                        box-sizing: border-box;
+
+                        img {
+                            @apply .max-w-full .max-h-full;
+                        }
+                    }
+                }
+            }
+        }
+
+        .swiper-pagination {
+            @apply .w-full .relative .py-4 .mb-4;
+
+            .swiper-pagination-bullet {
+                @apply .mx-2;
+
+                &.swiper-pagination-bullet-active {
+                    @apply .bg-grey-darker;
+                }
+            }
+        }
+    }
+</style>

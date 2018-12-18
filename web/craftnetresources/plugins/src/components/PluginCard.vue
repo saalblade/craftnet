@@ -91,3 +91,47 @@
 
     }
 </script>
+
+<style lang="scss">
+    .plugin-card {
+        @apply .flex .no-underline .text-black;
+
+        .plugin-icon {
+            @apply .mr-4;
+            width: 60px;
+            flex-shrink: 0;
+
+            img {
+                width: 100%;
+            }
+        }
+
+        .details {
+            @apply .leading-tight;
+            flex-grow: 1;
+            min-width: 0;
+
+            .name {
+                @apply .font-bold .mb-2;
+            }
+
+            .description {
+                @apply .mb-2;
+            }
+
+            .price {
+                @apply .text-grey-dark;
+            }
+        }
+
+        &:hover {
+            @apply .cursor-pointer;
+
+            .details {
+                .name {
+                    color: #0d78f2;
+                }
+            }
+        }
+    }
+</style>

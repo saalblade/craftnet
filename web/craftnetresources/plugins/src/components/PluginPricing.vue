@@ -98,3 +98,63 @@
 
     }
 </script>
+
+<style lang="scss">
+    .plugin-pricing {
+        .edition-name {
+            @apply .border .border-blue .rounded .inline-block .px-2 .py-1 .uppercase .font-normal .text-blue;
+        }
+
+        .price {
+            @apply .font-normal;
+        }
+
+        table {
+            tr {
+                th {
+                    &.group {
+                        @apply .pt-6;
+                    }
+
+                    &.feature {
+                        @apply .font-normal;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 991px) {
+        .plugin-pricing {
+            table {
+                tr {
+                    &.editions {
+                        @apply .flex;
+
+                        th:first-child {
+                            display: none;
+                        }
+                    }
+
+                    th:not(.edition) {
+                        display: block;
+                        width: auto;
+                        clear: left;
+                    }
+
+                    td, th.edition {
+                        display: block;
+                        width: 33%;
+                        float: left;
+                        text-align: center;
+                        min-height: 2.2em;
+
+                        &:nth-child(2n) {
+                            @apply .bg-grey-lighter;
+                        }
+                    }
+                }
+            }
+        }
+    }
+</style>

@@ -26,3 +26,17 @@
 
     }
 </script>
+
+<style lang="scss">
+    .copy-package {
+        @apply .flex .mb-4;
+
+        input {
+            @apply .rounded-r-none .font-mono;
+        }
+
+        a {
+            @apply .text-black .border .rounded-l-none .border-l-0;
+        }
+    }
+</style>

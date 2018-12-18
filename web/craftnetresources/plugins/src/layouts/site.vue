@@ -191,3 +191,19 @@
         },
     }
 </script>
+
+<style lang="scss">
+    .seo-meta {
+        @apply .bg-blue-lighter .text-blue-darker .p-4 .rounded .mb-4;
+
+        ul {
+            @apply .list-reset;
+
+            li {
+                &:not(:last-child) {
+                    @apply .mb-2;
+                }
+            }
+        }
+    }
+</style>
