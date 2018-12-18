@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <screenshot-modal v-if="showingScreenshotModal"></screenshot-modal>
-        <header :class="{sticky: stickyHeader}">
+        <header>
             <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
                 <i class="fas fa-bars"></i>
                 <font-awesome-icon :icon="icon" />
@@ -30,7 +30,7 @@
             <template v-else>
                 <transition :name="transitionName">
                     <!--<div v-if="computedShowingSidebar" class="sidebar showing-sidebar">-->
-                    <div class="sidebar" :class="{'showing-sidebar': computedShowingSidebar, sticky: stickyHeader}">
+                    <div class="sidebar" :class="{'showing-sidebar': computedShowingSidebar}">
                         <div class="sidebar-main">
                             <ul class="categories">
                                 <li v-for="category in categories">
@@ -99,7 +99,6 @@
                 showingSidebar: state => state.app.showingSidebar,
                 showingScreenshotModal: state => state.app.showingScreenshotModal,
                 pageMeta: state => state.app.pageMeta,
-                stickyHeader: state => state.app.stickyHeader,
                 searchQuery: state => state.pluginStore.searchQuery,
                 categories: state => state.pluginStore.categories,
                 featuredPlugins: state => state.pluginStore.featuredPlugins,
@@ -165,12 +164,6 @@
 
             searchQueryBlur() {
                 this.searchVisible = false
-            }
-        },
-
-        watch: {
-            '$route.path': function() {
-                this.$store.commit('app/updateStickyHeader', true)
             }
         },
 

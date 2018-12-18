@@ -1,6 +1,6 @@
 <template>
     <div class="plugin-layout">
-        <div ref="pluginDetailsHeader" class="plugin-details-header" :class="{scrolled: scrolled}">
+        <div ref="pluginDetailsHeader" class="plugin-details-header">
             <div v-if="pluginSnippet" class="xcontainer">
                 <div class="description">
                     <div class="icon">
@@ -29,6 +29,8 @@
         </div>
 
         <div class="xcontainer">
+            <hr>
+
             <slot></slot>
         </div>
     </div>
@@ -45,7 +47,6 @@
 
         data() {
             return {
-                scrolled: false,
                 showNav: false,
             }
         },
@@ -63,63 +64,6 @@
 
         },
 
-        methods: {
-
-            onScroll(scrollY) {
-                if (this.$refs.pluginDetailsHeader) {
-                    let headerHeight = this.$refs.pluginDetailsHeader.clientHeight
-
-                    if (this.scrolled) {
-                        headerHeight += 30
-                    }
-
-                    if (!this.scrolled && window.innerHeight < 992) {
-                        headerHeight += this.$refs.pluginDetailsHeader.offsetTop
-                    }
-
-                    if (scrollY > headerHeight) {
-                        this.scrolled = true
-                    } else {
-                        this.scrolled = false
-                    }
-                }
-            },
-
-            onViewScroll(e) {
-                if(e) {
-                    this.onScroll(e.target.scrollTop);
-                }
-            },
-
-            onWindowResize() {
-                if(window.innerHeight > 991) {
-                    this.onViewScroll()
-                } else {
-                    this.onWindowScroll()
-                }
-            },
-
-            onWindowScroll() {
-                this.onScroll(window.scrollY);
-            },
-        },
-
-        mounted() {
-            this.$nextTick(() => {
-                this.$store.commit('app/updateStickyHeader', false)
-            })
-
-            window.addEventListener('scroll', this.onWindowScroll)
-            this.$bus.$on('viewScroll', this.onViewScroll)
-            window.addEventListener('resize', this.onWindowResize)
-            this.onWindowResize()
-        },
-
-        destroyed() {
-            window.removeEventListener('scroll', this.onWindowScroll, true)
-            this.$bus.$off('viewScroll')
-            window.removeEventListener('resize', this.onWindowResize, true)
-        }
     }
 
 </script>
@@ -130,7 +74,7 @@
     /* Plugin Details (plugin/_id) */
 
     .plugin-details-header {
-        @apply .bg-white .mt-0 .py-6 .border-b;
+        @apply .bg-white .mt-0 .pt-6;
 
         .description {
             @apply .flex;
@@ -167,30 +111,6 @@
 
                     &.nuxt-link-active {
                         @apply .text-grey-dark;
-                    }
-                }
-            }
-        }
-
-        &.scrolled {
-            @apply .py-2 .sticky .pin-t .z-30 .w-full .border-b-0;
-            margin-top: 30px;
-            -webkit-box-shadow: 0 4px 2px -2px rgba(0,0,0,.1);
-            box-shadow: 0 4px 2px -2px rgba(0,0,0,.1);
-
-            .description {
-                .icon {
-                    width: 50px;
-                    transition: all 0s ease-out;
-                }
-
-                .name {
-                    h1 {
-                        @apply .text-lg;
-                    }
-
-                    .developer {
-                        @apply .hidden;
                     }
                 }
             }

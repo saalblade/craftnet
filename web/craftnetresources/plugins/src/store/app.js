@@ -8,7 +8,6 @@ export const state = () => ({
     showingScreenshotModal: false,
     screenshotModalImages: null,
     screenshotModalImageKey: 0,
-    stickyHeader: false,
 })
 
 
@@ -47,10 +46,6 @@ export const mutations = {
 
     updatePageMeta(state, pageMeta) {
         state.pageMeta = pageMeta
-    },
-
-    updateStickyHeader(state, stickyHeader) {
-        state.stickyHeader = stickyHeader
     },
 
 }
