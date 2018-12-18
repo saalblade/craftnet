@@ -1,7 +1,7 @@
 <template>
     <div class="plugin-layout">
         <div ref="pluginDetailsHeader" class="plugin-details-header" :class="{scrolled: scrolled}">
-            <div class="xcontainer">
+            <div v-if="pluginSnippet" class="xcontainer">
                 <div class="description">
                     <div class="icon">
                         <img v-if="pluginSnippet.iconUrl" :src="pluginSnippet.iconUrl" />

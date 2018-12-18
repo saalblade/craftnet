@@ -115,46 +115,20 @@
 }
 
 .plugin-details-body {
-  @apply .mt-6 .-mx-4 .leading-normal;
+  @apply .mt-6 .leading-normal;
 
   .plugin-description {
-    @apply .px-4;
-
     h1 {
       @apply .border-b-0;
     }
   }
 
-  .plugin-sidebar {
-    @apply .px-4;
+  .plugin-meta-links {
+    ul {
+      @apply .list-reset;
 
-    .plugin-meta {
-      @apply .mb-4;
-
-      ul {
-        @apply .list-reset;
-
-        li {
-          @apply  .w-1/2 .float-left .mb-4;
-
-          span {
-            @apply .text-grey-dark .block;
-          }
-
-          strong {
-            @apply .font-normal;
-          }
-        }
-      }
-    }
-
-    .plugin-meta-links {
-      ul {
-        @apply .list-reset;
-
-        li {
-          @apply .my-2;
-        }
+      li {
+        @apply .my-2;
       }
     }
   }

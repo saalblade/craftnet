@@ -8,68 +8,36 @@
                     <p v-else>No description.</p>
                 </div>
 
-                <div class="plugin-meta">
-                    <ul class="plugin-meta-data">
-                        <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
-                        <li><span>{{ "Last Update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>
-                        <li v-if="plugin.activeInstalls > 0"><span>{{ "Active Installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
-                        <li><span>{{ "Compatibility"|t('app') }}</span> <strong>{{ plugin.compatibility }}</strong></li>
-                        <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
+                <hr>
 
-                        <li v-if="pluginCategories.length > 0">
-                            <span>{{ "Categories"|t('app') }}</span>
-                            <strong>
-                                <template v-for="category, key in pluginCategories">
-                                    <a @click="viewCategory(category)">{{ category.title }}</a><template v-if="key < (pluginCategories.length - 1)">, </template>
-                                </template>
-                            </strong>
-                        </li>
-                    </ul>
-                    <div class="clearfix"></div>
+                <plugin-editions :plugin="plugin"></plugin-editions>
 
-                    <p v-if="isCommercial(pluginSnippet) && editions.length === 1" class="text-grey-dark">
-                        Price includes 1 year of updates.<br />
-                        {{ editions[0].renewalPrice|currency }}/year per site for updates after that.
-                    </p>
-                </div>
-
-                <template v-if="isCommercial(pluginSnippet) && editions.length > 1">
-                    <h3>Editions</h3>
-
-                    <div class="plugin-editions mb-4">
-                        <div class="plugin-editions-edition" v-for="edition in plugin.editions">
-                            <h4><span class="edition-name">{{edition.name}}</span></h4>
-                            <ul>
-                                <li v-for="feature in edition.features">
-                                    <font-awesome-icon icon="check"></font-awesome-icon>
-                                    {{feature.name}}
-                                    <font-awesome-icon icon="info-circle" />
-                                    <!--
-                                    <template v-if="feature.description">
-                                        — {{feature.description}}
-                                    </template>
-                                    -->
-                                </li>
-                            </ul>
-
-                            <div class="buttons">
-                                <a :href="craftIdUrl + '/buy-plugin/' + pluginSnippet.handle + '/' + edition.handle" class="btn btn-primary">
-                                    {{edition.price|currency}}
-                                </a>
-                            </div>
-
-                            <p class="mt-4 text-grey-dark mb-0">
-                                Price includes 1 year of updates.<br />
-                                {{ edition.renewalPrice|currency }}/year per site for updates after that.
-                            </p>
-                        </div>
-                    </div>
-                </template>
+                <hr>
 
                 <h3>Package Name</h3>
                 <p>To install this plugin, search for its package name on the Plugin Store and click “Install”.</p>
-
                 <copy-package :plugin="plugin"></copy-package>
+
+                <hr>
+
+                <h3>Informations</h3>
+                <ul class="plugin-meta">
+                    <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
+                    <li><span>{{ "Last Update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>
+                    <li v-if="plugin.activeInstalls > 0"><span>{{ "Active Installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
+                    <li><span>{{ "Compatibility"|t('app') }}</span> <strong>{{ plugin.compatibility }}</strong></li>
+                    <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
+
+                    <li v-if="pluginCategories.length > 0">
+                        <span>{{ "Categories"|t('app') }}</span>
+                        <strong>
+                            <template v-for="category, key in pluginCategories">
+                                <a @click="viewCategory(category)">{{ category.title }}</a><template v-if="key < (pluginCategories.length - 1)">, </template>
+                            </template>
+                        </strong>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
 
                 <hr>
 
@@ -94,6 +62,7 @@
     import PluginLayout from '../../components/PluginLayout'
     import CopyPackage from '../../components/CopyPackage'
     import Carousel from '../../components/Carousel'
+    import PluginEditions from '../../components/PluginEditions'
 
     export default {
 
@@ -134,12 +103,14 @@
         },
 
         head () {
-            return {
-                title: this.pageMeta.title,
-                meta: [
-                    { hid: 'description', name: 'description', content: this.pageMeta.description }
-                ]
-            };
+            if (this.pageMeta) {
+                return {
+                    title: this.pageMeta.title,
+                    meta: [
+                        { hid: 'description', name: 'description', content: this.pageMeta.description }
+                    ]
+                };
+            }
         },
 
         layout: 'site',
@@ -149,6 +120,7 @@
             PluginLayout,
             CopyPackage,
             Carousel,
+            PluginEditions,
         },
 
         data() {
@@ -167,7 +139,6 @@
             }),
 
             ...mapGetters({
-                isCommercial: 'pluginStore/isCommercial',
                 getPluginEditions: 'pluginStore/getPluginEditions',
             }),
 
@@ -216,21 +187,41 @@
 </script>
 
 <style lang="scss" scoped>
-    .my-swiper {
-        height: 300px;
-        width: 100%;
-        .swiper-slide {
-            text-align: center;
-            font-size: 38px;
-            font-weight: 700;
-            background-color: #eee;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+    /* Plugin Meta */
+
+    ul.plugin-meta {
+        @apply .flex .flex-wrap .list-reset .-mx-4;
+
+        li {
+            @apply .mb-8 .px-4 .flex-no-shrink .flex-no-grow;
+            flex-basis: 50%;
+
+            span {
+                @apply .block .text-grey;
+            }
         }
-        .swiper-pagination {
-            > .swiper-pagination-bullet {
-                background-color: red;
+    }
+
+    @media only screen and (min-width: 672px) {
+        ul.plugin-meta {
+            li {
+                flex-basis: 33.3333%;
+            }
+        }
+    }
+
+    @media only screen and (min-width: 1400px) {
+        ul.plugin-meta {
+            li {
+                flex-basis: 25%;
+            }
+        }
+    }
+
+    @media only screen and (min-width: 1824px) {
+        ul.plugin-meta {
+            li {
+                flex-basis: 20%;
             }
         }
     }

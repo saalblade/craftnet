@@ -5,13 +5,13 @@
                 <a class="block toggle" @click="globalMenuToggle">
                     <font-awesome-icon icon="th" />
                 </a>
-                <div class="popover" :class="{hidden: !showingGlobalMenu}">
+                <div class="navitation-popover" :class="{hidden: !showingGlobalMenu}">
                     <div>
                         <p><a :href="craftIdUrl">Craft ID</a></p>
                         <p><nuxt-link to="/" exact>Craft Plugins</nuxt-link></p>
                     </div>
 
-                    <div class="popover-arrow"></div>
+                    <div class="navigation-popover-arrow"></div>
                 </div>
             </li>
         </ul>
