@@ -1,8 +1,10 @@
 <template>
     <div class="screenshots">
-        <a class="screenshot" v-for="(image, key) in images" @click="zoomImage(key)" :key="key">
-            <img :src="image" />
-        </a>
+        <div class="screenshots-inner">
+            <a class="screenshot" v-for="(image, key) in images" @click="zoomImage(key)" :key="key">
+                <img :src="image" />
+            </a>
+        </div>
     </div>
 </template>
 
@@ -27,22 +29,28 @@
 
 <style lang="scss">
     .screenshots {
-        @apply .overflow-auto .flex .-mx-4;
+        @apply .overflow-auto;
 
-        .screenshot {
-            @apply .px-4 .flex-no-shrink .flex-no-grow;
-            flex-basis: 50%;
+        .screenshots-inner {
+            @apply .-mx-4 .flex;
 
-            img {
-                @apply .rounded;
+            .screenshot {
+                @apply .px-4 .flex-no-shrink .flex-no-grow;
+                flex-basis: 50%;
+
+                img {
+                    @apply .rounded;
+                }
             }
         }
     }
 
     @media only screen and (min-width: 1400px) {
         .screenshots {
-            .screenshot {
-                flex-basis: 33.3333%;
+            .screenshots-inner {
+                .screenshot {
+                    flex-basis: 33.3333%;
+                }
             }
         }
     }

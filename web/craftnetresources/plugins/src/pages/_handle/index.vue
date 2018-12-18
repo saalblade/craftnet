@@ -5,6 +5,8 @@
                 <div class="plugin-description">
                     <plugin-screenshots :images="plugin.screenshotUrls"></plugin-screenshots>
 
+                    <hr>
+
                     <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                     <p v-else>No description.</p>
                 </div>
@@ -187,6 +189,43 @@
 </script>
 
 <style lang="scss" scoped>
+    /* Plugin Details Body */
+
+    .plugin-details-body {
+        @apply .mt-6 .leading-normal;
+
+        .plugin-description {
+            h1 {
+                @apply .border-b-0;
+            }
+        }
+
+        .plugin-meta-links {
+            ul {
+                @apply .list-reset;
+
+                li {
+                    @apply .my-2;
+                }
+            }
+        }
+
+        .plugin-carousel {
+            @apply .bg-red .relative .mb-6;
+            width: 100%;
+            padding-top: 75%;
+
+            .image {
+                @apply .bg-grey-lightest .absolute .pin .text-center;
+
+                img {
+                    height: 100%;
+                }
+            }
+        }
+    }
+
+
     /* Plugin Meta */
 
     ul.plugin-meta {

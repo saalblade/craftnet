@@ -98,3 +98,48 @@
 
     }
 </script>
+
+<style lang="scss">
+    .developer-card {
+        @apply .flex;
+
+        .photo {
+            @apply .mr-6 .rounded-full .bg-grey-lighter;
+
+            width: 150px;
+            height: 150px;
+
+            img {
+                @apply .rounded-full;
+            }
+        }
+
+        .developer-details {
+            @apply .flex .content-center;
+
+            .developer-details-content {
+                @apply .self-center;
+
+                h1 {
+                    @apply .border-b-0;
+                }
+
+                ul {
+                    @apply .list-reset;
+
+                    &.links {
+                        @apply .mt-2;
+
+                        li {
+                            @apply .inline-block .mr-2;
+
+                            a {
+                                @apply .inline-block;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</style>
