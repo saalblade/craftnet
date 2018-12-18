@@ -3,9 +3,10 @@
         <template v-if="pluginSnippet && plugin && !loading">
             <div class="plugin-details-body">
                 <div class="plugin-description">
-                    <plugin-screenshots :images="plugin.screenshotUrls"></plugin-screenshots>
-
-                    <hr>
+                    <template v-if="plugin.screenshotUrls.length">
+                        <plugin-screenshots :images="plugin.screenshotUrls"></plugin-screenshots>
+                        <hr>
+                    </template>
 
                     <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                     <p v-else>No description.</p>
