@@ -29,7 +29,7 @@
         </div>
 
         <div class="grid-main">
-            <plugin-index :plugins="plugins" columns="3"></plugin-index>
+            <plugin-index :plugins="plugins"></plugin-index>
         </div>
     </div>
 </template>

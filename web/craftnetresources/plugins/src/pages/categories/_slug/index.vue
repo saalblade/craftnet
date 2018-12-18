@@ -1,7 +1,7 @@
 <template>
     <div v-if="category" class="xcontainer py-6">
         <h1>{{category.title}}</h1>
-        <plugin-index :plugins="plugins" :columns="4"></plugin-index>
+        <plugin-index :plugins="plugins"></plugin-index>
     </div>
 </template>
 

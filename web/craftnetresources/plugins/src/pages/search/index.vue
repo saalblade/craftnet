@@ -2,7 +2,7 @@
     <div class="xcontainer py-6">
         <h1>Showing results for “{{ searchQuery }}”</h1>
 
-        <plugin-grid :plugins="pluginsToRender" :columns="4"></plugin-grid>
+        <plugin-grid :plugins="pluginsToRender"></plugin-grid>
     </div>
 </template>
 
