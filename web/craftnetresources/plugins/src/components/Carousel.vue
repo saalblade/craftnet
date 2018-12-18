@@ -17,7 +17,7 @@
 <script>
     export default {
 
-        props: ['identifier', 'inline', 'images'],
+        props: ['identifier', 'inline', 'images', 'initialSlide'],
 
         data() {
             return {
@@ -37,7 +37,11 @@
                     },
                     keyboard: true
                 }
-            }
+            },
+
+            swiper() {
+                return this.$refs.swiper.swiper
+            },
 
         },
 
@@ -87,6 +91,8 @@
         mounted: function () {
             window.addEventListener('resize', this.handleResize)
             this.handleResize()
+
+            this.swiper.slideTo(this.initialSlide, 0)
         },
 
         beforeDestroy: function () {

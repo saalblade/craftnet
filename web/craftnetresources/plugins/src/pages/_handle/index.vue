@@ -3,7 +3,8 @@
         <template v-if="pluginSnippet && plugin && !loading">
             <div class="plugin-details-body">
                 <div class="plugin-description">
-                    <carousel identifier="plugin-carousel" :inline="true" :images="plugin.screenshotUrls"></carousel>
+                    <plugin-screenshots :images="plugin.screenshotUrls"></plugin-screenshots>
+
                     <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                     <p v-else>No description.</p>
                 </div>
@@ -61,7 +62,7 @@
     import PluginPricing from '../../components/PluginPricing'
     import PluginLayout from '../../components/PluginLayout'
     import CopyPackage from '../../components/CopyPackage'
-    import Carousel from '../../components/Carousel'
+    import PluginScreenshots from '../../components/PluginScreenshots'
     import PluginEditions from '../../components/PluginEditions'
 
     export default {
@@ -119,7 +120,7 @@
             PluginPricing,
             PluginLayout,
             CopyPackage,
-            Carousel,
+            PluginScreenshots,
             PluginEditions,
         },
 

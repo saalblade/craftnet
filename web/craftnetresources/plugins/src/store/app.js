@@ -7,6 +7,7 @@ export const state = () => ({
     searchQuery: '',
     showingScreenshotModal: false,
     screenshotModalImages: null,
+    screenshotModalImageKey: 0,
     stickyHeader: false,
 })
 
@@ -32,8 +33,16 @@ export const mutations = {
         state.searchQuery = searchQuery
     },
 
+    updateShowingScreenshotModal(state, show) {
+        state.showingScreenshotModal = show
+    },
+
     updateScreenshotModalImages(state, images) {
         state.screenshotModalImages = images
+    },
+
+    updateScreenshotModalImageKey(state, key) {
+        state.screenshotModalImageKey = key
     },
 
     updatePageMeta(state, pageMeta) {
@@ -42,6 +51,6 @@ export const mutations = {
 
     updateStickyHeader(state, stickyHeader) {
         state.stickyHeader = stickyHeader
-    }
+    },
 
 }

@@ -2,7 +2,7 @@
     <div class="screenshot-modal">
         <a class="close" @click="close">&times;</a>
 
-        <carousel identifier="screenshot-modal-carousel" v-if="screenshotModalImages" :images="screenshotModalImages"></carousel>
+        <carousel identifier="screenshot-modal-carousel" v-if="screenshotModalImages" :images="screenshotModalImages" :initial-slide="(screenshotModalImageKey + 1)"></carousel>
     </div>
 </template>
 
@@ -20,7 +20,12 @@
 
             ...mapState({
                 screenshotModalImages: state => state.app.screenshotModalImages,
-            })
+                screenshotModalImageKey: state => state.app.screenshotModalImageKey,
+            }),
+
+            swiper() {
+                return this.$refs.screenshotModalSwiper.swiper
+            },
 
         },
 
