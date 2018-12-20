@@ -30,7 +30,7 @@
             swiperOption() {
                 return {
                     initialSlide: 0,
-                    loop: true,
+                    loop: false,
                     pagination: {
                         el: '.swiper-pagination-' + this.identifier,
                         clickable: true
@@ -96,6 +96,7 @@
         },
 
         beforeDestroy: function () {
+            this.swiper.destroy(true, false)
             window.removeEventListener('resize', this.handleResize)
         }
 

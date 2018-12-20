@@ -2,7 +2,7 @@
     <div class="screenshot-modal">
         <a class="close" @click="close">&times;</a>
 
-        <carousel identifier="screenshot-modal-carousel" v-if="screenshotModalImages" :images="screenshotModalImages" :initial-slide="(screenshotModalImageKey + 1)"></carousel>
+        <carousel identifier="screenshot-modal-carousel" v-if="screenshotModalImages" :images="screenshotModalImages" :initial-slide="(screenshotModalImageKey)"></carousel>
     </div>
 </template>
 
