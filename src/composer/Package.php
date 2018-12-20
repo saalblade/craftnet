@@ -26,6 +26,11 @@ class Package extends Model
     public $id;
 
     /**
+     * @var int|null
+     */
+    public $developerId;
+
+    /**
      * @var
      */
     public $name;
@@ -148,26 +153,24 @@ class Package extends Model
             $client = new GithubClient();
 
             $token = null;
-            if ($plugin = $this->getPlugin()) {
-                $token = Module::getInstance()->getOauth()->getAuthTokenByUserId('Github', $plugin->developerId);
-                Craft::info('Using package token for ' . $plugin->name . ': ' . substr($token, 0, 10) . '...', __METHOD__);
+            if ($this->developerId) {
+                Craft::info('Using package token for ' . $this->name . ': ' . substr($token, 0, 10), __METHOD__);
+                $token = Module::getInstance()->getOauth()->getAuthTokenByUserId('Github', $this->developerId);
 
                 if (!$token) {
                     if (Module::getInstance()->getPackageManager()->requirePluginVcsTokens) {
-                        throw new MissingTokenException($plugin);
+                        throw new MissingTokenException($this);
                     }
-                    Craft::warning("Plugin \"{$plugin->name}\" is missing its VCS token.", __METHOD__);
+                    Craft::warning("Package \"{$this->name}\" is missing its VCS token.", __METHOD__);
                 }
             }
             if (!$token) {
                 // Just use a fallback token
                 $token = Module::getInstance()->getPackageManager()->getRandomGitHubFallbackToken();
-                Craft::info('Using fallback token for ' . ($plugin ? $plugin->name : $this->name) . ': ' . substr($token, 0, 10) . '...', __METHOD__);
+                Craft::info("Using fallback token for {$this->name}: " . substr($token, 0, 10), __METHOD__);
             }
 
-            if ($token) {
-                $client->authenticate($token, null, GithubClient::AUTH_HTTP_TOKEN);
-            }
+            $client->authenticate($token, null, GithubClient::AUTH_HTTP_TOKEN);
 
             return new GitHub($this, [
                 'client' => $client,

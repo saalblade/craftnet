@@ -697,8 +697,6 @@ EOL;
         $icon = $plugin->getIcon();
         $developer = $plugin->getDeveloper();
 
-        $latestRelease = Module::getInstance()->getPackageManager()->getRelease($plugin->packageName, $plugin->latestVersion);
-
         // Return data
         $data = [
             'id' => $plugin->id,
@@ -714,7 +712,7 @@ EOL;
             'version' => $plugin->latestVersion,
             'activeInstalls' => $plugin->activeInstalls,
             'packageName' => $plugin->packageName,
-            'lastUpdate' => $latestRelease->time ?? $plugin->dateUpdated->format(\DateTime::ATOM),
+            'lastUpdate' => ($plugin->latestVersionTime ?? $plugin->dateUpdated)->format(\DateTime::ATOM),
         ];
 
         foreach ($plugin->getEditions() as $edition) {

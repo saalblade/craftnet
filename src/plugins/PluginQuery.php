@@ -2,8 +2,10 @@
 
 namespace craftnet\plugins;
 
+use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
+use craftnet\Module;
 use yii\db\Connection;
 
 /**
@@ -39,9 +41,24 @@ class PluginQuery extends ElementQuery
     public $packageId;
 
     /**
-     * @var bool|null Whether the matching plugins must have (or must not have) a latest version.
+     * @var bool Whether info about the latest release should be included
      */
-    public $hasLatestVersion;
+    public $withLatestReleaseInfo = false;
+
+    /**
+     * @var string|null Craft version the latest release must be compatible with
+     */
+    public $cmsVersion;
+
+    /**
+     * @var string|null Minimum stability the latest release must have
+     */
+    public $minStability;
+
+    /**
+     * @var bool Whether a stable release should be returned if possible
+     */
+    public $preferStable = true;
 
     /**
      * @inheritdoc
@@ -122,15 +139,20 @@ class PluginQuery extends ElementQuery
     }
 
     /**
-     * Sets the [[hasLatestVersion]] property.
+     * Sets the [[withLatestReleaseInfo]], [[cmsVersion]], and [[minStability]] properties.
      *
-     * @param bool $value The property value
-     *
+     * @param bool $withLatestReleaseInfo
+     * @param string|null $cmsVersion
+     * @param string|null $minStability
+     * @param bool $preferStable
      * @return static self reference
      */
-    public function hasLatestVersion($value = true)
+    public function withLatestReleaseInfo(bool $withLatestReleaseInfo = true, string $cmsVersion = null, string $minStability = null, $preferStable = true)
     {
-        $this->hasLatestVersion = $value;
+        $this->withLatestReleaseInfo = $withLatestReleaseInfo;
+        $this->cmsVersion = $cmsVersion;
+        $this->minStability = $minStability;
+        $this->preferStable = $preferStable;
         return $this;
     }
 
@@ -151,7 +173,6 @@ class PluginQuery extends ElementQuery
             'craftnet_plugins.longDescription',
             'craftnet_plugins.documentationUrl',
             'craftnet_plugins.changelogPath',
-            'craftnet_plugins.latestVersion',
             'craftnet_plugins.activeInstalls',
             'craftnet_plugins.pendingApproval',
             'craftnet_plugins.keywords',
@@ -180,10 +201,39 @@ class PluginQuery extends ElementQuery
                 ->andWhere(Db::parseParam('pc.categoryId', $this->categoryId));
         }
 
-        if ($this->hasLatestVersion === true) {
-            $this->subQuery->andWhere(['not', ['craftnet_plugins.latestVersion' => null]]);
-        } else if ($this->hasLatestVersion === false) {
-            $this->subQuery->andWhere(['craftnet_plugins.latestVersion' => null]);
+        if ($this->withLatestReleaseInfo) {
+            $maxCol = $this->preferStable ? 'stableOrder' : 'order';
+            $latestReleaseQuery = (new Query())
+                ->select(["max([[s_vo.{$maxCol}]])"])
+                ->from(['craftnet_pluginversionorder s_vo'])
+                ->innerJoin(['craftnet_packageversions s_v'], '[[s_v.id]] = [[s_vo.versionId]]')
+                ->where('[[s_v.packageId]] = [[craftnet_plugins.packageId]]')
+                ->groupBy(['s_v.packageId']);
+
+            $packageManager = Module::getInstance()->getPackageManager();
+
+            if ($this->cmsVersion) {
+                $cmsRelease = $packageManager->getRelease('craftcms/cms', $this->cmsVersion);
+                if ($cmsRelease) {
+                    $latestReleaseQuery
+                        ->innerJoin(['craftnet_pluginversioncompat s_vc'], '[[s_vc.pluginVersionId]] = [[s_v.id]]')
+                        ->andWhere(['s_vc.cmsVersionId' => $cmsRelease->id]);
+                }
+            }
+
+            if ($this->minStability) {
+                $latestReleaseQuery->andWhere([
+                    's_v.stability' => $packageManager->getStabilities($this->minStability)
+                ]);
+            }
+
+            $this->subQuery
+                ->addSelect(['v.version as latestVersion', 'v.time as latestVersionTime'])
+                ->innerJoin(['craftnet_packageversions v'], '[[v.packageId]] = [[craftnet_plugins.packageId]]')
+                ->innerJoin(['craftnet_pluginversionorder vo'], '[[vo.versionId]] = [[v.id]]')
+                ->andWhere(["vo.{$maxCol}" => $latestReleaseQuery]);
+            $this->query
+                ->addSelect(['latestVersion', 'latestVersionTime']);
         }
 
         return parent::beforePrepare();
