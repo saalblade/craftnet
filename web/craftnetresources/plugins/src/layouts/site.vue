@@ -75,7 +75,6 @@
                 loading: false,
                 bigScreen: false,
                 searchVisible: false,
-                showingSidebar: false,
             }
         },
 
@@ -96,7 +95,7 @@
             },
 
             ...mapState({
-                // showingSidebar: state => state.app.showingSidebar,
+                showingSidebar: state => state.app.showingSidebar,
                 showingScreenshotModal: state => state.app.showingScreenshotModal,
                 pageMeta: state => state.app.pageMeta,
                 searchQuery: state => state.pluginStore.searchQuery,
@@ -116,22 +115,7 @@
              * Toggles the sidebar.
              */
             toggleSidebar() {
-                // this.$store.commit('app/toggleSidebar')
-                this.showingSidebar = !this.showingSidebar
-            },
-
-            handleResize() {
-                // const windowWidth = document.documentElement.clientWidth;
-                //
-                // if(windowWidth > 991) {
-                //     this.bigScreen = true
-                //
-                //     if(this.showingSidebar) {
-                //         this.toggleSidebar()
-                //     }
-                // } else {
-                //     this.bigScreen = false
-                // }
+                this.$store.commit('app/toggleSidebar')
             },
 
             onViewScroll(e) {
