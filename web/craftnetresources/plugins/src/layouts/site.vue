@@ -1,6 +1,8 @@
 <template>
     <div class="wrapper">
-        <screenshot-modal v-if="showingScreenshotModal"></screenshot-modal>
+        <transition name="fade">
+            <screenshot-modal v-if="showingScreenshotModal"></screenshot-modal>
+        </transition>
         <header>
             <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
                 <i class="fas fa-bars"></i>
@@ -28,26 +30,23 @@
             </div>
 
             <template v-else>
-                <transition :name="transitionName">
-                    <!--<div v-if="computedShowingSidebar" class="sidebar showing-sidebar">-->
-                    <div class="sidebar" :class="{'showing-sidebar': computedShowingSidebar}">
-                        <div class="sidebar-main">
-                            <ul class="categories">
-                                <li v-for="category in categories">
-                                    <nuxt-link :to="'/categories/'+category.slug">
-                                        <img :src="category.iconUrl" width="24" height="24" />
-                                        {{ category.title }}
-                                    </nuxt-link>
-                                </li>
-                            </ul>
+                <div class="sidebar" :class="{'showing-sidebar': showingSidebar}">
+                    <div class="sidebar-main">
+                        <ul class="categories">
+                            <li v-for="category in categories">
+                                <nuxt-link :to="'/categories/'+category.slug">
+                                    <img :src="category.iconUrl" width="24" height="24" />
+                                    {{ category.title }}
+                                </nuxt-link>
+                            </li>
+                        </ul>
 
-                            <div class="nav">
-                                <h3>Switch Sites</h3>
-                                <navigation></navigation>
-                            </div>
+                        <div class="nav">
+                            <h3>Switch Sites</h3>
+                            <navigation></navigation>
                         </div>
                     </div>
-                </transition>
+                </div>
 
                 <div ref="view" class="view">
                     <div v-if="pageMeta && showSeoMeta" class="seo-meta">
@@ -76,6 +75,7 @@
                 loading: false,
                 bigScreen: false,
                 searchVisible: false,
+                showingSidebar: false,
             }
         },
 
@@ -96,7 +96,7 @@
             },
 
             ...mapState({
-                showingSidebar: state => state.app.showingSidebar,
+                // showingSidebar: state => state.app.showingSidebar,
                 showingScreenshotModal: state => state.app.showingScreenshotModal,
                 pageMeta: state => state.app.pageMeta,
                 searchQuery: state => state.pluginStore.searchQuery,
@@ -108,22 +108,6 @@
                 return process.env.showSeoMeta
             },
 
-            computedShowingSidebar() {
-                if(this.bigScreen) {
-                    return true
-                }
-
-                return this.showingSidebar
-            },
-
-            transitionName() {
-                if(this.bigScreen) {
-                    return null
-                }
-
-                return 'fade'
-            }
-
         },
 
         methods: {
@@ -132,21 +116,22 @@
              * Toggles the sidebar.
              */
             toggleSidebar() {
-                this.$store.commit('app/toggleSidebar')
+                // this.$store.commit('app/toggleSidebar')
+                this.showingSidebar = !this.showingSidebar
             },
 
             handleResize() {
-                const windowWidth = document.documentElement.clientWidth;
-
-                if(windowWidth > 991) {
-                    this.bigScreen = true
-
-                    if(this.showingSidebar) {
-                        this.toggleSidebar()
-                    }
-                } else {
-                    this.bigScreen = false
-                }
+                // const windowWidth = document.documentElement.clientWidth;
+                //
+                // if(windowWidth > 991) {
+                //     this.bigScreen = true
+                //
+                //     if(this.showingSidebar) {
+                //         this.toggleSidebar()
+                //     }
+                // } else {
+                //     this.bigScreen = false
+                // }
             },
 
             onViewScroll(e) {
@@ -190,7 +175,7 @@
 
     .wrapper {
         header {
-            @apply .flex .px-6 .py-3 .bg-grey-lighter .border-b .justify-between;
+            @apply .flex .px-6 .py-3 .bg-grey-lighter .border-b .justify-between .relative .z-50;
 
             &.sticky {
                 @apply .sticky .pin .z-10;
@@ -242,25 +227,65 @@
                 @apply .overflow-y-auto .pin .z-40;
                 -webkit-overflow-scrolling: touch;
                 top: 53px;
+                @apply .fixed;
 
                 &.sticky {
                     @apply .sticky;
                 }
 
-                &.showing-sidebar {
-                    @apply .fixed;
-
-                    .sidebar-main {
-                        @apply .block;
-                    }
-                }
-
                 .sidebar-main {
-                    @apply .hidden .px-6 .py-4;
+                    @apply .px-6 .py-4;
                 }
 
                 nav {
                     @apply .-mx-6 .px-6 .pb-4 .mb-4;
+                }
+            }
+
+            .sidebar {
+                @apply .bg-grey-lighter;
+
+                h3 {
+                    @apply .mb-2 .mt-4;
+
+                    &.first {
+                        @apply .mt-0;
+                    }
+                }
+
+                ul {
+                    @apply .list-reset;
+
+                    li {
+                        a {
+                            @apply .block .py-2 .no-underline .-mx-6 .px-6 .text-grey-darker;
+
+                            img {
+                                @apply .align-middle;
+                            }
+
+                            &:hover {
+                                @apply .text-blue;
+                            }
+
+                            &.nuxt-link-active {
+                                @apply .bg-grey-light;
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            .sidebar {
+                // transition: all .5s ease-out;
+                transform: translateY(-100%);
+                visibility: hidden;
+
+                &.showing-sidebar {
+                    // transition: all .5s ease-out;
+                    transform: translateY(0);
+                    visibility: visible;
                 }
             }
         }
@@ -316,61 +341,20 @@
                 @apply .flex .flex-row .flex-1;
 
                 .sidebar {
-                    @apply .w-64 .overflow-auto .block .border-r;
+                    @apply .w-64 .overflow-auto .block .border-r .relative .pin-none;
 
-                    &.showing-sidebar {
-                        @apply .relative .pin-none;
+                    transition: none;
+                    transform: translateY(0);
+                    visibility: visible;
+
+                    .nav {
+                        @apply .hidden;
                     }
                 }
 
                 .view {
                     @apply .flex-1 .overflow-auto;
                 }
-            }
-        }
-    }
-
-
-    /* Sidebar */
-
-    .sidebar {
-        @apply .bg-grey-lighter;
-
-        h3 {
-            @apply .mb-2 .mt-4;
-
-            &.first {
-                @apply .mt-0;
-            }
-        }
-
-        ul {
-            @apply .list-reset;
-
-            li {
-                a {
-                    @apply .block .py-2 .no-underline .-mx-6 .px-6 .text-grey-darker;
-
-                    img {
-                        @apply .align-middle;
-                    }
-
-                    &:hover {
-                        @apply .text-blue;
-                    }
-
-                    &.nuxt-link-active {
-                        @apply .bg-grey-light;
-                    }
-                }
-            }
-        }
-    }
-
-    @media (min-width: 992px) {
-        .sidebar {
-            .nav {
-                @apply .hidden;
             }
         }
     }
