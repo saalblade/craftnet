@@ -8,8 +8,18 @@
                         <hr>
                     </template>
 
-                    <div v-if="longDescription" v-html="longDescription" class="readable"></div>
-                    <p v-else>No description.</p>
+                    <div class="lg:flex">
+                        <div class="lg:flex-1 lg:pr-8">
+                            <div v-if="longDescription" v-html="longDescription" class="readable"></div>
+                            <p v-else>No description.</p>
+                        </div>
+                        <div class="lg:pl-8">
+                            <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)" class="list-reset">
+                                <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
+                                <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl"><font-awesome-icon icon="certificate" /> {{ "Changelog"|t('app') }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
                 <hr>
@@ -46,16 +56,6 @@
                 <hr>
 
                 <plugin-changelog></plugin-changelog>
-
-                <hr>
-
-                <div class="plugin-meta-links">
-                    <h3>Links</h3>
-                    <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)">
-                        <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
-                        <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl"><font-awesome-icon icon="certificate" /> {{ "Changelog"|t('app') }}</a></li>
-                    </ul>
-                </div>
             </div>
         </template>
         <template v-else>
@@ -204,16 +204,6 @@
         .plugin-description {
             h1 {
                 @apply .border-b-0;
-            }
-        }
-
-        .plugin-meta-links {
-            ul {
-                @apply .list-reset;
-
-                li {
-                    @apply .my-2;
-                }
             }
         }
 
