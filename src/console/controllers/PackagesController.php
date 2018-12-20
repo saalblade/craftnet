@@ -2,6 +2,8 @@
 
 namespace craftnet\console\controllers;
 
+use Craft;
+use craft\elements\User;
 use craftnet\composer\Package;
 use craftnet\Module;
 use yii\base\Exception;
@@ -22,6 +24,11 @@ class PackagesController extends Controller
      * @var bool Whether to update package releases even if their SHA hasn't changed
      */
     public $force = false;
+
+    /**
+     * @var string|int
+     */
+    public $developer;
 
     /**
      * @var bool Whether this is a managed package or just a dependency of a managed package
@@ -85,6 +92,7 @@ class PackagesController extends Controller
 
         switch ($actionID) {
             case 'add':
+                $options[] = 'developer';
                 $options[] = 'managed';
                 $options[] = 'repository';
                 $options[] = 'type';
@@ -137,8 +145,18 @@ class PackagesController extends Controller
      */
     public function actionAdd(string $name): int
     {
+        if ($this->developer) {
+            try {
+                $developer = $this->_developer($this->developer);
+            } catch (InvalidArgumentException $e) {
+                Console::error(Console::ansiFormat($e->getMessage(), [Console::FG_RED]));
+                return ExitCode::UNSPECIFIED_ERROR;
+            }
+        }
+
         $packageManager = $this->module->getPackageManager();
         $package = new Package([
+            'developerId' => $developer->id ?? null,
             'name' => $name,
             'type' => $this->type,
             'repository' => $this->repository,
@@ -151,6 +169,45 @@ class PackagesController extends Controller
         }
         if (!$this->dumpJson && $this->confirm('Dump new Composer JSON?')) {
             $this->module->getJsonDumper()->dump();
+        }
+
+        return ExitCode::OK;
+    }
+
+    /**
+     * Assigns a package to a developer.
+     *
+     * @param string $name The package name
+     * @param int|string $developer The developer's ID, username, or email
+     * @param string $repository The package's repository URL
+     * @return int
+     */
+    public function actionAssign(string $name, $developer, string $repository): int
+    {
+        $packageManager = $this->module->getPackageManager();
+        try {
+            $package = $packageManager->getPackage($name);
+            $developer = $this->_developer($developer);
+        } catch (InvalidArgumentException $e) {
+            Console::error(Console::ansiFormat($e->getMessage(), [Console::FG_RED]));
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
+
+        $package->developerId = $developer->id;
+        $package->managed = true;
+        $package->repository = $repository;
+        $packageManager->savePackage($package);
+        Console::output("Done assigning {$name} to {$developer->email}.");
+
+        if ($package->webhookId) {
+            $create = $this->confirm('Recreate a webhook?');
+        } else {
+            $create = $this->confirm('Create a webhook?');
+        }
+
+        if ($create) {
+            $packageManager->createWebhook($name, true);
+            Console::output('Webhook created.');
         }
 
         return ExitCode::OK;
@@ -302,5 +359,31 @@ class PackagesController extends Controller
         }
 
         return ExitCode::OK;
+    }
+
+    /**
+     * Returns a developer by its ID, email, or username.
+     *
+     * @param mixed $developer
+     * @return User
+     * @throws InvalidArgumentException
+     */
+    private function _developer($developer): User
+    {
+        if ($developer instanceof User) {
+            return $developer;
+        }
+
+        if (is_numeric($developer)) {
+            $user = User::findOne($developer);
+        } else {
+            $user = Craft::$app->getUsers()->getUserByUsernameOrEmail($developer);
+        }
+
+        if (!$user) {
+            throw new InvalidArgumentException('Unknown developer: ' . $developer);
+        }
+
+        return $user;
     }
 }

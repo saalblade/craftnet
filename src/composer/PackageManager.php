@@ -426,6 +426,7 @@ class PackageManager extends Component
     public function savePackage(Package $package)
     {
         $data = [
+            'developerId' => $package->developerId,
             'name' => $package->name,
             'type' => $package->type,
             'managed' => $package->managed,
@@ -1289,7 +1290,7 @@ class PackageManager extends Component
     private function _createPackageQuery(): Query
     {
         return (new Query())
-            ->select(['id', 'name', 'type', 'repository', 'managed', 'abandoned', 'replacementPackage', 'webhookId', 'webhookSecret'])
+            ->select(['id', 'developerId', 'name', 'type', 'repository', 'managed', 'abandoned', 'replacementPackage', 'webhookId', 'webhookSecret'])
             ->from(['craftnet_packages']);
     }
 }

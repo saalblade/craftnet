@@ -830,14 +830,16 @@ class Plugin extends Element
         $packageManager = Module::getInstance()->getPackageManager();
         if ($packageManager->packageExists($this->packageName)) {
             $package = $packageManager->getPackage($this->packageName);
-            if ($package->type !== 'craft-plugin' || $package->repository !== $this->repository || !$package->managed) {
+            if ($package->type !== 'craft-plugin' || $package->developerId != $this->developerId || $package->repository !== $this->repository || !$package->managed) {
                 $package->type = 'craft-plugin';
+                $package->developerId = $this->developerId;
                 $package->repository = $this->repository;
                 $package->managed = true;
                 $packageManager->savePackage($package);
             }
         } else {
             $package = new Package([
+                'developerId' => $this->developerId,
                 'name' => $this->packageName,
                 'type' => 'craft-plugin',
                 'repository' => $this->repository,
