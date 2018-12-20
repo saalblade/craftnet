@@ -29,7 +29,7 @@
 
 <style lang="scss">
     .copy-package {
-        @apply .flex .mb-4;
+        @apply .flex;
 
         input {
             @apply .rounded-r-none .font-mono;

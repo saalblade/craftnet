@@ -28,9 +28,11 @@
 
                 <hr>
 
-                <h2>Package Name</h2>
-                <p>To install this plugin, search for its package name on the Plugin Store and click “Install”.</p>
-                <copy-package :plugin="plugin"></copy-package>
+                <div class="max-w-sm mx-auto p-8">
+                    <h2 class="mt-0">Package Name</h2>
+                    <p>To install this plugin, search for its package name on the Plugin Store and click “Install”.</p>
+                    <copy-package :plugin="plugin"></copy-package>
+                </div>
 
                 <hr>
 
