@@ -207,7 +207,6 @@ class PackagesController extends Controller
 
         if ($create) {
             $packageManager->createWebhook($name, true);
-            Console::output('Webhook created.');
         }
 
         return ExitCode::OK;
