@@ -93,7 +93,7 @@
                 @apply .ml-4 .self-center;
 
                 h1 {
-                    @apply .self-center .pb-0 .border-b-0 .text-2xl .mb-1;
+                    @apply .self-center .pb-0 .border-b-0 .text-2xl .mt-0 .mb-1;
                 }
             }
 

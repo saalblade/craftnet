@@ -1,6 +1,6 @@
 <template>
     <div v-if="category" class="xcontainer py-6">
-        <h1>{{category.title}}</h1>
+        <h1 class="border-b py-2 mt-0 mb-0">{{category.title}}</h1>
         <plugin-index :plugins="plugins"></plugin-index>
     </div>
 </template>

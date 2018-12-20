@@ -9,7 +9,7 @@
                 <font-awesome-icon :icon="icon" />
             </a>
 
-            <h2><router-link to="/">Craft Plugin Store</router-link></h2>
+            <h1><router-link to="/">Craft Plugin Store</router-link></h1>
 
             <div class="search" :class="{open: searchVisible}">
                 <search-form ref="searchForm" @searchQueryBlur="searchQueryBlur()" />
@@ -186,8 +186,8 @@
                 width: 14px;
             }
 
-            h2 {
-                @apply .text-lg .self-center .px-6 .py-2 .flex-no-shrink .-ml-6;
+            h1 {
+                @apply .text-lg .self-center .px-6 .py-2 .flex-no-shrink .my-0 .-ml-6;
 
                 a {
                     @apply .text-grey-darker;
@@ -314,7 +314,7 @@
             @apply .flex .flex-col .absolute .pin;
 
             header {
-                h2 {
+                h1 {
                     @apply .w-64;
                 }
 

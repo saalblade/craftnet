@@ -1,5 +1,5 @@
 <template>
-    <div class="plugin-changelog">
+    <div class="plugin-changelog mb-8">
         <div class="flex">
             <h2 class="flex-1">Changelog</h2>
             <div>
@@ -10,7 +10,7 @@
 
         <div class="releases">
             <changelog-release version="2.3.3" date="2018-09-17">
-                <h3>Fixed</h3>
+                <h4>Fixed</h4>
                 <ul>
                     <li>Fixed a bug where Payments were not working correctly in
                         Flexbox and Grid formatting templates and demo templates.
@@ -20,7 +20,7 @@
 
             <template v-if="showMore">
                 <changelog-release version="2.3.2" date="2018-09-14">
-                    <h3>Fixed</h3>
+                    <h4>Fixed</h4>
                     <ul>
                         <li>Various bug fixes for Freeform Payments feature.</li>
                         <li>Bug fixes and improvements to demo and sample templates to
@@ -30,7 +30,7 @@
                 </changelog-release>
 
                 <changelog-release version="2.3.1" date="2018-09-13">
-                    <h3>Changed</h3>
+                    <h4>Changed</h4>
                     <ul>
                         <li>Updated reCAPTCHA field to only be allowed once per form
                             (disappears from Special fields list when in use).
@@ -42,14 +42,14 @@
                 </changelog-release>
 
                 <changelog-release version="2.3.0" date="2018-09-12">
-                    <h3>Added</h3>
+                    <h4>Added</h4>
                     <ul>
                         <li>Added ability to set Mailing List fields as hidden fields
                             (automatically opting in users).
                         </li>
                     </ul>
 
-                    <h3>Changed</h3>
+                    <h4>Changed</h4>
                     <ul>
                         <li>Updated for compatibility with future Freeform Payments
                             add-on plugin.
@@ -78,7 +78,7 @@
                             script loading and IE11 compatibility.
                         </li>
                     </ul>
-                    <h3>Fixed</h3>
+                    <h4>Fixed</h4>
                     <ul>
                         <li>Fixed a bug where Salesforce API connections were not
                             holding for more than a day or so.
@@ -107,7 +107,7 @@
                 </changelog-release>
 
                 <changelog-release version="2.2.2" date="2018-08-02">
-                    <h3>Changed</h3>
+                    <h4>Changed</h4>
                     <ul>
                         <li>Updated Element Connections feature to allow mapping
                             Freeform File Upload fields to the User Photo field.
@@ -116,7 +116,7 @@
                             field types.
                         </li>
                     </ul>
-                    <h3>Fixed</h3>
+                    <h4>Fixed</h4>
                     <ul>
                         <li>Fixed a bug where the Element Connections feature would
                             display an error for customers using Solo edition.
@@ -125,7 +125,7 @@
                 </changelog-release>
 
                 <changelog-release version="2.2.1" date="2018-07-19">
-                    <h3>Changed</h3>
+                    <h4>Changed</h4>
                     <ul>
                         <li>Updated HubSpot integration to load custom fields from
                             Contacts, Companies and Deals endpoints now, not just Deals.
@@ -134,7 +134,7 @@
                             the same handle.
                         </li>
                     </ul>
-                    <h3>Fixed</h3>
+                    <h4>Fixed</h4>
                     <ul>
                         <li>Fixed a bug where some users were getting a 'fieldlayout'
                             table doesn't exist error in Composer.

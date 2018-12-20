@@ -18,13 +18,13 @@
 
                 <hr>
 
-                <h3>Package Name</h3>
+                <h2>Package Name</h2>
                 <p>To install this plugin, search for its package name on the Plugin Store and click “Install”.</p>
                 <copy-package :plugin="plugin"></copy-package>
 
                 <hr>
 
-                <h3>Informations</h3>
+                <h2>Informations</h2>
                 <ul class="plugin-meta">
                     <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
                     <li><span>{{ "Last Update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>

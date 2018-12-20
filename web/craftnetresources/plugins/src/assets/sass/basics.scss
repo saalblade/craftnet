@@ -14,7 +14,19 @@ hr {
 }
 
 h1 {
-  @apply .border-b .pb-2 .leading-tight;
+  @apply .leading-tight .text-3xl .mt-8 .mb-4;
+}
+
+h2 {
+  @apply .leading-tight .text-2xl .mt-8 .mb-4;
+}
+
+h3 {
+  @apply .leading-tight .text-xl .mt-8 .mb-4;
+}
+
+h4 {
+  @apply .leading-tight .text-lg .mt-8 .mb-4;
 }
 
 p {
