@@ -1,6 +1,6 @@
 <template>
     <div class="plugin-changelog">
-        <div class="tw-flex">
+        <div class="flex">
             <h2 class="flex-1">Changelog</h2>
             <div>
                 <a v-if="showMore === false" @click.prevent="showMore = true">More</a>
