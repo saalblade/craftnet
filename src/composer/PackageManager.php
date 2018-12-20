@@ -17,6 +17,7 @@ use craftnet\Module;
 use craftnet\plugins\Plugin;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\base\InvalidArgumentException;
 use yii\db\Expression;
 use yii\helpers\Console;
 
@@ -482,7 +483,7 @@ class PackageManager extends Component
      * @param string $name
      *
      * @return Package
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function getPackage(string $name): Package
     {
@@ -490,7 +491,7 @@ class PackageManager extends Component
             ->where(['name' => $name])
             ->one();
         if (!$result) {
-            throw new Exception('Invalid package name: ' . $name);
+            throw new InvalidArgumentException('Invalid package name: ' . $name);
         }
         return new Package($result);
     }
@@ -714,6 +715,7 @@ class PackageManager extends Component
      * @param bool $queue Whether to queue the update
      * @param bool $dumpJson Whether to update the JSON if anything changed
      * @return int The total number of added/removed package releases
+     * @throws InvalidArgumentException if the package name doesn't exist
      * @throws MissingTokenException if the package is a plugin, but we don't have a VCS token for it
      * @throws \Throwable if reasons
      */
@@ -1100,7 +1102,8 @@ class PackageManager extends Component
             ->select(['v.packageId', 'v.id as versionId', 'v.version', 'd.constraints'])
             ->from(['craftnet_packageversions v'])
             ->innerJoin(['craftnet_pluginversionorder o'], '[[o.versionId]] = [[v.id]]')
-            ->innerJoin(['craftnet_packagedeps d'], ['and',
+            ->innerJoin(['craftnet_packagedeps d'], [
+                'and',
                 '[[d.versionId]] = [[v.id]]',
                 ['d.name' => 'craftcms/cms']
             ])
