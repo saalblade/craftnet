@@ -159,7 +159,7 @@
 
     .wrapper {
         header {
-            @apply .flex .px-6 .py-3 .bg-grey-lighter .border-b .justify-between .relative .z-50;
+            @apply .flex .px-6 .py-3 .bg-grey-lighter .border-b .justify-between .relative .z-20;
 
             &.sticky {
                 @apply .sticky .pin .z-10;
@@ -208,7 +208,7 @@
 
         .main {
             .sidebar {
-                @apply .overflow-y-auto .pin .z-40;
+                @apply .overflow-y-auto .pin .z-10;
                 -webkit-overflow-scrolling: touch;
                 top: 53px;
                 @apply .fixed;
