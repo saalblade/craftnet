@@ -20,6 +20,7 @@ use craftnet\plugins\Plugin;
 use craftnet\plugins\PluginLicense;
 use GuzzleHttp\Client;
 use yii\base\Exception;
+use yii\base\InvalidArgumentException;
 use yii\caching\FileCache;
 use yii\console\Controller;
 use yii\db\Expression;
@@ -735,7 +736,7 @@ class ElliottImportController extends Controller
         $packageManager = $this->module->getPackageManager();
         try {
             $package = $packageManager->getPackage('craftcms/commerce');
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             $this->stdout('    > Adding Commerce package ... ', Console::FG_YELLOW);
             $package = new Package([
                 'name' => 'craftcms/commerce',

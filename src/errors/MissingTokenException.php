@@ -2,31 +2,31 @@
 
 namespace craftnet\errors;
 
-use craftnet\plugins\Plugin;
+use craftnet\composer\Package;
 use Throwable;
 use yii\base\Exception;
 
 class MissingTokenException extends Exception
 {
     /**
-     * @var Plugin
+     * @var Package
      */
     public $plugin;
 
     /**
      * Constructor
      *
-     * @param Plugin $plugin
+     * @param Package $package
      * @param string|null $message
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct(Plugin $plugin, string $message = null, $code = 0, Throwable $previous = null)
+    public function __construct(Package $package, string $message = null, $code = 0, Throwable $previous = null)
     {
-        $this->plugin = $plugin;
+        $this->plugin = $package;
 
         if ($message === null) {
-            $message = "Plugin \"{$plugin->name}\" is missing its VCS token.";
+            $message = "Package \"{$package->name}\" is missing its VCS token.";
         }
 
         parent::__construct($message, $code, $previous);

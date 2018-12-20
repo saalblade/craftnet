@@ -8,6 +8,7 @@ use craft\elements\Category;
 use craft\elements\User;
 use craft\helpers\Json;
 use craftnet\cms\CmsEdition;
+use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use yii\web\Response;
 
@@ -167,6 +168,7 @@ class CraftIdController extends BaseController
      */
     private function _plugins(User $user): array
     {
+        /** @var UserBehavior|User $user */
         $ret = [];
 
         foreach ($user->getPlugins() as $plugin) {
