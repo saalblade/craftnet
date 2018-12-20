@@ -32,11 +32,18 @@
         @apply .overflow-auto;
 
         .screenshots-inner {
-            @apply .-mx-4 .flex;
+            @apply .flex;
 
             .screenshot {
                 @apply .px-4 .flex-no-shrink .flex-no-grow;
                 flex-basis: 50%;
+
+                &:first-child {
+                    @apply .-ml-4;
+                }
+                &:last-child {
+                    @apply .-mr-4;
+                }
 
                 img {
                     @apply .rounded;
