@@ -22,8 +22,6 @@
                         <template v-if="showNav"><font-awesome-icon icon="chevron-up" /></template>
                         <template v-else><font-awesome-icon icon="chevron-down" /></template>
                     </a>
-                    <!--<div class="short-description">{{ pluginSnippet.shortDescription }}</div>-->
-                    <!--<div><router-link :to="'/developer/'+pluginSnippet.developerId">{{ pluginSnippet.developerName }}</router-link></div>-->
                 </div>
             </div>
         </div>
@@ -69,10 +67,6 @@
 </script>
 
 <style lang="scss">
-
-
-    /* Plugin Details (plugin/_id) */
-
     .plugin-details-header {
         @apply .bg-white .mt-0 .pt-6;
 
@@ -148,5 +142,4 @@
             }
         }
     }
-
 </style>
