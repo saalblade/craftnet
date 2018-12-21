@@ -41,7 +41,7 @@
             };
         },
 
-        layout: 'plugin',
+        layout: 'site',
 
         components: {
             PluginGrid,
