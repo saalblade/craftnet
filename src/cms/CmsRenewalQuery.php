@@ -37,6 +37,7 @@ class CmsRenewalQuery extends ElementQuery
 
         $this->query->select([
             'craftnet_cmsrenewals.editionId',
+            'craftnet_cmsrenewals.price',
         ]);
 
         if ($this->editionId) {
