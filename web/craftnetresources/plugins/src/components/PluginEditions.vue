@@ -21,7 +21,7 @@
 <style lang="scss">
     .plugin-editions {
         @apply .py-6;
-        
+
         .plugin-editions-edition {
             &:not(:last-child) {
                 @apply .mb-6;
@@ -35,6 +35,10 @@
 
             .plugin-editions-edition {
                 @apply .w-1/3 .mx-4;
+
+                &:not(:last-child) {
+                    @apply .mb-0;
+                }
             }
         }
     }

@@ -9,11 +9,11 @@
                     </template>
 
                     <div class="lg:flex">
-                        <div class="lg:flex-1 lg:pr-8">
+                        <div class="lg:flex-1 lg:pr-8 lg:mr-4">
                             <div v-if="longDescription" v-html="longDescription" class="readable"></div>
                             <p v-else>No description.</p>
                         </div>
-                        <div class="lg:pl-8">
+                        <div class="lg:pl-8 lg:ml-4">
                             <ul class="list-reset">
                                 <li class="py-1" v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
                                 <li class="py-1"><a href="#"><font-awesome-icon icon="question-circle" /> {{ "Support"|t('app') }}</a></li>
