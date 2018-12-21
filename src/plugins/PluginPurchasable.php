@@ -1,8 +1,8 @@
 <?php
 
-namespace craftnet\base;
+namespace craftnet\plugins;
 
-use craftnet\plugins\Plugin;
+use craftnet\base\Purchasable;
 use yii\base\InvalidConfigException;
 
 /**

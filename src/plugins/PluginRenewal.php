@@ -4,7 +4,6 @@ namespace craftnet\plugins;
 
 use Craft;
 use craft\elements\db\ElementQueryInterface;
-use craftnet\base\PluginPurchasable;
 use yii\base\InvalidConfigException;
 
 /**
