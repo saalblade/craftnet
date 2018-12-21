@@ -14,9 +14,9 @@
                             <p v-else>No description.</p>
                         </div>
                         <div class="lg:pl-8">
-                            <ul v-if="(plugin.documentationUrl || plugin.changelogUrl)" class="list-reset">
-                                <li v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
-                                <li v-if="plugin.changelogUrl"><a :href="plugin.changelogUrl"><font-awesome-icon icon="certificate" /> {{ "Changelog"|t('app') }}</a></li>
+                            <ul class="list-reset">
+                                <li class="py-1" v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
+                                <li class="py-1"><a href="#"><font-awesome-icon icon="question-circle" /> {{ "Support"|t('app') }}</a></li>
                             </ul>
                         </div>
                     </div>
