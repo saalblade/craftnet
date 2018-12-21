@@ -11,7 +11,7 @@ use yii\base\InvalidConfigException;
 /**
  * @property-read CmsEdition $edition
  */
-class CmsRenewal extends Purchasable
+class CmsRenewal extends CmsPurchasable
 {
     // Static
     // =========================================================================

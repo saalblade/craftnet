@@ -13,7 +13,7 @@ use craftnet\Module;
 use yii\base\Exception;
 
 
-class CmsEdition extends Purchasable
+class CmsEdition extends CmsPurchasable
 {
     // Static
     // =========================================================================
