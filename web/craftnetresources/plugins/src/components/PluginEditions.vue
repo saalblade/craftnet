@@ -1,5 +1,5 @@
 <template>
-    <div class="plugin-editions mb-4 py-8">
+    <div class="plugin-editions">
         <plugin-edition v-for="edition in plugin.editions" :plugin="plugin" :edition="edition" :key="edition.handle"></plugin-edition>
     </div>
 </template>
@@ -20,10 +20,22 @@
 
 <style lang="scss">
     .plugin-editions {
-        @apply .flex .-mx-4 .justify-center;
-
+        @apply .py-6;
+        
         .plugin-editions-edition {
-            @apply .w-1/3 .mx-4;
+            &:not(:last-child) {
+                @apply .mb-6;
+            }
+        }
+    }
+
+    @media (min-width: 992px) {
+        .plugin-editions {
+            @apply .flex .-mx-4 .justify-center;
+
+            .plugin-editions-edition {
+                @apply .w-1/3 .mx-4;
+            }
         }
     }
 </style>
