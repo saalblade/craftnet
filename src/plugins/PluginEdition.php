@@ -383,7 +383,7 @@ class PluginEdition extends PluginPurchasable
             [
                 'options',
                 function($attribute, $params, $validator) use ($lineItem) {
-                    if (!isset($lineItem->options['licenseKey'])) {
+                    if (!isset($lineItem->getOptions()['licenseKey'])) {
                         $validator->addError($lineItem, $attribute, 'License key required');
                     }
                 },
@@ -442,27 +442,28 @@ class PluginEdition extends PluginPurchasable
     private function _upgradeOrderLicense(Order $order, LineItem $lineItem)
     {
         $manager = Module::getInstance()->getPluginLicenseManager();
+        $options = $lineItem->getOptions();
 
         // is this for an existing plugin license?
-        $isNew = (strncmp($lineItem->options['licenseKey'], 'new:', 4) === 0);
+        $isNew = (strncmp($options['licenseKey'], 'new:', 4) === 0);
         if (!$isNew) {
             try {
-                $license = $manager->getLicenseByKey($lineItem->options['licenseKey'], $this->getPlugin()->handle);
+                $license = $manager->getLicenseByKey($options['licenseKey'], $this->getPlugin()->handle);
             } catch (LicenseNotFoundException $e) {
-                Craft::error("Could not upgrade plugin license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
+                Craft::error("Could not upgrade plugin license {$options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
                 Craft::$app->getErrorHandler()->logException($e);
                 return;
             }
         } else {
             // chop off "new:"
-            $key = substr($lineItem->options['licenseKey'], 4);
+            $key = substr($options['licenseKey'], 4);
 
             // was a Craft license specified?
-            if (!empty($lineItem->options['cmsLicenseKey'])) {
+            if (!empty($options['cmsLicenseKey'])) {
                 try {
-                    $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseByKey($lineItem->options['cmsLicenseKey']);
+                    $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseByKey($options['cmsLicenseKey']);
                 } catch (LicenseNotFoundException $e) {
-                    Craft::error("Could not associate new plugin license with Craft license {$lineItem->options['cmsLicenseKey']} for order {$order->number}: {$e->getMessage()}");
+                    Craft::error("Could not associate new plugin license with Craft license {$options['cmsLicenseKey']} for order {$order->number}: {$e->getMessage()}");
                     Craft::$app->getErrorHandler()->logException($e);
                     $cmsLicense = null;
                 }
@@ -496,8 +497,8 @@ class PluginEdition extends PluginPurchasable
             $license->expiresOn = (new \DateTime())->modify('+1 year');
         }
 
-        if (isset($lineItem->options['autoRenew'])) {
-            $license->autoRenew = $lineItem->options['autoRenew'];
+        if (isset($options['autoRenew'])) {
+            $license->autoRenew = $options['autoRenew'];
         }
 
         // if the license doesn't have an owner yet, reassign it to the order's customer

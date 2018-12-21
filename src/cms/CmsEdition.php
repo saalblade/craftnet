@@ -180,7 +180,7 @@ class CmsEdition extends CmsPurchasable
             [
                 'options',
                 function($attribute, $params, $validator) use ($lineItem) {
-                    if (!isset($lineItem->options['licenseKey'])) {
+                    if (!isset($lineItem->getOptions()['licenseKey'])) {
                         $validator->addError($lineItem, $attribute, 'License key required.');
                     }
                 },
@@ -222,20 +222,21 @@ class CmsEdition extends CmsPurchasable
     private function _updateOrderLicense(Order $order, LineItem $lineItem)
     {
         $manager = Module::getInstance()->getCmsLicenseManager();
+        $options = $lineItem->getOptions();
 
         // is this for an existing Craft license?
-        $isNew = (strncmp($lineItem->options['licenseKey'], 'new:', 4) === 0);
+        $isNew = (strncmp($options['licenseKey'], 'new:', 4) === 0);
         if (!$isNew) {
             try {
-                $license = $manager->getLicenseByKey($lineItem->options['licenseKey']);
+                $license = $manager->getLicenseByKey($options['licenseKey']);
             } catch (LicenseNotFoundException $e) {
-                Craft::error("Could not update Craft license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
+                Craft::error("Could not update Craft license {$options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
                 Craft::$app->getErrorHandler()->logException($e);
                 return;
             }
         } else {
             // chop off "new:"
-            $key = substr($lineItem->options['licenseKey'], 4);
+            $key = substr($options['licenseKey'], 4);
 
             // create the new license
             $license = new CmsLicense([
@@ -262,8 +263,8 @@ class CmsEdition extends CmsPurchasable
             $license->expiresOn = (new \DateTime())->modify('+1 year');
         }
 
-        if (isset($lineItem->options['autoRenew'])) {
-            $license->autoRenew = $lineItem->options['autoRenew'];
+        if (isset($options['autoRenew'])) {
+            $license->autoRenew = $options['autoRenew'];
         }
 
         // if the license doesn't have an owner yet, reassign it to the order's customer
