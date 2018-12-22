@@ -14,6 +14,7 @@ use craft\helpers\Json;
 use craftnet\base\EditionInterface;
 use craftnet\base\RenewalInterface;
 use craftnet\errors\LicenseNotFoundException;
+use craftnet\helpers\OrderHelper;
 use craftnet\Module;
 use yii\base\Exception;
 use yii\validators\CompareValidator;
@@ -398,6 +399,14 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
     /**
      * @inheritdoc
      */
+    public function populateLineItem(LineItem $lineItem)
+    {
+        OrderHelper::populateEditionLineItem($lineItem, $this);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function afterOrderComplete(Order $order, LineItem $lineItem)
     {
         $this->_upgradeOrderLicense($order, $lineItem);
@@ -497,10 +506,7 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
 
         // If it's expirable, set the expiresOn date to a year from now
         if ($license->expirable) {
-            $license->expiresOn = (new \DateTime())->modify('+1 year');
-            if (isset($options['expiryDate'])) {
-                $license->expiresOn = max($license->expiresOn, DateTimeHelper::toDateTime($options['expiryDate']));
-            }
+            $license->expiresOn = DateTimeHelper::toDateTime($options['expiryDate']);
         }
 
         if (isset($options['autoRenew'])) {

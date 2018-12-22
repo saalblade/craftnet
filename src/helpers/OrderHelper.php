@@ -2,6 +2,10 @@
 
 namespace craftnet\helpers;
 
+use craft\commerce\models\LineItem;
+use craft\helpers\DateTimeHelper;
+use craftnet\base\EditionInterface;
+
 abstract class OrderHelper
 {
     /**
@@ -39,5 +43,44 @@ abstract class OrderHelper
         }
 
         return $years;
+    }
+
+    /**
+     * Populates an edition line item.
+     *
+     * @param LineItem $lineItem
+     * @param EditionInterface $edition
+     */
+    public static function populateEditionLineItem(LineItem $lineItem, EditionInterface $edition)
+    {
+        // existing license?
+        $options = $lineItem->getOptions();
+        $oldExpiryDate = null;
+
+        if (strpos($options['licenseKey'], 'new:') !== 0) {
+            $license = $edition->getLicenseByKey($options['licenseKey']);
+            if (!$license->getIsExpirable()) {
+                return;
+            }
+            $oldExpiryDate = $license->getExpiryDate();
+        }
+
+        // the expiration date must be at least a year from now
+        $expiryDate = (new \DateTime())->modify('+1 year');
+
+        // if the line item specifies an expiration date, go with that
+        if (!empty($options['expiryDate'])) {
+            $expiryDate = max($expiryDate, DateTimeHelper::toDateTime($options['expiryDate']));
+        }
+
+        // if it's an existing license, make sure the expiration date is at least the current one
+        if ($oldExpiryDate) {
+            $expiryDate = max($expiryDate, $oldExpiryDate);
+        }
+
+        // update the expiration date on the line item
+        $expiryDate->setTimezone(new \DateTimeZone('UTC'));
+        $options['expiryDate'] = $expiryDate->format('Y-m-d');
+        $lineItem->setOptions($options);
     }
 }

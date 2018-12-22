@@ -13,6 +13,7 @@ use craftnet\base\LicenseInterface;
 use craftnet\base\Purchasable;
 use craftnet\base\RenewalInterface;
 use craftnet\errors\LicenseNotFoundException;
+use craftnet\helpers\OrderHelper;
 use craftnet\Module;
 use yii\base\Exception;
 
@@ -193,6 +194,13 @@ class CmsEdition extends CmsPurchasable implements EditionInterface
         return 'CRAFT-' . strtoupper($this->handle);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function populateLineItem(LineItem $lineItem)
+    {
+        OrderHelper::populateEditionLineItem($lineItem, $this);
+    }
 
     /**
      * @inheritdoc
@@ -265,10 +273,7 @@ class CmsEdition extends CmsPurchasable implements EditionInterface
 
         // If it's expirable, set the expiresOn date to a year from now
         if ($license->expirable) {
-            $license->expiresOn = (new \DateTime())->modify('+1 year');
-            if (isset($options['expiryDate'])) {
-                $license->expiresOn = max($license->expiresOn, DateTimeHelper::toDateTime($options['expiryDate']));
-            }
+            $license->expiresOn = DateTimeHelper::toDateTime($options['expiryDate']);
         }
 
         if (isset($options['autoRenew'])) {
