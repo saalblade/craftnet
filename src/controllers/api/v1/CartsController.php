@@ -519,12 +519,7 @@ class CartsController extends BaseApiController
             }
 
             // Make sure this is actually an upgrade
-            $validUpgrades = [];
-            if ($license->editionHandle === CmsLicenseManager::EDITION_SOLO) {
-                $validUpgrades[] = CmsLicenseManager::EDITION_PRO;
-            }
-
-            if (!in_array($item->edition, $validUpgrades, true)) {
+            if ($edition->getPrice() <= $license->getEdition()->getPrice()) {
                 $errors[] = [
                     'param' => "{$paramPrefix}.edition",
                     'message' => "Invalid upgrade edition: {$item->edition}",
@@ -598,8 +593,15 @@ class CartsController extends BaseApiController
                 return null;
             }
 
-            // todo: verify that this is actually an upgrade
-            // ...
+            // Make sure this is actually an upgrade
+            if ($edition->getPrice() <= $license->getEdition()->getPrice()) {
+                $errors[] = [
+                    'param' => "{$paramPrefix}.edition",
+                    'message' => "Invalid upgrade edition: {$item->edition}",
+                    'code' => self::ERROR_CODE_INVALID,
+                ];
+                return null;
+            }
 
             $options = [
                 'licenseKey' => $license->key,
