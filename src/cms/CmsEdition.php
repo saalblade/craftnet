@@ -7,6 +7,7 @@ use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\DateTimeHelper;
 use craftnet\base\EditionInterface;
 use craftnet\base\LicenseInterface;
 use craftnet\base\Purchasable;
@@ -282,6 +283,9 @@ class CmsEdition extends CmsPurchasable implements EditionInterface
         // If it's expirable, set the expiresOn date to a year from now
         if ($license->expirable) {
             $license->expiresOn = (new \DateTime())->modify('+1 year');
+            if (isset($options['expiryDate'])) {
+                $license->expiresOn = max($license->expiresOn, DateTimeHelper::toDateTime($options['expiryDate']));
+            }
         }
 
         if (isset($options['autoRenew'])) {

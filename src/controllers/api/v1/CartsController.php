@@ -538,6 +538,10 @@ class CartsController extends BaseApiController
             ];
         }
 
+        if (isset($item->expiryDate)) {
+            $options['expiryDate'] = $item->expiryDate;
+        }
+
         if (isset($item->autoRenew)) {
             $options['autoRenew'] = $item->autoRenew;
         }
@@ -628,6 +632,10 @@ class CartsController extends BaseApiController
                 'licenseKey' => 'new:' . KeyHelper::generatePluginKey(),
                 'cmsLicenseKey' => $cmsLicense->key ?? null,
             ];
+        }
+
+        if (isset($item->expiryDate)) {
+            $options['expiryDate'] = $item->expiryDate;
         }
 
         if (isset($item->autoRenew)) {

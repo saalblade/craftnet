@@ -4,6 +4,7 @@
   "properties": {
     "edition": {"enum": ["pro"]},
     "licenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"},
+    "expiryDate": {"type": "string", "format": "date"},
     "autoRenew": {"type": "boolean"}
   },
   "required": ["edition"]

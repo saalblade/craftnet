@@ -9,6 +9,7 @@ use craft\commerce\Plugin as Commerce;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
+use craft\helpers\DateTimeHelper;
 use craft\helpers\Json;
 use craftnet\base\EditionInterface;
 use craftnet\base\RenewalInterface;
@@ -515,6 +516,9 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
         // If it's expirable, set the expiresOn date to a year from now
         if ($license->expirable) {
             $license->expiresOn = (new \DateTime())->modify('+1 year');
+            if (isset($options['expiryDate'])) {
+                $license->expiresOn = max($license->expiresOn, DateTimeHelper::toDateTime($options['expiryDate']));
+            }
         }
 
         if (isset($options['autoRenew'])) {

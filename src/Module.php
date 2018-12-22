@@ -88,6 +88,9 @@ class Module extends \yii\base\Module
             $e->types[] = CmsEdition::class;
             $e->types[] = PluginEdition::class;
         });
+        Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
+            $e->types[] = OrderAdjuster::class;
+        });
 
         // register our custom receipt system message
         Event::on(SystemMessages::class, SystemMessages::EVENT_REGISTER_MESSAGES, function(RegisterEmailMessagesEvent $e) {
