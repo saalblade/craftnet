@@ -5,6 +5,8 @@ namespace craftnet\helpers;
 use craft\commerce\models\LineItem;
 use craft\helpers\DateTimeHelper;
 use craftnet\base\EditionInterface;
+use craftnet\base\RenewalInterface;
+use craftnet\errors\LicenseNotFoundException;
 
 abstract class OrderHelper
 {
@@ -82,5 +84,38 @@ abstract class OrderHelper
         $expiryDate->setTimezone(new \DateTimeZone('UTC'));
         $options['expiryDate'] = $expiryDate->format('Y-m-d');
         $lineItem->setOptions($options);
+    }
+
+    /**
+     * Populates a renewal line item.
+     *
+     * @param LineItem $lineItem
+     * @param RenewalInterface $renewal
+     */
+    public static function populateRenewalLineItem(LineItem $lineItem, RenewalInterface $renewal)
+    {
+        $options = $lineItem->getOptions();
+        $license = $renewal->getLicenseByKey($options['licenseKey']);
+        /** @var \DateTime $oldExpiryDate */
+        $oldExpiryDate = max(new \DateTime(), $license->getExpiryDate());
+
+        // does the line item specify an expiration date?
+        if (isset($options['expiryDate'])) {
+            $expiryDate = max($oldExpiryDate, DateTimeHelper::toDateTime($options['expiryDate']));
+        } else {
+            $expiryDate = (clone $oldExpiryDate)->modify('+1 year');
+        }
+
+        // set the price
+        $paidRenewalYears = static::dateDiffInYears($oldExpiryDate, $expiryDate);
+        $lineItem->price = $renewal->getPrice() * $paidRenewalYears;
+
+        // update the expiration date on the line item
+        $expiryDate->setTimezone(new \DateTimeZone('UTC'));
+        $options['expiryDate'] = $expiryDate->format('Y-m-d');
+        $lineItem->setOptions($options);
+
+        // update the description on the line item
+        $lineItem->snapshot['description'] = $renewal->getDescription() . ' - Updates until ' . $expiryDate->format('Y-m-d');
     }
 }

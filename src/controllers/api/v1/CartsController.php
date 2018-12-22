@@ -12,11 +12,13 @@ use craft\elements\User;
 use craft\helpers\StringHelper;
 use craftnet\cms\CmsEdition;
 use craftnet\cms\CmsLicenseManager;
+use craftnet\cms\CmsRenewal;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\errors\ValidationException;
 use craftnet\helpers\KeyHelper;
 use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginRenewal;
 use Ddeboer\Vatin\Validator;
 use Moccalotto\Eu\CountryInfo;
 use yii\base\Exception;
@@ -241,12 +243,14 @@ class CartsController extends BaseApiController
                             $lineItem = $this->_cmsEditionLineItem($cart, $item, $paramPrefix, $errors);
                             break;
                         case 'cms-renewal':
-                            throw new NotSupportedException('Purchasing CMS renewals is not supported yet.');
+                            $lineItem = $this->_cmsRenewalLineItem($cart, $item, $paramPrefix, $errors);
+                            break;
                         case 'plugin-edition':
                             $lineItem = $this->_pluginEditionLineItem($cart, $item, $paramPrefix, $errors);
                             break;
                         case 'plugin-renewal':
-                            throw new NotSupportedException('Purchasing plugin renewals is not supported yet.');
+                            $lineItem = $this->_pluginRenewalLineItem($cart, $item, $paramPrefix, $errors);
+                            break;
                         default:
                             $errors[] = [
                                 'param' => $paramPrefix . '.type',
@@ -555,6 +559,42 @@ class CartsController extends BaseApiController
      * @param $errors
      * @return LineItem|null
      */
+    private function _cmsRenewalLineItem(Order $cart, \stdClass $item, string $paramPrefix, &$errors)
+    {
+        try {
+            $license = $this->module->getCmsLicenseManager()->getLicenseByKey($item->licenseKey);
+        } catch (LicenseNotFoundException $e) {
+            $errors[] = [
+                'param' => "{$paramPrefix}.licenseKey",
+                'message' => $e->getMessage(),
+                'code' => self::ERROR_CODE_MISSING,
+            ];
+            return null;
+        }
+
+        $renewalId = CmsRenewal::find()
+            ->select(['elements.id'])
+            ->editionId($license->editionId)
+            ->scalar();
+
+        $options = [
+            'licenseKey' => $item->licenseKey,
+        ];
+
+        if (isset($item->expiryDate)) {
+            $options['expiryDate'] = $item->expiryDate;
+        }
+
+        return Commerce::getInstance()->getLineItems()->resolveLineItem($cart->id, $renewalId, $options);
+    }
+
+    /**
+     * @param Order $cart
+     * @param \stdClass $item
+     * @param string $paramPrefix
+     * @param $errors
+     * @return LineItem|null
+     */
     private function _pluginEditionLineItem(Order $cart, \stdClass $item, string $paramPrefix, &$errors)
     {
         // get the plugin
@@ -642,5 +682,41 @@ class CartsController extends BaseApiController
         }
 
         return Commerce::getInstance()->getLineItems()->resolveLineItem($cart->id, $edition->id, $options);
+    }
+
+    /**
+     * @param Order $cart
+     * @param \stdClass $item
+     * @param string $paramPrefix
+     * @param $errors
+     * @return LineItem|null
+     */
+    private function _pluginRenewalLineItem(Order $cart, \stdClass $item, string $paramPrefix, &$errors)
+    {
+        try {
+            $license = $this->module->getPluginLicenseManager()->getLicenseByKey($item->licenseKey);
+        } catch (LicenseNotFoundException $e) {
+            $errors[] = [
+                'param' => "{$paramPrefix}.licenseKey",
+                'message' => $e->getMessage(),
+                'code' => self::ERROR_CODE_MISSING,
+            ];
+            return null;
+        }
+
+        $renewalId = PluginRenewal::find()
+            ->select(['elements.id'])
+            ->editionId($license->editionId)
+            ->scalar();
+
+        $options = [
+            'licenseKey' => $item->licenseKey,
+        ];
+
+        if (isset($item->expiryDate)) {
+            $options['expiryDate'] = $item->expiryDate;
+        }
+
+        return Commerce::getInstance()->getLineItems()->resolveLineItem($cart->id, $renewalId, $options);
     }
 }

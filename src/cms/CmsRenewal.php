@@ -3,9 +3,15 @@
 namespace craftnet\cms;
 
 use Craft;
+use craft\commerce\elements\Order;
+use craft\commerce\models\LineItem;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\DateTimeHelper;
 use craftnet\base\Purchasable;
 use craftnet\base\RenewalInterface;
+use craftnet\errors\LicenseNotFoundException;
+use craftnet\helpers\OrderHelper;
+use craftnet\Module;
 use yii\base\InvalidConfigException;
 
 
@@ -140,5 +146,68 @@ class CmsRenewal extends CmsPurchasable implements RenewalInterface
     public function getSku(): string
     {
         return "{$this->edition->getSku()}-RENEWAL";
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function populateLineItem(LineItem $lineItem)
+    {
+        OrderHelper::populateRenewalLineItem($lineItem, $this);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterOrderComplete(Order $order, LineItem $lineItem)
+    {
+        $this->_updateOrderLicense($order, $lineItem);
+        parent::afterOrderComplete($order, $lineItem);
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * @param Order $order
+     * @param LineItem $lineItem
+     */
+    private function _updateOrderLicense(Order $order, LineItem $lineItem)
+    {
+        $manager = Module::getInstance()->getCmsLicenseManager();
+        $options = $lineItem->getOptions();
+
+        try {
+            $license = $manager->getLicenseByKey($options['licenseKey']);
+        } catch (LicenseNotFoundException $e) {
+            Craft::error("Could not renew Craft license {$options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
+            Craft::$app->getErrorHandler()->logException($e);
+            return;
+        }
+
+        $license->expired = false;
+        $license->expiresOn = DateTimeHelper::toDateTime($options['expiryDate']);
+
+        try {
+            // save the license
+            if (!$manager->saveLicense($license, false)) {
+                Craft::error("Could not save Craft license {$license->key} for order {$order->number}: " . implode(', ', $license->getErrorSummary(true)));
+                return;
+            }
+
+            // relate the license to the line item
+            Craft::$app->getDb()->createCommand()
+                ->insert('craftnet_cmslicenses_lineitems', [
+                    'licenseId' => $license->id,
+                    'lineItemId' => $lineItem->id,
+                ], false)
+                ->execute();
+
+            // update the license history
+            $manager->addHistory($license->id, "Renewed until {$options['expiryDate']} per order {$order->number}");
+        } catch (\Throwable $e) {
+            Craft::error("Could not save Craft license {$license->key} for order {$order->number}: {$e->getMessage()}");
+            Craft::$app->getErrorHandler()->logException($e);
+        }
     }
 }
