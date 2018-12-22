@@ -139,6 +139,6 @@ class CmsRenewal extends CmsPurchasable implements RenewalInterface
      */
     public function getSku(): string
     {
-        return $this->getEdition()->getSku() . '-RENEWAL';
+        return "{$this->edition->getSku()}-RENEWAL";
     }
 }

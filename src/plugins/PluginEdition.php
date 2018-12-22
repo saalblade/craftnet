@@ -19,6 +19,7 @@ use yii\base\Exception;
 use yii\validators\CompareValidator;
 
 /**
+ * @property-read Plugin $plugin
  * @property-read string $fullName
  */
 class PluginEdition extends PluginPurchasable implements EditionInterface
@@ -375,8 +376,7 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
      */
     public function getDescription(): string
     {
-        // todo: include $this->name when we start supporting editions
-        return $this->getPlugin()->name;
+        return "{$this->plugin->name} ({$this->name} edition)";
     }
 
     /**
@@ -392,7 +392,7 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
      */
     public function getSku(): string
     {
-        return strtoupper($this->getPlugin()->handle . '-' . $this->handle);
+        return strtoupper("{$this->plugin->handle}-{$this->handle}");
     }
 
     /**

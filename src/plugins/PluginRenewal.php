@@ -8,6 +8,7 @@ use craftnet\base\RenewalInterface;
 use yii\base\InvalidConfigException;
 
 /**
+ * @property-read Plugin $plugin
  * @property-read PluginEdition $edition
  */
 class PluginRenewal extends PluginPurchasable implements RenewalInterface
@@ -122,8 +123,7 @@ class PluginRenewal extends PluginPurchasable implements RenewalInterface
      */
     public function getDescription(): string
     {
-        // todo: include the edition name when we start supporting editions
-        return $this->getPlugin()->name . ' Renewal';
+        return "{$this->plugin->name} ({$this->edition->name} edition) Renewal";
     }
 
     /**
@@ -139,6 +139,6 @@ class PluginRenewal extends PluginPurchasable implements RenewalInterface
      */
     public function getSku(): string
     {
-        return $this->getEdition()->getSku() . '-RENEWAL';
+        return "{$this->edition->getSku()}-RENEWAL";
     }
 }

@@ -174,7 +174,7 @@ class CmsEdition extends CmsPurchasable implements EditionInterface
      */
     public function getDescription(): string
     {
-        return 'Craft ' . $this->name;
+        return "Craft {$this->name}";
     }
 
     /**
