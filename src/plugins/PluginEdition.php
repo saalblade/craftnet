@@ -398,24 +398,6 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
     /**
      * @inheritdoc
      */
-    public function getLineItemRules(LineItem $lineItem): array
-    {
-        return [
-            [
-                'options',
-                function($attribute, $params, $validator) use ($lineItem) {
-                    if (!isset($lineItem->getOptions()['licenseKey'])) {
-                        $validator->addError($lineItem, $attribute, 'License key required');
-                    }
-                },
-                'skipOnEmpty' => false
-            ]
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function afterOrderComplete(Order $order, LineItem $lineItem)
     {
         $this->_upgradeOrderLicense($order, $lineItem);

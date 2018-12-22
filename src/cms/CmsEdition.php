@@ -193,23 +193,6 @@ class CmsEdition extends CmsPurchasable implements EditionInterface
         return 'CRAFT-' . strtoupper($this->handle);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getLineItemRules(LineItem $lineItem): array
-    {
-        return [
-            [
-                'options',
-                function($attribute, $params, $validator) use ($lineItem) {
-                    if (!isset($lineItem->getOptions()['licenseKey'])) {
-                        $validator->addError($lineItem, $attribute, 'License key required.');
-                    }
-                },
-                'skipOnEmpty' => false
-            ]
-        ];
-    }
 
     /**
      * @inheritdoc
