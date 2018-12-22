@@ -48,6 +48,7 @@ class PluginStoreController extends BaseApiController
                 'categories' => $this->_categories(),
                 'featuredPlugins' => $this->_featuredPlugins($plugins),
                 'plugins' => $this->_plugins($plugins),
+                'expiryDateOptions' => $this->_expiryDateOptions(),
             ];
 
             if ($enablePluginStoreCache) {
@@ -158,5 +159,21 @@ class PluginStoreController extends BaseApiController
         }
 
         return $ret;
+    }
+
+    /**
+     * @return array`
+     */
+    private function _expiryDateOptions(): array
+    {
+        $dates = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+            $dates[] = (new \DateTime('now', new \DateTimeZone('UTC')))
+                ->modify("+{$i} years")
+                ->format('Y-m-d');
+        }
+
+        return $dates;
     }
 }
