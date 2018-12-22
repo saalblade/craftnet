@@ -6,7 +6,6 @@ use craft\commerce\models\LineItem;
 use craft\helpers\DateTimeHelper;
 use craftnet\base\EditionInterface;
 use craftnet\base\RenewalInterface;
-use craftnet\errors\LicenseNotFoundException;
 
 abstract class OrderHelper
 {

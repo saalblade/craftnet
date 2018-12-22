@@ -204,7 +204,7 @@ class Module extends \yii\base\Module
             $e->navItems[] = [
                 'url' => 'partners',
                 'label' => 'Partners',
-                'icon' => __DIR__.'/icons/partner.svg',
+                'icon' => __DIR__ . '/icons/partner.svg',
             ];
         });
 

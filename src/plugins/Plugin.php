@@ -21,7 +21,6 @@ use DateTime;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\helpers\Markdown;
-use yii\validators\CompareValidator;
 
 /**
  * @property User $developer

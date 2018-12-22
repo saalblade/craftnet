@@ -6,7 +6,6 @@ use Craft;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\Entry;
-use craft\helpers\ArrayHelper;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\plugins\Plugin;
 use yii\caching\FileDependency;

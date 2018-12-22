@@ -7,7 +7,6 @@ use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\DateTimeHelper;
-use craftnet\base\Purchasable;
 use craftnet\base\RenewalInterface;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\helpers\OrderHelper;
