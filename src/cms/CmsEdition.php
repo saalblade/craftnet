@@ -7,13 +7,16 @@ use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\db\ElementQueryInterface;
+use craftnet\base\EditionInterface;
+use craftnet\base\LicenseInterface;
 use craftnet\base\Purchasable;
+use craftnet\base\RenewalInterface;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
 use yii\base\Exception;
 
 
-class CmsEdition extends CmsPurchasable
+class CmsEdition extends CmsPurchasable implements EditionInterface
 {
     // Static
     // =========================================================================
@@ -100,6 +103,24 @@ class CmsEdition extends CmsPurchasable
     public function getType(): string
     {
         return 'cms-edition';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHandle(): string
+    {
+        return $this->handle;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRenewal(): RenewalInterface
+    {
+        return CmsRenewal::find()
+            ->editionId($this->id)
+            ->one();
     }
 
     /**

@@ -4,12 +4,13 @@ namespace craftnet\plugins;
 
 use Craft;
 use craft\elements\db\ElementQueryInterface;
+use craftnet\base\RenewalInterface;
 use yii\base\InvalidConfigException;
 
 /**
  * @property-read PluginEdition $edition
  */
-class PluginRenewal extends PluginPurchasable
+class PluginRenewal extends PluginPurchasable implements RenewalInterface
 {
     // Static
     // =========================================================================

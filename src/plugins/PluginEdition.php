@@ -10,6 +10,8 @@ use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Json;
+use craftnet\base\EditionInterface;
+use craftnet\base\RenewalInterface;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
 use yii\base\Exception;
@@ -18,7 +20,7 @@ use yii\validators\CompareValidator;
 /**
  * @property-read string $fullName
  */
-class PluginEdition extends PluginPurchasable
+class PluginEdition extends PluginPurchasable implements EditionInterface
 {
     // Constants
     // =========================================================================
@@ -162,6 +164,24 @@ class PluginEdition extends PluginPurchasable
     public function getType(): string
     {
         return 'plugin-edition';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHandle(): string
+    {
+        return $this->handle;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRenewal(): RenewalInterface
+    {
+        return PluginRenewal::find()
+            ->editionId($this->id)
+            ->one();
     }
 
     /**

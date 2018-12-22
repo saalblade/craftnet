@@ -5,13 +5,14 @@ namespace craftnet\cms;
 use Craft;
 use craft\elements\db\ElementQueryInterface;
 use craftnet\base\Purchasable;
+use craftnet\base\RenewalInterface;
 use yii\base\InvalidConfigException;
 
 
 /**
  * @property-read CmsEdition $edition
  */
-class CmsRenewal extends CmsPurchasable
+class CmsRenewal extends CmsPurchasable implements RenewalInterface
 {
     // Static
     // =========================================================================

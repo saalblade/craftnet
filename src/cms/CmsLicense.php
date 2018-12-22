@@ -4,6 +4,9 @@ namespace craftnet\cms;
 
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
+use craft\helpers\DateTimeHelper;
+use craftnet\base\EditionInterface;
+use craftnet\base\LicenseInterface;
 use craftnet\Module;
 use craftnet\plugins\PluginLicense;
 
@@ -11,7 +14,7 @@ use craftnet\plugins\PluginLicense;
  * @property PluginLicense[] $pluginLicenses
  * @property string $shortKey
  */
-class CmsLicense extends Model
+class CmsLicense extends Model implements LicenseInterface
 {
     public $id;
     public $editionId;
@@ -86,6 +89,30 @@ class CmsLicense extends Model
         $attributes[] = 'lastRenewedOn';
         $attributes[] = 'expiresOn';
         return $attributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsExpirable(): bool
+    {
+        return $this->expirable;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExpiryDate(): \DateTime
+    {
+        return DateTimeHelper::toDateTime($this->expiresOn);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEdition(): EditionInterface
+    {
+        return CmsEdition::findOne($this->editionId);
     }
 
     /**

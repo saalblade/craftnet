@@ -4,12 +4,15 @@ namespace craftnet\plugins;
 
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
-use craftnet\EditionUpgradeDiscount;
+use craft\helpers\DateTimeHelper;
+use craftnet\base\EditionInterface;
+use craftnet\base\LicenseInterface;
+use craftnet\OrderAdjuster;
 
 /**
  * @property string $shortKey
  */
-class PluginLicense extends Model
+class PluginLicense extends Model implements LicenseInterface
 {
     public $id;
     public $pluginId;
@@ -79,6 +82,30 @@ class PluginLicense extends Model
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getIsExpirable(): bool
+    {
+        return $this->expirable;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExpiryDate(): \DateTime
+    {
+        return DateTimeHelper::toDateTime($this->expiresOn);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEdition(): EditionInterface
+    {
+        return PluginEdition::findOne($this->editionId);
+    }
+
+    /**
      * Returns a shortened version of the license key.
      *
      * @return string
@@ -96,16 +123,6 @@ class PluginLicense extends Model
         return Plugin::find()
             ->id($this->pluginId)
             ->status(null)
-            ->one();
-    }
-
-    /**
-     * @return PluginEdition
-     */
-    public function getEdition(): PluginEdition
-    {
-        return PluginEdition::find()
-            ->id($this->editionId)
             ->one();
     }
 }
