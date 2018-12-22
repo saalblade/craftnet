@@ -10,6 +10,7 @@ use craft\commerce\models\OrderAdjustment;
 use craft\helpers\DateTimeHelper;
 use craftnet\base\EditionInterface;
 use craftnet\errors\LicenseNotFoundException;
+use craftnet\helpers\OrderHelper;
 
 class OrderAdjuster implements AdjusterInterface
 {
@@ -80,7 +81,7 @@ class OrderAdjuster implements AdjusterInterface
 
         // If the expiry date is over a year from now, charge for it
         if ($expiryDate > $nextYear) {
-            $paidRenewalYears = $this->_diffInYears($nextYear, $expiryDate);
+            $paidRenewalYears = OrderHelper::dateDiffInYears($nextYear, $expiryDate);
 
             $adjustments[] = new OrderAdjustment([
                 'orderId' => $order->id,
@@ -122,7 +123,7 @@ class OrderAdjuster implements AdjusterInterface
                 $renewalUpgradeDiscount = min($oldRenewal->getPrice(), $renewal->getPrice());
 
                 if ($renewalUpgradeDiscount > 0) {
-                    $oldPaidRenewalYears = $this->_diffInYears($nextYear, $oldExpiryDate);
+                    $oldPaidRenewalYears = OrderHelper::dateDiffInYears($nextYear, $oldExpiryDate);
 
                     $adjustments[] = new OrderAdjustment([
                         'orderId' => $order->id,
@@ -139,33 +140,5 @@ class OrderAdjuster implements AdjusterInterface
                 }
             }
         }
-    }
-
-    /**
-     * Calculates the difference in years between two dates.
-     *
-     * @param \DateTime $d1
-     * @param \DateTime $d2
-     * @return float
-     */
-    private function _diffInYears(\DateTime $d1, \DateTime $d2): float
-    {
-        $d1 = new \DateTime($d1->format('Y-m-d'), new \DateTimeZone('UTC'));
-        $d2 = new \DateTime($d2->format('Y-m-d'), new \DateTimeZone('UTC'));
-        $diff = $d2->diff($d1);
-        $years = $diff->y;
-
-        // Calculate the difference in % into the year each date is
-        if ($diff->m !== 0 || $diff->d !== 0) {
-            $d1Pct = $d1->format('z') / ($d1->format('L') ? 365 : 364);
-            $d2Pct = $d2->format('z') / ($d2->format('L') ? 365 : 364);
-            if ($d2Pct >= $d1Pct) {
-                $years += $d2Pct - $d1Pct;
-            } else {
-                $years += 1 - ($d1Pct - $d2Pct);
-            }
-        }
-
-        return $years;
     }
 }
