@@ -243,7 +243,7 @@ class CmsEdition extends CmsPurchasable implements EditionInterface
             try {
                 $license = $manager->getLicenseByKey($options['licenseKey']);
             } catch (LicenseNotFoundException $e) {
-                Craft::error("Could not update Craft license {$options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
+                Craft::error("Could not upgrade Craft license {$options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
                 Craft::$app->getErrorHandler()->logException($e);
                 return;
             }
