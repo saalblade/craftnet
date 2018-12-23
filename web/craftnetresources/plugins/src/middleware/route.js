@@ -14,7 +14,7 @@ export default function ({store, route, app}) {
             resolve()
         }, 50)
         setTimeout(function() {
-            store.commit('app/hideSidebar')
+            store.commit('app/hideNavigation')
         }, 100)
     })
 }

@@ -14,18 +14,18 @@
 
             <template v-else>
 
-                <!-- sidebar -->
-                <div class="sidebar" :class="{'showing-sidebar': showingSidebar}">
+                <!-- navigation -->
+                <div class="navigation" :class="{'showing-navigation': showingNavigation}">
                     <header>
-                        <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
+                        <a ref="navigationToggle" class="navigation-toggle" @click.prevent="toggleNavigation()">
                             <i class="fas fa-bars"></i>
                             <font-awesome-icon :icon="icon" />
                         </a>
                         <h1><router-link to="/">Craft Plugin Store</router-link></h1>
                     </header>
 
-                    <div class="sidebar-navigation">
-                        <div class="sidebar-main">
+                    <div class="navigation-items">
+                        <div class="navigation-items-main">
                             <plugin-search></plugin-search>
 
                             <ul class="categories">
@@ -84,7 +84,7 @@
         computed: {
 
             icon () {
-                if (this.showingSidebar) {
+                if (this.showingNavigation) {
                     return 'times'
                 }
 
@@ -92,7 +92,7 @@
             },
 
             ...mapState({
-                showingSidebar: state => state.app.showingSidebar,
+                showingNavigation: state => state.app.showingNavigation,
                 showingScreenshotModal: state => state.app.showingScreenshotModal,
                 searchQuery: state => state.pluginStore.searchQuery,
                 categories: state => state.pluginStore.categories,
@@ -103,8 +103,8 @@
 
         methods: {
 
-            toggleSidebar() {
-                this.$store.commit('app/toggleSidebar')
+            toggleNavigation() {
+                this.$store.commit('app/toggleNavigation')
             },
 
             onViewScroll(e) {
@@ -131,7 +131,7 @@
                 @apply .sticky .pin .z-10;
             }
 
-            a.sidebar-toggle {
+            a.navigation-toggle {
                 @apply .self-center .text-grey-darker .mr-4;
                 width: 14px;
             }
@@ -150,25 +150,25 @@
         }
 
         .main {
-            .sidebar {
+            .navigation {
                 @apply .sticky .pin-t .w-full;
 
-                &.showing-sidebar {
-                    .sidebar-navigation {
+                &.showing-navigation {
+                    .navigation-items {
                         // transition: all .5s ease-out;
                         transform: translateY(0);
                         visibility: visible;
                     }
                 }
 
-                .sidebar-navigation {
+                .navigation-items {
                     // transition: all .5s ease-out;
                     transform: translateY(-100%);
                     visibility: hidden;
                 }
             }
 
-            .sidebar-navigation {
+            .navigation-items {
                 @apply .fixed .overflow-y-auto .pin .z-10 .bg-grey-lighter;
                 -webkit-overflow-scrolling: touch;
                 top: 63px;
@@ -177,7 +177,7 @@
                     @apply .sticky;
                 }
 
-                .sidebar-main {
+                .navigation-items-main {
                     @apply .px-6 .py-4;
                 }
 
@@ -227,7 +227,7 @@
                     @apply .w-64;
                 }
 
-                .sidebar-toggle {
+                .navigation-toggle {
                     @apply .hidden;
                 }
 
@@ -249,10 +249,10 @@
             .main {
                 @apply .flex .flex-row .flex-1;
 
-                .sidebar {
+                .navigation {
                     @apply .flex .flex-col .relative .pin-none .w-64 .border-r;
 
-                    .sidebar-navigation {
+                    .navigation-items {
                         @apply .flex-1;
                         // transition: all .5s ease-out;
                         transform: translateY(0);
@@ -260,7 +260,7 @@
                     }
                 }
 
-                .sidebar-navigation {
+                .navigation-items {
                     @apply .overflow-auto .block .relative .pin-none;
                     transition: none;
                     transform: translateY(0);

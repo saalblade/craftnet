@@ -3,7 +3,7 @@
  */
 export const state = () => ({
     pageMeta: null,
-    showingSidebar: false,
+    showingNavigation: false,
     searchQuery: '',
     showingScreenshotModal: false,
     screenshotModalImages: null,
@@ -16,16 +16,16 @@ export const state = () => ({
  */
 export const mutations = {
 
-    toggleSidebar(state) {
-        state.showingSidebar = !state.showingSidebar
+    toggleNavigation(state) {
+        state.showingNavigation = !state.showingNavigation
     },
 
     toggleScreenshotModal(state) {
         state.showingScreenshotModal = !state.showingScreenshotModal
     },
 
-    hideSidebar(state) {
-        state.showingSidebar = false
+    hideNavigation(state) {
+        state.showingNavigation = false
     },
 
     updateSearchQuery(state, searchQuery) {
