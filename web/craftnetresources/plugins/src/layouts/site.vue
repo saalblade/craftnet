@@ -3,58 +3,52 @@
         <transition name="fade">
             <screenshot-modal v-if="showingScreenshotModal"></screenshot-modal>
         </transition>
-        <header>
-            <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
-                <i class="fas fa-bars"></i>
-                <font-awesome-icon :icon="icon" />
-            </a>
 
-            <h1><router-link to="/">Craft Plugin Store</router-link></h1>
-
-            <div class="search" :class="{open: searchVisible}">
-                <search-form ref="searchForm" @searchQueryBlur="searchQueryBlur()" />
-                
-                <a class="search-toggle" @click="showSearch()">
-                    <font-awesome-icon icon="search" />
-                </a>
-            </div>
-
-            <div class="nav">
-                <navigation></navigation>
-            </div>
-        </header>
-
+        <!-- main -->
         <div class="main">
+
+            <!-- loading -->
             <div v-if="loading" class="loading-wrapper">
                 <div class="loading">Loading…</div>
             </div>
 
             <template v-else>
-                <div class="sidebar" :class="{'showing-sidebar': showingSidebar}">
-                    <div class="sidebar-main">
-                        <ul class="categories">
-                            <li v-for="category in categories">
-                                <nuxt-link :to="'/categories/'+category.slug">
-                                    <img :src="category.iconUrl" width="24" height="24" />
-                                    {{ category.title }}
-                                </nuxt-link>
-                            </li>
-                        </ul>
 
-                        <div class="nav">
+                <!-- sidebar -->
+                <div class="sidebar" :class="{'showing-sidebar': showingSidebar}">
+                    <header>
+                        <a ref="sidebarToggle" class="sidebar-toggle" @click.prevent="toggleSidebar()">
+                            <i class="fas fa-bars"></i>
+                            <font-awesome-icon :icon="icon" />
+                        </a>
+                        <h1><router-link to="/">Craft Plugin Store</router-link></h1>
+                    </header>
+
+                    <div class="sidebar-navigation">
+                        <div class="sidebar-main">
+                            <plugin-search></plugin-search>
+
+                            <ul class="categories">
+                                <li v-for="category in categories">
+                                    <nuxt-link :to="'/categories/'+category.slug">
+                                        <img :src="category.iconUrl" width="24" height="24" />
+                                        {{ category.title }}
+                                    </nuxt-link>
+                                </li>
+                            </ul>
+
                             <h3>Switch Sites</h3>
-                            <navigation></navigation>
+                            <ul class="list-reset mb-0">
+                                <p><a :href="craftIdUrl">Craft ID</a></p>
+                                <p><nuxt-link to="/" exact>Craft Plugin Store</nuxt-link></p>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
+                <!-- view -->
                 <div ref="view" class="view">
-                    <div v-if="pageMeta && showSeoMeta" class="seo-meta">
-                        <ul>
-                            <li><strong>Title:</strong> {{pageMeta.title}}</li>
-                            <li><strong>Description:</strong> {{pageMeta.description}}</li>
-                        </ul>
-                    </div>
+                    <seo-meta></seo-meta>
                     <nuxt/>
                 </div>
             </template>
@@ -63,12 +57,15 @@
 </template>
 
 <script>
+    import helpers from '../mixins/helpers'
     import {mapState} from 'vuex'
-    import Navigation from '../components/Navigation'
-    import SearchForm from '../components/SearchForm'
     import ScreenshotModal from '../components/ScreenshotModal'
+    import PluginSearch from '../components/PluginSearch'
+    import SeoMeta from '../components/SeoMeta'
 
     export default {
+
+        mixins: [helpers],
 
         data() {
             return {
@@ -79,9 +76,9 @@
         },
 
         components: {
-            Navigation,
-            SearchForm,
             ScreenshotModal,
+            PluginSearch,
+            SeoMeta,
         },
 
         computed: {
@@ -97,23 +94,15 @@
             ...mapState({
                 showingSidebar: state => state.app.showingSidebar,
                 showingScreenshotModal: state => state.app.showingScreenshotModal,
-                pageMeta: state => state.app.pageMeta,
                 searchQuery: state => state.pluginStore.searchQuery,
                 categories: state => state.pluginStore.categories,
                 featuredPlugins: state => state.pluginStore.featuredPlugins,
             }),
 
-            showSeoMeta() {
-                return process.env.showSeoMeta
-            },
-
         },
 
         methods: {
 
-            /**
-             * Toggles the sidebar.
-             */
             toggleSidebar() {
                 this.$store.commit('app/toggleSidebar')
             },
@@ -122,31 +111,10 @@
                 this.$bus.$emit('viewScroll', e)
             },
 
-            showSearch() {
-                this.searchVisible = true
-                const searchQueryInput = this.$refs.searchForm.$refs.searchQuery
-
-                this.$nextTick(() => {
-                    searchQueryInput.focus()
-                })
-            },
-
-            searchQueryBlur() {
-                this.searchVisible = false
-            }
-        },
-
-        created() {
-            // console.log('env', process.env.NODE_ENV);
-
-            if (this.$route.query.q) {
-                this.$store.commit('app/updateSearchQuery', this.$route.query.q)
-            }
         },
 
         mounted () {
             window.addEventListener('resize', this.handleResize)
-            // this.handleResize()
             window.dispatchEvent(new Event('resize'));
 
             this.$refs.view.addEventListener('scroll', this.onViewScroll)
@@ -155,8 +123,6 @@
 </script>
 
 <style lang="scss">
-    /* Layout */
-
     .wrapper {
         header {
             @apply .flex .px-6 .py-3 .bg-grey-lighter .border-b .justify-between .relative .z-20;
@@ -171,33 +137,10 @@
             }
 
             h1 {
-                @apply .text-lg .self-center .px-6 .py-2 .flex-no-shrink .my-0 .-ml-6;
+                @apply .flex-1 .text-lg .self-center .px-6 .py-2 .flex-no-shrink .my-0 .-ml-6;
 
                 a {
                     @apply .text-grey-darker;
-                }
-            }
-
-            .search {
-                @apply .self-center;
-
-                .search-form {
-                    @apply .hidden;
-                }
-
-                &.open {
-                    @apply .absolute;
-                    top: 0.5rem;
-                    left: 1.5rem;
-                    right: 1.5rem;
-
-                    .search-form {
-                        @apply .block;
-                    }
-
-                    .search-toggle {
-                        @apply .hidden;
-                    }
                 }
             }
 
@@ -208,10 +151,27 @@
 
         .main {
             .sidebar {
-                @apply .overflow-y-auto .pin .z-10;
+                @apply .sticky .pin-t .w-full;
+
+                &.showing-sidebar {
+                    .sidebar-navigation {
+                        // transition: all .5s ease-out;
+                        transform: translateY(0);
+                        visibility: visible;
+                    }
+                }
+
+                .sidebar-navigation {
+                    // transition: all .5s ease-out;
+                    transform: translateY(-100%);
+                    visibility: hidden;
+                }
+            }
+
+            .sidebar-navigation {
+                @apply .fixed .overflow-y-auto .pin .z-10 .bg-grey-lighter;
                 -webkit-overflow-scrolling: touch;
-                top: 53px;
-                @apply .fixed;
+                top: 63px;
 
                 &.sticky {
                     @apply .sticky;
@@ -220,14 +180,6 @@
                 .sidebar-main {
                     @apply .px-6 .py-4;
                 }
-
-                nav {
-                    @apply .-mx-6 .px-6 .pb-4 .mb-4;
-                }
-            }
-
-            .sidebar {
-                @apply .bg-grey-lighter;
 
                 h3 {
                     @apply .mb-2 .mt-4;
@@ -258,36 +210,9 @@
                         }
                     }
                 }
-            }
 
-
-            .sidebar {
-                // transition: all .5s ease-out;
-                transform: translateY(-100%);
-                visibility: hidden;
-
-                &.showing-sidebar {
-                    // transition: all .5s ease-out;
-                    transform: translateY(0);
-                    visibility: visible;
-                }
-            }
-        }
-    }
-
-    @media (min-width: 576px) {
-        .wrapper {
-            header {
-                .search {
-                    @apply .flex-1;
-
-                    .search-form {
-                        @apply .block;
-                    }
-
-                    .search-toggle {
-                        @apply .hidden;
-                    }
+                nav {
+                    @apply .-mx-6 .px-6 .pb-4 .mb-4;
                 }
             }
         }
@@ -295,7 +220,7 @@
 
     @media (min-width: 992px) {
         .wrapper {
-            @apply .flex .flex-col .absolute .pin;
+            @apply .flex .flex-row .absolute .pin;
 
             header {
                 h1 {
@@ -325,8 +250,18 @@
                 @apply .flex .flex-row .flex-1;
 
                 .sidebar {
-                    @apply .w-64 .overflow-auto .block .border-r .relative .pin-none;
+                    @apply .flex .flex-col .relative .pin-none .w-64 .border-r;
 
+                    .sidebar-navigation {
+                        @apply .flex-1;
+                        // transition: all .5s ease-out;
+                        transform: translateY(0);
+                        visibility: visible;
+                    }
+                }
+
+                .sidebar-navigation {
+                    @apply .overflow-auto .block .relative .pin-none;
                     transition: none;
                     transform: translateY(0);
                     visibility: visible;
@@ -338,23 +273,6 @@
 
                 .view {
                     @apply .flex-1 .overflow-auto;
-                }
-            }
-        }
-    }
-
-
-    /* SEO meta */
-
-    .seo-meta {
-        @apply .bg-blue-lighter .text-blue-darker .p-4 .rounded .mb-4;
-
-        ul {
-            @apply .list-reset;
-
-            li {
-                &:not(:last-child) {
-                    @apply .mb-2;
                 }
             }
         }
