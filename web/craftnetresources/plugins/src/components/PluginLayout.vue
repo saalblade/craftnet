@@ -17,11 +17,6 @@
                             <router-link :to="'/developer/'+pluginSnippet.developerId">{{ pluginSnippet.developerName }}</router-link>
                         </div>
                     </div>
-
-                    <a class="nav-toggle" @click="showNav=!showNav">
-                        <template v-if="showNav"><font-awesome-icon icon="chevron-up" /></template>
-                        <template v-else><font-awesome-icon icon="chevron-down" /></template>
-                    </a>
                 </div>
             </div>
         </div>
@@ -42,12 +37,6 @@
     export default {
 
         mixins: [helpers],
-
-        data() {
-            return {
-                showNav: false,
-            }
-        },
 
         computed: {
 
