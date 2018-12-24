@@ -1,6 +1,6 @@
 <template>
     <div class="search" :class="{open: searchVisible}">
-        <search-form ref="searchForm" @searchQueryBlur="searchQueryBlur()" />
+        <plugin-search ref="searchForm" @searchQueryBlur="searchQueryBlur()" />
 
         <a class="search-toggle" @click="showSearch()">
             <font-awesome-icon icon="search" />
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import SearchForm from '../components/SearchForm'
+    import PluginSearch from './PluginSearch'
 
     export default {
 
@@ -20,7 +20,7 @@
         },
 
         components: {
-            SearchForm,
+            PluginSearch,
         },
 
         methods: {

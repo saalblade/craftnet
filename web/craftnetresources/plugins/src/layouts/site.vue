@@ -23,7 +23,7 @@
                     </header>
 
                     <div class="navigation-main">
-                        <togglable-search></togglable-search>
+                        <plugin-search></plugin-search>
 
                         <ul>
                             <li v-for="category in categories">
@@ -57,7 +57,7 @@
     import helpers from '../mixins/helpers'
     import ScreenshotModal from '../components/ScreenshotModal'
     import SeoMeta from '../components/SeoMeta'
-    import ToggableSearch from '../components/TogglableSearch'
+    import PluginSearch from '../components/PluginSearch'
 
     export default {
 
@@ -74,7 +74,7 @@
         components: {
             ScreenshotModal,
             SeoMeta,
-            ToggableSearch,
+            PluginSearch,
         },
 
         computed: {

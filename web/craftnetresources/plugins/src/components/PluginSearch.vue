@@ -37,7 +37,7 @@
 
 <style lang="scss">
     .search-form {
-        @apply .flex-1 .relative;
+        @apply .flex-1 .relative .mt-2 mb-6;
 
         input.text {
             padding-left: 32px;
