@@ -6,14 +6,12 @@
 
         <!-- main -->
         <div class="main">
-
             <!-- loading -->
             <div v-if="loading" class="loading-wrapper">
                 <div class="loading">Loading…</div>
             </div>
 
             <template v-else>
-
                 <!-- navigation -->
                 <div class="navigation" :class="{'showing-navigation': showingNavigation}">
                     <header>
@@ -24,25 +22,23 @@
                         <h1><router-link to="/">Craft Plugin Store</router-link></h1>
                     </header>
 
-                    <div class="navigation-items">
-                        <div class="navigation-items-main">
-                            <plugin-search></plugin-search>
+                    <div class="navigation-main">
+                        <plugin-search></plugin-search>
 
-                            <ul class="categories">
-                                <li v-for="category in categories">
-                                    <nuxt-link :to="'/categories/'+category.slug">
-                                        <img :src="category.iconUrl" width="24" height="24" />
-                                        {{ category.title }}
-                                    </nuxt-link>
-                                </li>
-                            </ul>
+                        <ul>
+                            <li v-for="category in categories">
+                                <nuxt-link :to="'/categories/'+category.slug">
+                                    <img :src="category.iconUrl" width="24" height="24" />
+                                    {{ category.title }}
+                                </nuxt-link>
+                            </li>
+                        </ul>
 
-                            <h3>Switch Sites</h3>
-                            <ul class="list-reset mb-0">
-                                <p><a :href="craftIdUrl">Craft ID</a></p>
-                                <p><nuxt-link to="/" exact>Craft Plugin Store</nuxt-link></p>
-                            </ul>
-                        </div>
+                        <h3>Switch Sites</h3>
+                        <ul>
+                            <p><a :href="craftIdUrl">Craft ID</a></p>
+                            <p><nuxt-link to="/" exact>Craft Plugin Store</nuxt-link></p>
+                        </ul>
                     </div>
                 </div>
 
@@ -57,11 +53,11 @@
 </template>
 
 <script>
-    import helpers from '../mixins/helpers'
     import {mapState} from 'vuex'
+    import helpers from '../mixins/helpers'
     import ScreenshotModal from '../components/ScreenshotModal'
-    import PluginSearch from '../components/PluginSearch'
     import SeoMeta from '../components/SeoMeta'
+    import PluginSearch from '../components/PluginSearch'
 
     export default {
 
@@ -77,11 +73,19 @@
 
         components: {
             ScreenshotModal,
-            PluginSearch,
             SeoMeta,
+            PluginSearch,
         },
 
         computed: {
+
+            ...mapState({
+                showingScreenshotModal: state => state.app.showingScreenshotModal,
+                searchQuery: state => state.pluginStore.searchQuery,
+                featuredPlugins: state => state.pluginStore.featuredPlugins,
+                showingNavigation: state => state.app.showingNavigation,
+                categories: state => state.pluginStore.categories,
+            }),
 
             icon () {
                 if (this.showingNavigation) {
@@ -91,24 +95,16 @@
                 return 'bars'
             },
 
-            ...mapState({
-                showingNavigation: state => state.app.showingNavigation,
-                showingScreenshotModal: state => state.app.showingScreenshotModal,
-                searchQuery: state => state.pluginStore.searchQuery,
-                categories: state => state.pluginStore.categories,
-                featuredPlugins: state => state.pluginStore.featuredPlugins,
-            }),
-
         },
 
         methods: {
 
-            toggleNavigation() {
-                this.$store.commit('app/toggleNavigation')
-            },
-
             onViewScroll(e) {
                 this.$bus.$emit('viewScroll', e)
+            },
+
+            toggleNavigation() {
+                this.$store.commit('app/toggleNavigation')
             },
 
         },
@@ -123,62 +119,61 @@
 </script>
 
 <style lang="scss">
+    // Wrapper
+
     .wrapper {
-        header {
-            @apply .flex .px-6 .py-3 .bg-grey-lighter .border-b .justify-between .relative .z-20;
 
-            &.sticky {
-                @apply .sticky .pin .z-10;
-            }
 
-            a.navigation-toggle {
-                @apply .self-center .text-grey-darker .mr-4;
-                width: 14px;
-            }
+        // Navigation
 
-            h1 {
-                @apply .flex-1 .text-lg .self-center .px-6 .py-2 .flex-no-shrink .my-0 .-ml-6;
+        .navigation {
+            @apply .sticky .pin-t .w-full;
 
-                a {
-                    @apply .text-grey-darker;
+            &.showing-navigation {
+                .navigation-main {
+                    // transition: all .5s ease-out;
+                    transform: translateY(0);
+                    visibility: visible;
                 }
             }
 
-            .nav {
-                @apply .block .ml-2 .self-center;
-            }
-        }
 
-        .main {
-            .navigation {
-                @apply .sticky .pin-t .w-full;
+            // Header
 
-                &.showing-navigation {
-                    .navigation-items {
-                        // transition: all .5s ease-out;
-                        transform: translateY(0);
-                        visibility: visible;
+            header {
+                @apply .flex .px-6 .py-3 .bg-grey-lighter .border-b .justify-between .relative .z-20;
+
+                &.sticky {
+                    @apply .sticky .pin .z-10;
+                }
+
+                a.navigation-toggle {
+                    @apply .self-center .text-grey-darker .mr-4;
+                    width: 14px;
+                }
+
+                h1 {
+                    @apply .flex-1 .text-lg .self-center .px-6 .py-2 .flex-no-shrink .my-0 .-ml-6;
+
+                    a {
+                        @apply .text-grey-darker;
                     }
                 }
-
-                .navigation-items {
-                    // transition: all .5s ease-out;
-                    transform: translateY(-100%);
-                    visibility: hidden;
-                }
             }
 
-            .navigation-items {
-                @apply .fixed .overflow-y-auto .pin .z-10 .bg-grey-lighter;
+
+            // Navigation Main
+
+            .navigation-main {
+                @apply .fixed .overflow-y-auto .pin .z-10 .bg-grey-lighter .px-6 .py-4;
                 -webkit-overflow-scrolling: touch;
                 top: 63px;
+                // transition: all .5s ease-out;
+                transform: translateY(-100%);
+                visibility: hidden;
 
                 &.sticky {
                     @apply .sticky;
-                }
-
-                .navigation-items-main {
-                    @apply .px-6 .py-4;
                 }
 
                 h3 {
@@ -210,66 +205,54 @@
                         }
                     }
                 }
-
-                nav {
-                    @apply .-mx-6 .px-6 .pb-4 .mb-4;
-                }
             }
         }
     }
 
     @media (min-width: 992px) {
+        // Wrapper
+
         .wrapper {
             @apply .flex .flex-row .absolute .pin;
 
-            header {
-                h1 {
-                    @apply .w-64;
-                }
 
-                .navigation-toggle {
-                    @apply .hidden;
-                }
-
-                .nav {
-                    ul {
-                        @apply .list-reset;
-
-                        li {
-                            @apply .inline-block .ml-2;
-
-                            a {
-                                @apply .p-2;
-                            }
-                        }
-                    }
-                }
-            }
+            // Main
 
             .main {
                 @apply .flex .flex-row .flex-1;
 
+
+                // Navigation
+
                 .navigation {
                     @apply .flex .flex-col .relative .pin-none .w-64 .border-r;
 
-                    .navigation-items {
-                        @apply .flex-1;
-                        // transition: all .5s ease-out;
+
+                    // Header
+
+                    header {
+                        h1 {
+                            @apply .w-64;
+                        }
+
+                        .navigation-toggle {
+                            @apply .hidden;
+                        }
+                    }
+
+
+                    // Navigation Main
+
+                    .navigation-main {
+                        @apply .flex-1 .overflow-auto .block .relative .pin-none;
+                        transition: none;
                         transform: translateY(0);
                         visibility: visible;
                     }
                 }
 
-                .navigation-items {
-                    @apply .overflow-auto .block .relative .pin-none;
-                    transition: none;
-                    transform: translateY(0);
-                    visibility: visible;
 
-                    .nav {
-                        @apply .hidden;
-                    }
-                }
+                // View
 
                 .view {
                     @apply .flex-1 .overflow-auto;

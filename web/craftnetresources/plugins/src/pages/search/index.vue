@@ -1,6 +1,6 @@
 <template>
     <div class="xcontainer py-6">
-        <h1>Showing results for “{{ searchQuery }}”</h1>
+        <h1 class="border-b py-2 mt-0 mb-0">Showing results for “{{ searchQuery }}”</h1>
 
         <plugin-grid :plugins="pluginsToRender"></plugin-grid>
     </div>
