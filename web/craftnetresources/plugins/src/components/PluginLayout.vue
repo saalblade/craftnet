@@ -79,24 +79,6 @@
                     @apply .self-center .pb-0 .border-b-0 .text-2xl .mt-0 .mb-1;
                 }
             }
-
-            .nav-toggle {
-                @apply .flex-1 .self-center .text-right;
-            }
-        }
-
-        ul.nav {
-            @apply .list-reset .self-center .py-4 .w-full;
-
-            li {
-                a:not(.btn) {
-                    @apply .block .py-3 .border-t;
-
-                    &.nuxt-link-active {
-                        @apply .text-grey-dark;
-                    }
-                }
-            }
         }
     }
 
@@ -106,28 +88,6 @@
 
             .xcontainer {
                 @apply .flex .justify-between;
-            }
-
-            .description {
-                .nav-toggle {
-                    @apply .hidden;
-                }
-            }
-
-            ul.nav {
-                @apply .block .w-auto .py-0;
-
-                li {
-                    @apply .inline-block;
-
-                    a:not(.btn) {
-                        @apply .border-0 .px-4 .py-0;
-                    }
-                }
-
-                li.buy {
-                    @apply .ml-4;
-                }
             }
         }
     }
