@@ -573,7 +573,6 @@ EOD;
 
 
 EOL;
-
                 }
             } while ($logException !== null);
 

@@ -6,11 +6,11 @@ use Craft;
 use craft\commerce\elements\Order;
 use craft\commerce\records\Transaction as TransactionRecord;
 use craft\elements\User;
-use craftnet\base\PluginPurchasable;
 use craftnet\cms\CmsLicense;
 use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use craftnet\plugins\PluginLicense;
+use craftnet\plugins\PluginPurchasable;
 use yii\base\Behavior;
 
 /**

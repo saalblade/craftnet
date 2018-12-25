@@ -2,8 +2,8 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "plugin": {"type": "string"},
-    "licenseKey": {"$ref": "definitions.json#/pluginLicenseKey"}
+    "licenseKey": {"$ref": "../definitions.json#/pluginLicenseKey"},
+    "expiryDate": {"type": "string", "format": "date"}
   },
-  "required": ["plugin", "licenseKey"]
+  "required": ["licenseKey"]
 }

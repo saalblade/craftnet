@@ -79,7 +79,6 @@ class PluginLicenseManager extends Component
                     ['<', 'expiresOn', Db::prepareDateForDb($date)]
                 ]
             ])
-
             ->all();
 
         $licenses = [];

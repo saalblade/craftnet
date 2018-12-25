@@ -89,7 +89,7 @@ class Module extends \yii\base\Module
             $e->types[] = PluginEdition::class;
         });
         Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
-            $e->types[] = EditionUpgradeDiscount::class;
+            $e->types[] = OrderAdjuster::class;
         });
 
         // register our custom receipt system message
@@ -204,7 +204,7 @@ class Module extends \yii\base\Module
             $e->navItems[] = [
                 'url' => 'partners',
                 'label' => 'Partners',
-                'icon' => __DIR__.'/icons/partner.svg',
+                'icon' => __DIR__ . '/icons/partner.svg',
             ];
         });
 

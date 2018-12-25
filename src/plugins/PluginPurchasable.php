@@ -1,8 +1,10 @@
 <?php
 
-namespace craftnet\base;
+namespace craftnet\plugins;
 
-use craftnet\plugins\Plugin;
+use craftnet\base\LicenseInterface;
+use craftnet\base\Purchasable;
+use craftnet\Module;
 use yii\base\InvalidConfigException;
 
 /**
@@ -45,6 +47,14 @@ abstract class PluginPurchasable extends Purchasable
         $rules[] = [['pluginId'], 'required'];
         $rules[] = [['pluginId'], 'number', 'integerOnly' => true];
         return $rules;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLicenseByKey(string $key): LicenseInterface
+    {
+        return Module::getInstance()->getPluginLicenseManager()->getLicenseByKey($key, $this->getPlugin()->handle);
     }
 
     /**

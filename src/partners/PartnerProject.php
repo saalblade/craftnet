@@ -44,7 +44,7 @@ class PartnerProject extends Model
         ];
 
         $rules[] = [
-            ['name','url'],
+            ['name', 'url'],
             'required',
             'on' => [
                 Element::SCENARIO_DEFAULT,

@@ -38,6 +38,7 @@ class PluginRenewalQuery extends ElementQuery
         $this->query->select([
             'craftnet_pluginrenewals.pluginId',
             'craftnet_pluginrenewals.editionId',
+            'craftnet_pluginrenewals.price',
         ]);
 
         if ($this->editionId) {

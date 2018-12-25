@@ -3,19 +3,14 @@
 namespace craftnet\base;
 
 use craft\commerce\base\Purchasable as CommercePurchasable;
+use craft\commerce\models\LineItem;
+use craftnet\validators\LineItemOptionsValidator;
 
 /**
  * @property-read string $type
  */
-abstract class Purchasable extends CommercePurchasable
+abstract class Purchasable extends CommercePurchasable implements PurchasableInterface
 {
-    /**
-     * Returns the "type" value that should be included in toArray().
-     *
-     * @return string
-     */
-    abstract public function getType(): string;
-
     /**
      * @inheritdoc
      */
@@ -24,5 +19,15 @@ abstract class Purchasable extends CommercePurchasable
         $names = parent::attributes();
         $names[] = 'type';
         return $names;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLineItemRules(LineItem $lineItem): array
+    {
+        return [
+            ['options', LineItemOptionsValidator::class, 'purchasable' => $this],
+        ];
     }
 }

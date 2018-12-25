@@ -151,7 +151,7 @@ class CmsLicensesController extends Controller
                     $license->domain = $domain ?: null;
                 }
 
-                if($notes !== null) {
+                if ($notes !== null) {
                     $license->notes = $notes;
                 }
 

@@ -7,7 +7,6 @@ use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
 use craft\helpers\Json;
-use craftnet\cms\CmsEdition;
 use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use yii\web\Response;

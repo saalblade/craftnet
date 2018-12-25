@@ -6,6 +6,7 @@
     "edition": {"type": "string"},
     "licenseKey": {"$ref": "../definitions.json#/pluginLicenseKey"},
     "cmsLicenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"},
+    "expiryDate": {"type": "string", "format": "date"},
     "autoRenew": {"type": "boolean"}
   },
   "required": ["plugin", "edition"]
