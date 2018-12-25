@@ -71,8 +71,8 @@
 
                         </template>
                         <template v-else>
-                            <span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
-                            <span v-else="" class="badge">Disabled</span>
+                            <badge v-if="license.autoRenew == 1" type="success">Enabled</badge>
+                            <badge v-else>Disabled</badge>
                         </template>
                     </td>
                 </tr>
@@ -85,6 +85,7 @@
 
 <script>
     import {mapGetters} from 'vuex'
+    import Badge from '../Badge'
 
     export default {
 
@@ -95,6 +96,10 @@
         },
 
         props: ['licenses', 'excludeCmsLicenseColumn', 'excludeNotesColumn', 'autoRenewSwitch'],
+
+        components: {
+            Badge,
+        },
 
         computed: {
 

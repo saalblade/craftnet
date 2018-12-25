@@ -48,8 +48,8 @@
                     </td>
                     <td>
                         <template v-if="license.expirable && license.expiresOn">
-                            <span v-if="license.autoRenew == 1" class="badge badge-success">Enabled</span>
-                            <span v-else="" class="badge">Disabled</span>
+                            <badge v-if="license.autoRenew == 1" type="success">Enabled</badge>
+                            <badge v-else>Disabled</badge>
                         </template>
                     </td>
                 </tr>

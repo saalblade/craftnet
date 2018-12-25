@@ -15,7 +15,7 @@
                 <li class="block ml-6 cart-menu">
                     <router-link class="block" to="/cart">
                         <font-awesome-icon icon="shopping-cart" />
-                        <div class="badge" :class="{invisible: !cartTotalItems}">{{cartTotalItems}}</div>
+                        <div class="cart-badge" :class="{invisible: !cartTotalItems}">{{cartTotalItems}}</div>
                     </router-link>
                 </li>
                 <li class="block ml-6 global-menu" v-on-clickaway="awayGlobalMenu">
