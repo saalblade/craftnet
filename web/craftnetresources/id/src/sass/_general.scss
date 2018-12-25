@@ -176,6 +176,13 @@ th {
 }
 
 
+/* Flex container */
+
+.flex-container {
+  @apply .flex-1 .flex;
+}
+
+
 /* Renew Licenses Modal */
 
 #renew-licenses-modal {

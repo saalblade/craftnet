@@ -142,3 +142,106 @@
 
     }
 </script>
+
+<style lang="scss">
+    // Cart menu
+
+    .cart-menu {
+        a {
+            @apply .relative;
+
+            .cart-badge {
+                @apply .rounded-full .leading-none .absolute .border .border-grey-lighter .border-2 .text-xs .bg-red .text-white;
+                padding: 2px 6px;
+                top: -12px;
+                right: -20px;
+            }
+        }
+    }
+
+
+    // Global menu
+
+    .global-menu {
+        @apply .relative;
+
+        .toggle {
+            @apply .text-lg .p-2 .rounded-full;
+        }
+
+        .popover {
+            top: 48px;
+            right: -13px;
+
+            .popover-arrow {
+                right: 5px;
+            }
+        }
+    }
+
+
+    // User menu
+
+    .user-menu {
+        @apply .relative;
+
+        .toggle {
+            @apply .bg-grey-light .rounded-full;
+            width: 36px;
+            height: 36px;
+
+            &:hover {
+                @apply .cursor-pointer;
+            }
+
+            img {
+                @apply .rounded-full;
+                width: 36px;
+            }
+        }
+
+        .popover {
+            top: 48px;
+            right: -12px;
+
+            .popover-arrow {
+                right: 5px;
+            }
+        }
+    }
+
+
+    // Popover
+
+    .popover {
+        width: 200px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 20px;
+        background: white;
+        box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.3);
+        z-index: 20;
+
+        .popover-arrow {
+            width: 50px;
+            height: 16px;
+            position: absolute;
+            top: -16px;
+            right: 5px;
+            overflow: hidden;
+
+            &::after {
+                content: "";
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                background: white;
+                transform: translateX(-50%) translateY(-50%) rotate(45deg);
+                top: 100%;
+                left: 50%;
+                box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.3);
+            }
+        }
+    }
+</style>
