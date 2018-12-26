@@ -23,3 +23,14 @@
 
     }
 </script>
+
+<style lang="scss">
+    #renew-licenses-modal {
+        .modal {
+            .modal-dialog {
+                min-width: 800px;
+                min-height: 600px;
+            }
+        }
+    }
+</style>

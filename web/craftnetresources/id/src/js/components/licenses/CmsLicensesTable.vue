@@ -61,10 +61,15 @@
 
 <script>
     import {mapGetters} from 'vuex'
+    import Badge from '../Badge'
 
     export default {
 
         props: ['licenses'],
+
+        components: {
+            Badge
+        },
 
         computed: {
 
