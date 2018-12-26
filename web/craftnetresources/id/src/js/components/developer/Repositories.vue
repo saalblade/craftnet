@@ -4,9 +4,8 @@
 
         <text-field placeholder="Filter repositories" v-model="q" />
 
-
-        <div v-if="filteredRepositories.length > 0" class="list-group">
-            <div v-for="repository in filteredRepositories" class="list-group-item">
+        <list-group v-if="filteredRepositories.length > 0">
+            <list-group-item v-for="repository in filteredRepositories">
                 <div class="flex items-center">
                     <div class="flex-1">
                         {{ repository.full_name }}
@@ -17,8 +16,8 @@
                         <a v-else href="#" class="btn btn-sm btn-light disabled" :class="{ disabled: repositoryIsInUse(repository.html_url )}">Already in use</a>
                     </div>
                 </div>
-            </div>
-        </div>
+            </list-group-item>
+        </list-group>
 
         <p v-else="">No repositories.</p>
     </div>
@@ -28,6 +27,8 @@
     import filter from 'lodash/filter';
     import includes from 'lodash/includes';
     import {mapState, mapGetters} from 'vuex';
+    import ListGroup from '../ListGroup'
+    import ListGroupItem from '../ListGroupItem'
 
     export default {
 
@@ -37,6 +38,11 @@
             return {
                 q: ''
             };
+        },
+
+        components: {
+            ListGroup,
+            ListGroupItem,
         },
 
         computed: {

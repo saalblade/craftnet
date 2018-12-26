@@ -1,5 +1,5 @@
 <template>
-    <div class="list-group-item">
+    <list-group-item>
         <template v-if="loading">
             <div class="spinner"></div>
         </template>
@@ -33,10 +33,12 @@
                 </div>
             </div>
         </template>
-    </div>
+    </list-group-item>
 </template>
 
 <script>
+    import ListGroupItem from '../../ListGroupItem'
+
     export default {
 
         props: ['name', 'description', 'icon', 'accountName', 'connected', 'buttonLoading', 'loading'],
@@ -52,6 +54,10 @@
                 // loading: false,
             }
         },
+
+        components: {
+            ListGroupItem
+        }
 
     }
 </script>

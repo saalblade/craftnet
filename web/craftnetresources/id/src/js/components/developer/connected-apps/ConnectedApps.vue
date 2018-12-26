@@ -1,5 +1,5 @@
 <template>
-    <div class="list-group">
+    <list-group>
         <stripe-app v-if="showStripe"></stripe-app>
 
         <template v-for="appType, index in appTypes">
@@ -16,13 +16,14 @@
 
             <hr v-if="index != (appTypes.length - 1)">
         </template>
-    </div>
+    </list-group>
 </template>
 
 <script>
     import {mapState, mapGetters} from 'vuex'
     import StripeApp from './StripeApp'
     import ConnectedApp from './ConnectedApp'
+    import ListGroup from '../../ListGroup'
     import helpers from '../../../mixins/helpers'
 
     export default {
@@ -53,6 +54,7 @@
         components: {
             StripeApp,
             ConnectedApp,
+            ListGroup,
         },
 
         computed: {
