@@ -81,6 +81,11 @@
   @apply .opacity-0;
 }
 
+.fade {
+  @apply .opacity-0;
+  transition: opacity .15s linear;
+}
+
 
 /* Auth Manager Modal */
 
