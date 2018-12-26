@@ -445,3 +445,20 @@
 
     }
 </script>
+
+<style lang="scss">
+    .auth-manager-modal {
+        .modal-body {
+            padding: 24px;
+            padding-left: 76px;
+
+            & > svg {
+                float: left;
+                margin: -6px 0 0 -58px;
+                width: 40px;
+                height: 40px;
+                color: #b9bfc6;
+            }
+        }
+    }
+</style>
