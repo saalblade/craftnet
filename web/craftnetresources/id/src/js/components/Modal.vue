@@ -45,3 +45,16 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .modal {
+        .modal-dialog {
+            min-width: 800px;
+            min-height: 600px;
+        }
+
+        .modal-content {
+            @apply .p-6;
+        }
+    }
+</style>
