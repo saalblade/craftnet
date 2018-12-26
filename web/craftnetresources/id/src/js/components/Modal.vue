@@ -53,8 +53,6 @@
 
         .modal-dialog {
             @apply .w-auto .max-w-sm .mx-auto .my-8;
-            min-width: 800px;
-            min-height: 600px;
         }
 
         .modal-wide {
@@ -62,7 +60,7 @@
         }
 
         .modal-content {
-            @apply .flex .flex-col .bg-white .rounded .p-6;
+            @apply .flex .flex-col .bg-white .rounded .p-8;
             border: 1px solid rgba(0,0,0,.2);
         }
     }

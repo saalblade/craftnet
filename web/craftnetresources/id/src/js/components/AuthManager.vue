@@ -449,7 +449,6 @@
 <style lang="scss">
     .auth-manager-modal {
         .modal-body {
-            padding: 24px;
             padding-left: 76px;
 
             & > svg {
