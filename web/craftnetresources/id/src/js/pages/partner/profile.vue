@@ -3,7 +3,7 @@
 		<h1>Partner Profile</h1>
 
         <div v-if="loadState == LOADING" class="text-center">
-            <div class="spinner big mt-8"></div>
+            <spinner big cssClass="mt-8"></spinner>
         </div>
 
         <p v-if="loadState == LOAD_ERROR">Error: {{ loadError }}</p>
@@ -23,6 +23,7 @@
     import PartnerInfo from '../../components/partner/PartnerInfo'
     import PartnerLocations from '../../components/partner/PartnerLocations'
     import PartnerProjects from '../../components/partner/PartnerProjects'
+    import Spinner from '../../components/Spinner'
 
     export default {
 
@@ -41,7 +42,8 @@
             PartnerCompletion,
             PartnerInfo,
             PartnerLocations,
-            PartnerProjects
+            PartnerProjects,
+            Spinner,
         },
 
         computed: {

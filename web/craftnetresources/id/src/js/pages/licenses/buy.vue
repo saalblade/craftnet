@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <div class="spinner" v-if="loading"></div>
+                <spinner v-if="loading"></spinner>
             </div>
         </div>
 
@@ -45,8 +45,13 @@
 
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
+    import Spinner from '../../components/Spinner'
 
     export default {
+
+        components: {
+            Spinner,
+        },
 
         data() {
             return {

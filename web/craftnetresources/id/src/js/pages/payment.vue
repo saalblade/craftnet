@@ -3,7 +3,7 @@
         <h1>Payment</h1>
 
         <div v-if="error">{{error}}</div>
-        <div v-if="!cart" class="spinner"></div>
+        <spinner v-if="!cart"></spinner>
 
         <template v-else>
             <form @submit.prevent="pay()">
@@ -32,7 +32,7 @@
                 <div class="text-center mt-8">
                     <input type="submit" class="btn btn-lg btn-primary" :value="'Pay '+$options.filters.currency(cart.totalPrice)" />
 
-                    <div v-if="payLoading" class="spinner"></div>
+                    <spinner v-if="payLoading"></spinner>
 
                     <div class="mt-4">
                         <img src="~@/images/powered_by_stripe.svg" height="18" />
@@ -48,6 +48,7 @@
     import PaymentMethod from '../components/payment/PaymentMethod'
     import CouponCode from '../components/payment/CouponCode'
     import BillingInfos from '../components/payment/BillingInfos'
+    import Spinner from '../components/Spinner'
 
     export default {
 
@@ -80,6 +81,7 @@
             PaymentMethod,
             CouponCode,
             BillingInfos,
+            Spinner,
         },
 
         computed: {

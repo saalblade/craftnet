@@ -2,7 +2,7 @@
     <div>
         <h1>Cart</h1>
 
-        <div v-if="loading" class="spinner"></div>
+        <spinner v-if="loading"></spinner>
 
         <template v-else>
             <template v-if="cart">
@@ -95,6 +95,7 @@
     import {mapState, mapGetters, mapActions} from 'vuex'
     import CartMock from '../components/CartMock'
     import Empty from '../components/Empty'
+    import Spinner from '../components/Spinner'
     import helpers from '../mixins/helpers'
 
     export default {
@@ -103,6 +104,7 @@
         components: {
             CartMock,
             Empty,
+            Spinner,
         },
 
         data() {

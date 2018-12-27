@@ -32,7 +32,7 @@
             <div class="card-body">
                 <h4>Invoices</h4>
 
-                <div v-if="invoicesLoading" class="spinner"></div>
+                <spinner v-if="invoicesLoading"></spinner>
 
                 <template v-else>
                     <invoices-table v-if="invoices && invoices.length > 0" :invoices="invoices"></invoices-table>
@@ -49,6 +49,7 @@
     import BillingInvoiceDetails from '../../../components/billing/BillingInvoiceDetails'
     import BillingAddressForm from '../../../components/billing/BillingAddressForm'
     import InvoicesTable from '../../../components/billing/InvoicesTable'
+    import Spinner from '../../../components/Spinner'
 
 
     export default {
@@ -58,6 +59,7 @@
             BillingInvoiceDetails,
             BillingAddressForm,
             InvoicesTable,
+            Spinner,
         },
 
         computed: {

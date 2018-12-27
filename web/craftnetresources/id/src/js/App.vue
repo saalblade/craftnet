@@ -13,7 +13,7 @@
 
         <template v-if="loading">
             <div class="text-center">
-                <div class="spinner big mt-8"></div>
+                <spinner big cssClass="mt-8"></spinner>
             </div>
         </template>
 
@@ -30,6 +30,7 @@
     import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal';
     import Layout from './components/Layout';
     import LayoutNoSidebar from './components/LayoutNoSidebar';
+    import Spinner from './components/Spinner';
 
     export default {
 
@@ -40,6 +41,7 @@
             RenewLicensesModal,
             Layout,
             LayoutNoSidebar,
+            Spinner,
         },
 
         computed: {

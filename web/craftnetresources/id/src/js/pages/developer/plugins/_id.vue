@@ -47,7 +47,7 @@
 
                     <span class="text-secondary">Your plugin will be automatically published once it’s approved.</span>
                 </template>
-                <div v-if="pluginSubmitLoading" class="spinner"></div>
+                <spinner v-if="pluginSubmitLoading"></spinner>
             </div>
 
             <form @submit.prevent="save()">
@@ -207,7 +207,7 @@
 
                 <div>
                     <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
-                    <div v-if="loading" class="spinner"></div>
+                    <spinner v-if="loading"></spinner>
                 </div>
             </form>
         </template>
@@ -219,6 +219,7 @@
     import ConnectedApps from '../../../components/developer/connected-apps/ConnectedApps'
     import Repositories from '../../../components/developer/Repositories'
     import PluginCategories from '../../../components/developer/PluginCategories'
+    import Spinner from '../../../components/Spinner'
     import slug from 'limax'
     import draggable from 'vuedraggable'
     import axios from 'axios'
@@ -230,6 +231,7 @@
             ConnectedApps,
             Repositories,
             PluginCategories,
+            Spinner,
             draggable,
         },
 

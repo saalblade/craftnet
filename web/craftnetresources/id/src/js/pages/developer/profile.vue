@@ -31,7 +31,7 @@
                         <input type="button" class="btn btn-secondary" value="Upload a photo" @click="changePhoto" :disabled="photoLoading" />
                     </div>
                 </template>
-                <div v-if="photoLoading" class="spinner"></div>
+                <spinner v-if="photoLoading"></spinner>
                 <input type="file" ref="photoFile" class="hidden" @change="onChangePhoto" />
             </div>
         </div>
@@ -41,18 +41,20 @@
         <p class="text-secondary"><em>Your profile data is being used for your developer page on the Plugin Store.</em></p>
 
         <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
-        <div v-if="loading" class="spinner"></div>
+        <spinner v-if="loading"></spinner>
     </form>
 </template>
 
 <script>
     import {mapState, mapGetters} from 'vuex'
     import ConnectedApps from '../../components/developer/connected-apps/ConnectedApps'
+    import Spinner from '../../components/Spinner'
 
     export default {
 
         components: {
             ConnectedApps,
+            Spinner,
         },
 
         data() {

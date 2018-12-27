@@ -34,7 +34,7 @@
                                         <text-field id="domain" v-model="licenseDraft.domain" @input="domainChange"></text-field>
                                         <input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !domainValidates}" :disabled="!domainValidates" />
                                         <input @click="cancelEditDomain()" type="button" class="btn btn-secondary" value="Cancel" />
-                                        <div class="spinner" v-if="domainLoading"></div>
+                                        <spinner v-if="domainLoading"></spinner>
                                     </form>
                                 </dd>
                             </dl>
@@ -64,7 +64,7 @@
                                         <textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
                                         <input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
                                         <input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
-                                        <div class="spinner" v-if="notesLoading"></div>
+                                        <spinner v-if="notesLoading"></spinner>
                                     </form>
                                 </dd>
                             </dl>
@@ -113,10 +113,15 @@
 <script>
     import LicenseUpdateMessage from './LicenseUpdateMessage'
     import RenewLicensesForm from './renew-licenses/RenewLicensesForm'
+    import Spinner from '../Spinner'
 
     export default {
 
         props: ['license'],
+
+        components: {
+            Spinner,
+        },
 
         data() {
             return {

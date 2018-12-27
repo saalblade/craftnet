@@ -1,8 +1,7 @@
 <template>
     <list-group-item>
-        <template v-if="loading">
-            <div class="spinner"></div>
-        </template>
+        <spinner v-if="loading"></spinner>
+
         <template v-else>
             <div class="flex items-start">
                 <img class="flex mr-3" :src="icon" height="48" width="48" />
@@ -28,7 +27,7 @@
                     </template>
 
                     <div v-if="buttonLoading" class="mt-2 text-right">
-                        <div class="spinner"></div>
+                        <spinner></spinner>
                     </div>
                 </div>
             </div>
@@ -38,6 +37,7 @@
 
 <script>
     import ListGroupItem from '../../ListGroupItem'
+    import Spinner from '../../Spinner'
 
     export default {
 
@@ -56,7 +56,8 @@
         },
 
         components: {
-            ListGroupItem
+            ListGroupItem,
+            Spinner,
         }
 
     }

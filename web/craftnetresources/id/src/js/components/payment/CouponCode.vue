@@ -1,14 +1,19 @@
 <template>
     <div>
         <text-field placeholder="XXXXXXX" id="coupon-code" size="12" v-model="couponCode" @input="couponCodeChange" :errors="couponCodeError" />
-        <div v-if="couponCodeLoading" class="spinner"></div>
+        <spinner v-if="couponCodeLoading"></spinner>
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
+    import Spinner from '../Spinner'
 
     export default {
+
+        components: {
+            Spinner,
+        },
 
         data() {
             return {

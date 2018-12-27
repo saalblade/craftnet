@@ -39,7 +39,7 @@
                         Remove
                     </button>
 
-                    <div v-if="removeCardLoading" class="spinner"></div>
+                    <spinner v-if="removeCardLoading"></spinner>
                 </p>
             </div>
         </div>
@@ -50,6 +50,7 @@
     import {mapState} from 'vuex'
     import CardForm from '../card/CardForm'
     import CardIcon from '../card/CardIcon'
+    import Spinner from '../Spinner'
     import helpers from '../../mixins/helpers'
 
     export default {
@@ -59,6 +60,7 @@
         components: {
             CardForm,
             CardIcon,
+            Spinner,
         },
 
         data() {

@@ -41,7 +41,7 @@
                                     :disabled="requestPending"
                                     @click="$emit('save')">Save</button>
 
-                            <div class="spinner" :class="{'invisible': !requestPending}"></div>
+                            <spinner :class="{'invisible': !requestPending}"></spinner>
                         </div>
                         <div>
                             <!-- Multiple locations not currently enabled -->
@@ -55,19 +55,20 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
 
 <script>
     import Modal from '../Modal'
+    import Spinner from '../Spinner'
 
     export default {
         props: ['index', 'location', 'editIndex', 'requestPending', 'errors'],
 
         components: {
             Modal,
+            Spinner,
         },
 
         data() {

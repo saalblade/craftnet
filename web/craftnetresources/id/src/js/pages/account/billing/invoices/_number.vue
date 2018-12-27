@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="invoicesLoading" class="spinner"></div>
+        <spinner v-if="invoicesLoading"></spinner>
 
         <template v-else>
             <p><router-link class="nav-link" to="/account/billing" exact>← Billing</router-link></p>
@@ -103,6 +103,7 @@
     import CardIcon from '../../../../components/card/CardIcon'
     import CmsLicensesTable from '../../../../components/licenses/CmsLicensesTable'
     import PluginLicensesTable from '../../../../components/licenses/PluginLicensesTable'
+    import Spinner from '../../../../components/Spinner'
 
     export default {
 
@@ -111,6 +112,7 @@
             CardIcon,
             CmsLicensesTable,
             PluginLicensesTable,
+            Spinner,
         },
 
         computed: {

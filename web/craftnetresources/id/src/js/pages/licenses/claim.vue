@@ -10,7 +10,7 @@
                 <form class="mb-6" @submit.prevent="claimCmsLicense()">
                     <textarea-field id="cmsLicenseKey" class="mono" spellcheck="false" v-model="cmsLicenseKey" @input="cmsLicenseKeyChange" label="Craft CMS License Key" rows="5" />
                     <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !cmsLicenseValidates }" :disabled="!cmsLicenseValidates" />
-                    <div class="spinner" v-if="cmsLicenseLoading"></div>
+                    <spinner v-if="cmsLicenseLoading"></spinner>
                 </form>
 
                 <form @submit.prevent="claimCmsLicenseFile()">
@@ -20,7 +20,7 @@
                     </div>
 
                     <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !cmsLicenseFileValidates }" :disabled="!cmsLicenseFileValidates" />
-                    <div class="spinner" v-if="cmsLicenseFileLoading"></div>
+                    <spinner v-if="cmsLicenseFileLoading"></spinner>
                 </form>
             </div>
         </div>
@@ -33,7 +33,7 @@
                 <form @submit.prevent="claimPluginLicense()">
                     <text-field id="pluginLicenseKey" class="mono" spellcheck="false" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" :mask="{ mask: '****-****-****-****-****-****', placeholder: ' ', showMaskOnHover: false, showMaskOnFocus: false }" />
                     <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !pluginLicenseValidates }" :disabled="!pluginLicenseValidates" />
-                    <div class="spinner" v-if="pluginLicenseLoading"></div>
+                    <spinner v-if="pluginLicenseLoading"></spinner>
                 </form>
             </div>
         </div>
@@ -46,7 +46,7 @@
                 <form @submit.prevent="claimLicensesByEmail()">
                     <text-field id="email" label="Email Address" v-model="email" placeholder="user@example.com" />
                     <input type="submit" class="btn btn-primary" value="Claim Licenses" :class="{disabled: $v.email.$invalid }" :disabled="$v.email.$invalid" />
-                    <div class="spinner" v-if="emailLoading"></div>
+                    <spinner v-if="emailLoading"></spinner>
                 </form>
             </div>
         </div>
@@ -55,8 +55,13 @@
 
 <script>
     import { required, email } from 'vuelidate/lib/validators'
+    import Spinner from '../../components/Spinner'
 
     export default {
+
+        components: {
+            Spinner,
+        },
 
         data() {
             return {

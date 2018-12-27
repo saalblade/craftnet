@@ -19,7 +19,7 @@
                     <input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
                     <input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
 
-                    <div class="spinner" v-if="loading"></div>
+                    <spinner v-if="loading"></spinner>
                 </form>
             </div>
         </div>
@@ -29,6 +29,7 @@
 <script>
     import {mapState} from 'vuex'
     import ConnectedApps from '../../components/developer/connected-apps/ConnectedApps'
+    import Spinner from '../../components/Spinner'
 
     export default {
 
@@ -42,6 +43,7 @@
 
         components: {
             ConnectedApps,
+            Spinner,
         },
 
         computed: {

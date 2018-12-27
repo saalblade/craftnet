@@ -29,7 +29,7 @@
                                             <button @click="detachCmsLicense()" type="button" class="btn btn-secondary btn-sm">
                                                 Detach from this Craft license
                                             </button>
-                                            <div class="spinner" v-if="detaching"></div>
+                                            <spinner v-if="detaching"></spinner>
                                         </div>
                                     </template>
                                     <template v-else>
@@ -64,7 +64,7 @@
                                         <textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
                                         <input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
                                         <input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
-                                        <div class="spinner" v-if="notesLoading"></div>
+                                        <spinner v-if="notesLoading"></spinner>
                                     </form>
                                 </dd>
                             </dl>
@@ -131,6 +131,7 @@
 
 <script>
     import LicenseUpdateMessage from './LicenseUpdateMessage'
+    import Spinner from '../Spinner'
 
     export default {
 
@@ -153,6 +154,7 @@
 
         components: {
             LicenseUpdateMessage,
+            Spinner,
         },
 
         computed: {

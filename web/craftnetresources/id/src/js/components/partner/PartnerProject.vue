@@ -50,7 +50,7 @@
                     <button class="btn btn-sm btn-outline-secondary" @click="$refs.screenshotFiles.click()" :disabled="isUploading">
                         <span v-show="!isUploading"><font-awesome-icon icon="plus" /> Add screenshots</span>
                         <span v-show="isUploading">Uploading: {{ uploadProgress }}%</span>
-                        <span v-show="isUploading" class="spinner"></span>
+                        <spinner v-show="isUploading"></spinner>
                     </button>
                 </div>
 
@@ -68,7 +68,7 @@
                             :disabled="requestPending"
                             @click="$emit('save')">Save</button>
 
-                        <div class="spinner" :class="{'invisible': !requestPending}"></div>
+                        <spinner :class="{'invisible': !requestPending}"></spinner>
                     </div>
                     <div>
                         <button
@@ -88,6 +88,7 @@
     import axios from 'axios'
     import draggable from 'vuedraggable'
     import Modal from '../Modal'
+    import Spinner from '../Spinner'
 
 
     export default {
@@ -96,6 +97,7 @@
         components: {
             draggable,
             Modal,
+            Spinner,
         },
 
         data() {

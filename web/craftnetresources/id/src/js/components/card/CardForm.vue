@@ -8,15 +8,21 @@
             Cancel
         </button>
 
-        <div class="spinner" v-if="loading"></div>
+        <spinner v-if="loading"></spinner>
     </form>
 </template>
 
 
 <script>
+    import Spinner from '../Spinner'
+
     export default {
 
         props: ['loading'],
+
+        components: {
+            Spinner,
+        },
 
         methods: {
 

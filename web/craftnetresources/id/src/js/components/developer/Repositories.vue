@@ -11,7 +11,7 @@
                         {{ repository.full_name }}
                     </div>
                     <div>
-                        <div v-if="isLoading(repository.html_url)" class="spinner"></div>
+                        <spinner v-if="isLoading(repository.html_url)"></spinner>
                         <a v-if="!repositoryIsInUse(repository.html_url)" href="#" class="btn btn-sm btn-primary" @click.prevent="$emit('selectRepository', repository)">Select</a>
                         <a v-else href="#" class="btn btn-sm btn-light disabled" :class="{ disabled: repositoryIsInUse(repository.html_url )}">Already in use</a>
                     </div>
@@ -29,6 +29,7 @@
     import {mapState, mapGetters} from 'vuex';
     import ListGroup from '../ListGroup'
     import ListGroupItem from '../ListGroupItem'
+    import Spinner from '../Spinner'
 
     export default {
 
@@ -43,6 +44,7 @@
         components: {
             ListGroup,
             ListGroupItem,
+            Spinner,
         },
 
         computed: {
