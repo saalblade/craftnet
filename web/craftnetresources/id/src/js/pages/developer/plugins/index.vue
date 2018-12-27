@@ -77,24 +77,24 @@
             </table>
         </div>
 
-        <div v-else class="empty">
-            <div class="empty-body">
-                <font-awesome-icon icon="plug" class="text-5xl mb-4 text-grey-light" />
-                <div class="font-bold">No plugins</div>
-                <div>You haven’t added any plugins yet.</div>
-            </div>
-        </div>
+        <empty v-else>
+            <font-awesome-icon icon="plug" class="text-5xl mb-4 text-grey-light" />
+            <div class="font-bold">No plugins</div>
+            <div>You haven’t added any plugins yet.</div>
+        </empty>
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
     import StripeAccountAlert from '../../../components/developer/StripeAccountAlert'
+    import Empty from '../../../components/Empty'
 
     export default {
 
         components: {
-            StripeAccountAlert
+            StripeAccountAlert,
+            Empty,
         },
 
         data() {

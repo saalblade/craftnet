@@ -148,15 +148,3 @@
     }
   }
 }
-
-
-/* Empty */
-
-.empty {
-  @apply .flex .items-center justify-center;
-  min-height: 500px;
-
-  .empty-body {
-    @apply .text-center .py-8;
-  }
-}

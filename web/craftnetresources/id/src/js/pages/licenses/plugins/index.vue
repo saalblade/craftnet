@@ -8,13 +8,11 @@
             <plugin-licenses-table :licenses="pluginLicenses"></plugin-licenses-table>
         </div>
 
-        <div v-else class="empty">
-            <div class="empty-body">
-                <font-awesome-icon icon="key" class="text-5xl mb-4 text-grey-light" />
-                <div class="font-bold">No plugin licenses</div>
-                <div>You don’t have any plugin licenses yet.</div>
-            </div>
-        </div>
+        <empty v-else>
+            <font-awesome-icon icon="key" class="text-5xl mb-4 text-grey-light" />
+            <div class="font-bold">No plugin licenses</div>
+            <div>You don’t have any plugin licenses yet.</div>
+        </empty>
     </div>
 </template>
 
@@ -22,12 +20,14 @@
     import {mapState, mapGetters} from 'vuex'
     import LicenseRenewAlert from '../../../components/licenses/LicenseRenewAlert';
     import PluginLicensesTable from '../../../components/licenses/PluginLicensesTable';
+    import Empty from '../../../components/Empty';
 
     export default {
 
         components: {
             LicenseRenewAlert,
             PluginLicensesTable,
+            Empty,
         },
 
         computed: {

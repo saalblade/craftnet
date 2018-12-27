@@ -78,15 +78,13 @@
                 </template>
 
                 <div v-else>
-                    <div class="empty">
-                        <div class="empty-body">
-                            <font-awesome-icon icon="shopping-cart" class="text-5xl mb-4 text-grey" />
-                            <div class="font-bold">Your cart is empty</div>
-                            <div class="mt-4">
-                                <p>Browse plugins on <a :href="craftPluginsUrl()">plugins.craftcms.com</a></p>
-                            </div>
+                    <empty>
+                        <font-awesome-icon icon="shopping-cart" class="text-5xl mb-4 text-grey" />
+                        <div class="font-bold">Your cart is empty</div>
+                        <div class="mt-4">
+                            <p>Browse plugins on <a :href="craftPluginsUrl()">plugins.craftcms.com</a></p>
                         </div>
-                    </div>
+                    </empty>
                 </div>
             </template>
         </template>
@@ -96,6 +94,7 @@
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
     import CartMock from '../components/CartMock'
+    import Empty from '../components/Empty'
     import helpers from '../mixins/helpers'
 
     export default {
@@ -103,6 +102,7 @@
 
         components: {
             CartMock,
+            Empty,
         },
 
         data() {

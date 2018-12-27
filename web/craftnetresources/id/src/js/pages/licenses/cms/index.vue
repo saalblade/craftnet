@@ -8,13 +8,11 @@
             <cms-licenses-table type="craft" :licenses="cmsLicenses"></cms-licenses-table>
         </div>
 
-        <div v-else class="empty">
-            <div class="empty-body">
-                <font-awesome-icon icon="key" class="text-5xl mb-4 text-grey-light" />
-                <div class="font-bold">No Craft CMS licenses</div>
-                <div>You don’t have any Craft CMS licenses yet.</div>
-            </div>
-        </div>
+        <empty v-else>
+            <font-awesome-icon icon="key" class="text-5xl mb-4 text-grey-light" />
+            <div class="font-bold">No Craft CMS licenses</div>
+            <div>You don’t have any Craft CMS licenses yet.</div>
+        </empty>
     </div>
 </template>
 
@@ -22,12 +20,14 @@
     import {mapState, mapGetters} from 'vuex'
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
     import LicenseRenewAlert from '../../../components/licenses/LicenseRenewAlert';
+    import Empty from '../../../components/Empty';
 
     export default {
 
         components: {
             CmsLicensesTable,
             LicenseRenewAlert,
+            Empty,
         },
 
         computed: {
