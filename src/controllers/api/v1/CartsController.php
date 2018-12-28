@@ -711,6 +711,10 @@ class CartsController extends BaseApiController
             'licenseKey' => $item->licenseKey,
         ];
 
+        if (isset($item->cmsLicenseKey)) {
+            $options['cmsLicenseKey'] = $item->cmsLicenseKey;
+        }
+
         if (isset($item->expiryDate)) {
             $options['expiryDate'] = $item->expiryDate;
         }
