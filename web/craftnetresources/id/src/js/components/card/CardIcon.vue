@@ -33,3 +33,9 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .card-icon {
+        @apply .inline-block;
+    }
+</style>

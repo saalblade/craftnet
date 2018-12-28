@@ -132,3 +132,11 @@
 
     }
 </script>
+
+<style lang="scss">
+    .credit-card {
+        .card-icon {
+            @apply .mb-1;
+        }
+    }
+</style>

@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="save()">
-        <div ref="cardElement" id="card-element" class="card-element form-control mb-3"></div>
+        <div ref="cardElement" class="card-element form-control mb-3"></div>
         <p id="card-errors" class="text-red" role="alert"></p>
 
         <input type="submit" class="btn btn-primary" value="Save"></input>
@@ -73,3 +73,10 @@
 
     }
 </script>
+
+<style lang="scss" scoped>
+    .card-element {
+        @apply .border .border-grey-light .px-3 .py-2 .rounded;
+        max-width: 410px;
+    }
+</style>
