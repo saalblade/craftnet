@@ -307,21 +307,21 @@
             },
 
             addToCart() {
+                const expiryDate = this.$moment(this.license.expiresOn.date).add(this.renew, 'year')
+                const formattedExpiryDate = this.$moment(expiryDate).format('YYYY-MM-DD')
+
                 const item = {
-                    type: 'renewal',
-                    pluginLicenses: [
-                        this.license.key,
-                    ],
-                    lineItem: {
-                        total: this.newExpiresOn.diff(this.license.expiresOn.date, 'years', true) * this.license.edition.renewalPrice
-                    }
+                    type: 'plugin-renewal',
+                    licenseKey: this.license.key,
+                    expiryDate: formattedExpiryDate,
                 }
 
-                this.$store.dispatch('cart/addToCartMock', {item})
-                    .then(response => {
+                this.$store.dispatch('cart/addToCart', [item])
+                    .then(() => {
                         this.$router.push({path: '/cart'})
                     })
             }
+            
         },
 
         mounted() {

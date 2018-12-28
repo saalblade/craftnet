@@ -12,6 +12,7 @@
                             <thead>
                             <tr>
                                 <th colspan="2">Item</th>
+                                <th>Type</th>
                                 <th>Updates</th>
                                 <th>Quantity</th>
                                 <th></th>
@@ -29,7 +30,7 @@
                                     <td>Craft {{ item.lineItem.purchasable.name }}</td>
                                 </template>
 
-                                <template v-else="item.lineItem.purchasable.type === 'plugin-edition'">
+                                <template v-else-if="item.lineItem.purchasable.type === 'plugin-edition'">
                                     <td class="icon-col">
                                         <div v-if="item.plugin" class="plugin-icon">
                                             <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
@@ -44,8 +45,38 @@
                                     </td>
                                 </template>
 
+                                <template v-else-if="item.lineItem.purchasable.type === 'plugin-renewal'">
+                                    <td class="icon-col">
+                                        <div v-if="item.plugin" class="plugin-icon">
+                                            <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <strong class="text-xl">{{item.lineItem.purchasable.plugin.name}}</strong>
+
+                                        <div class="text-secondary">
+                                            {{item.lineItem.options.licenseKey}}
+                                        </div>
+                                    </td>
+                                </template>
+
+                                <template v-else>
+                                    <td colspan="2">
+                                        <em>Unknown purchasable type</em>
+                                    </td>
+                                </template>
+
                                 <td>
-                                    <select-field v-model="itemUpdates[itemKey]" :options="itemUpdateOptions(itemKey)" />
+                                    <code>{{item.lineItem.purchasable.type}}</code>
+                                </td>
+
+                                <td>
+                                    <template v-if="item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition'">
+                                        <select-field v-model="itemUpdates[itemKey]" :options="itemUpdateOptions(itemKey)" />
+                                    </template>
+                                    <template v-else>
+                                        Updates until <strong>{{item.lineItem.options.expiryDate}}</strong>
+                                    </template>
                                 </td>
                                 <td>
                                     <number-input
@@ -59,13 +90,16 @@
                                     ></number-input>
                                 </td>
                                 <td class="text-right">
-                                    <strong class="block text-xl">{{ itemTotal(itemKey)|currency }}</strong>
+                                    <strong class="block text-xl">
+                                        <!--{{ itemTotal(itemKey)|currency }}-->
+                                        {{ item.lineItem.total|currency }}
+                                    </strong>
                                     <a @click="removeFromCart(itemKey)">Remove</a>
                                 </td>
                             </tr>
 
                             <tr>
-                                <th class="text-right text-xl" colspan="4">Total</th>
+                                <th class="text-right text-xl" colspan="5">Total</th>
                                 <td class="text-right text-xl"><strong>{{ total|currency }}</strong></td>
                             </tr>
                             </tbody>
