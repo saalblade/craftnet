@@ -159,13 +159,11 @@
                 const item = this.cartItems[itemKey]
                 const renewalPrice = item.lineItem.purchasable.renewalPrice
                 const itemUpdate = this.itemUpdates[itemKey]
-                const currentDate = new Date()
 
                 let options = []
 
                 for (let i = 0; i < this.expiryDateOptions.length; i++) {
                     const date = this.expiryDateOptions[i]
-                    // const years = this.$moment(date).diff(currentDate, 'years')
                     const price = renewalPrice * (i - itemUpdate)
                     let label = "Updates Until " + this.$options.filters.moment(date, 'L')
 
