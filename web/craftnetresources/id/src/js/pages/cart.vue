@@ -122,6 +122,7 @@
             ...mapState({
                 cart: state => state.cart.cart,
                 mockCart: state => state.cart.mockCart,
+                expiryDateOptions: state => state.pluginStore.expiryDateOptions,
             }),
 
             ...mapGetters({
@@ -158,17 +159,14 @@
                 const item = this.cartItems[itemKey]
                 const renewalPrice = item.lineItem.purchasable.renewalPrice
                 const itemUpdate = this.itemUpdates[itemKey]
-                const years = 5
+                const currentDate = new Date()
+
                 let options = []
 
-                for (let i = 1; i <= years; i++) {
-                    const currentDate = new Date()
-                    const year = currentDate.getFullYear() + i
-                    const month = currentDate.getMonth()
-                    const day = currentDate.getDay()
-                    const date = new Date(year, month, day)
-                    const price = renewalPrice * (i - itemUpdate);
-
+                for (let i = 0; i < this.expiryDateOptions.length; i++) {
+                    const date = this.expiryDateOptions[i]
+                    // const years = this.$moment(date).diff(currentDate, 'years')
+                    const price = renewalPrice * (i - itemUpdate)
                     let label = "Updates Until " + this.$options.filters.moment(date, 'L')
 
                     if (price !== 0) {
@@ -193,7 +191,7 @@
             itemTotal(itemKey) {
                 const purchasable = this.cartItems[itemKey].lineItem.purchasable
                 const price = parseInt(purchasable.price)
-                const renewalsTotal = parseInt(purchasable.renewalPrice) * (this.itemUpdates[itemKey] - 1)
+                const renewalsTotal = parseInt(purchasable.renewalPrice) * this.itemUpdates[itemKey]
                 const quantity = this.itemQuantity[itemKey]
 
                 return (price + renewalsTotal) * quantity
@@ -235,7 +233,7 @@
                             this.loading = false
 
                             this.cartItems.forEach(function(item, key) {
-                                this.$set(this.itemUpdates, key, 1)
+                                this.$set(this.itemUpdates, key, 0)
                                 this.$set(this.itemQuantity, key, 1)
                             }.bind(this))
                         })

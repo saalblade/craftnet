@@ -12,6 +12,7 @@ const state = {
     featuredPlugins: [],
     plugins: [],
     pluginStoreDataLoaded: false,
+    expiryDateOptions: [],
 }
 
 /**
@@ -58,6 +59,7 @@ const mutations = {
         state.categories = response.data.categories
         state.featuredPlugins = response.data.featuredPlugins
         state.plugins = response.data.plugins
+        state.expiryDateOptions = response.data.expiryDateOptions,
         state.pluginStoreDataLoaded = true
     },
 
