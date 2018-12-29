@@ -321,7 +321,7 @@
                         this.$router.push({path: '/cart'})
                     })
             }
-            
+
         },
 
         mounted() {
