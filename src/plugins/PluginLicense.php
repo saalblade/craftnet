@@ -7,6 +7,8 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craftnet\base\EditionInterface;
 use craftnet\base\LicenseInterface;
+use craftnet\cms\CmsLicense;
+use craftnet\Module;
 
 /**
  * @property string $shortKey
@@ -123,5 +125,16 @@ class PluginLicense extends Model implements LicenseInterface
             ->id($this->pluginId)
             ->status(null)
             ->one();
+    }
+
+    /**
+     * @return CmsLicense|null
+     */
+    public function getCmsLicense()
+    {
+        if (!$this->cmsLicenseId) {
+            return null;
+        }
+        return Module::getInstance()->getCmsLicenseManager()->getLicenseById($this->cmsLicenseId);
     }
 }
