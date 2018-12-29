@@ -227,6 +227,9 @@ class CartsController extends BaseApiController
                     $cart->setLineItems([]);
                 }
 
+                // keep track of the license keys we've already found items for
+                $licenseKeys = [];
+
                 foreach ($payload->items as $i => $item) {
                     $paramPrefix = "items[{$i}]";
 
@@ -234,6 +237,18 @@ class CartsController extends BaseApiController
                     // todo: eventually we should be able to handle this from the root payload validation, if JSON schemas can do conditional validation
                     if (!$this->validatePayload($item, 'line-item-types/' . $item->type, $errors, $paramPrefix)) {
                         continue;
+                    }
+
+                    if (isset($item->licenseKey)) {
+                        if (isset($licenseKeys[$item->licenseKey])) {
+                            $errors[] = [
+                                'param' => $paramPrefix . '.licenseKey',
+                                'message' => 'Another item already handles this license key.',
+                                'code' => self::ERROR_CODE_INVALID,
+                            ];
+                            continue;
+                        }
+                        $licenseKeys[$item->licenseKey] = true;
                     }
 
                     switch ($item->type) {
