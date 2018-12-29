@@ -37,7 +37,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <strong class="text-xl">{{item.lineItem.purchasable.plugin.name}}</strong>
+                                        <strong class="text-xl">{{item.lineItem.description}}</strong>
 
                                         <div class="text-secondary">
                                             {{item.lineItem.purchasable.name}}
@@ -45,24 +45,16 @@
                                     </td>
                                 </template>
 
-                                <template v-else-if="item.lineItem.purchasable.type === 'plugin-renewal'">
-                                    <td class="icon-col">
-                                        <div v-if="item.plugin" class="plugin-icon">
-                                            <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <strong class="text-xl">{{item.lineItem.purchasable.plugin.name}}</strong>
-
-                                        <div class="text-secondary">
-                                            {{item.lineItem.options.licenseKey}}
-                                        </div>
-                                    </td>
-                                </template>
-
                                 <template v-else>
                                     <td colspan="2">
-                                        <em>Unknown purchasable type</em>
+                                        <strong class="text-xl">
+                                            <template v-if="item.lineItem.purchasable.type === 'cms-renewal'">Craft </template>
+                                            {{item.lineItem.description}}
+                                        </strong>
+
+                                        <div class="text-secondary">
+                                            <code>{{ item.lineItem.options.licenseKey.substr(0, 4) }}</code>
+                                        </div>
                                     </td>
                                 </template>
 
@@ -87,6 +79,7 @@
                                                   step="1"
                                                   @keydown="onQuantityKeyDown($event, itemKey)"
                                                   @input="onQuantityInput($event, itemKey)"
+                                                  :disabled="(item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition' ? false : true)"
                                     ></number-input>
                                 </td>
                                 <td class="text-right">

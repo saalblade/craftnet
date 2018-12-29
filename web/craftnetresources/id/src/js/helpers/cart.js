@@ -24,6 +24,14 @@ export default {
                         autoRenew: lineItem.options.autoRenew,
                     })
                     break
+                case 'cms-renewal':
+                case 'plugin-renewal':
+                    lineItems.push({
+                        type: lineItem.purchasable.type,
+                        licenseKey: lineItem.options.licenseKey,
+                        expiryDate: lineItem.options.expiryDate,
+                    })
+                    break
             }
         }
 

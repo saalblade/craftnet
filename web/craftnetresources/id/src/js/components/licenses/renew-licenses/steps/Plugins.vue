@@ -99,32 +99,32 @@
             },
 
             addToCart() {
-                const license = this.license
-                const checkedLicenses = this.checkedLicenses
                 const renewableLicenses = this.renewableLicenses(this.license, this.renew)
-                let pluginLicenses = []
+                const items = []
 
                 renewableLicenses.forEach(function(renewableLicense, key) {
-                    if(key > 0 && checkedLicenses[key]) {
-                        pluginLicenses.push(renewableLicense.key)
+                    if (!this.checkedLicenses[key]) {
+                        return
                     }
-                })
 
-                const item = {
-                    type: 'renewal',
-                    cmsLicense: license.key,
-                    pluginLicenses: pluginLicenses,
-                    lineItem: {
-                        total: this.renewableLicensesTotal(this.license, this.renew, this.checkedLicenses)
+                    const type = renewableLicense.type
+                    const licenseKey = renewableLicense.key
+                    const expiryDate = this.$moment(renewableLicense.newExpiresOn).format('YYYY-MM-DD')
+
+                    const item = {
+                        type,
+                        licenseKey,
+                        expiryDate,
                     }
-                }
 
-                this.$store.dispatch('cart/addToCartMock', {item})
-                    .then(response => {
+                    items.push(item)
+                }.bind(this))
+
+                this.$store.dispatch('cart/addToCart', items)
+                    .then(() => {
                         this.$router.push({path: '/cart'})
+                        this.$emit('addToCart')
                     })
-
-                this.$emit('addToCart')
             },
 
         },
