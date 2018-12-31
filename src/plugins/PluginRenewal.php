@@ -186,7 +186,7 @@ class PluginRenewal extends PluginPurchasable implements RenewalInterface
         }
 
         $license->expired = false;
-        $license->expiresOn = DateTimeHelper::toDateTime($options['expiryDate']);
+        $license->expiresOn = DateTimeHelper::toDateTime($options['expiryDate'], false, false);
 
         try {
             // save the license

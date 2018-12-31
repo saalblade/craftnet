@@ -65,7 +65,7 @@ class PluginLicenseManager extends Component
      */
     public function getRenewLicensesByOwner(int $ownerId): array
     {
-        $date = new \DateTime();
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $date->add(new \DateInterval('P45D'));
 
         $results = $this->_createLicenseQuery()

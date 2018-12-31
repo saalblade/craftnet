@@ -291,7 +291,7 @@ class CmsLicensesController extends Controller
     protected function expiresOnPrompt(\DateTime $default = null): \DateTime
     {
         if ($default === null) {
-            $default = (new \DateTime())->modify('+1 year');
+            $default = (new \DateTime('now', new \DateTimeZone('UTC')))->modify('+1 year');
         }
 
         return DateTimeHelper::toDateTime($this->prompt('Expiration date:', [
@@ -299,7 +299,7 @@ class CmsLicensesController extends Controller
             'validator' => function(string $input) {
                 return DateTimeHelper::toDateTime($input) !== false;
             },
-            'default' => $default->format(\DateTime::ATOM),
-        ]));
+            'default' => $default->format('Y-m-d'),
+        ]), false, false);
     }
 }

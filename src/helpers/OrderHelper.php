@@ -27,8 +27,9 @@ abstract class OrderHelper
             list($d1, $d2) = [$d2, $d1];
         }
 
-        $d1 = new \DateTime($d1->format('Y-m-d'), new \DateTimeZone('UTC'));
-        $d2 = new \DateTime($d2->format('Y-m-d'), new \DateTimeZone('UTC'));
+        $utc = new \DateTimeZone('UTC');
+        $d1 = new \DateTime((clone $d1)->setTimezone($utc)->format('Y-m-d'), $utc);
+        $d2 = new \DateTime((clone $d2)->setTimezone($utc)->format('Y-m-d'), $utc);
         $diff = $d2->diff($d1);
         $years = $diff->y;
 
@@ -71,7 +72,7 @@ abstract class OrderHelper
 
         // if the line item specifies an expiration date, go with that
         if (!empty($options['expiryDate'])) {
-            $expiryDate = max($expiryDate, DateTimeHelper::toDateTime($options['expiryDate']));
+            $expiryDate = max($expiryDate, DateTimeHelper::toDateTime($options['expiryDate'], false, false));
         }
 
         // if it's an existing license, make sure the expiration date is at least the current one
@@ -96,11 +97,11 @@ abstract class OrderHelper
         $options = $lineItem->getOptions();
         $license = $renewal->getLicenseByKey($options['licenseKey']);
         /** @var \DateTime $oldExpiryDate */
-        $oldExpiryDate = max(new \DateTime(), $license->getExpiryDate());
+        $oldExpiryDate = max(new \DateTime('now', new \DateTimeZone('UTC')), $license->getExpiryDate());
 
         // does the line item specify an expiration date?
         if (isset($options['expiryDate'])) {
-            $expiryDate = max($oldExpiryDate, DateTimeHelper::toDateTime($options['expiryDate']));
+            $expiryDate = max($oldExpiryDate, DateTimeHelper::toDateTime($options['expiryDate'], false, false));
         } else {
             $expiryDate = (clone $oldExpiryDate)->modify('+1 year');
         }

@@ -54,11 +54,11 @@ class OrderAdjuster implements AdjusterInterface
     private function _adjustForEdition(Order $order, LineItem $lineItem, EditionInterface $edition, array &$adjustments)
     {
         $options = $lineItem->getOptions();
-        $expiryDate = DateTimeHelper::toDateTime($options['expiryDate']);
+        $expiryDate = DateTimeHelper::toDateTime($options['expiryDate'], false, false);
         $renewal = $edition->getRenewal();
 
         // If the expiry date is over a year from now, charge for it
-        $nextYear = (new \DateTime())->modify('+1 year');
+        $nextYear = (new \DateTime('now', new \DateTimeZone('UTC')))->modify('+1 year');
         if ($expiryDate > $nextYear) {
             $paidRenewalYears = OrderHelper::dateDiffInYears($nextYear, $expiryDate);
 

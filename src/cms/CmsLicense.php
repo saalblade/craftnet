@@ -104,7 +104,7 @@ class CmsLicense extends Model implements LicenseInterface
      */
     public function getExpiryDate(): \DateTime
     {
-        return DateTimeHelper::toDateTime($this->expiresOn);
+        return DateTimeHelper::toDateTime($this->expiresOn, false, false);
     }
 
     /**

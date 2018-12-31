@@ -833,7 +833,7 @@ class Plugin extends Element
         ];
 
         if ($this->_approved) {
-            $pluginData['dateApproved'] = Db::prepareDateForDb(new DateTime());
+            $pluginData['dateApproved'] = Db::prepareDateForDb(new DateTime('now', new \DateTimeZone('UTC')));
         }
 
         $categoryData = [];

@@ -276,7 +276,7 @@ abstract class BaseApiController extends Controller
                     $responseHeaders->set('X-Craft-License-Edition', $cmsLicense->editionHandle);
 
                     // update the license
-                    $cmsLicense->lastActivityOn = new \DateTime();
+                    $cmsLicense->lastActivityOn = new \DateTime('now', new \DateTimeZone('UTC'));
                     if ($this->cmsVersion !== null) {
                         $cmsLicense->lastVersion = $this->cmsVersion;
                     }
@@ -368,7 +368,7 @@ abstract class BaseApiController extends Controller
                 $this->pluginLicenseStatuses[$pluginHandle] = $pluginLicenseStatus;
 
                 // update the license
-                $pluginLicense->lastActivityOn = new \DateTime();
+                $pluginLicense->lastActivityOn = new \DateTime('now', new \DateTimeZone('UTC'));
                 if ($pluginVersion !== null) {
                     $pluginLicense->lastVersion = $pluginVersion;
                 }
@@ -851,7 +851,7 @@ EOL;
             'key' => KeyHelper::generateCmsKey(),
             'lastEdition' => $this->cmsEdition,
             'lastVersion' => $this->cmsVersion,
-            'lastActivityOn' => new \DateTime(),
+            'lastActivityOn' => new \DateTime('now', new \DateTimeZone('UTC')),
         ]);
 
         $manager = $this->module->getCmsLicenseManager();

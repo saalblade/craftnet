@@ -216,7 +216,7 @@ class UpdatesController extends BaseApiController
 
                         // Fill in the date/critical bits
                         $currentReleaseInfo = $releaseInfo[$normalizedVersion];
-                        $date = DateTimeHelper::toDateTime(str_replace('.', '-', $match[2]), true);
+                        $date = DateTimeHelper::toDateTime(str_replace('.', '-', $match[2]), false, false);
                         $currentReleaseInfo->date = $date ? $date->format(\DateTime::ATOM) : null;
                         $currentReleaseInfo->critical = !empty($match[3]);
 
