@@ -19,6 +19,8 @@
  *
  * - handle:      The plugin's new Craft 3 handle. Only set this if the handle
  *                has changed beyond moving from CamelCase to kebab-case.
+ *                It can also be set to `false` if no Craft 3 version exists yet,
+ *                and another plugin has taken over its handle.
  * - statusColor: The status color to give the plugin (see below).
  * - status:      The status message to give the plugin. This can include
  *                Markdown formatting.
@@ -338,6 +340,11 @@ return [
     'OneDashboard' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Default Dashboard](https://github.com/verbb/default-dashboard) can be used instead.'
+    ],
+    'Pdfthumb' => [
+        'handle' => false,
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [PDF Transform](https://github.com/bymayo/craft-pdf-transform) or [PDFThumb](https://github.com/jmoont/pdfthumb) can be used instead.'
     ],
     'PhpTweak' => [
         'status' => 'Discontinued.'

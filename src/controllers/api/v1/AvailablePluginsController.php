@@ -51,8 +51,11 @@ class AvailablePluginsController extends BaseApiController
                     $resInfo = array_merge($resInfo, $craft2Plugins[$oldHandle]);
                 }
 
-                $newHandles[] = $newHandle;
-                $oldHandlesByNew[$newHandle] = $oldHandle;
+                if ($newHandle !== false) {
+                    $newHandles[] = $newHandle;
+                    $oldHandlesByNew[$newHandle] = $oldHandle;
+                }
+
                 $res[$oldHandle] = $resInfo;
             }
         }
