@@ -84,8 +84,8 @@ class OrderAdjuster implements AdjusterInterface
 
             if ($editionUpgradeDiscount > 0) {
                 $adjustments[] = new OrderAdjustment([
-                    'orderId' => $order->id,
-                    'lineItemId' => $lineItem->id,
+                    'order' => $order,
+                    'lineItem' => $lineItem,
                     'type' => Discount::ADJUSTMENT_TYPE,
                     'name' => 'Edition upgrade discount',
                     'amount' => -$editionUpgradeDiscount,
@@ -108,8 +108,8 @@ class OrderAdjuster implements AdjusterInterface
                         $oldPaidRenewalYears = OrderHelper::dateDiffInYears($nextYear, $oldExpiryDate);
 
                         $adjustments[] = new OrderAdjustment([
-                            'orderId' => $order->id,
-                            'lineItemId' => $lineItem->id,
+                            'order' => $order,
+                            'lineItem' => $lineItem,
                             'type' => Discount::ADJUSTMENT_TYPE,
                             'name' => 'Renewal upgrade discount',
                             'amount' => -round($renewalUpgradeDiscount * $oldPaidRenewalYears, 2),
