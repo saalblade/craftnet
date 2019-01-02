@@ -16,7 +16,7 @@
     "stripe/stripe-php": "^6.1",
     "stevenmaguire/oauth2-bitbucket": "^2.0",
     "flipboxfactory/craft-postmark": "^1.0.0-rc.1",
-    "craftcms/commerce": "dev-develop#52ae21a0ecb87d334068179135915e31c6a0b1a5 as 2.0.0-beta.15",
+    "craftcms/commerce": "dev-develop#ea992a7428e0af9f9ccce5d4ee867ace8a539821 as 2.0.0-beta.15",
     "craftcms/commerce-stripe": "1.0.10",
     "layershifter/tld-extract": "^1.2",
     "ddeboer/vatin": "^2.1",
