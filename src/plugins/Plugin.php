@@ -462,6 +462,7 @@ class Plugin extends Element
         switch ($handle) {
             case 'editions':
                 $this->_editions = $elements;
+                break;
             case 'developer':
                 $this->_developer = $elements[0] ?? null;
                 break;
