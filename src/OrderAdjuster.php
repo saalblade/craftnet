@@ -63,8 +63,8 @@ class OrderAdjuster implements AdjusterInterface
             $paidRenewalYears = OrderHelper::dateDiffInYears($nextYear, $expiryDate);
 
             $adjustments[] = new OrderAdjustment([
-                'orderId' => $order->id,
-                'lineItemId' => $lineItem->id,
+                'order' => $order,
+                'lineItem' => $lineItem,
                 'type' => Discount::ADJUSTMENT_TYPE,
                 'name' => 'Updates until ' . $expiryDate->format('Y-m-d'),
                 'amount' => round($renewal->getPrice() * $paidRenewalYears, 2),
