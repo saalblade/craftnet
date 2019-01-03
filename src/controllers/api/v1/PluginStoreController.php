@@ -168,7 +168,7 @@ class PluginStoreController extends BaseApiController
         $dates = [];
 
         for ($i = 1; $i <= 5; $i++) {
-            $dates[] = (new \DateTime('now', new \DateTimeZone('UTC')))
+            $dates["{$i}y"] = (new \DateTime('now', new \DateTimeZone('UTC')))
                 ->modify("+{$i} years")
                 ->format('Y-m-d');
         }

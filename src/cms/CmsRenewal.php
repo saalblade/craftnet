@@ -185,7 +185,7 @@ class CmsRenewal extends CmsPurchasable implements RenewalInterface
         }
 
         $license->expired = false;
-        $license->expiresOn = DateTimeHelper::toDateTime($options['expiryDate'], false, false);
+        $license->expiresOn = OrderHelper::expiryStr2Obj($options['expiryDate']);
 
         try {
             // save the license
@@ -203,7 +203,8 @@ class CmsRenewal extends CmsPurchasable implements RenewalInterface
                 ->execute();
 
             // update the license history
-            $manager->addHistory($license->id, "Renewed until {$options['expiryDate']} per order {$order->number}");
+            $expiryStr = OrderHelper::expiryObj2Str($license->expiresOn);
+            $manager->addHistory($license->id, "Renewed until {$expiryStr} per order {$order->number}");
         } catch (\Throwable $e) {
             Craft::error("Could not save Craft license {$license->key} for order {$order->number}: {$e->getMessage()}");
             Craft::$app->getErrorHandler()->logException($e);

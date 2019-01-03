@@ -10,5 +10,12 @@
     "type": "string",
     "minLength": 24,
     "maxLength": 24
+  },
+  "expiryDate": {
+    "type": "string",
+    "anyOf": [
+      {"format": "date"},
+      {"pattern": "^\\d+y$"}
+    ]
   }
 }

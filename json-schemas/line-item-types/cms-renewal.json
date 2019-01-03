@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "licenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"},
-    "expiryDate": {"type": "string", "format": "date"}
+    "expiryDate": {"$ref": "../definitions.json#/expiryDate"}
   },
   "required": ["licenseKey"]
 }

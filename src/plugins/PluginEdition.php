@@ -506,7 +506,7 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
 
         // If it's expirable, set the expiresOn date to a year from now
         if ($license->expirable) {
-            $license->expiresOn = DateTimeHelper::toDateTime($options['expiryDate'], false, false);
+            $license->expiresOn = OrderHelper::expiryStr2Obj($options['expiryDate']);
         }
 
         if (isset($options['autoRenew'])) {

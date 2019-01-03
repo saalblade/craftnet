@@ -10,6 +10,39 @@ use craftnet\base\RenewalInterface;
 abstract class OrderHelper
 {
     /**
+     * Converts an expiry date string to a DateTime object.
+     *
+     * @param string $expiryDate
+     * @return \DateTime
+     */
+    public static function expiryStr2Obj(string $expiryDate): \DateTime
+    {
+        if (preg_match('/^(\d+)y$/', $expiryDate, $matches)) {
+            return (new \DateTime('now', new \DateTimeZone('UTC')))
+                ->modify("+{$matches[1]} years");
+        }
+
+        return DateTimeHelper::toDateTime($expiryDate, false, false);
+    }
+
+    /**
+     * Converts a DateTime object to an expiry date string
+     *
+     * @param \DateTime $expiryDate
+     * @param string|null $originalStr
+     * @return string
+     */
+    public static function expiryObj2Str(\DateTime $expiryDate, string $originalStr = null): string
+    {
+        if ($originalStr !== null && static::expiryStr2Obj($originalStr)->getTimestamp() === $expiryDate->getTimestamp()) {
+            return $originalStr;
+        }
+
+        $expiryDate->setTimezone(new \DateTimeZone('UTC'));
+        return $expiryDate->format('Y-m-d');
+    }
+
+    /**
      * Calculates the difference in years between two dates.
      *
      * @param \DateTime $d1
@@ -71,8 +104,8 @@ abstract class OrderHelper
         $expiryDate = (new \DateTime())->modify('+1 year');
 
         // if the line item specifies an expiration date, go with that
-        if (!empty($options['expiryDate'])) {
-            $expiryDate = max($expiryDate, DateTimeHelper::toDateTime($options['expiryDate'], false, false));
+        if ($originalExpiryDate = $options['expiryDate'] ?? null) {
+            $expiryDate = max($expiryDate, static::expiryStr2Obj($originalExpiryDate));
         }
 
         // if it's an existing license, make sure the expiration date is at least the current one
@@ -82,7 +115,7 @@ abstract class OrderHelper
 
         // update the expiration date on the line item
         $expiryDate->setTimezone(new \DateTimeZone('UTC'));
-        $options['expiryDate'] = $expiryDate->format('Y-m-d');
+        $options['expiryDate'] = static::expiryObj2Str($expiryDate, $originalExpiryDate);
         $lineItem->setOptions($options);
     }
 
@@ -100,8 +133,8 @@ abstract class OrderHelper
         $oldExpiryDate = max(new \DateTime('now', new \DateTimeZone('UTC')), $license->getExpiryDate());
 
         // does the line item specify an expiration date?
-        if (isset($options['expiryDate'])) {
-            $expiryDate = max($oldExpiryDate, DateTimeHelper::toDateTime($options['expiryDate'], false, false));
+        if ($originalExpiryDate = $options['expiryDate'] ?? null) {
+            $expiryDate = max($oldExpiryDate, static::expiryStr2Obj($originalExpiryDate));
         } else {
             $expiryDate = (clone $oldExpiryDate)->modify('+1 year');
         }
@@ -112,7 +145,7 @@ abstract class OrderHelper
 
         // update the expiration date on the line item
         $expiryDate->setTimezone(new \DateTimeZone('UTC'));
-        $options['expiryDate'] = $expiryDate->format('Y-m-d');
+        $options['expiryDate'] = static::expiryObj2Str($expiryDate, $originalExpiryDate);
         $lineItem->setOptions($options);
 
         // update the description on the line item
