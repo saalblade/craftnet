@@ -22,7 +22,11 @@ Purchase Date: {{ order.datePaid|date('medium') }}
 {% set purchasable = lineItem.getPurchasable() %}
 {% set developer = purchasable and className(purchasable) matches '/^craftnet\\\\cms\\\\/' ? 'Pixel & Tonic' : (purchasable.getPlugin().getDeveloperName() ?? '') %}
 
-{{ lineItem.getDescription() ~ (developer ? " (by #{developer})") }} - {{ (lineItem.total)|currency('USD') }}
+{{ lineItem.getDescription() ~ (developer ? " (by #{developer})") }} — {{ (lineItem.price)|currency('USD') }}
+
+{% for adjustment in lineItem.getAdjustments() %}
+- {{ adjustment.name }} — {{ (adjustment.amount)|currency('USD') }}
+{% endfor %}
 
 {% endfor %}
 

@@ -14,7 +14,7 @@
 			<td style="background-color:{{ bgColor }}; font-size:{{ fontSize }};">{{ item }}</td>
 			<td style="background-color:{{ bgColor }}; font-size:{{ fontSize }};">{{ developer }}</td>
 		{% endif %}
-		<td style="background-color:{{ bgColor }}; font-size:{{ fontSize }}; text-align:right;">{{ price < 0 ? '-' }}${{ price|abs|number_format(2, '.', ',') }}</td>
+		<td style="background-color:{{ bgColor }}; font-size:{{ fontSize }}; text-align:right;">{{ price|currency('USD') }}</td>
 	</tr>
 	<tr><td style="background-color:{{ bgColor }}; height: {{ padding }}; font-size: 0;" colspan="3">&nbsp;</td></tr>
 	<tr><td style="background-color:#e9ebed; height:1px; font-size: 0;" colspan="3">&nbps;</td></tr>
@@ -107,7 +107,7 @@
 		{{ row(
 			lineItem.getDescription(),
 			purchasable and className(purchasable) matches '/^craftnet\\\\cms\\\\/' ? 'Pixel & Tonic' : (purchasable.getPlugin().getDeveloperName() ?? ''),
-			lineItem.total
+			lineItem.price
 		) }}
 		{% for adjustment in lineItem.getAdjustments() %}
 			{{ row(
