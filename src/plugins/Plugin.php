@@ -23,11 +23,11 @@ use yii\base\InvalidConfigException;
 use yii\helpers\Markdown;
 
 /**
- * @property User $developer
- * @property Package $package
- * @property string $eagerLoadedElements
- * @property Asset|null $icon
  * @property PluginEdition[] $editions
+ * @property string $eagerLoadedElements
+ * @property-read Asset|null $icon
+ * @property-read Package $package
+ * @property-read User $developer
  */
 class Plugin extends Element
 {
