@@ -377,7 +377,11 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
      */
     public function getDescription(): string
     {
-        return "{$this->plugin->name} ({$this->name} edition)";
+        $plugin = $this->getPlugin();
+        if ($plugin->getHasMultipleEditions()) {
+            return "{$plugin->name} ({$this->name} edition)";
+        }
+        return $plugin->name;
     }
 
     /**

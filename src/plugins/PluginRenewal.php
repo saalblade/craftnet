@@ -129,7 +129,7 @@ class PluginRenewal extends PluginPurchasable implements RenewalInterface
      */
     public function getDescription(): string
     {
-        return "{$this->plugin->name} ({$this->edition->name} edition) Renewal";
+        return $this->getEdition()->getDescription() . ' Renewal';
     }
 
     /**

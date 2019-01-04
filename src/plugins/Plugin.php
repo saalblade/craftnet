@@ -26,6 +26,7 @@ use yii\helpers\Markdown;
  * @property PluginEdition[] $editions
  * @property string $eagerLoadedElements
  * @property-read Asset|null $icon
+ * @property-read bool $hasMultipleEditions
  * @property-read Package $package
  * @property-read User $developer
  */
@@ -479,6 +480,27 @@ class Plugin extends Element
             default:
                 parent::setEagerLoadedElements($handle, $elements);
         }
+    }
+
+    /**
+     * @return bool
+     * @throws InvalidConfigException
+     */
+    public function getHasMultipleEditions(): bool
+    {
+        if ($this->_editions !== null) {
+            $count = count($this->_editions);
+        } else {
+            if ($this->id === null) {
+                throw new InvalidConfigException('Plugin is missing its ID.');
+            }
+
+            $count = PluginEdition::find()
+                ->pluginId($this->id)
+                ->count();
+        }
+
+        return $count > 1;
     }
 
     /**
