@@ -18,6 +18,6 @@ class UpdatePackage extends BaseJob
 
     protected function defaultDescription()
     {
-        return 'Update '.$this->name;
+        return 'Update ' . $this->name;
     }
 }

@@ -1,0 +1,116 @@
+{#
+    This is set up for several locations but for now is used to
+    capture a single address.
+
+    The Title field will be used as a generic text field in
+    Craft ID where someone can enter anything like "Austin, TX and more"
+#}
+{% macro locationForm(key, location) %}
+    {% set id = key matches '/new/' ? key : location.id %}
+    {% set location = location | default({}) %}
+
+    <p>
+        Note: We’re only using one "Location" for a single address.<br>
+        The Title field will be a generic text field to allow
+        any description of their location(s).
+    </p>
+    <table class="subform shadow-box" data-id="{{ id }}">
+        <thead>
+        <tr>
+            <td colspan="2" class="subform-controls">
+                <button class="btn js-subform-up">&uarr;</button>
+                <button class="btn js-subform-down">&darr;</button>
+                <button class="btn js-subform-delete red">Delete</button>
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th><label class="required">Title</label></th>
+            <td>
+                <input type="text" class="text" name="locations[{{ id }}][title]" value="{{ location.title ?? '' }}" autocomplete="off">
+                {% include "_includes/forms/errorList" with { errors: location.getErrors('title') ?? [] } %}
+            </td>
+        </tr>
+        <tr>
+            <th><label class="required">Address</label></th>
+            <td class="textual">
+                <input type="text" class="text" name="locations[{{ id }}][addressLine1]" value="{{ location.addressLine1 ?? '' }}" autocomplete="off">
+                {% include "_includes/forms/errorList" with { errors: location.getErrors('addressLine1') ?? [] } %}
+            </td>
+        </tr>
+        <tr>
+            <th><label>Address Line 2</label></th>
+            <td class="textual">
+                <input type="text" class="text" name="locations[{{ id }}][addressLine2]" value="{{ location.addressLine2 ?? '' }}" autocomplete="off">
+                {% include "_includes/forms/errorList" with { errors: location.getErrors('addressLine2') ?? [] } %}
+            </td>
+        </tr>
+        <tr>
+            <th><label class="required">City</label></th>
+            <td class="textual">
+                <input type="text" class="text" name="locations[{{ id }}][city]" value="{{ location.city ?? '' }}" autocomplete="off">
+                {% include "_includes/forms/errorList" with { errors: location.getErrors('city') ?? [] } %}
+            </td>
+        </tr>
+        <tr>
+            <th><label class="required">State</label></th>
+            <td class="textual">
+                <input type="text" class="text" name="locations[{{ id }}][state]" value="{{ location.state ?? '' }}" autocomplete="off">
+                {% include "_includes/forms/errorList" with { errors: location.getErrors('state') ?? [] } %}
+            </td>
+        </tr>
+        <tr>
+            <th><label class="required">Zip</label></th>
+            <td class="textual">
+                <input type="text" class="text" name="locations[{{ id }}][zip]" value="{{ location.zip ?? '' }}" autocomplete="off">
+                {% include "_includes/forms/errorList" with { errors: location.getErrors('zip') ?? [] } %}
+            </td>
+        </tr>
+        <tr>
+            <th><label class="required">Country</label></th>
+            <td class="textual">
+                <input type="text" class="text" name="locations[{{ id }}][country]" value="{{ location.country ?? '' }}" autocomplete="off">
+                {% include "_includes/forms/errorList" with { errors: location.getErrors('country') ?? [] } %}
+            </td>
+        </tr>
+        <tr>
+            <th><label>Phone</label></th>
+            <td class="textual">
+                <input type="text" class="text" name="locations[{{ id }}][phone]" value="{{ location.phone ?? '' }}" autocomplete="off">
+                {% include "_includes/forms/errorList" with { errors: location.getErrors('phone') ?? [] } %}
+            </td>
+        </tr>
+        <tr>
+            <th><label>Email</label></th>
+            <td class="textual">
+                <input type="text" class="text" name="locations[{{ id }}][email]" value="{{ location.email ?? '' }}" autocomplete="off">
+                {% include "_includes/forms/errorList" with { errors: location.getErrors('email') ?? [] } %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endmacro %}
+
+<div class="field">
+    <div class="heading">
+        <label>Locations</label>
+    </div>
+    <div class="subforms-wrap" data-limit="1">
+        {# Template for adding new locations dynamically #}
+        {% import _self as self %}
+        <script class="subform-template" type="text/html">
+            {{ self.locationForm('__new__') }}
+        </script>
+
+        <div class="subforms">
+            {% for key, location in partner.locations | default([]) %}
+                {{ self.locationForm(key, location) }}
+            {% endfor %}
+        </div>
+        <div>
+            {% include "_includes/forms/errorList" with { errors: partner.getErrors('locations') ?? null } %}
+            <button class="btn subform-add js-subform-add">Add a Location</button>
+        </div>
+    </div>
+</div>

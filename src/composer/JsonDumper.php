@@ -46,7 +46,6 @@ class JsonDumper extends Component
         $packages = (new Query())
             ->select(['id', 'name', 'abandoned', 'replacementPackage'])
             ->from(['craftnet_packages'])
-            ->where(['not', ['latestVersion' => null]])
             ->indexBy('id')
             ->all();
 
@@ -194,17 +193,17 @@ class JsonDumper extends Component
         ];
 
         Craft::info("Writing JSON file to {$this->composerWebroot}/packages.json", __METHOD__);
-        FileHelper::writeToFile($this->composerWebroot.'/packages.json', Json::encode($rootData));
+        FileHelper::writeToFile($this->composerWebroot . '/packages.json', Json::encode($rootData));
 
         if ($isConsole) {
             Console::output('done');
         }
 
-//        if (!empty($oldPaths)) {
-//            Craft::$app->getQueue()->delay(60 * 5)->push(new DeletePaths([
-//                'paths' => $oldPaths,
-//            ]));
-//        }
+        if (!empty($oldPaths)) {
+            Craft::$app->getQueue()->delay(60 * 5)->push(new DeletePaths([
+                'paths' => $oldPaths,
+            ]));
+        }
     }
 
     /**
@@ -220,7 +219,7 @@ class JsonDumper extends Component
     {
         $content = Json::encode($data);
         $hash = hash('sha256', $content);
-        $path = $this->composerWebroot.'/'.str_replace('%hash%', $hash, $path);
+        $path = $this->composerWebroot . '/' . str_replace('%hash%', $hash, $path);
 
         // If nothing's changed, we're done
         if (file_exists($path)) {
@@ -234,12 +233,12 @@ class JsonDumper extends Component
                 if ($file === '.' || $file === '..') {
                     continue;
                 }
-                $oldPaths[] = $dir.'/'.$file;
+                $oldPaths[] = $dir . '/' . $file;
             }
             closedir($handle);
         }
 
-        Craft::info("Writing JSON file to ".$path, __METHOD__);
+        Craft::info("Writing JSON file to " . $path, __METHOD__);
         try {
             // Write the new file
             FileHelper::writeToFile($path, $content);

@@ -2,13 +2,18 @@
     <thead>
         <tr>
             <th scope="col">Plugin Handle</th>
+            <th scope="col">Status</th>
             <th scope="col">Hits</th>
         </tr>
     </thead>
     <tbody>
         {% for plugin, hits in plugins %}
             <tr>
-                <td>{{ plugin }}</td>
+                <td>
+                    <div class="status {{ craft2Plugins[plugin].statusColor ?? '' }}"></div>
+                    {{ plugin }}
+                </td>
+                <td>{{ (craft2Plugins[plugin].status ?? 'Not available yet')|md }}</td>
                 <td>{{ hits }}</td>
             </tr>
         {% endfor %}

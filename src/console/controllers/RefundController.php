@@ -94,12 +94,12 @@ class RefundController extends Controller
             $key = (string)($i + 1);
             $lineItems[$key] = $lineItem;
             $lineItemLicenses[$key] = $license;
-            $lineItemDescriptions[$key] = $lineItem->getDescription()." ({$licenseKey})";
-            $lineItemOptions[$key] = $lineItemDescriptions[$key].' - '.$formatter->asCurrency($total, 'USD');
+            $lineItemDescriptions[$key] = $lineItem->getDescription() . " ({$licenseKey})";
+            $lineItemOptions[$key] = $lineItemDescriptions[$key] . ' - ' . $formatter->asCurrency($total, 'USD');
         }
 
         if (empty($lineItemOptions)) {
-            $this->stderr('This order doesn\'t contain any Craft or plugin licenses.'.PHP_EOL, Console::FG_RED);
+            $this->stderr('This order doesn\'t contain any Craft or plugin licenses.' . PHP_EOL, Console::FG_RED);
             return 1;
         }
 
@@ -125,7 +125,7 @@ class RefundController extends Controller
 
             $total = $lineItem->getTotal();
             $refundAmount += $total;
-            $refundNote .= ($refundNote ? ', ' : '').$lineItemDescriptions[$key];
+            $refundNote .= ($refundNote ? ', ' : '') . $lineItemDescriptions[$key];
 
             if ($license instanceof PluginLicense) {
                 /** @var PluginEdition $purchasable */
@@ -144,30 +144,30 @@ class RefundController extends Controller
         } while (!empty($lineItemOptions));
 
         // Run the refund
-        $this->stdout('Refunding '.$formatter->asCurrency($refundAmount, 'USD').' to customer ... ', Console::FG_YELLOW);
+        $this->stdout('Refunding ' . $formatter->asCurrency($refundAmount, 'USD') . ' to customer ... ', Console::FG_YELLOW);
         $child = Commerce::getInstance()->getPayments()->refundTransaction($transaction, $refundAmount, $refundNote);
         if ($child->status !== TransactionRecord::STATUS_SUCCESS) {
-            $this->stderr('error: '.$child->message.PHP_EOL, Console::FG_RED);
+            $this->stderr('error: ' . $child->message . PHP_EOL, Console::FG_RED);
             return 1;
         }
-        $this->stdout('done'.PHP_EOL, Console::FG_GREEN);
+        $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
 
         // Debit the developers' accounts
         foreach ($devDebitAmounts as $developerId => $debitAmount) {
             $developer = $developers[$developerId];
-            $this->stdout('Debiting '.$formatter->asCurrency($debitAmount, 'USD')." from {$developer->getDeveloperName()}'s account ... ", Console::FG_YELLOW);
+            $this->stdout('Debiting ' . $formatter->asCurrency($debitAmount, 'USD') . " from {$developer->getDeveloperName()}'s account ... ", Console::FG_YELLOW);
             do {
                 try {
                     $developer->getFundsManager()->debit("Payment refunded for order {$orderNumber} (txn {$child->id})", $debitAmount);
                     break;
                 } catch (InaccessibleFundsException $e) {
-                    $this->stdout(PHP_EOL.$e->getMessage().PHP_EOL, Console::FG_RED);
+                    $this->stdout(PHP_EOL . $e->getMessage() . PHP_EOL, Console::FG_RED);
                     if (!$this->confirm('Retry?', true)) {
                         break;
                     }
                 }
             } while (true);
-            $this->stdout('done'.PHP_EOL, Console::FG_GREEN);
+            $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
         }
 
         // Delete the licenses
@@ -179,7 +179,7 @@ class RefundController extends Controller
             } else {
                 $pluginLicenseManager->deleteLicenseByKey($license->key);
             }
-            $this->stdout('done'.PHP_EOL, Console::FG_GREEN);
+            $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
         }
 
         return 0;

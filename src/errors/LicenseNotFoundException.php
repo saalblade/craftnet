@@ -25,7 +25,7 @@ class LicenseNotFoundException extends Exception
         $this->identifier = $identifier;
 
         if ($message === null) {
-            $message = 'License not found: '.$identifier;
+            $message = 'License not found: ' . $identifier;
         }
 
         parent::__construct($message, $code, $previous);

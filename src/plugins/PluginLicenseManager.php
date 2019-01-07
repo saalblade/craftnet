@@ -27,7 +27,7 @@ class PluginLicenseManager extends Component
     {
         $normalized = trim(preg_replace('/[\-]+/', '', $key));
         if (strlen($normalized) !== 24) {
-            throw new InvalidArgumentException('Invalid license key: '.$key);
+            throw new InvalidArgumentException('Invalid license key: ' . $key);
         }
 
         return $normalized;
@@ -369,7 +369,7 @@ class PluginLicenseManager extends Component
         $license->email = $user->email;
 
         if (!$this->saveLicense($license)) {
-            throw new Exception('Could not save plugin license: '.implode(', ', $license->getErrorSummary(true)));
+            throw new Exception('Could not save plugin license: ' . implode(', ', $license->getErrorSummary(true)));
         }
 
         $this->addHistory($license->id, "claimed by {$user->email}");

@@ -9,7 +9,6 @@ namespace pixelandtonic\yii\queue\sqs;
 
 use Aws\Sqs\SqsClient;
 use Craft;
-use craft\helpers\StringHelper;
 use yii\base\InvalidConfigException;
 use yii\queue\serializers\JsonSerializer;
 use yii\web\Application as WebApp;
@@ -25,11 +24,6 @@ class Queue extends \yii\queue\cli\Queue
      * @var string The SQS queue URL
      */
     public $url;
-
-    /**
-     * @var string The SQS message group ID
-     */
-    public $messageGroupId;
 
     /**
      * @var SqsClient The SQS client. This can initially be set to an SQS client config array.
@@ -99,18 +93,6 @@ class Queue extends \yii\queue\cli\Queue
     }
 
     /**
-     * Sets the message deduplication ID
-     *
-     * @param string $id
-     * @return $this
-     */
-    public function messageDeduplicationId(string $id): Queue
-    {
-        $this->messageDeduplicationId = $id;
-        return $this;
-    }
-
-    /**
      * Handles a message
      *
      * @param string|null $id
@@ -156,8 +138,6 @@ class Queue extends \yii\queue\cli\Queue
     {
         $result = $this->client->sendMessage([
             'QueueUrl' => $this->url,
-            'MessageGroupId' => $this->messageGroupId,
-            'MessageDeduplicationId' => $this->messageDeduplicationId ?? StringHelper::randomString(),
             'MessageBody' => $message,
             'DelaySeconds' => $delay,
             'MessageAttributes' => [
@@ -167,10 +147,6 @@ class Queue extends \yii\queue\cli\Queue
                 ],
             ],
         ]);
-
-        if ($this->messageDeduplicationId) {
-            $this->messageDeduplicationId = null;
-        }
 
         return $result['MessageId'] ?? null;
     }

@@ -64,6 +64,14 @@
                                     </ul>
                                 </template>
 
+                                <template v-if="currentUser.enablePartnerFeatures">
+                                    <h5><router-link @click.native="closeSidebar()" to="/partner"><i class="fa fa-handshake"></i> Partner</router-link></h5>
+                                    <ul>
+                                        <li><router-link @click.native="closeSidebar()" to="/partner/overview">Overview</router-link></li>
+                                        <li><router-link @click.native="closeSidebar()" to="/partner/profile">Profile</router-link></li>
+                                    </ul>
+                                </template>
+
                                 <h5><router-link @click.native="closeSidebar()" to="/account"><i class="fas fa-user"></i> Account</router-link></h5>
                                 <ul>
                                     <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>

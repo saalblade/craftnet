@@ -80,7 +80,7 @@ define('PDF_HEADER_LOGO_WIDTH', 30);
 /**
  * Cache directory for temporary files (full path).
  */
-define('K_PATH_CACHE', sys_get_temp_dir().'/');
+define('K_PATH_CACHE', sys_get_temp_dir() . '/');
 
 /**
  * Generic name for a blank image.

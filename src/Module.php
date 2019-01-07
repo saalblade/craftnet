@@ -98,19 +98,19 @@ class Module extends \yii\base\Module
                 'key' => self::MESSAGE_KEY_RECEIPT,
                 'heading' => 'When someone places an order:',
                 'subject' => 'Your receipt from {{ fromName }}',
-                'body' => file_get_contents(__DIR__.'/emails/receipt.txt'),
+                'body' => file_get_contents(__DIR__ . '/emails/receipt.txt'),
             ]);
             $e->messages[] = new SystemMessage([
                 'key' => self::MESSAGE_KEY_VERIFY,
                 'heading' => 'When someone wants to claim licenses by an email address:',
                 'subject' => 'Verify your email',
-                'body' => file_get_contents(__DIR__.'/emails/verify.txt'),
+                'body' => file_get_contents(__DIR__ . '/emails/verify.txt'),
             ]);
             $e->messages[] = new SystemMessage([
                 'key' => self::MESSAGE_KEY_DEVELOPER_SALE,
                 'heading' => 'When a plugin developer makes a sale:',
                 'subject' => 'Craft Plugin Store Sale',
-                'body' => file_get_contents(__DIR__.'/emails/developer_sale.txt'),
+                'body' => file_get_contents(__DIR__ . '/emails/developer_sale.txt'),
             ]);
         });
 
@@ -200,6 +200,12 @@ class Module extends \yii\base\Module
                 'label' => 'Plugins',
                 'fontIcon' => 'plugin',
             ];
+
+            $e->navItems[] = [
+                'url' => 'partners',
+                'label' => 'Partners',
+                'icon' => __DIR__.'/icons/partner.svg',
+            ];
         });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $e) {
@@ -207,11 +213,18 @@ class Module extends \yii\base\Module
                 'plugins' => ['template' => 'craftnet/plugins/_index'],
                 'plugins/new' => 'craftnet/plugins/edit',
                 'plugins/<pluginId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/plugins/edit',
+                'partners' => ['template' => 'craftnet/partners/_index'],
+                'partners/new' => 'craftnet/partners/edit',
+                'partners/<partnerId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/partners/edit',
+                'partners/foo' => 'craftnet/partners/foo',
+                'GET partners/history/<partnerId:\d+>' => 'craftnet/partners/fetch-history',
+                'POST partners/history' => 'craftnet/partners/save-history',
+                'DELETE partners/history/<id:\d+>' => 'craftnet/partners/delete-history',
             ]);
         });
 
         Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
-            $e->roots['craftnet'] = __DIR__.'/templates';
+            $e->roots['craftnet'] = __DIR__ . '/templates';
         });
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $e) {

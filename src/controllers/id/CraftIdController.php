@@ -6,6 +6,7 @@ use Craft;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
+use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use yii\web\Response;
 
@@ -85,6 +86,7 @@ class CraftIdController extends BaseController
                 'location' => $currentUser->location,
                 'enablePluginDeveloperFeatures' => ($currentUser->isInGroup('developers') ? true : false),
                 'enableShowcaseFeatures' => ($currentUser->enableShowcaseFeatures == 1 ? true : false),
+                'enablePartnerFeatures' => ($currentUser->enablePartnerFeatures == 1 ? true : false),
                 'groups' => $currentUser->getGroups(),
                 'photoId' => $currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null,
                 'photoUrl' => $photoUrl,
@@ -115,6 +117,7 @@ class CraftIdController extends BaseController
      */
     private function _plugins(User $user): array
     {
+        /** @var UserBehavior|User $user */
         $ret = [];
 
         foreach ($user->getPlugins() as $plugin) {

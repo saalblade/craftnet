@@ -57,7 +57,7 @@ class JobsController extends Controller
         $success = $shellCommand->execute();
 
         if (!$success) {
-            Craft::error('There was a problem syncing staging: '.$shellCommand->getError(), __METHOD__);
+            Craft::error('There was a problem syncing staging: ' . $shellCommand->getError(), __METHOD__);
         }
     }
 }

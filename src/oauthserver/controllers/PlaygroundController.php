@@ -59,7 +59,7 @@ class PlaygroundController extends Controller
                 return $this->connectPassword();
 
             default:
-                throw new \Exception('Grant “'.$grantHandle.'” not supported.');
+                throw new \Exception('Grant “' . $grantHandle . '” not supported.');
         }
     }
 

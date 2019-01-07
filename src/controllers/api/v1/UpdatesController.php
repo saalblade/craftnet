@@ -7,11 +7,11 @@ use Composer\Semver\VersionParser;
 use Craft;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
-use craft\helpers\Html;
 use craft\helpers\HtmlPurifier;
 use craft\models\Update;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\errors\ValidationException;
+use craftnet\plugins\Plugin;
 use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -115,9 +115,16 @@ class UpdatesController extends BaseApiController
         $updateInfo = [];
 
         foreach ($this->plugins as $handle => $plugin) {
+            // Get the latest release that's compatible with their current Craft version
+            $toVersion = Plugin::find()
+                ->id($plugin->id)
+                ->withLatestReleaseInfo(true, $this->cmsVersion)
+                ->select(['latestVersion'])
+                ->scalar();
+
             $info = [
                 'status' => Update::STATUS_ELIGIBLE,
-                'releases' => $this->_releases($plugin->packageName, $this->pluginVersions[$handle]),
+                'releases' => $toVersion ? $this->_releases($plugin->packageName, $this->pluginVersions[$handle], $toVersion) : [],
             ];
 
             if (isset($this->pluginLicenses[$handle]) && $this->pluginLicenses[$handle]->expired) {
@@ -136,13 +143,19 @@ class UpdatesController extends BaseApiController
      *
      * @param string $name The package name
      * @param string $fromVersion The version that is already installed
+     * @param string|null $toVersion The version that is available to be installed (if null the latest version will be assumed)
      * @return array
      */
-    private function _releases(string $name, string $fromVersion): array
+    private function _releases(string $name, string $fromVersion, string $toVersion = null): array
     {
         $packageManager = $this->module->getPackageManager();
         $minStability = VersionParser::parseStability($fromVersion);
-        $versions = $packageManager->getVersionsAfter($name, $fromVersion, $minStability);
+
+        if ($toVersion !== null) {
+            $versions = $packageManager->getVersionsBetween($name, $fromVersion, $toVersion, $minStability);
+        } else {
+            $versions = $packageManager->getVersionsAfter($name, $fromVersion, $minStability);
+        }
 
         // Are they already at the latest?
         if (empty($versions)) {

@@ -58,7 +58,7 @@ class EmailVerifier extends BaseObject
             ->execute();
 
         // send the verification email
-        $path = Craft::$app->getConfig()->getGeneral()->actionTrigger.'/craftnet/id/claim-licenses/verify';
+        $path = Craft::$app->getConfig()->getGeneral()->actionTrigger . '/craftnet/id/claim-licenses/verify';
         $params = [
             'id' => $this->user->uid,
             'email' => $email,

@@ -40,7 +40,7 @@ abstract class BaseController extends Controller
         $screenshotIds = [];
 
         foreach ($plugin->getScreenshots() as $screenshot) {
-            $screenshotUrls[] = $screenshot->getUrl().'?'.$screenshot->dateModified->getTimestamp();
+            $screenshotUrls[] = $screenshot->getUrl() . '?' . $screenshot->dateModified->getTimestamp();
             $screenshotIds[] = $screenshot->getId();
         }
 
@@ -56,13 +56,20 @@ abstract class BaseController extends Controller
             }
         }
 
+        // Latest version
+        $latestVersion = Plugin::find()
+            ->id($plugin->id)
+            ->withLatestReleaseInfo()
+            ->select(['latestVersion'])
+            ->scalar();
+
         return [
             'id' => $plugin->id,
             'enabled' => $plugin->enabled,
             'pendingApproval' => $plugin->pendingApproval,
             'status' => $plugin->status,
             'iconId' => $plugin->iconId,
-            'iconUrl' => $icon ? $icon->getUrl().'?'.$icon->dateModified->getTimestamp() : null,
+            'iconUrl' => $icon ? $icon->getUrl() . '?' . $icon->dateModified->getTimestamp() : null,
             'packageName' => $plugin->packageName,
             'handle' => $plugin->handle,
             'name' => $plugin->name,
@@ -75,7 +82,7 @@ abstract class BaseController extends Controller
             'price' => $plugin->price,
             'renewalPrice' => $plugin->renewalPrice,
             'keywords' => $plugin->keywords,
-            'latestVersion' => $plugin->latestVersion,
+            'latestVersion' => $latestVersion ?: null,
 
             // 'iconUrl' => $iconUrl,
             'developerId' => $developer->id,

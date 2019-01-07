@@ -45,7 +45,7 @@ class KeyHelper
     {
         $licenseKey = '';
 
-        $codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.$extraChars;
+        $codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' . $extraChars;
         $alphabetLength = strlen($codeAlphabet);
         $log = log($alphabetLength, 2);
         $bytes = (int)($log / 8) + 1; // length in bytes

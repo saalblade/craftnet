@@ -3,22 +3,11 @@
 namespace craftnet\console\controllers;
 
 use Craft;
-use craft\commerce\elements\Order;
-use craft\commerce\models\LineItem;
-use craft\commerce\Plugin as Commerce;
-use craft\commerce\records\Transaction as TransactionRecord;
 use craft\db\Query;
 use craft\elements\User;
 use craft\i18n\Locale;
-use craftnet\cms\CmsEdition;
-use craftnet\cms\CmsLicense;
 use craftnet\developers\UserBehavior;
-use craftnet\errors\InaccessibleFundsException;
-use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
-use craftnet\plugins\PluginEdition;
-use craftnet\plugins\PluginLicense;
-use yii\base\InvalidArgumentException;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\Console;
@@ -224,7 +213,7 @@ class FundsController extends Controller
     {
         // Figure out the max col sizes
         $cellSizes = [];
-        foreach (array_merge($data, array($headers)) as $row) {
+        foreach (array_merge($data, [$headers]) as $row) {
             foreach ($row as $i => $cell) {
                 if (is_array($cell)) {
                     $cellSizes[$i][] = strlen($cell[0]);

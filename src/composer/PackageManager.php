@@ -8,14 +8,16 @@ use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
 use Craft;
 use craft\db\Query;
-use craft\helpers\Db;
+use craft\helpers\ArrayHelper;
 use craft\helpers\Json;
 use craftnet\composer\jobs\UpdatePackage;
 use craftnet\errors\MissingTokenException;
 use craftnet\errors\VcsException;
 use craftnet\Module;
+use craftnet\plugins\Plugin;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\base\InvalidArgumentException;
 use yii\db\Expression;
 use yii\helpers\Console;
 
@@ -40,6 +42,17 @@ class PackageManager extends Component
     private $_acquiredLock = false;
 
     /**
+     * @var array Stability sort orders
+     * @see updatePluginReleaseOrder()
+     */
+    private $_stabilities = [
+        'alpha' => 1,
+        'beta' => 2,
+        'RC' => 3,
+        'stable' => 4,
+    ];
+
+    /**
      *
      */
     public function init()
@@ -61,23 +74,6 @@ class PackageManager extends Component
         return (new Query())
             ->from(['craftnet_packages'])
             ->where(['name' => $name])
-            ->exists();
-    }
-
-    /**
-     * @param string $name
-     * @param int $seconds
-     *
-     * @return bool
-     */
-    public function packageUpdatedWithin(string $name, int $seconds): bool
-    {
-        $timestamp = Db::prepareDateForDb(new \DateTime("-{$seconds} seconds"));
-        return (new Query())
-            ->from(['craftnet_packages'])
-            ->where(['name' => $name])
-            ->andWhere('[[dateUpdated]] != [[dateCreated]]')
-            ->andWhere(['>=', 'dateUpdated', $timestamp])
             ->exists();
     }
 
@@ -141,13 +137,13 @@ class PackageManager extends Component
 
     /**
      * @param string $name The package name
-     * @param string $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
+     * @param string|null $minStability The minimum required stability (dev, alpha, beta, RC, or stable)
      * @param string|null $constraint The version constraint, if any
      * @param bool $sort Whether the versions should be sorted
      *
      * @return string[] The known package versions
      */
-    public function getAllVersions(string $name, string $minStability = 'stable', string $constraint = null, bool $sort = true): array
+    public function getAllVersions(string $name, $minStability = 'stable', string $constraint = null, bool $sort = true): array
     {
         $query = (new Query())
             ->select(['pv.version'])
@@ -160,9 +156,11 @@ class PackageManager extends Component
             ]);
 
         // Restrict to certain stabilities?
-        $allowedStabilities = $this->_allowedStabilities($minStability);
-        if (!empty($allowedStabilities)) {
-            $query->andWhere(['pv.stability' => $allowedStabilities]);
+        if ($minStability !== null) {
+            $allowedStabilities = $this->getStabilities($minStability);
+            if (!empty($allowedStabilities)) {
+                $query->andWhere(['pv.stability' => $allowedStabilities]);
+            }
         }
 
         // Was a specific version requested by the constraint?
@@ -251,6 +249,70 @@ class PackageManager extends Component
     }
 
     /**
+     * Returns all the versions after a given version and up to (and including) another version
+     *
+     * @param string $name The package name
+     * @param string $from The version that others should be after
+     * @param string $to The version that others should be before or equal to
+     * @param string $minStability The minimum required stability
+     * @param string|null $constraint The version constraint, if any
+     * @param bool $sort Whether the versions should be sorted
+     *
+     * @return string[] The versions after $from and up to $to, sorted oldest-to-newest
+     */
+    public function getVersionsBetween(string $name, string $from, string $to, string $minStability = 'stable', string $constraint = null, bool $sort = true): array
+    {
+        $vp = new VersionParser();
+        $from = $vp->normalize($from);
+        $to = $vp->normalize($to);
+
+        // Get all the versions
+        $versions = $this->getAllVersions($name, $minStability, $constraint, false);
+
+        // Filter out the ones <= $from
+        $versions = array_filter($versions, function($version) use ($vp, $from, $to) {
+            $version = $vp->normalize($version);
+            return (Comparator::greaterThan($version, $from) && Comparator::lessThanOrEqualTo($version, $to));
+        });
+
+        if ($sort) {
+            $this->_sortVersions($versions);
+        }
+
+        return $versions;
+    }
+
+    /**
+     * Returns all the releases for a package.
+     *
+     * @param string $name The package name
+     * @param string|null $minStability The minimum required stability
+     * @param string|null $constraint The version constraint, if any
+     *
+     * @return PackageRelease[] The releases, sorted oldest-to-newest
+     */
+    public function getAllReleases(string $name, $minStability = 'stable', string $constraint = null): array
+    {
+        if ($minStability !== null || $constraint !== null) {
+            $versions = $this->getAllVersions($name, $minStability, $constraint, false);
+        } else {
+            $versions = null;
+        }
+
+        $results = $this->_createReleaseQuery($name, $versions)->all();
+        $releases = [];
+
+        foreach ($results as $result) {
+            $releases[] = new PackageRelease($result);
+        }
+
+        // Sort them oldest-to-newest
+        $this->_sortVersions($releases);
+
+        return $releases;
+    }
+
+    /**
      * Returns all the releases after a given version
      *
      * @param string $name The package name
@@ -281,7 +343,7 @@ class PackageManager extends Component
      *
      * @return string[] The allowed stabilities, or an empty array if all stabilities should be allowed
      */
-    private function _allowedStabilities(string $minStability = 'stable'): array
+    public function getStabilities(string $minStability = 'stable'): array
     {
         $allowedStabilities = [];
 
@@ -364,6 +426,7 @@ class PackageManager extends Component
     public function savePackage(Package $package)
     {
         $data = [
+            'developerId' => $package->developerId,
             'name' => $package->name,
             'type' => $package->type,
             'managed' => $package->managed,
@@ -421,7 +484,7 @@ class PackageManager extends Component
      * @param string $name
      *
      * @return Package
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function getPackage(string $name): Package
     {
@@ -429,7 +492,7 @@ class PackageManager extends Component
             ->where(['name' => $name])
             ->one();
         if (!$result) {
-            throw new Exception('Invalid package name: '.$name);
+            throw new InvalidArgumentException('Invalid package name: ' . $name);
         }
         return new Package($result);
     }
@@ -446,7 +509,7 @@ class PackageManager extends Component
             ->where(['id' => $id])
             ->one();
         if (!$result) {
-            throw new Exception('Invalid package ID: '.$id);
+            throw new Exception('Invalid package ID: ' . $id);
         }
         return new Package($result);
     }
@@ -592,23 +655,13 @@ class PackageManager extends Component
 
     /**
      * @param string $name
-     * @param string|string[] $version
+     * @param string|string[]|null $version
      *
      * @return Query
      */
-    private function _createReleaseQuery(string $name, $version): Query
+    private function _createReleaseQuery(string $name, $version = null): Query
     {
-        $vp = new VersionParser();
-
-        if (is_array($version)) {
-            foreach ($version as $k => $v) {
-                $version[$k] = $vp->normalize($v);
-            }
-        } else {
-            $version = $vp->normalize($version);
-        }
-
-        return (new Query())
+        $query = (new Query())
             ->select([
                 'pv.id',
                 'pv.packageId',
@@ -639,9 +692,22 @@ class PackageManager extends Component
             ->innerJoin(['craftnet_packages p'], '[[p.id]] = [[pv.packageId]]')
             ->where([
                 'p.name' => $name,
-                'pv.normalizedVersion' => $version,
                 'pv.valid' => true,
             ]);
+
+        if ($version !== null) {
+            $vp = new VersionParser();
+            if (is_array($version)) {
+                foreach ($version as $k => $v) {
+                    $version[$k] = $vp->normalize($v);
+                }
+            } else if (is_string($version)) {
+                $version = $vp->normalize($version);
+            }
+            $query->andWhere(['pv.normalizedVersion' => $version]);
+        }
+
+        return $query;
     }
 
     /**
@@ -650,6 +716,7 @@ class PackageManager extends Component
      * @param bool $queue Whether to queue the update
      * @param bool $dumpJson Whether to update the JSON if anything changed
      * @return int The total number of added/removed package releases
+     * @throws InvalidArgumentException if the package name doesn't exist
      * @throws MissingTokenException if the package is a plugin, but we don't have a VCS token for it
      * @throws \Throwable if reasons
      */
@@ -795,10 +862,9 @@ class PackageManager extends Component
 
             // We can treat "updated" versions as "new" now.
             $newVersions = array_merge($updatedVersions, $newVersions);
-            $latestVersion = null;
             $packageDeps = [];
 
-            // Bail early if there's nothing new
+            // Process new versions
             if (!empty($newVersions)) {
                 if ($isConsole) {
                     Console::output('Processing new versions ...');
@@ -807,11 +873,8 @@ class PackageManager extends Component
                 // Sort by newest => oldest
                 $this->_sortVersions($newVersions, SORT_DESC);
 
-                $foundStable = false;
-
                 foreach ($newVersions as $normalizedVersion) {
                     $version = $vcsVersionInfo[$normalizedVersion]['version'];
-                    $stability = $vcsVersionInfo[$normalizedVersion]['stability'];
                     $sha = $vcsVersionInfo[$normalizedVersion]['sha'];
 
                     if ($isConsole) {
@@ -827,7 +890,7 @@ class PackageManager extends Component
                     $vcs->populateRelease($release);
 
                     if ($isConsole && !$release->valid) {
-                        Console::stdout(Console::ansiFormat('invalid'.($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
+                        Console::stdout(Console::ansiFormat('invalid' . ($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
                         Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
                     }
 
@@ -858,11 +921,10 @@ class PackageManager extends Component
                     }
 
                     if ($release->valid) {
-                        if (!$foundStable && $stability === 'stable') {
-                            $latestVersion = $version;
-                            $foundStable = true;
-                        } else if ($latestVersion === null) {
-                            $latestVersion = $version;
+                        if ($package->name === 'craftcms/cms') {
+                            $this->updatePluginCompatIndexForCmsRelease($release);
+                        } else if ($plugin !== null) {
+                            $this->updatePluginCompatIndexForPluginRelease($release);
                         }
                     }
 
@@ -872,45 +934,15 @@ class PackageManager extends Component
                 }
 
                 if ($isConsole) {
-                    Console::output('Done processing '.count($newVersions).' versions.');
+                    Console::output('Done processing ' . count($newVersions) . ' versions.');
+                }
+
+                if ($plugin !== null) {
+                    $this->updatePluginReleaseOrder($plugin);
                 }
             } else {
                 if ($isConsole) {
                     Console::output('No new versions to process.');
-                }
-            }
-
-            // Does the package already have a latestVersion in the DB, which wasn't just deleted?
-            if (!$force && $package->latestVersion !== null && !in_array($package->latestVersion, $deletedVersions, true)) {
-                // If we couldn't find a new latestVersion, then don't change it
-                if ($latestVersion === null) {
-                    $latestVersion = $package->latestVersion;
-                } else {
-                    // Otherwise make sure that the new latestVersion is greater than the stored one
-                    $vp = new VersionParser();
-                    if (Comparator::greaterThan($vp->normalize($package->latestVersion), $vp->normalize($latestVersion))) {
-                        $latestVersion = $package->latestVersion;
-                    }
-                }
-            }
-
-            // Update the package's latestVersion and dateUpdated
-            $db->createCommand()
-                ->update('craftnet_packages', ['latestVersion' => $latestVersion], ['id' => $package->id])
-                ->execute();
-
-            if ($plugin && $latestVersion !== $plugin->latestVersion) {
-                $plugin->latestVersion = $latestVersion;
-                $db->createCommand()
-                    ->update('craftnet_plugins', ['latestVersion' => $latestVersion], ['id' => $plugin->id])
-                    ->execute();
-            }
-
-            if ($isConsole) {
-                if ($latestVersion !== null) {
-                    Console::output("Latest version for {$name} is now {$latestVersion}.");
-                } else {
-                    Console::output("No latest version known for {$name}.");
                 }
             }
 
@@ -958,26 +990,182 @@ class PackageManager extends Component
             }
 
             $transaction->commit();
-        }
-        catch (\Throwable $e) {
+        } catch (\Throwable $exception) {
             $transaction->rollBack();
-            $mutex->release(__METHOD__);
-            throw $e;
+            // throw the exception later
         }
 
         if ($acquiredLock) {
-            if ($isConsole) {
+            if ($isConsole && !isset($exception)) {
                 Console::stdout('Releasing the lock ... ');
             }
 
             $mutex->release(__METHOD__);
 
-            if ($isConsole) {
+            if ($isConsole && !isset($exception)) {
                 Console::output('done');
             }
         }
 
+        if (isset($exception)) {
+            throw $exception;
+        }
+
         return $totalAffected;
+    }
+
+    /**
+     * @param Plugin $plugin
+     */
+    public function updatePluginReleaseOrder(Plugin $plugin)
+    {
+        $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
+
+        if ($isConsole) {
+            Console::stdout('Updating plugin release order ... ');
+        }
+
+        // Delete existing release order data
+        $db = Craft::$app->getDb();
+        $db->createCommand()
+            ->delete('craftnet_pluginversionorder', ['pluginId' => $plugin->id])
+            ->execute();
+
+        // Get the new plugin releases
+        $releases = $this->_createReleaseQuery($plugin->packageName)
+            ->select(['pv.id', 'pv.normalizedVersion as version', 'pv.stability'])
+            ->indexBy('id')
+            ->all();
+
+        // get versionId => version map
+        $versions = array_column($releases, 'version', 'id');
+
+        // sort it by version oldest-to-newest, preserving versionId keys
+        uasort($versions, function($a, $b): int {
+            return Comparator::equalTo($a, $b) ? 0 : (Comparator::lessThan($a, $b) ? -1 : 1);
+        });
+
+        // versionId => sort order
+        $releaseOrder = array_flip(array_keys($versions));
+
+        // Create our multisort arrays
+        $stabilities = [];
+        $orders = [];
+        $releaseIds = [];
+        foreach ($releases as &$release) {
+            $stabilities[] = $this->_stabilities[$release['stability']];
+            $orders[] = $releaseOrder[$release['id']];
+            $releaseIds[] = $release['id'];
+        }
+        unset($release);
+
+        // versionId => stability-inspired sort order
+        array_multisort($stabilities, SORT_NUMERIC, $orders, SORT_NUMERIC, $releaseIds);
+        $releaseStableOrder = array_flip($releaseIds);
+
+        // build and insert the order data
+        $orderData = [];
+
+        foreach ($releases as $releaseId => $release) {
+            $orderData[] = [
+                $release['id'],
+                $plugin->id,
+                $releaseOrder[$releaseId],
+                $releaseStableOrder[$releaseId],
+            ];
+        }
+
+        $db->createCommand()
+            ->batchInsert('craftnet_pluginversionorder', [
+                'versionId',
+                'pluginId',
+                'order',
+                'stableOrder',
+            ], $orderData, false)
+            ->execute();
+
+        if ($isConsole) {
+            Console::output('done');
+        }
+    }
+
+    /**
+     * @param PackageRelease $cmsRelease
+     */
+    public function updatePluginCompatIndexForCmsRelease(PackageRelease $cmsRelease)
+    {
+        if (Craft::$app->getRequest()->getIsConsoleRequest()) {
+            Console::stdout(Console::ansiFormat('updating compatibility index ... ', [Console::FG_YELLOW]));
+        }
+
+        // fetch all plugin releases ever, sorted by newest to oldest
+        $pluginData = (new Query())
+            ->select(['v.packageId', 'v.id as versionId', 'v.version', 'd.constraints'])
+            ->from(['craftnet_packageversions v'])
+            ->innerJoin(['craftnet_pluginversionorder o'], '[[o.versionId]] = [[v.id]]')
+            ->innerJoin(['craftnet_packagedeps d'], [
+                'and',
+                '[[d.versionId]] = [[v.id]]',
+                ['d.name' => 'craftcms/cms']
+            ])
+            ->orderBy(['o.order' => SORT_DESC])
+            ->all();
+
+        $pluginData = ArrayHelper::index($pluginData, null, 'packageId');
+        $compatData = [];
+
+        foreach ($pluginData as $packageId => $releases) {
+            foreach ($releases as $release) {
+                if (Semver::satisfies($cmsRelease->version, $release['constraints'])) {
+                    $compatData[] = [$release['versionId'], $cmsRelease->id];
+                } else {
+                    // if this release wasn't a match, chances are older releases won't be a match either
+                    break;
+                }
+            }
+        }
+
+        Craft::$app->getDb()->createCommand()
+            ->batchInsert('craftnet_pluginversioncompat', [
+                'pluginVersionId',
+                'cmsVersionId',
+            ], $compatData, false)
+            ->execute();
+    }
+
+    /**
+     * @param PackageRelease $pluginRelease
+     */
+    public function updatePluginCompatIndexForPluginRelease(PackageRelease $pluginRelease)
+    {
+        $isConsole = Craft::$app->getRequest()->getIsConsoleRequest();
+
+        if (!isset($pluginRelease->require['craftcms/cms'])) {
+            if ($isConsole) {
+                Console::stdout(Console::ansiFormat('no craftcms/cms requirement', [Console::FG_RED]));
+                Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
+            }
+            return;
+        }
+
+        if ($isConsole) {
+            Console::stdout(Console::ansiFormat('updating compatibility index ... ', [Console::FG_YELLOW]));
+        }
+
+        $cmsConstraint = $pluginRelease->require['craftcms/cms'];
+
+        foreach ($this->getAllReleases('craftcms/cms', null) as $cmsRelease) {
+            if (Semver::satisfies($cmsRelease->version, $cmsConstraint)) {
+                $compatData[] = [$pluginRelease->id, $cmsRelease->id];
+            }
+        }
+
+        Craft::$app->getDb()->createCommand()
+            ->batchInsert('craftnet_pluginversioncompat', [
+                'pluginVersionId',
+                'cmsVersionId',
+            ], $compatData, false)
+            ->execute();
     }
 
     /**
@@ -1102,7 +1290,7 @@ class PackageManager extends Component
     private function _createPackageQuery(): Query
     {
         return (new Query())
-            ->select(['id', 'name', 'type', 'repository', 'managed', 'latestVersion', 'abandoned', 'replacementPackage', 'webhookId', 'webhookSecret'])
+            ->select(['id', 'developerId', 'name', 'type', 'repository', 'managed', 'abandoned', 'replacementPackage', 'webhookId', 'webhookSecret'])
             ->from(['craftnet_packages']);
     }
 }

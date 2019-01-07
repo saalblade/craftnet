@@ -1,0 +1,49 @@
+.subform { padding: 10px; }
+.subform + .subform { margin-top: 20px; }
+.subform-controls { text-align: right !important; }
+.subform tbody { padding: 5px 10px; }
+.subform td { padding: 5px 0; }
+.subform .text { width: 100%; }
+.subforms-wrap .btn.red { color: red; }
+.subform-add { margin: 20px 0; }
+
+.partner-history { padding: 24px; }
+.partner-history__item { padding: 10px 0; }
+.partner-history__item + .partner-history__item { border-top: 1px dotted #BFC2C9; }
+
+.partner-history__meta {
+    margin: 10px 0 0 3px;
+    color: #6F747A;
+    font-size: 0.9em;
+}
+
+.partner-history textarea {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #b4b4b4;
+    font-size: 0.9em;
+    padding: 10px;
+    display: block;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.partner-history .btn.red {
+    color: red;
+}
+
+.partner-history__message {
+    padding: 4px;
+}
+
+.partner-history__message--canEdit:hover {
+    background: rgba(255, 255, 255, 0.1);
+    outline: 1px solid #b4b4b4;
+    cursor: pointer;
+}
+
+.partner-history__button-wrap {
+    padding: 5px;
+    text-align: right;
+}

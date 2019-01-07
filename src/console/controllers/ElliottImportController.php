@@ -20,6 +20,7 @@ use craftnet\plugins\Plugin;
 use craftnet\plugins\PluginLicense;
 use GuzzleHttp\Client;
 use yii\base\Exception;
+use yii\base\InvalidArgumentException;
 use yii\caching\FileCache;
 use yii\console\Controller;
 use yii\db\Expression;
@@ -79,7 +80,7 @@ class ElliottImportController extends Controller
 
         $generalConfig = Craft::$app->getConfig()->getGeneral();
         $this->cache = new FileCache([
-            'cachePath' => Craft::$app->getPath()->getRuntimePath().DIRECTORY_SEPARATOR.'elliott_import_cache',
+            'cachePath' => Craft::$app->getPath()->getRuntimePath() . DIRECTORY_SEPARATOR . 'elliott_import_cache',
             'fileMode' => $generalConfig->defaultFileMode,
             'dirMode' => $generalConfig->defaultDirMode,
             'defaultDuration' => $generalConfig->cacheDuration,
@@ -119,7 +120,7 @@ class ElliottImportController extends Controller
         }
 
         $this->stdout(PHP_EOL);
-        $this->stdout('All done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL.PHP_EOL, Console::FG_GREEN);
+        $this->stdout('All done (time: ' . $this->formatTime(microtime(true) - $startTime) . ')' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
     }
 
     /**
@@ -127,7 +128,7 @@ class ElliottImportController extends Controller
      */
     public function actionCmsLicenses()
     {
-        $this->stdout('Importing Craft licenses'.PHP_EOL);
+        $this->stdout('Importing Craft licenses' . PHP_EOL);
         $startTime = microtime(true);
         $manager = $this->module->getCmsLicenseManager();
 
@@ -178,10 +179,10 @@ class ElliottImportController extends Controller
                     ->execute();
             }
 
-            $this->stdout('done'.PHP_EOL);
+            $this->stdout('done' . PHP_EOL);
         });
 
-        $this->stdout('done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL);
+        $this->stdout('done (time: ' . $this->formatTime(microtime(true) - $startTime) . ')' . PHP_EOL);
 
         return $result;
     }
@@ -194,7 +195,7 @@ class ElliottImportController extends Controller
      */
     public function actionCommerceLicenses()
     {
-        $this->stdout('Importing Commerce licenses'.PHP_EOL);
+        $this->stdout('Importing Commerce licenses' . PHP_EOL);
         $startTime = microtime(true);
 
         $cmsLicenseManager = $this->module->getCmsLicenseManager();
@@ -233,10 +234,10 @@ class ElliottImportController extends Controller
             $this->stdout("    > Saving Commerce license {$item['licenseKey']} ... ");
             $pluginLicenseManager->saveLicense($license, false);
             $pluginLicenseManager->addHistory($license->id, "created by {$license->email}", $item['dateCreated']);
-            $this->stdout('done'.PHP_EOL);
+            $this->stdout('done' . PHP_EOL);
         });
 
-        $this->stdout('done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL);
+        $this->stdout('done (time: ' . $this->formatTime(microtime(true) - $startTime) . ')' . PHP_EOL);
 
         return $result;
     }
@@ -249,7 +250,7 @@ class ElliottImportController extends Controller
      */
     public function actionOrders()
     {
-        $this->stdout('Importing orders'.PHP_EOL);
+        $this->stdout('Importing orders' . PHP_EOL);
         $startTime = microtime(true);
 
         $plugin = $this->getCommerce();
@@ -270,7 +271,7 @@ class ElliottImportController extends Controller
                     'default' => $i === 0,
                 ]);
                 if (!$orderStatusesService->saveOrderStatus($orderStatus, [])) {
-                    throw new Exception('Could not save order status: '.implode(', ', $orderStatus->getErrorSummary(true)));
+                    throw new Exception('Could not save order status: ' . implode(', ', $orderStatus->getErrorSummary(true)));
                 }
             }
             $orderStatusIds[$handle] = $orderStatus->id;
@@ -301,7 +302,7 @@ class ElliottImportController extends Controller
                     'userId' => $user['id']
                 ]);
                 if (!$customersService->saveCustomer($customer)) {
-                    throw new Exception('Could not save customer: '.implode(', ', $customer->getErrorSummary(true)));
+                    throw new Exception('Could not save customer: ' . implode(', ', $customer->getErrorSummary(true)));
                 }
                 $user['customerId'] = $customer->id;
             }
@@ -334,7 +335,7 @@ class ElliottImportController extends Controller
                 'default' => true,
             ]);
             if (!$taxCategoriesService->saveTaxCategory($taxCategory)) {
-                throw new Exception('Could not save tax category: '.implode(', ', $taxCategory->getErrorSummary(true)));
+                throw new Exception('Could not save tax category: ' . implode(', ', $taxCategory->getErrorSummary(true)));
             }
         }
         $taxCategoryId = $taxCategory->id;
@@ -359,7 +360,7 @@ class ElliottImportController extends Controller
             $pluginLicenseManager
         ) {
             if (empty($item['lineItems'])) {
-                $this->stdout("    > Skipping order {$item['number']} (no line items)".PHP_EOL, Console::FG_YELLOW);
+                $this->stdout("    > Skipping order {$item['number']} (no line items)" . PHP_EOL, Console::FG_YELLOW);
                 return;
             }
 
@@ -615,10 +616,10 @@ class ElliottImportController extends Controller
                 }
             }
 
-            $this->stdout('done'.PHP_EOL);
+            $this->stdout('done' . PHP_EOL);
         });
 
-        $this->stdout('done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL);
+        $this->stdout('done (time: ' . $this->formatTime(microtime(true) - $startTime) . ')' . PHP_EOL);
 
         return $result;
     }
@@ -631,7 +632,7 @@ class ElliottImportController extends Controller
      */
     public function actionDiscounts()
     {
-        $this->stdout('Importing discounts'.PHP_EOL);
+        $this->stdout('Importing discounts' . PHP_EOL);
         $startTime = microtime(true);
 
         $editionIds = CmsEdition::find()
@@ -693,10 +694,10 @@ class ElliottImportController extends Controller
                     ->execute();
             }
 
-            $this->stdout('done'.PHP_EOL);
+            $this->stdout('done' . PHP_EOL);
         });
 
-        $this->stdout('done (time: '.$this->formatTime(microtime(true) - $startTime).')'.PHP_EOL);
+        $this->stdout('done (time: ' . $this->formatTime(microtime(true) - $startTime) . ')' . PHP_EOL);
 
         return $result;
     }
@@ -735,7 +736,7 @@ class ElliottImportController extends Controller
         $packageManager = $this->module->getPackageManager();
         try {
             $package = $packageManager->getPackage('craftcms/commerce');
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             $this->stdout('    > Adding Commerce package ... ', Console::FG_YELLOW);
             $package = new Package([
                 'name' => 'craftcms/commerce',
@@ -744,7 +745,7 @@ class ElliottImportController extends Controller
                 'managed' => true,
             ]);
             $packageManager->savePackage($package);
-            $this->stdout('done'.PHP_EOL, Console::FG_YELLOW);
+            $this->stdout('done' . PHP_EOL, Console::FG_YELLOW);
         }
 
         $plugin = new Plugin([
@@ -763,9 +764,9 @@ class ElliottImportController extends Controller
 
         $this->stdout('    > Adding Commerce plugin ... ', Console::FG_YELLOW);
         if (!Craft::$app->getElements()->saveElement($plugin)) {
-            throw new Exception('Could not save Commerce plugin: '.implode(',', $plugin->getErrorSummary(true)));
+            throw new Exception('Could not save Commerce plugin: ' . implode(',', $plugin->getErrorSummary(true)));
         }
-        $this->stdout('done'.PHP_EOL, Console::FG_YELLOW);
+        $this->stdout('done' . PHP_EOL, Console::FG_YELLOW);
 
         return $plugin;
     }
@@ -807,7 +808,7 @@ class ElliottImportController extends Controller
     {
         $fetched = 0;
 
-        if ($imported = $this->cache->get($uri.'-imported') ?: 0) {
+        if ($imported = $this->cache->get($uri . '-imported') ?: 0) {
             $startPage = floor($imported / $this->perPage) + 1;
             $skip = $imported % $this->perPage;
         } else {
@@ -820,10 +821,10 @@ class ElliottImportController extends Controller
 
             $this->stdout("    > Fetching {$uri} p.{$page} ... ");
             $response = $this->get($uri, $page, $this->perPage);
-            $this->stdout('done ('.count($response['data']).' items)'.PHP_EOL);
+            $this->stdout('done (' . count($response['data']) . ' items)' . PHP_EOL);
 
             if ($skip) {
-                $this->stdout("    > Skipping first {$skip} items".PHP_EOL, Console::FG_YELLOW);
+                $this->stdout("    > Skipping first {$skip} items" . PHP_EOL, Console::FG_YELLOW);
                 array_splice($response['data'], 0, $skip);
                 $skip = 0;
             }
@@ -841,18 +842,18 @@ class ElliottImportController extends Controller
                     $imported++;
                 }
             } catch (\Throwable $e) {
-                $this->stderr("error: {$e->getMessage()}".PHP_EOL, Console::FG_RED);
+                $this->stderr("error: {$e->getMessage()}" . PHP_EOL, Console::FG_RED);
                 $success = false;
             }
 
             if (!$success) {
                 $transaction->rollBack();
-                $this->stderr('    > Aborting import due to error.'.PHP_EOL, Console::FG_YELLOW);
+                $this->stderr('    > Aborting import due to error.' . PHP_EOL, Console::FG_YELLOW);
                 return 1;
             }
 
             $transaction->commit();
-            $this->cache->set($uri.'-imported', $imported);
+            $this->cache->set($uri . '-imported', $imported);
             $fetched++;
         } while (
             (!$this->totalPages || $fetched < $this->totalPages) &&
@@ -864,7 +865,7 @@ class ElliottImportController extends Controller
 
     protected function get(string $uri, int $page, int $perPage): array
     {
-        $response = $this->client->get('/actions/ops/export/'.$uri, [
+        $response = $this->client->get('/actions/ops/export/' . $uri, [
             'query' => [
                 'key' => getenv('ELLIOTT_KEY'),
                 'page' => $page,

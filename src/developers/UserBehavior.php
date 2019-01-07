@@ -6,8 +6,10 @@ use Craft;
 use craft\base\Element;
 use craft\elements\User;
 use craftnet\helpers\KeyHelper;
+use craftnet\partners\Partner;
 use craftnet\plugins\Plugin;
 use yii\base\Behavior;
+use yii\base\Exception;
 
 /**
  * The Developer behavior extends users with plugin developer-related features.
@@ -60,6 +62,28 @@ class UserBehavior extends Behavior
     }
 
     /**
+     * @return Partner
+     * @throws Exception if the partner element couldn't be created
+     */
+    public function getPartner(): Partner
+    {
+        $partner = Partner::find()
+            ->ownerId($this->owner->id)
+            ->status(null)
+            ->one();
+
+        if (!$partner) {
+            $partner = new Partner();
+            $partner->ownerId = $this->owner->id;
+            if (!Craft::$app->getElements()->saveElement($partner)) {
+                throw new Exception('Couldn\'t save partner: ' . implode(', ', $partner->getErrorSummary(true)));
+            }
+        }
+
+        return $partner;
+    }
+
+    /**
      * @return string
      */
     public function getDeveloperName(): string
@@ -78,7 +102,7 @@ class UserBehavior extends Behavior
 
         return $this->_plugins = Plugin::find()
             ->developerId($this->owner->id)
-            ->status(null)
+            ->anyStatus()
             ->all();
     }
 

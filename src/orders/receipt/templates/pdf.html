@@ -1,7 +1,26 @@
 {% macro line(text) %}
 	{%- if text %}{{ text }}<br>{% endif %}
 {%- endmacro %}
-{%- from _self import line -%}
+
+{% macro row(item, developer, price, adjustment) %}
+	{% set bgColor = adjustment ? '#f6f7f9' : '#ffffff' %}
+	{% set fontSize = adjustment ? '11px' : '13px' %}
+	{% set padding = adjustment ? '5px' : '7px' %}
+	<tr><td style="background-color:{{ bgColor }}; height: {{ padding }}; font-size: 0;" colspan="3">&nbsp;</td></tr>
+	<tr>
+		{% if adjustment %}
+			<td style="background-color:{{ bgColor }}; font-size:{{ fontSize }};" colspan="2">&nbsp;• {{ item }}</td>
+		{% else %}
+			<td style="background-color:{{ bgColor }}; font-size:{{ fontSize }};">{{ item }}</td>
+			<td style="background-color:{{ bgColor }}; font-size:{{ fontSize }};">{{ developer }}</td>
+		{% endif %}
+		<td style="background-color:{{ bgColor }}; font-size:{{ fontSize }}; text-align:right;">{{ price|currency('USD') }}</td>
+	</tr>
+	<tr><td style="background-color:{{ bgColor }}; height: {{ padding }}; font-size: 0;" colspan="3">&nbsp;</td></tr>
+	<tr><td style="background-color:#e9ebed; height:1px; font-size: 0;" colspan="3">&nbps;</td></tr>
+{% endmacro %}
+
+{%- from _self import line, row -%}
 
 <style>
 	body { font-size: 13px; }
@@ -81,26 +100,37 @@
 		<th>Developer</th>
 		<th align="right">Price</th>
 	</tr>
-	<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
-	<tr><td style="background-color:#e9ebed; height:1px; font-size: 0px;" colspan="3">&nbps;</td></tr>
-	<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
+	<tr><td style="height: 7px; font-size: 0;" colspan="3">&nbsp;</td></tr>
+	<tr><td style="background-color:#e9ebed; height:1px; font-size: 0;" colspan="3">&nbps;</td></tr>
 	{% for lineItem in order.getLineItems() %}
 		{% set purchasable = lineItem.getPurchasable() %}
-		<tr>
-			<td>{{ lineItem.getDescription() }}</td>
-			<td>{{ purchasable and className(purchasable) matches '/^craftnet\\\\cms\\\\/' ? 'Pixel & Tonic' : (purchasable.getPlugin().getDeveloperName() ?? '') }}</td>
-			<td align="right">${{ lineItem.total|number_format(2, '.', ',') }}</td>
-		</tr>
-		<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
-		<tr><td style="background-color:#e9ebed; height:1px; font-size: 0px;" colspan="3">&nbps;</td></tr>
-		<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
+		{{ row(
+			lineItem.getDescription(),
+			purchasable and className(purchasable) matches '/^craftnet\\\\cms\\\\/' ? 'Pixel & Tonic' : (purchasable.getPlugin().getDeveloperName() ?? ''),
+			lineItem.price
+		) }}
+		{% for adjustment in lineItem.getAdjustments() %}
+			{{ row(
+				adjustment.name,
+				'',
+				adjustment.amount,
+				true
+			) }}
+		{% endfor %}
+	{% endfor %}
+	{% for adjustment in order.getOrderAdjustments() %}
+		{{ row(
+			adjustment.name,
+			'',
+			adjustment.amount
+		) }}
 	{% endfor %}
 	<tr>
 		<td colspan="3">&nbsp;</td>
 	</tr>
-	<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
-	<tr><td style="background-color:#e9ebed; height:1px; font-size: 0px;" colspan="3">&nbps;</td></tr>
-	<tr><td style="height: 7px; font-size: 0px;" colspan="3">&nbsp;</td></tr>
+	<tr><td style="height: 7px; font-size: 0;" colspan="3">&nbsp;</td></tr>
+	<tr><td style="background-color:#e9ebed; height:1px; font-size: 0;" colspan="3">&nbps;</td></tr>
+	<tr><td style="height: 7px; font-size: 0;" colspan="3">&nbsp;</td></tr>
 	<tr>
 		<td align="right" colspan="3"><strong>Total:</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ order.totalPrice|currency('USD') }}</td>
 	</tr>

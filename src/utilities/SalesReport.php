@@ -94,7 +94,7 @@ class SalesReport extends Utility
         $allPurchasables = array_merge($allPurchasables, $gatewayPurchasables);
 
         $orders = Order::find()
-            ->datePaid(['and', '>='.$dateStart, '<='.$dateEnd])
+            ->datePaid(['and', '>=' . $dateStart, '<=' . $dateEnd])
             ->orderBy('datePaid')
             ->all();
 
