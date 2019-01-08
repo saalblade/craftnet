@@ -5,6 +5,7 @@ use craftnet\services\Oauth;
 
 return [
     '*' => [
+        'id' => 'craftnet',
         'bootstrap' => [
             'craftnet',
             'oauth-server',
