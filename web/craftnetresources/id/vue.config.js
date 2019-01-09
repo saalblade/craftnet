@@ -17,7 +17,12 @@ module.exports = {
             new ManifestPlugin({
                 publicPath: '/'
             }),
-        ]
+        ],
+        resolve: {
+            alias: {
+                'vue$': 'vue/dist/vue.esm.js'
+            }
+        }
     },
     chainWebpack: config => {
         // Remove the standard entry point
