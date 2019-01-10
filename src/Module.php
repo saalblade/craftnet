@@ -40,6 +40,7 @@ use craftnet\orders\PdfRenderer;
 use craftnet\plugins\PluginEdition;
 use craftnet\plugins\PluginLicenseManager;
 use craftnet\services\Oauth;
+use craftnet\utilities\PullProduction;
 use craftnet\utilities\SalesReport;
 use craftnet\utilities\UnavailablePlugins;
 use yii\base\Event;
@@ -83,6 +84,7 @@ class Module extends \yii\base\Module
         Event::on(Utilities::class, Utilities::EVENT_REGISTER_UTILITY_TYPES, function(RegisterComponentTypesEvent $e) {
             $e->types[] = UnavailablePlugins::class;
             $e->types[] = SalesReport::class;
+            $e->types[] = PullProduction::class;
         });
         Event::on(Purchasables::class, Purchasables::EVENT_REGISTER_PURCHASABLE_ELEMENT_TYPES, function(RegisterComponentTypesEvent $e) {
             $e->types[] = CmsEdition::class;
