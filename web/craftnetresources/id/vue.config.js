@@ -10,6 +10,10 @@ module.exports = {
             cert: process.env.DEV_SSL_CERT ? fs.readFileSync(process.env.DEV_SSL_CERT) : null,
         },
         port: process.env.DEV_SERVER_PORT,
+
+        // Fix bug caused by webpack-dev-server 3.1.11.
+        // https://github.com/vuejs/vue-cli/issues/3173#issuecomment-449573901
+        disableHostCheck: true,
     },
     baseUrl: process.env.NODE_ENV === 'development' ? process.env.DEV_BASE_URL : process.env.PROD_BASE_URL,
     configureWebpack: {
