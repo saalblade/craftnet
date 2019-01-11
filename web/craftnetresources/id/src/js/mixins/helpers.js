@@ -55,17 +55,17 @@ export default {
         },
 
         /**
-         * Returns an URL that points to the dist folder.
+         * Returns a static image URL.
          *
          * @param {String} url
          * @returns {String}
          */
-        staticUrl(url) {
+        staticImageUrl(url) {
             if (process.env.NODE_ENV === 'development') {
-                return process.env.BASE_URL + url;
+                return process.env.BASE_URL + 'img/static/' + url;
             }
 
-            return '/craftnetresources/id/dist/' + url;
+            return '/craftnetresources/id/dist/img/static/' + url;
         },
 
         /**

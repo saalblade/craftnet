@@ -2,7 +2,7 @@
     <connected-app
             :name="appType.name"
             :description="'Connect to your ' + appType.name + ' account.'"
-            :icon="staticUrl('images/' + appType.handle + '.svg')"
+            :icon="staticImageUrl('' + appType.handle + '.svg')"
             :account-name="(stripeAccount ? stripeAccount.display_name : '')"
             :connected="stripeAccount"
             :buttonLoading="disconnectLoading"

@@ -6,7 +6,7 @@
             <connected-app
                     :name="appType.name"
                     :description="'Connect to your ' + appType.name + ' account.'"
-                    :icon="staticUrl('images/' + appType.handle + '.svg')"
+                    :icon="staticImageUrl('' + appType.handle + '.svg')"
                     :account-name="accountName(appType.handle)"
                     :connected="apps[appType.handle]"
                     :buttonLoading="(loading && loading[appType.handle])"

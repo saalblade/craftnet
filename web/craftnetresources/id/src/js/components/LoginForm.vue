@@ -2,7 +2,7 @@
     <div class="mx-auto max-w-sm">
         <div class="pt-8 mb-6 text-center">
             <div class="pt-8 pb-3">
-                <img src="~@/images/craftid.svg" width="80" height="80" />
+                <img src="staticImageUrl('craftid.svg')" width="80" height="80" />
             </div>
             <h1 class="mb-0">Craft ID</h1>
             <p class="lead">Manage your Craft ID.</p>
@@ -39,7 +39,11 @@
 </template>
 
 <script>
+    import helpers from '../mixins/helpers'
+
     export default {
+
+        mixins: [helpers],
 
         props: ['rememberedUsername'],
 
