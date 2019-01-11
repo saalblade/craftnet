@@ -14,5 +14,4 @@
 /templates/test.twig
 /web/test.php
 /web/scratch.php
-
-/scripts/.env.sh
+/.pgpass
