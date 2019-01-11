@@ -2,17 +2,14 @@
 
 namespace craftnet\controllers\api\v1;
 
-use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
 use Craft;
 use craft\helpers\ArrayHelper;
-use craft\helpers\DateTimeHelper;
-use craft\helpers\HtmlPurifier;
 use craft\models\Update;
+use craftnet\ChangelogParser;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\errors\ValidationException;
 use craftnet\plugins\Plugin;
-use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -180,85 +177,17 @@ class UpdatesController extends BaseApiController
         $changelog = $packageManager->getRelease($name, $toVersion)->changelog ?? null;
 
         if ($changelog) {
-            // Move it to a temp file & parse it
-            $file = tmpfile();
-            fwrite($file, $changelog);
-            fseek($file, 0);
-
-            $currentReleaseInfo = null;
-            $currentNotes = '';
-
-            while (($line = fgets($file)) !== false) {
-                // Is this an H1 or H2?
-                if (strncmp($line, '# ', 2) === 0 || strncmp($line, '## ', 3) === 0) {
-                    // If we're in the middle of getting a release's notes, finish it off
-                    if ($currentReleaseInfo !== null) {
-                        $currentReleaseInfo->notes = $this->_parseReleaseNotes($currentNotes);
-                        $currentReleaseInfo = null;
-                    }
-
-                    // Is it an H2 version heading?
-                    if (preg_match('/^## (?:.* )?\[?v?(\d+\.\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z-\.]+)?)\]?(?:\(.*?\)|\[.*?\])? - (\d{4}[-\.]\d\d?[-\.]\d\d?)( \[critical\])?/i', $line, $match)) {
-                        // Make sure this is a version we care about
-                        try {
-                            $normalizedVersion = $vp->normalize($match[1]);
-                        } catch (\UnexpectedValueException $e) {
-                            continue;
-                        }
-
-                        if (!isset($releaseInfo[$normalizedVersion])) {
-                            // Is it <= the currently-installed version?
-                            if (Comparator::lessThanOrEqualTo($normalizedVersion, $fromVersion)) {
-                                break;
-                            }
-                            continue;
-                        }
-
-                        // Fill in the date/critical bits
-                        $currentReleaseInfo = $releaseInfo[$normalizedVersion];
-                        $date = DateTimeHelper::toDateTime(str_replace('.', '-', $match[2]), false, false);
-                        $currentReleaseInfo->date = $date ? $date->format(\DateTime::ATOM) : null;
-                        $currentReleaseInfo->critical = !empty($match[3]);
-
-                        // Start the release notes
-                        $currentNotes = '';
-                    }
-                } else if ($currentReleaseInfo !== null) {
-                    // Append the line to the current release notes
-                    $currentNotes .= $line;
+            $changelogReleases = (new ChangelogParser())->parse($changelog, $fromVersion);
+            foreach ($changelogReleases as $normalizedVersion => $release) {
+                if (isset($releaseInfo[$normalizedVersion])) {
+                    $releaseInfo[$normalizedVersion]->critical = $release['critical'];
+                    $releaseInfo[$normalizedVersion]->date = $release['date'];
+                    $releaseInfo[$normalizedVersion]->notes = $release['notes'];
                 }
-            }
-
-            // Close the temp file
-            fclose($file);
-
-            // If we're in the middle of getting a release's notes, finish it off
-            if ($currentReleaseInfo !== null) {
-                $currentReleaseInfo->notes = $this->_parseReleaseNotes($currentNotes);
             }
         }
 
         // Drop the version keys and convert objects to arrays
         return ArrayHelper::toArray(array_values($releaseInfo));
-    }
-
-    /**
-     * Parses releases notes into HTML.
-     *
-     * @param string $notes
-     * @return string
-     */
-    private function _parseReleaseNotes(string $notes): string
-    {
-        // Parse as Markdown
-        $notes = Markdown::process($notes, 'gfm');
-
-        // Purify HTML
-        $notes = HtmlPurifier::process($notes);
-
-        // Notes/tips
-        $notes = preg_replace('/<blockquote><p>\{(note|tip|warning)\}/', '<blockquote class="note $1"><p>', $notes);
-
-        return $notes;
     }
 }
