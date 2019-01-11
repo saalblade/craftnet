@@ -15,7 +15,7 @@ module.exports = {
         // https://github.com/vuejs/vue-cli/issues/3173#issuecomment-449573901
         disableHostCheck: true,
     },
-    baseUrl: process.env.NODE_ENV === 'development' ? process.env.DEV_BASE_URL : process.env.PROD_BASE_URL,
+    publicPath: process.env.NODE_ENV === 'development' ? process.env.DEV_BASE_URL : process.env.PROD_BASE_URL,
     configureWebpack: {
         plugins: [
             new ManifestPlugin({
