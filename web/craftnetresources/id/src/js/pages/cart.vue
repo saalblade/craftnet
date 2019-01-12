@@ -97,8 +97,6 @@
                             </tr>
                             </tbody>
                         </template>
-
-                        <cart-mock />
                     </table>
 
                     <div class="mt-4 text-right"><input type="button" class="btn btn-lg btn-primary" @click="checkout()" value="Check Out" /></div>
@@ -120,7 +118,6 @@
 
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
-    import CartMock from '../components/CartMock'
     import Empty from '../components/Empty'
     import Spinner from '../components/Spinner'
     import helpers from '../mixins/helpers'
@@ -129,7 +126,6 @@
         mixins: [helpers],
 
         components: {
-            CartMock,
             Empty,
             Spinner,
         },
