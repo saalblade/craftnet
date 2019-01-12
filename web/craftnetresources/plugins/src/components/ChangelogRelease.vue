@@ -1,21 +1,20 @@
 <template>
-    <div class="changelog-release">
+    <div v-if="release" class="changelog-release">
         <div class="version">
-            <a :href="'#' + version" class="anchor"><font-awesome-icon icon="link" /></a>
-            <h3 :id="version">Version {{ version }}</h3>
-            <div class="date">{{date}}</div>
+            <a :href="'#' + release.version" class="anchor"><font-awesome-icon icon="link" /></a>
+            <h2 :id="release.version">Version {{release.version}}</h2>
+            <div class="date">{{release.date|moment('l')}}</div>
+            <div v-if="release.critical" class="critical">Critical</div>
         </div>
 
-        <div class="details">
-            <slot></slot>
-        </div>
+        <div class="details readable" v-html="release.notes"></div>
     </div>
 </template>
 
 <script>
     export default {
 
-        props: ['version', 'date'],
+        props: ['release'],
 
     }
 </script>

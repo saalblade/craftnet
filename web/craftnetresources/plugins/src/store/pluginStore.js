@@ -15,6 +15,7 @@ export const state = () => ({
     plugins: [],
     actionUrl: null,
     plugin: null,
+    pluginChangelog: null,
     developer: null,
     seo: {},
 })
@@ -140,6 +141,22 @@ export const actions = {
             })
     },
 
+    getPluginChangelog({state, commit}, pluginId) {
+        beforeAxiosRequest()
+
+        return axios.get(process.env.actionUrl + '/craftnet/plugins/plugin-store/plugin-changelog', {
+                params: {
+                    pluginId: pluginId,
+                },
+            })
+            .then(response => {
+                commit('updatePluginChangelog', response.data)
+            })
+            .catch(response => {
+                console.log('error', response)
+            })
+    },
+
     getDeveloper({state, commit}, developerId) {
         beforeAxiosRequest()
 
@@ -172,6 +189,10 @@ export const mutations = {
 
     updatePluginDetails(state, pluginDetails) {
         state.plugin = pluginDetails
+    },
+
+    updatePluginChangelog(state, pluginChangelog) {
+        state.pluginChangelog = pluginChangelog
     },
 
     receiveDeveloper(state, {developer}) {

@@ -15,8 +15,13 @@
                         </div>
                         <div class="lg:pl-8 lg:ml-4">
                             <ul class="list-reset">
-                                <li class="py-1" v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation"|t('app') }}</a></li>
-                                <li class="py-1"><a href="#"><font-awesome-icon icon="question-circle" /> {{ "Support"|t('app') }}</a></li>
+                                <li class="py-1" v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation" }}</a></li>
+                                <li v-if="plugin.changelogUrl" class="py-1">
+                                    <a :href="plugin.changelogUrl" rel="noopener" target="_blank">
+                                        <font-awesome-icon icon="info-circle"></font-awesome-icon>
+                                        {{ "Changelog"|t('app') }}
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -57,7 +62,7 @@
 
                 <hr>
 
-                <plugin-changelog></plugin-changelog>
+                <plugin-changelog :pluginId="pluginId"></plugin-changelog>
             </div>
         </template>
         <template v-else>
@@ -142,6 +147,7 @@
             return {
                 actionsLoading: false,
                 loading: false,
+                pluginId: null,
             }
         },
 
@@ -193,6 +199,11 @@
             },
 
         },
+
+        mounted() {
+            const pluginSnippet = this.$store.getters['pluginStore/getPluginByHandle'](this.$route.params.handle)
+            this.pluginId = pluginSnippet.id
+        }
 
     }
 </script>

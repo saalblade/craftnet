@@ -4,6 +4,7 @@ namespace craftnet\controllers\plugins;
 
 use Craft;
 use craft\elements\Entry;
+use craft\helpers\Json;
 use craft\web\Controller;
 use yii\web\Response;
 
@@ -47,6 +48,21 @@ class PluginStoreController extends Controller
         $pluginDetails = Craft::$app->getApi()->getPluginDetails($pluginId);
 
         return $this->asJson($pluginDetails);
+    }
+
+    /**
+     * Returns plugin changelog.
+     *
+     * @return Response
+     */
+    public function actionPluginChangelog()
+    {
+        $pluginId = Craft::$app->getRequest()->getParam('pluginId');
+
+        $response = Craft::$app->getApi()->request('GET', 'plugin/' . $pluginId . '/changelog');
+        $pluginChangelog = Json::decode((string)$response->getBody());
+
+        return $this->asJson($pluginChangelog);
     }
 
     /**
