@@ -4,11 +4,6 @@
         <div class="card mb-6">
             <div class="card-body">
                 <h4>Email &amp; password</h4>
-                <!--<el-form>
-                    <el-form-item label="Current Password">
-                        <el-input type="password" v-model="password"></el-input>
-                    </el-form-item>
-                </el-form>-->
 
                 <password-field id="password" label="Current Password" v-model="password" :errors="errors.currentPassword" />
                 <text-field id="email" label="Email" v-model="userDraft.email" :errors="errors.email" />
@@ -98,27 +93,28 @@
                     enablePartnerFeatures: (this.userDraft.enablePartnerFeatures ? 1 : 0),
                     password: this.password,
                     newPassword: this.newPassword,
-                }).then(response => {
-                    this.loading = false;
+                })
+                    .then(() => {
+                        this.loading = false;
 
-                    if (newEmail) {
-                        this.userDraft.email = this.currentUser.email;
-                        this.$store.dispatch('app/displayNotice', 'You’ve been sent an email to verify your new email address.');
-                    } else {
-                        this.$store.dispatch('app/displayNotice', 'Settings saved.');
-                    }
+                        if (newEmail) {
+                            this.userDraft.email = this.currentUser.email;
+                            this.$store.dispatch('app/displayNotice', 'You’ve been sent an email to verify your new email address.');
+                        } else {
+                            this.$store.dispatch('app/displayNotice', 'Settings saved.');
+                        }
 
-                    this.password = '';
-                    this.newPassword = '';
-                    this.errors = {};
-                }).catch(response => {
-                    this.loading = false;
+                        this.password = '';
+                        this.newPassword = '';
+                        this.errors = {};
+                    }).catch(response => {
+                        this.loading = false;
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.';
-                    this.$store.dispatch('app/displayError', errorMessage);
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.';
+                        this.$store.dispatch('app/displayError', errorMessage);
 
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                });
+                        this.errors = response.data && response.data.errors ? response.data.errors : {};
+                    })
             }
 
         },

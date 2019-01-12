@@ -39,6 +39,8 @@
 </template>
 
 <script>
+    /* global Craft */
+
     import helpers from '../mixins/helpers'
 
     export default {

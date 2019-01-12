@@ -88,12 +88,13 @@
              * @param source
              */
             saveCard(card, source) {
-                this.$store.dispatch('account/saveCard', source).then(response => {
-                    card.clear();
-                    this.cardFormloading = false;
-                    this.editing = false;
-                    this.$store.dispatch('app/displayNotice', 'Card saved.');
-                });
+                this.$store.dispatch('account/saveCard', source)
+                    .then(() => {
+                        card.clear();
+                        this.cardFormloading = false;
+                        this.editing = false;
+                        this.$store.dispatch('app/displayNotice', 'Card saved.');
+                    })
             },
 
             /**
@@ -101,10 +102,11 @@
              */
             removeCard() {
                 this.removeCardLoading = true;
-                this.$store.dispatch('account/removeCard').then(response => {
-                    this.removeCardLoading = false;
-                    this.$store.dispatch('app/displayNotice', 'Card removed.')
-                })
+                this.$store.dispatch('account/removeCard')
+                    .then(() => {
+                        this.removeCardLoading = false;
+                        this.$store.dispatch('app/displayNotice', 'Card removed.')
+                    })
             },
 
             /**

@@ -13,7 +13,7 @@
             </thead>
             <tbody>
             <template>
-                <tr v-for="license in licenses">
+                <tr v-for="(license, key) in licenses" :key="key">
                     <td>
                         <code>
                             <router-link v-if="license.key" :to="'/licenses/cms/'+license.id">

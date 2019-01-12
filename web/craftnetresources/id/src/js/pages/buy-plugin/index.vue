@@ -78,11 +78,11 @@
             if(this.plugins.length === 0) {
                 this.loading = true
                 this.getPluginStoreData()
-                    .then(response => {
+                    .then(() => {
                         this.loading = false
                         this.addToCart();
                     })
-                    .catch(response => {
+                    .catch(() => {
                         this.loading = false
                     })
             } else {

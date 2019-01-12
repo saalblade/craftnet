@@ -198,10 +198,6 @@ const actions = {
         })
     },
 
-    getAccountData({commit}) {
-
-    }
-
 }
 
 /**
@@ -235,7 +231,7 @@ const mutations = {
         state.currentUser.photoUrl = response.data.photoUrl;
     },
 
-    saveUser(state, {user, response}) {
+    saveUser(state, {user}) {
         for (let attribute in user) {
             if (attribute === 'id' || attribute === 'email') {
                 continue;

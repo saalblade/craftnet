@@ -2,6 +2,7 @@
     <div v-if="cardType" class="card-icon">
         <img :src="staticImageUrl('cards/'+cardType+'.svg')" height="20" />
     </div>
+
 </template>
 
 <script>

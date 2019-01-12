@@ -20,7 +20,7 @@
                             </thead>
 
                             <tbody>
-                            <tr v-for="(item, itemKey) in cartItems">
+                            <tr v-for="(item, itemKey) in cartItems" :key="itemKey">
                                 <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
                                     <td class="icon-col">
                                         <div class="plugin-icon">

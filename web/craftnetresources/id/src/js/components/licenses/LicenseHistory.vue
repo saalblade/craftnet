@@ -11,7 +11,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="item in history">
+                <tr v-for="(item, key) in history" :key="key">
                     <td>{{ item.note }}</td>
                     <td>{{ item.timestamp }}</td>
                 </tr>

@@ -20,7 +20,7 @@
         </div>
 
         <ul v-if="selectedPlugin" class="list-reset mb-4">
-           <li v-for="edition in selectedPlugin.editions" class="flex">
+           <li v-for="(edition, key) in selectedPlugin.editions" class="flex" :key="key">
                <input type="radio" checked="checked" :value="edition.handle" class="mt-1" v-model="pluginEditionHandle">
                <div class="ml-2">
                    <h3>{{edition.name}}</h3>
@@ -107,10 +107,10 @@
                 this.loading = true
 
                 this.getPluginStoreData()
-                    .then(response => {
+                    .then(() => {
                         this.loading = false
                     })
-                    .catch(response => {
+                    .catch(() => {
                         this.loading = false
                     })
             }

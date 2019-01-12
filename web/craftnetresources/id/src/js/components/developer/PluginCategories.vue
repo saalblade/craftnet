@@ -5,7 +5,7 @@
             <div class="instructions"><p>Pick up to {{maxCategories}} categories. ({{ pluginDraft.categoryIds.length }}/{{maxCategories}} selected)</p></div>
 
             <draggable v-model="pluginDraft.categoryIds">
-                <div class="alert float-left clearfix mb-3 mr-2 px-3 py-2" v-for="category in selectedCategories">
+                <div class="alert float-left clearfix mb-3 mr-2 px-3 py-2" v-for="(category, key) in selectedCategories" :key="'selected-categories-' + key">
                     <div class="flex">
                         <div>{{category.title}}</div>
                         <div class="ml-3 mt-1">
@@ -20,7 +20,7 @@
             <div class="clearfix"></div>
 
             <div>
-                <div class="inline-block" v-for="category in availableCategories">
+                <div class="inline-block" v-for="(category, key) in availableCategories" :key="'available-category-' + key">
                     <a class="btn btn-outline-secondary mb-2 mr-2" :class="{disabled: pluginDraft.categoryIds.length >= maxCategories }" href="#" @click.prevent="selectCategory(category.id)">
                         <font-awesome-icon icon="plus" />
                         {{category.title}}

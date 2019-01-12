@@ -11,7 +11,7 @@
                     <template v-if="connectedAppsCount > 0">
                         <p>To get started, select a repository for your plugin.</p>
 
-                        <div v-for="app, appHandle in apps" class="mb-3">
+                        <div v-for="(app, appHandle) in apps" class="mb-3" :key="appHandle">
                             <repositories :appHandle="appHandle" :loading-repository="loadingRepository" @selectRepository="onSelectRepository"></repositories>
                         </div>
 
@@ -74,7 +74,7 @@
                                         <p>Plugin icons must be square SVG files, and should not exceed {{ maxUploadSize }}.</p>
                                     </div>
                                     <input type="file" ref="iconFile" class="form-control" @change="changeIcon" :class="{'is-invalid': errors.iconId }" />
-                                    <div class="invalid-feedback" v-for="error in errors.iconId">{{ error }}</div>
+                                    <div class="invalid-feedback" v-for="(error, errorKey) in errors.iconId" :key="'plugin-icon-error-' + errorKey">{{ error }}</div>
                                 </div>
                             </div>
                         </div>
@@ -131,7 +131,7 @@
                         <div ref="screenshots" class="d-inline">
 
                             <draggable v-model="screenshots">
-                                <div v-for="(screenshot, key) in screenshots" class="screenshot">
+                                <div v-for="(screenshot, key) in screenshots" class="screenshot" :key="key">
                                     <img :src="screenshot.url" class="img-thumbnail mr-3 mb-3" />
                                     <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(key);">
                                         <font-awesome-icon icon="times" />
@@ -147,7 +147,7 @@
                     <div class="card-header">Editions</div>
                     <div class="card-body">
                         <template v-for="(edition, editionKey) in pluginDraft.editions">
-                            <div class="flex">
+                            <div class="flex" :key="'edition-' + editionKey">
                                 <div class="w-1/4">
                                     <h2>{{edition.name}}</h2>
                                     <p class="text-grey"><code>{{edition.handle}}</code></p>
@@ -166,7 +166,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr v-for="(feature, featureKey) in edition.features">
+                                            <tr v-for="(feature, featureKey) in edition.features" :key="'feature-'+featureKey">
                                                 <td>
                                                     <text-input :id="edition.handle+'-featureName'" v-model="feature.name" />
                                                 </td>
@@ -185,9 +185,9 @@
                                         </div>
                                     </field>
                                 </div>
-                            </div>
 
-                            <hr>
+                                <hr>
+                            </div>
                         </template>
 
                         <p class="text-center">To manage your editions, please <a href="mailto:hello@craftcms.com">contact us</a>.</p>
@@ -215,6 +215,8 @@
 </template>
 
 <script>
+    /* global Craft */
+
     import {mapState, mapGetters} from 'vuex'
     import ConnectedApps from '../../../components/developer/connected-apps/ConnectedApps'
     import Repositories from '../../../components/developer/Repositories'
@@ -383,10 +385,8 @@
 
             /**
              * Change screenshots.
-             *
-             * @param ev
              */
-            changeScreenshots(ev) {
+            changeScreenshots() {
                 this.pluginDraft.screenshotUrls = [];
 
                 let files = this.$refs.screenshotFiles.files;
@@ -489,7 +489,7 @@
                             }
                         }
                     })
-                    .catch(response => {
+                    .catch(() => {
                         this.repositoryLoading = false;
                         this.$store.dispatch('app/displayError', "Couldn’t load repository");
                     });
@@ -542,18 +542,19 @@
                     plugin.screenshotIds = this.pluginDraft.screenshotIds;
                 }
 
-                this.$store.dispatch('developers/savePlugin', {plugin}).then(response => {
-                    this.loading = false;
-                    this.$store.dispatch('app/displayNotice', 'Plugin saved.');
-                    this.$router.push({path: '/developer/plugins'});
-                }).catch(response => {
-                    this.loading = false;
+                this.$store.dispatch('developers/savePlugin', {plugin})
+                    .then(() => {
+                        this.loading = false;
+                        this.$store.dispatch('app/displayNotice', 'Plugin saved.');
+                        this.$router.push({path: '/developer/plugins'});
+                    }).catch(response => {
+                        this.loading = false;
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save plugin.';
-                    this.$store.dispatch('app/displayError', errorMessage);
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save plugin.';
+                        this.$store.dispatch('app/displayError', errorMessage);
 
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                });
+                        this.errors = response.data && response.data.errors ? response.data.errors : {};
+                    });
             },
 
             /**
@@ -561,17 +562,18 @@
              */
             submit() {
                 this.pluginSubmitLoading = true;
-                this.$store.dispatch('developers/submitPlugin', this.plugin.id).then(response => {
-                    this.pluginSubmitLoading = false;
-                    this.$store.dispatch('app/displayNotice', 'Plugin submitted for approval.');
-                }).catch(response => {
-                    this.pluginSubmitLoading = false;
+                this.$store.dispatch('developers/submitPlugin', this.plugin.id)
+                    .then(() => {
+                        this.pluginSubmitLoading = false;
+                        this.$store.dispatch('app/displayNotice', 'Plugin submitted for approval.');
+                    }).catch(response => {
+                        this.pluginSubmitLoading = false;
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t submit plugin for approval.';
-                    this.$store.dispatch('app/displayError', errorMessage);
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t submit plugin for approval.';
+                        this.$store.dispatch('app/displayError', errorMessage);
 
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                })
+                        this.errors = response.data && response.data.errors ? response.data.errors : {};
+                    })
             },
 
             /**

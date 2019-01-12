@@ -22,7 +22,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="sale in salesToRender">
+                    <tr v-for="(sale, key) in salesToRender" :key="key">
                         <td>{{ sale.plugin.name }}</td>
                         <td><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></td>
                         <td class="text-secondary">License Purchase</td>

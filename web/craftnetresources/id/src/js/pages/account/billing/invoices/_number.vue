@@ -28,13 +28,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="lineItem in invoice.lineItems">
+                            <tr v-for="(lineItem, lineItemKey) in invoice.lineItems" :key="'line-item-' + lineItemKey">
                                 <td>{{ lineItem.description }}</td>
                                 <td>{{ lineItem.salePrice|currency }}</td>
                                 <td>{{ lineItem.qty }}</td>
                                 <td class="text-right">{{ lineItem.subtotal|currency }}</td>
                             </tr>
-                            <tr v-for="adjustment in invoice.adjustments">
+                            <tr v-for="(adjustment, adjustmentKey) in invoice.adjustments" :key="'adjustment-' + adjustmentKey">
                                 <th colspan="3" class="text-right">{{ adjustment.name }}</th>
                                 <td class="text-right">{{ adjustment.amount|currency }}</td>
                             </tr>
@@ -67,7 +67,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="transaction in invoice.transactions">
+                        <tr v-for="(transaction, transactionKey) in invoice.transactions" :key="'transaction-' + transactionKey">
                             <td>{{ transaction.type }}</td>
                             <td>{{ transaction.status }}</td>
                             <td>{{ transaction.amount|currency }}</td>
@@ -130,6 +130,8 @@
 
                 if(!invoice) {
                     this.$store.dispatch('app/displayError', "Couldn’t find invoice.")
+
+                    // eslint-disable-next-line
                     this.$router.push({path: '/account/billing'})
                 }
 

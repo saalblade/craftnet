@@ -6,7 +6,7 @@
 
                 <template v-if="!showForm && billingAddress">
                     <ul v-if="billingAddress.firstName || billingAddress.lastName || billingAddress.address1 || billingAddress.address2 || billingAddress.city || billingAddress.country || billingAddress.businessName || billingAddress.state || billingAddress.zipCode" class="list-reset">
-                        <li v-if="billingAddress.firstName || billingAddress.lastName">{{ billingAddress.firstName }} {{ billingAddress.lastName }}</li>
+                        <li v-if="billingAddress.firstName || billingAddress.lastName">{{ billingAddress.firstName }} {{ billingAddress.lastName }}</li>
                         <li v-if="billingAddress.businessName">{{ billingAddress.businessName }}</li>
                         <li v-if="billingAddress.address1">{{ billingAddress.address1 }}</li>
                         <li v-if="billingAddress.address2">{{ billingAddress.address2 }}</li>

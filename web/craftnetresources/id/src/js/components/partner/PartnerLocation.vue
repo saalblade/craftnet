@@ -87,6 +87,7 @@
                 return `${city}${comma} ${state} ${zip}`.trim()
             },
             isEditing() {
+                // eslint-disable-next-line
                 this.draft = this.simpleClone
                 return this.editIndex === this.index
             },

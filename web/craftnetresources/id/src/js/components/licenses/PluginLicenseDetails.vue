@@ -228,14 +228,15 @@
                     cmsLicenseId: this.licenseDraft.cmsLicenseId,
                     cmsLicense: this.licenseDraft.cmsLicense,
                     notes: this.licenseDraft.notes,
-                }).then(data => {
-                    cb();
-                    this.$store.dispatch('app/displayNotice', 'License saved.');
-                }).catch(response => {
-                    cbError();
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
-                    this.$store.dispatch('app/displayError', errorMessage)
-                });
+                })
+                    .then(() => {
+                        cb();
+                        this.$store.dispatch('app/displayNotice', 'License saved.');
+                    }).catch(response => {
+                        cbError();
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
@@ -246,18 +247,19 @@
                     pluginHandle: this.license.plugin.handle,
                     key: this.license.key,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
-                }).then((data) => {
-                    if (this.licenseDraft.autoRenew) {
-                        this.$store.dispatch('app/displayNotice', 'Auto renew enabled.');
-                    } else {
-                        this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
-                    }
+                })
+                    .then(() => {
+                        if (this.licenseDraft.autoRenew) {
+                            this.$store.dispatch('app/displayNotice', 'Auto renew enabled.');
+                        } else {
+                            this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
+                        }
 
-                    this.$store.dispatch('licenses/getCmsLicenses');
-                }).catch((data) => {
-                    this.$store.dispatch('app/displayError', 'Couldn’t save license.');
-                    this.errors = data.errors;
-                });
+                        this.$store.dispatch('licenses/getCmsLicenses');
+                    }).catch(data => {
+                        this.$store.dispatch('app/displayError', 'Couldn’t save license.');
+                        this.errors = data.errors;
+                    })
             },
 
         },

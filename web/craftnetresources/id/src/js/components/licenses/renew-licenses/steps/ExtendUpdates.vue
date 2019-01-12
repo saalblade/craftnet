@@ -4,6 +4,7 @@
         <button @click="$emit('cancel')" class="btn btn-secondary">Cancel</button>
         <button @click="$emit('continue')" class="btn btn-primary">Continue</button>
     </div>
+
 </template>
 
 <script>

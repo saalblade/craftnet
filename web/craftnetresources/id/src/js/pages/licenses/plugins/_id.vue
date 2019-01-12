@@ -55,7 +55,7 @@
                         pluginHandle: this.license.plugin.handle,
                         licenseKey: this.license.key,
                     })
-                    .then(response => {
+                    .then(() => {
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('account/getInvoices');

@@ -157,7 +157,6 @@
                                     resolve()
                                 }, () => {
                                     reject()
-                                    console.log('failure')
                                 })
                             } else {
                                 resolve()
@@ -191,7 +190,6 @@
             },
 
             processPayment() {
-                console.log('processPayment');
                 let cardToken = null
 
                 if (this.cart.totalPrice > 0) {

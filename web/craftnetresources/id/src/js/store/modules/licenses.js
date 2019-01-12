@@ -20,7 +20,7 @@ const state = {
  */
 const getters = {
 
-    expiresSoon(state) {
+    expiresSoon() {
         return license => {
             if(!license.expiresOn) {
                 return false
@@ -40,7 +40,7 @@ const getters = {
         }
     },
 
-    daysBeforeExpiry(state) {
+    daysBeforeExpiry() {
         return license => {
             const today = new Date()
             const expiresOn = new Date(license.expiresOn.date)
@@ -186,7 +186,8 @@ const getters = {
  */
 const actions = {
 
-    claimCmsLicense({commit}, licenseKey) {
+    // eslint-disable-next-line
+    claimCmsLicense({}, licenseKey) {
         return new Promise((resolve, reject) => {
             licensesApi.claimCmsLicense(licenseKey, response => {
                 if (response.data && !response.data.error) {
@@ -200,7 +201,8 @@ const actions = {
         })
     },
 
-    claimCmsLicenseFile({commit}, licenseFile) {
+    // eslint-disable-next-line
+    claimCmsLicenseFile({}, licenseFile) {
         return new Promise((resolve, reject) => {
             licensesApi.claimCmsLicenseFile(licenseFile, response => {
                 if (response.data && !response.data.error) {
@@ -214,7 +216,8 @@ const actions = {
         })
     },
 
-    claimLicensesByEmail({commit}, email) {
+    // eslint-disable-next-line
+    claimLicensesByEmail({}, email) {
         return new Promise((resolve, reject) => {
             licensesApi.claimLicensesByEmail(email, response => {
                 if (response.data && !response.data.error) {
@@ -228,7 +231,8 @@ const actions = {
         })
     },
 
-    claimPluginLicense({commit}, licenseKey) {
+    // eslint-disable-next-line
+    claimPluginLicense({}, licenseKey) {
         return new Promise((resolve, reject) => {
             licensesApi.claimPluginLicense(licenseKey, response => {
                 if (response.data && !response.data.error) {

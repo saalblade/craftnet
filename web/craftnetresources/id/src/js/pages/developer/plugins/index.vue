@@ -24,7 +24,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(plugin, pluginKey) in computedPlugins">
+                <tr v-for="(plugin, pluginKey) in computedPlugins" :key="pluginKey">
                     <td class="icon-col">
                         <router-link :to="'/developer/plugins/' + plugin.id">
                             <img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" />

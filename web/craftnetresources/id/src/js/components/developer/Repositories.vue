@@ -1,11 +1,9 @@
 <template>
     <div>
-        <!--<h3>{{ appHandle }}</h3>-->
-
         <text-field placeholder="Filter repositories" v-model="q" />
 
         <list-group v-if="filteredRepositories.length > 0">
-            <list-group-item v-for="repository in filteredRepositories">
+            <list-group-item v-for="(repository, key) in filteredRepositories" :key="key">
                 <div class="flex items-center">
                     <div class="flex-1">
                         {{ repository.full_name }}

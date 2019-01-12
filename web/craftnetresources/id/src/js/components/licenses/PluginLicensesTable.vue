@@ -13,7 +13,7 @@
             </thead>
             <tbody>
             <template>
-                <tr v-for="license in licenses">
+                <tr v-for="(license, licenseIndex) in licenses" :key="licenseIndex">
                     <td>
                         <code>
                             <router-link v-if="license.key" :to="'/licenses/plugins/'+license.id">{{ license.key.substr(0, 4) }}</router-link>
@@ -124,7 +124,7 @@
                 }
 
                 this.$store.dispatch('licenses/savePluginLicense', data)
-                    .then(response => {
+                    .then(() => {
                         if (autoRenew) {
                             this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
                         } else {

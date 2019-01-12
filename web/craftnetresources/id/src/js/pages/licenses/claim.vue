@@ -53,6 +53,7 @@
     </div>
 </template>
 
+
 <script>
     import { required, email } from 'vuelidate/lib/validators'
     import Spinner from '../../components/Spinner'
@@ -97,7 +98,7 @@
             },
 
             checkPluginLicense() {
-                const normalizedValue = this.pluginLicenseKey.replace(/(\-\ )/gm, "").trim();
+                const normalizedValue = this.pluginLicenseKey.replace(/(- )/gm, "").trim();
 
                 if(normalizedValue.length === 29) {
                     return true;
@@ -110,7 +111,7 @@
                 this.cmsLicenseLoading = true;
 
                 this.$store.dispatch('licenses/claimCmsLicense', this.cmsLicenseKey)
-                    .then(response => {
+                    .then(() => {
                         this.cmsLicenseLoading = false;
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
@@ -127,7 +128,7 @@
 
             claimCmsLicenseFile() {
                 this.$store.dispatch('licenses/claimCmsLicenseFile', this.$refs.licenseFile.files[0])
-                    .then(response => {
+                    .then(() => {
                         this.cmsLicenseFileLoading = false;
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
@@ -146,7 +147,7 @@
                 this.emailLoading = true;
 
                 this.$store.dispatch('licenses/claimLicensesByEmail', this.email)
-                    .then(response => {
+                    .then(() => {
                         this.emailLoading = false;
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
@@ -164,7 +165,7 @@
                 this.pluginLicenseLoading = true;
 
                 this.$store.dispatch('licenses/claimPluginLicense', this.pluginLicenseKey)
-                    .then(response => {
+                    .then(() => {
                         this.pluginLicenseLoading = false;
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
@@ -193,11 +194,11 @@
 
         watch: {
 
-            cmsLicenseKey(key) {
+            cmsLicenseKey() {
                 this.cmsLicenseValidates = this.checkCmsLicense();
             },
 
-            pluginLicenseKey(key) {
+            pluginLicenseKey() {
                 this.pluginLicenseValidates = this.checkPluginLicense();
             }
 

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import qs from 'qs'
 import api from '../../api/cart'
 import CartHelper from '../../helpers/cart'
 
@@ -19,7 +18,7 @@ const state = {
  */
 const getters = {
 
-    cartTotal(state) {
+    cartTotal() {
         return 0
     },
 
@@ -156,7 +155,8 @@ const actions = {
         api.resetOrderNumber()
     },
 
-    checkout({dispatch, commit}, data) {
+    // eslint-disable-next-line
+    checkout({}, data) {
         return new Promise((resolve, reject) => {
             api.checkout(data)
                 .then(response => {
@@ -183,7 +183,8 @@ const actions = {
         })
     },
 
-    saveOrderNumber({state}, {orderNumber}) {
+    // eslint-disable-next-line
+    saveOrderNumber({}, {orderNumber}) {
         api.saveOrderNumber(orderNumber)
     },
 
@@ -193,14 +194,6 @@ const actions = {
         }
 
         axios.post('https://api.craftcms.test/v1/carts', data)
-            .then(response => {
-                console.log('success');
-                // return cb(response.data)
-            })
-            .catch(response => {
-                console.log('error');
-                // return errorCb(response)
-            })
     },
 
     addToCart({commit, state, dispatch}, newItems) {

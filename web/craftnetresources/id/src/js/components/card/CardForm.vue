@@ -3,7 +3,7 @@
         <div ref="cardElement" class="card-element form-control mb-3"></div>
         <p id="card-errors" class="text-red" role="alert"></p>
 
-        <input type="submit" class="btn btn-primary" value="Save"></input>
+        <input type="submit" class="btn btn-primary" value="Save" />
         <button type="button" class="btn btn-secondary" @click="cancel()">
             Cancel
         </button>
@@ -14,6 +14,8 @@
 
 
 <script>
+    /* global Stripe */
+
     import Spinner from '../Spinner'
 
     export default {

@@ -52,7 +52,7 @@ export default {
      */
     updateCart(orderNumber, data, cb, errorCb) {
         if (data.items) {
-            data.items.forEach((item, index) => {
+            data.items.forEach(item => {
                 // Todo: Support updating an item with cmsLicenseKey
                 if(!item.cmsLicenseKey) {
                     delete item["cmsLicenseKey"]

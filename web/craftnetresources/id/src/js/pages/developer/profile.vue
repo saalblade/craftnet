@@ -84,10 +84,8 @@
 
             /**
              * Delete photo.
-             *
-             * @param ev
              */
-            deletePhoto(ev) {
+            deletePhoto() {
                 if (confirm("Are you sure you want to delete this image?")) {
                     this.photoLoading = true;
 
@@ -118,17 +116,15 @@
 
             /**
              * On change photo.
-             *
-             * @param ev
              */
-            onChangePhoto(ev) {
-                /*let reader = new FileReader();
-
-                reader.onload = function (e) {
-                    this.userDraft.photoUrl = [e.target.result]
-                }.bind(this);
-
-                reader.readAsDataURL(this.$refs.photoFile.files[0]);*/
+            onChangePhoto() {
+                // let reader = new FileReader();
+                //
+                // reader.onload = function (e) {
+                //     this.userDraft.photoUrl = [e.target.result]
+                // }.bind(this);
+                //
+                // reader.readAsDataURL(this.$refs.photoFile.files[0]);
 
                 this.photoLoading = true;
 
@@ -170,7 +166,7 @@
                         location: this.userDraft.location,
                         photoUrl: this.userDraft.photoUrl,
                     })
-                    .then(response => {
+                    .then(() => {
                         this.$store.dispatch('app/displayNotice', 'Settings saved.');
                         this.errors = {};
                         this.loading = false;

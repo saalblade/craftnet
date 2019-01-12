@@ -41,7 +41,7 @@
                     </div>
                 </draggable>
 
-                <div class="invalid-feedback" v-for="error in localErrors.screenshots">{{ error }}</div>
+                <div class="invalid-feedback" v-for="(error, errorKey) in localErrors.screenshots" :key="errorKey">{{ error }}</div>
 
                 <!-- JPEG with 12x7 1200 x 700 -->
 
@@ -85,6 +85,8 @@
 </template>
 
 <script>
+    /* global Craft */
+
     import axios from 'axios'
     import draggable from 'vuedraggable'
     import Modal from '../Modal'

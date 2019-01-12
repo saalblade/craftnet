@@ -2,7 +2,7 @@
     <list-group>
         <stripe-app v-if="showStripe"></stripe-app>
 
-        <template v-for="appType, index in appTypes">
+        <div v-for="(appType, index) in appTypes" :key="index">
             <connected-app
                     :name="appType.name"
                     :description="'Connect to your ' + appType.name + ' account.'"
@@ -15,7 +15,7 @@
             ></connected-app>
 
             <hr v-if="index != (appTypes.length - 1)">
-        </template>
+        </div>
     </list-group>
 </template>
 
@@ -84,10 +84,8 @@
                     switch (appType) {
                         case 'github':
                             return app.account.name;
-                            break;
                         case 'bitbucket':
                             return app.account.display_name;
-                            break;
                     }
                 }
             },
@@ -130,7 +128,7 @@
             disconnect(provider) {
                 this.loading[provider] = true;
                 this.$store.dispatch('account/disconnectApp', provider)
-                    .then(response => {
+                    .then(() => {
                         this.loading[provider] = false;
                         this.$store.dispatch('app/displayNotice', 'App disconnected.');
                     }).catch(response => {

@@ -116,6 +116,8 @@
 </template>
 
 <script>
+    /* global Craft */
+
     import {mapActions} from 'vuex'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
     import Spinner from '../Spinner'
@@ -126,6 +128,7 @@
 
         components: {
             Spinner,
+            LicenseUpdateMessage,
         },
 
         data() {
@@ -140,10 +143,6 @@
                 notesValidates: false,
                 renewLicenses: false,
             }
-        },
-
-        components: {
-            LicenseUpdateMessage,
         },
 
         computed: {
@@ -185,7 +184,7 @@
                 this.$store.dispatch('licenses/saveCmsLicense', {
                     key: this.license.key,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
-                }).then(response => {
+                }).then(() => {
                     if (this.licenseDraft.autoRenew) {
                         this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
                     } else {

@@ -1,5 +1,6 @@
+/* global Craft */
+
 import axios from 'axios'
-import qs from 'qs'
 
 export default {
     getPartner(cb, cbError) {
@@ -17,6 +18,7 @@ export default {
         formData.append('scenario', 'scenarioBaseInfo')
         formData.append('id', partnerId)
 
+        // eslint-disable-next-line
         console.warn('api patchPartner()', files)
 
         for (let prop in data) {
@@ -54,8 +56,6 @@ export default {
         formData.append('scenario', 'scenarioLocations')
 
         locations.forEach(location => {
-            const id = location.id
-
             for (let prop in location) {
                 if (prop !== 'id') {
                     formData.append(
@@ -82,8 +82,6 @@ export default {
 
         for (let i in projects) {
             let project = projects[i]
-
-            const id = project.id
 
             for (let prop in project) {
                 if (prop !== 'id' && prop !== 'screenshots') {

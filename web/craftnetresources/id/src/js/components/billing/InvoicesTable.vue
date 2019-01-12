@@ -10,7 +10,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="invoice in invoices">
+            <tr v-for="(invoice, key) in invoices" :key="key">
                 <td v-if="!upcoming"><router-link :to="'/account/billing/invoices/' + invoice.number">{{ invoice.shortNumber }}</router-link></td>
                 <td v-else>—</td>
                 <td>{{ invoice.totalPrice|currency }}</td>

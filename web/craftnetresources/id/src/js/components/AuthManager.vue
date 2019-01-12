@@ -57,6 +57,8 @@
 
 
 <script>
+    /* global Craft */
+
     import axios from 'axios';
     import qs from 'qs';
     import Modal from './Modal';
@@ -126,7 +128,7 @@
                         this.updateRemainingSessionTime(response.data.timeout);
                         this.submitLoginIfLoggedOut = false;
                     })
-                    .catch(response => {
+                    .catch(() => {
 
                         this.updateRemainingSessionTime(-1);
                     });
@@ -324,7 +326,7 @@
              */
             logout() {
                 axios.get(Craft.actionUrl + '/users/logout')
-                    .then(response => {
+                    .then(() => {
                         document.location.href = '';
                     })
             },
@@ -401,7 +403,7 @@
                             }
                         }
                     })
-                    .catch(response => {
+                    .catch(() => {
                         this.passwordSpinner = false;
                         this.showLoginError();
                     });

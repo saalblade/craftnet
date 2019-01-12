@@ -45,7 +45,9 @@ const actions = {
     },
 
     patchPartner({commit, state}, {draft, files}) {
+        // eslint-disable-next-line
         console.warn('store patchPartner()', files)
+        // eslint-disable-next-line
         console.warn('store patchPartner() partnerId', state.partner.id)
         return new Promise((resolve, reject) => {
             partnerApi.patchPartner(

@@ -48,7 +48,7 @@
                     }
 
                     this.$store.dispatch('cart/saveCart', data)
-                        .then(response => {
+                        .then(() => {
                             this.couponCodeSuccess = true
                             this.couponCodeError = null
                             this.staticCartTotal = this.cart.totalPrice

@@ -9,7 +9,8 @@
                     <template v-if="address.lastName">{{ address.lastName }}</template>
                 </strong>
             </li>
-            <li v-if="address.businessName || address.businessTaxId">
+            <li v-if="address.businessName || address.businessTaxId">
+
                 <strong>
                     <template v-if="address.businessName">{{ address.businessName }}</template>
                     <template v-if="address.businessTaxId">- {{ address.businessTaxId }}</template>

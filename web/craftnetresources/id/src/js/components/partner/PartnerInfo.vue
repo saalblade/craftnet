@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <p class="text-grey-darker">Basic business information and adminstrative contact information for Pixel &amp; Tonic to reach you.</p>
 
         <div class="card mb-4">
@@ -270,7 +271,6 @@
                 let reader = new FileReader();
 
                 reader.onload = e => {
-                    let url = e.target.result
                     this.draft.logo.url = e.target.result
                     this.draft.logo.id = 'new'
                 }
@@ -278,14 +278,17 @@
                 reader.readAsDataURL(event.target.files[0])
 
                 this.logoFiles = event.target.files
+                // eslint-disable-next-line
                 console.warn('change', this.logoFiles)
             },
 
             onSubmit() {
+                // eslint-disable-next-line
                 console.warn('onSubmit')
                 this.errors = {}
                 this.errorMessage = ''
                 this.requestPending = true
+                // eslint-disable-next-line
                 console.warn('onSubmit', this.logoFiles)
 
                 let data = {
@@ -295,7 +298,9 @@
 
                 this.$store.dispatch('patchPartner', data)
                     .then(response => {
+                        // eslint-disable-next-line
                         console.warn('.then()')
+                        // eslint-disable-next-line
                         console.warn(response)
                         this.requestPending = false
 
@@ -308,7 +313,9 @@
                         }
                     })
                     .catch(errorMessage => {
+                        // eslint-disable-next-line
                         console.warn('.catch()')
+                        // eslint-disable-next-line
                         console.warn(errorMessage)
                         this.$root.displayError(errorMessage)
                         this.requestPending = false

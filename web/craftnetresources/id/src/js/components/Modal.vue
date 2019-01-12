@@ -6,7 +6,6 @@
                     <div v-if="$slots.header" class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel"><slot name="header"></slot></h5>
                     </div>
-
                     <div class="modal-body">
                         <slot name="body"></slot>
                     </div>
@@ -50,7 +49,7 @@
     .modal {
         @apply .fixed .pin .block .z-10 .flex .items-center .content-center .justify-center;
         background: rgba(0,0,0,0.7);
-        
+
         .modal-content {
             @apply .flex .flex-col .bg-white .rounded .p-8;
             border: 1px solid rgba(0,0,0,.2);

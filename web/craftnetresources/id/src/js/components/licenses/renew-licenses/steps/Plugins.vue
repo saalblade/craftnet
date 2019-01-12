@@ -13,7 +13,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="renewableLicense, key in renewableLicenses(license, renew)">
+            <tr v-for="(renewableLicense, key) in renewableLicenses(license, renew)" :key="key">
                 <td>
                     <input
                             type="checkbox"
