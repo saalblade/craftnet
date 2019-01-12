@@ -28,31 +28,11 @@ const getters = {
  */
 const actions = {
 
-    setStripeAccountLoading({commit}, loading) {
-        commit('updateStripeAccountLoading', loading)
-    },
-
-    setInvoicesLoading({commit}, loading) {
-        commit('updateInvoicesLoading', loading)
-    },
-
-    setShowRenewLicensesModal({commit}, loading) {
-        commit('updateShowRenewLicensesModal', loading)
-    },
-
-    setRenewLicense({commit}, loading) {
-        commit('updateRenewLicense', loading)
-    },
-
     showRenewLicensesModal({commit}, step) {
         commit('updateRenewLicensesStep', step)
         commit('updateShowRenewLicensesModal', true)
     },
-
-    setLoading({commit}, loading) {
-        commit('updateLoading', loading)
-    },
-
+    
     /**
      *  Displays an error.
      *

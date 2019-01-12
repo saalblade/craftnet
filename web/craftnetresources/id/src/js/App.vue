@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <auth-manager ref="authManager"></auth-manager>
-        <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.dispatch('app/setShowRenewLicensesModal', false)" />
+        <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.commit('app/updateShowRenewLicensesModal', false)" />
 
         <template v-if="notification">
             <div id="notifications-wrapper" :class="{'hide': !notification }">
@@ -62,7 +62,7 @@
         created() {
             this.$store.dispatch('craftId/getCraftIdData')
                 .then(() => {
-                    this.$store.dispatch('app/setLoading', false)
+                    this.$store.commit('app/updateLoading', false)
                 });
 
             this.$store.dispatch('cart/getCart');
@@ -70,20 +70,20 @@
             if (window.stripeAccessToken) {
                 this.$store.dispatch('account/getStripeAccount')
                     .then(() => {
-                        this.$store.dispatch('app/setStripeAccountLoading', false)
+                        this.$store.commit('app/updateStripeAccountLoading', false)
                     }, () => {
-                        this.$store.dispatch('app/setStripeAccountLoading', false)
+                        this.$store.commit('app/updateStripeAccountLoading', false)
                     });
             } else {
-                this.$store.dispatch('app/setStripeAccountLoading', false)
+                this.$store.commit('app/updateStripeAccountLoading', false)
             }
 
             this.$store.dispatch('account/getInvoices')
                 .then(() => {
-                    this.$store.dispatch('app/setInvoicesLoading', false)
+                    this.$store.commit('app/updateInvoicesLoading', false)
                 })
                 .catch(() => {
-                    this.$store.dispatch('app/setInvoicesLoading', false)
+                    this.$store.commit('app/updateInvoicesLoading', false)
                 });
 
             if(window.sessionNotice) {
