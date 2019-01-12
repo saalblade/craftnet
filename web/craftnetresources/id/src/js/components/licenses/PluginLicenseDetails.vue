@@ -320,6 +320,10 @@
                     .then(() => {
                         this.$router.push({path: '/cart'})
                     })
+                    .catch(error => {
+                        const errorMessage = error.response.data.errors && error.response.data.errors[0] && error.response.data.errors[0].message ? error.response.data.errors[0].message : 'Couldn’t add update to cart.';
+                        this.$store.dispatch('app/displayError', errorMessage);
+                    })
             }
 
         },
