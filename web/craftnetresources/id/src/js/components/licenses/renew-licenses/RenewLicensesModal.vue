@@ -28,8 +28,13 @@
     #renew-licenses-modal {
         .modal {
             .modal-dialog {
+                @apply .relative;
                 min-width: 800px;
                 min-height: 600px;
+
+                .modal-content {
+                    @apply .absolute .pin;
+                }
             }
         }
     }

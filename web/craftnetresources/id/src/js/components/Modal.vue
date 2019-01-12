@@ -48,17 +48,9 @@
 
 <style lang="scss">
     .modal {
-        @apply .fixed .pin .block .z-10;
+        @apply .fixed .pin .block .z-10 .flex .items-center .content-center .justify-center;
         background: rgba(0,0,0,0.7);
-
-        .modal-dialog {
-            @apply .w-auto .max-w-sm .mx-auto .my-8;
-        }
-
-        .modal-wide {
-            @apply .w-auto .max-w-xl .mx-auto .my-8;
-        }
-
+        
         .modal-content {
             @apply .flex .flex-col .bg-white .rounded .p-8;
             border: 1px solid rgba(0,0,0,.2);
