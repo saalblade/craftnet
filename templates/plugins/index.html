@@ -1,57 +1,5 @@
 {% extends "_layouts/site" %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-12 ml-auto mr-auto">
-                <div class="p-5 text-center">
-                    <h1>Craft 3 Plugins</h1>
-                </div>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Plugin</th>
-                            <th>Developer</th>
-                            <th align="right">Price</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for plugin in plugins %}
-                            <tr>
-                                <td>
-                                    {% if plugin.icon %}
-                                        <img src="{{ plugin.icon.getUrl() }}" class="plugin-icon" />
-                                    {% else %}
-                                        <img src="/craftnetresources/id/dist/images/default-plugin.svg" class="plugin-icon">
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <strong><a href="{{ plugin.repository }}" target="_blank">{{ plugin.name }}</a></strong>
-                                    <p>{{ plugin.shortDescription }}</p>
-                                </td>
-                                <td>
-                                    {% if plugin.developer.developerUrl %}
-                                        <a href="{{ plugin.developer.developerUrl }}" target="_blank">{{ plugin.developer.developerName }}</a>
-                                    {% else %}
-                                        {{ plugin.developer.developerName }}
-                                    {% endif %}
-                                </td>
-                                <td align="right">
-                                    {% if plugin.price %}
-                                            {{ plugin.price|currency('USD') }}<br>
-                                            <span class="plugin-renewal-price">{{ plugin.renewalPrice|currency('USD') }}/year</span>
-                                    {% else %}
-                                        Free
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <p>To get started, please run the Nuxt server.</p>
 {% endblock %}
