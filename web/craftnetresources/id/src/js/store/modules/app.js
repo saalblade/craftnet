@@ -19,20 +19,23 @@ const state = {
 /**
  * Getters
  */
-const getters = {
-
-}
+const getters = {}
 
 /**
  * Actions
  */
 const actions = {
 
+    /**
+     *  Show the renew licenses modal at a given step.
+     *
+     * @param {string} step
+     */
     showRenewLicensesModal({commit}, step) {
         commit('updateRenewLicensesStep', step)
         commit('updateShowRenewLicensesModal', true)
     },
-    
+
     /**
      *  Displays an error.
      *
