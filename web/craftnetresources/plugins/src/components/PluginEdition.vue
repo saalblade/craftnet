@@ -7,7 +7,7 @@
                     {{edition.price|currency}}
                 </template>
                 <template v-else>
-                    {{ "Free"|t('app') }}
+                    {{ "Free" }}
                 </template>
             </div>
 

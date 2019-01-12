@@ -43,14 +43,14 @@
 
                 <h2>Informations</h2>
                 <ul class="plugin-meta">
-                    <li><span>{{ "Version"|t('app') }}</span> <strong>{{ plugin.version }}</strong></li>
-                    <li><span>{{ "Last Update"|t('app') }}</span> <strong>{{ lastUpdate }}</strong></li>
-                    <li v-if="plugin.activeInstalls > 0"><span>{{ "Active Installs"|t('app') }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
-                    <li><span>{{ "Compatibility"|t('app') }}</span> <strong>{{ plugin.compatibility }}</strong></li>
-                    <li><span>{{ "License"|t('app') }}</span> <strong>{{ licenseLabel }}</strong></li>
+                    <li><span>{{ "Version" }}</span> <strong>{{ plugin.version }}</strong></li>
+                    <li><span>{{ "Last Update" }}</span> <strong>{{ lastUpdate }}</strong></li>
+                    <li v-if="plugin.activeInstalls > 0"><span>{{ "Active Installs" }}</span> <strong>{{ plugin.activeInstalls | formatNumber }}</strong></li>
+                    <li><span>{{ "Compatibility" }}</span> <strong>{{ plugin.compatibility }}</strong></li>
+                    <li><span>{{ "License" }}</span> <strong>{{ licenseLabel }}</strong></li>
 
                     <li v-if="pluginCategories.length > 0">
-                        <span>{{ "Categories"|t('app') }}</span>
+                        <span>{{ "Categories" }}</span>
                         <strong>
                             <template v-for="category, key in pluginCategories">
                                 <a @click="viewCategory(category)">{{ category.title }}</a><template v-if="key < (pluginCategories.length - 1)">, </template>
