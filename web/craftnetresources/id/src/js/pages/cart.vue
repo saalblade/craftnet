@@ -6,7 +6,7 @@
 
         <template v-else>
             <template v-if="cart">
-                <template v-if="cartItems.length || mockCart.items.length">
+                <template v-if="cartItems.length">
                     <table class="table">
                         <template v-if="cartItems.length">
                             <thead>
@@ -144,7 +144,6 @@
 
             ...mapState({
                 cart: state => state.cart.cart,
-                mockCart: state => state.cart.mockCart,
                 expiryDateOptions: state => state.pluginStore.expiryDateOptions,
             }),
 
@@ -170,7 +169,6 @@
                 getCart: 'cart/getCart',
                 removeFromCart: 'cart/removeFromCart',
                 createCart: 'cart/createCart',
-                removeFromCartMock: 'cart/removeFromCartMock',
                 getPluginStoreData: 'pluginStore/getPluginStoreData',
             }),
 

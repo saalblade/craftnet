@@ -4,7 +4,6 @@ import AccountBillingIndex from '../pages/account/billing/index'
 import AccountBillingInvoiceNumber from '../pages/account/billing/invoices/_number'
 import AccountSettings from '../pages/account/settings'
 import BuyPlugin from '../pages/buy-plugin/index'
-import BuyPluginMock from '../pages/buy-plugin/_mock'
 import Cart from '../pages/cart'
 import DeveloperPlugins from '../pages/developer/plugins/index'
 import DeveloperPluginsId from '../pages/developer/plugins/_id'
@@ -74,12 +73,6 @@ const router = new VueRouter({
             path: '/buy-plugin/:handle/:edition',
             name: 'BuyPlugin',
             component: BuyPlugin,
-            meta: { layout: "no-sidebar" }
-        },
-        {
-            path: '/buy-plugin-mock/:handle/:edition',
-            name: 'BuyPluginMock',
-            component: BuyPluginMock,
             meta: { layout: "no-sidebar" }
         },
         {

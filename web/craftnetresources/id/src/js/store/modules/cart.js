@@ -12,9 +12,6 @@ Vue.use(Vuex)
  */
 const state = {
     cart: null,
-    mockCart: {
-        items: []
-    }
 }
 
 /**
@@ -23,13 +20,7 @@ const state = {
 const getters = {
 
     cartTotal(state) {
-        let total = 0;
-
-        state.mockCart.items.forEach(item => {
-            total += parseFloat(item.lineItem.total);
-        })
-
-        return total
+        return 0
     },
 
     cartTotalItems(state) {
@@ -261,14 +252,6 @@ const actions = {
         })
     },
 
-    addToCartMock({commit}, {item}) {
-        commit('addToCartMock', {item})
-    },
-
-    removeFromCartMock({commit, state}, lineItemKey) {
-        commit('removeFromCartMock', {lineItemKey})
-    },
-
 }
 
 /**
@@ -279,14 +262,6 @@ const mutations = {
     updateCart(state, {response}) {
         state.cart = response.cart
         state.stripePublicKey = response.stripePublicKey
-    },
-
-    addToCartMock(state, {item}) {
-        state.mockCart.items.push(item)
-    },
-
-    removeFromCartMock(state, {lineItemKey}) {
-        state.mockCart.items.splice(lineItemKey, 1)
     },
 
     resetCart(state) {
