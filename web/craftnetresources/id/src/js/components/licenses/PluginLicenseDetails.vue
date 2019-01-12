@@ -98,38 +98,14 @@
                 <h4>Updates</h4>
                 <license-update-message :license="license"></license-update-message>
 
-                <h5>Renew License</h5>
-
-                <select-field v-model="renew" :options="renewOptions" />
-
-                <table class="table mb-2">
-                    <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Renewal Date</th>
-                        <th>New Renewal Date</th>
-                        <th>Renewal Price</th>
-                        <th>Subtotal</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{ license.plugin.name }}</td>
-                        <td>{{ license.expiresOn.date|moment('L') }}</td>
-                        <td>{{ newExpiresOn|moment('L') }}</td>
-                        <td>{{ license.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(license.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
-                        <td>{{ newExpiresOn.diff(license.expiresOn.date, 'years', true) * license.edition.renewalPrice|currency }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <input type="button" class="btn btn-primary" @click="addToCart()" value="Add to cart" />
+                <button @click="showRenewLicensesModal('renew-plugin-license')" class="btn btn-secondary">Renew your license…</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
     import Spinner from '../Spinner'
 
@@ -148,7 +124,6 @@
                 notesEditing: false,
                 notesLoading: false,
                 notesValidates: false,
-                renew: 1,
             }
         },
 
@@ -157,32 +132,11 @@
             Spinner,
         },
 
-        computed: {
-
-            renewOptions() {
-                let options = [];
-
-                for (let i = 1; i <= 5; i++) {
-                    const date = this.$moment(this.license.expiresOn.date).add(i, 'year')
-                    const formattedDate = this.$moment(date).format('L')
-                    const label = "Extend updates until " + formattedDate
-
-                    options.push({
-                        label: label,
-                        value: i,
-                    })
-                }
-
-                return options;
-            },
-
-            newExpiresOn() {
-                const expiresOn = this.$moment(this.license.expiresOn.date)
-                return expiresOn.add(this.renew, 'years')
-            },
-        },
-
         methods: {
+
+            ...mapActions({
+                showRenewLicensesModal: 'app/showRenewLicensesModal',
+            }),
 
             /**
              * Detach the Craft license.
@@ -306,26 +260,6 @@
                 });
             },
 
-            addToCart() {
-                const expiryDate = this.$moment(this.license.expiresOn.date).add(this.renew, 'year')
-                const formattedExpiryDate = this.$moment(expiryDate).format('YYYY-MM-DD')
-
-                const item = {
-                    type: 'plugin-renewal',
-                    licenseKey: this.license.key,
-                    expiryDate: formattedExpiryDate,
-                }
-
-                this.$store.dispatch('cart/addToCart', [item])
-                    .then(() => {
-                        this.$router.push({path: '/cart'})
-                    })
-                    .catch(error => {
-                        const errorMessage = error.response.data.errors && error.response.data.errors[0] && error.response.data.errors[0].message ? error.response.data.errors[0].message : 'Couldn’t add update to cart.';
-                        this.$store.dispatch('app/displayError', errorMessage);
-                    })
-            }
-
         },
 
         mounted() {
@@ -334,7 +268,7 @@
                 cmsLicense: this.license.cmsLicense,
                 autoRenew: (this.license.autoRenew == 1 ? true : false),
                 notes: this.license.notes,
-            };
+            }
         }
 
     }

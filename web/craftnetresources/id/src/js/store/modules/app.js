@@ -11,6 +11,7 @@ const state = {
     notification: null,
     stripeAccountLoading: true,
     invoicesLoading: true,
+    renewLicensesStep: null,
     showRenewLicensesModal: false,
     renewLicense: null,
 }
@@ -39,12 +40,17 @@ const actions = {
         commit('updateShowRenewLicensesModal', loading)
     },
 
-    setLoading({commit}, loading) {
-        commit('updateLoading', loading)
-    },
-
     setRenewLicense({commit}, loading) {
         commit('updateRenewLicense', loading)
+    },
+
+    showRenewLicensesModal({commit}, step) {
+        commit('updateRenewLicensesStep', step)
+        commit('updateShowRenewLicensesModal', true)
+    },
+
+    setLoading({commit}, loading) {
+        commit('updateLoading', loading)
     },
 
     /**
@@ -96,6 +102,10 @@ const mutations = {
 
     updateInvoicesLoading(state, loading) {
         state.invoicesLoading = loading
+    },
+
+    updateRenewLicensesStep(state, step) {
+        state.renewLicensesStep = step
     },
 
     updateShowRenewLicensesModal(state, show) {

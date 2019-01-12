@@ -68,6 +68,10 @@
                     });
             },
 
+        },
+
+        mounted() {
+            this.$store.dispatch('app/setRenewLicense', this.license)
         }
 
     }

@@ -109,20 +109,15 @@
                 <h4>Updates</h4>
                 <license-update-message :license="license" />
 
-                <button @click="$store.dispatch('app/setShowRenewLicensesModal', true)" class="btn btn-secondary">Renew your license…</button>
-
-                <!--<template v-else>-->
-                    <!--<hr>-->
-                    <!--<renew-licenses-form :license="license" @cancel="renewLicenses = false" />-->
-                <!--</template>-->
+                <button @click="showRenewLicensesModal('extend-updates')" class="btn btn-secondary">Renew your license…</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
-    import RenewLicensesForm from './renew-licenses/RenewLicensesForm'
     import Spinner from '../Spinner'
 
     export default {
@@ -149,7 +144,6 @@
 
         components: {
             LicenseUpdateMessage,
-            RenewLicensesForm,
         },
 
         computed: {
@@ -179,6 +173,10 @@
         },
 
         methods: {
+
+            ...mapActions({
+                showRenewLicensesModal: 'app/showRenewLicensesModal',
+            }),
 
             /**
              * Save auto renew.
