@@ -188,14 +188,6 @@ const actions = {
         api.saveOrderNumber(orderNumber)
     },
 
-    createCart() {
-        const data = {
-            email: 'ben@pixelandtonic.com'
-        }
-
-        axios.post('https://api.craftcms.test/v1/carts', data)
-    },
-
     addToCart({commit, state, dispatch}, newItems) {
         return new Promise((resolve, reject) => {
             dispatch('getCart')

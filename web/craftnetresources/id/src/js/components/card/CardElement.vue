@@ -7,7 +7,7 @@
 
 <script>
     /* global Stripe */
-    
+
     export default {
 
         data() {

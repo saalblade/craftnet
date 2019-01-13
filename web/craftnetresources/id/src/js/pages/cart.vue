@@ -168,7 +168,6 @@
             ...mapActions({
                 getCart: 'cart/getCart',
                 removeFromCart: 'cart/removeFromCart',
-                createCart: 'cart/createCart',
                 getPluginStoreData: 'pluginStore/getPluginStoreData',
             }),
 
