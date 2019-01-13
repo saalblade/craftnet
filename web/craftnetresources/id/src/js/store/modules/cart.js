@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
 import api from '../../api/cart'
 import CartHelper from '../../helpers/cart'
 
