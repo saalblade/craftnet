@@ -451,6 +451,7 @@
 
 <style lang="scss">
     .auth-manager-modal {
+        z-index: 20;
         .modal-body {
             padding-left: 76px;
 
