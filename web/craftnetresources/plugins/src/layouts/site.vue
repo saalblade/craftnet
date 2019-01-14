@@ -36,8 +36,8 @@
 
                         <h3>Switch Sites</h3>
                         <ul>
-                            <p><a :href="craftIdUrl">Craft ID</a></p>
                             <p><nuxt-link to="/" exact>Craft Plugin Store</nuxt-link></p>
+                            <p><a :href="craftIdUrl()">Craft ID</a></p>
                         </ul>
                     </div>
                 </div>
