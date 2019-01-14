@@ -69,6 +69,7 @@ class OrderAdjuster implements AdjusterInterface
                 'name' => 'Updates until ' . OrderHelper::expiryObj2Str($expiryDate),
                 'amount' => round($renewal->getPrice() * $paidRenewalYears, 2),
                 'sourceSnapshot' => [
+                    'type' => 'extendedUpdates',
                     'renewalPrice' => $renewal->getPrice(),
                     'expiryDate' => $expiryDate->format(\DateTime::ATOM),
                     'paidRenewalYears' => $paidRenewalYears,
@@ -80,25 +81,18 @@ class OrderAdjuster implements AdjusterInterface
         if (strpos($options['licenseKey'], 'new:') !== 0) {
             $license = $edition->getLicenseByKey($options['licenseKey']);
             $oldEdition = $license->getEdition();
-            $editionUpgradeDiscount = min($oldEdition->getPrice(), $edition->getPrice());
-
-            if ($editionUpgradeDiscount > 0) {
-                $adjustments[] = new OrderAdjustment([
-                    'order' => $order,
-                    'lineItem' => $lineItem,
-                    'type' => Discount::ADJUSTMENT_TYPE,
-                    'name' => 'Edition upgrade discount',
-                    'amount' => -$editionUpgradeDiscount,
-                    'sourceSnapshot' => [
-                        'oldEdition' => $oldEdition->getHandle(),
-                        'oldEditionPrice' => $oldEdition->getPrice(),
-                    ],
-                ]);
-            }
+            $upgradeDiscount = min($oldEdition->getPrice(), $edition->getPrice());
+            $upgradeSnapshot = [
+                'type' => 'upgradeDiscount',
+                'oldEdition' => $oldEdition->getHandle(),
+                'oldEditionPrice' => $oldEdition->getPrice(),
+                'editionUpgradeDiscount' => $upgradeDiscount,
+            ];
 
             // Was the old expiration date over a year away?
             if ($license->getIsExpirable()) {
                 $oldExpiryDate = $license->getExpiryDate();
+                $upgradeSnapshot['oldExpiryDate'] = $oldExpiryDate->format(\DateTime::ATOM);
 
                 if ($oldExpiryDate > $nextYear) {
                     $oldRenewal = $oldEdition->getRenewal();
@@ -106,21 +100,24 @@ class OrderAdjuster implements AdjusterInterface
 
                     if ($renewalUpgradeDiscount > 0) {
                         $oldPaidRenewalYears = OrderHelper::dateDiffInYears($nextYear, $oldExpiryDate);
-
-                        $adjustments[] = new OrderAdjustment([
-                            'order' => $order,
-                            'lineItem' => $lineItem,
-                            'type' => Discount::ADJUSTMENT_TYPE,
-                            'name' => 'Renewal upgrade discount',
-                            'amount' => -round($renewalUpgradeDiscount * $oldPaidRenewalYears, 2),
-                            'sourceSnapshot' => [
-                                'oldRenewalPrice' => $oldRenewal->getPrice(),
-                                'oldExpiryDate' => $oldExpiryDate->format(\DateTime::ATOM),
-                                'oldPaidRenewalYears' => $oldPaidRenewalYears,
-                            ],
-                        ]);
+                        $updatesUpgradeDiscount = round($renewalUpgradeDiscount * $oldPaidRenewalYears, 2);
+                        $upgradeSnapshot['oldRenewalPrice'] = $oldRenewal->getPrice();
+                        $upgradeSnapshot['oldPaidRenewalYears'] = $oldPaidRenewalYears;
+                        $upgradeSnapshot['updatesUpgradeDiscount'] =  $updatesUpgradeDiscount;
+                        $upgradeDiscount += $updatesUpgradeDiscount;
                     }
                 }
+            }
+
+            if ($upgradeDiscount > 0) {
+                $adjustments[] = new OrderAdjustment([
+                    'order' => $order,
+                    'lineItem' => $lineItem,
+                    'type' => Discount::ADJUSTMENT_TYPE,
+                    'name' => 'Upgrade discount',
+                    'amount' => -$upgradeDiscount,
+                    'sourceSnapshot' => $upgradeSnapshot,
+                ]);
             }
         }
     }
