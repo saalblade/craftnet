@@ -64,7 +64,6 @@ return [
             'api' => 'https://staging.api.craftcms.com/',
             'composer' => 'https://composer.craftcms.com/',
             'craftId' => 'https://staging.id.craftcms.com/',
-            'plugins' => 'https://staging.plugins.craftcms.com/',
         ],
         'defaultCookieDomain' => '.craftcms.com',
         'baseCpUrl' => 'https://staging.id.craftcms.com/',
