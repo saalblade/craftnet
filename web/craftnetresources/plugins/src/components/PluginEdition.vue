@@ -16,7 +16,7 @@
                 {{ edition.renewalPrice|currency }}/year per site for updates after that.
             </p>
 
-            <ul v-if="edition.features.length > 0">
+            <ul v-if="edition.features && edition.features.length > 0">
                 <li v-for="feature in edition.features">
                     <font-awesome-icon icon="check"></font-awesome-icon>
                     {{feature.name}}
