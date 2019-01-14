@@ -41,7 +41,7 @@
 
                 <hr>
 
-                <h2>Informations</h2>
+                <h2>Information</h2>
                 <ul class="plugin-meta">
                     <li><span>{{ "Version" }}</span> <strong>{{ plugin.version }}</strong></li>
                     <li><span>{{ "Last Update" }}</span> <strong>{{ lastUpdate }}</strong></li>
