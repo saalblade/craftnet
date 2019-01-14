@@ -20,6 +20,7 @@ use craftnet\helpers\KeyHelper;
 use craftnet\Module;
 use craftnet\oauthserver\Module as OauthServer;
 use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginEdition;
 use craftnet\plugins\PluginLicense;
 use JsonSchema\Validator;
 use stdClass;
@@ -119,6 +120,13 @@ abstract class BaseApiController extends Controller
     public $pluginLicenses = [];
 
     /**
+     * The plugin editions the plugin licenses are set to.
+     *
+     * @var PluginEdition[]
+     */
+    public $pluginLicenseEditions = [];
+
+    /**
      * The plugin license statuses.
      *
      * @var string[]
@@ -200,12 +208,14 @@ abstract class BaseApiController extends Controller
             if (!empty($this->pluginVersions)) {
                 $this->plugins = Plugin::find()
                     ->handle(array_keys($this->pluginVersions))
+                    ->with(['editions'])
                     ->indexBy('handle')
                     ->all();
             }
         }
 
         $e = null;
+        /** @var CmsLicense|null $cmsLicense */
         $cmsLicense = null;
 
         try {
@@ -266,7 +276,7 @@ abstract class BaseApiController extends Controller
                     $responseHeaders->set('X-Craft-License-Edition', $cmsLicense->editionHandle);
 
                     // update the license
-                    $cmsLicense->lastActivityOn = new \DateTime();
+                    $cmsLicense->lastActivityOn = new \DateTime('now', new \DateTimeZone('UTC'));
                     if ($this->cmsVersion !== null) {
                         $cmsLicense->lastVersion = $this->cmsVersion;
                     }
@@ -285,13 +295,14 @@ abstract class BaseApiController extends Controller
                 }
             }
 
-            // collect the plugin licenses
+            // collect the plugin licenses & their editions
             if (($pluginLicenseKeys = $requestHeaders->get('X-Craft-Plugin-Licenses')) !== null) {
                 $pluginLicenseManager = $this->module->getPluginLicenseManager();
                 foreach (explode(',', $pluginLicenseKeys) as $pluginLicenseInfo) {
                     list($pluginHandle, $pluginLicenseKey) = explode(':', $pluginLicenseInfo);
                     try {
-                        $this->pluginLicenses[$pluginHandle] = $pluginLicenseManager->getLicenseByKey($pluginLicenseKey, $pluginHandle);
+                        $pluginLicense = $this->pluginLicenses[$pluginHandle] = $pluginLicenseManager->getLicenseByKey($pluginLicenseKey, $pluginHandle);
+                        $this->pluginLicenseEditions[$pluginHandle] = $pluginLicense->getEdition();
                     } catch (LicenseNotFoundException $e) {
                         $this->pluginLicenseStatuses[$pluginHandle] = self::LICENSE_STATUS_INVALID;
                         $e = null;
@@ -309,7 +320,15 @@ abstract class BaseApiController extends Controller
                 // no license key yet?
                 if (!isset($this->pluginLicenses[$pluginHandle])) {
                     // should there be?
-                    if ($plugin->price != 0) {
+                    $edition = $plugin->getEditions()[0];
+                    if (isset($this->pluginEditions[$pluginHandle])) {
+                        try {
+                            $edition = $plugin->getEdition($this->pluginEditions[$pluginHandle]);
+                        } catch (InvalidArgumentException $e) {
+                            // just assume the first
+                        }
+                    }
+                    if ($edition->price != 0) {
                         $this->pluginLicenseStatuses[$pluginHandle] = self::LICENSE_STATUS_INVALID;
                     }
                     continue;
@@ -349,7 +368,7 @@ abstract class BaseApiController extends Controller
                 $this->pluginLicenseStatuses[$pluginHandle] = $pluginLicenseStatus;
 
                 // update the license
-                $pluginLicense->lastActivityOn = new \DateTime();
+                $pluginLicense->lastActivityOn = new \DateTime('now', new \DateTimeZone('UTC'));
                 if ($pluginVersion !== null) {
                     $pluginLicense->lastVersion = $pluginVersion;
                 }
@@ -368,6 +387,15 @@ abstract class BaseApiController extends Controller
                     $pluginLicenseStatuses[] = "{$pluginHandle}:{$pluginLicenseStatus}";
                 }
                 $responseHeaders->set('X-Craft-Plugin-License-Statuses', implode(',', $pluginLicenseStatuses));
+            }
+
+            // set the X-Craft-Plugin-License-Editions header
+            if (!empty($this->pluginLicenseEditions)) {
+                $pluginLicenseEditions = [];
+                foreach ($this->pluginLicenseEditions as $pluginHandle => $pluginEdition) {
+                    $pluginLicenseEditions[] = "{$pluginHandle}:{$pluginEdition->handle}";
+                }
+                $responseHeaders->set('X-Craft-Plugin-License-Editions', implode(',', $pluginLicenseEditions));
             }
 
             if (($result = YiiController::runAction($id, $params)) instanceof Response) {
@@ -545,7 +573,6 @@ EOD;
 
 
 EOL;
-
                 }
             } while ($logException !== null);
 
@@ -685,15 +712,18 @@ EOL;
             'activeInstalls' => $plugin->activeInstalls,
             'packageName' => $plugin->packageName,
             'lastUpdate' => ($plugin->latestVersionTime ?? $plugin->dateUpdated)->format(\DateTime::ATOM),
-            'editions' => [
-                [
-                    'name' => 'Standard',
-                    'handle' => 'standard',
-                    'price' => $plugin->price,
-                    'renewalPrice' => $plugin->renewalPrice,
-                ],
-            ],
         ];
+
+        foreach ($plugin->getEditions() as $edition) {
+            $data['editions'][] = [
+                'id' => $edition->id,
+                'name' => $edition->name,
+                'handle' => $edition->handle,
+                'price' => $edition->price,
+                'renewalPrice' => $edition->renewalPrice,
+                'features' => $edition->features ?? [],
+            ];
+        }
 
         if ($fullDetails) {
             // Screenshots
@@ -797,6 +827,7 @@ EOL;
     /**
      * Creates a new CMS license.
      *
+     * @return CmsLicense
      * @throws BadRequestHttpException
      * @throws Exception
      */
@@ -820,7 +851,7 @@ EOL;
             'key' => KeyHelper::generateCmsKey(),
             'lastEdition' => $this->cmsEdition,
             'lastVersion' => $this->cmsVersion,
-            'lastActivityOn' => new \DateTime(),
+            'lastActivityOn' => new \DateTime('now', new \DateTimeZone('UTC')),
         ]);
 
         $manager = $this->module->getCmsLicenseManager();

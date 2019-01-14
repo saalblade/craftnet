@@ -6,7 +6,6 @@ use Craft;
 use craft\elements\User;
 use craftnet\composer\Package;
 use craftnet\Module;
-use yii\base\Exception;
 use yii\base\InvalidArgumentException;
 use yii\console\Controller;
 use yii\console\ExitCode;

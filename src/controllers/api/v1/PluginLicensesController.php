@@ -119,12 +119,12 @@ class PluginLicensesController extends BaseApiController
         }
 
         $expirable = $payload->expirable ?? false;
-        $expiresOn = $expirable ? (new \DateTime())->modify('+1 year') : null;
+        $expiresOn = $expirable ? (new \DateTime('now', new \DateTimeZone('UTC')))->modify('+1 year') : null;
 
         if (
             $expirable &&
             isset($payload->expiresOn) &&
-            ($expiresOn = DateTimeHelper::toDateTime($payload->expiresOn)) === false
+            ($expiresOn = DateTimeHelper::toDateTime($payload->expiresOn, false, false)) === false
         ) {
             $errors[] = [
                 'param' => 'expiresOn',

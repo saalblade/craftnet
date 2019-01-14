@@ -76,7 +76,7 @@ class AvailablePluginsController extends BaseApiController
         // Find the plugins
         $plugins = Plugin::find()
             ->handle($newHandles)
-            ->with(['icon', 'developer'])
+            ->with(['icon', 'developer', 'editions'])
             ->status(null)
             ->all();
 
@@ -92,7 +92,7 @@ class AvailablePluginsController extends BaseApiController
                 'status' => "[$status]({$plugin->repository})",
                 'iconUrl' => $icon ? $icon->getUrl() . '?' . $icon->dateModified->getTimestamp() : null,
                 'name' => strip_tags($plugin->name),
-                'price' => $plugin->price,
+                'price' => $plugin->getEditions()[0]->price,
                 'currency' => 'USD',
                 'developerName' => strip_tags($developer->getDeveloperName()),
                 'developerUrl' => $developer->developerUrl,

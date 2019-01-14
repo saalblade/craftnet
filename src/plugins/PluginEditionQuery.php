@@ -32,7 +32,7 @@ class PluginEditionQuery extends ElementQuery
     {
         // Default orderBy
         if (!isset($config['orderBy'])) {
-            $config['orderBy'] = 'price';
+            $config['orderBy'] = ['price' => SORT_ASC];
         }
 
         parent::__construct($elementType, $config);
@@ -87,6 +87,7 @@ class PluginEditionQuery extends ElementQuery
             'craftnet_plugineditions.handle',
             'craftnet_plugineditions.price',
             'craftnet_plugineditions.renewalPrice',
+            'craftnet_plugineditions.features',
         ]);
 
         if ($this->pluginId) {

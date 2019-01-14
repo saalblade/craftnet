@@ -6,6 +6,7 @@ use Craft;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
+use craft\helpers\Json;
 use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use yii\web\Response;
@@ -39,7 +40,6 @@ class CraftIdController extends BaseController
         // Craft ID config
 
         $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
-        $enableRenewalFeatures = $craftIdConfig['enableRenewalFeatures'];
 
 
         // Billing address
@@ -92,6 +92,8 @@ class CraftIdController extends BaseController
                 'photoUrl' => $photoUrl,
                 'hasApiToken' => ($currentUser->apiToken !== null),
             ],
+            'card' => $this->_card($currentUser),
+            'cardToken' => $this->_cardToken($currentUser),
             'billingAddress' => $billingAddressArray,
             'countries' => Craft::$app->getApi()->getCountries(),
             'apps' => Module::getInstance()->getOauth()->getApps(),
@@ -101,14 +103,62 @@ class CraftIdController extends BaseController
             'sales' => $this->_sales($currentUser),
             'upcomingInvoice' => $this->_upcomingInvoice(),
             'categories' => $this->_pluginCategories(),
-            'enableRenewalFeatures' => $enableRenewalFeatures
         ];
 
         return $this->asJson($data);
     }
 
+    public function actionPluginStoreData()
+    {
+        $pluginStoreData = Craft::$app->getApi()->getPluginStoreData();
+
+        return $this->asJson($pluginStoreData);
+    }
+
     // Private Methods
     // =========================================================================
+
+    /**
+     * @param User $user
+     *
+     * @return array|null
+     */
+    private function _card(User $user)
+    {
+        $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
+
+        if (\count($paymentSources) === 0) {
+            return null;
+        }
+
+        $paymentSource = $paymentSources[0];
+        $response = Json::decode($paymentSource->response);
+
+        if (isset($response['object']) && $response['object'] === 'card') {
+            return $response;
+        } elseif (isset($response['object']) && $response['object'] === 'source') {
+            return $response['card'];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param User $user
+     * @return null|string
+     */
+    private function _cardToken(User $user)
+    {
+        $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
+
+        if (\count($paymentSources) === 0) {
+            return null;
+        }
+
+        $paymentSource = $paymentSources[0];
+
+        return $paymentSource->token;
+    }
 
     /**
      * @param User $user

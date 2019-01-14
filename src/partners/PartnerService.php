@@ -602,8 +602,7 @@ class PartnerService
 
         try {
             $image = $this->savePartnerImage($logoFile, $partner, ['svg']);
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             $partner->addError('logo', 'Upload error: ' . $e->getMessage());
         }
 
@@ -639,14 +638,14 @@ class PartnerService
 
         if ($uploadedFile->error != UPLOAD_ERR_OK) {
             if ($uploadedFile->error == UPLOAD_ERR_INI_SIZE) {
-                throw new Exception($maxUploadM.'MB upload limit exceeded.');
+                throw new Exception($maxUploadM . 'MB upload limit exceeded.');
             }
 
             throw new Exception($uploadedFile->error);
         }
 
         if ($uploadedFile->size > $maxUpload) {
-            throw new Exception($maxUploadM.'MB upload limit exceeded.');
+            throw new Exception($maxUploadM . 'MB upload limit exceeded.');
         }
 
         $extension = $uploadedFile->getExtension();
@@ -656,7 +655,7 @@ class PartnerService
         }
 
         $handle = $partner->id;
-        $tempPath = Craft::$app->getPath()->getTempPath()."/screenshot-{$handle}-".StringHelper::randomString().'.'.$uploadedFile->getExtension();
+        $tempPath = Craft::$app->getPath()->getTempPath() . "/screenshot-{$handle}-" . StringHelper::randomString() . '.' . $uploadedFile->getExtension();
         move_uploaded_file($uploadedFile->tempName, $tempPath);
 
         if (!$imageService->checkMemoryForImage($tempPath)) {
@@ -696,7 +695,7 @@ class PartnerService
         $image->validate(['newLocation']);
 
         if ($image->hasErrors() || !Craft::$app->getElements()->saveElement($image, false)) {
-            throw new Exception('Could not save image asset: '.implode(', ', $image->getErrorSummary(true)));
+            throw new Exception('Could not save image asset: ' . implode(', ', $image->getErrorSummary(true)));
         }
 
         return $image;

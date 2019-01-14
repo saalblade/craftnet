@@ -91,7 +91,7 @@ class Module extends \yii\base\Module
             $e->types[] = PluginEdition::class;
         });
         Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
-            $e->types[] = EditionUpgradeDiscount::class;
+            $e->types[] = OrderAdjuster::class;
         });
 
         // register our custom receipt system message
@@ -206,7 +206,7 @@ class Module extends \yii\base\Module
             $e->navItems[] = [
                 'url' => 'partners',
                 'label' => 'Partners',
-                'icon' => __DIR__.'/icons/partner.svg',
+                'icon' => __DIR__ . '/icons/partner.svg',
             ];
         });
 
@@ -240,6 +240,11 @@ class Module extends \yii\base\Module
 
     private function _initSiteRequest()
     {
-        Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
+        if (Craft::$app->getRequest()->getOrigin() === getenv('CRAFT_ID_ORIGIN')) {
+            Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', getenv('CRAFT_ID_ORIGIN'));
+            Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Credentials', 'true');
+        } else {
+            Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
+        }
     }
 }

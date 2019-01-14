@@ -94,8 +94,8 @@ class PluginLicensesController extends Controller
                 'validator' => function(string $input) {
                     return DateTimeHelper::toDateTime($input) !== false;
                 },
-                'default' => (new \DateTime())->modify('+1 year')->format(\DateTime::ATOM),
-            ]));
+                'default' => (new \DateTime('now', new \DateTimeZone('UTC')))->modify('+1 year')->format('Y-m-d'),
+            ]), false, false);
             $license->autoRenew = $this->confirm('Auto-renew?');
         }
 

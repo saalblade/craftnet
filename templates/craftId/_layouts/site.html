@@ -1,49 +1,49 @@
 {% extends "_layouts/base" %}
 
-{#{% do view.registerCssFile("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css") %}#}
-{% do view.registerJsFile("//use.fontawesome.com/releases/v5.0.4/js/all.js") %}
-{% do view.registerJsFile(mix('js/site.js')) %}
-{% do view.registerCssFile(mix('css/site.css')) %}
-
 {% set bodyClass = 'bg-light' %}
 
 {% set config = craft.app.config.getConfigFromFile('craftid') %}
 
 {% js at head %}
-	window.craftIdUrl = "{{ config.craftIdUrl }}";
-	window.currentUserId = {{ currentUser is defined and currentUser and currentUser.id ? currentUser.id : 'null'  }};
+    window.craftIdUrl = "{{ config.craftIdUrl }}";
+    window.currentUserId = {{ currentUser is defined and currentUser and currentUser.id ? currentUser.id : 'null'  }};
 
-	window.Craft = {
-		actionUrl:             "{{ actionUrl()|e('js') }}",
-		username:              {{ currentUser is defined and currentUser ? ('"'~currentUser.username|e('js')~'"')|raw : 'null' }},
-		remainingSessionTime:  {{ craft.app.user.getRemainingSessionTime() }},
-		maxUploadSize:         {{ craft.io.getMaxUploadSize() }},
+    window.Craft = {
+        actionUrl:             "{{ actionUrl()|e('js') }}",
+        username:              {{ currentUser is defined and currentUser ? ('"'~currentUser.username|e('js')~'"')|raw : 'null' }},
+        remainingSessionTime:  {{ craft.app.user.getRemainingSessionTime() }},
+        maxUploadSize:         {{ craft.io.getMaxUploadSize() }},
 
-		{% if craft.app.config.general.enableCsrfProtection %}
-			csrfTokenValue:        "{{ craft.app.request.getCsrfToken()|e('js') }}",
-			csrfTokenName:         "{{ craft.app.config.general.csrfTokenName|e('js') }}",
-		{% endif %}
-	};
+        {% if craft.app.config.general.enableCsrfProtection %}
+            csrfTokenValue:        "{{ craft.app.request.getCsrfToken()|e('js') }}",
+            csrfTokenName:         "{{ craft.app.config.general.csrfTokenName|e('js') }}",
+        {% endif %}
+    };
 {% endjs %}
 
 {% block body %}
+    {{ craft.twigpack.includeCssModule("chunk-vendors.css") }}
+    {{ craft.twigpack.includeCssModule("site.css") }}
 
-	<div id="site">
-		<div id="notifications-wrapper">
-			<div id="notifications">
-				{% for type in ['notice', 'error'] %}
-					{% set message = craft.app.session.getFlash(type) %}
+    <div id="site">
+        <div id="notifications-wrapper">
+            <div id="notifications">
+                {% for type in ['notice', 'error'] %}
+                    {% set message = craft.app.session.getFlash(type) %}
 
-					{% if message %}
-						<notification type="{{ type }}" message="{{ message }}"></notification>
-					{% endif %}
-				{% endfor %}
-			</div>
-		</div>
+                    {% if message %}
+                        <notification type="{{ type }}" message="{{ message }}"></notification>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
 
-		{% block content %}
-			{{ content is defined ? content }}
-		{% endblock %}
-	</div>
+        {% block content %}
+            {{ content is defined ? content }}
+        {% endblock %}
+    </div>
 
+    {{ craft.twigpack.includeJsModule("chunk-common.js") }}
+    {{ craft.twigpack.includeJsModule("chunk-vendors.js") }}
+    {{ craft.twigpack.includeJsModule("site.js") }}
 {% endblock %}

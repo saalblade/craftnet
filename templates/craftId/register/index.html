@@ -1,5 +1,5 @@
 {% if currentUser %}
-	{% redirect '' %}
+    {% redirect '' %}
 {% endif %}
 
 {% extends "_layouts/site" %}
@@ -7,68 +7,68 @@
 {% set title = "Register" %}
 
 {% macro errorList(errors) %}
-	{% if errors %}
-		<ul class="invalid-feedback">
-			{% for error in errors %}
-				<li>{{ error }}</li>
-			{% endfor %}
-		</ul>
-	{% endif %}
+    {% if errors %}
+        <ul class="invalid-feedback">
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endmacro %}
 
 {% from _self import errorList %}
 
 {% block content %}
-	<div class="mx-auto max-w-sm">
-		<div class="pt-8 text-center">
-			<div class="pt-8 pb-3">
-				<img src="/craftidresources/dist/images/craftid.svg" width="80" />
-			</div>
-			<h1>Register</h1>
-			<p class="lead">Create your Craft ID.</p>
-		</div>
+    <div class="mx-auto max-w-sm">
+        <div class="pt-8 pb-4 text-center">
+            <div class="pt-8 pb-3">
+                <img src="/craftnetresources/id/dist/img/static/craftid.svg" width="80" height="80" />
+            </div>
+            <h1 class="mb-0">Register</h1>
+            <p class="lead">Create your Craft ID.</p>
+        </div>
 
-		<div class="card">
-			<div class="card-body">
-				<form method="post" accept-charset="UTF-8" @submit.prevent="register()" ref="registerform">
-					{{ csrfInput() }}
-					<input type="hidden" name="action" value="users/save-user">
-					<input type="hidden" name="redirect" value="{{ 'register/success'|hash }}">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" accept-charset="UTF-8" @submit.prevent="register()" ref="registerform">
+                    {{ csrfInput() }}
+                    <input type="hidden" name="action" value="users/save-user">
+                    <input type="hidden" name="redirect" value="{{ 'register/success'|hash }}">
 
-					<div class="form-group">
-						<label for="username">Username</label>
-						<input class="form-control{{ user is defined and user.getErrors('username') ? ' is-invalid' : '' }}" id="username" type="text" name="username" {%- if user is defined %} value="{{ user.username }}"{% endif -%} />
+                    <div class="field">
+                        <label for="username">Username</label>
+                        <input class="w-full {{ user is defined and user.getErrors('username') ? ' is-invalid' : '' }}" id="username" type="text" name="username" {%- if user is defined %} value="{{ user.username }}"{% endif -%} />
 
-						{% if user is defined %}
-							{{ errorList(user.getErrors('username')) }}
-						{% endif %}
-					</div>
+                        {% if user is defined %}
+                            {{ errorList(user.getErrors('username')) }}
+                        {% endif %}
+                    </div>
 
-					<div class="form-group">
-						<label for="email">Email</label>
-						<input class="form-control{{ user is defined and user.getErrors('email') ? ' is-invalid' : '' }}" id="email" type="text" name="email" {%- if user is defined %} value="{{ user.email }}"{% endif -%} />
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input class="w-full {{ user is defined and user.getErrors('email') ? ' is-invalid' : '' }}" id="email" type="text" name="email" {%- if user is defined %} value="{{ user.email }}"{% endif -%} />
 
-						{% if user is defined %}
-							{{ errorList(user.getErrors('email')) }}
-						{% endif %}
-					</div>
+                        {% if user is defined %}
+                            {{ errorList(user.getErrors('email')) }}
+                        {% endif %}
+                    </div>
 
-					<div class="form-group">
-						<label for="password">Password</label>
-						<input class="form-control{{ user is defined and user.getErrors('password') ? ' is-invalid' : '' }}" id="password" type="password" name="password" />
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <input class="w-full {{ user is defined and user.getErrors('password') ? ' is-invalid' : '' }}" id="password" type="password" name="password" />
 
-						{% if user is defined %}
-							{{ errorList(user.getErrors('password')) }}
-						{% endif %}
-					</div>
+                        {% if user is defined %}
+                            {{ errorList(user.getErrors('password')) }}
+                        {% endif %}
+                    </div>
 
-					<input type="submit" class="btn btn-primary btn-block" :class="{ disabled: registerFormLoading }" :disabled="registerFormLoading" value="Register">
-				</form>
-			</div>
-		</div>
+                    <input type="submit" class="btn btn-primary btn-block" :class="{ disabled: registerFormLoading }" :disabled="registerFormLoading" value="Register">
+                </form>
+            </div>
+        </div>
 
-		<div class="mt-4 text-center">
-			<p>Already have an account? <a href="{{ url('login') }}">Sign in</a>.</p>
-		</div>
-	</div>
+        <div class="mt-4 text-center">
+            <p>Already have an account? <a href="{{ url('login') }}">Sign in</a>.</p>
+        </div>
+    </div>
 {% endblock %}

@@ -1,40 +1,5 @@
-{% extends "_layouts/base" %}
+{% extends "_layouts/app" %}
 
-{#{% do view.registerCssFile("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css") %}#}
-{% do view.registerJsFile("//use.fontawesome.com/releases/v5.0.4/js/all.js") %}
-{% do view.registerJsFile("//js.stripe.com/v3/") %}
-{% do view.registerJsFile(mix('js/app.js')) %}
-{% do view.registerCssFile(mix('css/app.css')) %}
-
-{% set config = craft.app.config.getConfigFromFile('craftid') %}
-
-{% js at head %}
-	window.craftIdUrl = "{{ config.craftIdUrl }}";
-	window.currentUserId = {{ currentUser is defined and currentUser and currentUser.id ? currentUser.id : 'null'  }};
-	window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken|json_encode|raw : 'false' }};
-	window.stripePublicKey = {{ stripePublicKey|json_encode|raw }};
-	window.stripeConnectUrl = {{ url('stripe/connect')|json_encode|raw }};
-	window.sessionNotice = {{ craft.app.session.getFlash('notice')|json_encode|raw }};
-	window.sessionError = {{ craft.app.session.getFlash('error')|json_encode|raw }};
-
-	window.Craft = {
-	actionUrl:             "{{ actionUrl()|e('js') }}",
-	username:              {{ currentUser is defined and currentUser ? ('"'~currentUser.username|e('js')~'"')|raw : 'null' }},
-	remainingSessionTime:  {{ craft.app.user.getRemainingSessionTime() }},
-	maxUploadSize:         {{ craft.io.getMaxUploadSize() }},
-
-	{% if craft.app.config.general.enableCsrfProtection %}
-		csrfTokenValue:        "{{ craft.app.request.getCsrfToken()|e('js') }}",
-		csrfTokenName:         "{{ craft.app.config.general.csrfTokenName|e('js') }}",
-	{% endif %}
-	};
-{% endjs %}
-
-
-{% block body %}
-
-	<div id="app">
-		<app ref="app" :loading="loading" :notification="notification"></app>
-	</div>
-
+{% block content %}
+    <div id="app"></div>
 {% endblock %}

@@ -1,0 +1,7 @@
+@tailwind preflight;
+
+@import "~@pixelandtonic/craftui/src/sass/components.scss";
+@import "basics";
+@import "tooltip";
+
+@tailwind utilities;
