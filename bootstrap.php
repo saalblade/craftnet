@@ -19,6 +19,7 @@ switch($_SERVER['HTTP_HOST']) {
         define('CRAFT_SITE', 'craftId');
         break;
     case 'plugins.craftcms.com':
+    case 'staging.plugins.craftcms.com':
     case 'plugins.craftcms.test':
         define('CRAFT_SITE', 'plugins');
         break;
