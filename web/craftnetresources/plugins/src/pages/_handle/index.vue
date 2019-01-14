@@ -16,12 +16,6 @@
                         <div class="lg:pl-8 lg:ml-4">
                             <ul class="list-reset">
                                 <li class="py-1" v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation" }}</a></li>
-                                <li v-if="plugin.changelogUrl" class="py-1">
-                                    <a :href="plugin.changelogUrl" rel="noopener" target="_blank">
-                                        <font-awesome-icon icon="info-circle"></font-awesome-icon>
-                                        {{ "Changelog"|t('app') }}
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </div>
