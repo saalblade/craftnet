@@ -177,7 +177,7 @@
                 }
 
                 h3 {
-                    @apply .mb-2 .mt-4;
+                    @apply .mb-2 .mt-8 .uppercase .text-sm .text-grey;
 
                     &.first {
                         @apply .mt-0;
