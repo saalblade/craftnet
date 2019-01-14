@@ -14,8 +14,8 @@
                             <p v-else>No description.</p>
                         </div>
                         <div class="lg:pl-8 lg:ml-4">
-                            <ul class="list-reset">
-                                <li class="py-1" v-if="plugin.documentationUrl"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation" }}</a></li>
+                            <ul v-if="plugin.documentationUrl" class="list-reset">
+                                <li v-if="plugin.documentationUrl" class="py-1"><a :href="plugin.documentationUrl"><font-awesome-icon icon="book" /> {{ "Documentation" }}</a></li>
                             </ul>
                         </div>
                     </div>
