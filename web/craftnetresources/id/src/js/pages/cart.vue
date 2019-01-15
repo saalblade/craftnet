@@ -100,10 +100,11 @@
                                     <tr :key="itemKey + 'adjustment-' + adjustmentKey" class="sub-item">
                                         <td class="blank-cell"></td>
                                         <td class="blank-cell"></td>
-                                        <td>
+                                        <td class="blank-cell"></td>
+                                        <td colspan="2">
                                             {{adjustment.name}}
                                         </td>
-                                        <td class="price">
+                                        <td class="price text-right">
                                             {{adjustment.amount|currency}}
                                         </td>
                                     </tr>
