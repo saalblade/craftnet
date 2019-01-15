@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8690e990189694b8223a268628581939",
+    "content-hash": "dfb22575e2438dc4800d9485ed82de7d",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.85.1",
+            "version": "3.85.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "e232d117d0124ccb7059cd6db90f45dd23cda3f3"
+                "reference": "c113c8008dedb257d1f47770aab1963acf4be092"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e232d117d0124ccb7059cd6db90f45dd23cda3f3",
-                "reference": "e232d117d0124ccb7059cd6db90f45dd23cda3f3",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c113c8008dedb257d1f47770aab1963acf4be092",
+                "reference": "c113c8008dedb257d1f47770aab1963acf4be092",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +142,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-01-11T19:22:05+00:00"
+            "time": "2019-01-14T23:06:17+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -651,16 +651,16 @@
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.0.0-beta.15",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "be232001cb98e7d49318e43bb774238570f23e40"
+                "reference": "e1d9b9026115f60199770c9c3355d1bf74a8b6f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/be232001cb98e7d49318e43bb774238570f23e40",
-                "reference": "be232001cb98e7d49318e43bb774238570f23e40",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/e1d9b9026115f60199770c9c3355d1bf74a8b6f5",
+                "reference": "e1d9b9026115f60199770c9c3355d1bf74a8b6f5",
                 "shasum": ""
             },
             "require": {
@@ -694,7 +694,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2018-12-27T07:18:11+00:00"
+            "time": "2019-01-11T14:50:56+00:00"
         },
         {
             "name": "craftcms/commerce-stripe",
@@ -1663,23 +1663,23 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "5.2.7",
+            "version": "5.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "8560d4314577199ba51bf2032f02cd1315587c23"
+                "reference": "dcb6e1006bb5fd1e392b4daa68932880f37550d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/8560d4314577199ba51bf2032f02cd1315587c23",
-                "reference": "8560d4314577199ba51bf2032f02cd1315587c23",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/dcb6e1006bb5fd1e392b4daa68932880f37550d4",
+                "reference": "dcb6e1006bb5fd1e392b4daa68932880f37550d4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.1",
+                "friendsofphp/php-cs-fixer": "~2.2.20",
                 "json-schema/json-schema-test-suite": "1.2.0",
                 "phpunit/phpunit": "^4.8.35"
             },
@@ -1725,7 +1725,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2018-02-14T22:26:30+00:00"
+            "time": "2019-01-14T23:55:14+00:00"
         },
         {
             "name": "knplabs/github-api",
@@ -5507,11 +5507,18 @@
             "time": "2018-10-30T17:29:25+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "2.0.0-beta.15",
+            "alias_normalized": "2.0.0.0-beta15",
+            "version": "dev-develop",
+            "package": "craftcms/commerce"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "flipboxfactory/craft-postmark": 5,
-        "craftcms/commerce": 10
+        "craftcms/commerce": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
