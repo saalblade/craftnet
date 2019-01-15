@@ -177,14 +177,23 @@
 
             itemUpdateOptions(itemKey) {
                 const item = this.cartItems[itemKey]
-                const renewalPrice = item.lineItem.purchasable.renewalPrice
-                const itemUpdate = this.itemUpdates[itemKey]
+                const renewalPrice = parseFloat(item.lineItem.purchasable.renewalPrice)
 
                 let options = []
+                let selectedOption = 0
+
+                this.expiryDateOptions.forEach((option, key) => {
+                    if (option === item.lineItem.options.expiryDate) {
+                        selectedOption = key
+                    }
+                })
 
                 for (let i = 0; i < this.expiryDateOptions.length; i++) {
-                    const date = this.expiryDateOptions[i]
-                    const price = renewalPrice * (i - itemUpdate)
+                    const expiryDateOption = this.expiryDateOptions[i]
+                    const value = expiryDateOption[0]
+                    const date = expiryDateOption[1]
+                    const price = renewalPrice * (i - selectedOption)
+
                     let label = "Updates Until " + this.$options.filters.moment(date, 'L')
 
                     if (price !== 0) {
@@ -199,7 +208,7 @@
 
                     options.push({
                         label: label,
-                        value: i,
+                        value: value,
                     })
                 }
 
@@ -251,7 +260,7 @@
                             this.loading = false
 
                             this.cartItems.forEach(function(item, key) {
-                                this.$set(this.itemUpdates, key, 0)
+                                this.$set(this.itemUpdates, key, '1y')
                                 this.$set(this.itemQuantity, key, 1)
                             }.bind(this))
                         })
