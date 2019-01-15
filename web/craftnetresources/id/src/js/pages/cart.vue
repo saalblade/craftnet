@@ -245,8 +245,6 @@
             },
 
             onSelectedExpiryDateChange(itemKey) {
-                console.log('itemKey', itemKey)
-                console.log('cartItemsData', this.cartItemsData)
                 this.$set(this.loadingItems, itemKey, true)
                 let item = this.cartItemsData[itemKey]
                 item.expiryDate = this.selectedExpiryDates[itemKey]

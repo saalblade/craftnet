@@ -40,7 +40,7 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex'
     import Spinner from '../../../Spinner'
 
     export default {
