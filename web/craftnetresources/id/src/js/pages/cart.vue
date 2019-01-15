@@ -14,7 +14,7 @@
                                 <th colspan="2">Item</th>
                                 <th>Type</th>
                                 <th>Updates</th>
-                                <th>Quantity</th>
+                                <th class="hidden">Quantity</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -76,7 +76,7 @@
                                             <spinner v-if="itemLoading(itemKey)"></spinner>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="hidden">
                                         <number-input
                                                 ref="quantityInput"
                                                 v-model="itemQuantity[itemKey]"
@@ -85,7 +85,7 @@
                                                 step="1"
                                                 @keydown="onQuantityKeyDown($event, itemKey)"
                                                 @input="onQuantityInput($event, itemKey)"
-                                                :disabled="(item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition' ? false : true)"
+                                                :disabled="1 === 1 || (item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition' ? false : true)"
                                         ></number-input>
                                     </td>
                                     <td class="text-right">
@@ -112,7 +112,7 @@
                             </tbody>
                             <tbody>
                             <tr>
-                                <th class="text-right text-xl" colspan="5">Total</th>
+                                <th class="text-right text-xl" colspan="4">Total</th>
                                 <td class="text-right text-xl"><strong>{{ cart.totalPrice|currency }}</strong></td>
                             </tr>
                             </tbody>
