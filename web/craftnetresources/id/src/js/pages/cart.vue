@@ -84,7 +84,6 @@
                                 </td>
                                 <td class="text-right">
                                     <strong class="block text-xl">
-                                        <!--{{ itemTotal(itemKey)|currency }}-->
                                         {{ item.lineItem.total|currency }}
                                     </strong>
                                     <a @click="removeFromCart(itemKey)">Remove</a>
@@ -93,7 +92,7 @@
 
                             <tr>
                                 <th class="text-right text-xl" colspan="5">Total</th>
-                                <td class="text-right text-xl"><strong>{{ total|currency }}</strong></td>
+                                <td class="text-right text-xl"><strong>{{ cart.totalPrice|currency }}</strong></td>
                             </tr>
                             </tbody>
                         </template>
@@ -151,16 +150,6 @@
                 cartItems: 'cart/cartItems',
             }),
 
-            total() {
-                let total = 0
-
-                this.cartItems.forEach(function(item, key) {
-                    total += this.itemTotal(key)
-                }.bind(this))
-
-                return total
-            }
-
         },
 
         methods: {
@@ -213,15 +202,6 @@
                 }
 
                 return options
-            },
-
-            itemTotal(itemKey) {
-                const purchasable = this.cartItems[itemKey].lineItem.purchasable
-                const price = parseInt(purchasable.price)
-                const renewalsTotal = parseInt(purchasable.renewalPrice) * this.itemUpdates[itemKey]
-                const quantity = this.itemQuantity[itemKey]
-
-                return (price + renewalsTotal) * quantity
             },
 
             onQuantityInput(value, itemKey) {
