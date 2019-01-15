@@ -12,7 +12,6 @@ use craftnet\developers\UserBehavior;
 use League\OAuth2\Client\Token\AccessToken;
 use Stripe\Account;
 use Stripe\Stripe;
-use yii\helpers\Json;
 use yii\web\HttpException;
 use yii\web\Response;
 
@@ -125,38 +124,6 @@ class StripeController extends BaseController
     }
 
     /**
-     * Returns Stripe customer and default card for the current user.
-     *
-     * @return Response
-     */
-    public function actionCustomer(): Response
-    {
-        $user = Craft::$app->getUser()->getIdentity();
-        $customer = \craft\commerce\stripe\Plugin::getInstance()->getCustomers()->getCustomer(getenv('STRIPE_GATEWAY_ID'), $user);
-
-        $paymentSource = null;
-        $card = null;
-        $paymentSources = \craft\commerce\Plugin::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
-
-        if (count($paymentSources)) {
-            $paymentSource = $paymentSources[0];
-            $response = Json::decode($paymentSource->response);
-
-            if (isset($response['card'])) {
-                $card = $response['card'];
-            } elseif (isset($response['object']) && $response['object'] === 'card') {
-                $card = $response;
-            }
-        }
-
-        return $this->asJson([
-            'customer' => $customer,
-            'paymentSource' => $paymentSource,
-            'card' => $card,
-        ]);
-    }
-
-    /**
      * Saves a new credit card and sets it as default source for the Stripe customer.
      *
      * @return Response|null
@@ -222,6 +189,7 @@ class StripeController extends BaseController
      * Removes the default payment source.
      *
      * @return Response
+     * @throws \Throwable
      */
     public function actionRemoveCard(): Response
     {

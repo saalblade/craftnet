@@ -343,7 +343,8 @@ class Partner extends Element
         ];
 
         // Always validate locations
-        $rules[] = ['locations',
+        $rules[] = [
+            'locations',
             ModelsValidator::class,
             'message' => 'Location errors found',
             'on' => [
@@ -354,7 +355,8 @@ class Partner extends Element
         ];
 
         // Always validate projects
-        $rules[] = ['projects',
+        $rules[] = [
+            'projects',
             ModelsValidator::class,
             'message' => 'Project errors found',
             'on' => [

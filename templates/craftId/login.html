@@ -1,25 +1,9 @@
 {% extends "_layouts/site" %}
 
 {% block content %}
-	<div class="mx-auto max-w-sm">
-		<div class="pt-8 text-center">
-			<div class="pt-8 pb-3">
-				<img src="/craftidresources/dist/images/craftid.svg" width="80" />
-			</div>
-			<h1>Craft ID</h1>
-			<p class="lead">Manage your Craft ID.</p>
-		</div>
+    <div v-if="loading" class="flex items-center self-center text-center pin absolute justify-center">
+        <div class="spinner"></div>
+    </div>
 
-		<div class="card">
-			<div class="card-body">
-				<login-form remembered-username="{{ craft.app.user.rememberedUsername }}"></login-form>
-
-				<p class="mt-4"><a href="{{ url('forgotpassword') }}">Forgot your password?</a></p>
-			</div>
-		</div>
-
-		<div class="mt-4 text-center">
-			<p>Don’t have an account? <a href="{{ url('register') }}">Sign up</a>.</p>
-		</div>
-	</div>
+    <login-form v-else remembered-username="{{ craft.app.user.rememberedUsername }}"></login-form>
 {% endblock %}

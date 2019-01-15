@@ -129,6 +129,39 @@ class CmsLicenseManager extends Component
     }
 
     /**
+     * Returns licenses that need to be renewed in the next 45 days.
+     *
+     * @param int $ownerId
+     * @return CmsLicense[]
+     */
+    public function getRenewLicensesByOwner(int $ownerId): array
+    {
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
+        $date->add(new \DateInterval('P45D'));
+
+        $results = $this->_createLicenseQuery()
+            ->where([
+                'and',
+                [
+                    'l.ownerId' => $ownerId,
+                    'l.editionHandle' => 'pro'
+                ],
+                [
+                    'and',
+                    ['<', 'expiresOn', Db::prepareDateForDb($date)]
+                ]
+            ])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new CmsLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
      * Returns licenses purchased by an order.
      *
      * @param int $orderId
@@ -395,7 +428,7 @@ class CmsLicenseManager extends Component
     public function transformLicenseForOwner(CmsLicense $result, User $owner)
     {
         if ($result->ownerId === $owner->id) {
-            $license = $result->getAttributes(['id', 'key', 'domain', 'notes', 'email', 'dateCreated']);
+            $license = $result->getAttributes(['id', 'key', 'domain', 'notes', 'email', 'autoRenew', 'expirable', 'expired', 'expiresOn', 'dateCreated']);
             $license['edition'] = $result->editionHandle;
         } else {
             $license = [
@@ -409,6 +442,7 @@ class CmsLicenseManager extends Component
         // History
 
         $license['history'] = $this->getHistory($result->id);
+        $license['editionDetails'] = CmsEdition::findOne($result->editionId);
 
 
         // Plugin licenses
@@ -417,18 +451,17 @@ class CmsLicenseManager extends Component
 
         foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
             if ($pluginLicensesResult->ownerId === $owner->id) {
-                $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key']);
+                $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key', 'expiresOn', 'autoRenew']);
             } else {
-                $pluginLicense = [
-                    'shortKey' => $pluginLicensesResult->getShortKey(),
-                ];
+                $pluginLicense = $pluginLicensesResult->getAttributes(['expiresOn', 'autoRenew']);
+                $pluginLicense['shortKey'] = $pluginLicensesResult->getShortKey();
             }
 
             $plugin = null;
 
             if ($pluginLicensesResult->pluginId) {
                 $pluginResult = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
-                $plugin = $pluginResult->getAttributes(['name']);
+                $plugin = $pluginResult->getAttributes(['name', 'handle']);
             }
 
             $pluginLicense['plugin'] = $plugin;

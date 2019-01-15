@@ -1,10 +1,10 @@
 <?php
 
-namespace craftcom\controllers;
+namespace craftnet\controllers;
 
 use Craft;
 use craft\web\Controller;
-use craftcom\Module;
+use craftnet\Module;
 use mikehaertl\shellcommand\Command as ShellCommand;
 use yii\web\BadRequestHttpException;
 
@@ -34,13 +34,23 @@ class JobsController extends Controller
     // Public Methods
     // =========================================================================
 
+    /**
+     *
+     */
     public function actionUpdateDeps()
     {
         $this->module->getPackageManager()->updateDeps(false, true);
     }
 
+    /**
+     *
+     */
     public function actionSyncStaging()
     {
+        if (getenv('CRAFT_ENV') !== 'stage') {
+            throw new BadRequestHttpException();
+        }
+
         $shellCommand = new ShellCommand();
         $shellCommand->setCommand(getenv('SYNC_PATH'));
 

@@ -9,16 +9,28 @@ use craft\commerce\Plugin as Commerce;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
-use craftnet\base\PluginPurchasable;
+use craft\helpers\DateTimeHelper;
+use craft\helpers\Json;
+use craftnet\base\EditionInterface;
+use craftnet\base\RenewalInterface;
 use craftnet\errors\LicenseNotFoundException;
+use craftnet\helpers\OrderHelper;
 use craftnet\Module;
 use yii\base\Exception;
+use yii\validators\CompareValidator;
 
 /**
+ * @property-read Plugin $plugin
  * @property-read string $fullName
  */
-class PluginEdition extends PluginPurchasable
+class PluginEdition extends PluginPurchasable implements EditionInterface
 {
+    // Constants
+    // =========================================================================
+
+    const SCENARIO_CP = 'cp';
+    const SCENARIO_SITE = 'site';
+
     // Static
     // =========================================================================
 
@@ -117,6 +129,11 @@ class PluginEdition extends PluginPurchasable
      */
     public $renewalPrice;
 
+    /**
+     * @var array|null Edition feature list
+     */
+    public $features;
+
     // Public Methods
     // =========================================================================
 
@@ -135,9 +152,50 @@ class PluginEdition extends PluginPurchasable
     /**
      * @inheritdoc
      */
+    public function init()
+    {
+        parent::init();
+
+        if (is_string($this->features)) {
+            $this->features = Json::decode($this->features);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getType(): string
     {
         return 'plugin-edition';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHandle(): string
+    {
+        return $this->handle;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRenewal(): RenewalInterface
+    {
+        return PluginRenewal::find()
+            ->editionId($this->id)
+            ->one();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_CP => ['name', 'handle', 'price', 'renewalPrice', 'features'],
+            self::SCENARIO_SITE => ['price', 'renewalPrice', 'features'],
+        ];
     }
 
     /**
@@ -194,9 +252,76 @@ class PluginEdition extends PluginPurchasable
     public function rules()
     {
         $rules = parent::rules();
-        $rules[] = [['name', 'handle', 'price', 'renewalPrice'], 'required'];
-        $rules[] = [['price', 'renewalPrice'], 'number'];
+        $rules[] = [['name', 'handle'], 'required'];
+
+        $rules[] = [
+            [
+                'price',
+                'renewalPrice'
+            ],
+            'number',
+            'min' => 5,
+            'isEmpty' => [$this, 'isPriceEmpty'],
+        ];
+
+        $rules[] = [
+            [
+                'renewalPrice'
+            ],
+            'required',
+            'when' => [$this, 'isRenewalPriceRequired'],
+            'isEmpty' => [$this, 'isPriceEmpty']
+        ];
+
+        $rules[] = [
+            [
+                'renewalPrice'
+            ],
+            'compare',
+            'compareAttribute' => 'price',
+            'type' => CompareValidator::TYPE_NUMBER,
+            'operator' => '<=',
+            'when' => [$this, 'isRenewalPriceRequired']
+        ];
+
+        $rules[] = [
+            [
+                'renewalPrice'
+            ],
+            'number',
+            'min' => 0,
+            'max' => 0,
+            'when' => [$this, 'isRenewalPriceForbidden']
+        ];
+
         return $rules;
+    }
+
+    /**
+     * Returns whether a given price attribute should be validated.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function isPriceEmpty($value): bool
+    {
+        return $value === null || $value === [] || $value === '' || $value == 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRenewalPriceRequired(): bool
+    {
+        return $this->price != 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRenewalPriceForbidden(): bool
+    {
+        return $this->price == 0;
     }
 
     /**
@@ -211,6 +336,7 @@ class PluginEdition extends PluginPurchasable
             'handle' => $this->handle,
             'price' => $this->price,
             'renewalPrice' => $this->renewalPrice,
+            'features' => Json::encode(array_values($this->features ?: [])),
         ];
 
         if ($isNew) {
@@ -222,6 +348,18 @@ class PluginEdition extends PluginPurchasable
                 ->update('craftnet_plugineditions', $data, ['id' => $this->id], [], false)
                 ->execute();
         }
+
+        // Save the renewal
+        $renewal = PluginRenewal::find()
+            ->editionId($this->id)
+            ->one();
+        if (!$renewal) {
+            $renewal = new PluginRenewal();
+            $renewal->editionId = $this->id;
+            $renewal->pluginId = $this->pluginId;
+        }
+        $renewal->price = $this->renewalPrice;
+        Craft::$app->getElements()->saveElement($renewal, false);
 
         parent::afterSave($isNew);
     }
@@ -239,8 +377,11 @@ class PluginEdition extends PluginPurchasable
      */
     public function getDescription(): string
     {
-        // todo: include $this->name when we start supporting editions
-        return $this->getPlugin()->name;
+        $plugin = $this->getPlugin();
+        if ($plugin->getHasMultipleEditions()) {
+            return "{$plugin->name} ({$this->name} edition)";
+        }
+        return $plugin->name;
     }
 
     /**
@@ -256,25 +397,15 @@ class PluginEdition extends PluginPurchasable
      */
     public function getSku(): string
     {
-        return strtoupper($this->getPlugin()->handle . '-' . $this->handle);
+        return strtoupper("{$this->plugin->handle}-{$this->handle}");
     }
 
     /**
      * @inheritdoc
      */
-    public function getLineItemRules(LineItem $lineItem): array
+    public function populateLineItem(LineItem $lineItem)
     {
-        return [
-            [
-                'options',
-                function($attribute, $params, $validator) use ($lineItem) {
-                    if (!isset($lineItem->options['licenseKey'])) {
-                        $validator->addError($lineItem, $attribute, 'License key required');
-                    }
-                },
-                'skipOnEmpty' => false
-            ]
-        ];
+        OrderHelper::populateEditionLineItem($lineItem, $this);
     }
 
     /**
@@ -327,27 +458,28 @@ class PluginEdition extends PluginPurchasable
     private function _upgradeOrderLicense(Order $order, LineItem $lineItem)
     {
         $manager = Module::getInstance()->getPluginLicenseManager();
+        $options = $lineItem->getOptions();
 
         // is this for an existing plugin license?
-        $isNew = (strncmp($lineItem->options['licenseKey'], 'new:', 4) === 0);
+        $isNew = (strncmp($options['licenseKey'], 'new:', 4) === 0);
         if (!$isNew) {
             try {
-                $license = $manager->getLicenseByKey($lineItem->options['licenseKey'], $this->getPlugin()->handle);
+                $license = $manager->getLicenseByKey($options['licenseKey'], $this->getPlugin()->handle);
             } catch (LicenseNotFoundException $e) {
-                Craft::error("Could not upgrade plugin license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
+                Craft::error("Could not upgrade plugin license {$options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
                 Craft::$app->getErrorHandler()->logException($e);
                 return;
             }
         } else {
             // chop off "new:"
-            $key = substr($lineItem->options['licenseKey'], 4);
+            $key = substr($options['licenseKey'], 4);
 
             // was a Craft license specified?
-            if (!empty($lineItem->options['cmsLicenseKey'])) {
+            if (!empty($options['cmsLicenseKey'])) {
                 try {
-                    $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseByKey($lineItem->options['cmsLicenseKey']);
+                    $cmsLicense = Module::getInstance()->getCmsLicenseManager()->getLicenseByKey($options['cmsLicenseKey']);
                 } catch (LicenseNotFoundException $e) {
-                    Craft::error("Could not associate new plugin license with Craft license {$lineItem->options['cmsLicenseKey']} for order {$order->number}: {$e->getMessage()}");
+                    Craft::error("Could not associate new plugin license with Craft license {$options['cmsLicenseKey']} for order {$order->number}: {$e->getMessage()}");
                     Craft::$app->getErrorHandler()->logException($e);
                     $cmsLicense = null;
                 }
@@ -378,11 +510,11 @@ class PluginEdition extends PluginPurchasable
 
         // If it's expirable, set the expiresOn date to a year from now
         if ($license->expirable) {
-            $license->expiresOn = (new \DateTime())->modify('+1 year');
+            $license->expiresOn = OrderHelper::expiryStr2Obj($options['expiryDate']);
         }
 
-        if (isset($lineItem->options['autoRenew'])) {
-            $license->autoRenew = $lineItem->options['autoRenew'];
+        if (isset($options['autoRenew'])) {
+            $license->autoRenew = $options['autoRenew'];
         }
 
         // if the license doesn't have an owner yet, reassign it to the order's customer

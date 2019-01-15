@@ -1,0 +1,58 @@
+{% import "_includes/forms" as forms %}
+
+<div class="pane meta" data-id="{{ editionId }}">
+    {% namespace "editions[#{editionId}]" %}
+        {{ forms.textField({
+            label: 'Name',
+            required: true,
+            id: 'name',
+            name: 'name',
+            value: edition.name,
+            errors: edition.getErrors('name'),
+        }) }}
+
+        {{ forms.textField({
+            label: 'Handle',
+            required: true,
+            id: 'handle',
+            name: 'handle',
+            value: edition.handle,
+            errors: edition.getErrors('handle'),
+            class: 'code',
+        }) }}
+
+        {{ forms.textField({
+            label: 'Price',
+            id: 'price',
+            name: 'price',
+            value: (edition.price)|number_format(2, '.', ''),
+            errors: edition.getErrors('price'),
+        }) }}
+
+        {{ forms.textField({
+            label: 'Renewal Price',
+            id: 'renewalPrice',
+            name: 'renewalPrice',
+            value: (edition.renewalPrice)|number_format(2, '.', ''),
+            errors: edition.getErrors('renewalPrice'),
+        }) }}
+
+        {{ forms.editableTableField({
+            label: 'Features',
+            id: 'features',
+            name: 'features',
+            cols: {
+                'name': {
+                    heading: 'Name',
+                    type: 'singleline',
+                    width: '30%'
+                },
+                'description': {
+                    heading: 'Description',
+                    type: 'singleline'
+                }
+            },
+            rows: edition.features
+        }) }}
+    {% endnamespace %}
+</div>

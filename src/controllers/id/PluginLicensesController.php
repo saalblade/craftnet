@@ -112,6 +112,10 @@ class PluginLicensesController extends Controller
                     $license->cmsLicenseId = $cmsLicenseId ?: null;
                 }
 
+                if (($autoRenew = Craft::$app->getRequest()->getParam('autoRenew', false)) !== false) {
+                    $license->autoRenew = $autoRenew ? true : false;
+                }
+
                 if ($manager->saveLicense($license)) {
                     if ($oldCmsLicenseId != $license->cmsLicenseId) {
                         if ($oldCmsLicenseId) {

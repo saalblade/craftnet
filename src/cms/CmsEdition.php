@@ -7,13 +7,16 @@ use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\db\ElementQueryInterface;
-use craftnet\base\Purchasable;
+use craft\helpers\DateTimeHelper;
+use craftnet\base\EditionInterface;
+use craftnet\base\RenewalInterface;
 use craftnet\errors\LicenseNotFoundException;
+use craftnet\helpers\OrderHelper;
 use craftnet\Module;
 use yii\base\Exception;
 
 
-class CmsEdition extends Purchasable
+class CmsEdition extends CmsPurchasable implements EditionInterface
 {
     // Static
     // =========================================================================
@@ -105,6 +108,24 @@ class CmsEdition extends Purchasable
     /**
      * @inheritdoc
      */
+    public function getHandle(): string
+    {
+        return $this->handle;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRenewal(): RenewalInterface
+    {
+        return CmsRenewal::find()
+            ->editionId($this->id)
+            ->one();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         $rules = parent::rules();
@@ -152,7 +173,7 @@ class CmsEdition extends Purchasable
      */
     public function getDescription(): string
     {
-        return 'Craft ' . $this->name;
+        return "Craft {$this->name}";
     }
 
     /**
@@ -174,19 +195,9 @@ class CmsEdition extends Purchasable
     /**
      * @inheritdoc
      */
-    public function getLineItemRules(LineItem $lineItem): array
+    public function populateLineItem(LineItem $lineItem)
     {
-        return [
-            [
-                'options',
-                function($attribute, $params, $validator) use ($lineItem) {
-                    if (!isset($lineItem->options['licenseKey'])) {
-                        $validator->addError($lineItem, $attribute, 'License key required.');
-                    }
-                },
-                'skipOnEmpty' => false
-            ]
-        ];
+        OrderHelper::populateEditionLineItem($lineItem, $this);
     }
 
     /**
@@ -222,20 +233,21 @@ class CmsEdition extends Purchasable
     private function _updateOrderLicense(Order $order, LineItem $lineItem)
     {
         $manager = Module::getInstance()->getCmsLicenseManager();
+        $options = $lineItem->getOptions();
 
         // is this for an existing Craft license?
-        $isNew = (strncmp($lineItem->options['licenseKey'], 'new:', 4) === 0);
+        $isNew = (strncmp($options['licenseKey'], 'new:', 4) === 0);
         if (!$isNew) {
             try {
-                $license = $manager->getLicenseByKey($lineItem->options['licenseKey']);
+                $license = $manager->getLicenseByKey($options['licenseKey']);
             } catch (LicenseNotFoundException $e) {
-                Craft::error("Could not update Craft license {$lineItem->options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
+                Craft::error("Could not upgrade Craft license {$options['licenseKey']} for order {$order->number}: {$e->getMessage()}");
                 Craft::$app->getErrorHandler()->logException($e);
                 return;
             }
         } else {
             // chop off "new:"
-            $key = substr($lineItem->options['licenseKey'], 4);
+            $key = substr($options['licenseKey'], 4);
 
             // create the new license
             $license = new CmsLicense([
@@ -259,11 +271,11 @@ class CmsEdition extends Purchasable
 
         // If it's expirable, set the expiresOn date to a year from now
         if ($license->expirable) {
-            $license->expiresOn = (new \DateTime())->modify('+1 year');
+            $license->expiresOn = OrderHelper::expiryStr2Obj($options['expiryDate']);
         }
 
-        if (isset($lineItem->options['autoRenew'])) {
-            $license->autoRenew = $lineItem->options['autoRenew'];
+        if (isset($options['autoRenew'])) {
+            $license->autoRenew = $options['autoRenew'];
         }
 
         // if the license doesn't have an owner yet, reassign it to the order's customer

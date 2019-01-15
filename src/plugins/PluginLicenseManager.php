@@ -43,7 +43,42 @@ class PluginLicenseManager extends Component
     public function getLicensesByOwner(int $ownerId): array
     {
         $results = $this->_createLicenseQuery()
-            ->where(['l.ownerId' => $ownerId])
+            ->where([
+                'l.ownerId' => $ownerId,
+            ])
+            ->all();
+
+        $licenses = [];
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
+     * Returns licenses that need to be renewed in the next 45 days.
+     *
+     * @param int $ownerId
+     *
+     * @return PluginLicense[]
+     */
+    public function getRenewLicensesByOwner(int $ownerId): array
+    {
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
+        $date->add(new \DateInterval('P45D'));
+
+        $results = $this->_createLicenseQuery()
+            ->where([
+                'and',
+                [
+                    'l.ownerId' => $ownerId,
+                ],
+                [
+                    'and',
+                    ['<', 'expiresOn', Db::prepareDateForDb($date)]
+                ]
+            ])
             ->all();
 
         $licenses = [];
@@ -178,6 +213,7 @@ class PluginLicenseManager extends Component
     {
         $results = $this->_createLicenseQuery()
             ->where(['cmsLicenseId' => $cmsLicenseId])
+            ->orderBy(['l.pluginHandle' => SORT_ASC])
             ->all();
 
         $licenses = [];
@@ -462,7 +498,7 @@ class PluginLicenseManager extends Component
     public function transformLicenseForOwner(PluginLicense $result, User $owner)
     {
         if ($result->ownerId === $owner->id) {
-            $license = $result->getAttributes(['id', 'key', 'cmsLicenseId', 'email', 'notes', 'dateCreated']);
+            $license = $result->getAttributes(['id', 'editionId', 'key', 'cmsLicenseId', 'email', 'notes', 'autoRenew', 'expirable', 'expired', 'expiresOn', 'dateCreated']);
         } else {
             $license = [
                 'shortKey' => $result->getShortKey()
@@ -473,7 +509,7 @@ class PluginLicenseManager extends Component
         // History
 
         $license['history'] = $this->getHistory($result->id);
-
+        $license['edition'] = PluginEdition::findOne($result->editionId);
 
         // Plugin
 

@@ -52,7 +52,7 @@ class Releases2ChangelogController extends BaseApiController
                 continue;
             }
 
-            $date = isset($release['date']) ? DateTimeHelper::toDateTime($release['date']) : false;
+            $date = isset($release['date']) ? DateTimeHelper::toDateTime($release['date'], false, false) : false;
             $critical = !empty($release['critical']);
 
             $changelog .= "\n## {$release['version']}";

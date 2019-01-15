@@ -2,7 +2,8 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "licenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"}
+    "licenseKey": {"$ref": "../definitions.json#/cmsLicenseKey"},
+    "expiryDate": {"$ref": "../definitions.json#/expiryDate"}
   },
   "required": ["licenseKey"]
 }

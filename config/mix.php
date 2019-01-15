@@ -2,5 +2,5 @@
 
 return [
     'publicPath' => 'web',
-    'assetPath' => 'craftidresources/dist',
+    'assetPath' => 'craftnetresources/id/dist',
 ];

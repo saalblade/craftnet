@@ -43,11 +43,12 @@ return [
         'GET     v1/plugin-licenses/<key:.*>' => 'craftnet/api/v1/plugin-licenses/get',
         'GET     v1/plugin-store' => 'craftnet/api/v1/plugin-store',
         'GET     v1/plugin/<pluginId:\d+>' => 'craftnet/api/v1/plugin',
+        'GET     v1/plugin/<pluginId:\d+>/changelog' => 'craftnet/api/v1/plugin/changelog',
         'GET     v1/updates' => 'craftnet/api/v1/updates',
         'POST    v1/updates' => 'craftnet/api/v1/updates/old',
         'POST    v1/utils/releases-2-changelog' => 'craftnet/api/v1/utils/releases-2-changelog',
         'POST    webhook/github' => 'craftnet/api/webhook/github',
-        'update-deps' => 'craftnet/update-deps',
+        'update-deps' => 'craftnet/jobs/update-deps',
     ],
     'craftId' => [
         'POST    queue/handle-message' => 'queue/handle-message',
@@ -70,7 +71,7 @@ return [
         'oauth/access-token' => 'oauth-server/oauth/access-token',
         'oauth/revoke' => 'oauth-server/oauth/revoke',
 
-        'GET     sync-staging' => 'craftnet/jobs/sync-staging',
+        'sync-staging' => 'craftnet/jobs/sync-staging',
 
         // Catch-all route for Vue when people reload the page.
         'login'=> ['template' => 'login'],
@@ -81,5 +82,6 @@ return [
     ],
     'plugins' => [
         '/' => 'craftnet/plugins/index/index',
+        '<url:(.*)>'=> 'craftnet/plugins/index/index',
     ],
 ];

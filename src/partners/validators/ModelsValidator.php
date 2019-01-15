@@ -10,7 +10,6 @@ namespace craftnet\partners\validators;
 
 
 use Craft;
-use craft\base\Element;
 use craft\base\Model;
 use yii\validators\Validator;
 

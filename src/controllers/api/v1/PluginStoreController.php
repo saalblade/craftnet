@@ -6,7 +6,6 @@ use Craft;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\Entry;
-use craft\helpers\ArrayHelper;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\plugins\Plugin;
 use yii\caching\FileDependency;
@@ -48,6 +47,7 @@ class PluginStoreController extends BaseApiController
                 'categories' => $this->_categories(),
                 'featuredPlugins' => $this->_featuredPlugins($plugins),
                 'plugins' => $this->_plugins($plugins),
+                'expiryDateOptions' => $this->_expiryDateOptions(),
             ];
 
             if ($enablePluginStoreCache) {
@@ -78,6 +78,7 @@ class PluginStoreController extends BaseApiController
             $ret[] = [
                 'id' => $category->id,
                 'title' => $category->title,
+                'description' => $category->description,
                 'slug' => $category->slug,
                 'iconUrl' => $icon ? $icon->getUrl() . '?' . $icon->dateModified->getTimestamp() : null,
             ];
@@ -102,16 +103,20 @@ class PluginStoreController extends BaseApiController
             ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
             ->ids();
 
+        $recentlyAddedPluginsEntry = Entry::find()->site('plugins')->section('recentlyAddedPlugins')->one();
+
         $ret[] = [
             'id' => 'recently-added',
-            'title' => 'Recently Added',
+            'slug' => 'recently-added',
+            'title' => $recentlyAddedPluginsEntry->title,
+            'description' => $recentlyAddedPluginsEntry->description,
             'plugins' => $recents,
             'limit' => 6,
         ];
 
         $entries = Entry::find()
             ->site('craftId')
-            ->select(['elements.id', 'elements.fieldLayoutId', 'content.title', 'content.field_limit'])
+            ->select(['elements.id', 'elements.fieldLayoutId', 'content.title', 'content.field_limit', 'content.field_description', 'elements_sites.slug'])
             ->section('featuredPlugins')
             ->with('plugins', ['select' => ['elements.id']])
             ->all();
@@ -127,6 +132,7 @@ class PluginStoreController extends BaseApiController
             if (!empty($pluginIds)) {
                 $ret[] = [
                     'id' => $entry->id,
+                    'slug' => $entry->slug,
                     'title' => $entry->title,
                     'plugins' => $pluginIds,
                     'limit' => $entry->limit,
@@ -152,5 +158,21 @@ class PluginStoreController extends BaseApiController
         }
 
         return $ret;
+    }
+
+    /**
+     * @return array`
+     */
+    private function _expiryDateOptions(): array
+    {
+        $dates = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+            $date =  (new \DateTime('now', new \DateTimeZone('UTC')))
+                ->modify("+{$i} years");
+            $dates[] = ["{$i}y", $date->format('Y-m-d')];
+        }
+
+        return $dates;
     }
 }

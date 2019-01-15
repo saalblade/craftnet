@@ -53,7 +53,7 @@ class EmailVerifier extends BaseObject
                 'userId' => $this->user->id,
                 'email' => $email,
                 'code' => $securityService->hashPassword($code),
-                'dateIssued' => Db::prepareDateForDb(new \DateTime()),
+                'dateIssued' => Db::prepareDateForDb(new \DateTime('now', new \DateTimeZone('UTC'))),
             ], false)
             ->execute();
 
@@ -93,7 +93,7 @@ class EmailVerifier extends BaseObject
 
         // first delete all codes that have expired
         $interval = DateTimeHelper::secondsToInterval(Craft::$app->getConfig()->getGeneral()->verificationCodeDuration);
-        $minCodeIssueDate = (new \DateTime())->sub($interval);
+        $minCodeIssueDate = (new \DateTime('now', new \DateTimeZone('UTC')))->sub($interval);
         $db->createCommand()
             ->delete('craftnet_emailcodes', ['<', 'dateIssued', Db::prepareDateForDb($minCodeIssueDate)])
             ->execute();

@@ -4,7 +4,6 @@
   "require": {
     "php": ">=7.0.0",
     "craftcms/cms": "3.0.37",
-    "roave/security-advisories": "dev-master",
     "justinrainbow/json-schema": "^5.2",
     "yiisoft/yii2-redis": "^2.0.6",
     "knplabs/github-api": "^2.5.0",
@@ -16,14 +15,14 @@
     "stripe/stripe-php": "^6.1",
     "stevenmaguire/oauth2-bitbucket": "^2.0",
     "flipboxfactory/craft-postmark": "^1.0.0-rc.1",
-    "craftcms/commerce": "2.0.0-beta.14",
+    "craftcms/commerce": "dev-develop#ba8631161960cc914df01aa31d3a4b9a1b24a11a as 2.0.0-beta.15",
     "craftcms/commerce-stripe": "1.0.10",
     "layershifter/tld-extract": "^1.2",
     "ddeboer/vatin": "^2.1",
     "moccalotto/eu": "^0.3.0",
     "tecnickcom/tcpdf": "^6.2",
-    "misterbk/mix": "^1.5",
     "spacedealer/yii2-loggly": "^0.2.0",
+    "nystudio107/craft-twigpack": "^1.1",
     "aws/aws-sdk-php": "^3.71"
   },
   "require-dev": {
