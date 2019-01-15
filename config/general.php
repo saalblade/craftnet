@@ -61,12 +61,12 @@ return [
         'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
         'allowUpdates' => false,
         'siteUrl' => [
-            'api' => 'https://staging.api.craftcms.com/',
+            'api' => getenv('CRAFT_API_ORIGIN'),
             'composer' => 'https://composer.craftcms.com/',
-            'craftId' => 'https://staging.id.craftcms.com/',
+            'craftId' => getenv('CRAFT_ID_ORIGIN'),
         ],
         'defaultCookieDomain' => '.craftcms.com',
-        'baseCpUrl' => 'https://staging.id.craftcms.com/',
+        'baseCpUrl' => getenv('CRAFT_ID_ORIGIN'),
     ],
     'dev' => [
         'devMode' => true,
