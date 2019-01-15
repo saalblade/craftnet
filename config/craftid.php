@@ -35,12 +35,12 @@ return [
                 'deassociatePluginLicense' => "Deassociate plugin license",
             ]
         ],
+        'enablePluginStoreCache' => false,
     ],
     'prod' => [
         'enablePluginStoreCache' => true,
     ],
     'dev' => [
         'craftIdUrl' => 'https://id.craftcms.test',
-        'enablePluginStoreCache' => false,
     ]
 ];
