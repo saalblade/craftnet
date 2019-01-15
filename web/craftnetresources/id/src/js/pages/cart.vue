@@ -12,7 +12,6 @@
                             <thead>
                             <tr>
                                 <th colspan="2">Item</th>
-                                <th>Type</th>
                                 <th>Updates</th>
                                 <th class="hidden">Quantity</th>
                                 <th></th>
@@ -57,10 +56,6 @@
                                             </div>
                                         </td>
                                     </template>
-
-                                    <td>
-                                        <code>{{item.lineItem.purchasable.type}}</code>
-                                    </td>
 
                                     <td>
                                         <div class="expiry-date">
