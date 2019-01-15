@@ -63,9 +63,8 @@
             this.$store.dispatch('craftId/getCraftIdData')
                 .then(() => {
                     this.$store.commit('app/updateLoading', false)
+                    this.$store.dispatch('cart/getCart');
                 });
-
-            this.$store.dispatch('cart/getCart');
 
             if (window.stripeAccessToken) {
                 this.$store.dispatch('account/getStripeAccount')
