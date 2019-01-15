@@ -2,6 +2,7 @@
 
 return [
     '*' => [
+        'craftIdUrl' => 'https://id.craftcms.com',
         'stripePublicKey' => getenv('STRIPE_PUBLIC_KEY'),
         'stripeApiKey' => getenv('STRIPE_API_KEY'),
         'stripeClientId' => getenv('STRIPE_CLIENT_ID'),
@@ -36,7 +37,6 @@ return [
         ],
     ],
     'prod' => [
-        'craftIdUrl' => 'https://id.craftcms.com',
         'enablePluginStoreCache' => true,
     ],
     'dev' => [
