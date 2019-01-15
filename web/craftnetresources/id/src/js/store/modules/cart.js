@@ -283,7 +283,7 @@ const mutations = {
 
         const selectedExpiryDates = {}
 
-        state.cart.lineItems.forEach((lineItem, key) => {
+        state.cart.lineItems.forEach(lineItem => {
             selectedExpiryDates[lineItem.id] = lineItem.options.expiryDate
         })
 
