@@ -43,7 +43,7 @@
 
         data() {
             return {
-                renew: 1,
+                renew: 0,
                 checkedLicenses: [],
             }
         },

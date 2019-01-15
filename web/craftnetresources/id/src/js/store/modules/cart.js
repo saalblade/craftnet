@@ -10,6 +10,7 @@ Vue.use(Vuex)
  */
 const state = {
     cart: null,
+    selectedExpiryDates: {},
 }
 
 /**
@@ -50,6 +51,11 @@ const getters = {
 
         return cartItems
     },
+
+    cartItemsData(state) {
+        return CartHelper.getCartItemsData(state.cart)
+    }
+
 }
 
 /**
@@ -195,7 +201,13 @@ const actions = {
                     let items = CartHelper.getCartItemsData(cart)
 
                     newItems.forEach(newItem => {
-                        items.push(newItem)
+                        let item = {...newItem}
+
+                        if (!item.expiryDate) {
+                            item.expiryDate = '1y'
+                        }
+
+                        items.push(item)
                     })
 
                     let data = {
@@ -236,6 +248,27 @@ const actions = {
         })
     },
 
+    updateItem({commit, state}, {itemKey, item}) {
+        return new Promise((resolve, reject) => {
+            const cart = state.cart
+
+            let items = CartHelper.getCartItemsData(cart)
+
+            items[itemKey] = item
+
+            let data = {
+                items,
+            }
+
+            api.updateCart(cart.number, data, response => {
+                commit('updateCart', {response})
+                resolve(response)
+            }, response => {
+                reject(response)
+            })
+        })
+    },
+
 }
 
 /**
@@ -246,10 +279,22 @@ const mutations = {
     updateCart(state, {response}) {
         state.cart = response.cart
         state.stripePublicKey = response.stripePublicKey
+
+        const selectedExpiryDates = {}
+
+        state.cart.lineItems.forEach((lineItem, key) => {
+            selectedExpiryDates[key] = lineItem.options.expiryDate
+        })
+
+        state.selectedExpiryDates = selectedExpiryDates
     },
 
     resetCart(state) {
         state.cart = null
+    },
+
+    updateSelectedExpiryDates(state, selectedExpiryDates) {
+        state.selectedExpiryDates = selectedExpiryDates
     },
 
 }

@@ -100,10 +100,33 @@ class CraftIdController extends BaseController
             'plugins' => $this->_plugins($currentUser),
             'cmsLicenses' => $this->_cmsLicenses($currentUser),
             'pluginLicenses' => $this->_pluginLicenses($currentUser),
+            'licenseExpiryDateOptions' => [
+                'cmsLicenses' => [],
+                'pluginLicenses' => [],
+            ],
             'sales' => $this->_sales($currentUser),
             'upcomingInvoice' => $this->_upcomingInvoice(),
             'categories' => $this->_pluginCategories(),
         ];
+
+
+        // Build expiry date options
+
+        foreach ($data['cmsLicenses'] as $cmsLicense) {
+            if (empty($cmsLicense['expiresOn'])) {
+                continue;
+            }
+
+            $data['licenseExpiryDateOptions']['cmsLicenses'][$cmsLicense['id']] = $this->getExpiryDateOptions($cmsLicense['expiresOn']);
+        }
+
+        foreach ($data['pluginLicenses'] as $pluginLicense) {
+            if (empty($pluginLicense['expiresOn'])) {
+                continue;
+            }
+
+            $data['licenseExpiryDateOptions']['pluginLicenses'][$pluginLicense['id']] = $this->getExpiryDateOptions($pluginLicense['expiresOn']);
+        }
 
         return $this->asJson($data);
     }
@@ -117,6 +140,33 @@ class CraftIdController extends BaseController
 
     // Private Methods
     // =========================================================================
+
+    /**
+     * Get expiry date options.
+     *
+     * @param \DateTime $expiryDate
+     * @return array
+     * @throws \Exception
+     */
+    private function getExpiryDateOptions(\DateTime $expiryDate)
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $dates = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+            if ($expiryDate < $now) {
+                $date =  (new \DateTime('now', new \DateTimeZone('UTC')))
+                    ->modify("+{$i} years");
+                $dates[] = ["{$i}y", $date->format('Y-m-d')];
+            } else {
+                $date = clone $expiryDate;
+                $date =  $date->modify("+{$i} years");
+                $dates[] = ["{$date->format('Y-m-d')}", $date->format('Y-m-d')];
+            }
+        }
+
+        return $dates;
+    }
 
     /**
      * @param User $user

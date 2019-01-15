@@ -88,6 +88,7 @@ const actions = {
                     commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true});
                     commit('account/updateCard', {card: response.data.card}, {root: true});
                     commit('account/updateCardToken', {cardToken: response.data.cardToken}, {root: true});
+                    commit('pluginStore/updateLicenseExpiryDateOptions', {licenseExpiryDateOptions: response.data.licenseExpiryDateOptions}, {root: true});
 
                     resolve(response);
                 },

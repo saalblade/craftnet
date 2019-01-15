@@ -1,69 +1,67 @@
 <template>
     <div>
-        <p>Do you want to renew plugin licenses as well?</p>
-        <table class="table mb-2">
-            <thead>
-            <tr>
-                <td><input type="checkbox" v-model="checkAllChecked" ref="checkAll" @change="checkAll"></td>
-                <th>Item</th>
-                <th>Renewal Date</th>
-                <th>New Renewal Date</th>
-                <th>Renewal Price</th>
-                <th>Subtotal</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(renewableLicense, key) in renewableLicenses(license, renew)" :key="key">
-                <td>
-                    <input
-                            type="checkbox"
-                            :value="1"
-                            :disabled="key === 0 ? true : false"
-                            :checked="checkedLicenses[key]"
-                            @input="checkLicense($event, key)" />
-                </td>
-                <td>{{ renewableLicense.description }}</td>
-                <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
-                <td>{{ renewableLicense.newExpiresOn|moment('L') }} <small class="text-grey-dark">(+{{renewableLicense.newExpiresOn|moment('diff', renewableLicense.newBaseExpiresOn.date, 'days')}} days)</small></td>
-                <td>{{ renewableLicense.edition.renewalPrice|currency }}/year</td>
-                <td>{{ renewableLicense.newExpiresOn|moment('diff', renewableLicense.newBaseExpiresOn.date, 'years', true) * renewableLicense.edition.renewalPrice|currency }}</td>
-            </tr>
-            <tr>
-                <th></th>
-                <th colspan="4" class="text-right">Total</th>
-                <th>{{ renewableLicensesTotal(license, renew, checkedLicenses)|currency }}</th>
-            </tr>
-            </tbody>
-        </table>
+        <spinner v-if="loading"></spinner>
 
-        <button @click="$emit('back')" class="btn btn-secondary">Back</button>
-        <button @click="addToCart()" class="btn btn-primary" :disabled="renewableLicensesTotal(license, renew, checkedLicenses) === 0" :class="{disabled: renewableLicensesTotal(license, renew, checkedLicenses) === 0}">Add to cart</button>
+        <template v-else>
+            <p>Do you want to renew plugin licenses as well?</p>
+            <table class="table mb-2">
+                <thead>
+                <tr>
+                    <td><input type="checkbox" v-model="checkAllChecked" ref="checkAll" @change="checkAll"></td>
+                    <th>Item</th>
+                    <th>Renewal Date</th>
+                    <th>New Renewal Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(renewableLicense, key) in renewableLicenses(license, renew)" :key="key">
+                    <td>
+                        <input
+                                type="checkbox"
+                                :value="1"
+                                :disabled="key === 0 ? true : false"
+                                :checked="checkedLicenses[key]"
+                                @input="checkLicense($event, key)" />
+                    </td>
+                    <td>{{ renewableLicense.description }}</td>
+                    <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
+                    <td>
+                        {{ renewableLicense.expiryDate|moment('L') }}
+                    </td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <button @click="$emit('back')" class="btn btn-secondary">Back</button>
+            <button @click="addToCart()" class="btn btn-primary">Add to cart</button>
+        </template>
     </div>
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex'
+    import Spinner from '../../../Spinner'
 
     export default {
 
         props: ['license', 'renew', 'checkedLicenses'],
 
+        components: {
+            Spinner,
+        },
+
         data() {
             return {
+                loading: false,
                 checkAllChecked: false
             }
         },
 
         computed: {
 
-            ...mapState({
-                pluginLicenses: state => state.licenses.pluginLicenses,
-            }),
-
             ...mapGetters({
                 renewableLicenses: 'licenses/renewableLicenses',
-                newExpiresOn: 'licenses/newExpiresOn',
-                renewableLicensesTotal: 'licenses/renewableLicensesTotal',
             }),
 
         },
@@ -109,7 +107,7 @@
 
                     const type = renewableLicense.type
                     const licenseKey = renewableLicense.key
-                    const expiryDate = this.$moment(renewableLicense.newExpiresOn).format('YYYY-MM-DD')
+                    const expiryDate = renewableLicense.expiryDate
 
                     const item = {
                         type,
@@ -130,7 +128,7 @@
         },
 
         mounted() {
-            this.$refs.checkAll.click();
+            this.$refs.checkAll.click()
         }
 
     }
