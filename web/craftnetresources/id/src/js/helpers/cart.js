@@ -19,6 +19,7 @@ export default {
                         edition: lineItem.purchasable.handle,
                         autoRenew: lineItem.options.autoRenew,
                         cmsLicenseKey: lineItem.options.cmsLicenseKey,
+                        expiryDate: lineItem.options.expiryDate,
                     })
                     break
                 case 'cms-edition':
@@ -28,6 +29,7 @@ export default {
                         edition: lineItem.purchasable.handle,
                         licenseKey: lineItem.options.licenseKey,
                         autoRenew: lineItem.options.autoRenew,
+                        expiryDate: lineItem.options.expiryDate,
                     })
                     break
                 case 'cms-renewal':
