@@ -13,6 +13,7 @@ const state = {
     plugins: [],
     pluginStoreDataLoaded: false,
     expiryDateOptions: [],
+    licenseExpiryDateOptions: {},
 }
 
 /**
@@ -61,6 +62,10 @@ const mutations = {
         state.plugins = response.data.plugins
         state.expiryDateOptions = response.data.expiryDateOptions,
         state.pluginStoreDataLoaded = true
+    },
+
+    updateLicenseExpiryDateOptions(state, {licenseExpiryDateOptions}) {
+        state.licenseExpiryDateOptions = licenseExpiryDateOptions
     },
 
 }

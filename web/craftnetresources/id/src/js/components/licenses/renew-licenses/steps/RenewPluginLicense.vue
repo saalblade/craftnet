@@ -52,15 +52,22 @@
         computed: {
 
             ...mapState({
-                expiryDateOptions: state => state.pluginStore.expiryDateOptions,
+                licenseExpiryDateOptions: state => state.pluginStore.licenseExpiryDateOptions,
             }),
 
+            expiryDateOptions() {
+                return this.licenseExpiryDateOptions.pluginLicenses[this.license.id]
+            },
+
             extendUpdateOptions() {
+                if (!this.expiryDateOptions) {
+                    return []
+                }
+
                 let options = [];
 
                 for (let i = 0; i < this.expiryDateOptions.length; i++) {
                     const expiryDateOption = this.expiryDateOptions[i]
-                    const value = expiryDateOption[0]
                     const date = expiryDateOption[1]
                     const formattedDate = this.$moment(date).format('L')
                     const label = "Extend updates until " + formattedDate
@@ -105,8 +112,7 @@
             }),
 
             addToCart() {
-                const expiryDate = this.expiryDateOptions[this.renew]
-
+                const expiryDate = this.expiryDateOptions[this.renew][0]
                 const item = {
                     type: 'plugin-renewal',
                     licenseKey: this.license.key,

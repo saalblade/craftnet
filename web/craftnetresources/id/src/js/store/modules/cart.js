@@ -202,7 +202,10 @@ const actions = {
 
                     newItems.forEach(newItem => {
                         let item = {...newItem}
-                        item.expiryDate = '1y'
+
+                        if (!item.expiryDate) {
+                            item.expiryDate = '1y'
+                        }
 
                         items.push(item)
                     })
