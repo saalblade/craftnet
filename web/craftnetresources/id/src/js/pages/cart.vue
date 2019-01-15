@@ -12,7 +12,6 @@
                             <thead>
                             <tr>
                                 <th colspan="2">Item</th>
-                                <th>Type</th>
                                 <th>Updates</th>
                                 <th class="hidden">Quantity</th>
                                 <th></th>
@@ -59,10 +58,6 @@
                                     </template>
 
                                     <td>
-                                        <code>{{item.lineItem.purchasable.type}}</code>
-                                    </td>
-
-                                    <td>
                                         <div class="expiry-date">
                                             <div>
                                                 <template v-if="item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition'">
@@ -98,7 +93,6 @@
 
                                 <template v-for="(adjustment, adjustmentKey) in item.lineItem.adjustments">
                                     <tr :key="itemKey + 'adjustment-' + adjustmentKey" class="sub-item">
-                                        <td class="blank-cell"></td>
                                         <td class="blank-cell"></td>
                                         <td class="blank-cell"></td>
                                         <td colspan="2">

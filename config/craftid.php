@@ -40,6 +40,9 @@ return [
     'prod' => [
         'enablePluginStoreCache' => true,
     ],
+    'stage' => [
+        'craftIdUrl' => 'https://staging-1750ml.id.craftcms.com/',
+    ],
     'dev' => [
         'craftIdUrl' => 'https://id.craftcms.test',
     ]
