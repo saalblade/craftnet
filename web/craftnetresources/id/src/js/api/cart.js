@@ -13,7 +13,7 @@ export default {
     axios() {
         if(!this._axios) {
             this._axios = axios.create({
-                baseURL: 'https://api.craftcms.test/v1/',
+                baseURL: process.env.VUE_APP_CRAFT_API_ENDPOINT + '/',
                 // params: {XDEBUG_SESSION_START: 16433}
             });
         }
