@@ -1,51 +1,67 @@
 <template>
     <div>
-        <select-field v-model="renew" :options="renewOptions" />
+        <spinner v-if="loading"></spinner>
 
-        <table class="table mb-2">
-            <thead>
-            <tr>
-                <th>Item</th>
-                <th>Renewal Date</th>
-                <th>New Renewal Date</th>
-                <th>Renewal Price</th>
-                <th>Subtotal</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{ license.plugin.name }}</td>
-                <td>{{ license.expiresOn.date|moment('L') }}</td>
-                <td>{{ newExpiresOn|moment('L') }}</td>
-                <td>{{ license.edition.renewalPrice|currency }} <span class="text-grey-dark">&times;</span> {{ Math.round(newExpiresOn.diff(license.expiresOn.date, 'years', true) * 100) / 100 }} year(s)</td>
-                <td>{{ newExpiresOn.diff(license.expiresOn.date, 'years', true) * license.edition.renewalPrice|currency }}</td>
-            </tr>
-            </tbody>
-        </table>
+        <template v-else>
+            <select-field v-model="renew" :options="extendUpdateOptions" />
 
-        <input type="button" class="btn btn-secondary" @click="$emit('cancel')" value="Cancel" />
-        <input type="button" class="btn btn-primary" @click="addToCart()" value="Add to cart" />
+            <table class="table mb-2">
+                <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Renewal Date</th>
+                    <th>New Renewal Date</th>
+                    <th>Subtotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ license.plugin.name }}</td>
+                    <td>{{ license.expiresOn.date|moment('L') }}</td>
+                    <td>{{ expiryDate }}</td>
+                    <td>{{ price|currency }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <input type="button" class="btn btn-secondary" @click="$emit('cancel')" value="Cancel" />
+            <input type="button" class="btn btn-primary" @click="addToCart()" value="Add to cart" />
+        </template>
     </div>
 </template>
 
 <script>
+    import {mapState, mapActions} from 'vuex'
+    import Spinner from '../../../Spinner'
+
     export default {
 
         props: ['license'],
 
+        components: {
+            Spinner,
+        },
+
         data() {
             return {
-                renew: 1,
+                loading: false,
+                renew: null,
             }
         },
 
         computed: {
 
-            renewOptions() {
+            ...mapState({
+                expiryDateOptions: state => state.pluginStore.expiryDateOptions,
+            }),
+
+            extendUpdateOptions() {
                 let options = [];
 
-                for (let i = 1; i <= 5; i++) {
-                    const date = this.$moment(this.license.expiresOn.date).add(i, 'year')
+                for (let i = 0; i < this.expiryDateOptions.length; i++) {
+                    const expiryDateOption = this.expiryDateOptions[i]
+                    const value = expiryDateOption[0]
+                    const date = expiryDateOption[1]
                     const formattedDate = this.$moment(date).format('L')
                     const label = "Extend updates until " + formattedDate
 
@@ -62,18 +78,39 @@
                 const expiresOn = this.$moment(this.license.expiresOn.date)
                 return expiresOn.add(this.renew, 'years')
             },
+
+            price() {
+                return (parseFloat(this.renew) + 1) * this.license.edition.renewalPrice;
+            },
+
+            expiryDate() {
+                if (!this.expiryDateOptions) {
+                    return null
+                }
+
+                if (!this.expiryDateOptions[this.renew]) {
+                    return null
+                }
+
+                const date = this.expiryDateOptions[this.renew][1]
+
+                return this.$moment(date).format('L')
+            }
         },
 
         methods: {
 
+            ...mapActions({
+                getPluginStoreData: 'pluginStore/getPluginStoreData',
+            }),
+
             addToCart() {
-                const expiryDate = this.$moment(this.license.expiresOn.date).add(this.renew, 'year')
-                const formattedExpiryDate = this.$moment(expiryDate).format('YYYY-MM-DD')
+                const expiryDate = this.expiryDateOptions[this.renew]
 
                 const item = {
                     type: 'plugin-renewal',
                     licenseKey: this.license.key,
-                    expiryDate: formattedExpiryDate,
+                    expiryDate: expiryDate,
                 }
 
                 this.$store.dispatch('cart/addToCart', [item])
@@ -87,6 +124,19 @@
                     })
             },
 
+        },
+
+        mounted() {
+            this.loading = true
+
+            this.getPluginStoreData()
+                .then(() => {
+                    this.loading = false
+                    this.renew = 0
+                })
+                .catch(() => {
+                    this.loading = false
+                })
         }
 
     }
