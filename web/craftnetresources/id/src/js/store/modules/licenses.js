@@ -78,27 +78,22 @@ const getters = {
         })
     },
 
-    renewableLicenses(state) {
+    renewableLicenses(state, getters, rootState) {
         return (license, renew) => {
             let renewableLicenses = []
 
             // CMS license
-            let cmsBaseExpiresOn = license.expiresOn.date
 
-            if (license.expired) {
-                cmsBaseExpiresOn = new Date()
-            }
-
-            let cmsNewExpiresOn = VueApp.$moment(cmsBaseExpiresOn)
-            cmsNewExpiresOn = cmsNewExpiresOn.add(renew, 'years')
+            const expiryDateOptions = rootState.pluginStore.licenseExpiryDateOptions.cmsLicenses[license.id]
+            let expiryDate = expiryDateOptions[renew][0]
 
             renewableLicenses.push({
                 type: 'cms-renewal',
                 key: license.key,
                 description: 'Craft ' + license.editionDetails.name,
+                renew: renew,
+                expiryDate: expiryDate,
                 expiresOn: license.expiresOn,
-                newBaseExpiresOn: cmsBaseExpiresOn,
-                newExpiresOn: cmsNewExpiresOn.format(),
                 edition: license.editionDetails,
             })
 
@@ -123,7 +118,7 @@ const getters = {
                     if (!pluginLicense.expired) {
                         const pluginExpiresOn = VueApp.$moment(pluginLicense.expiresOn.date)
 
-                        if(pluginExpiresOn > cmsNewExpiresOn) {
+                        if(pluginExpiresOn > expiryDate) {
                             return false
                         }
                     }
@@ -134,15 +129,12 @@ const getters = {
 
                 // Add renewable plugin licenses to the `renewableLicenses` array
                 renewablePluginLicenses.forEach(function(renewablePluginLicense) {
-                    const newBaseExpiresOn = cmsBaseExpiresOn
-                    const newExpiresOn = cmsNewExpiresOn
                     renewableLicenses.push({
                         type: 'plugin-renewal',
                         key: renewablePluginLicense.key,
                         description: renewablePluginLicense.plugin.name,
+                        expiryDate: expiryDate,
                         expiresOn: renewablePluginLicense.expiresOn,
-                        newBaseExpiresOn: newBaseExpiresOn,
-                        newExpiresOn: newExpiresOn.format(),
                         edition: renewablePluginLicense.edition,
                     })
                 })
@@ -151,33 +143,6 @@ const getters = {
             return renewableLicenses
         }
     },
-
-
-    newExpiresOn() {
-        return (license, renew) => {
-            const cmsExpiresOn = VueApp.$moment(license.expiresOn.date)
-            return cmsExpiresOn.add(renew, 'years')
-        }
-    },
-
-    renewableLicensesTotal(state, getters) {
-        return (license, renew, checkedLicenses) => {
-            let total = 0
-
-            const renewableLicenses = getters.renewableLicenses(license, renew)
-
-            renewableLicenses.forEach(function(renewableLicense, key) {
-                const isChecked = checkedLicenses[key]
-
-                if (isChecked) {
-                    const years = VueApp.$moment(renewableLicense.newExpiresOn).diff(renewableLicense.newBaseExpiresOn.date, 'years', true)
-                    total += years * renewableLicense.edition.renewalPrice
-                }
-            }.bind(this))
-
-            return total
-        }
-    }
 
 }
 

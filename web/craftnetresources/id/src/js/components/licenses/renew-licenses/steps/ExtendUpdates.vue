@@ -8,24 +8,34 @@
 </template>
 
 <script>
+    import {mapState, mapActions} from 'vuex'
+
     export default {
 
         props: ['license', 'renew'],
 
         computed: {
 
+            ...mapState({
+                licenseExpiryDateOptions: state => state.pluginStore.licenseExpiryDateOptions,
+            }),
+
+            expiryDateOptions() {
+                return this.licenseExpiryDateOptions.cmsLicenses[this.license.id]
+            },
+
             renewOptions() {
-                let options = []
+                if (!this.expiryDateOptions) {
+                    return []
+                }
 
-                for (let i = 1; i <= 5; i++) {
-                    let date = new Date();
+                let options = [];
 
-                    if (!this.license.expired) {
-                        date = this.license.expiresOn.date
-                    }
-
-                    const renewalDate = this.$moment(date).add(i, 'year')
-                    const label = "Extend updates until " + this.$moment(renewalDate).format('L')
+                for (let i = 0; i < this.expiryDateOptions.length; i++) {
+                    const expiryDateOption = this.expiryDateOptions[i]
+                    const date = expiryDateOption[1]
+                    const formattedDate = this.$moment(date).format('L')
+                    const label = "Extend updates until " + formattedDate
 
                     options.push({
                         label: label,
