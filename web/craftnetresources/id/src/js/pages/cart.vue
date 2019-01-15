@@ -106,7 +106,7 @@
                             </tbody>
                             <tbody>
                             <tr>
-                                <th class="text-right text-xl" colspan="4">Total</th>
+                                <th class="text-right text-xl" colspan="3">Total</th>
                                 <td class="text-right text-xl"><strong>{{ cart.totalPrice|currency }}</strong></td>
                             </tr>
                             </tbody>
