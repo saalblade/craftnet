@@ -7,7 +7,7 @@
         <template v-else>
             <template v-if="cart">
                 <template v-if="cartItems.length">
-                    <table class="table">
+                    <table class="table cart-data">
                         <template v-if="cartItems.length">
                             <thead>
                             <tr>
@@ -63,12 +63,18 @@
                                 </td>
 
                                 <td>
-                                    <template v-if="item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition'">
-                                        <select-field v-model="itemUpdates[itemKey]" :options="itemUpdateOptions(itemKey)" />
-                                    </template>
-                                    <template v-else>
-                                        Updates until <strong>{{item.lineItem.options.expiryDate}}</strong>
-                                    </template>
+                                    <div class="expiry-date">
+                                        <div>
+                                            <template v-if="item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition'">
+                                                <select-field v-model="selectedExpiryDates[itemKey]" :options="itemUpdateOptions(itemKey)" @input="onSelectedExpiryDateChange(itemKey)" />
+                                            </template>
+                                            <template v-else>
+                                                <span>Updates until <strong>{{item.lineItem.options.expiryDate}}</strong></span>
+                                            </template>
+                                        </div>
+
+                                        <spinner v-if="itemLoading(itemKey)"></spinner>
+                                    </div>
                                 </td>
                                 <td>
                                     <number-input
@@ -132,7 +138,7 @@
         data() {
             return {
                 loading: false,
-                itemUpdates: {},
+                loadingItems: {},
                 itemQuantity: {},
                 minQuantity: 1,
                 maxQuantity: 1000,
@@ -148,7 +154,17 @@
 
             ...mapGetters({
                 cartItems: 'cart/cartItems',
+                cartItemsData: 'cart/cartItemsData',
             }),
+
+            selectedExpiryDates: {
+                get() {
+                    return JSON.parse(JSON.stringify(this.$store.state.cart.selectedExpiryDates))
+                },
+                set(newValue) {
+                    this.$store.commit('cart/updateSelectedExpiryDates', newValue)
+                }
+            },
 
         },
 
@@ -228,6 +244,26 @@
                 }
             },
 
+            onSelectedExpiryDateChange(itemKey) {
+                console.log('itemKey', itemKey)
+                console.log('cartItemsData', this.cartItemsData)
+                this.$set(this.loadingItems, itemKey, true)
+                let item = this.cartItemsData[itemKey]
+                item.expiryDate = this.selectedExpiryDates[itemKey]
+                this.$store.dispatch('cart/updateItem', {itemKey, item})
+                    .then(() => {
+                        this.$delete(this.loadingItems, itemKey)
+                    })
+            },
+
+            itemLoading(itemKey) {
+                if (!this.loadingItems[itemKey]) {
+                    return false
+                }
+
+                return true
+            },
+
         },
 
         mounted() {
@@ -240,7 +276,6 @@
                             this.loading = false
 
                             this.cartItems.forEach(function(item, key) {
-                                this.$set(this.itemUpdates, key, '1y')
                                 this.$set(this.itemQuantity, key, 1)
                             }.bind(this))
                         })
@@ -254,3 +289,19 @@
         },
     }
 </script>
+
+<style lang="scss">
+    .cart-data {
+        .expiry-date {
+            @apply .flex .flex-row .items-center;
+
+            .field {
+                @apply .mb-0;
+            }
+        }
+
+        .spinner {
+            @apply .ml-4;
+        }
+    }
+</style>
