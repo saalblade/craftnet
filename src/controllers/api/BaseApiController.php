@@ -714,13 +714,15 @@ EOL;
             'lastUpdate' => ($plugin->latestVersionTime ?? $plugin->dateUpdated)->format(\DateTime::ATOM),
         ];
 
+        $isCraft30 = version_compare($this->cmsVersion, '3.1', '<');
+
         foreach ($plugin->getEditions() as $edition) {
             $data['editions'][] = [
                 'id' => $edition->id,
                 'name' => $edition->name,
                 'handle' => $edition->handle,
-                'price' => $edition->price,
-                'renewalPrice' => $edition->renewalPrice,
+                'price' => $isCraft30 ? ((float)$edition->price ?: null) : $edition->price,
+                'renewalPrice' => $isCraft30 ? ((float)$edition->renewalPrice ?: null) : $edition->renewalPrice,
                 'features' => $edition->features ?? [],
             ];
         }
