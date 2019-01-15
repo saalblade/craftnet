@@ -141,7 +141,14 @@ class CraftIdController extends BaseController
     // Private Methods
     // =========================================================================
 
-    private function getExpiryDateOptions($expiryDate)
+    /**
+     * Get expiry date options.
+     *
+     * @param \DateTime $expiryDate
+     * @return array
+     * @throws \Exception
+     */
+    private function getExpiryDateOptions(\DateTime $expiryDate)
     {
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $dates = [];
