@@ -85,7 +85,7 @@ const getters = {
             // CMS license
 
             const expiryDateOptions = rootState.pluginStore.licenseExpiryDateOptions.cmsLicenses[license.id]
-            let expiryDate = expiryDateOptions[renew][0]
+            let expiryDate = expiryDateOptions[renew][1]
 
             renewableLicenses.push({
                 type: 'cms-renewal',
