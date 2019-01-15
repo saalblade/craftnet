@@ -39,6 +39,7 @@ const getters = {
             lineItems.forEach(lineItem => {
                 let cartItem = {}
 
+                cartItem.id = lineItem.id
                 cartItem.lineItem = lineItem
 
                 if (lineItem.purchasable.type === 'plugin-edition') {
@@ -283,7 +284,7 @@ const mutations = {
         const selectedExpiryDates = {}
 
         state.cart.lineItems.forEach((lineItem, key) => {
-            selectedExpiryDates[key] = lineItem.options.expiryDate
+            selectedExpiryDates[lineItem.id] = lineItem.options.expiryDate
         })
 
         state.selectedExpiryDates = selectedExpiryDates

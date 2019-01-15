@@ -1,6 +1,10 @@
 export default {
 
     getCartItemsData(cart) {
+        if (!cart) {
+            return []
+        }
+
         let lineItems = []
 
         for (let i = 0; i < cart.lineItems.length; i++) {
@@ -9,6 +13,7 @@ export default {
             switch (lineItem.purchasable.type) {
                 case 'plugin-edition':
                     lineItems.push({
+                        id: lineItem.id,
                         type: lineItem.purchasable.type,
                         plugin: lineItem.purchasable.plugin.handle,
                         edition: lineItem.purchasable.handle,
@@ -18,6 +23,7 @@ export default {
                     break
                 case 'cms-edition':
                     lineItems.push({
+                        id: lineItem.id,
                         type: lineItem.purchasable.type,
                         edition: lineItem.purchasable.handle,
                         licenseKey: lineItem.options.licenseKey,
@@ -27,6 +33,7 @@ export default {
                 case 'cms-renewal':
                 case 'plugin-renewal':
                     lineItems.push({
+                        id: lineItem.id,
                         type: lineItem.purchasable.type,
                         licenseKey: lineItem.options.licenseKey,
                         expiryDate: lineItem.options.expiryDate,

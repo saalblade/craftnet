@@ -19,83 +19,97 @@
                             </tr>
                             </thead>
 
-                            <tbody>
-                            <tr v-for="(item, itemKey) in cartItems" :key="itemKey">
-                                <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
-                                    <td class="icon-col">
-                                        <div class="plugin-icon">
-                                            <img :src="craftLogo" width="42" height="42" />
-                                        </div>
-                                    </td>
-                                    <td>Craft {{ item.lineItem.purchasable.name }}</td>
-                                </template>
+                            <tbody v-for="(item, itemKey) in cartItems" :key="itemKey">
+                                <tr>
+                                    <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
+                                        <td class="icon-col">
+                                            <div class="plugin-icon">
+                                                <img :src="craftLogo" width="42" height="42" />
+                                            </div>
+                                        </td>
+                                        <td>Craft {{ item.lineItem.purchasable.name }} {{item.id}}</td>
+                                    </template>
 
-                                <template v-else-if="item.lineItem.purchasable.type === 'plugin-edition'">
-                                    <td class="icon-col">
-                                        <div v-if="item.plugin" class="plugin-icon">
-                                            <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
+                                    <template v-else-if="item.lineItem.purchasable.type === 'plugin-edition'">
+                                        <td class="icon-col">
+                                            <div v-if="item.plugin" class="plugin-icon">
+                                                <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <strong class="text-xl">{{item.lineItem.description}}</strong>
+
+                                            <div class="text-secondary">
+                                                {{item.lineItem.purchasable.name}}
+                                            </div>
+                                        </td>
+                                    </template>
+
+                                    <template v-else>
+                                        <td colspan="2">
+                                            <strong class="text-xl">
+                                                <template v-if="item.lineItem.purchasable.type === 'cms-renewal'">Craft </template>
+                                                {{item.lineItem.description}}
+                                            </strong>
+
+                                            <div class="text-secondary">
+                                                <code>{{ item.lineItem.options.licenseKey.substr(0, 4) }}</code>
+                                            </div>
+                                        </td>
+                                    </template>
+
+                                    <td>
+                                        <code>{{item.lineItem.purchasable.type}}</code>
+                                    </td>
+
+                                    <td>
+                                        <div class="expiry-date">
+                                            <div>
+                                                <template v-if="item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition'">
+                                                    <select-field v-model="selectedExpiryDates[item.id]" :options="itemUpdateOptions(itemKey)" @input="onSelectedExpiryDateChange(itemKey)" />
+                                                </template>
+                                                <template v-else>
+                                                    <span>Updates until <strong>{{item.lineItem.options.expiryDate}}</strong></span>
+                                                </template>
+                                            </div>
+
+                                            <spinner v-if="itemLoading(itemKey)"></spinner>
                                         </div>
                                     </td>
                                     <td>
-                                        <strong class="text-xl">{{item.lineItem.description}}</strong>
-
-                                        <div class="text-secondary">
-                                            {{item.lineItem.purchasable.name}}
-                                        </div>
+                                        <number-input
+                                                ref="quantityInput"
+                                                v-model="itemQuantity[itemKey]"
+                                                min="minQuantity"
+                                                max="maxQuantity"
+                                                step="1"
+                                                @keydown="onQuantityKeyDown($event, itemKey)"
+                                                @input="onQuantityInput($event, itemKey)"
+                                                :disabled="(item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition' ? false : true)"
+                                        ></number-input>
                                     </td>
-                                </template>
-
-                                <template v-else>
-                                    <td colspan="2">
-                                        <strong class="text-xl">
-                                            <template v-if="item.lineItem.purchasable.type === 'cms-renewal'">Craft </template>
-                                            {{item.lineItem.description}}
+                                    <td class="text-right">
+                                        <strong class="block text-xl">
+                                            {{ item.lineItem.total|currency }}
                                         </strong>
-
-                                        <div class="text-secondary">
-                                            <code>{{ item.lineItem.options.licenseKey.substr(0, 4) }}</code>
-                                        </div>
+                                        <a @click="removeFromCart(itemKey)">Remove</a>
                                     </td>
+                                </tr>
+
+                                <template v-for="(adjustment, adjustmentKey) in item.lineItem.adjustments">
+                                    <tr :key="itemKey + 'adjustment-' + adjustmentKey" class="sub-item">
+                                        <td class="blank-cell"></td>
+                                        <td class="blank-cell"></td>
+                                        <td>
+                                            {{adjustment.name}}
+                                        </td>
+                                        <td class="price">
+                                            {{adjustment.amount|currency}}
+                                        </td>
+                                    </tr>
                                 </template>
-
-                                <td>
-                                    <code>{{item.lineItem.purchasable.type}}</code>
-                                </td>
-
-                                <td>
-                                    <div class="expiry-date">
-                                        <div>
-                                            <template v-if="item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition'">
-                                                <select-field v-model="selectedExpiryDates[itemKey]" :options="itemUpdateOptions(itemKey)" @input="onSelectedExpiryDateChange(itemKey)" />
-                                            </template>
-                                            <template v-else>
-                                                <span>Updates until <strong>{{item.lineItem.options.expiryDate}}</strong></span>
-                                            </template>
-                                        </div>
-
-                                        <spinner v-if="itemLoading(itemKey)"></spinner>
-                                    </div>
-                                </td>
-                                <td>
-                                    <number-input
-                                                  ref="quantityInput"
-                                                  v-model="itemQuantity[itemKey]"
-                                                  min="minQuantity"
-                                                  max="maxQuantity"
-                                                  step="1"
-                                                  @keydown="onQuantityKeyDown($event, itemKey)"
-                                                  @input="onQuantityInput($event, itemKey)"
-                                                  :disabled="(item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition' ? false : true)"
-                                    ></number-input>
-                                </td>
-                                <td class="text-right">
-                                    <strong class="block text-xl">
-                                        {{ item.lineItem.total|currency }}
-                                    </strong>
-                                    <a @click="removeFromCart(itemKey)">Remove</a>
-                                </td>
-                            </tr>
-
+                            </tbody>
+                            <tbody>
                             <tr>
                                 <th class="text-right text-xl" colspan="5">Total</th>
                                 <td class="text-right text-xl"><strong>{{ cart.totalPrice|currency }}</strong></td>
@@ -247,7 +261,7 @@
             onSelectedExpiryDateChange(itemKey) {
                 this.$set(this.loadingItems, itemKey, true)
                 let item = this.cartItemsData[itemKey]
-                item.expiryDate = this.selectedExpiryDates[itemKey]
+                item.expiryDate = this.selectedExpiryDates[item.id]
                 this.$store.dispatch('cart/updateItem', {itemKey, item})
                     .then(() => {
                         this.$delete(this.loadingItems, itemKey)
