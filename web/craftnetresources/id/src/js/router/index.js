@@ -115,11 +115,6 @@ const router = new VueRouter({
             component: DeveloperSettings
         },
         {
-            path: '/licenses/buy',
-            name: 'LicensesBuy',
-            component: LicensesBuy
-        },
-        {
             path: '/licenses/claim',
             component: LicensesClaim
         },
