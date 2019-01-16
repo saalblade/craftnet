@@ -3,7 +3,7 @@
         <div class="card mb-3">
             <div class="card-header">Upcoming Invoice</div>
             <div class="card-body">
-                <invoices-table :invoices="[upcomingInvoice]" :upcoming="true"></invoices-table>
+                <invoices-table :invoices="[]" :upcoming="true"></invoices-table>
             </div>
         </div>
 
