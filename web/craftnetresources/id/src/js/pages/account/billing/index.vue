@@ -24,7 +24,7 @@
             <div class="card-body">
                 <h4>Upcoming Invoice</h4>
 
-                <invoices-table :invoices="[upcomingInvoice]" :upcoming="true"></invoices-table>
+                <invoices-table :invoices="[]" :upcoming="true"></invoices-table>
             </div>
         </div>
 
