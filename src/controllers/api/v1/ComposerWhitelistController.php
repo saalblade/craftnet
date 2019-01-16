@@ -29,7 +29,9 @@ class ComposerWhitelistController extends BaseApiController
     {
         $payload = $this->getPayload('composer-whitelist-request');
 
-        $whitelist = [];
+        $whitelist = [
+            'craftcms/vue-asset' => true,
+        ];
 
         $this->_ignoreDeps = [
             '__root__' => true,
