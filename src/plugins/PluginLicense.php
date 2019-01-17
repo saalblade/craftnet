@@ -93,7 +93,7 @@ class PluginLicense extends Model implements LicenseInterface
     /**
      * @inheritdoc
      */
-    public function getExpiryDate(): \DateTime
+    public function getExpiryDate()
     {
         return DateTimeHelper::toDateTime($this->expiresOn, false, false);
     }
