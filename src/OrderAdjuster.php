@@ -90,8 +90,7 @@ class OrderAdjuster implements AdjusterInterface
             ];
 
             // Was the old expiration date over a year away?
-            if ($license->getIsExpirable()) {
-                $oldExpiryDate = $license->getExpiryDate();
+            if ($license->getIsExpirable() && ($oldExpiryDate = $license->getExpiryDate()) !== null) {
                 $upgradeSnapshot['oldExpiryDate'] = $oldExpiryDate->format(\DateTime::ATOM);
 
                 if ($oldExpiryDate > $nextYear) {
