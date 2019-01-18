@@ -185,9 +185,8 @@
                                         </div>
                                     </field>
                                 </div>
-
-                                <hr>
                             </div>
+                            <hr />
                         </template>
 
                         <p class="text-center">To manage your editions, please <a href="mailto:hello@craftcms.com">contact us</a>.</p>
