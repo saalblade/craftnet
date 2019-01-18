@@ -778,7 +778,10 @@ class Plugin extends Element
     {
         parent::afterValidate();
 
+        $editionScenario = Craft::$app->getRequest()->getIsCpRequest() ? PluginEdition::SCENARIO_CP : PluginEdition::SCENARIO_SITE;
+
         foreach ($this->getEditions() as $i => $edition) {
+            $edition->setScenario($editionScenario);
             if (!$edition->validate()) {
                 $this->addModelErrors($edition, "editions[$i]");
             }
