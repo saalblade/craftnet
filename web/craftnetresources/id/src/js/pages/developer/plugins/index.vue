@@ -33,7 +33,7 @@
                     </td>
                     <td class="name-col">
                         <router-link :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>
-                        <small class="text-secondary" v-if="plugin.latestVersion">{{ plugin.latestVersion }}</small>
+                        <small class="ml-2 text-secondary" v-if="plugin.latestVersion">{{ plugin.latestVersion }}</small>
                         <div>{{ plugin.shortDescription }}</div>
                     </td>
                     <td>{{ plugin.activeInstalls }}</td>
