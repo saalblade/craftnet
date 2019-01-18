@@ -14,9 +14,9 @@ interface LicenseInterface
     /**
      * Returns the license's expiry date.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getExpiryDate(): \DateTime;
+    public function getExpiryDate();
 
     /**
      * Returns the edition associated with the license.

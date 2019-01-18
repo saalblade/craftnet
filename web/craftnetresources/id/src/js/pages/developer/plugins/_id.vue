@@ -146,8 +146,8 @@
                 <div class="card mb-6">
                     <div class="card-header">Editions</div>
                     <div class="card-body">
-                        <template v-for="(edition, editionKey) in pluginDraft.editions">
-                            <div class="flex" :key="'edition-' + editionKey">
+                        <div v-for="(edition, editionKey) in pluginDraft.editions" :key="'edition-' + editionKey">
+                            <div class="flex">
                                 <div class="w-1/4">
                                     <h2>{{edition.name}}</h2>
                                     <p class="text-grey"><code>{{edition.handle}}</code></p>
@@ -156,7 +156,7 @@
                                     <text-field :id="edition.handle+'-price'" label="License Price" v-model="edition.price" :errors="errors.price" />
                                     <text-field :id="edition.handle+'-renewalPrice'" label="Renewal Price" v-model="edition.renewalPrice" :errors="errors.renewalPrice" />
 
-                                    <field id="features" label="Features">
+                                    <field v-if="plugin.editions.length > 1" id="features" label="Features">
                                         <table v-if="edition.features.length > 0" id="features" class="table border mb-4">
                                             <thead>
                                             <tr>
@@ -185,10 +185,9 @@
                                         </div>
                                     </field>
                                 </div>
-
-                                <hr>
                             </div>
-                        </template>
+                            <hr />
+                        </div>
 
                         <p class="text-center">To manage your editions, please <a href="mailto:hello@craftcms.com">contact us</a>.</p>
                     </div>
