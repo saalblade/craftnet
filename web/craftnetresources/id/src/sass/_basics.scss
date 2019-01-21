@@ -1,5 +1,9 @@
 /* HTML Basics */
 
+* {
+  min-height: 0;
+}
+
 body {
   @apply .leading-normal .bg-grey-lighter;
 }
