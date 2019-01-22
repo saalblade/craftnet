@@ -21,7 +21,7 @@
                 <button @click="editInvoiceDetails()" type="button"
                         class="btn btn-secondary btn-sm"
                         data-facebox="#billing-contact-info-modal">
-                    <font-awesome-icon icon="pencil-alt" />
+                    <icon icon="pencil-alt" />
                     Edit
                 </button>
             </div>

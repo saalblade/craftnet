@@ -9,7 +9,7 @@
         </div>
 
         <empty v-else>
-            <font-awesome-icon icon="key" class="text-5xl mb-4 text-grey-light" />
+            <icon icon="key" cssClass="text-5xl mb-4 text-grey-light" />
             <div class="font-bold">No plugin licenses</div>
             <div>You don’t have any plugin licenses yet.</div>
         </empty>

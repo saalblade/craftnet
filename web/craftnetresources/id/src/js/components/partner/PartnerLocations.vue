@@ -20,7 +20,7 @@
 
         <!-- Multiple locations not currently enabled -->
         <div v-if="draftLocations.length === 0" class="pl-4">
-            <button class="btn btn-secondary btn-sm" @click="onAddLocationClick"><font-awesome-icon icon="plus" /> Add a Location</button>
+            <button class="btn btn-secondary btn-sm" @click="onAddLocationClick"><icon icon="plus" /> Add a Location</button>
         </div>
     </div>
 </template>

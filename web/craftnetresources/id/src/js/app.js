@@ -7,7 +7,6 @@ import {formatCmsLicense, formatPluginLicense} from './filters/licenses';
 import {capitalize} from './filters/capitalize';
 import App from './App.vue';
 import './plugins/craftui'
-import './plugins/font-awesome'
 
 Vue.filter('currency', currency);
 Vue.filter('formatCmsLicense', formatCmsLicense);

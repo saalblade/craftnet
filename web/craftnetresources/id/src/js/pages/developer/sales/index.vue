@@ -36,7 +36,7 @@
         </template>
         <template v-else>
             <empty>
-                <font-awesome-icon icon="dollar-sign" class="text-5xl mb-4 text-grey-light" />
+                <icon icon="dollar-sign" cssClass="text-5xl mb-4 text-grey-light" />
                 <div class="font-bold">No sales</div>
                 <div>You don’t have any sales yet.</div>
             </empty>

@@ -22,7 +22,7 @@
         ></partner-project>
 
         <div  v-if="partner.projects.length < 8 " class="pl-4">
-            <button class="btn btn-secondary btn-sm" @click="onAddProjectClick"><font-awesome-icon icon="plus" /> Add a Project</button>
+            <button class="btn btn-secondary btn-sm" @click="onAddProjectClick"><icon icon="plus" /> Add a Project</button>
         </div>
     </div>
 </template>

@@ -8,10 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@pixelandtonic/craftui": "^0.1.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.4",
-    "@fortawesome/free-solid-svg-icons": "^5.3.1",
-    "@fortawesome/vue-fontawesome": "^0.1.1",
+    "@pixelandtonic/craftui": "git://github.com/pixelandtonic/craftui.git#release/0.2.0",
     "axios": "^0.18.0",
     "humanize-duration": "^3.15.0",
     "limax": "^1.7.0",
