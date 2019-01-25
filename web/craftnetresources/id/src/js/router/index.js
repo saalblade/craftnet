@@ -20,6 +20,7 @@ import Payment from '../pages/payment'
 import ThankYou from '../pages/thank-you'
 import PartnerOverview from '../pages/partner/overview'
 import PartnerProfile from '../pages/partner/profile'
+import NotFound from '../pages/not-found'
 
 Vue.use(VueRouter);
 
@@ -163,7 +164,16 @@ const router = new VueRouter({
             path: '/partner/profile',
             name: 'PartnerProfile',
             component: PartnerProfile
-        }
+        },
+
+
+        // Not found
+        {
+            path: '*',
+            name: 'NotFound',
+            component: NotFound,
+            meta: { layout: "no-sidebar" }
+        },
     ]
 });
 
