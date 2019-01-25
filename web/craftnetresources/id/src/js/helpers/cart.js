@@ -23,14 +23,22 @@ export default {
                     })
                     break
                 case 'cms-edition':
-                    lineItems.push({
+                    const item = {
                         id: lineItem.id,
                         type: lineItem.purchasable.type,
                         edition: lineItem.purchasable.handle,
-                        licenseKey: lineItem.options.licenseKey,
                         autoRenew: lineItem.options.autoRenew,
                         expiryDate: lineItem.options.expiryDate,
-                    })
+                    }
+
+                    let licenseKey = lineItem.options.licenseKey
+
+                    if (licenseKey && licenseKey.substr(0, 3) !== 'new') {
+                        item.licenseKey = licenseKey
+                    }
+
+                    lineItems.push(item)
+
                     break
                 case 'cms-renewal':
                 case 'plugin-renewal':
