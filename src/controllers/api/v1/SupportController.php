@@ -59,7 +59,7 @@ class SupportController extends BaseApiController
                 '`' . $cmsLicense->getShortKey() . '` (' . ucfirst($cmsLicense->editionHandle) . ')',
                 'from ' . $formatter->asDate($cmsLicense->dateCreated, Locale::LENGTH_SHORT),
             ];
-            if ($cmsLicense->expirable) {
+            if ($cmsLicense->expirable && $cmsLicense->expiresOn) {
                 $licenseInfo[] .= ($cmsLicense->expired ? 'expired on' : 'expires on') .
                     ' '. $formatter->asDate($cmsLicense->expiresOn, Locale::LENGTH_SHORT);
             }
@@ -75,7 +75,7 @@ class SupportController extends BaseApiController
                 if ($plugin = $this->plugins[$pluginHandle] ?? null) {
                     $pluginInfo = "[{$plugin->name}](https://plugins.craftcms.com/{$plugin->handle})";
                 } else {
-                    $pluginInfo = $$pluginHandle;
+                    $pluginInfo = $pluginHandle;
                 }
                 if (($edition = $this->pluginEditions[$pluginHandle] ?? null) && $edition !== 'standard') {
                     $pluginInfo .= ' ' . ucfirst($edition);
