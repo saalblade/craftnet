@@ -94,7 +94,7 @@
 
             onDelete(index) {
                 if (this.draftLocations.length === 1) {
-                    this.$root.displayError('Must have at least one location');
+                    this.$store.dispatch('app/displayError', 'Must have at least one location');
                     return;
                 }
 
@@ -123,15 +123,15 @@
 
                         if (!response.data.success) {
                             this.errors = response.data.errors.locations
-                            this.$root.displayError('Validation errors')
+                            this.$store.dispatch('app/displayError', 'Validation errors')
                         } else {
                             this.setDraftLocations();
-                            this.$root.displayNotice('Updated')
+                            this.$store.dispatch('app/displayNotice', 'Updated')
                             this.editIndex = null
                         }
                     })
                     .catch(errorMessage => {
-                        this.$root.displayError(errorMessage)
+                        this.$store.dispatch('app/displayError', errorMessage)
                         this.requestPending = false
                     })
             },

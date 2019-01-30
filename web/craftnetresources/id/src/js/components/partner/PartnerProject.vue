@@ -157,7 +157,7 @@
                     }
                 }).then(response => {
                     this.isUploading = false
-                    this.$root.displayNotice('Uploaded')
+                    this.$store.dispatch('app/displayNotice', 'Uploaded')
 
                     let screenshots = response.data.screenshots || []
 
@@ -166,7 +166,7 @@
                     }
                 }).catch(error => {
                     this.isUploading = false
-                    this.$root.displayNotice(error)
+                    this.$store.dispatch('app/displayNotice', error)
                 });
             }
         },
