@@ -4,7 +4,9 @@ namespace craftnet\controllers\api\v1;
 
 use Craft;
 use craft\helpers\StringHelper;
+use craft\i18n\Locale;
 use craft\web\UploadedFile;
+use craftnet\cms\CmsLicense;
 use craftnet\controllers\api\BaseApiController;
 use GuzzleHttp\RequestOptions;
 use yii\web\Response;
@@ -32,6 +34,66 @@ class SupportController extends BaseApiController
         ];
 
         $request = Craft::$app->getRequest();
+        $requestHeaders = $request->getHeaders();
+        $body = $request->getRequiredBodyParam('message');
+
+        $info = [];
+        /** @var CmsLicense $cmsLicense */
+        $cmsLicense = reset($this->cmsLicenses) ?: null;
+        $formatter = Craft::$app->getFormatter();
+
+        if ($this->cmsEdition !== null || $this->cmsVersion !== null) {
+            $craftInfo = 'Craft' .
+                ($this->cmsEdition !== null ? ' ' . ucfirst($this->cmsEdition) : '') .
+                ($this->cmsVersion !== null ? ' ' . $this->cmsVersion : '');
+
+            if ($cmsLicense && $cmsLicense->editionHandle !== $this->cmsEdition) {
+                $craftInfo .= ' (trial)';
+            }
+
+            $info[] = $craftInfo;
+        }
+
+        if ($cmsLicense) {
+            $licenseInfo = [
+                '`' . $cmsLicense->getShortKey() . '` (' . ucfirst($cmsLicense->editionHandle) . ')',
+                'from ' . $formatter->asDate($cmsLicense->dateCreated, Locale::LENGTH_SHORT),
+            ];
+            if ($cmsLicense->expirable) {
+                $licenseInfo[] .= ($cmsLicense->expired ? 'expired on' : 'expires on') .
+                    ' '. $formatter->asDate($cmsLicense->expiresOn, Locale::LENGTH_SHORT);
+            }
+            if ($cmsLicense->domain) {
+                $licenseInfo[] = 'for ' . $cmsLicense->domain;
+            }
+            $info[] = 'License: ' . implode(', ', $licenseInfo);
+        }
+
+        if (!empty($this->pluginVersions)) {
+            $pluginInfos = [];
+            foreach ($this->pluginVersions as $pluginHandle => $pluginVersion) {
+                if ($plugin = $this->plugins[$pluginHandle] ?? null) {
+                    $pluginInfo = "[{$plugin->name}](https://plugins.craftcms.com/{$plugin->handle})";
+                } else {
+                    $pluginInfo = $$pluginHandle;
+                }
+                if (($edition = $this->pluginEditions[$pluginHandle] ?? null) && $edition !== 'standard') {
+                    $pluginInfo .= ' ' . ucfirst($edition);
+                }
+                $pluginInfo .= ' ' . $pluginVersion;
+                $pluginInfos[] = $pluginInfo;
+            }
+            $info[] = 'Plugins: ' . implode(', ', $pluginInfos);
+        }
+
+        if (($host = $requestHeaders->get('X-Craft-Host')) !== null) {
+            $info[] = 'Host: ' . $host;
+        }
+
+        if (!empty($info)) {
+            $body .= "\n\n---\n\n" . implode("  \n", $info);
+        }
+
         $parts = [
             [
                 'name' => 'sender[handle]',
@@ -51,7 +113,7 @@ class SupportController extends BaseApiController
             ],
             [
                 'name' => 'body',
-                'contents' => $request->getRequiredBodyParam('message'),
+                'contents' => $body,
             ],
             [
                 'name' => 'body_format',
@@ -91,9 +153,14 @@ class SupportController extends BaseApiController
             ],
         ];
 
-        if ($attachment = UploadedFile::getInstanceByName('attachment')) {
+        $attachments = UploadedFile::getInstancesByName('attachments');
+        if (empty($attachments) && $attachment = UploadedFile::getInstanceByName('attachment')) {
+            $attachments = [$attachment];
+        }
+
+        foreach ($attachments as $i => $attachment) {
             $parts[] = [
-                'name' => 'attachments[]',
+                'name' => "attachments[{$i}]",
                 'contents' => fopen($attachment->tempName, 'rb'),
                 'filename' => $attachment->name,
             ];
