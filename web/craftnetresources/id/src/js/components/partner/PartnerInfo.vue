@@ -305,11 +305,11 @@
                         this.requestPending = false
 
                         if (response.data.success) {
-                            this.$root.displayNotice('Updated')
+                            this.$store.dispatch('app/displayNotice', 'Updated')
                             this.isEditing = false
                         } else {
                             this.errors = response.data.errors
-                            this.$root.displayError('Validation errors')
+                            this.$store.dispatch('app/displayError', 'Validation errors')
                         }
                     })
                     .catch(errorMessage => {
@@ -317,7 +317,7 @@
                         console.warn('.catch()')
                         // eslint-disable-next-line
                         console.warn(errorMessage)
-                        this.$root.displayError(errorMessage)
+                        this.$store.dispatch('app/displayError', errorMessage)
                         this.requestPending = false
                     })
             }
