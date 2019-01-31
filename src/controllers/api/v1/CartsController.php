@@ -522,12 +522,13 @@ class CartsController extends BaseApiController
         }
 
         // get the license (if there is one)
-        if (!empty($item->licenseKey)) {
+        $licenseKey = $item->licenseKey ?? $item->cmsLicenseKey ?? null;
+        if (!empty($licenseKey)) {
             try {
-                $license = $this->module->getCmsLicenseManager()->getLicenseByKey($item->licenseKey);
+                $license = $this->module->getCmsLicenseManager()->getLicenseByKey($licenseKey);
             } catch (LicenseNotFoundException $e) {
                 $errors[] = [
-                    'param' => "{$paramPrefix}.licenseKey",
+                    'param' => $paramPrefix . '.' . (isset($item->licenseKey) ? 'licenseKey' : 'cmsLicenseKey'),
                     'message' => $e->getMessage(),
                     'code' => self::ERROR_CODE_MISSING,
                 ];
