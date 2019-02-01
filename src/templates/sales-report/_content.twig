@@ -7,6 +7,8 @@
 {% set totalCraftSalesNumber = 0 %}
 {% set totalCommerceSalesAmount = 0 %}
 {% set totalCommerceSalesNumber = 0 %}
+{% set totalCommerceLiteSalesAmount = 0 %}
+{% set totalCommerceLiteSalesNumber = 0 %}
 {% set totalGatewaySalesAmount = 0 %}
 {% set totalGatewaySalesNumber = 0 %}
 {% set totalDiscounts = 0 %}
@@ -60,8 +62,13 @@
                             {% set totalCraftSalesAmount = totalCraftSalesAmount + lineItem.total %}
                             {% set totalCraftSalesNumber = totalCraftSalesNumber + lineItem.qty %}
                         {% elseif lineItem.sku in commercePurchasables %}
-                            {% set totalCommerceSalesAmount = totalCommerceSalesAmount + lineItem.total %}
-                            {% set totalCommerceSalesNumber = totalCommerceSalesNumber + lineItem.qty %}
+                            {% if lineItem.sku == 'COMMERCE-STANDARD' or lineItem.sku == 'COMMERCE-PRO' %}
+                                {% set totalCommerceSalesAmount = totalCommerceSalesAmount + lineItem.total %}
+                                {% set totalCommerceSalesNumber = totalCommerceSalesNumber + lineItem.qty %}
+                            {% elseif lineItem.sku == 'COMMERCE-LITE' %}
+                                {% set totalCommerceLiteSalesAmount = totalCommerceLiteSalesAmount + lineItem.total %}
+                                {% set totalCommerceLiteSalesNumber = totalCommerceLiteSalesNumber + lineItem.qty %}
+                            {% endif %}
                         {% elseif lineItem.sku in gatewayPurchasables%}
                             {% set totalGatewaySalesAmount = totalGatewaySalesAmount + lineItem.total %}
                             {% set totalGatewaySalesNumber = totalGatewaySalesNumber + lineItem.qty %}
@@ -132,6 +139,7 @@
 <h2>Total Discounts: {{ totalDiscounts|currency }}</h2>
 <h2>Total Craft Sales: {{ totalCraftSalesAmount|currency }} ({{ totalCraftSalesNumber }})</h2>
 <h2>Total Commerce Sales: {{ totalCommerceSalesAmount|currency }} ({{ totalCommerceSalesNumber }})</h2>
+<h2>Total Commerce Lite Sales: {{ totalCommerceLiteSalesAmount|currency }} ({{ totalCommerceLiteSalesNumber }})</h2>
 <h2>Total Gateway Sales: {{ totalGatewaySalesAmount|currency }} ({{ totalGatewaySalesNumber }})</h2>
 <h2>Total 3rd Party Plugin Store Sales: {{ total3rdPartyPluginStoreSalesAmount|currency }} ({{ total3rdPartyPluginStoreSalesNumber }})</h2>
 <h2>Total Plugin Store Fees: {{ totalPluginStoreFees|currency }}</h2>
