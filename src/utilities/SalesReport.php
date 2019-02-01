@@ -83,6 +83,8 @@ class SalesReport extends Utility
 
         $commercePurchasable = [
             'COMMERCE-STANDARD',
+            'COMMERCE-PRO',
+            'COMMERCE-LITE'
         ];
 
         $craftPurchasables = [
