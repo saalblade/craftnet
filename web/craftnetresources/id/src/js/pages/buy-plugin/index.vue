@@ -69,6 +69,7 @@
 
                 this.$store.dispatch('cart/addToCart', [item])
                     .then(() => {
+                        this.$store.dispatch('app/displayNotice', 'Plugin license added your cart.');
                         this.$router.push({path: '/cart'})
                     })
             }
