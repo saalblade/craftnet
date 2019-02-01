@@ -86,9 +86,19 @@ class UpdatesController extends BaseApiController
      */
     private function _getCmsUpdateInfo(): array
     {
+        // Treat 3.0.39 as a breakpoint for 3.0 releases
+        if (
+            version_compare($this->cmsVersion, '3.0.0-alpha.1', '>') &&
+            version_compare($this->cmsVersion, '3.0.39', '<')
+        ) {
+            $toVersion = '3.0.39';
+        } else {
+            $toVersion = null;
+        }
+
         $info = [
-            'status' => Update::STATUS_ELIGIBLE,
-            'releases' => $this->_releases('craftcms/cms', $this->cmsVersion),
+            'status' => $toVersion ? Update::STATUS_BREAKPOINT : Update::STATUS_ELIGIBLE,
+            'releases' => $this->_releases('craftcms/cms', $this->cmsVersion, $toVersion),
         ];
 
         if (!empty($this->cmsLicenses)) {

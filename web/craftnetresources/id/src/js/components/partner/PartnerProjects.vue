@@ -88,7 +88,7 @@
 
             onDelete(index) {
                 if (this.draftProjects.length === 1) {
-                    this.$root.displayError('Must have at least one project');
+                    this.$store.dispatch('app/displayError', 'Must have at least one project');
                     return;
                 }
 
@@ -117,15 +117,15 @@
 
                         if (!response.data.success) {
                             this.errors = response.data.errors.projects
-                            this.$root.displayError('Validation errors')
+                            this.$store.dispatch('app/displayError', 'Validation errors')
                         } else {
                             this.setDraftProjects();
-                            this.$root.displayNotice('Updated')
+                            this.$store.dispatch('app/displayNotice', 'Updated')
                             this.editIndex = null
                         }
                     })
                     .catch(errorMessage => {
-                        this.$root.displayError(errorMessage)
+                        this.$store.dispatch('app/displayError', errorMessage)
                         this.requestPending = false
                     })
             },

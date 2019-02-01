@@ -156,7 +156,7 @@
                                     <text-field :id="edition.handle+'-price'" label="License Price" v-model="edition.price" :errors="errors.price" />
                                     <text-field :id="edition.handle+'-renewalPrice'" label="Renewal Price" v-model="edition.renewalPrice" :errors="errors.renewalPrice" />
 
-                                    <field v-if="plugin.editions.length > 1" id="features" label="Features">
+                                    <field v-if="pluginDraft.editions.length > 1" id="features" label="Features">
                                         <table v-if="edition.features.length > 0" id="features" class="table border mb-4">
                                             <thead>
                                             <tr>
