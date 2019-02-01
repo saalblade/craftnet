@@ -18,7 +18,6 @@ export default {
                         plugin: lineItem.purchasable.plugin.handle,
                         edition: lineItem.purchasable.handle,
                         autoRenew: lineItem.options.autoRenew,
-                        cmsLicenseKey: lineItem.options.cmsLicenseKey,
                         expiryDate: lineItem.options.expiryDate,
                     })
                     break

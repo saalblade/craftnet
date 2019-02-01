@@ -51,15 +51,6 @@ export default {
      * Update cart.
      */
     updateCart(orderNumber, data, cb, errorCb) {
-        if (data.items) {
-            data.items.forEach(item => {
-                // Todo: Support updating an item with cmsLicenseKey
-                if(!item.cmsLicenseKey) {
-                    delete item["cmsLicenseKey"]
-                }
-            })
-        }
-
         this.axios().post('carts/' + orderNumber, data)
             .then(response => {
                 return cb(response.data)
