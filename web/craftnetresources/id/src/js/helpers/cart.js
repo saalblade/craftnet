@@ -11,7 +11,7 @@ export default {
             let lineItem = cart.lineItems[i]
 
             switch (lineItem.purchasable.type) {
-                case 'plugin-edition':
+                case 'plugin-edition': {
                     lineItems.push({
                         id: lineItem.id,
                         type: lineItem.purchasable.type,
@@ -22,7 +22,9 @@ export default {
                         expiryDate: lineItem.options.expiryDate,
                     })
                     break
-                case 'cms-edition':
+                }
+
+                case 'cms-edition': {
                     const item = {
                         id: lineItem.id,
                         type: lineItem.purchasable.type,
@@ -40,8 +42,9 @@ export default {
                     lineItems.push(item)
 
                     break
-                case 'cms-renewal':
-                case 'plugin-renewal':
+                }
+
+                case 'cms-renewal': {
                     lineItems.push({
                         id: lineItem.id,
                         type: lineItem.purchasable.type,
@@ -49,6 +52,17 @@ export default {
                         expiryDate: lineItem.options.expiryDate,
                     })
                     break
+                }
+                
+                case 'plugin-renewal': {
+                    lineItems.push({
+                        id: lineItem.id,
+                        type: lineItem.purchasable.type,
+                        licenseKey: lineItem.options.licenseKey,
+                        expiryDate: lineItem.options.expiryDate,
+                    })
+                    break
+                }
             }
         }
 
