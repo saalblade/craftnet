@@ -26,9 +26,8 @@
                                                 <img :src="staticImageUrl('craft.svg')" width="42" height="42" />
                                             </div>
                                         </td>
-                                        <td>
-                                            <strong class="text-xl">Craft CMS</strong>
-                                            <br />
+                                        <td class="description">
+                                            <strong>Craft CMS</strong>
                                             <edition-badge>{{ item.lineItem.purchasable.name }}</edition-badge>
                                         </td>
                                     </template>
@@ -39,16 +38,15 @@
                                                 <img v-if="item.plugin.iconUrl" :src="item.plugin.iconUrl" width="42" height="42" />
                                             </div>
                                         </td>
-                                        <td>
-                                            <strong class="text-xl">{{item.plugin.name}}</strong>
-                                            <br />
+                                        <td class="description">
+                                            <strong>{{item.plugin.name}}</strong>
                                             <edition-badge>{{ item.lineItem.purchasable.name }}</edition-badge>
                                         </td>
                                     </template>
 
                                     <template v-else>
-                                        <td colspan="2">
-                                            <strong class="text-xl">
+                                        <td colspan="2" class="description">
+                                            <strong>
                                                 <template v-if="item.lineItem.purchasable.type === 'cms-renewal'">
                                                     Craft CMS
                                                     {{item.lineItem.description}}
@@ -64,8 +62,8 @@
                                         </td>
                                     </template>
 
-                                    <td>
-                                        <div class="expiry-date">
+                                    <td class="expiry-date">
+                                        <div class="expiry-date-flex">
                                             <div>
                                                 <template v-if="item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition'">
                                                     <select-field v-model="selectedExpiryDates[item.id]" :options="itemUpdateOptions(itemKey)" @input="onSelectedExpiryDateChange(itemKey)" />
@@ -307,11 +305,26 @@
 
 <style lang="scss">
     .cart-data {
-        .expiry-date {
-            @apply .flex .flex-row .items-center;
+        td.description {
+            strong {
+                @apply .mr-2 .text-xl;
+            }
 
-            .field {
-                @apply .mb-0;
+            .edition-badge {
+                @apply .relative;
+                top: -2px;
+            }
+        }
+
+        .expiry-date {
+            @apply .w-2/5;
+
+            .expiry-date-flex {
+                @apply .flex .flex-row .items-center;
+
+                .field {
+                    @apply .mb-0;
+                }
             }
         }
 
