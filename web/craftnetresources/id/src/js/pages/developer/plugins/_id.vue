@@ -134,7 +134,7 @@
                                 <div v-for="(screenshot, key) in screenshots" class="screenshot" :key="key">
                                     <img :src="screenshot.url" class="img-thumbnail mr-3 mb-3" />
                                     <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(key);">
-                                        <font-awesome-icon icon="times" />
+                                        <icon icon="times" />
                                     </a>
                                 </div>
                             </draggable>
@@ -174,14 +174,14 @@
                                                     <text-input :id="edition.handle+'-featureDescription'" v-model="feature.description" />
                                                 </td>
                                                 <td class="w-10 text-center">
-                                                    <a @click.prevent="removeFeature(editionKey, featureKey)"><font-awesome-icon icon="times" class="text-red" /></a>
+                                                    <a @click.prevent="removeFeature(editionKey, featureKey)"><icon icon="times" cssClass="text-red" /></a>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
 
                                         <div>
-                                            <a class="btn btn-secondary" @click.prevent="addFeature(editionKey)"><font-awesome-icon icon="plus" /> Add a feature</a>
+                                            <a class="btn btn-secondary" @click.prevent="addFeature(editionKey)"><icon icon="plus" /> Add a feature</a>
                                         </div>
                                     </field>
                                 </div>

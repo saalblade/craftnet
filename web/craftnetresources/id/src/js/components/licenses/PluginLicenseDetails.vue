@@ -54,7 +54,7 @@
 
                                         <div class="buttons">
                                             <button @click="notesEditing = true" type="button" class="btn btn-secondary btn-sm">
-                                                <font-awesome-icon icon="pencil-alt" />
+                                                <icon icon="pencil-alt" />
                                                 Edit
                                             </button>
                                         </div>

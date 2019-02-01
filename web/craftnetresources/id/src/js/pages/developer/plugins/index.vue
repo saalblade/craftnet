@@ -6,7 +6,7 @@
             <h1>Plugins</h1>
             <div>
                 <router-link to="/developer/add-plugin" class="btn btn-primary">
-                    <font-awesome-icon icon="plus" />
+                    <icon icon="plus" />
                     Add a plugin
                 </router-link>
             </div>
@@ -78,7 +78,7 @@
         </div>
 
         <empty v-else>
-            <font-awesome-icon icon="plug" class="text-5xl mb-4 text-grey-light" />
+            <icon icon="plug" cssClass="text-5xl mb-4 text-grey-light" />
             <div class="font-bold">No plugins</div>
             <div>You haven’t added any plugins yet.</div>
         </empty>

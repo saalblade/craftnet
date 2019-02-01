@@ -16,7 +16,7 @@
                         </li>
                     </ul>
                     <div>
-                        <button class="btn btn-secondary" @click="$emit('edit', index)"><font-awesome-icon icon="pencil-alt" /> Edit</button>
+                        <button class="btn btn-secondary" @click="$emit('edit', index)"><icon icon="pencil-alt" /> Edit</button>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                 <div v-if="project.screenshots.length <= 5">
                     <input type="file" accept=".jp2,.jpeg,.jpg,.jpx" @change="screenshotFileChange" ref="screenshotFiles" class="hidden" multiple=""><br>
                     <button class="btn btn-sm btn-outline-secondary" @click="$refs.screenshotFiles.click()" :disabled="isUploading">
-                        <span v-show="!isUploading"><font-awesome-icon icon="plus" /> Add screenshots</span>
+                        <span v-show="!isUploading"><icon icon="plus" /> Add screenshots</span>
                         <span v-show="isUploading">Uploading: {{ uploadProgress }}%</span>
                         <spinner v-show="isUploading"></spinner>
                     </button>

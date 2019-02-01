@@ -21,7 +21,7 @@
                     </div>
                     <div class="field">
                         <a href="#" class="btn btn-danger" @click.prevent="deletePhoto" :disabled="photoLoading">
-                            <font-awesome-icon icon="times" />
+                            <icon icon="times" />
                             Delete
                         </a>
                     </div>

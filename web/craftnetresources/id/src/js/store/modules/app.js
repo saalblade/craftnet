@@ -66,10 +66,16 @@ const actions = {
             message: message
         })
 
+        let notificationDuration = 2000;
+
+        if (type === 'error') {
+            notificationDuration = notificationDuration * 4;
+        }
+
         setTimeout(function() {
             this.notification = null;
             commit('updateNotification', null)
-        }.bind(this), 2000);
+        }.bind(this), notificationDuration);
     },
 
 }

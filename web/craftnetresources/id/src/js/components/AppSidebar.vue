@@ -3,7 +3,7 @@
     <div class="sidebar">
         <h5>
             <router-link @click.native="closeSidebar()" to="/licenses">
-                <font-awesome-icon icon="key" />
+                <icon icon="key" />
                 Licenses
             </router-link>
         </h5>
@@ -16,7 +16,7 @@
         <template v-if="userIsInGroup('developers')">
             <h5>
                 <router-link @click.native="closeSidebar()" to="/developer">
-                    <font-awesome-icon icon="plug" />
+                    <icon icon="plug" />
                     Developer
                 </router-link>
             </h5>
@@ -31,7 +31,7 @@
         <template v-if="userIsInGroup('staff') && currentUser.enableShowcaseFeatures">
             <h5>
                 <a class="disabled" href="#">
-                    <font-awesome-icon icon="image" />
+                    <icon icon="image" />
                     Showcase
                 </a>
             </h5>
@@ -45,7 +45,7 @@
         <template v-if="currentUser.enablePartnerFeatures">
             <h5>
                 <router-link @click.native="closeSidebar()" to="/partner">
-                    <font-awesome-icon icon="handshake" />
+                    <icon icon="handshake" />
                     Partner
                 </router-link>
             </h5>
@@ -57,7 +57,7 @@
 
         <h5>
             <router-link @click.native="closeSidebar()" to="/account">
-                <font-awesome-icon icon="user" />
+                <icon icon="user" />
                 Account
             </router-link>
         </h5>

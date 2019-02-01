@@ -6,7 +6,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="text-right" v-if="!isEditing">
-                    <button class="btn btn-secondary" @click="onEditClick"><font-awesome-icon icon="pencil-alt" /> Edit</button>
+                    <button class="btn btn-secondary" @click="onEditClick"><icon icon="pencil-alt" /> Edit</button>
                 </div>
 
                 <div v-if="!isEditing">

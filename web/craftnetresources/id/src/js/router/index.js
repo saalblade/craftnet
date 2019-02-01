@@ -4,6 +4,7 @@ import AccountBillingIndex from '../pages/account/billing/index'
 import AccountBillingInvoiceNumber from '../pages/account/billing/invoices/_number'
 import AccountSettings from '../pages/account/settings'
 import BuyPlugin from '../pages/buy-plugin/index'
+import BuyCms from '../pages/buy-cms/index'
 import Cart from '../pages/cart'
 import DeveloperPlugins from '../pages/developer/plugins/index'
 import DeveloperPluginsId from '../pages/developer/plugins/_id'
@@ -20,6 +21,7 @@ import Payment from '../pages/payment'
 import ThankYou from '../pages/thank-you'
 import PartnerOverview from '../pages/partner/overview'
 import PartnerProfile from '../pages/partner/profile'
+import NotFound from '../pages/not-found'
 
 Vue.use(VueRouter);
 
@@ -72,6 +74,12 @@ const router = new VueRouter({
             path: '/buy-plugin/:handle/:edition',
             name: 'BuyPlugin',
             component: BuyPlugin,
+            meta: { layout: "no-sidebar" }
+        },
+        {
+            path: '/buy-cms/:edition',
+            name: 'BuyCms',
+            component: BuyCms,
             meta: { layout: "no-sidebar" }
         },
         {
@@ -163,7 +171,16 @@ const router = new VueRouter({
             path: '/partner/profile',
             name: 'PartnerProfile',
             component: PartnerProfile
-        }
+        },
+
+
+        // Not found
+        {
+            path: '*',
+            name: 'NotFound',
+            component: NotFound,
+            meta: { layout: "no-sidebar" }
+        },
     ]
 });
 

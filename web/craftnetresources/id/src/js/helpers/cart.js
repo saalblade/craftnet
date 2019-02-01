@@ -11,7 +11,7 @@ export default {
             let lineItem = cart.lineItems[i]
 
             switch (lineItem.purchasable.type) {
-                case 'plugin-edition':
+                case 'plugin-edition': {
                     lineItems.push({
                         id: lineItem.id,
                         type: lineItem.purchasable.type,
@@ -22,18 +22,29 @@ export default {
                         expiryDate: lineItem.options.expiryDate,
                     })
                     break
-                case 'cms-edition':
-                    lineItems.push({
+                }
+
+                case 'cms-edition': {
+                    const item = {
                         id: lineItem.id,
                         type: lineItem.purchasable.type,
                         edition: lineItem.purchasable.handle,
-                        licenseKey: lineItem.options.licenseKey,
                         autoRenew: lineItem.options.autoRenew,
                         expiryDate: lineItem.options.expiryDate,
-                    })
+                    }
+
+                    let licenseKey = lineItem.options.licenseKey
+
+                    if (licenseKey && licenseKey.substr(0, 3) !== 'new') {
+                        item.licenseKey = licenseKey
+                    }
+
+                    lineItems.push(item)
+
                     break
-                case 'cms-renewal':
-                case 'plugin-renewal':
+                }
+
+                case 'cms-renewal': {
                     lineItems.push({
                         id: lineItem.id,
                         type: lineItem.purchasable.type,
@@ -41,6 +52,17 @@ export default {
                         expiryDate: lineItem.options.expiryDate,
                     })
                     break
+                }
+                
+                case 'plugin-renewal': {
+                    lineItems.push({
+                        id: lineItem.id,
+                        type: lineItem.purchasable.type,
+                        licenseKey: lineItem.options.licenseKey,
+                        expiryDate: lineItem.options.expiryDate,
+                    })
+                    break
+                }
             }
         }
 

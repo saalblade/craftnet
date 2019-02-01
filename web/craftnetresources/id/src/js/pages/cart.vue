@@ -23,10 +23,14 @@
                                     <template v-if="item.lineItem.purchasable.type === 'cms-edition'">
                                         <td class="icon-col">
                                             <div class="plugin-icon">
-                                                <img :src="craftLogo" width="42" height="42" />
+                                                <img :src="staticImageUrl('craft.svg')" width="42" height="42" />
                                             </div>
                                         </td>
-                                        <td>Craft {{ item.lineItem.purchasable.name }} {{item.id}}</td>
+                                        <td>
+                                            <strong class="text-xl">Craft CMS</strong>
+                                            <br />
+                                            <edition-badge>{{ item.lineItem.purchasable.name }}</edition-badge>
+                                        </td>
                                     </template>
 
                                     <template v-else-if="item.lineItem.purchasable.type === 'plugin-edition'">
@@ -36,19 +40,22 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <strong class="text-xl">{{item.lineItem.description}}</strong>
-
-                                            <div class="text-secondary">
-                                                {{item.lineItem.purchasable.name}}
-                                            </div>
+                                            <strong class="text-xl">{{item.plugin.name}}</strong>
+                                            <br />
+                                            <edition-badge>{{ item.lineItem.purchasable.name }}</edition-badge>
                                         </td>
                                     </template>
 
                                     <template v-else>
                                         <td colspan="2">
                                             <strong class="text-xl">
-                                                <template v-if="item.lineItem.purchasable.type === 'cms-renewal'">Craft </template>
-                                                {{item.lineItem.description}}
+                                                <template v-if="item.lineItem.purchasable.type === 'cms-renewal'">
+                                                    Craft CMS
+                                                    {{item.lineItem.description}}
+                                                </template>
+                                                <template v-else>
+                                                    {{item.lineItem.description}}
+                                                </template>
                                             </strong>
 
                                             <div class="text-secondary">
@@ -85,7 +92,7 @@
                                     </td>
                                     <td class="text-right">
                                         <strong class="block text-xl">
-                                            {{ item.lineItem.total|currency }}
+                                            {{ item.lineItem.price|currency }}
                                         </strong>
                                         <a @click="removeFromCart(itemKey)">Remove</a>
                                     </td>
@@ -93,7 +100,6 @@
 
                                 <template v-for="(adjustment, adjustmentKey) in item.lineItem.adjustments">
                                     <tr :key="itemKey + 'adjustment-' + adjustmentKey" class="sub-item">
-                                        <td class="blank-cell"></td>
                                         <td class="blank-cell"></td>
                                         <td colspan="2">
                                             {{adjustment.name}}
@@ -118,7 +124,7 @@
 
                 <div v-else>
                     <empty>
-                        <font-awesome-icon icon="shopping-cart" class="text-5xl mb-4 text-grey" />
+                        <icon icon="shopping-cart" cssClass="text-5xl mb-4 text-grey" />
                         <div class="font-bold">Your cart is empty</div>
                         <div class="mt-4">
                             <p>Browse plugins on <a :href="craftPluginsUrl()">plugins.craftcms.com</a></p>
@@ -134,6 +140,7 @@
     import {mapState, mapGetters, mapActions} from 'vuex'
     import Empty from '../components/Empty'
     import Spinner from '../components/Spinner'
+    import EditionBadge from '../components/EditionBadge'
     import helpers from '../mixins/helpers'
 
     export default {
@@ -142,6 +149,7 @@
         components: {
             Empty,
             Spinner,
+            EditionBadge,
         },
 
         data() {

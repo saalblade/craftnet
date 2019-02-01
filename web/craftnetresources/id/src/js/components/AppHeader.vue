@@ -2,7 +2,7 @@
     <div class="header">
         <div class="header-left">
             <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()">
-                <font-awesome-icon :icon="showingSidebar ? 'times' : 'bars'" />
+                <icon :icon="showingSidebar ? 'times' : 'bars'" />
             </a>
 
             <div class="header-brand">
@@ -14,13 +14,13 @@
             <ul class="list-reset flex items-center">
                 <li class="block ml-6 cart-menu">
                     <router-link class="block" to="/cart">
-                        <font-awesome-icon icon="shopping-cart" />
+                        <icon icon="shopping-cart" />
                         <div class="cart-badge" :class="{invisible: !cartTotalItems}">{{cartTotalItems}}</div>
                     </router-link>
                 </li>
                 <li class="block ml-6 global-menu" v-on-clickaway="awayGlobalMenu">
                     <a class="block toggle" @click="globalMenuToggle">
-                        <font-awesome-icon icon="th" />
+                        <icon icon="th" />
                     </a>
 
                     <div class="popover" :class="{hidden: !showingGlobalMenu}">

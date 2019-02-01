@@ -6,7 +6,7 @@
                @after-enter="onAfterEnterLogoutWarningModal"
                class="auth-manager-modal">
             <template slot="body">
-                <font-awesome-icon icon="exclamation-triangle" />
+                <icon icon="exclamation-triangle" />
                 {{ logoutWarningPara }}
 
                 <div class="float-right mt-4">
@@ -28,7 +28,7 @@
                @after-enter="onAfterEnterLoginModal" @leave="onLeaveLoginModal"
                class="auth-manager-modal">
             <template slot="body">
-                <font-awesome-icon icon="exclamation-triangle" />
+                <icon icon="exclamation-triangle" />
                 <form @submit.prevent="login">
                     <h6>Your session has ended</h6>
                     <p>Enter your password to log back in.</p>

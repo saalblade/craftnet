@@ -13,7 +13,7 @@
                         <li v-if="location.email">{{ location.email }}</li>
                     </ul>
                     <div>
-                        <button class="btn btn-secondary" @click="$emit('edit', index)"><font-awesome-icon icon="pencil-alt" /> Edit</button>
+                        <button class="btn btn-secondary" @click="$emit('edit', index)"><icon icon="pencil-alt" /> Edit</button>
                     </div>
                 </div>
                 <div v-else>

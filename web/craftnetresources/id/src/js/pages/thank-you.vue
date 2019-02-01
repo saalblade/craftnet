@@ -1,7 +1,7 @@
 <template>
     <div class="thank-you">
         <div class="icon">
-            <font-awesome-icon icon="check" />
+            <icon icon="check" />
         </div>
         <h1>Thank You!</h1>
         <p>Your order has been processed successfully.</p>
