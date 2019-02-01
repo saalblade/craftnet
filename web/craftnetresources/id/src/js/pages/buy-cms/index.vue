@@ -44,6 +44,7 @@
                 this.$store.dispatch('cart/addToCart', [item])
                     .then(() => {
                         this.loading = false
+                        this.$store.dispatch('app/displayNotice', 'Craft CMS license added your cart.');
                         this.$router.push({path: '/cart'})
                     })
             }
