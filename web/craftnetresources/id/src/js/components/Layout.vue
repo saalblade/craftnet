@@ -3,7 +3,10 @@
         <app-header></app-header>
 
         <div class="flex-container">
-            <app-sidebar></app-sidebar>
+
+            <template v-if="!$route.meta.layout || $route.meta.layout !== 'no-sidebar'">
+                <app-sidebar></app-sidebar>
+            </template>
 
             <div class="main">
                 <div class="main-content">

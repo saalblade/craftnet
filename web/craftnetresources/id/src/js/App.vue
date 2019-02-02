@@ -18,7 +18,7 @@
         </template>
 
         <template v-else>
-            <component :is="layout"></component>
+            <layout></layout>
         </template>
     </div>
 </template>
@@ -29,7 +29,6 @@
     import AuthManager from './components/AuthManager';
     import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal';
     import Layout from './components/Layout';
-    import LayoutNoSidebar from './components/LayoutNoSidebar';
     import Spinner from './components/Spinner';
 
     export default {
@@ -40,15 +39,10 @@
             AuthManager,
             RenewLicensesModal,
             Layout,
-            LayoutNoSidebar,
             Spinner,
         },
 
         computed: {
-
-            layout() {
-                return 'layout' + (this.$route.meta.layout ? '-' + this.$route.meta.layout : '')
-            },
 
             ...mapState({
                 notification: state => state.app.notification,
