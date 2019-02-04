@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="header-left">
-            <a id="sidebar-toggle" href="#" @click.prevent="toggleSidebar()">
+            <a id="sidebar-toggle" href="#" @click.prevent="$emit('toggleSidebar')">
                 <icon :icon="showingSidebar ? 'times' : 'bars'" />
             </a>
 
@@ -76,9 +76,10 @@
             onClickaway: onClickaway,
         },
 
+        props: ['showingSidebar'],
+
         data() {
             return {
-                showingSidebar: false,
                 showingUserMenu: false,
                 showingGlobalMenu: false,
             }
@@ -98,13 +99,6 @@
         },
 
         methods: {
-
-            /**
-             * Toggles the sidebar.
-             */
-            toggleSidebar() {
-                this.showingSidebar = !this.showingSidebar;
-            },
 
             /**
              * Click away from the user menu.

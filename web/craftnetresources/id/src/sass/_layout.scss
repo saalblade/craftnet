@@ -114,6 +114,14 @@
   }
 }
 
+#app:not(.has-sidebar) {
+  .header {
+    #sidebar-toggle {
+      @apply .hidden;
+    }
+  }
+}
+
 @media (max-width: 767px) {
   .app {
     .sidebar {

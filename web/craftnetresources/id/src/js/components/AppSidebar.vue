@@ -1,30 +1,29 @@
 <template>
-    <!--<div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">-->
-    <div class="sidebar">
+    <div class="sidebar" :class="{ 'showing-sidebar': showingSidebar }">
         <h5>
-            <router-link @click.native="closeSidebar()" to="/licenses">
+            <router-link @click.native="$emit('closeSidebar')" to="/licenses">
                 <icon icon="key" />
                 Licenses
             </router-link>
         </h5>
         <ul>
-            <li><router-link @click.native="closeSidebar()" to="/licenses/cms">Craft CMS</router-link></li>
-            <li><router-link @click.native="closeSidebar()" to="/licenses/plugins">Plugins</router-link></li>
-            <li><router-link @click.native="closeSidebar()" to="/licenses/claim">Claim License</router-link></li>
+            <li><router-link @click.native="$emit('closeSidebar')" to="/licenses/cms">Craft CMS</router-link></li>
+            <li><router-link @click.native="$emit('closeSidebar')" to="/licenses/plugins">Plugins</router-link></li>
+            <li><router-link @click.native="$emit('closeSidebar')" to="/licenses/claim">Claim License</router-link></li>
         </ul>
 
         <template v-if="userIsInGroup('developers')">
             <h5>
-                <router-link @click.native="closeSidebar()" to="/developer">
+                <router-link @click.native="$emit('closeSidebar')" to="/developer">
                     <icon icon="plug" />
                     Developer
                 </router-link>
             </h5>
             <ul>
-                <li><router-link @click.native="closeSidebar()" to="/developer/plugins">Plugins</router-link></li>
-                <li><router-link @click.native="closeSidebar()" to="/developer/sales">Sales</router-link></li>
-                <li><router-link @click.native="closeSidebar()" to="/developer/profile">Profile</router-link></li>
-                <li><router-link @click.native="closeSidebar()" to="/developer/settings">Settings</router-link></li>
+                <li><router-link @click.native="$emit('closeSidebar')" to="/developer/plugins">Plugins</router-link></li>
+                <li><router-link @click.native="$emit('closeSidebar')" to="/developer/sales">Sales</router-link></li>
+                <li><router-link @click.native="$emit('closeSidebar')" to="/developer/profile">Profile</router-link></li>
+                <li><router-link @click.native="$emit('closeSidebar')" to="/developer/settings">Settings</router-link></li>
             </ul>
         </template>
 
@@ -44,26 +43,26 @@
 
         <template v-if="currentUser.enablePartnerFeatures">
             <h5>
-                <router-link @click.native="closeSidebar()" to="/partner">
+                <router-link @click.native="$emit('closeSidebar')" to="/partner">
                     <icon icon="handshake" />
                     Partner
                 </router-link>
             </h5>
             <ul>
-                <li><router-link @click.native="closeSidebar()" to="/partner/overview">Overview</router-link></li>
-                <li><router-link @click.native="closeSidebar()" to="/partner/profile">Profile</router-link></li>
+                <li><router-link @click.native="$emit('closeSidebar')" to="/partner/overview">Overview</router-link></li>
+                <li><router-link @click.native="$emit('closeSidebar')" to="/partner/profile">Profile</router-link></li>
             </ul>
         </template>
 
         <h5>
-            <router-link @click.native="closeSidebar()" to="/account">
+            <router-link @click.native="$emit('closeSidebar')" to="/account">
                 <icon icon="user" />
                 Account
             </router-link>
         </h5>
         <ul>
-            <li><router-link @click.native="closeSidebar()" to="/account/billing">Billing</router-link></li>
-            <li><router-link @click.native="closeSidebar()" to="/account/settings">Settings</router-link></li>
+            <li><router-link @click.native="$emit('closeSidebar')" to="/account/billing">Billing</router-link></li>
+            <li><router-link @click.native="$emit('closeSidebar')" to="/account/settings">Settings</router-link></li>
         </ul>
     </div>
 </template>
@@ -72,6 +71,8 @@
     import {mapState, mapGetters} from 'vuex'
 
     export default {
+
+        props: ['showingSidebar'],
 
         computed: {
 
@@ -84,17 +85,6 @@
             }),
 
         },
-
-        methods: {
-
-            /**
-             * Closes the sidebar.
-             */
-            closeSidebar() {
-                this.showingSidebar = false;
-            },
-
-        }
 
     }
 </script>

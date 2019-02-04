@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" :class="{'has-sidebar': (!$route.meta.layout || $route.meta.layout !== 'no-sidebar')}">
         <auth-manager ref="authManager"></auth-manager>
         <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.commit('app/updateShowRenewLicensesModal', false)" />
 

@@ -1,11 +1,10 @@
 <template>
     <div class="app">
-        <app-header></app-header>
+        <app-header :showingSidebar="showingSidebar" @toggleSidebar="toggleSidebar()"></app-header>
 
         <div class="flex-container">
-
             <template v-if="!$route.meta.layout || $route.meta.layout !== 'no-sidebar'">
-                <app-sidebar></app-sidebar>
+                <app-sidebar :showingSidebar="showingSidebar" @closeSidebar="closeSidebar()"></app-sidebar>
             </template>
 
             <div class="main">
@@ -26,7 +25,32 @@
         components: {
             AppHeader,
             AppSidebar,
+        },
+
+        data() {
+            return {
+                showingSidebar: false,
+            }
+        },
+
+        methods: {
+
+            /**
+             * Toggles the sidebar.
+             */
+            toggleSidebar() {
+                this.showingSidebar = !this.showingSidebar;
+            },
+
+            /**
+             * Closes the sidebar.
+             */
+            closeSidebar() {
+                this.showingSidebar = false;
+            },
+
         }
+
 
     }
 </script>
