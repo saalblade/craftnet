@@ -24,14 +24,6 @@ const getters = {
         }
     },
 
-    getSaleById(state) {
-        return id => {
-            if (state.sales) {
-                return state.sales.find(sale => sale.id == id);
-            }
-        }
-    },
-
 }
 
 /**
