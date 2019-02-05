@@ -9,7 +9,6 @@ import Cart from '../pages/cart'
 import DeveloperPlugins from '../pages/developer/plugins/index'
 import DeveloperPluginsId from '../pages/developer/plugins/_id'
 import DeveloperProfile from '../pages/developer/profile'
-import DeveloperSalesId from '../pages/developer/sales/_id'
 import DeveloperSalesIndex from '../pages/developer/sales/index'
 import DeveloperSettings from '../pages/developer/settings'
 import LicensesClaim from '../pages/licenses/claim'
@@ -108,11 +107,6 @@ const router = new VueRouter({
             name: 'DeveloperSalesIndex',
             component: DeveloperSalesIndex,
             meta: { stripeAccountAlert: true }
-        },
-        {
-            path: '/developer/sales/:id',
-            name: 'DeveloperSalesId',
-            component: DeveloperSalesId,
         },
         {
             path: '/developer/profile',
