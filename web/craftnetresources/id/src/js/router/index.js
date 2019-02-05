@@ -91,7 +91,8 @@ const router = new VueRouter({
         {
             path: '/developer/plugins',
             name: 'Plugins',
-            component: DeveloperPlugins
+            component: DeveloperPlugins,
+            meta: { stripeAccountAlert: true }
         },
         {
             path: '/developer/add-plugin',
@@ -105,7 +106,8 @@ const router = new VueRouter({
         {
             path: '/developer/sales',
             name: 'DeveloperSalesIndex',
-            component: DeveloperSalesIndex
+            component: DeveloperSalesIndex,
+            meta: { stripeAccountAlert: true }
         },
         {
             path: '/developer/sales/:id',
@@ -129,6 +131,7 @@ const router = new VueRouter({
         {
             path: '/licenses/cms',
             component: LicensesCmsIndex,
+            meta: { cmsLicensesRenewAlert: true }
         },
         {
             path: '/licenses/cms/:id',
@@ -136,7 +139,8 @@ const router = new VueRouter({
         },
         {
             path: '/licenses/plugins',
-            component: LicensesPluginsIndex
+            component: LicensesPluginsIndex,
+            meta: { pluginLicensesRenewAlert: true }
         },
         {
             path: '/licenses/plugins/:id',

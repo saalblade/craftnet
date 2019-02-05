@@ -1,7 +1,5 @@
 <template>
     <div>
-        <stripe-account-alert></stripe-account-alert>
-
         <h1>Sales</h1>
 
         <template v-if="salesToRender.length > 0">
@@ -46,13 +44,11 @@
 
 <script>
     import {mapState} from 'vuex'
-    import StripeAccountAlert from '../../../components/developer/StripeAccountAlert'
     import Empty from '../../../components/Empty'
 
     export default {
 
         components: {
-            StripeAccountAlert,
             Empty,
         },
 

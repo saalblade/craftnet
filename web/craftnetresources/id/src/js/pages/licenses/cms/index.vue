@@ -1,7 +1,5 @@
 <template>
     <div>
-        <license-renew-alert type="CMS" :expiring-licenses="expiringCmsLicenses"></license-renew-alert>
-
         <h1>Craft CMS</h1>
 
         <div v-if="cmsLicenses.length > 0" class="card card-table responsive-content">
@@ -17,16 +15,14 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
-    import LicenseRenewAlert from '../../../components/licenses/LicenseRenewAlert';
     import Empty from '../../../components/Empty';
 
     export default {
 
         components: {
             CmsLicensesTable,
-            LicenseRenewAlert,
             Empty,
         },
 
@@ -34,10 +30,6 @@
 
             ...mapState({
                 cmsLicenses: state => state.licenses.cmsLicenses,
-            }),
-
-            ...mapGetters({
-                expiringCmsLicenses: 'licenses/expiringCmsLicenses',
             }),
 
         },

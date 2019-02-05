@@ -1,7 +1,5 @@
 <template>
     <div>
-        <license-renew-alert type="plugin" :expiring-licenses="expiringPluginLicenses"></license-renew-alert>
-
         <h1>Plugins</h1>
 
         <div v-if="pluginLicenses.length > 0" class="card card-table responsive-content">
@@ -17,15 +15,13 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
-    import LicenseRenewAlert from '../../../components/licenses/LicenseRenewAlert';
+    import {mapState} from 'vuex'
     import PluginLicensesTable from '../../../components/licenses/PluginLicensesTable';
     import Empty from '../../../components/Empty';
 
     export default {
 
         components: {
-            LicenseRenewAlert,
             PluginLicensesTable,
             Empty,
         },
@@ -34,10 +30,6 @@
 
             ...mapState({
                 pluginLicenses: state => state.licenses.pluginLicenses,
-            }),
-
-            ...mapGetters({
-                expiringPluginLicenses: 'licenses/expiringPluginLicenses',
             }),
 
         },

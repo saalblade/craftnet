@@ -1,7 +1,5 @@
 <template>
     <div>
-        <stripe-account-alert></stripe-account-alert>
-
         <div class="flex justify-between mb-2">
             <h1>Plugins</h1>
             <div>
@@ -87,13 +85,11 @@
 
 <script>
     import {mapState} from 'vuex'
-    import StripeAccountAlert from '../../../components/developer/StripeAccountAlert'
     import Empty from '../../../components/Empty'
 
     export default {
 
         components: {
-            StripeAccountAlert,
             Empty,
         },
 

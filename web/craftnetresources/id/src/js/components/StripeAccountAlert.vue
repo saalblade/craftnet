@@ -1,14 +1,19 @@
 <template>
-    <div v-if="!stripeAccountLoading && !stripeAccount" class="top-alert alert alert-warning" role="alert">
+    <page-alert v-if="!stripeAccountLoading && !stripeAccount" type="warning">
         <strong>Stripe account missing.</strong>
         Define a Stripe account in the <router-link to="/developer/settings">developer settings</router-link>.
-    </div>
+    </page-alert>
 </template>
 
 <script>
     import {mapState} from 'vuex'
+    import PageAlert from './PageAlert'
 
     export default {
+
+        components: {
+            PageAlert,
+        },
 
         computed: {
 
