@@ -409,6 +409,9 @@ return [
     'RetconHtml' => [
         'handle' => 'retcon'
     ],
+    'Roman' => [
+        'handle' => 'roman'
+    ],
     'Scraper' => [
         'status' => 'Currently in development.'
     ],
