@@ -924,8 +924,20 @@ class Plugin extends Element
             $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username . ' approved the plugin', $this->devComments);
             $sendDevEmail = true;
             $emailSubject = "{$this->name} has been approved!";
-            $emailMessage = <<<EOD
+            // Any actual licenses yet?
+            if (!empty($packageManager->getAllVersions($this->packageName, null, null, false))) {
+                $emailMessage = <<<EOD
 Congratulations, {$this->name} has been approved, and is now available in the Craft Plugin Store for all to enjoy.
+EOD;
+            } else {
+                $emailMessage = <<<EOD
+Congratulations, {$this->name} has been approved for the Craft Plugin Store!
+
+Note that before it will show up, you’re going to need to [tag a release](https://docs.craftcms.com/v3/extend/plugin-store.html#plugin-releases) on it. 
+EOD;
+            }
+            $emailMessage .= <<<EOD
+
 
 {$this->devComments}
 
