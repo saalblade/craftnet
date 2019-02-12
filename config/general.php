@@ -11,6 +11,8 @@ return [
         'aliases' => [
             '@nodeModules' => dirname(__FILE__) . '/../node_modules'
         ],
+        'allowUpdates' => false,
+        'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
         'omitScriptNameInUrls' => true,
         'cpTrigger' => getenv('CRAFT_CP_TRIGGER'),
         'imageDriver' => 'imagick',
@@ -45,8 +47,6 @@ return [
             '--exclude-table-data \'apilog.requests\'',
     ],
     'prod' => [
-        'allowUpdates' => false,
-        'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
         'siteUrl' => [
             'api' => 'https://api.craftcms.com/',
             'composer' => 'https://composer.craftcms.com/',
@@ -58,8 +58,6 @@ return [
         'runQueueAutomatically' => false,
     ],
     'stage' => [
-        'devMode' => isset($_REQUEST['secret']) && $_REQUEST['secret'] === getenv('DEV_MODE_SECRET'),
-        'allowUpdates' => false,
         'siteUrl' => [
             'api' => getenv('CRAFT_API_ORIGIN'),
             'composer' => 'https://composer.craftcms.com/',
