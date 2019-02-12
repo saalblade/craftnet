@@ -435,6 +435,7 @@ class Plugin extends Element
         $names = parent::attributes();
         ArrayHelper::removeValue($names, 'activeInstalls');
         ArrayHelper::removeValue($names, 'devComments');
+        $names[] = 'developerName';
         return $names;
     }
 
