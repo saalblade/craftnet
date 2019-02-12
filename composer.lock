@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8609634b2912ca07759e02f60ba2482",
+    "content-hash": "1682acb6b639ff0371516d84bb5df85b",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -871,6 +871,53 @@
             "time": "2018-08-17T23:47:59+00:00"
         },
         {
+            "name": "craftcms/webhooks",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/craftcms/webhooks.git",
+                "reference": "0f18d793dccf81a984a6796fb517152954daccaf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/craftcms/webhooks/zipball/0f18d793dccf81a984a6796fb517152954daccaf",
+                "reference": "0f18d793dccf81a984a6796fb517152954daccaf",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "^3.0.0"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Webhooks",
+                "handle": "webhooks"
+            },
+            "autoload": {
+                "psr-4": {
+                    "craft\\webhooks\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pixel & Tonic",
+                    "homepage": "https://pixelandtonic.com/"
+                }
+            ],
+            "description": "Post webhooks when events are triggered in Craft CMS.",
+            "keywords": [
+                "cms",
+                "craftcms",
+                "html",
+                "webhooks",
+                "yii2"
+            ],
+            "time": "2018-12-21T12:09:36+00:00"
+        },
+        {
             "name": "creocoder/yii2-nested-sets",
             "version": "0.9.0",
             "source": {
@@ -971,12 +1018,12 @@
             "version": "1.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/dannyvankooten/vat.php.git",
+                "url": "https://github.com/ibericode/vat.git",
                 "reference": "1d24382454481384bbc987dcbc959cfef17d6baa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dannyvankooten/vat.php/zipball/1d24382454481384bbc987dcbc959cfef17d6baa",
+                "url": "https://api.github.com/repos/ibericode/vat/zipball/1d24382454481384bbc987dcbc959cfef17d6baa",
                 "reference": "1d24382454481384bbc987dcbc959cfef17d6baa",
                 "shasum": ""
             },
@@ -1011,6 +1058,7 @@
             "keywords": [
                 "vat"
             ],
+            "abandoned": "ibericode/vat",
             "time": "2019-01-08T09:21:39+00:00"
         },
         {
@@ -1428,12 +1476,12 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/flipboxfactory/craft-postmark.git",
+                "url": "https://github.com/benface/craft-postmark.git",
                 "reference": "5cb8b1c00469560fe727b09d6f3c280c396340d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flipboxfactory/craft-postmark/zipball/5cb8b1c00469560fe727b09d6f3c280c396340d8",
+                "url": "https://api.github.com/repos/benface/craft-postmark/zipball/5cb8b1c00469560fe727b09d6f3c280c396340d8",
                 "reference": "5cb8b1c00469560fe727b09d6f3c280c396340d8",
                 "shasum": ""
             },
