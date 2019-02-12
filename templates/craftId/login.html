@@ -1,9 +1,0 @@
-{% extends "_layouts/site" %}
-
-{% block content %}
-    <div v-if="loading" class="flex items-center self-center text-center pin absolute justify-center">
-        <div class="spinner"></div>
-    </div>
-
-    <login-form v-else remembered-username="{{ craft.app.user.rememberedUsername }}"></login-form>
-{% endblock %}

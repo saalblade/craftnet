@@ -22,7 +22,6 @@
 {% endjs %}
 
 {% block body %}
-    {{ craft.twigpack.includeCssModule("chunk-vendors.css") }}
     {{ craft.twigpack.includeCssModule("site.css") }}
 
     <div id="site">
@@ -43,7 +42,6 @@
         {% endblock %}
     </div>
 
-    {{ craft.twigpack.includeJsModule("chunk-common.js") }}
     {{ craft.twigpack.includeJsModule("chunk-vendors.js") }}
     {{ craft.twigpack.includeJsModule("site.js") }}
 {% endblock %}

@@ -32,32 +32,40 @@
                         <div class="popover-arrow"></div>
                     </div>
                 </li>
-                <li class="block ml-6 user-menu" v-on-clickaway="awayUserMenu">
-                    <a class="block toggle" @click="userMenuToggle">
-                        <img :src="currentUser.photoUrl" />
-                    </a>
 
-                    <div class="popover" :class="{hidden: !showingUserMenu}">
-                        <div>
-                            {{currentUser.email}}
+                <template v-if="currentUser">
+                    <li class="block ml-6 user-menu" v-on-clickaway="awayUserMenu">
+                        <a class="block toggle" @click="userMenuToggle">
+                            <img :src="currentUser.photoUrl" />
+                        </a>
+
+                        <div class="popover" :class="{hidden: !showingUserMenu}">
+                            <div>
+                                {{currentUser.email}}
+                            </div>
+
+                            <hr>
+
+                            <ul class="list-reset">
+                                <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/billing">Billing</router-link></li>
+                                <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/settings">Account Settings</router-link></li>
+                            </ul>
+
+                            <hr>
+
+                            <div>
+                                <a href="/logout">Logout</a>
+                            </div>
+
+                            <div class="popover-arrow"></div>
                         </div>
+                    </li>
+                </template>
 
-                        <hr>
-
-                        <ul class="list-reset">
-                            <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/billing">Billing</router-link></li>
-                            <li><router-link class="block py-1" @click.native="showingUserMenu = false" to="/account/settings">Account Settings</router-link></li>
-                        </ul>
-
-                        <hr>
-
-                        <div>
-                            <a href="/logout">Logout</a>
-                        </div>
-
-                        <div class="popover-arrow"></div>
-                    </div>
-                </li>
+                <template v-else>
+                    <li class="ml-4"><router-link to="/site/register" class="block py-1">Register</router-link></li>
+                    <li class="ml-4"><router-link to="/site/login" class="block py-1">Login</router-link></li>
+                </template>
             </ul>
         </div>
     </div>
@@ -92,7 +100,6 @@
             }),
 
             ...mapGetters({
-                userIsInGroup: 'account/userIsInGroup',
                 cartTotalItems: 'cart/cartTotalItems',
             }),
 

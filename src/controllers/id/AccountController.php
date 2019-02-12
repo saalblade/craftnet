@@ -27,25 +27,6 @@ class AccountController extends Controller
     // =========================================================================
 
     /**
-     * Account index.
-     *
-     * @return Response
-     */
-    public function actionIndex(): Response
-    {
-        $stripeAccessToken = null;
-        $user = Craft::$app->getUser()->getIdentity();
-
-        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
-        $stripePublicKey = $craftIdConfig['stripePublicKey'];
-
-        return $this->renderTemplate('account/index', [
-            'stripeAccessToken' => $user->stripeAccessToken,
-            'stripePublicKey' => $stripePublicKey
-        ]);
-    }
-
-    /**
      * Upload a user photo.
      *
      * @return null|Response

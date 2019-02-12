@@ -1,7 +1,10 @@
 <template>
     <div id="app" :class="{'has-sidebar': (!$route.meta.layout || $route.meta.layout !== 'no-sidebar')}">
         <auth-manager ref="authManager"></auth-manager>
-        <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.commit('app/updateShowRenewLicensesModal', false)" />
+
+        <template v-if="currentUser">
+            <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.commit('app/updateShowRenewLicensesModal', false)" />
+        </template>
 
         <template v-if="notification">
             <div id="notifications-wrapper" :class="{'hide': !notification }">
@@ -26,6 +29,7 @@
 <script>
     import {mapState} from 'vuex'
     import router from './router';
+    import helpers from './mixins/helpers'
     import AuthManager from './components/AuthManager';
     import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal';
     import Layout from './components/Layout';
@@ -34,6 +38,8 @@
     export default {
 
         router,
+
+        mixins: [helpers],
 
         components: {
             AuthManager,
@@ -49,35 +55,32 @@
                 showRenewLicensesModal: state => state.app.showRenewLicensesModal,
                 loading: state => state.app.loading,
                 renewLicense: state => state.app.renewLicense,
+                currentUser: state => state.account.currentUser,
             }),
 
+            currentLayout() {
+                switch (this.$route.meta.layout) {
+                    case 'site-layout':
+                        return this.$route.meta.layout
+
+                    default:
+                        return 'app-layout'
+                }
+            }
+        },
+
+        methods: {
+            loadUserData() {
+                if (window.currentUserId) {
+                    this.loadAuthenticatedUserData()
+                } else {
+                    this.loadGuestUserData()
+                }
+            },
         },
 
         created() {
-            this.$store.dispatch('craftId/getCraftIdData')
-                .then(() => {
-                    this.$store.commit('app/updateLoading', false)
-                    this.$store.dispatch('cart/getCart');
-                });
-
-            if (window.stripeAccessToken) {
-                this.$store.dispatch('account/getStripeAccount')
-                    .then(() => {
-                        this.$store.commit('app/updateStripeAccountLoading', false)
-                    }, () => {
-                        this.$store.commit('app/updateStripeAccountLoading', false)
-                    });
-            } else {
-                this.$store.commit('app/updateStripeAccountLoading', false)
-            }
-
-            this.$store.dispatch('account/getInvoices')
-                .then(() => {
-                    this.$store.commit('app/updateInvoicesLoading', false)
-                })
-                .catch(() => {
-                    this.$store.commit('app/updateInvoicesLoading', false)
-                });
+            this.loadUserData()
 
             if(window.sessionNotice) {
                 this.$store.dispatch('app/displayNotice', window.sessionNotice);

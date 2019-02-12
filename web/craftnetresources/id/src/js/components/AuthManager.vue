@@ -59,6 +59,7 @@
 <script>
     /* global Craft */
 
+    import {mapState} from 'vuex'
     import axios from 'axios';
     import qs from 'qs';
     import Modal from './Modal';
@@ -90,6 +91,14 @@
                 minSafeSessionTime: 120,
                 checkInterval: 60,
             }
+        },
+
+        computed: {
+
+            ...mapState({
+                currentUser: state => state.account.currentUser,
+            }),
+
         },
 
         methods: {
@@ -129,7 +138,6 @@
                         this.submitLoginIfLoggedOut = false;
                     })
                     .catch(() => {
-
                         this.updateRemainingSessionTime(-1);
                     });
             },
@@ -138,6 +146,10 @@
              * Updates our record of the auth timeout, and handles it.
              */
             updateRemainingSessionTime(remainingSessionTime) {
+                if (!this.currentUser) {
+                    return false
+                }
+
                 this.remainingSessionTime = parseInt(remainingSessionTime);
 
                 // Are we within the warning window?

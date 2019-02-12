@@ -75,11 +75,7 @@ return [
         'sync-staging' => 'craftnet/jobs/sync-staging',
 
         // Catch-all route for Vue when people reload the page.
-        'login'=> ['template' => 'login'],
-        'register'=> ['template' => 'register'],
-        'register/success'=> ['template' => 'register/success'],
-        'forgotpassword'=> ['template' => 'forgotpassword'],
-        '<url:(.*)>'=> 'craftnet/id/account',
+        '<url:(.*)>'=> 'craftnet/id/index',
     ],
     'plugins' => [
         '/' => 'craftnet/plugins/index/index',

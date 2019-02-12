@@ -75,6 +75,52 @@ export default {
          */
         craftPluginsUrl() {
             return process.env.VUE_APP_CRAFT_PLUGINS_URL;
+        },
+
+        loadAuthenticatedUserData(cb, cbError) {
+            // Account
+            this.$store.dispatch('craftId/getCraftIdData')
+                .then(() => {
+                    // Cart
+                    this.$store.dispatch('cart/getCart')
+                        .then(() => {
+                            this.$store.commit('app/updateLoading', false)
+
+                            cb();
+
+                            // Stripe Account
+                            if (window.stripeAccessToken) {
+                                this.$store.dispatch('account/getStripeAccount')
+                                    .then(() => {
+                                        this.$store.commit('app/updateStripeAccountLoading', false)
+                                    }, () => {
+                                        this.$store.commit('app/updateStripeAccountLoading', false)
+                                    });
+                            } else {
+                                this.$store.commit('app/updateStripeAccountLoading', false)
+                            }
+
+                            // Invoices
+                            this.$store.dispatch('account/getInvoices')
+                                .then(() => {
+                                    this.$store.commit('app/updateInvoicesLoading', false)
+                                })
+                                .catch(() => {
+                                    this.$store.commit('app/updateInvoicesLoading', false)
+                                });
+                        })
+                        .catch(() => {
+                            cbError();
+                        })
+                });
+        },
+
+        loadGuestUserData() {
+            // Cart
+            this.$store.dispatch('cart/getCart')
+                .then(() => {
+                    this.$store.commit('app/updateLoading', false)
+                })
         }
     }
 }

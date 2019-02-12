@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Register from '../pages/register/index'
+import RegisterSuccess from '../pages/register/success'
+import Login from '../pages/login'
+import ForgotPassword from '../pages/forgot-password'
 import AccountBillingIndex from '../pages/account/billing/index'
 import AccountBillingInvoiceNumber from '../pages/account/billing/invoices/_number'
 import AccountSettings from '../pages/account/settings'
@@ -54,6 +58,30 @@ const router = new VueRouter({
 
         // Pages
 
+        {
+            path: '/site/register',
+            name: 'Register',
+            component: Register,
+            meta: { layout: "no-sidebar" }
+        },
+        {
+            path: '/site/register/success',
+            name: 'RegisterSuccess',
+            component: RegisterSuccess,
+            meta: { layout: "no-sidebar" }
+        },
+        {
+            path: '/site/login',
+            name: 'Login',
+            component: Login,
+            meta: { layout: "no-sidebar" }
+        },
+        {
+            path: '/site/forgot-password',
+            name: 'ForgotPassword',
+            component: ForgotPassword,
+            meta: { layout: "no-sidebar" }
+        },
         {
             path: '/account/billing',
             name: 'Billing',
@@ -182,13 +210,26 @@ const router = new VueRouter({
     ]
 });
 
-// Renew session when changing route
+import store from '../store'
+
 router.beforeEach((to, from, next) => {
+    // Renew the auth manager’s session
     if (router.app.$refs.authManager) {
         router.app.$refs.authManager.renewSession();
     }
 
-    next();
+    // Guest users are limited to login, registration and cart pages
+    const currentUser = store.state.account.currentUser
+
+    if (!currentUser) {
+        if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart') {
+            router.push({path: '/site/login'})
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
 });
 
 export default router;
