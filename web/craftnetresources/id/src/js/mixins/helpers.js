@@ -86,7 +86,9 @@ export default {
                         .then(() => {
                             this.$store.commit('app/updateLoading', false)
 
-                            cb();
+                            if (cb) {
+                                cb();
+                            }
 
                             // Stripe Account
                             if (window.stripeAccessToken) {
@@ -110,7 +112,9 @@ export default {
                                 });
                         })
                         .catch(() => {
-                            cbError();
+                            if (cbError) {
+                                cbError();
+                            }
                         })
                 });
         },

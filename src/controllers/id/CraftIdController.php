@@ -7,7 +7,6 @@ use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
 use craft\helpers\Json;
-use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use yii\web\Response;
 
@@ -20,7 +19,7 @@ class CraftIdController extends BaseController
     // =========================================================================
 
     /**
-     * Handles /v1/craft-id requests.
+     * Get Craft ID data.
      *
      * @return Response
      * @throws \yii\base\InvalidConfigException
@@ -31,42 +30,7 @@ class CraftIdController extends BaseController
         $this->requireLogin();
         $this->requirePostRequest();
 
-
-        // Current user
-
         $currentUser = Craft::$app->getUser()->getIdentity();
-
-
-        // Craft ID config
-
-        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
-
-
-        // Billing address
-
-        $billingAddressArray = null;
-
-        $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($currentUser->id);
-
-        if ($customer && $billingAddress = $customer->getPrimaryBillingAddress()) {
-            $billingAddressArray = $billingAddress->toArray();
-
-            $country = $billingAddress->getCountry();
-
-            if ($country) {
-                $billingAddressArray['country'] = $country->iso;
-            }
-
-            $state = $billingAddress->getState();
-
-            if ($state) {
-                $billingAddressArray['state'] = $state->abbreviation;
-            }
-        }
-
-
-        // Data
-
         $photo = $currentUser->getPhoto();
         $photoUrl = $photo ? Craft::$app->getAssets()->getAssetUrl($photo, [
             'mode' => 'crop',
@@ -74,7 +38,8 @@ class CraftIdController extends BaseController
             'height' => 200,
         ], true) : null;
 
-        $data = [
+        return $this->asJson([
+            'billingAddress' => $this->getBillingAddress($currentUser),
             'currentUser' => [
                 'id' => $currentUser->id,
                 'email' => $currentUser->email,
@@ -84,96 +49,43 @@ class CraftIdController extends BaseController
                 'developerName' => $currentUser->developerName,
                 'developerUrl' => $currentUser->developerUrl,
                 'location' => $currentUser->location,
-                'enablePluginDeveloperFeatures' => ($currentUser->isInGroup('developers') ? true : false),
-                'enableShowcaseFeatures' => ($currentUser->enableShowcaseFeatures == 1 ? true : false),
-                'enablePartnerFeatures' => ($currentUser->enablePartnerFeatures == 1 ? true : false),
+                'enablePluginDeveloperFeatures' => $currentUser->isInGroup('developers') ? true : false,
+                'enableShowcaseFeatures' => $currentUser->enableShowcaseFeatures == 1 ? true : false,
+                'enablePartnerFeatures' => $currentUser->enablePartnerFeatures == 1 ? true : false,
                 'groups' => $currentUser->getGroups(),
                 'photoId' => $currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null,
                 'photoUrl' => $photoUrl,
-                'hasApiToken' => ($currentUser->apiToken !== null),
+                'hasApiToken' => $currentUser->apiToken !== null,
             ],
-            'card' => $this->_card($currentUser),
-            'cardToken' => $this->_cardToken($currentUser),
-            'billingAddress' => $billingAddressArray,
+            'card' => $this->getCard($currentUser),
+            'cardToken' => $this->getCardToken($currentUser),
+            'categories' => $this->getPluginCategories(),
             'countries' => Craft::$app->getApi()->getCountries(),
-            'apps' => Module::getInstance()->getOauth()->getApps(),
-            'plugins' => $this->_plugins($currentUser),
-            'cmsLicenses' => $this->_cmsLicenses($currentUser),
-            'pluginLicenses' => $this->_pluginLicenses($currentUser),
-            'licenseExpiryDateOptions' => [
-                'cmsLicenses' => [],
-                'pluginLicenses' => [],
-            ],
-            'sales' => $this->_sales($currentUser),
-            'upcomingInvoice' => $this->_upcomingInvoice(),
-            'categories' => $this->_pluginCategories(),
-        ];
-
-
-        // Build expiry date options
-
-        foreach ($data['cmsLicenses'] as $cmsLicense) {
-            if (empty($cmsLicense['expiresOn'])) {
-                continue;
-            }
-
-            $data['licenseExpiryDateOptions']['cmsLicenses'][$cmsLicense['id']] = $this->getExpiryDateOptions($cmsLicense['expiresOn']);
-        }
-
-        foreach ($data['pluginLicenses'] as $pluginLicense) {
-            if (empty($pluginLicense['expiresOn'])) {
-                continue;
-            }
-
-            $data['licenseExpiryDateOptions']['pluginLicenses'][$pluginLicense['id']] = $this->getExpiryDateOptions($pluginLicense['expiresOn']);
-        }
-
-        return $this->asJson($data);
+            'licenseExpiryDateOptions' => $this->getLicenseExpiryDateOptions($currentUser),
+        ]);
     }
 
-    public function actionPluginStoreData()
+    /**
+     * Get Plugin Store data.
+     *
+     * @return Response
+     */
+    public function actionPluginStoreData(): Response
     {
-        $pluginStoreData = Craft::$app->getApi()->getPluginStoreData();
+        $data = Craft::$app->getApi()->getPluginStoreData();
 
-        return $this->asJson($pluginStoreData);
+        return $this->asJson($data);
     }
 
     // Private Methods
     // =========================================================================
 
     /**
-     * Get expiry date options.
-     *
-     * @param \DateTime $expiryDate
-     * @return array
-     * @throws \Exception
-     */
-    private function getExpiryDateOptions(\DateTime $expiryDate)
-    {
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-        $dates = [];
-
-        for ($i = 1; $i <= 5; $i++) {
-            if ($expiryDate < $now) {
-                $date =  (new \DateTime('now', new \DateTimeZone('UTC')))
-                    ->modify("+{$i} years");
-                $dates[] = ["{$i}y", $date->format('Y-m-d')];
-            } else {
-                $date = clone $expiryDate;
-                $date =  $date->modify("+{$i} years");
-                $dates[] = ["{$date->format('Y-m-d')}", $date->format('Y-m-d')];
-            }
-        }
-
-        return $dates;
-    }
-
-    /**
      * @param User $user
      *
      * @return array|null
      */
-    private function _card(User $user)
+    private function getCard(User $user): ?array
     {
         $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
 
@@ -197,7 +109,7 @@ class CraftIdController extends BaseController
      * @param User $user
      * @return null|string
      */
-    private function _cardToken(User $user)
+    private function getCardToken(User $user): ?string
     {
         $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
 
@@ -211,80 +123,12 @@ class CraftIdController extends BaseController
     }
 
     /**
-     * @param User $user
-     *
      * @return array
      */
-    private function _plugins(User $user): array
+    private function getPluginCategories(): array
     {
-        /** @var UserBehavior|User $user */
         $ret = [];
 
-        foreach ($user->getPlugins() as $plugin) {
-            $ret[] = $this->pluginTransformer($plugin);
-        }
-
-        return $ret;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return array CMS licenses.
-     */
-    private function _cmsLicenses(User $user): array
-    {
-        return Module::getInstance()->getCmsLicenseManager()->getLicensesArrayByOwner($user);
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return array Plugin licenses.
-     */
-    private function _pluginLicenses(User $user): array
-    {
-        return Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
-    }
-
-    /**
-     * @return array
-     */
-    private function _sales(User $user): array
-    {
-        return Module::getInstance()->getPluginLicenseManager()->getSalesArrayByPluginOwner($user);
-    }
-
-    /**
-     * @return array
-     */
-    private function _upcomingInvoice(): array
-    {
-        return [
-            'datePaid' => date('Y-m-d'),
-            'paymentMethod' => [
-                'type' => 'visa',
-                'last4' => '2424',
-            ],
-            'items' => [
-                ['id' => 6, 'name' => 'Analytics', 'amount' => 29, 'type' => 'renewal'],
-                ['id' => 8, 'name' => 'Social', 'amount' => 99, 'type' => 'license']
-            ],
-            'totalPrice' => 128,
-            'customer' => [
-                'id' => 1,
-                'name' => 'Benjamin David',
-                'email' => 'ben@pixelandtonic.com',
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function _pluginCategories(): array
-    {
-        $ret = [];
         $categories = Category::find()
             ->group('pluginCategories')
             ->all();
@@ -297,5 +141,74 @@ class CraftIdController extends BaseController
         }
 
         return $ret;
+    }
+
+    /**
+     * @param User $user
+     * @return array
+     * @throws \Exception
+     */
+    private function getLicenseExpiryDateOptions(User $user): array
+    {
+        $licenseExpiryDateOptions = [
+            'cmsLicenses' => [],
+            'pluginLicenses' => [],
+        ];
+
+        $cmsLicenses = Module::getInstance()->getCmsLicenseManager()->getLicensesArrayByOwner($user);
+        $pluginLicenses = Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
+
+        foreach ($cmsLicenses as $cmsLicense) {
+            if (empty($cmsLicense['expiresOn'])) {
+                continue;
+            }
+
+            $licenseExpiryDateOptions['cmsLicenses'][$cmsLicense['id']] = $this->getExpiryDateOptions($cmsLicense['expiresOn']);
+        }
+
+        foreach ($pluginLicenses as $pluginLicense) {
+            if (empty($pluginLicense['expiresOn'])) {
+                continue;
+            }
+
+            $licenseExpiryDateOptions['pluginLicenses'][$pluginLicense['id']] = $this->getExpiryDateOptions($pluginLicense['expiresOn']);
+        }
+
+        return $licenseExpiryDateOptions;
+    }
+
+    /**
+     * @param User $user
+     * @return array|null
+     */
+    private function getBillingAddress(User $user): ?array
+    {
+        $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
+
+        if (!$customer) {
+            return null;
+        }
+
+        $primaryBillingAddress = $customer->getPrimaryBillingAddress();
+
+        if (!$primaryBillingAddress) {
+            return null;
+        }
+
+        $billingAddress = $primaryBillingAddress->toArray();
+
+        $country = $primaryBillingAddress->getCountry();
+
+        if ($country) {
+            $billingAddress['country'] = $country->iso;
+        }
+
+        $state = $primaryBillingAddress->getState();
+
+        if ($state) {
+            $billingAddress['state'] = $state->abbreviation;
+        }
+
+        return $billingAddress;
     }
 }

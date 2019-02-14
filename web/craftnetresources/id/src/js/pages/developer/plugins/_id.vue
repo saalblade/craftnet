@@ -8,23 +8,27 @@
         <template v-if="!pluginId && !this.pluginDraft.repository">
             <div class="card">
                 <div class="card-body">
-                    <template v-if="connectedAppsCount > 0">
-                        <p>To get started, select a repository for your plugin.</p>
+                    <p>To get started, select a repository for your plugin.</p>
 
-                        <div v-for="(app, appHandle) in apps" class="mb-3" :key="appHandle">
-                            <repositories :appHandle="appHandle" :loading-repository="loadingRepository" @selectRepository="onSelectRepository"></repositories>
-                        </div>
-
-                        <div>
-                            <router-link to="/account/settings#connected-apps" class="btn btn-secondary">Manage connected apps</router-link>
-                        </div>
+                    <template v-if="appsLoading">
+                        <spinner></spinner>
                     </template>
                     <template v-else>
-                        <h2>Connect</h2>
-                        <p>Connect to GitHub to retrieve your repositories.</p>
-
-                        <connected-apps></connected-apps>
+                        <template v-if="connectedAppsCount > 0">
+                                <div v-for="(app, appHandle) in apps" class="mb-3" :key="appHandle">
+                                    <repositories :appHandle="appHandle" :loading-repository="loadingRepository" @selectRepository="onSelectRepository"></repositories>
+                                </div>
+                        </template>
+                        <template v-else>
+                            <h2>Connect</h2>
+                            <p>Connect to GitHub to retrieve your repositories.</p>
+                            <connected-apps></connected-apps>
+                        </template>
                     </template>
+
+                    <div class="mt-2">
+                        <router-link to="/developer/settings" class="btn btn-secondary">Manage connected apps</router-link>
+                    </div>
                 </div>
             </div>
         </template>
@@ -281,6 +285,7 @@
 
             ...mapState({
                 apps: state => state.account.apps,
+                appsLoading: state => state.account.appsLoading,
                 plugins: state => state.developers.plugins,
             }),
 
@@ -611,6 +616,8 @@
         },
 
         mounted() {
+            this.$store.dispatch('account/getApps')
+
             if (this.plugin) {
                 this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
 

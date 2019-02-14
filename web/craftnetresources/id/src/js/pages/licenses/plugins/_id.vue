@@ -1,20 +1,26 @@
 <template>
-    <div v-if="license">
+    <div>
         <p><router-link class="nav-link" to="/licenses/plugins" exact>← Plugins</router-link></p>
-        <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
 
-        <plugin-license-details :license="license"></plugin-license-details>
+        <template v-if="pluginLicensesLoading || !license">
+            <spinner></spinner>
+        </template>
+        <template v-else>
+            <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
 
-        <license-history :history="license.history" />
+            <plugin-license-details :license="license"></plugin-license-details>
 
-        <div class="card card-danger mb-3">
-            <div class="card-header">Danger Zone</div>
-            <div class="card-body">
-                <h5>Release license</h5>
-                <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
-                <div><button class="btn btn-danger" @click="releasePluginLicense()">Release License</button></div>
+            <license-history :history="license.history" />
+
+            <div class="card card-danger mb-3">
+                <div class="card-header">Danger Zone</div>
+                <div class="card-body">
+                    <h5>Release license</h5>
+                    <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
+                    <div><button class="btn btn-danger" @click="releasePluginLicense()">Release License</button></div>
+                </div>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 
@@ -23,6 +29,7 @@
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
     import PluginLicenseDetails from '../../../components/licenses/PluginLicenseDetails';
     import LicenseHistory from '../../../components/licenses/LicenseHistory';
+    import Spinner from '../../../components/Spinner';
 
     export default {
 
@@ -30,12 +37,14 @@
             CmsLicensesTable,
             PluginLicenseDetails,
             LicenseHistory,
+            Spinner,
         },
 
         computed: {
 
             ...mapState({
                 pluginLicenses: state => state.licenses.pluginLicenses,
+                pluginLicensesLoading: state => state.licenses.pluginLicensesLoading,
             }),
 
             license() {
@@ -72,6 +81,8 @@
 
         mounted() {
             this.$store.commit('app/updateRenewLicense', this.license)
+
+            this.$store.dispatch('licenses/getPluginLicenses')
         }
 
     }

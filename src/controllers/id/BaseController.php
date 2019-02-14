@@ -108,4 +108,31 @@ abstract class BaseController extends Controller
             'activeInstalls' => $plugin->activeInstalls,
         ];
     }
+
+    /**
+     * Get expiry date options.
+     *
+     * @param \DateTime $expiryDate
+     * @return array
+     * @throws \Exception
+     */
+    protected function getExpiryDateOptions(\DateTime $expiryDate)
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $dates = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+            if ($expiryDate < $now) {
+                $date =  (new \DateTime('now', new \DateTimeZone('UTC')))
+                    ->modify("+{$i} years");
+                $dates[] = ["{$i}y", $date->format('Y-m-d')];
+            } else {
+                $date = clone $expiryDate;
+                $date =  $date->modify("+{$i} years");
+                $dates[] = ["{$date->format('Y-m-d')}", $date->format('Y-m-d')];
+            }
+        }
+
+        return $dates;
+    }
 }

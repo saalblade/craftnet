@@ -22,14 +22,6 @@
 
         <div class="card mb-6">
             <div class="card-body">
-                <h4>Upcoming Invoice</h4>
-
-                <invoices-table :invoices="[]" :upcoming="true"></invoices-table>
-            </div>
-        </div>
-
-        <div class="card mb-6">
-            <div class="card-body">
                 <h4>Invoices</h4>
 
                 <spinner v-if="invoicesLoading"></spinner>
@@ -66,7 +58,6 @@
 
             ...mapState({
                 invoices: state => state.account.invoices,
-                upcomingInvoice: state => state.account.upcomingInvoice,
                 invoicesLoading: state => state.account.invoicesLoading,
             }),
 

@@ -1,30 +1,38 @@
 <template>
-    <list-group>
-        <stripe-app v-if="showStripe"></stripe-app>
+    <div>
+        <template v-if="appsLoading">
+            <spinner></spinner>
+        </template>
+        <template v-else>
+            <list-group>
+                <stripe-app v-if="showStripe"></stripe-app>
 
-        <div v-for="(appType, index) in appTypes" :key="index">
-            <connected-app
-                    :name="appType.name"
-                    :description="'Connect to your ' + appType.name + ' account.'"
-                    :icon="staticImageUrl('' + appType.handle + '.svg')"
-                    :account-name="accountName(appType.handle)"
-                    :connected="apps[appType.handle]"
-                    :buttonLoading="(loading && loading[appType.handle])"
-                    @connect="connect(appType.handle)"
-                    @disconnect="disconnect(appType.handle)"
-            ></connected-app>
+                <div v-for="(appType, index) in appTypes" :key="index">
+                    <connected-app
+                            :name="appType.name"
+                            :description="'Connect to your ' + appType.name + ' account.'"
+                            :icon="staticImageUrl('' + appType.handle + '.svg')"
+                            :account-name="accountName(appType.handle)"
+                            :connected="apps[appType.handle]"
+                            :buttonLoading="(loading && loading[appType.handle])"
+                            @connect="connect(appType.handle)"
+                            @disconnect="disconnect(appType.handle)"
+                    ></connected-app>
 
-            <hr v-if="index != (appTypes.length - 1)">
-        </div>
-    </list-group>
+                    <hr v-if="index != (appTypes.length - 1)">
+                </div>
+            </list-group>
+        </template>
+    </div>
 </template>
 
 <script>
     import {mapState, mapGetters} from 'vuex'
+    import helpers from '../../../mixins/helpers'
     import StripeApp from './StripeApp'
     import ConnectedApp from './ConnectedApp'
     import ListGroup from '../../ListGroup'
-    import helpers from '../../../mixins/helpers'
+    import Spinner from '../../Spinner'
 
     export default {
 
@@ -55,12 +63,14 @@
             StripeApp,
             ConnectedApp,
             ListGroup,
+            Spinner,
         },
 
         computed: {
 
             ...mapState({
                 apps: state => state.account.apps,
+                appsLoading: state => state.account.appsLoading,
                 currentUser: state => state.account.currentUser,
             }),
 
@@ -141,6 +151,10 @@
                 });
             },
 
+        },
+
+        mounted() {
+            this.$store.dispatch('account/getApps')
         }
 
     }

@@ -32,7 +32,6 @@ const getters = {
         return options;
     },
 
-
     stateOptions(state) {
         return iso => {
             let options = [];
@@ -74,16 +73,7 @@ const actions = {
             craftIdApi.getCraftIdData(response => {
                     commit('updateCategories', {categories: response.data.categories});
                     commit('updateCountries', {countries: response.data.countries});
-
                     commit('developers/updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true});
-                    commit('developers/updatePlugins', {plugins: response.data.plugins}, {root: true});
-                    commit('developers/updateSales', {sales: response.data.sales}, {root: true});
-
-                    commit('licenses/updateCmsLicenses', {cmsLicenses: response.data.cmsLicenses}, {root: true});
-                    commit('licenses/updatePluginLicenses', {pluginLicenses: response.data.pluginLicenses}, {root: true});
-
-                    commit('account/updateUpcomingInvoice', {upcomingInvoice: response.data.upcomingInvoice}, {root: true});
-                    commit('account/updateApps', {apps: response.data.apps}, {root: true});
                     commit('account/updateCurrentUser', {currentUser: response.data.currentUser}, {root: true});
                     commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true});
                     commit('account/updateCard', {card: response.data.card}, {root: true});

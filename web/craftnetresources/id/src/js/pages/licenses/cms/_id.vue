@@ -50,7 +50,6 @@
 
             ...mapState({
                 cmsLicenses: state => state.licenses.cmsLicenses,
-                pluginLicenses: state => state.licenses.pluginLicenses,
             }),
 
             license() {
@@ -84,6 +83,8 @@
 
         mounted() {
             this.$store.commit('app/updateRenewLicense', this.license)
+
+            this.$store.dispatch('licenses/getCmsLicenses')
         }
 
     }

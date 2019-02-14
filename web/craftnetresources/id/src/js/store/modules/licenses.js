@@ -12,7 +12,9 @@ var VueApp = new Vue();
  */
 const state = {
     cmsLicenses: [],
+    cmsLicensesLoading: false,
     pluginLicenses: [],
+    pluginLicensesLoading: false,
 }
 
 /**
@@ -212,9 +214,21 @@ const actions = {
         })
     },
 
-    getCmsLicenses({commit}) {
+    getCmsLicenses({commit, state}) {
+        if (state.cmsLicensesLoading) {
+            return false
+        }
+
+        if (state.cmsLicenses.length > 0) {
+            return false
+        }
+
+        commit('updateCmsLicensesLoading', true)
+
         return new Promise((resolve, reject) => {
             licensesApi.getCmsLicenses(response => {
+                commit('updateCmsLicensesLoading', false)
+
                 if (response.data && !response.data.error) {
                     commit('updateCmsLicenses', {cmsLicenses: response.data});
                     resolve(response);
@@ -222,14 +236,28 @@ const actions = {
                     reject(response);
                 }
             }, response => {
+                commit('updateCmsLicensesLoading', false)
+
                 reject(response);
             })
         })
     },
 
     getPluginLicenses({commit}) {
+        if (state.pluginLicensesLoading) {
+            return false
+        }
+
+        if (state.pluginLicenses.length > 0) {
+            return false
+        }
+
+        commit('updatePluginLicensesLoading', true)
+
         return new Promise((resolve, reject) => {
             licensesApi.getPluginLicenses(response => {
+                commit('updatePluginLicensesLoading', false)
+
                 if (response.data && !response.data.error) {
                     commit('updatePluginLicenses', {pluginLicenses: response.data});
                     resolve(response);
@@ -237,6 +265,8 @@ const actions = {
                     reject(response);
                 }
             }, response => {
+                commit('updatePluginLicensesLoading', false)
+
                 reject(response);
             })
         })
@@ -313,8 +343,16 @@ const mutations = {
         state.cmsLicenses = cmsLicenses;
     },
 
+    updateCmsLicensesLoading(state, loading) {
+        state.cmsLicensesLoading = loading
+    },
+
     updatePluginLicenses(state, {pluginLicenses}) {
         state.pluginLicenses = pluginLicenses;
+    },
+
+    updatePluginLicensesLoading(state, loading) {
+        state.pluginLicensesLoading = loading
     },
 
     releaseCmsLicense(state, {licenseKey}) {

@@ -10,92 +10,100 @@
             </div>
         </div>
 
-        <div v-if="computedPlugins.length > 0" class="card card-table responsive-content">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Active Installs</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(plugin, pluginKey) in computedPlugins" :key="pluginKey">
-                    <td class="icon-col">
-                        <router-link :to="'/developer/plugins/' + plugin.id">
-                            <img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" />
-                            <img v-else src="~@/images/default-plugin.svg" height="36" />
-                        </router-link>
-                    </td>
-                    <td class="name-col">
-                        <router-link :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>
-                        <small class="ml-2 text-secondary" v-if="plugin.latestVersion">{{ plugin.latestVersion }}</small>
-                        <div>{{ plugin.shortDescription }}</div>
-                    </td>
-                    <td>{{ plugin.activeInstalls }}</td>
-                    <td>
-                        <div class="text-nowrap">
-                            <template v-if="priceRanges[pluginKey].min !== priceRanges[pluginKey].max">
-                                <template v-if="priceRanges[pluginKey].min > 0">
-                                    {{priceRanges[pluginKey].min|currency}}
+        <template v-if="loading">
+            <spinner></spinner>
+        </template>
+
+        <template v-else>
+            <div v-if="computedPlugins.length > 0" class="card card-table responsive-content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Active Installs</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(plugin, pluginKey) in computedPlugins" :key="pluginKey">
+                        <td class="icon-col">
+                            <router-link :to="'/developer/plugins/' + plugin.id">
+                                <img v-if="plugin.iconUrl" :src="plugin.iconUrl" height="36" />
+                                <img v-else src="~@/images/default-plugin.svg" height="36" />
+                            </router-link>
+                        </td>
+                        <td class="name-col">
+                            <router-link :to="'/developer/plugins/' + plugin.id">{{ plugin.name }}</router-link>
+                            <small class="ml-2 text-secondary" v-if="plugin.latestVersion">{{ plugin.latestVersion }}</small>
+                            <div>{{ plugin.shortDescription }}</div>
+                        </td>
+                        <td>{{ plugin.activeInstalls }}</td>
+                        <td>
+                            <div class="text-nowrap">
+                                <template v-if="priceRanges[pluginKey].min !== priceRanges[pluginKey].max">
+                                    <template v-if="priceRanges[pluginKey].min > 0">
+                                        {{priceRanges[pluginKey].min|currency}}
+                                    </template>
+                                    <template v-else>
+                                        Free
+                                    </template>
+                                    -
+                                    {{priceRanges[pluginKey].max|currency}}
                                 </template>
                                 <template v-else>
-                                    Free
+                                    <template v-if="priceRanges[pluginKey].min > 0">
+                                        {{priceRanges[pluginKey].min|currency}}
+                                    </template>
+                                    <template v-else>
+                                        Free
+                                    </template>
                                 </template>
-                                -
-                                {{priceRanges[pluginKey].max|currency}}
+                            </div>
+                        </td>
+                        <td>
+                            <template v-if="plugin.enabled">
+                                <span class="text-green">Approved</span>
                             </template>
                             <template v-else>
-                                <template v-if="priceRanges[pluginKey].min > 0">
-                                    {{priceRanges[pluginKey].min|currency}}
-                                </template>
+
+                                <span v-if="plugin.pendingApproval" class="text-secondary">In Review</span>
                                 <template v-else>
-                                    Free
+                                    <span v-if="plugin.lastHistoryNote && plugin.lastHistoryNote.devComments" class="text-warning">Changes requested</span>
+                                    <span v-else class="text-secondary">Prepare for submission</span>
                                 </template>
                             </template>
-                        </div>
-                    </td>
-                    <td>
-                        <template v-if="plugin.enabled">
-                            <span class="text-green">Approved</span>
-                        </template>
-                        <template v-else>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                            <span v-if="plugin.pendingApproval" class="text-secondary">In Review</span>
-                            <template v-else>
-                                <span v-if="plugin.lastHistoryNote && plugin.lastHistoryNote.devComments" class="text-warning">Changes requested</span>
-                                <span v-else class="text-secondary">Prepare for submission</span>
-                            </template>
-                        </template>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <empty v-else>
-            <icon icon="plug" cssClass="text-5xl mb-4 text-grey-light" />
-            <div class="font-bold">No plugins</div>
-            <div>You haven’t added any plugins yet.</div>
-        </empty>
+            <empty v-else>
+                <icon icon="plug" cssClass="text-5xl mb-4 text-grey-light" />
+                <div class="font-bold">No plugins</div>
+                <div>You haven’t added any plugins yet.</div>
+            </empty>
+        </template>
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
     import Empty from '../../../components/Empty'
+    import Spinner from '../../../components/Spinner'
 
     export default {
 
         components: {
             Empty,
+            Spinner,
         },
 
         data() {
             return {
-                showSpinner: 1,
+                loading: false,
             }
         },
 
@@ -168,6 +176,20 @@
                 }
             }
 
+        },
+
+        mounted() {
+            if (this.plugins.length === 0) {
+                this.loading = true
+
+                this.$store.dispatch('developers/getPlugins')
+                    .then(() => {
+                        this.loading = false
+                    })
+                    .catch(() => {
+                        this.loading = false
+                    })
+            }
         }
 
     }

@@ -117,4 +117,8 @@ export default {
             .catch(error => cbError(error.response));
     },
 
+    getApps() {
+        return axios.get(Craft.actionUrl + '/craftnet/id/account/get-apps')
+    }
+
 }

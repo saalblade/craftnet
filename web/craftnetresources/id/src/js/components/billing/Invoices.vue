@@ -1,13 +1,6 @@
 <template>
     <div>
         <div class="card mb-3">
-            <div class="card-header">Upcoming Invoice</div>
-            <div class="card-body">
-                <invoices-table :invoices="[]" :upcoming="true"></invoices-table>
-            </div>
-        </div>
-
-        <div class="card mb-3">
             <div class="card-header">Invoices</div>
             <div class="card-body">
                 <invoices-table :invoices="invoices"></invoices-table>
@@ -31,7 +24,6 @@
 
             ...mapState({
                 invoices: state => state.account.invoices,
-                upcomingInvoice: state => state.account.upcomingInvoice,
             }),
 
         },

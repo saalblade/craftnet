@@ -9,6 +9,7 @@ Vue.use(Vuex)
  */
 const state = {
     apps: {},
+    appsLoading: false,
     billingAddress: null,
     card: null,
     cardToken: null,
@@ -16,7 +17,6 @@ const state = {
     invoices: [],
     stripeAccount: null,
     stripeCustomer: null,
-    upcomingInvoice: null,
 }
 
 /**
@@ -198,6 +198,30 @@ const actions = {
         })
     },
 
+    getApps({commit, state}) {
+        if (state.appsLoading) {
+            return false
+        }
+
+        if (Object.keys(state.apps).length > 0) {
+            return false
+        }
+
+        commit('updateAppsLoading', true)
+
+        return new Promise((resolve, reject) => {
+            accountApi.getApps()
+                .then(response => {
+                    commit('updateAppsLoading', false)
+                    commit('updateApps', {apps: response.data})
+                    resolve(response)
+                })
+                .catch(response => {
+                    commit('updateAppsLoading', false)
+                    reject(response)
+                })
+        })
+    }
 }
 
 /**
@@ -214,6 +238,10 @@ const mutations = {
 
     disconnectApp(state, {appHandle}) {
         Vue.delete(state.apps, appHandle);
+    },
+
+    updateAppsLoading(state, loading) {
+        state.appsLoading = loading
     },
 
 
@@ -303,10 +331,6 @@ const mutations = {
     updateInvoices(state, {response}) {
         state.invoices = response.data;
     },
-
-    updateUpcomingInvoice(state, {upcomingInvoice}) {
-        state.upcomingInvoice = upcomingInvoice;
-    }
 
 }
 
