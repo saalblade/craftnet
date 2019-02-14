@@ -2,6 +2,7 @@
     <div>
         <div class="flex justify-between mb-2">
             <h1>Plugins</h1>
+
             <div>
                 <router-link to="/developer/add-plugin" class="btn btn-primary">
                     <icon icon="plus" />

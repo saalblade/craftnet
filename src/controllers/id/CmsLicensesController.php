@@ -81,7 +81,6 @@ class CmsLicensesController extends Controller
      * Returns licenses for the current user.
      *
      * @return Response
-     * @throws LicenseNotFoundException
      */
     public function actionGetLicenses(): Response
     {

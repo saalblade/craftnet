@@ -50,6 +50,7 @@ class PluginLicensesController extends Controller
 
         try {
             $licenses = Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
+
             return $this->asJson($licenses);
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
