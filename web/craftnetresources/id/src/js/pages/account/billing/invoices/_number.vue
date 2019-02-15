@@ -118,11 +118,11 @@
         computed: {
 
             ...mapState({
-                invoicesLoading: state => state.app.invoicesLoading,
+                invoicesLoading: state => state.invoices.invoicesLoading,
             }),
 
             ...mapGetters({
-                getInvoiceByNumber: 'account/getInvoiceByNumber',
+                getInvoiceByNumber: 'invoices/getInvoiceByNumber',
             }),
 
             invoice() {

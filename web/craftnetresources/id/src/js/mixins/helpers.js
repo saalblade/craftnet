@@ -101,15 +101,6 @@ export default {
                             } else {
                                 this.$store.commit('app/updateStripeAccountLoading', false)
                             }
-
-                            // Invoices
-                            this.$store.dispatch('account/getInvoices')
-                                .then(() => {
-                                    this.$store.commit('app/updateInvoicesLoading', false)
-                                })
-                                .catch(() => {
-                                    this.$store.commit('app/updateInvoicesLoading', false)
-                                });
                         })
                         .catch(() => {
                             if (cbError) {

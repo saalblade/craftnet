@@ -10,7 +10,6 @@ const state = {
     loading: true,
     notification: null,
     stripeAccountLoading: true,
-    invoicesLoading: true,
     renewLicensesStep: null,
     showRenewLicensesModal: false,
     renewLicense: null,
@@ -87,10 +86,6 @@ const mutations = {
 
     updateStripeAccountLoading(state, loading) {
         state.stripeAccountLoading = loading
-    },
-
-    updateInvoicesLoading(state, loading) {
-        state.invoicesLoading = loading
     },
 
     updateRenewLicensesStep(state, step) {

@@ -12,7 +12,6 @@ const state = {
     card: null,
     cardToken: null,
     currentUser: null,
-    invoices: [],
     stripeAccount: null,
     stripeCustomer: null,
 }
@@ -25,14 +24,6 @@ const getters = {
     userIsInGroup(state) {
         return handle => {
             return state.currentUser.groups.find(g => g.handle === handle)
-        }
-    },
-
-    getInvoiceByNumber(state) {
-        return number => {
-            if (state.invoices) {
-                return state.invoices.find(inv => inv.number == number)
-            }
         }
     },
 
@@ -176,26 +167,6 @@ const actions = {
         })
     },
 
-
-    /**
-     * Invoices
-     */
-
-    getInvoices({commit}) {
-        return new Promise((resolve, reject) => {
-            accountApi.getInvoices(response => {
-                if (response.data && !response.data.error) {
-                    commit('updateInvoices', {response});
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
 }
 
 /**
@@ -288,15 +259,6 @@ const mutations = {
 
     updateStripeAccount(state, {response}) {
         state.stripeAccount = response.data
-    },
-
-
-    /**
-     * Invoices
-     */
-
-    updateInvoices(state, {response}) {
-        state.invoices = response.data;
     },
 
 }

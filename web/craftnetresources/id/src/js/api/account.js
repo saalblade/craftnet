@@ -111,10 +111,4 @@ export default {
             .catch(error => cbError(error.response));
     },
 
-    getInvoices(cb, cbError) {
-        axios.get(Craft.actionUrl + '/craftnet/id/account/get-invoices')
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
-    },
-
 }

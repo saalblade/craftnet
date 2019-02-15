@@ -57,11 +57,15 @@
         computed: {
 
             ...mapState({
-                invoices: state => state.account.invoices,
-                invoicesLoading: state => state.account.invoicesLoading,
+                invoices: state => state.invoices.invoices,
+                invoicesLoading: state => state.invoices.invoicesLoading,
             }),
 
         },
+
+        mounted() {
+            this.$store.dispatch('invoices/getInvoices')
+        }
 
     }
 </script>

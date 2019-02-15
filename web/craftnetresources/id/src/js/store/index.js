@@ -6,6 +6,7 @@ import apps from './modules/apps'
 import cart from './modules/cart'
 import craftId from './modules/craft-id'
 import developers from './modules/developers'
+import invoices from './modules/invoices'
 import licenses from './modules/licenses'
 import partner from './modules/partner'
 import pluginStore from './modules/plugin-store'
@@ -21,6 +22,7 @@ export default new Vuex.Store({
         cart,
         craftId,
         developers,
+        invoices,
         licenses,
         partner,
         pluginStore,

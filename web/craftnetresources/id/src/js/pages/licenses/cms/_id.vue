@@ -69,7 +69,7 @@
                     .then(() => {
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
-                        this.$store.dispatch('account/getInvoices');
+                        this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'CMS license released.');
                         this.$router.push({path: '/licenses/cms'});
                     })

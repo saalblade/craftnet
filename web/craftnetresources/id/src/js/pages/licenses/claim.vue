@@ -115,7 +115,7 @@
                         this.cmsLicenseLoading = false;
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
-                        this.$store.dispatch('account/getInvoices');
+                        this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'CMS license claimed.');
                         this.$router.push({path: '/licenses/cms'});
                     })
@@ -132,7 +132,7 @@
                         this.cmsLicenseFileLoading = false;
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
-                        this.$store.dispatch('account/getInvoices');
+                        this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'CMS license claimed.');
                         this.$router.push({path: '/licenses/cms'});
                     })
@@ -151,7 +151,7 @@
                         this.emailLoading = false;
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
-                        this.$store.dispatch('account/getInvoices');
+                        this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'Verification email sent to ' + this.email + '.');
                     })
                     .catch(response => {
@@ -169,7 +169,7 @@
                         this.pluginLicenseLoading = false;
                         this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
-                        this.$store.dispatch('account/getInvoices');
+                        this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'Plugin license claimed.');
                         this.$router.push({path: '/licenses/plugins'});
                     })
