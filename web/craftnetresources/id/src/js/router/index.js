@@ -219,16 +219,24 @@ router.beforeEach((to, from, next) => {
     }
 
     // Guest users are limited to login, registration and cart pages
-    const currentUser = store.state.account.currentUser
-
-    if (!currentUser) {
-        if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart') {
-            router.push({path: '/site/login'})
+    if (!store.state.account.currentUser) {
+        if (!window.currentUserId) {
+            if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart') {
+                router.push({path: '/site/login'})
+            } else {
+                next()
+            }
         } else {
-            next();
+            store.dispatch('craftId/getCraftIdData')
+                .then(() => {
+                    next()
+                })
+                .catch(() => {
+                    router.push({path: '/site/login'})
+                })
         }
     } else {
-        next();
+        next()
     }
 });
 
