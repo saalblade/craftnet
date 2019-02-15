@@ -144,7 +144,6 @@ const mutations = {
     },
 
     savePlugin(state, {plugin, response}) {
-
         let newPlugin = false;
         let statePlugin = state.plugins.find(p => p.id == plugin.pluginId);
 
