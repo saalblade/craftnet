@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import accountApi from '../../api/account';
+import appsApi from '../../api/apps';
 
 Vue.use(Vuex)
 
@@ -34,7 +34,7 @@ const actions = {
         commit('updateAppsLoading', true)
 
         return new Promise((resolve, reject) => {
-            accountApi.getApps()
+            appsApi.getApps()
                 .then(response => {
                     commit('updateAppsLoading', false)
                     commit('updateApps', {apps: response.data})
