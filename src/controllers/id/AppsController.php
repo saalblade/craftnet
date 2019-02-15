@@ -29,6 +29,20 @@ class AppsController extends BaseController
     // =========================================================================
 
     /**
+     * Get apps.
+     *
+     * @return Response
+     */
+    public function actionGetApps(): Response
+    {
+        $this->requireLogin();
+
+        $data = Module::getInstance()->getOauth()->getApps();
+
+        return $this->asJson($data);
+    }
+
+    /**
      * OAuth connect.
      *
      * @return Response

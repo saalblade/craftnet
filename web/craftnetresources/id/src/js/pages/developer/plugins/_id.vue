@@ -284,8 +284,8 @@
         computed: {
 
             ...mapState({
-                apps: state => state.account.apps,
-                appsLoading: state => state.account.appsLoading,
+                apps: state => state.apps.apps,
+                appsLoading: state => state.apps.appsLoading,
                 plugins: state => state.developers.plugins,
             }),
 
@@ -616,7 +616,7 @@
         },
 
         mounted() {
-            this.$store.dispatch('account/getApps')
+            this.$store.dispatch('apps/getApps')
 
             if (this.plugin) {
                 this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));

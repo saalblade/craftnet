@@ -69,8 +69,8 @@
         computed: {
 
             ...mapState({
-                apps: state => state.account.apps,
-                appsLoading: state => state.account.appsLoading,
+                apps: state => state.apps.apps,
+                appsLoading: state => state.apps.appsLoading,
                 currentUser: state => state.account.currentUser,
             }),
 
@@ -154,7 +154,7 @@
         },
 
         mounted() {
-            this.$store.dispatch('account/getApps')
+            this.$store.dispatch('apps/getApps')
         }
 
     }

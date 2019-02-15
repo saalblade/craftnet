@@ -8,8 +8,6 @@ Vue.use(Vuex)
  * State
  */
 const state = {
-    apps: {},
-    appsLoading: false,
     billingAddress: null,
     card: null,
     cardToken: null,
@@ -198,30 +196,6 @@ const actions = {
         })
     },
 
-    getApps({commit, state}) {
-        if (state.appsLoading) {
-            return false
-        }
-
-        if (Object.keys(state.apps).length > 0) {
-            return false
-        }
-
-        commit('updateAppsLoading', true)
-
-        return new Promise((resolve, reject) => {
-            accountApi.getApps()
-                .then(response => {
-                    commit('updateAppsLoading', false)
-                    commit('updateApps', {apps: response.data})
-                    resolve(response)
-                })
-                .catch(response => {
-                    commit('updateAppsLoading', false)
-                    reject(response)
-                })
-        })
-    }
 }
 
 /**
@@ -232,17 +206,10 @@ const mutations = {
      * Apps
      */
 
-    updateApps(state, {apps}) {
-        state.apps = apps;
-    },
-
     disconnectApp(state, {appHandle}) {
         Vue.delete(state.apps, appHandle);
     },
 
-    updateAppsLoading(state, loading) {
-        state.appsLoading = loading
-    },
 
 
     /**

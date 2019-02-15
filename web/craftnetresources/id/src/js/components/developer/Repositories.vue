@@ -48,7 +48,7 @@
         computed: {
 
             ...mapState({
-                apps: state => state.account.apps,
+                apps: state => state.apps.apps,
             }),
 
             ...mapGetters({

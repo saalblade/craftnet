@@ -231,18 +231,4 @@ class AccountController extends Controller
             return $this->asErrorJson($e->getMessage());
         }
     }
-
-    /**
-     * Get apps.
-     *
-     * @return Response
-     */
-    public function actionGetApps(): Response
-    {
-        $this->requireLogin();
-
-        $data = Module::getInstance()->getOauth()->getApps();
-
-        return $this->asJson($data);
-    }
 }

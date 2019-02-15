@@ -118,7 +118,7 @@ export default {
     },
 
     getApps() {
-        return axios.get(Craft.actionUrl + '/craftnet/id/account/get-apps')
+        return axios.get(Craft.actionUrl + '/craftnet/id/apps/get-apps')
     }
 
 }
