@@ -84,6 +84,8 @@ const actions = {
                     resolve(response);
                 },
                 response => {
+                    commit('account/updateCurrentUserLoaded', true, {root: true});
+
                     reject(response);
                 })
         })
