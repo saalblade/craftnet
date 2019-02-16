@@ -220,7 +220,7 @@ router.beforeEach((to, from, next) => {
 
     // Guest users are limited to login, registration and cart pages
     if (!store.state.account.currentUser) {
-        if (!window.currentUserId) {
+        if (!store.state.account.currentUserLoaded) {
             if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart') {
                 router.push({path: '/site/login'})
             } else {

@@ -75,6 +75,7 @@ const actions = {
                     commit('updateCountries', {countries: response.data.countries});
                     commit('developers/updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true});
                     commit('account/updateCurrentUser', {currentUser: response.data.currentUser}, {root: true});
+                    commit('account/updateCurrentUserLoaded', true, {root: true});
                     commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true});
                     commit('account/updateCard', {card: response.data.card}, {root: true});
                     commit('account/updateCardToken', {cardToken: response.data.cardToken}, {root: true});

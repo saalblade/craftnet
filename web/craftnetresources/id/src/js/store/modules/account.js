@@ -12,6 +12,7 @@ const state = {
     card: null,
     cardToken: null,
     currentUser: null,
+    currentUserLoaded: false,
     stripeAccount: null,
     stripeCustomer: null,
 }
@@ -233,6 +234,10 @@ const mutations = {
 
     updateCurrentUser(state, {currentUser}) {
         state.currentUser = currentUser
+    },
+
+    updateCurrentUserLoaded(state, loaded) {
+        state.currentUserLoaded = loaded
     },
 
 
