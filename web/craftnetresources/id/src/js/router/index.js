@@ -220,7 +220,8 @@ router.beforeEach((to, from, next) => {
 
     // Guest users are limited to login, registration and cart pages
     if (!store.state.account.currentUser) {
-        if (!store.state.account.currentUserLoaded) {
+        if (store.state.account.currentUserLoaded) {
+            // Todo: Replace conditional paths with meta.requireAuthentication for pages
             if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart') {
                 router.push({path: '/site/login'})
             } else {
