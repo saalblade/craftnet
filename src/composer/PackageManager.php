@@ -1167,6 +1167,7 @@ class PackageManager extends Component
             Console::stdout(Console::ansiFormat('updating compatibility index ... ', [Console::FG_YELLOW]));
         }
 
+        $compatData = [];
         $cmsConstraint = $pluginRelease->require['craftcms/cms'];
 
         foreach ($this->getAllReleases('craftcms/cms', null) as $cmsRelease) {
