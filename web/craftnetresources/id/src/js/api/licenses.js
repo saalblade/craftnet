@@ -62,8 +62,12 @@ export default {
             .catch(error => cbError(error.response));
     },
 
-    getCmsLicenses(cb, cbError) {
-        axios.get(Craft.actionUrl + '/craftnet/id/cms-licenses/get-licenses')
+    getCmsLicense(id) {
+        axios.get(Craft.actionUrl + '/craftnet/id/cms-licenses/get-license-by-id', {params: {id}})
+    },
+
+    getExpiringCmsLicensesTotal(cb, cbError) {
+        axios.get(Craft.actionUrl + '/craftnet/id/cms-licenses/get-expiring-licenses-total')
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },

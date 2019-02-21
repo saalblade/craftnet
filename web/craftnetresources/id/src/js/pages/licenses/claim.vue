@@ -113,7 +113,6 @@
                 this.$store.dispatch('licenses/claimCmsLicense', this.cmsLicenseKey)
                     .then(() => {
                         this.cmsLicenseLoading = false;
-                        this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'CMS license claimed.');
@@ -130,7 +129,6 @@
                 this.$store.dispatch('licenses/claimCmsLicenseFile', this.$refs.licenseFile.files[0])
                     .then(() => {
                         this.cmsLicenseFileLoading = false;
-                        this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'CMS license claimed.');
@@ -149,7 +147,6 @@
                 this.$store.dispatch('licenses/claimLicensesByEmail', this.email)
                     .then(() => {
                         this.emailLoading = false;
-                        this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'Verification email sent to ' + this.email + '.');
@@ -167,7 +164,6 @@
                 this.$store.dispatch('licenses/claimPluginLicense', this.pluginLicenseKey)
                     .then(() => {
                         this.pluginLicenseLoading = false;
-                        this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'Plugin license claimed.');

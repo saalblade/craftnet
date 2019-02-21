@@ -14,11 +14,11 @@
                     </template>
 
                     <template v-if="$route.meta.cmsLicensesRenewAlert">
-                        <license-renew-alert type="CMS" :expiring-licenses="expiringCmsLicenses"></license-renew-alert>
+                        <license-renew-alert type="CMS" :expiring-licenses-total="expiringCmsLicensesTotal"></license-renew-alert>
                     </template>
 
                     <template v-if="$route.meta.pluginLicensesRenewAlert">
-                        <license-renew-alert type="plugin" :expiring-licenses="expiringPluginLicenses"></license-renew-alert>
+                        <license-renew-alert type="plugin" :expiring-licenses-total="expiringPluginLicenses.length"></license-renew-alert>
                     </template>
                 </div>
 
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState, mapGetters} from 'vuex'
     import AppHeader from './AppHeader';
     import AppSidebar from './AppSidebar';
     import StripeAccountAlert from './StripeAccountAlert';
@@ -54,8 +54,11 @@
 
         computed: {
 
+            ...mapState({
+                expiringCmsLicensesTotal: state => state.licenses.expiringCmsLicensesTotal,
+            }),
+
             ...mapGetters({
-                expiringCmsLicenses: 'licenses/expiringCmsLicenses',
                 expiringPluginLicenses: 'licenses/expiringPluginLicenses',
             }),
 

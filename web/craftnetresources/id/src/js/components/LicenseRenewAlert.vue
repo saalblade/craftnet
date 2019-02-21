@@ -1,10 +1,10 @@
 <template>
-    <page-alert v-if="expiringLicenses.length > 0">
-        <template v-if="expiringLicenses.length === 1">
-            {{ expiringLicenses.length }} {{ type }} license will lose its access to updates soon. Renew it now to keep getting updates.
+    <page-alert v-if="expiringLicensesTotal > 0">
+        <template v-if="expiringLicensesTotal === 1">
+            {{ expiringLicensesTotal }} {{ type }} license will lose its access to updates soon. Renew it now to keep getting updates.
         </template>
         <template v-else>
-            {{ expiringLicenses.length }} {{ type }} licenses will lose their access to updates soon. Renew them now to keep getting updates.
+            {{ expiringLicensesTotal }} {{ type }} licenses will lose their access to updates soon. Renew them now to keep getting updates.
         </template>
     </page-alert>
 </template>
@@ -15,7 +15,7 @@
 
     export default {
 
-        props: ['expiringLicenses', 'type'],
+        props: ['expiringLicensesTotal', 'type'],
 
         components: {
             PageAlert,

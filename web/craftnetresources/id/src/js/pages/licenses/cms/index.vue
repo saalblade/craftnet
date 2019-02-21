@@ -2,49 +2,206 @@
     <div>
         <h1>Craft CMS</h1>
 
-        <template v-if="cmsLicensesLoading">
-            <spinner></spinner>
-        </template>
-        <template v-else>
-            <div v-if="cmsLicenses.length > 0" class="card card-table responsive-content">
-                <cms-licenses-table type="craft" :licenses="cmsLicenses"></cms-licenses-table>
+        <div class="flex mb-6">
+            <div class="flex-1">
+                <filter-bar @filter-set="onFilterSet" @filter-reset="onFilterReset"></filter-bar>
             </div>
 
-            <empty v-else>
-                <icon icon="key" cssClass="text-5xl mb-4 text-grey-light" />
-                <div class="font-bold">No Craft CMS licenses</div>
-                <div>You don’t have any Craft CMS licenses yet.</div>
-            </empty>
-        </template>
+            <div class="mx-2 flex items-center">
+                <spinner :cssClass="{invisible: !loading}"></spinner>
+            </div>
+
+            <div class="text-right">
+                <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
+            </div>
+        </div>
+
+        <div class="card card-table" :class="{'opacity-25': loading}">
+            <vuetable
+                    ref="vuetable"
+                    pagination-path=""
+                    :api-url="apiUrl"
+                    :fields="fields"
+                    :append-params="moreParams"
+                    @vuetable:pagination-data="onPaginationData"
+                    @vuetable:loading="onLoading"
+                    @vuetable:loaded="onLoaded"
+            >
+                <template slot="key" slot-scope="props">
+                    <router-link :to="'/licenses/cms/' + props.rowData.id">{{props.rowData.key.substr(0, 10)}}</router-link>
+                </template>
+
+                <template slot="edition" slot-scope="props">
+                    {{props.rowData.edition|capitalize}}
+                </template>
+
+                <template slot="expiresOn" slot-scope="props">
+                    <template v-if="props.rowData.expirable && props.rowData.expiresOn">
+                        <template v-if="!props.rowData.expired">
+                            <template v-if="expiresSoon(props.rowData)">
+                                <span class="text-orange">{{ props.rowData.expiresOn.date|moment("L") }}</span>
+                            </template>
+                            <template v-else>
+                                {{ props.rowData.expiresOn.date|moment("L") }}
+                            </template>
+                        </template>
+                        <template v-else>
+                            <span class="text-grey-dark">Expired</span>
+                        </template>
+                    </template>
+                    <template v-else>
+                        Forever
+                    </template>
+                </template>
+
+                <template slot="autoRenew" slot-scope="props">
+                    <template v-if="props.rowData.expirable && props.rowData.expiresOn">
+                        <badge v-if="props.rowData.autoRenew == 1" type="success">Enabled</badge>
+                        <badge v-else>Disabled</badge>
+                    </template>
+                </template>
+            </vuetable>
+        </div>
+
+        <!--
+        <empty>
+            <icon icon="key" cssClass="text-5xl mb-4 text-grey-light" />
+            <div class="font-bold">No Craft CMS licenses</div>
+            <div>You don’t have any Craft CMS licenses yet.</div>
+        </empty>
+        -->
     </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import {mapGetters} from 'vuex'
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
     import Empty from '../../../components/Empty';
     import Spinner from '../../../components/Spinner';
+    import Badge from '../../../components/Badge'
+    import FilterBar from '../../../components/FilterBar'
+    import Vuetable from 'vuetable-2/src/components/Vuetable'
+    import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
+
+    window.axios = require('axios');
 
     export default {
+
+        data() {
+            return {
+                searchQuery: '',
+                vueTableInitiatedRouteChange: false,
+                loading: false,
+                columns: ['key', 'edition', 'domain', 'notes', 'expiresOn', 'autoRenew'],
+                options:{
+                    perPage: 10,
+                    texts: {
+                        filter: "",
+                        filterPlaceholder: "Search licenses"
+                    },
+                    headings: {
+                        expiresOn: 'Updates Until',
+                        autoRenew: 'Auto Renew'
+                    },
+                    filterable: true,
+                },
+                fields: [
+                    {
+                        name: '__slot:key',
+                        title: 'Key',
+                    },
+                    {
+                        name: '__slot:edition',
+                        title: 'Edition',
+                    },
+                    {
+                        name: '__slot:expiresOn',
+                        title: 'Updates until',
+                    },
+                    {
+                        name: '__slot:autoRenew',
+                        title: 'Auto renew',
+                    }
+                ],
+                moreParams: {}
+            }
+        },
 
         components: {
             CmsLicensesTable,
             Empty,
             Spinner,
+            Badge,
+            Vuetable,
+            VuetablePagination,
+            FilterBar,
         },
 
         computed: {
 
-            ...mapState({
-                cmsLicenses: state => state.licenses.cmsLicenses,
-                cmsLicensesLoading: state => state.licenses.cmsLicensesLoading,
+            ...mapGetters({
+                expiresSoon: 'licenses/expiresSoon',
             }),
+
+            apiUrl() {
+                return Craft.actionUrl + '/craftnet/id/cms-licenses/get-licenses'
+            }
 
         },
 
+        methods: {
+
+            onFilterSet (filterText) {
+                this.moreParams = {
+                    'filter': filterText
+                }
+
+                this.$nextTick( () => this.$refs.vuetable.refresh())
+            },
+
+            onFilterReset () {
+                this.moreParams = {}
+                this.$nextTick( () => this.$refs.vuetable.refresh())
+            },
+
+            onPaginationData (paginationData) {
+                this.$refs.pagination.setPaginationData(paginationData)
+            },
+
+            onChangePage (page) {
+                this.$refs.vuetable.changePage(page)
+            },
+
+            onLoading() {
+                this.loading = true
+            },
+
+            onLoaded() {
+                this.loading = false
+            }
+        },
+
         mounted() {
-            this.$store.dispatch('licenses/getCmsLicenses')
+            this.$store.dispatch('licenses/getExpiringCmsLicensesTotal')
         }
+
+        // beforeRouteUpdate (to, from, next) {
+        //     if (!this.vueTableInitiatedRouteChange) {
+        //         this.$refs.vuetable.setPage(to.query.p)
+        //     }
+        //
+        //     if (this.vueTableInitiatedRouteChange) {
+        //         this.vueTableInitiatedRouteChange = false
+        //     }
+        //
+        //     next()
+        // },
 
     }
 </script>
+
+<style lang="scss">
+    .vuetable-pagination-dropdown {
+        @apply .w-32;
+    }
+</style>

@@ -148,7 +148,6 @@
 
                 this.savePluginLicense(() => {
                     this.detaching = false;
-                    this.$store.dispatch('licenses/getCmsLicenses')
                     this.$store.dispatch('licenses/getPluginLicenses')
                 }, () => {
                     this.detaching = false;
@@ -254,8 +253,6 @@
                         } else {
                             this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
                         }
-
-                        this.$store.dispatch('licenses/getCmsLicenses');
                     }).catch(data => {
                         this.$store.dispatch('app/displayError', 'Couldn’t save license.');
                         this.errors = data.errors;

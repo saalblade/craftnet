@@ -1,42 +1,50 @@
 <template>
-    <div v-if="license">
-        <p><router-link class="nav-link" to="/licenses/cms" exact>← Craft CMS</router-link></p>
-        <h1><code>{{ license.key.substr(0, 10) }}</code></h1>
+    <div>
+        <template v-if="loading">
+            <spinner></spinner>
+        </template>
+        <template else>
+            <template v-if="license">
+                <p><router-link class="nav-link" to="/licenses/cms" exact>← Craft CMS</router-link></p>
+                <h1><code>{{ license.key.substr(0, 10) }}</code></h1>
 
-        <cms-license-details :license="license"></cms-license-details>
+                <cms-license-details :license="license"></cms-license-details>
 
-        <div class="card mb-3">
-            <div class="card-body">
-                <h4>Plugin Licenses</h4>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4>Plugin Licenses</h4>
 
-                <template v-if="license.pluginLicenses.length > 0">
-                    <p class="text-secondary mb-4">Plugin licenses attached to this Craft CMS license.</p>
-                    <plugin-licenses-table :licenses="license.pluginLicenses" :exclude-cms-license-column="true" :exclude-notes-column="true" :auto-renew-switch="true"></plugin-licenses-table>
-                </template>
-                <template v-else>
-                    <p class="text-secondary mb-4">No plugin licenses are attached to this Craft CMS license.</p>
-                </template>
-            </div>
-        </div>
+                        <template v-if="license.pluginLicenses.length > 0">
+                            <p class="text-secondary mb-4">Plugin licenses attached to this Craft CMS license.</p>
+                            <plugin-licenses-table :licenses="license.pluginLicenses" :exclude-cms-license-column="true" :exclude-notes-column="true" :auto-renew-switch="true"></plugin-licenses-table>
+                        </template>
+                        <template v-else>
+                            <p class="text-secondary mb-4">No plugin licenses are attached to this Craft CMS license.</p>
+                        </template>
+                    </div>
+                </div>
 
-        <license-history :history="license.history" />
+                <license-history :history="license.history" />
 
-        <div class="card card-danger mb-3">
-            <div class="card-header">Danger Zone</div>
-            <div class="card-body">
-                <h5>Release license</h5>
-                <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
-                <div><button class="btn btn-danger" @click="releaseCmsLicense()">Release License</button></div>
-            </div>
-        </div>
+                <div class="card card-danger mb-3">
+                    <div class="card-header">Danger Zone</div>
+                    <div class="card-body">
+                        <h5>Release license</h5>
+                        <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
+                        <div><button class="btn btn-danger" @click="releaseCmsLicense()">Release License</button></div>
+                    </div>
+                </div>
+            </template>
+        </template>
     </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import licensesApi from '../../../api/licenses';
     import CmsLicenseDetails from '../../../components/licenses/CmsLicenseDetails'
     import PluginLicensesTable from '../../../components/licenses/PluginLicensesTable';
     import LicenseHistory from '../../../components/licenses/LicenseHistory';
+    import Spinner from '../../../components/Spinner';
 
     export default {
 
@@ -44,18 +52,14 @@
             CmsLicenseDetails,
             PluginLicensesTable,
             LicenseHistory,
+            Spinner,
         },
 
-        computed: {
-
-            ...mapState({
-                cmsLicenses: state => state.licenses.cmsLicenses,
-            }),
-
-            license() {
-                return this.cmsLicenses.find(l => l.id == this.$route.params.id);
-            },
-
+        data() {
+            return {
+                loading: false,
+                license: null,
+            }
         },
 
         methods: {
@@ -67,7 +71,6 @@
 
                 this.$store.dispatch('licenses/releaseCmsLicense', this.license.key)
                     .then(() => {
-                        this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'CMS license released.');
@@ -82,9 +85,19 @@
         },
 
         mounted() {
-            this.$store.commit('app/updateRenewLicense', this.license)
+            const licenseId = this.$route.params.id
 
-            this.$store.dispatch('licenses/getCmsLicenses')
+            this.loading = true
+
+            licensesApi.getCmsLicense(licenseId)
+                .then((response) => {
+                    this.license = response.data
+                    this.$store.commit('app/updateRenewLicense', this.license)
+                    this.loading = false
+                })
+                .catch(() => {
+                    this.loading = false
+                })
         }
 
     }

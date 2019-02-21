@@ -65,7 +65,6 @@
                         licenseKey: this.license.key,
                     })
                     .then(() => {
-                        this.$store.dispatch('licenses/getCmsLicenses');
                         this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'Plugin license released.');

@@ -130,8 +130,6 @@
                         } else {
                             this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
                         }
-
-                        this.$store.dispatch('licenses/getCmsLicenses');
                     }).catch(response => {
                     this.$store.dispatch('app/displayError', 'Couldn’t save license.');
                     this.errors = response.errors;

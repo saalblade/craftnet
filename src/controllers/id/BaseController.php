@@ -14,14 +14,6 @@ use yii\helpers\Markdown;
  */
 abstract class BaseController extends Controller
 {
-    // Properties
-    // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
-    public $enableCsrfValidation = false;
-
     // Protected Methods
     // =========================================================================
 
@@ -116,7 +108,7 @@ abstract class BaseController extends Controller
      * @return array
      * @throws \Exception
      */
-    protected function getExpiryDateOptions(\DateTime $expiryDate)
+    protected function getExpiryDateOptions(\DateTime $expiryDate): array
     {
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $dates = [];

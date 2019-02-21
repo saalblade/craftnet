@@ -139,20 +139,10 @@ class CraftIdController extends BaseController
     private function getLicenseExpiryDateOptions(User $user): array
     {
         $licenseExpiryDateOptions = [
-            'cmsLicenses' => [],
             'pluginLicenses' => [],
         ];
 
-        $cmsLicenses = Module::getInstance()->getCmsLicenseManager()->getLicensesArrayByOwner($user);
         $pluginLicenses = Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
-
-        foreach ($cmsLicenses as $cmsLicense) {
-            if (empty($cmsLicense['expiresOn'])) {
-                continue;
-            }
-
-            $licenseExpiryDateOptions['cmsLicenses'][$cmsLicense['id']] = $this->getExpiryDateOptions($cmsLicense['expiresOn']);
-        }
 
         foreach ($pluginLicenses as $pluginLicense) {
             if (empty($pluginLicense['expiresOn'])) {

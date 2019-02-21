@@ -8,8 +8,7 @@ use craft\elements\User;
 use craft\helpers\Db;
 use craft\helpers\StringHelper;
 use craftnet\errors\LicenseNotFoundException;
-use craftnet\Module;
-use craftnet\plugins\Plugin;
+use craftnet\helpers\LicenseHelper;
 use LayerShifter\TLDExtract\Extract;
 use LayerShifter\TLDExtract\IDN;
 use yii\base\Component;
@@ -109,30 +108,11 @@ class CmsLicenseManager extends Component
     }
 
     /**
-     * Returns licenses owned by a user.
+     * Returns licenses that need to be renewed within the next 45 days.
      *
      * @param int $ownerId
      * @return CmsLicense[]
-     */
-    public function getLicensesByOwner(int $ownerId): array
-    {
-        $results = $this->_createLicenseQuery()
-            ->where(['l.ownerId' => $ownerId])
-            ->all();
-
-        $licenses = [];
-        foreach ($results as $result) {
-            $licenses[] = new CmsLicense($result);
-        }
-
-        return $licenses;
-    }
-
-    /**
-     * Returns licenses that need to be renewed in the next 45 days.
-     *
-     * @param int $ownerId
-     * @return CmsLicense[]
+     * @throws \Exception
      */
     public function getRenewLicensesByOwner(int $ownerId): array
     {
@@ -154,6 +134,7 @@ class CmsLicenseManager extends Component
             ->all();
 
         $licenses = [];
+
         foreach ($results as $result) {
             $licenses[] = new CmsLicense($result);
         }
@@ -385,17 +366,66 @@ class CmsLicenseManager extends Component
     }
 
     /**
+     * Get licenses by owner.
+     *
+     * @param User $owner
+     * @param $query
+     * @param $limit
+     * @param $page
+     * @param $orderBy
+     * @param $ascending
+     * @return array
+     * @throws \Exception
+     */
+    public function getLicensesByOwner(User $owner, $query, $limit, $page, $orderBy, $ascending): array
+    {
+        $defaultLimit = 30;
+
+        $query = strtoupper($query);
+        $perPage = $limit ?? $defaultLimit;
+        $offset = ($page - 1) * $perPage;
+
+        $licenseQuery = $this->_createLicenseQuery()
+            ->where(['l.ownerId' => $owner->id]);
+
+        if ($query) {
+            $licenseQuery->andFilterWhere(['like', 'l.key', $query]);
+        }
+
+        if ($orderBy) {
+            $licenseQuery->orderBy([$orderBy => $ascending ? SORT_ASC : SORT_DESC]);
+        }
+
+        $licenseQuery
+            ->offset($offset)
+            ->limit($limit);
+
+        $results = $licenseQuery->all();
+        $resultsArray = [];
+        foreach ($results as $result) {
+            $resultsArray[] = new CmsLicense($result);
+        }
+
+        return $this->transformLicensesForOwner($resultsArray, $owner);
+    }
+
+    /**
      * Returns licenses by owner as an array.
      *
      * @param User $owner
-     *
-     * @return array
+     * @param string|null $query
+     * @return int
      */
-    public function getLicensesArrayByOwner(User $owner)
+    public function getTotalLicensesByOwner(User $owner, string $query = null): int
     {
-        $results = $this->getLicensesByOwner($owner->id);
+        $licenseQuery = $this->_createLicenseQuery()
+            ->where(['l.ownerId' => $owner->id]);
 
-        return $this->transformLicensesForOwner($results, $owner);
+        if ($query) {
+            $licenseQuery->andFilterWhere(['like', 'l.key', strtoupper($query)]);
+        }
+
+        return $licenseQuery->count();
     }
 
     /**
@@ -403,8 +433,8 @@ class CmsLicenseManager extends Component
      *
      * @param array $results
      * @param User $owner
-     *
      * @return array
+     * @throws \Exception
      */
     public function transformLicensesForOwner(array $results, User $owner)
     {
@@ -422,10 +452,10 @@ class CmsLicenseManager extends Component
      *
      * @param CmsLicense $result
      * @param User $owner
-     *
      * @return array
+     * @throws \Exception
      */
-    public function transformLicenseForOwner(CmsLicense $result, User $owner)
+    public function transformLicenseForOwner(CmsLicense $result, User $owner): array
     {
         if ($result->ownerId === $owner->id) {
             $license = $result->getAttributes(['id', 'key', 'domain', 'notes', 'email', 'autoRenew', 'expirable', 'expired', 'expiresOn', 'dateCreated']);
@@ -436,40 +466,16 @@ class CmsLicenseManager extends Component
             ];
         }
 
-        $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
-
-
         // History
-
         $license['history'] = $this->getHistory($result->id);
+
+        // Edition details
         $license['editionDetails'] = CmsEdition::findOne($result->editionId);
 
-
-        // Plugin licenses
-
-        $pluginLicenses = [];
-
-        foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
-            if ($pluginLicensesResult->ownerId === $owner->id) {
-                $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key', 'expiresOn', 'autoRenew']);
-            } else {
-                $pluginLicense = $pluginLicensesResult->getAttributes(['expiresOn', 'autoRenew']);
-                $pluginLicense['shortKey'] = $pluginLicensesResult->getShortKey();
-            }
-
-            $plugin = null;
-
-            if ($pluginLicensesResult->pluginId) {
-                $pluginResult = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
-                $plugin = $pluginResult->getAttributes(['name', 'handle']);
-            }
-
-            $pluginLicense['plugin'] = $plugin;
-
-            $pluginLicenses[] = $pluginLicense;
+        // Expiry Date Options
+        if (!empty($license['expiresOn'])) {
+            $license['expiryDateOptions'] = LicenseHelper::getExpiryDateOptions($license['expiresOn']);
         }
-
-        $license['pluginLicenses'] = $pluginLicenses;
 
         return $license;
     }
@@ -495,6 +501,29 @@ class CmsLicenseManager extends Component
         if ($rows === 0) {
             throw new LicenseNotFoundException($key);
         }
+    }
+
+    /**
+     * Returns the number of licenses expiring in the next 45 days.
+     *
+     * @param User $owner
+     * @return int
+     * @throws \Exception
+     */
+    public function getExpiringLicensesTotal(User $owner): int
+    {
+        $date = new \DateTime('now');
+        $date->add(new \DateInterval('P45D'));
+        $dateFormatted = $date->format('Y-m-d');
+
+        $licenseQuery = $this->_createLicenseQuery()
+            ->where(['l.ownerId' => $owner->id])
+            ->andWhere(['l.expired' => false])
+            ->andWhere(['l.autoRenew' => false])
+            ->andWhere(['not', ['l.expiresOn' => null]])
+            ->andWhere(['<=', 'l.expiresOn', $dateFormatted]);
+
+        return $licenseQuery->count();
     }
 
     /**
