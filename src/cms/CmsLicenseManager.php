@@ -21,8 +21,14 @@ use yii\db\Expression;
 
 class CmsLicenseManager extends Component
 {
+    // Constants
+    // =========================================================================
+
     const EDITION_SOLO = 'solo';
     const EDITION_PRO = 'pro';
+
+    // Properties
+    // =========================================================================
 
     /**
      * @var array Domains that we treat as private, because they are only used for dev/testing/staging purposes
@@ -41,6 +47,9 @@ class CmsLicenseManager extends Component
      * @see normalizeDomain()
      */
     public $devSubdomainWords = [];
+
+    // Public Methods
+    // =========================================================================
 
     /**
      * Normalizes a license key by trimming whitespace and removing newlines.
@@ -562,6 +571,9 @@ class CmsLicenseManager extends Component
 
         return $licenseQuery->count();
     }
+
+    // Private Methods
+    // =========================================================================
 
     /**
      * @return Query

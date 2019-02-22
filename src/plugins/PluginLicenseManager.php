@@ -16,6 +16,9 @@ use yii\db\Expression;
 
 class PluginLicenseManager extends Component
 {
+    // Public Methods
+    // =========================================================================
+
     /**
      * Normalizes a license key by trimming whitespace and removing dashes.
      *
@@ -493,7 +496,14 @@ class PluginLicenseManager extends Component
         return $query->count();
     }
 
-    private function _getSalesQuery(User $owner)
+    // Public Methods
+    // =========================================================================
+
+    /**
+     * @param User $owner
+     * @return Query
+     */
+    private function _getSalesQuery(User $owner): Query
     {
         return (new Query())
             ->select([
@@ -660,6 +670,9 @@ class PluginLicenseManager extends Component
 
         return $licenseQuery->count();
     }
+
+    // Private Methods
+    // =========================================================================
 
     /**
      * @return Query
