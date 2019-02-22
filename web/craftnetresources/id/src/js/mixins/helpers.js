@@ -107,6 +107,9 @@ export default {
                                 cbError();
                             }
                         })
+
+                    // Launch timer again now that we have a current user
+                    this.$root.$children[0].$refs.authManager.updateRemainingSessionTime(Craft.remainingSessionTime);
                 });
         },
 
