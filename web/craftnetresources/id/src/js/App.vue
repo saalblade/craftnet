@@ -36,7 +36,6 @@
     import Spinner from './components/Spinner';
 
     export default {
-
         router,
 
         mixins: [helpers],
@@ -49,7 +48,6 @@
         },
 
         computed: {
-
             ...mapState({
                 notification: state => state.app.notification,
                 showRenewLicensesModal: state => state.app.showRenewLicensesModal,
