@@ -93,7 +93,6 @@ class CmsLicensesController extends BaseController
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
-
     }
 
     /**
@@ -114,7 +113,7 @@ class CmsLicensesController extends BaseController
                 throw new UnauthorizedHttpException('Not Authorized');
             }
 
-            $licenseArray = Module::getInstance()->getCmsLicenseManager()->transformLicenseForOwner($license, $user);
+            $licenseArray = Module::getInstance()->getCmsLicenseManager()->transformLicenseForOwner($license, $user, ['pluginLicenses']);
 
             return $this->asJson($licenseArray);
         } catch (Throwable $e) {

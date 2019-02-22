@@ -9,6 +9,8 @@ use craft\helpers\Db;
 use craft\helpers\StringHelper;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\helpers\LicenseHelper;
+use craftnet\Module;
+use craftnet\plugins\Plugin;
 use LayerShifter\TLDExtract\Extract;
 use LayerShifter\TLDExtract\IDN;
 use yii\base\Component;
@@ -433,15 +435,16 @@ class CmsLicenseManager extends Component
      *
      * @param array $results
      * @param User $owner
+     * @param array $include
      * @return array
      * @throws \Exception
      */
-    public function transformLicensesForOwner(array $results, User $owner)
+    public function transformLicensesForOwner(array $results, User $owner, array $include = []): array
     {
         $licenses = [];
 
         foreach ($results as $result) {
-            $licenses[] = $this->transformLicenseForOwner($result, $owner);
+            $licenses[] = $this->transformLicenseForOwner($result, $owner, $include);
         }
 
         return $licenses;
@@ -452,10 +455,11 @@ class CmsLicenseManager extends Component
      *
      * @param CmsLicense $result
      * @param User $owner
+     * @param array $include
      * @return array
      * @throws \Exception
      */
-    public function transformLicenseForOwner(CmsLicense $result, User $owner): array
+    public function transformLicenseForOwner(CmsLicense $result, User $owner, array $include = []): array
     {
         if ($result->ownerId === $owner->id) {
             $license = $result->getAttributes(['id', 'key', 'domain', 'notes', 'email', 'autoRenew', 'expirable', 'expired', 'expiresOn', 'dateCreated']);
@@ -475,6 +479,34 @@ class CmsLicenseManager extends Component
         // Expiry Date Options
         if (!empty($license['expiresOn'])) {
             $license['expiryDateOptions'] = LicenseHelper::getExpiryDateOptions($license['expiresOn']);
+        }
+
+        // Plugin Licenses
+        if (in_array('pluginLicenses', $include, false)) {
+            $pluginLicensesResults = Module::getInstance()->getPluginLicenseManager()->getLicensesByCmsLicenseId($result->id);
+            $pluginLicenses = [];
+
+            foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
+                if ($pluginLicensesResult->ownerId === $owner->id) {
+                    $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key', 'expiresOn', 'autoRenew']);
+                } else {
+                    $pluginLicense = $pluginLicensesResult->getAttributes(['expiresOn', 'autoRenew']);
+                    $pluginLicense['shortKey'] = $pluginLicensesResult->getShortKey();
+                }
+
+                $plugin = null;
+
+                if ($pluginLicensesResult->pluginId) {
+                    $pluginResult = Plugin::find()->id($pluginLicensesResult->pluginId)->status(null)->one();
+                    $plugin = $pluginResult->getAttributes(['name', 'handle']);
+                }
+
+                $pluginLicense['plugin'] = $plugin;
+
+                $pluginLicenses[] = $pluginLicense;
+            }
+
+            $license['pluginLicenses'] = $pluginLicenses;
         }
 
         return $license;
