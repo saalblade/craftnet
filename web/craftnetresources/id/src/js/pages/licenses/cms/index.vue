@@ -35,6 +35,14 @@
                     {{props.rowData.edition|capitalize}}
                 </template>
 
+                <template slot="domain" slot-scope="props">
+                    {{props.rowData.domain}}
+                </template>
+
+                <template slot="notes" slot-scope="props">
+                    {{props.rowData.notes}}
+                </template>
+
                 <template slot="expiresOn" slot-scope="props">
                     <template v-if="props.rowData.expirable && props.rowData.expiresOn">
                         <template v-if="!props.rowData.expired">
@@ -113,6 +121,14 @@
                     {
                         name: '__slot:edition',
                         title: 'Edition',
+                    },
+                    {
+                        name: '__slot:domain',
+                        title: 'Domain',
+                    },
+                    {
+                        name: '__slot:notes',
+                        title: 'Notes',
                     },
                     {
                         name: '__slot:expiresOn',
