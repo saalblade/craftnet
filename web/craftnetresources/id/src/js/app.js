@@ -19,17 +19,11 @@ import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
 window.craftIdApp = new Vue({
-
     store,
+    
     render: h => h(App),
 
-    data() {
-        return {
-        }
-    },
-
     methods: {
-
         /**
          * Connect app callback.
          *
@@ -40,7 +34,5 @@ window.craftIdApp = new Vue({
 
             this.$store.dispatch('app/displayNotice', 'App connected.');
         },
-
     },
-
 }).$mount('#app')
