@@ -81,8 +81,4 @@ export default {
         return axios.get(Craft.actionUrl + '/craftnet/id/plugins/get-plugins')
     },
 
-    getSales() {
-        return axios.get(Craft.actionUrl + '/craftnet/id/sales/get-sales')
-    }
-
 }

@@ -392,7 +392,7 @@ class CmsLicenseManager extends Component
             ->where(['l.ownerId' => $owner->id]);
 
         if ($query) {
-            $licenseQuery->andFilterWhere(['like', 'l.key', $query]);
+            $licenseQuery->andFilterWhere(['like', 'orderEmail', $query]);
         }
 
         if ($orderBy) {

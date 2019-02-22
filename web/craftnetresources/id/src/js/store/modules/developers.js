@@ -10,9 +10,6 @@ Vue.use(Vuex)
 const state = {
     hasApiToken: false,
     plugins: [],
-    sales: [],
-    salesLoading: false,
-    salesLoaded: false,
 }
 
 /**
@@ -91,35 +88,6 @@ const actions = {
         })
     },
 
-
-    getSales({commit, state}) {
-        if (state.salesLoaded) {
-            return false
-        }
-
-        if (state.salesLoading) {
-            return false
-        }
-
-        commit('updateSalesLoading', true)
-
-        return new Promise((resolve, reject) => {
-            developerApi.getSales()
-                .then(response => {
-                    commit('updateSalesLoading', false)
-                    commit('updateSalesLoaded', true)
-                    commit('updateSales', {sales: response.data})
-                    resolve(response)
-                })
-                .catch(response => {
-                    commit('updateSalesLoading', false)
-                    commit('updateSalesLoaded', true)
-                    reject(response)
-                })
-        })
-    },
-
-
 }
 
 /**
@@ -129,18 +97,6 @@ const mutations = {
 
     updatePlugins(state, {plugins}) {
         state.plugins = plugins
-    },
-
-    updateSales(state, {sales}) {
-        state.sales = sales
-    },
-
-    updateSalesLoading(state, loading) {
-        state.salesLoading = loading
-    },
-
-    updateSalesLoaded(state, loaded) {
-        state.salesLoaded = loaded
     },
 
     savePlugin(state, {plugin, response}) {

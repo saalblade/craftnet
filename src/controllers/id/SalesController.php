@@ -21,12 +21,31 @@ class SalesController extends BaseController
      */
     public function actionGetSales(): Response
     {
-        $this->requireLogin();
+        $user = Craft::$app->getUser()->getIdentity();
 
-        $currentUser = Craft::$app->getUser()->getIdentity();
+        $filter = Craft::$app->getRequest()->getParam('filter');
+        $limit = Craft::$app->getRequest()->getParam('limit', 10);
+        $page = Craft::$app->getRequest()->getParam('page', 1);
 
-        $data = Module::getInstance()->getPluginLicenseManager()->getSalesArrayByPluginOwner($currentUser);
+        $data = Module::getInstance()->getSaleManager()->getSalesByPluginOwner($user, $filter, $limit, $page);
+        $total = Module::getInstance()->getSaleManager()->getTotalSalesByPluginOwner($user);
 
-        return $this->asJson($data);
+        $last_page = ceil($total / $limit);
+        $next_page_url = '?next';
+        $prev_page_url = '?prev';
+        $from = ($page - 1) * $limit;
+        $to = ($page * $limit) - 1;
+
+        return $this->asJson([
+            'total' => $total,
+            'per_page' => $limit,
+            'current_page' => $page,
+            'last_page' => $last_page,
+            'next_page_url' => $next_page_url,
+            'prev_page_url' => $prev_page_url,
+            'from' => $from,
+            'to' => $to,
+            'data' => $data,
+        ]);
     }
 }

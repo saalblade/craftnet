@@ -2,7 +2,7 @@
     <div class="filter-bar ui basic segment grid">
         <div class="ui form">
             <div class="inline flex items-center">
-                <input class="flex-1" type="text" v-model="filterText" @input="onFilterTextInput" placeholder="License key, domain, edition, …">
+                <input class="flex-1" type="text" v-model="filterText" @input="onFilterTextInput" :placeholder="placeholder">
             </div>
         </div>
     </div>
@@ -12,6 +12,9 @@
     import {debounce} from 'debounce'
 
     export default {
+
+        props: ['placeholder'],
+
         data () {
             return {
                 filterText: ''

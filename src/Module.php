@@ -39,6 +39,7 @@ use craftnet\orders\OrderBehavior;
 use craftnet\orders\PdfRenderer;
 use craftnet\plugins\PluginEdition;
 use craftnet\plugins\PluginLicenseManager;
+use craftnet\sales\SaleManager;
 use craftnet\services\Oauth;
 use craftnet\utilities\PullProduction;
 use craftnet\utilities\SalesReport;
@@ -52,6 +53,7 @@ use yii\base\Event;
  * @property Oauth $oauth
  * @property PackageManager $packageManager
  * @property PluginLicenseManager $pluginLicenseManager
+ * @property SaleManager $saleManager
  */
 class Module extends \yii\base\Module
 {
@@ -190,6 +192,14 @@ class Module extends \yii\base\Module
     public function getOauth(): Oauth
     {
         return $this->get('oauth');
+    }
+
+    /**
+     * @return SaleManager
+     */
+    public function getSaleManager(): SaleManager
+    {
+        return $this->get('saleManager');
     }
 
     private function _initCpRequest()
