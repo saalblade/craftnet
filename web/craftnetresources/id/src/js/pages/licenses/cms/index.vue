@@ -116,7 +116,7 @@
                 fields: [
                     {
                         name: '__slot:key',
-                        title: 'Key',
+                        title: 'License Key',
                     },
                     {
                         name: '__slot:edition',
