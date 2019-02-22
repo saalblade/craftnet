@@ -15,6 +15,14 @@ use yii\web\Response;
  */
 class CraftIdController extends BaseController
 {
+    // Properties
+    // =========================================================================
+
+    /**
+     * @inheritdoc
+     */
+    public $enableCsrfValidation = false;
+    
     // Public Methods
     // =========================================================================
 
