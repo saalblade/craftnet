@@ -60,7 +60,7 @@
 
     import {mapState} from 'vuex'
     import usersApi from '../api/users'
-    import qs from 'qs';
+    import FormDataHelper from '../helpers/form-data'
     import Modal from './Modal';
     import IsMobileBrowser from './IsMobileBrowser';
     import humanizeDuration from 'humanize-duration';
@@ -383,19 +383,12 @@
              * Submit login.
              */
             submitLogin() {
-                let data = {
-                    loginName: Craft.username,
-                    password: this.password
-                };
+                let formData = new FormData()
 
-                let params = qs.stringify(data);
-                let headers = {};
+                FormDataHelper.append(formData, 'loginName', this.currentUser.username)
+                FormDataHelper.append(formData, 'password', this.password)
 
-                if (Craft.csrfTokenValue && Craft.csrfTokenName) {
-                    headers['X-CSRF-Token'] = Craft.csrfTokenValue;
-                }
-
-                usersApi.login2(params, headers)
+                usersApi.login(formData)
                     .then(response => {
                         this.passwordSpinner = false;
 

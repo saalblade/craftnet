@@ -16,15 +16,11 @@ export default {
         })
     },
 
-    login2(params, headers) {
-        return axios.post(Craft.actionUrl + '/users/login', params, {headers: headers})
-    },
-
     logout() {
         return axios.get(Craft.actionUrl + '/users/logout')
     },
 
-    saveUser(formData) {
+    registerUser(formData) {
         return axios.post(Craft.actionUrl + '/users/save-user', formData, {
             headers: {
                 'X-CSRF-Token': Craft.csrfTokenValue,
@@ -32,7 +28,7 @@ export default {
         })
     },
 
-    saveUser2(user, cb, cbError) {
+    saveUser(user, cb, cbError) {
         let formData = new FormData();
 
         for (let attribute in user) {

@@ -74,7 +74,7 @@ const actions = {
 
     saveUser({commit}, user) {
         return new Promise((resolve, reject) => {
-            usersApi.saveUser2(user, response => {
+            usersApi.saveUser(user, response => {
                     if (!response.data.errors) {
                         commit('saveUser', {user, response});
                         resolve(response);

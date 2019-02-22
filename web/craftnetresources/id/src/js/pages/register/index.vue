@@ -67,7 +67,7 @@
                 FormDataHelper.append(formData, 'email', this.email)
                 FormDataHelper.append(formData, 'password', this.password)
 
-                usersApi.saveUser(formData)
+                usersApi.registerUser(formData)
                     .then(response => {
                         this.loading = false
 
