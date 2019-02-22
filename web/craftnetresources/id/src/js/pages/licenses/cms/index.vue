@@ -195,6 +195,7 @@
             onLoaded() {
                 this.loading = false
             }
+
         },
 
         mounted() {
