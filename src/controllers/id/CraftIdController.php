@@ -7,7 +7,6 @@ use craft\commerce\Plugin as Commerce;
 use craft\elements\Category;
 use craft\elements\User;
 use craft\helpers\Json;
-use craftnet\Module;
 use yii\web\Response;
 
 /**
@@ -22,7 +21,7 @@ class CraftIdController extends BaseController
      * @inheritdoc
      */
     public $enableCsrfValidation = false;
-    
+
     // Public Methods
     // =========================================================================
 
