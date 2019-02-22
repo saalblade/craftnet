@@ -210,13 +210,13 @@
     /* global Craft */
 
     import {mapState, mapGetters} from 'vuex'
+    import pluginsApi from '../../../api/plugins'
     import ConnectedApps from '../../../components/developer/connected-apps/ConnectedApps'
     import Repositories from '../../../components/developer/Repositories'
     import PluginCategories from '../../../components/developer/PluginCategories'
     import Spinner from '../../../components/Spinner'
     import slug from 'limax'
     import draggable from 'vuedraggable'
-    import axios from 'axios'
     import qs from 'qs'
 
     export default {
@@ -419,7 +419,7 @@
                 let params = qs.stringify(body);
                 let url = repositoryUrl;
 
-                axios.post(Craft.actionUrl + '/craftnet/plugins/load-details&repository=' + encodeURIComponent(url), params)
+                pluginsApi.loadDetails(url, params)
                     .then(response => {
                         this.repositoryLoading = false;
                         this.loadingRepository = null;

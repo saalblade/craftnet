@@ -42,7 +42,7 @@
     /* global Craft */
 
     import {mapState} from 'vuex'
-    import axios from 'axios'
+    import usersApi from '../api/users'
     import helpers from '../mixins/helpers'
     import FormDataHelper from '../helpers/form-data'
     import Spinner from '../components/Spinner'
@@ -97,19 +97,13 @@
 
                 // Send login request
 
-                const action = 'users/login'
-
                 let formData = new FormData()
 
                 FormDataHelper.append(formData, 'loginName', this.loginName)
                 FormDataHelper.append(formData, 'password', this.password)
                 FormDataHelper.append(formData, 'rememberMe', (this.rememberMe ? '1' : '0'))
 
-                axios.post(Craft.actionUrl + '/' + action, formData, {
-                        headers: {
-                            'X-CSRF-Token': Craft.csrfTokenValue,
-                        }
-                    })
+                usersApi.login(formData)
                     .then(() => {
                         this.loadAuthenticatedUserData(() => {
                             this.loading = false

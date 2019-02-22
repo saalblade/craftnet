@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import usersApi from '../../api/users'
     import helpers from '../../mixins/helpers'
     import FormDataHelper from '../../helpers/form-data'
     import Spinner from '../../components/Spinner'
@@ -61,19 +61,13 @@
 
                 // Send login request
 
-                const action = 'users/save-user'
-
                 let formData = new FormData()
 
                 FormDataHelper.append(formData, 'username', this.username)
                 FormDataHelper.append(formData, 'email', this.email)
                 FormDataHelper.append(formData, 'password', this.password)
 
-                axios.post(Craft.actionUrl + '/' + action, formData, {
-                        headers: {
-                            'X-CSRF-Token': Craft.csrfTokenValue,
-                        }
-                    })
+                usersApi.saveUser(formData)
                     .then(response => {
                         this.loading = false
 

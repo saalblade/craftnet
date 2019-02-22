@@ -28,7 +28,7 @@
     /* global Craft */
 
     import {required} from 'vuelidate/lib/validators'
-    import axios from 'axios'
+    import usersApi from '../api/users'
     import FormDataHelper from '../helpers/form-data'
     import helpers from '../mixins/helpers'
     import Spinner from '../components/Spinner'
@@ -63,11 +63,7 @@
 
                 FormDataHelper.append(formData, 'loginName', this.loginName)
 
-                axios.post(Craft.actionUrl + '/' + action, formData, {
-                        headers: {
-                            'X-CSRF-Token': Craft.csrfTokenValue,
-                        }
-                    })
+                usersApi.sendPasswordResetEmail(formData)
                     .then(response => {
                         this.loading = false
 

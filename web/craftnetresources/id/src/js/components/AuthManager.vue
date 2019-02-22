@@ -59,7 +59,7 @@
     /* global Craft */
 
     import {mapState} from 'vuex'
-    import axios from 'axios';
+    import usersApi from '../api/users'
     import qs from 'qs';
     import Modal from './Modal';
     import IsMobileBrowser from './IsMobileBrowser';
@@ -123,7 +123,7 @@
                     };
                 }
 
-                axios.get(Craft.actionUrl + '/users/get-remaining-session-time', config)
+                usersApi.getRemainingSessionTime(config)
                     .then(response => {
                         if (typeof response.data.csrfTokenValue !== 'undefined' && typeof Craft.csrfTokenValue !== 'undefined') {
                             Craft.csrfTokenValue = response.data.csrfTokenValue;
@@ -332,7 +332,7 @@
              * Logout.
              */
             logout() {
-                axios.get(Craft.actionUrl + '/users/logout')
+                usersApi.logout()
                     .then(() => {
                         document.location.href = '';
                     })
@@ -395,7 +395,7 @@
                     headers['X-CSRF-Token'] = Craft.csrfTokenValue;
                 }
 
-                axios.post(Craft.actionUrl + '/users/login', params, {headers: headers})
+                usersApi.login2(params, headers)
                     .then(response => {
                         this.passwordSpinner = false;
 

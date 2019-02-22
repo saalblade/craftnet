@@ -107,5 +107,9 @@ export default {
         })
             .then(response => cb(response))
             .catch(error => cbError(error.response));
+    },
+
+    uploadScreenshots(formData, config) {
+        return axios.post(Craft.actionUrl + '/craftnet/partners/upload-screenshots', formData, config)
     }
 }

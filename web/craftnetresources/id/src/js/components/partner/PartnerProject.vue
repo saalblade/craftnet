@@ -87,7 +87,7 @@
 <script>
     /* global Craft */
 
-    import axios from 'axios'
+    import partnerApi from '../../api/partner'
     import draggable from 'vuedraggable'
     import Modal from '../Modal'
     import Spinner from '../Spinner'
@@ -148,26 +148,28 @@
 
                 this.isUploading = true
 
-                axios.post(Craft.actionUrl + '/craftnet/partners/upload-screenshots', formData, {
-                    headers: {
-                        'X-CSRF-Token': Craft.csrfTokenValue,
-                    },
-                    onUploadProgress: (event) => {
-                        this.uploadProgress = Math.round(event.loaded / event.total * 100)
-                    }
-                }).then(response => {
-                    this.isUploading = false
-                    this.$store.dispatch('app/displayNotice', 'Uploaded')
+                partnerApi.uploadScreenshots(formData, {
+                        headers: {
+                            'X-CSRF-Token': Craft.csrfTokenValue,
+                        },
+                        onUploadProgress: (event) => {
+                            this.uploadProgress = Math.round(event.loaded / event.total * 100)
+                        }
+                    })
+                    .then(response => {
+                        this.isUploading = false
+                        this.$store.dispatch('app/displayNotice', 'Uploaded')
 
-                    let screenshots = response.data.screenshots || []
+                        let screenshots = response.data.screenshots || []
 
-                    for (let i in screenshots) {
-                        this.project.screenshots.push(screenshots[i])
-                    }
-                }).catch(error => {
-                    this.isUploading = false
-                    this.$store.dispatch('app/displayNotice', error)
-                });
+                        for (let i in screenshots) {
+                            this.project.screenshots.push(screenshots[i])
+                        }
+                    })
+                    .catch(error => {
+                        this.isUploading = false
+                        this.$store.dispatch('app/displayNotice', error)
+                    });
             }
         },
 
