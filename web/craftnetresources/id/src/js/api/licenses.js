@@ -63,7 +63,7 @@ export default {
     },
 
     getCmsLicense(id) {
-        axios.get(Craft.actionUrl + '/craftnet/id/cms-licenses/get-license-by-id', {params: {id}})
+        return axios.get(Craft.actionUrl + '/craftnet/id/cms-licenses/get-license-by-id', {params: {id}})
     },
 
     getExpiringCmsLicensesTotal(cb, cbError) {
