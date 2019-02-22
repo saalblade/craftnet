@@ -28,7 +28,15 @@
                     @vuetable:loaded="onLoaded"
             >
                 <template slot="key" slot-scope="props">
-                    <router-link :to="'/licenses/cms/' + props.rowData.id">{{props.rowData.key.substr(0, 10)}}</router-link>
+                    <code>
+                        <router-link v-if="props.rowData.key" :to="'/licenses/cms/'+props.rowData.id">
+                            {{ props.rowData.key.substr(0, 10) }}
+                        </router-link>
+
+                        <template v-else>
+                            {{ props.rowData.shortKey }}
+                        </template>
+                    </code>
                 </template>
 
                 <template slot="edition" slot-scope="props">
