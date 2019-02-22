@@ -137,31 +137,6 @@ class AccountController extends Controller
     }
 
     /**
-     * Get invoices.
-     *
-     * @return Response
-     */
-    public function actionGetInvoices(): Response
-    {
-        $this->requireLogin();
-        $user = Craft::$app->getUser()->getIdentity();
-
-        try {
-            $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
-
-            $invoices = [];
-
-            if ($customer) {
-                $invoices = Module::getInstance()->getInvoiceManager()->getInvoices($customer);
-            }
-
-            return $this->asJson($invoices);
-        } catch (Throwable $e) {
-            return $this->asErrorJson($e->getMessage());
-        }
-    }
-
-    /**
      * Save billing info.
      *
      * @return Response
