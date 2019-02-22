@@ -47,6 +47,10 @@ class CraftIdController extends BaseController
 
         return $this->asJson([
             'billingAddress' => $this->getBillingAddress($currentUser),
+            'card' => $this->getCard($currentUser),
+            'cardToken' => $this->getCardToken($currentUser),
+            'categories' => $this->getPluginCategories(),
+            'countries' => Craft::$app->getApi()->getCountries(),
             'currentUser' => [
                 'id' => $currentUser->id,
                 'email' => $currentUser->email,
@@ -64,10 +68,6 @@ class CraftIdController extends BaseController
                 'photoUrl' => $photoUrl,
                 'hasApiToken' => $currentUser->apiToken !== null,
             ],
-            'card' => $this->getCard($currentUser),
-            'cardToken' => $this->getCardToken($currentUser),
-            'categories' => $this->getPluginCategories(),
-            'countries' => Craft::$app->getApi()->getCountries(),
         ]);
     }
 
