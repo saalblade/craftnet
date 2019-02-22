@@ -17,7 +17,6 @@ const state = {
  * Getters
  */
 const getters = {
-
     cartTotal() {
         return 0
     },
@@ -56,14 +55,12 @@ const getters = {
     cartItemsData(state) {
         return CartHelper.getCartItemsData(state.cart)
     }
-
 }
 
 /**
  * Actions
  */
 const actions = {
-
     getCart({dispatch, commit, rootState, state}) {
         return new Promise((resolve, reject) => {
             if (!state.cart) {
@@ -269,14 +266,12 @@ const actions = {
             })
         })
     },
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-
     updateCart(state, {response}) {
         state.cart = response.cart
         state.stripePublicKey = response.stripePublicKey
@@ -297,7 +292,6 @@ const mutations = {
     updateSelectedExpiryDates(state, selectedExpiryDates) {
         state.selectedExpiryDates = selectedExpiryDates
     },
-
 }
 
 export default {

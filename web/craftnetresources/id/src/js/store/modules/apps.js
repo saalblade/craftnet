@@ -21,7 +21,6 @@ const getters = {}
  * Actions
  */
 const actions = {
-
     getApps({commit, state}) {
         if (state.appsLoading) {
             return false
@@ -46,14 +45,12 @@ const actions = {
                 })
         })
     }
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-
     updateApps(state, {apps}) {
         state.apps = apps;
     },
@@ -61,7 +58,6 @@ const mutations = {
     updateAppsLoading(state, loading) {
         state.appsLoading = loading
     },
-
 }
 
 export default {

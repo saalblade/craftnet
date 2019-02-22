@@ -19,7 +19,6 @@ const state = {
  * Getters
  */
 const getters = {
-
     expiresSoon() {
         return license => {
             if(!license.expiresOn) {
@@ -110,14 +109,12 @@ const getters = {
             return renewableLicenses
         }
     },
-
 }
 
 /**
  * Actions
  */
 const actions = {
-
     // eslint-disable-next-line
     claimCmsLicense({}, licenseKey) {
         return new Promise((resolve, reject) => {
@@ -263,14 +260,12 @@ const actions = {
             })
         })
     },
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-
     updateExpiringCmsLicensesTotal(state, total) {
         state.expiringCmsLicensesTotal = total
     },

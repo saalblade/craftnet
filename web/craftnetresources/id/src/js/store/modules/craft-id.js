@@ -16,7 +16,6 @@ const state = {
  * Getters
  */
 const getters = {
-
     countryOptions(state) {
         let options = [];
 
@@ -60,14 +59,12 @@ const getters = {
             return state.currentUser.groups.find(g => g.handle === handle)
         }
     },
-
 }
 
 /**
  * Actions
  */
 const actions = {
-
     getCraftIdData({commit}) {
         return new Promise((resolve, reject) => {
             craftIdApi.getCraftIdData(response => {
@@ -89,14 +86,12 @@ const actions = {
                 })
         })
     },
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-
     updateCategories(state, {categories}) {
         state.categories = categories;
     },
@@ -104,7 +99,6 @@ const mutations = {
     updateCountries(state, {countries}) {
         state.countries = countries;
     },
-
 }
 
 export default {

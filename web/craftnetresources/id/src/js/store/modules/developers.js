@@ -16,20 +16,17 @@ const state = {
  * Getters
  */
 const getters = {
-
     repositoryIsInUse(state) {
         return repositoryUrl => {
             return state.plugins.find(plugin => plugin.repository === repositoryUrl)
         }
     },
-
 }
 
 /**
  * Actions
  */
 const actions = {
-
     savePlugin({commit}, {plugin}) {
         return new Promise((resolve, reject) => {
             developerApi.savePlugin({plugin}, response => {
@@ -87,14 +84,12 @@ const actions = {
                 })
         })
     },
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-
     updatePlugins(state, {plugins}) {
         state.plugins = plugins
     },
@@ -170,7 +165,6 @@ const mutations = {
     updateHasApiToken(state, {hasApiToken}){
         state.hasApiToken = hasApiToken;
     }
-
 }
 
 export default {

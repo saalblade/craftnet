@@ -21,20 +21,17 @@ const state = {
  * Getters
  */
 const getters = {
-
     userIsInGroup(state) {
         return handle => {
             return state.currentUser.groups.find(g => g.handle === handle)
         }
     },
-
 }
 
 /**
  * Actions
  */
 const actions = {
-
     /**
      * Apps
      */
@@ -167,7 +164,6 @@ const actions = {
             })
         })
     },
-
 }
 
 /**
@@ -181,7 +177,6 @@ const mutations = {
     disconnectApp(state, {appHandle}) {
         Vue.delete(state.apps, appHandle);
     },
-
 
 
     /**
@@ -265,7 +260,6 @@ const mutations = {
     updateStripeAccount(state, {response}) {
         state.stripeAccount = response.data
     },
-
 }
 
 export default {

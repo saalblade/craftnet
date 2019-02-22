@@ -19,20 +19,17 @@ const state = {
  * Getters
  */
 const getters = {
-
     getPluginByHandle(state) {
         return handle => {
             return state.plugins.find(plugin => plugin.handle === handle)
         }
     },
-
 }
 
 /**
  * Actions
  */
 const actions = {
-
     getPluginStoreData({commit, state}) {
         return new Promise((resolve, reject) => {
             if (!state.pluginStoreDataLoaded) {
@@ -47,14 +44,12 @@ const actions = {
             }
         })
     },
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-
     updatePluginStoreData(state, {response}) {
         state.categories = response.data.categories
         state.featuredPlugins = response.data.featuredPlugins
@@ -62,7 +57,6 @@ const mutations = {
         state.expiryDateOptions = response.data.expiryDateOptions,
         state.pluginStoreDataLoaded = true
     },
-
 }
 
 export default {

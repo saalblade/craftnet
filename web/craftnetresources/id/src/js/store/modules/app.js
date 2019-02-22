@@ -24,7 +24,6 @@ const getters = {}
  * Actions
  */
 const actions = {
-
     /**
      *  Show the renew licenses modal at a given step.
      *
@@ -76,14 +75,12 @@ const actions = {
             commit('updateNotification', null)
         }.bind(this), notificationDuration);
     },
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-
     updateStripeAccountLoading(state, loading) {
         state.stripeAccountLoading = loading
     },
@@ -107,7 +104,6 @@ const mutations = {
     updateNotification(state, notification) {
         state.notification = notification;
     },
-
 }
 
 export default {
