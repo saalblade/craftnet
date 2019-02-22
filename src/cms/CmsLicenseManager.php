@@ -11,6 +11,7 @@ use craftnet\errors\LicenseNotFoundException;
 use craftnet\helpers\LicenseHelper;
 use craftnet\Module;
 use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginEdition;
 use LayerShifter\TLDExtract\Extract;
 use LayerShifter\TLDExtract\IDN;
 use yii\base\Component;
@@ -488,12 +489,16 @@ class CmsLicenseManager extends Component
 
             foreach ($pluginLicensesResults as $key => $pluginLicensesResult) {
                 if ($pluginLicensesResult->ownerId === $owner->id) {
-                    $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key', 'expiresOn', 'autoRenew']);
+                    $pluginLicense = $pluginLicensesResult->getAttributes(['id', 'key', 'expired', 'expiresOn', 'autoRenew']);
                 } else {
                     $pluginLicense = $pluginLicensesResult->getAttributes(['expiresOn', 'autoRenew']);
                     $pluginLicense['shortKey'] = $pluginLicensesResult->getShortKey();
                 }
 
+                // Edition details
+                $pluginLicense['edition'] = PluginEdition::findOne($pluginLicensesResult->editionId);
+
+                // Plugin details
                 $plugin = null;
 
                 if ($pluginLicensesResult->pluginId) {

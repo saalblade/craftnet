@@ -66,14 +66,18 @@ export default {
         return axios.get(Craft.actionUrl + '/craftnet/id/cms-licenses/get-license-by-id', {params: {id}})
     },
 
+    getPluginLicense(id) {
+        return axios.get(Craft.actionUrl + '/craftnet/id/plugin-licenses/get-license-by-id', {params: {id}})
+    },
+
     getExpiringCmsLicensesTotal(cb, cbError) {
         axios.get(Craft.actionUrl + '/craftnet/id/cms-licenses/get-expiring-licenses-total')
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },
 
-    getPluginLicenses(cb, cbError) {
-        axios.get(Craft.actionUrl + '/craftnet/id/plugin-licenses/get-licenses')
+    getExpiringPluginLicensesTotal(cb, cbError) {
+        axios.get(Craft.actionUrl + '/craftnet/id/plugin-licenses/get-expiring-licenses-total')
             .then(response => cb(response))
             .catch(error => cbError(error.response));
     },

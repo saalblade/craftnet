@@ -18,7 +18,7 @@
                     </template>
 
                     <template v-if="$route.meta.pluginLicensesRenewAlert">
-                        <license-renew-alert type="plugin" :expiring-licenses-total="expiringPluginLicenses.length"></license-renew-alert>
+                        <license-renew-alert type="plugin" :expiring-licenses-total="expiringPluginLicensesTotal"></license-renew-alert>
                     </template>
                 </div>
 
@@ -56,10 +56,7 @@
 
             ...mapState({
                 expiringCmsLicensesTotal: state => state.licenses.expiringCmsLicensesTotal,
-            }),
-
-            ...mapGetters({
-                expiringPluginLicenses: 'licenses/expiringPluginLicenses',
+                expiringPluginLicensesTotal: state => state.licenses.expiringPluginLicensesTotal,
             }),
 
         },

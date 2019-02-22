@@ -61,7 +61,6 @@ class CraftIdController extends BaseController
             'cardToken' => $this->getCardToken($currentUser),
             'categories' => $this->getPluginCategories(),
             'countries' => Craft::$app->getApi()->getCountries(),
-            'licenseExpiryDateOptions' => $this->getLicenseExpiryDateOptions($currentUser),
         ]);
     }
 
@@ -129,30 +128,6 @@ class CraftIdController extends BaseController
         }
 
         return $ret;
-    }
-
-    /**
-     * @param User $user
-     * @return array
-     * @throws \Exception
-     */
-    private function getLicenseExpiryDateOptions(User $user): array
-    {
-        $licenseExpiryDateOptions = [
-            'pluginLicenses' => [],
-        ];
-
-        $pluginLicenses = Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
-
-        foreach ($pluginLicenses as $pluginLicense) {
-            if (empty($pluginLicense['expiresOn'])) {
-                continue;
-            }
-
-            $licenseExpiryDateOptions['pluginLicenses'][$pluginLicense['id']] = $this->getExpiryDateOptions($pluginLicense['expiresOn']);
-        }
-
-        return $licenseExpiryDateOptions;
     }
 
     /**

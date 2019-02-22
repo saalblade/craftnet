@@ -39,6 +39,32 @@ class PluginLicensesController extends Controller
     }
 
     /**
+     * Get license by ID.
+     *
+     * @return Response
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionGetLicenseById(): Response
+    {
+        $user = Craft::$app->getUser()->getIdentity();
+        $id = Craft::$app->getRequest()->getRequiredParam('id');
+
+        try {
+            $license = Module::getInstance()->getPluginLicenseManager()->getLicenseById($id);
+
+            if ($license->ownerId !== $user->id) {
+                throw new UnauthorizedHttpException('Not Authorized');
+            }
+
+            $licenseArray = Module::getInstance()->getPluginLicenseManager()->transformLicenseForOwner($license, $user);
+
+            return $this->asJson($licenseArray);
+        } catch (Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
+    }
+
+    /**
      * Returns licenses for the current user.
      *
      * @return Response
@@ -48,10 +74,51 @@ class PluginLicensesController extends Controller
     {
         $user = Craft::$app->getUser()->getIdentity();
 
-        try {
-            $licenses = Module::getInstance()->getPluginLicenseManager()->getLicensesArrayByOwner($user);
+        $filter = Craft::$app->getRequest()->getParam('filter');
+        $limit = Craft::$app->getRequest()->getParam('limit', 10);
+        $page = Craft::$app->getRequest()->getParam('page', 1);
+        $orderBy = Craft::$app->getRequest()->getParam('orderBy');
+        $ascending = Craft::$app->getRequest()->getParam('ascending');
 
-            return $this->asJson($licenses);
+        try {
+            $licenses = Module::getInstance()->getPluginLicenseManager()->getLicensesByOwner($user, $filter, $limit, $page, $orderBy, $ascending);
+            $totalLicenses = Module::getInstance()->getPluginLicenseManager()->getTotalLicensesByOwner($user, $filter);
+
+            $last_page = ceil($totalLicenses / $limit);
+            $next_page_url = '?next';
+            $prev_page_url = '?prev';
+            $from = ($page - 1) * $limit;
+            $to = ($page * $limit) - 1;
+
+            return $this->asJson([
+                'total' => $totalLicenses,
+                'per_page' => $limit,
+                'current_page' => $page,
+                'last_page' => $last_page,
+                'next_page_url' => $next_page_url,
+                'prev_page_url' => $prev_page_url,
+                'from' => $from,
+                'to' => $to,
+                'data' => $licenses,
+            ]);
+        } catch (Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Get the number of expiring licenses.
+     *
+     * @return Response
+     */
+    public function actionGetExpiringLicensesTotal(): Response
+    {
+        $user = Craft::$app->getUser()->getIdentity();
+
+        try {
+            $total = Module::getInstance()->getPluginLicenseManager()->getExpiringLicensesTotal($user);
+
+            return $this->asJson($total);
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }

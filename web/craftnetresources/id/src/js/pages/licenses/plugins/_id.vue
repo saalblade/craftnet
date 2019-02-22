@@ -1,31 +1,36 @@
 <template>
     <div>
-        <p><router-link class="nav-link" to="/licenses/plugins" exact>← Plugins</router-link></p>
+        <template v-if="!loading">
+            <p><router-link class="nav-link" to="/licenses/plugins" exact>← Plugins</router-link></p>
 
-        <template v-if="pluginLicensesLoading || !license">
-            <spinner></spinner>
+            <template v-if="error">
+                <p class="text-red">Couldn’t load license.</p>
+            </template>
+            <template v-if="license">
+                <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
+
+                <plugin-license-details :license="license"></plugin-license-details>
+
+                <license-history :history="license.history" />
+
+                <div class="card card-danger mb-3">
+                    <div class="card-header">Danger Zone</div>
+                    <div class="card-body">
+                        <h5>Release license</h5>
+                        <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
+                        <div><button class="btn btn-danger" @click="releasePluginLicense()">Release License</button></div>
+                    </div>
+                </div>
+            </template>
         </template>
         <template v-else>
-            <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
-
-            <plugin-license-details :license="license"></plugin-license-details>
-
-            <license-history :history="license.history" />
-
-            <div class="card card-danger mb-3">
-                <div class="card-header">Danger Zone</div>
-                <div class="card-body">
-                    <h5>Release license</h5>
-                    <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
-                    <div><button class="btn btn-danger" @click="releasePluginLicense()">Release License</button></div>
-                </div>
-            </div>
+            <spinner></spinner>
         </template>
     </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import licensesApi from '../../../api/licenses';
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
     import PluginLicenseDetails from '../../../components/licenses/PluginLicenseDetails';
     import LicenseHistory from '../../../components/licenses/LicenseHistory';
@@ -40,17 +45,12 @@
             Spinner,
         },
 
-        computed: {
-
-            ...mapState({
-                pluginLicenses: state => state.licenses.pluginLicenses,
-                pluginLicensesLoading: state => state.licenses.pluginLicensesLoading,
-            }),
-
-            license() {
-                return this.pluginLicenses.find(l => l.id == this.$route.params.id);
-            },
-
+        data() {
+            return {
+                loading: false,
+                license: null,
+                error: false,
+            }
         },
 
         methods: {
@@ -65,7 +65,6 @@
                         licenseKey: this.license.key,
                     })
                     .then(() => {
-                        this.$store.dispatch('licenses/getPluginLicenses');
                         this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'Plugin license released.');
                         this.$router.push({path: '/licenses/plugins'});
@@ -79,9 +78,26 @@
         },
 
         mounted() {
-            this.$store.commit('app/updateRenewLicense', this.license)
+            const licenseId = this.$route.params.id
 
-            this.$store.dispatch('licenses/getPluginLicenses')
+            this.loading = true
+            this.error = false
+
+            licensesApi.getPluginLicense(licenseId)
+                .then((response) => {
+                    this.loading = false
+
+                    if (response.data && response.data.error) {
+                        this.error = true
+                    } else {
+                        this.license = response.data
+                        this.$store.commit('app/updateRenewLicense', this.license)
+                    }
+                })
+                .catch(() => {
+                    this.loading = false
+                    this.error = true
+                })
         }
 
     }

@@ -12,8 +12,7 @@ var VueApp = new Vue();
  */
 const state = {
     expiringCmsLicensesTotal: 0,
-    pluginLicenses: [],
-    pluginLicensesLoading: false,
+    expiringPluginLicensesTotal: 0,
 }
 
 /**
@@ -51,20 +50,6 @@ const getters = {
         }
     },
 
-    expiringPluginLicenses(state, getters) {
-        return state.pluginLicenses.filter(license => {
-            if (license.expired) {
-                return false
-            }
-
-            if (license.autoRenew) {
-                return false
-            }
-
-            return getters.expiresSoon(license)
-        })
-    },
-
     renewableLicenses(state, getters, rootState) {
         return (license, renew) => {
             let renewableLicenses = []
@@ -90,19 +75,13 @@ const getters = {
 
             if (license.pluginLicenses.length > 0) {
                 // Renewable plugin licenses
-                const renewablePluginLicenses = state.pluginLicenses.filter(pluginLicense => {
-                    // Only keep plugin licenses related to this CMS license
-                    if (pluginLicense.cmsLicenseId !== license.id) {
-                        return false
-                    }
-
+                const renewablePluginLicenses = license.pluginLicenses.filter(pluginLicense => {
                     // Plugin licenses with no `expiresOn` are not renewable
                     if (!pluginLicense.expiresOn) {
                         return false
                     }
 
                     // Ignore the plugin license if it expires after the CMS license
-
                     if (!pluginLicense.expired) {
                         const pluginExpiresOn = VueApp.$moment(pluginLicense.expiresOn.date)
                         const expiryDateObject = VueApp.$moment(expiryDate)
@@ -114,7 +93,6 @@ const getters = {
 
                     return true
                 })
-
 
                 // Add renewable plugin licenses to the `renewableLicenses` array
                 renewablePluginLicenses.forEach(function(renewablePluginLicense) {
@@ -215,30 +193,16 @@ const actions = {
         })
     },
 
-    getPluginLicenses({commit}) {
-        if (state.pluginLicensesLoading) {
-            return false
-        }
-
-        if (state.pluginLicenses.length > 0) {
-            return false
-        }
-
-        commit('updatePluginLicensesLoading', true)
-
+    getExpiringPluginLicensesTotal({commit}) {
         return new Promise((resolve, reject) => {
-            licensesApi.getPluginLicenses(response => {
-                commit('updatePluginLicensesLoading', false)
-
+            licensesApi.getExpiringPluginLicensesTotal(response => {
                 if (response.data && !response.data.error) {
-                    commit('updatePluginLicenses', {pluginLicenses: response.data});
+                    commit('updateExpiringPluginLicensesTotal', response.data);
                     resolve(response);
                 } else {
                     reject(response);
                 }
             }, response => {
-                commit('updatePluginLicensesLoading', false)
-
                 reject(response);
             })
         })
@@ -262,7 +226,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.releasePluginLicense({pluginHandle, licenseKey}, response => {
                 if (response.data && !response.data.error) {
-                    commit('releasePluginLicense', {licenseKey});
                     resolve(response);
                 } else {
                     reject(response);
@@ -291,7 +254,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             licensesApi.savePluginLicense(license, response => {
                 if (response.data && !response.data.error) {
-                    commit('savePluginLicense', {license});
                     resolve(response);
                 } else {
                     reject(response);
@@ -309,40 +271,12 @@ const actions = {
  */
 const mutations = {
 
-    updatePluginLicenses(state, {pluginLicenses}) {
-        state.pluginLicenses = pluginLicenses;
-    },
-
-    updatePluginLicensesLoading(state, loading) {
-        state.pluginLicensesLoading = loading
-    },
-
-    releasePluginLicense(state, {licenseKey}) {
-        state.pluginLicenses.find((l, index, array) => {
-            if (l.key === licenseKey) {
-                array.splice(index, 1);
-                return true;
-            }
-
-            return false;
-        });
-    },
-
-    savePluginLicense(state, {license}) {
-        let stateLicense = state.pluginLicenses.find(l => l.key == license.key);
-        for (let attribute in license) {
-            switch(attribute) {
-                case 'autoRenew':
-                    stateLicense[attribute] = license[attribute] === 1 || license[attribute] === '1' ? true : false
-                    break
-                default:
-                    stateLicense[attribute] = license[attribute];
-            }
-        }
-    },
-
     updateExpiringCmsLicensesTotal(state, total) {
         state.expiringCmsLicensesTotal = total
+    },
+
+    updateExpiringPluginLicensesTotal(state, total) {
+        state.expiringPluginLicensesTotal = total
     }
 }
 

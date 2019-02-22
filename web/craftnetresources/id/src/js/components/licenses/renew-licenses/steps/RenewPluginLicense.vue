@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import {mapState, mapActions} from 'vuex'
+    import {mapActions} from 'vuex'
     import Spinner from '../../../Spinner'
 
     export default {
@@ -51,12 +51,8 @@
 
         computed: {
 
-            ...mapState({
-                licenseExpiryDateOptions: state => state.pluginStore.licenseExpiryDateOptions,
-            }),
-
             expiryDateOptions() {
-                return this.licenseExpiryDateOptions.pluginLicenses[this.license.id]
+                return this.license.expiryDateOptions
             },
 
             extendUpdateOptions() {

@@ -148,7 +148,6 @@
 
                 this.savePluginLicense(() => {
                     this.detaching = false;
-                    this.$store.dispatch('licenses/getPluginLicenses')
                 }, () => {
                     this.detaching = false;
                 });
