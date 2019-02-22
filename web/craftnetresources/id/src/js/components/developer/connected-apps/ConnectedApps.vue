@@ -35,7 +35,6 @@
     import Spinner from '../../Spinner'
 
     export default {
-
         mixins: [helpers],
 
         props: ['title', 'showStripe'],
@@ -67,7 +66,6 @@
         },
 
         computed: {
-
             ...mapState({
                 apps: state => state.apps.apps,
                 appsLoading: state => state.apps.appsLoading,
@@ -77,11 +75,9 @@
             ...mapGetters({
                 userIsInGroup: 'account/userIsInGroup',
             }),
-
         },
 
         methods: {
-
             /**
              * Account name.
              *
@@ -150,12 +146,10 @@
                     this.errors = response.data && response.data.errors ? response.data.errors : {};
                 });
             },
-
         },
 
         mounted() {
             this.$store.dispatch('apps/getApps')
         }
-
     }
 </script>

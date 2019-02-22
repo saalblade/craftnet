@@ -105,7 +105,6 @@
     import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
 
     export default {
-
         components: {
             PluginLicensesTable,
             Empty,
@@ -121,7 +120,7 @@
                 searchQuery: '',
                 vueTableInitiatedRouteChange: false,
                 loading: false,
-                options:{
+                options: {
                     perPage: 10,
                     texts: {
                         filter: "",
@@ -164,7 +163,6 @@
         },
 
         computed: {
-
             ...mapGetters({
                 expiresSoon: 'licenses/expiresSoon',
             }),
@@ -172,29 +170,27 @@
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/plugin-licenses/get-licenses'
             }
-
         },
 
         methods: {
-
-            onFilterSet (filterText) {
+            onFilterSet(filterText) {
                 this.moreParams = {
                     'filter': filterText
                 }
 
-                this.$nextTick( () => this.$refs.vuetable.refresh())
+                this.$nextTick(() => this.$refs.vuetable.refresh())
             },
 
-            onFilterReset () {
+            onFilterReset() {
                 this.moreParams = {}
-                this.$nextTick( () => this.$refs.vuetable.refresh())
+                this.$nextTick(() => this.$refs.vuetable.refresh())
             },
 
-            onPaginationData (paginationData) {
+            onPaginationData(paginationData) {
                 this.$refs.pagination.setPaginationData(paginationData)
             },
 
-            onChangePage (page) {
+            onChangePage(page) {
                 this.$refs.vuetable.changePage(page)
             },
 
@@ -205,7 +201,6 @@
             onLoaded() {
                 this.loading = false
             }
-
         },
 
         mounted() {

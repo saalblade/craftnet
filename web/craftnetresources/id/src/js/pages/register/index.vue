@@ -34,7 +34,6 @@
     import Spinner from '../../components/Spinner'
 
     export default {
-
         mixins: [helpers],
 
         components: {
@@ -52,7 +51,6 @@
         },
 
         methods: {
-
             submit() {
                 this.loading = true
 
@@ -83,7 +81,7 @@
                             this.errors = response.data.errors
                             this.$store.dispatch('app/displayError', 'Registration error.')
                         } else {
-                            this.$router.push({ path: '/site/register/success' })
+                            this.$router.push({path: '/site/register/success'})
                         }
                     })
                     .catch(() => {
@@ -119,7 +117,6 @@
 
                 return false;
             },
-
         }
     }
 </script>

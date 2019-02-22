@@ -35,7 +35,6 @@
     import Spinner from '../../../Spinner'
 
     export default {
-
         props: ['license'],
 
         components: {
@@ -50,7 +49,6 @@
         },
 
         computed: {
-
             expiryDateOptions() {
                 return this.license.expiryDateOptions
             },
@@ -102,7 +100,6 @@
         },
 
         methods: {
-
             ...mapActions({
                 getPluginStoreData: 'pluginStore/getPluginStoreData',
             }),
@@ -125,7 +122,6 @@
                         this.$store.dispatch('app/displayError', errorMessage);
                     })
             },
-
         },
 
         mounted() {
@@ -140,6 +136,5 @@
                     this.loading = false
                 })
         }
-
     }
 </script>

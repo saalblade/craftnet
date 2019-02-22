@@ -39,7 +39,6 @@
     import {mapState} from 'vuex'
 
     export default {
-
         data() {
             return {
                 errors: {},
@@ -49,19 +48,13 @@
         },
 
         computed: {
-
             ...mapState({
                 currentUser: state => state.account.currentUser,
                 billingAddress: state => state.account.billingAddress,
             }),
-
         },
 
         methods: {
-
-            /**
-             * Edit invoice details.
-             */
             editInvoiceDetails() {
                 this.showForm = true;
 
@@ -70,15 +63,12 @@
                 }
             },
 
-            /**
-             * Saves the user’s invoice details.
-             */
             save() {
                 let data = {
                     businessTaxId: this.invoiceDetailsDraft.businessTaxId,
                 }
 
-                if(this.billingAddress) {
+                if (this.billingAddress) {
                     data = Object.assign({}, data, {
                         id: this.billingAddress.id,
                         firstName: this.billingAddress.firstName,
@@ -104,21 +94,16 @@
                             this.errors = {};
                         }
                     }).catch(response => {
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.';
-                        this.$store.dispatch('app/displayError', errorMessage);
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
-                    });
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.';
+                    this.$store.dispatch('app/displayError', errorMessage);
+                    this.errors = response.data && response.data.errors ? response.data.errors : {};
+                });
             },
 
-            /**
-             * Cancel changes.
-             */
             cancel() {
                 this.showForm = false;
                 this.errors = {};
             }
-
         }
-
     }
 </script>

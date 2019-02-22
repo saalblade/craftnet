@@ -23,12 +23,10 @@
     import CardElement from '../card/CardElement'
 
     export default {
-
         props: ['card', 'cardToken', 'paymentMode', 'replaceCard'],
 
         components: {
             CardElement,
         },
-
     }
 </script>

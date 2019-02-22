@@ -37,7 +37,6 @@
     import Spinner from '../../../components/Spinner';
 
     export default {
-
         components: {
             CmsLicensesTable,
             PluginLicenseDetails,
@@ -54,7 +53,6 @@
         },
 
         methods: {
-
             releasePluginLicense() {
                 if (!window.confirm("Are you sure you want to release this license?")) {
                     return false;
@@ -74,7 +72,6 @@
                         this.$store.dispatch('app/displayError', errorMessage);
                     });
             },
-
         },
 
         mounted() {
@@ -99,6 +96,5 @@
                     this.error = true
                 })
         }
-
     }
 </script>

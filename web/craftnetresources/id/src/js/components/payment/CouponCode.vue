@@ -10,7 +10,6 @@
     import Spinner from '../Spinner'
 
     export default {
-
         components: {
             Spinner,
         },
@@ -26,15 +25,12 @@
         },
 
         computed: {
-
             ...mapState({
                 cart: state => state.cart.cart,
             }),
-
         },
 
         methods: {
-
             couponCodeChange() {
                 clearTimeout(this.couponCodeTimeout)
                 this.couponCodeSuccess = false
@@ -66,7 +62,6 @@
                         })
                 }.bind(this), 500)
             }
-
         },
 
         mounted() {

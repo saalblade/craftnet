@@ -43,9 +43,7 @@
     import InvoicesTable from '../../../components/billing/InvoicesTable'
     import Spinner from '../../../components/Spinner'
 
-
     export default {
-
         components: {
             BillingPayment,
             BillingInvoiceDetails,
@@ -55,17 +53,14 @@
         },
 
         computed: {
-
             ...mapState({
                 invoices: state => state.invoices.invoices,
                 invoicesLoading: state => state.invoices.invoicesLoading,
             }),
-
         },
 
         mounted() {
             this.$store.dispatch('invoices/getInvoices')
         }
-
     }
 </script>

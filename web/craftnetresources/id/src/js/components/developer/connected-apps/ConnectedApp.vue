@@ -40,7 +40,6 @@
     import Spinner from '../../Spinner'
 
     export default {
-
         props: ['name', 'description', 'icon', 'accountName', 'connected', 'buttonLoading', 'loading'],
 
         data() {
@@ -59,6 +58,5 @@
             ListGroupItem,
             Spinner,
         }
-
     }
 </script>

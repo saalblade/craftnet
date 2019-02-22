@@ -106,7 +106,6 @@
     import Spinner from '../../../../components/Spinner'
 
     export default {
-
         components: {
             BillingAddress,
             CardIcon,
@@ -116,7 +115,6 @@
         },
 
         computed: {
-
             ...mapState({
                 invoicesLoading: state => state.invoices.invoicesLoading,
             }),
@@ -128,7 +126,7 @@
             invoice() {
                 const invoice = this.getInvoiceByNumber(this.$route.params.number)
 
-                if(!invoice) {
+                if (!invoice) {
                     this.$store.dispatch('app/displayError', "Couldn’t find invoice.")
 
                     // eslint-disable-next-line
@@ -137,8 +135,6 @@
 
                 return invoice;
             },
-
         }
-
     }
 </script>

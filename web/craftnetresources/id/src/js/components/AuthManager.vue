@@ -55,7 +55,6 @@
     </div>
 </template>
 
-
 <script>
     /* global Craft */
 
@@ -68,7 +67,6 @@
     import Spinner from './Spinner';
 
     export default {
-
         components: {
             Modal,
             Spinner,
@@ -94,15 +92,12 @@
         },
 
         computed: {
-
             ...mapState({
                 currentUser: state => state.account.currentUser,
             }),
-
         },
 
         methods: {
-
             /**
              * Sets a timer for the next time to check the auth timeout.
              */
@@ -441,7 +436,6 @@
         },
 
         watch: {
-
             /**
              * Validate password when the password value changes.
              */
@@ -450,14 +444,12 @@
 
                 return newVal;
             }
-
         },
 
         mounted() {
             // Let's get it started.
             this.updateRemainingSessionTime(Craft.remainingSessionTime);
         }
-
     }
 </script>
 

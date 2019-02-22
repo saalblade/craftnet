@@ -15,7 +15,6 @@
     import InvoicesTable from './InvoicesTable';
 
     export default {
-
         components: {
             InvoicesTable
         },
@@ -25,8 +24,6 @@
             ...mapState({
                 invoices: state => state.account.invoices,
             }),
-
         },
-
     }
 </script>

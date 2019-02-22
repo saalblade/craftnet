@@ -10,7 +10,6 @@
     import Spinner from '../../components/Spinner'
 
     export default {
-
         components: {
             Spinner,
         },
@@ -23,15 +22,12 @@
         },
 
         computed: {
-
             edition() {
                 return this.$route.params.edition
             }
-
         },
 
         methods: {
-
             addToCart() {
                 this.loading = true;
 
@@ -48,12 +44,10 @@
                         this.$router.push({path: '/cart'})
                     })
             }
-
         },
 
         mounted() {
             this.addToCart()
         }
-
     }
 </script>

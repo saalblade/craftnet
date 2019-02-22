@@ -30,25 +30,21 @@
     import {mapGetters} from 'vuex'
 
     export default {
-
         props: ['billingInfo', 'errors'],
 
         computed: {
-
             ...mapGetters({
                 countryOptions: 'craftId/countryOptions',
                 stateOptions: 'craftId/stateOptions',
             }),
-
         },
 
         methods: {
-
             onCountryChange() {
                 this.billingInfo.state = null
                 const stateOptions = this.stateOptions(this.billingInfo.country);
 
-                if(stateOptions.length) {
+                if (stateOptions.length) {
                     this.billingInfo.state = stateOptions[0].value
                 }
             },
@@ -59,8 +55,6 @@
 
                 this.$emit('update:billingInfo', billingInfo);
             }
-
         }
-
     }
 </script>

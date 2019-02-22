@@ -36,11 +36,9 @@
     import draggable from 'vuedraggable'
 
     export default {
-
         components: {
             draggable
         },
-
 
         props: ['pluginDraft'],
 
@@ -51,7 +49,6 @@
         },
 
         computed: {
-
             ...mapState({
                 categories: state => state.craftId.categories,
             }),
@@ -90,11 +87,9 @@
 
                 return options;
             }
-
         },
 
         methods: {
-
             /**
              * Select category.
              *
@@ -122,7 +117,6 @@
                     this.pluginDraft.categoryIds.splice(i, 1);
                 }
             },
-
         }
     }
 </script>

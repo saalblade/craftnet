@@ -48,7 +48,6 @@
     import Spinner from '../components/Spinner'
 
     export default {
-
         mixins: [helpers],
 
         components: {
@@ -65,7 +64,6 @@
         },
 
         computed: {
-
             ...mapState({
                 currentUser: state => state.account.currentUser,
             }),
@@ -81,11 +79,9 @@
             rememberedUsername() {
                 return window.rememberedUsername
             }
-
         },
 
         methods: {
-
             submit() {
                 if (this.loading) {
                     return false
@@ -118,7 +114,7 @@
                         this.loadAuthenticatedUserData(() => {
                             this.loading = false
                             this.$store.dispatch('app/displayNotice', 'Logged in.')
-                            this.$router.push({ path: '/' })
+                            this.$router.push({path: '/'})
                         }, () => {
                             this.loading = false
                             this.$store.dispatch('app/displayError', 'Couldn’t login.')
@@ -153,7 +149,6 @@
 
                 return false;
             },
-
         },
 
         mounted() {
@@ -171,7 +166,6 @@
                 }
             }
         }
-
     }
 </script>
 

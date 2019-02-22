@@ -9,17 +9,14 @@
     </page-alert>
 </template>
 
-
 <script>
     import PageAlert from './PageAlert'
 
     export default {
-
         props: ['expiringLicensesTotal', 'type'],
 
         components: {
             PageAlert,
         },
-
     }
 </script>

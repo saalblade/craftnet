@@ -54,7 +54,6 @@
     import {mapState, mapGetters} from 'vuex'
 
     export default {
-
         data() {
             return {
                 errors: {},
@@ -64,7 +63,6 @@
         },
 
         computed: {
-
             ...mapState({
                 currentUser: state => state.account.currentUser,
                 billingAddress: state => state.account.billingAddress,
@@ -75,25 +73,17 @@
                 countryOptions: 'craftId/countryOptions',
                 stateOptions: 'craftId/stateOptions',
             }),
-
         },
 
         methods: {
-
-            /**
-             * Edit billing address.
-             */
             edit() {
                 this.showForm = true;
 
-                if(this.billingAddress) {
+                if (this.billingAddress) {
                     this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress));
                 }
             },
 
-            /**
-             * Save the billing address.
-             */
             save() {
                 let data = {
                     firstName: this.invoiceDetailsDraft.firstName,
@@ -107,7 +97,7 @@
                     country: this.invoiceDetailsDraft.country,
                 }
 
-                if(this.billingAddress) {
+                if (this.billingAddress) {
                     data = Object.assign({}, data, {
                         id: this.billingAddress.id,
                         businessTaxId: this.billingAddress.businessTaxId,
@@ -125,15 +115,12 @@
                             this.errors = {};
                         }
                     }).catch(response => {
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save billing address.';
-                        this.$store.dispatch('app/displayError', errorMessage);
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
-                    });
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save billing address.';
+                    this.$store.dispatch('app/displayError', errorMessage);
+                    this.errors = response.data && response.data.errors ? response.data.errors : {};
+                });
             },
 
-            /**
-             * Cancel changes.
-             */
             cancel() {
                 this.showForm = false;
                 this.errors = {};
@@ -143,11 +130,10 @@
                 this.invoiceDetailsDraft.state = null
                 const stateOptions = this.stateOptions(this.invoiceDetailsDraft.country);
 
-                if(stateOptions.length) {
+                if (stateOptions.length) {
                     this.invoiceDetailsDraft.state = stateOptions[0].value
                 }
             }
         }
-
     }
 </script>

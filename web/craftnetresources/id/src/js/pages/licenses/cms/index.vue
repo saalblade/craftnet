@@ -94,6 +94,15 @@
     window.axios = require('axios');
 
     export default {
+        components: {
+            CmsLicensesTable,
+            Empty,
+            Spinner,
+            Badge,
+            Vuetable,
+            VuetablePagination,
+            FilterBar,
+        },
 
         data() {
             return {
@@ -101,7 +110,7 @@
                 vueTableInitiatedRouteChange: false,
                 loading: false,
                 columns: ['key', 'edition', 'domain', 'notes', 'expiresOn', 'autoRenew'],
-                options:{
+                options: {
                     perPage: 10,
                     texts: {
                         filter: "",
@@ -143,18 +152,7 @@
             }
         },
 
-        components: {
-            CmsLicensesTable,
-            Empty,
-            Spinner,
-            Badge,
-            Vuetable,
-            VuetablePagination,
-            FilterBar,
-        },
-
         computed: {
-
             ...mapGetters({
                 expiresSoon: 'licenses/expiresSoon',
             }),
@@ -162,29 +160,27 @@
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/cms-licenses/get-licenses'
             }
-
         },
 
         methods: {
-
-            onFilterSet (filterText) {
+            onFilterSet(filterText) {
                 this.moreParams = {
                     'filter': filterText
                 }
 
-                this.$nextTick( () => this.$refs.vuetable.refresh())
+                this.$nextTick(() => this.$refs.vuetable.refresh())
             },
 
-            onFilterReset () {
+            onFilterReset() {
                 this.moreParams = {}
-                this.$nextTick( () => this.$refs.vuetable.refresh())
+                this.$nextTick(() => this.$refs.vuetable.refresh())
             },
 
-            onPaginationData (paginationData) {
+            onPaginationData(paginationData) {
                 this.$refs.pagination.setPaginationData(paginationData)
             },
 
-            onChangePage (page) {
+            onChangePage(page) {
                 this.$refs.vuetable.changePage(page)
             },
 
@@ -195,7 +191,6 @@
             onLoaded() {
                 this.loading = false
             }
-
         },
 
         mounted() {
@@ -213,7 +208,6 @@
         //
         //     next()
         // },
-
     }
 </script>
 

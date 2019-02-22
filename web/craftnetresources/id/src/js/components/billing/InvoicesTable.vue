@@ -23,8 +23,6 @@
 
 <script>
     export default {
-
         props: ['invoices'],
-
     }
 </script>

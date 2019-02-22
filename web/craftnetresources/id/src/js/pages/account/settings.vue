@@ -42,7 +42,6 @@
     import Spinner from '../../components/Spinner'
 
     export default {
-
         component: {
             Spinner,
         },
@@ -59,7 +58,6 @@
         },
 
         computed: {
-
             ...mapState({
                 currentUser: state => state.account.currentUser,
             }),
@@ -67,11 +65,9 @@
             ...mapGetters({
                 userIsInGroup: 'account/userIsInGroup',
             }),
-
         },
 
         methods: {
-
             /**
              * Save the settings.
              */
@@ -85,15 +81,15 @@
                 }
 
                 this.$store.dispatch('account/saveUser', {
-                    id: this.userDraft.id,
-                    email: this.userDraft.email,
-                    username: this.userDraft.username,
-                    enablePluginDeveloperFeatures: (this.userDraft.enablePluginDeveloperFeatures ? 1 : 0),
-                    enableShowcaseFeatures: (this.userDraft.enableShowcaseFeatures ? 1 : 0),
-                    enablePartnerFeatures: (this.userDraft.enablePartnerFeatures ? 1 : 0),
-                    password: this.password,
-                    newPassword: this.newPassword,
-                })
+                        id: this.userDraft.id,
+                        email: this.userDraft.email,
+                        username: this.userDraft.username,
+                        enablePluginDeveloperFeatures: (this.userDraft.enablePluginDeveloperFeatures ? 1 : 0),
+                        enableShowcaseFeatures: (this.userDraft.enableShowcaseFeatures ? 1 : 0),
+                        enablePartnerFeatures: (this.userDraft.enablePartnerFeatures ? 1 : 0),
+                        password: this.password,
+                        newPassword: this.newPassword,
+                    })
                     .then(() => {
                         this.loading = false;
 
@@ -108,20 +104,18 @@
                         this.newPassword = '';
                         this.errors = {};
                     }).catch(response => {
-                        this.loading = false;
+                    this.loading = false;
 
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.';
-                        this.$store.dispatch('app/displayError', errorMessage);
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.';
+                    this.$store.dispatch('app/displayError', errorMessage);
 
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
-                    })
+                    this.errors = response.data && response.data.errors ? response.data.errors : {};
+                })
             }
-
         },
 
         mounted() {
             this.userDraft = JSON.parse(JSON.stringify(this.currentUser));
         }
-
     }
 </script>

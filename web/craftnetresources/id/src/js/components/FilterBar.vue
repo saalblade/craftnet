@@ -12,7 +12,6 @@
     import {debounce} from 'debounce'
 
     export default {
-
         props: ['placeholder'],
 
         data () {

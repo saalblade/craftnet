@@ -74,10 +74,9 @@
 <script>
     import {mapState, mapGetters} from 'vuex'
     import helpers from '../mixins/helpers'
-    import { directive as onClickaway } from 'vue-clickaway';
+    import {directive as onClickaway} from 'vue-clickaway';
 
     export default {
-
         mixins: [helpers],
 
         directives: {
@@ -94,7 +93,6 @@
         },
 
         computed: {
-
             ...mapState({
                 currentUser: state => state.account.currentUser,
             }),
@@ -102,16 +100,14 @@
             ...mapGetters({
                 cartTotalItems: 'cart/cartTotalItems',
             }),
-
         },
 
         methods: {
-
             /**
              * Click away from the user menu.
              */
             awayUserMenu: function() {
-                if(this.showingUserMenu === true) {
+                if (this.showingUserMenu === true) {
                     this.showingUserMenu = false
                 }
             },
@@ -120,7 +116,7 @@
              * Click away from the global menu.
              */
             awayGlobalMenu: function() {
-                if(this.showingGlobalMenu === true) {
+                if (this.showingGlobalMenu === true) {
                     this.showingGlobalMenu = false
                 }
             },
@@ -138,9 +134,7 @@
             globalMenuToggle() {
                 this.showingGlobalMenu = !this.showingGlobalMenu
             }
-
         }
-
     }
 </script>
 

@@ -161,7 +161,6 @@
         },
 
         computed: {
-
             ...mapState({
                 cart: state => state.cart.cart,
                 expiryDateOptions: state => state.pluginStore.expiryDateOptions,
@@ -180,11 +179,9 @@
                     this.$store.commit('cart/updateSelectedExpiryDates', newValue)
                 }
             },
-
         },
 
         methods: {
-
             ...mapActions({
                 getCart: 'cart/getCart',
                 removeFromCart: 'cart/removeFromCart',
@@ -252,7 +249,7 @@
                 let charCode = ($event.which) ? $event.which : $event.keyCode;
 
                 // prevent `e` and `-` to prevent exponent and negative notations
-                if(charCode === 69 || charCode === 189) {
+                if (charCode === 69 || charCode === 189) {
                     $event.preventDefault();
 
                     return false
@@ -276,7 +273,6 @@
 
                 return true
             },
-
         },
 
         mounted() {

@@ -30,7 +30,6 @@
     import Spinner from '../Spinner'
 
     export default {
-
         props: ['appHandle', 'loadingRepository'],
 
         data() {
@@ -46,7 +45,6 @@
         },
 
         computed: {
-
             ...mapState({
                 apps: state => state.apps.apps,
             }),
@@ -79,11 +77,9 @@
                     }
                 });
             }
-
         },
 
         methods: {
-
             /**
              * Is repository loading?
              *
@@ -93,8 +89,6 @@
             isLoading(repositoryUrl) {
                 return this.loadingRepository === repositoryUrl;
             }
-
         }
-
     }
 </script>

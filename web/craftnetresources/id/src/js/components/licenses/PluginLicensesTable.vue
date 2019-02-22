@@ -82,12 +82,16 @@
     </div>
 </template>
 
-
 <script>
     import {mapGetters} from 'vuex'
     import Badge from '../Badge'
 
     export default {
+        props: ['licenses', 'excludeCmsLicenseColumn', 'excludeNotesColumn', 'autoRenewSwitch'],
+
+        components: {
+            Badge,
+        },
 
         data() {
             return {
@@ -95,24 +99,15 @@
             }
         },
 
-        props: ['licenses', 'excludeCmsLicenseColumn', 'excludeNotesColumn', 'autoRenewSwitch'],
-
-        components: {
-            Badge,
-        },
-
         computed: {
-
             ...mapGetters({
                 expiresSoon: 'licenses/expiresSoon',
             }),
-
         },
 
         methods: {
-
             savePluginLicenseAutoRenew(license, $event) {
-                if(!license.key) {
+                if (!license.key) {
                     return false;
                 }
 
@@ -135,7 +130,6 @@
                     this.errors = response.errors;
                 });
             }
-
         },
 
         mounted() {
@@ -145,6 +139,5 @@
                 this.pluginLicensesAutoRenew[license.id] = license.autoRenew
             }.bind(this))
         }
-
     }
 </script>

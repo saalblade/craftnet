@@ -51,7 +51,6 @@
     import Spinner from '../components/Spinner'
 
     export default {
-
         data() {
             return {
                 billingInfo: {
@@ -85,7 +84,6 @@
         },
 
         computed: {
-
             ...mapState({
                 cart: state => state.cart.cart,
                 card: state => state.account.card,
@@ -96,11 +94,9 @@
             ...mapGetters({
                 cartTotal: 'cart/cartTotal',
             }),
-
         },
 
         methods: {
-
             ...mapActions({
                 getCart: 'cart/getCart',
             }),
@@ -220,7 +216,6 @@
                             })
                     })
             },
-
         },
 
         mounted() {
@@ -244,6 +239,5 @@
                 }
             })
         }
-
     }
 </script>

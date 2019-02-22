@@ -9,14 +9,13 @@
     import helpers from '../../mixins/helpers'
 
     export default {
-
         mixins: [helpers],
 
         props: ['brand'],
 
         computed: {
             cardType() {
-                switch(this.brand) {
+                switch (this.brand) {
                     case 'Visa':
                         return 'visa';
                     case 'American Express':

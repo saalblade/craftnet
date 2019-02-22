@@ -32,7 +32,6 @@
     import RenewPluginLicense from './steps/RenewPluginLicense'
 
     export default {
-
         props: ['license'],
 
         components: {
@@ -49,7 +48,6 @@
         },
 
         computed: {
-
             ...mapState({
                 renewLicensesStep: state => state.app.renewLicensesStep,
             }),
@@ -57,8 +55,6 @@
             ...mapGetters({
                 renewableLicenses: 'licenses/renewableLicenses',
             }),
-
         },
-
     }
 </script>

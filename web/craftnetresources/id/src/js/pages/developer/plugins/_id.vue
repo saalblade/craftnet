@@ -197,17 +197,6 @@
                     </div>
                 </div>
 
-                <!--Old Price Fields-->
-                <!--
-                <div v-if="showPriceFields" class="card mb-6">
-                    <div class="card-header">Pricing</div>
-                    <div class="card-body">
-                        <text-field id="price" label="License Price" v-model="pluginDraft.price" :errors="errors.price" />
-                        <text-field id="renewalPrice" label="Renewal Price" v-model="pluginDraft.renewalPrice" :errors="errors.renewalPrice" />
-                    </div>
-                </div>
-                -->
-
                 <div>
                     <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
                     <spinner v-if="loading"></spinner>
@@ -231,7 +220,6 @@
     import qs from 'qs'
 
     export default {
-
         components: {
             ConnectedApps,
             Repositories,
@@ -282,7 +270,6 @@
         },
 
         computed: {
-
             ...mapState({
                 apps: state => state.apps.apps,
                 appsLoading: state => state.apps.appsLoading,
@@ -334,22 +321,12 @@
                 }
             },
 
-            // showPriceFields() {
-            //     if (!this.plugin) {
-            //         return true;
-            //     }
-            //
-            //     return !this.plugin.enabled || (this.plugin.enabled && this.plugin.price);
-            // },
-
             maxUploadSize() {
                 return this.humanFileSize(Craft.maxUploadSize);
             }
-
         },
 
         methods: {
-
             /**
              * On input name.
              *
@@ -552,13 +529,13 @@
                         this.$store.dispatch('app/displayNotice', 'Plugin saved.');
                         this.$router.push({path: '/developer/plugins'});
                     }).catch(response => {
-                        this.loading = false;
+                    this.loading = false;
 
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save plugin.';
-                        this.$store.dispatch('app/displayError', errorMessage);
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save plugin.';
+                    this.$store.dispatch('app/displayError', errorMessage);
 
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
-                    });
+                    this.errors = response.data && response.data.errors ? response.data.errors : {};
+                });
             },
 
             /**
@@ -571,13 +548,13 @@
                         this.pluginSubmitLoading = false;
                         this.$store.dispatch('app/displayNotice', 'Plugin submitted for approval.');
                     }).catch(response => {
-                        this.pluginSubmitLoading = false;
+                    this.pluginSubmitLoading = false;
 
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t submit plugin for approval.';
-                        this.$store.dispatch('app/displayError', errorMessage);
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t submit plugin for approval.';
+                    this.$store.dispatch('app/displayError', errorMessage);
 
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
-                    })
+                    this.errors = response.data && response.data.errors ? response.data.errors : {};
+                })
             },
 
             /**
@@ -634,7 +611,6 @@
                 }
             }
         },
-
     }
 </script>
 

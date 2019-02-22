@@ -8,11 +8,9 @@
 
 <script>
     export default {
-
         props: ['license', 'renew'],
 
         computed: {
-
             renewOptions() {
                 if (!this.license.expiryDateOptions) {
                     return []
@@ -34,8 +32,6 @@
 
                 return options
             },
-
         },
-
     }
 </script>

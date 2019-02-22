@@ -96,7 +96,6 @@
     import Spinner from '../../../components/Spinner'
 
     export default {
-
         components: {
             Empty,
             Spinner,
@@ -109,7 +108,6 @@
         },
 
         computed: {
-
             ...mapState({
                 plugins: state => state.developers.plugins,
             }),
@@ -141,32 +139,30 @@
 
                 return priceRanges;
             }
-
         },
 
         methods: {
-
             getPriceRange(editions) {
                 let min = null;
                 let max = null;
 
-                for(let i = 0; i < editions.length; i++) {
+                for (let i = 0; i < editions.length; i++) {
                     const edition = editions[i];
                     const price = parseInt(edition.price)
 
-                    if(min === null) {
+                    if (min === null) {
                         min = price;
                     }
 
-                    if(max === null) {
+                    if (max === null) {
                         max = price;
                     }
 
-                    if(price < min) {
+                    if (price < min) {
                         min = price
                     }
 
-                    if(price > max) {
+                    if (price > max) {
                         max = price
                     }
                 }
@@ -176,7 +172,6 @@
                     max
                 }
             }
-
         },
 
         mounted() {
@@ -192,6 +187,5 @@
                     })
             }
         }
-
     }
 </script>

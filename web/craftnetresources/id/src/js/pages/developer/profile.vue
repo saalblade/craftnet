@@ -51,7 +51,6 @@
     import Spinner from '../../components/Spinner'
 
     export default {
-
         components: {
             ConnectedApps,
             Spinner,
@@ -69,7 +68,6 @@
         },
 
         computed: {
-
             ...mapState({
                 currentUser: state => state.account.currentUser,
             }),
@@ -77,11 +75,9 @@
             ...mapGetters({
                 userIsInGroup: 'account/userIsInGroup',
             }),
-
         },
 
         methods: {
-
             /**
              * Delete photo.
              */
@@ -185,6 +181,5 @@
         mounted() {
             this.userDraft = JSON.parse(JSON.stringify(this.currentUser));
         }
-
     }
 </script>

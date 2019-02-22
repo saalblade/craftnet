@@ -44,7 +44,6 @@
     import Spinner from '../../../Spinner'
 
     export default {
-
         props: ['license', 'renew', 'checkedLicenses'],
 
         components: {
@@ -59,11 +58,9 @@
         },
 
         computed: {
-
             ...mapGetters({
                 renewableLicenses: 'licenses/renewableLicenses',
             }),
-
         },
 
         methods: {
@@ -85,7 +82,7 @@
             checkAll($event) {
                 let checkedLicenses = []
 
-                if($event.target.checked) {
+                if ($event.target.checked) {
                     this.renewableLicenses(this.license, this.renew).forEach(function(renewableLicense, key) {
                         checkedLicenses[key] = 1
                     })
@@ -124,12 +121,10 @@
                         this.$emit('addToCart')
                     })
             },
-
         },
 
         mounted() {
             this.$refs.checkAll.click()
         }
-
     }
 </script>

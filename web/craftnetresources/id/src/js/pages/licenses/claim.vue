@@ -53,13 +53,11 @@
     </div>
 </template>
 
-
 <script>
-    import { required, email } from 'vuelidate/lib/validators'
+    import {required, email} from 'vuelidate/lib/validators'
     import Spinner from '../../components/Spinner'
 
     export default {
-
         components: {
             Spinner,
         },
@@ -88,9 +86,8 @@
         },
 
         methods: {
-
             checkCmsLicense() {
-                if(this.cmsLicenseKey.length === 258) {
+                if (this.cmsLicenseKey.length === 258) {
                     return true;
                 }
 
@@ -100,7 +97,7 @@
             checkPluginLicense() {
                 const normalizedValue = this.pluginLicenseKey.replace(/(- )/gm, "").trim();
 
-                if(normalizedValue.length === 29) {
+                if (normalizedValue.length === 29) {
                     return true;
                 }
 
@@ -181,11 +178,9 @@
             cmsLicenseFileChange() {
                 this.cmsLicenseFileValidates = this.$refs.licenseFile.files.length > 0;
             }
-
         },
 
         watch: {
-
             cmsLicenseKey() {
                 this.cmsLicenseValidates = this.checkCmsLicense();
             },
@@ -193,8 +188,6 @@
             pluginLicenseKey() {
                 this.pluginLicenseValidates = this.checkPluginLicense();
             }
-
         },
-
     }
 </script>

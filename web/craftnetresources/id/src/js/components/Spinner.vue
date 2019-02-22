@@ -4,11 +4,9 @@
 
 <script>
     export default {
-
         props: ['big', 'cssClass'],
 
         computed: {
-
             computedClass() {
                 let cssClass = {
                     big: typeof this.big !== 'undefined',
@@ -26,9 +24,7 @@
 
                 return cssClass;
             }
-
         }
-
     }
 </script>
 

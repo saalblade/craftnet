@@ -32,7 +32,6 @@
     import Spinner from '../../components/Spinner'
 
     export default {
-
         data() {
             return {
                 apiToken: '',
@@ -47,16 +46,13 @@
         },
 
         computed: {
-
             ...mapState({
                 hasApiToken: state => state.developers.hasApiToken,
                 currentUser: state => state.account.currentUser,
             }),
-
         },
 
         methods: {
-
             generateToken() {
                 this.loading = true
 
@@ -80,7 +76,6 @@
                         this.$store.dispatch('app/displayError', errorMessage)
                     });
             },
-
         },
 
         mounted() {
@@ -88,6 +83,5 @@
                 this.apiToken = '****************************************'
             }
         }
-
     }
 </script>

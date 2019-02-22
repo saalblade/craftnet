@@ -27,14 +27,13 @@
 <script>
     /* global Craft */
 
-    import { required } from 'vuelidate/lib/validators'
+    import {required} from 'vuelidate/lib/validators'
     import axios from 'axios'
     import FormDataHelper from '../helpers/form-data'
     import helpers from '../mixins/helpers'
     import Spinner from '../components/Spinner'
 
     export default {
-
         mixins: [helpers],
 
         components: {
@@ -55,7 +54,6 @@
         },
 
         methods: {
-
             submit() {
                 this.loading = true
 
@@ -87,9 +85,7 @@
                         this.$store.dispatch('app/displayError', 'Couldn’t send reset email.')
                     });
             }
-
         }
-
     }
 </script>
 

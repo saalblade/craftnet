@@ -13,14 +13,12 @@
     import RenewLicensesForm from './RenewLicensesForm'
 
     export default {
-
         props: ['license'],
 
         components: {
             Modal,
             RenewLicensesForm,
         },
-
     }
 </script>
 

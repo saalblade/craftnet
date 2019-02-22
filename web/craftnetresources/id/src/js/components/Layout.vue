@@ -31,14 +31,13 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import AppHeader from './AppHeader';
     import AppSidebar from './AppSidebar';
     import StripeAccountAlert from './StripeAccountAlert';
     import LicenseRenewAlert from './LicenseRenewAlert';
 
     export default {
-
         components: {
             AppHeader,
             AppSidebar,
@@ -53,16 +52,13 @@
         },
 
         computed: {
-
             ...mapState({
                 expiringCmsLicensesTotal: state => state.licenses.expiringCmsLicensesTotal,
                 expiringPluginLicensesTotal: state => state.licenses.expiringPluginLicensesTotal,
             }),
-
         },
 
         methods: {
-
             /**
              * Toggles the sidebar.
              */
@@ -76,9 +72,6 @@
             closeSidebar() {
                 this.showingSidebar = false;
             },
-
         }
-
-
     }
 </script>

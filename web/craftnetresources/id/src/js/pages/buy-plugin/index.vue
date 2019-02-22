@@ -20,7 +20,6 @@
     import Spinner from '../../components/Spinner'
 
     export default {
-
         components: {
             Spinner,
         },
@@ -33,7 +32,6 @@
         },
 
         computed: {
-
             ...mapState({
                 plugins: state => state.pluginStore.plugins,
             }),
@@ -52,7 +50,6 @@
         },
 
         methods: {
-
             ...mapActions({
                 getPluginStoreData: 'pluginStore/getPluginStoreData',
             }),
@@ -76,7 +73,7 @@
         },
 
         mounted() {
-            if(this.plugins.length === 0) {
+            if (this.plugins.length === 0) {
                 this.loading = true
                 this.getPluginStoreData()
                     .then(() => {
@@ -90,6 +87,5 @@
                 this.addToCart();
             }
         }
-
     }
 </script>

@@ -110,7 +110,6 @@
     import Spinner from '../Spinner'
 
     export default {
-
         props: ['license', 'type'],
 
         data() {
@@ -133,7 +132,6 @@
         },
 
         methods: {
-
             ...mapActions({
                 showRenewLicensesModal: 'app/showRenewLicensesModal',
             }),
@@ -257,7 +255,6 @@
                         this.errors = data.errors;
                     })
             },
-
         },
 
         mounted() {
@@ -268,6 +265,5 @@
                 notes: this.license.notes,
             }
         }
-
     }
 </script>

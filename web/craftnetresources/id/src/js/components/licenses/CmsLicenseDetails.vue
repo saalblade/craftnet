@@ -123,7 +123,6 @@
     import Spinner from '../Spinner'
 
     export default {
-
         props: ['license'],
 
         components: {
@@ -146,7 +145,6 @@
         },
 
         computed: {
-
             canSave() {
                 if (this.license.domain != this.licenseDraft.domain) {
                     return true;
@@ -168,11 +166,9 @@
             downloadLicenseUrl() {
                 return Craft.actionUrl + '/craftnet/id/cms-licenses/download&id=' + this.license.id;
             },
-
         },
 
         methods: {
-
             ...mapActions({
                 showRenewLicensesModal: 'app/showRenewLicensesModal',
             }),
@@ -209,7 +205,7 @@
                     if (oldDomain && oldDomain !== newDomain) {
                         this.licenseDraft.domain = newDomain
 
-                        if(!newDomain) {
+                        if (!newDomain) {
                             this.$store.dispatch('app/displayNotice', oldDomain + ' is not a public domain.');
                         } else {
                             this.$store.dispatch('app/displayNotice', 'Domain changed to ' + newDomain + '.')
@@ -283,7 +279,7 @@
              */
             notesChange() {
                 this.notesValidates = false;
-                if(this.licenseDraft.notes !== this.license.notes) {
+                if (this.licenseDraft.notes !== this.license.notes) {
                     this.notesValidates = true;
                 }
             },
@@ -293,7 +289,7 @@
              */
             domainChange() {
                 this.domainValidates = false;
-                if(this.licenseDraft.domain !== this.license.domain) {
+                if (this.licenseDraft.domain !== this.license.domain) {
                     this.domainValidates = true;
                 }
             },
@@ -311,7 +307,6 @@
 
                 this.$store.dispatch('app/displayNotice', 'License key copied.');
             },
-
         },
 
         mounted() {
@@ -321,6 +316,5 @@
                 notes: this.license.notes,
             };
         }
-
     }
 </script>

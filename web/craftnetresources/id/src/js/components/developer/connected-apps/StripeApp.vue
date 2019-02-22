@@ -18,7 +18,6 @@
     import helpers from '../../../mixins/helpers'
 
     export default {
-
         mixins: [helpers],
 
         data() {
@@ -36,7 +35,6 @@
         },
 
         computed: {
-
             ...mapState({
                 stripeAccount: state => state.account.stripeAccount,
                 stripeAccountLoading: state => state.app.stripeAccountLoading,
@@ -45,11 +43,9 @@
             stripeConnectUrl() {
                 return window.stripeConnectUrl;
             }
-
         },
 
         methods: {
-
             /**
              * Connect to Stripe account.
              */
@@ -68,8 +64,6 @@
                     this.$store.dispatch('app/displayNotice', 'Stripe account removed.');
                 });
             }
-
         },
-
     }
 </script>

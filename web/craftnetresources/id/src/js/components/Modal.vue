@@ -21,11 +21,10 @@
 
 <script>
     export default {
-
         props: {
             show: Boolean,
             transition: String,
-            modalType: { default: 'dialog' }
+            modalType: {default: 'dialog'}
         },
 
         computed: {
@@ -37,7 +36,7 @@
 
         methods: {
             test($ev) {
-                if($ev.target.classList.contains('modal')) {
+                if ($ev.target.classList.contains('modal')) {
                     this.$emit('background-click')
                 }
             }

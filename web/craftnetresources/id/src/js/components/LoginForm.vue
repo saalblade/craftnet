@@ -44,7 +44,6 @@
     import helpers from '../mixins/helpers'
 
     export default {
-
         mixins: [helpers],
 
         props: ['rememberedUsername'],
@@ -57,7 +56,6 @@
         },
 
         computed: {
-
             csrfTokenName() {
                 return Craft.csrfTokenName;
             },
@@ -65,11 +63,9 @@
             csrfTokenValue() {
                 return Craft.csrfTokenValue;
             },
-
         },
 
         methods: {
-
             /**
              * Password validates.
              *
@@ -93,7 +89,6 @@
 
                 return false;
             },
-
         },
 
         mounted() {
@@ -107,6 +102,5 @@
                 this.$refs.passwordField.$children[0].$el.focus();
             }
         }
-
     }
 </script>

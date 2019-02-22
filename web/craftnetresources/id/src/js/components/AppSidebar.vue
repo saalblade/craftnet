@@ -71,11 +71,9 @@
     import {mapState, mapGetters} from 'vuex'
 
     export default {
-
         props: ['showingSidebar'],
 
         computed: {
-
             ...mapState({
                 currentUser: state => state.account.currentUser,
             }),
@@ -83,8 +81,6 @@
             ...mapGetters({
                 userIsInGroup: 'account/userIsInGroup',
             }),
-
         },
-
     }
 </script>

@@ -64,7 +64,6 @@
     import Badge from '../Badge'
 
     export default {
-
         props: ['licenses'],
 
         components: {
@@ -72,12 +71,9 @@
         },
 
         computed: {
-
             ...mapGetters({
                 expiresSoon: 'licenses/expiresSoon',
             }),
-
         }
-
     }
 </script>

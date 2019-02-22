@@ -10,19 +10,15 @@
     import PageAlert from './PageAlert'
 
     export default {
-
         components: {
             PageAlert,
         },
 
         computed: {
-
             ...mapState({
                 stripeAccount: state => state.account.stripeAccount,
                 stripeAccountLoading: state => state.app.stripeAccountLoading,
             }),
-
         },
-
     }
 </script>

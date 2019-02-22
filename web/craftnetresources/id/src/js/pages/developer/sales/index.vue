@@ -71,7 +71,6 @@
     import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
 
     export default {
-
         components: {
             Empty,
             Spinner,
@@ -127,14 +126,12 @@
         },
 
         computed: {
-
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/sales/get-sales'
             }
         },
 
         methods: {
-
             onFilterSet (filterText) {
                 this.moreParams = {
                     'filter': filterText
@@ -162,9 +159,7 @@
 
             onLoaded() {
                 this.loading = false
-            }
-
+            },
         },
-
     }
 </script>

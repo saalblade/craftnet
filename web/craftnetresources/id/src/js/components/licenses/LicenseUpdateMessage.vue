@@ -33,7 +33,6 @@
     import {mapGetters} from 'vuex'
 
     export default {
-
         props: ['license'],
 
         computed: {
@@ -42,6 +41,5 @@
                 daysBeforeExpiry: 'licenses/daysBeforeExpiry',
             }),
         }
-
     }
 </script>

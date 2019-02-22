@@ -9,7 +9,6 @@
     /* global Stripe */
 
     export default {
-
         data() {
             return {
                 stripe: null,
@@ -19,7 +18,6 @@
         },
 
         methods: {
-
             /**
              * Save the credit card.
              */
@@ -35,13 +33,12 @@
                         }
                     });
             },
-
         },
 
         mounted() {
             this.stripe = Stripe(window.stripePublicKey);
-            this.elements = this.stripe.elements({ locale: 'en' });
-            this.card = this.elements.create('card', { hidePostalCode: true });
+            this.elements = this.stripe.elements({locale: 'en'});
+            this.card = this.elements.create('card', {hidePostalCode: true});
 
             // Vue likes to stay in control of $el but Stripe needs a real element
             const el = document.createElement('div')
@@ -50,7 +47,6 @@
             // this.$children cannot be used because it expects a VNode :(
             this.$refs.cardElement.appendChild(el)
         },
-
     }
 </script>
 
