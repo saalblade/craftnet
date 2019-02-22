@@ -6,6 +6,7 @@
             <template v-if="error">
                 <p class="text-red">Couldn’t load license.</p>
             </template>
+
             <template v-if="license">
                 <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
 
@@ -63,7 +64,6 @@
                         licenseKey: this.license.key,
                     })
                     .then(() => {
-                        this.$store.dispatch('invoices/getInvoices');
                         this.$store.dispatch('app/displayNotice', 'Plugin license released.');
                         this.$router.push({path: '/licenses/plugins'});
                     })

@@ -24,8 +24,13 @@ class InvoicesController extends Controller
      */
     public function actionGetInvoices(): Response
     {
-        $this->requireLogin();
         $user = Craft::$app->getUser()->getIdentity();
+
+        $filter = Craft::$app->getRequest()->getParam('filter');
+        $limit = Craft::$app->getRequest()->getParam('limit', 10);
+        $page = Craft::$app->getRequest()->getParam('page', 1);
+        $orderBy = Craft::$app->getRequest()->getParam('orderBy');
+        $ascending = Craft::$app->getRequest()->getParam('ascending');
 
         try {
             $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
@@ -33,10 +38,50 @@ class InvoicesController extends Controller
             $invoices = [];
 
             if ($customer) {
-                $invoices = Module::getInstance()->getInvoiceManager()->getInvoices($customer);
+                $invoices = Module::getInstance()->getInvoiceManager()->getInvoices($customer, $filter, $limit, $page, $orderBy, $ascending);
             }
 
-            return $this->asJson($invoices);
+            $total = Module::getInstance()->getInvoiceManager()->getTotalInvoices($customer, $filter);
+
+            $last_page = ceil($total / $limit);
+            $next_page_url = '?next';
+            $prev_page_url = '?prev';
+            $from = ($page - 1) * $limit;
+            $to = ($page * $limit) - 1;
+
+            return $this->asJson([
+                'total' => $total,
+                'per_page' => $limit,
+                'current_page' => $page,
+                'last_page' => $last_page,
+                'next_page_url' => $next_page_url,
+                'prev_page_url' => $prev_page_url,
+                'from' => $from,
+                'to' => $to,
+                'data' => $invoices,
+            ]);
+        } catch (Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Get invoice by its number.
+     *
+     * @return Response
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionGetInvoiceByNumber(): Response
+    {
+        $user = Craft::$app->getUser()->getIdentity();
+        $number = Craft::$app->getRequest()->getRequiredParam('number');
+
+        try {
+            $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
+
+            $invoice = Module::getInstance()->getInvoiceManager()->getInvoiceByNumber($customer, $number);
+
+            return $this->asJson($invoice);
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
