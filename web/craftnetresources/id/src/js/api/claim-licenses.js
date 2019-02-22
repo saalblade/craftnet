@@ -1,10 +1,12 @@
-/* global Craft */
-
 import axios from 'axios';
 
 export default {
-    getCraftIdData(cb, cbError) {
-        return axios.post(Craft.actionUrl + '/craftnet/id/craft-id', {}, {
+    claimLicensesByEmail(email, cb, cbError) {
+        const data = {
+            email: email,
+        }
+
+        axios.post(Craft.actionUrl + '/craftnet/id/claim-licenses', qs.stringify(data), {
                 headers: {
                     'X-CSRF-Token': Craft.csrfTokenValue,
                 }

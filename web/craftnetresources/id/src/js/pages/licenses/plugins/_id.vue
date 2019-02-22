@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import licensesApi from '../../../api/licenses';
+    import pluginLicensesApi from '../../../api/plugin-licenses';
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
     import PluginLicenseDetails from '../../../components/licenses/PluginLicenseDetails';
     import LicenseHistory from '../../../components/licenses/LicenseHistory';
@@ -80,7 +80,7 @@
             this.loading = true
             this.error = false
 
-            licensesApi.getPluginLicense(licenseId)
+            pluginLicensesApi.getPluginLicense(licenseId)
                 .then((response) => {
                     this.loading = false
 

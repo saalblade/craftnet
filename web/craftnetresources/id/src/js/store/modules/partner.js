@@ -1,7 +1,7 @@
 import * as types from '../../store/mutation-types'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import partnerApi from '../../api/partner'
+import partnerApi from '../../api/partners'
 
 Vue.use(Vuex)
 

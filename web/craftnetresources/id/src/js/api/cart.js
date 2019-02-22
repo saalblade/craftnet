@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 export default {
-
     /**
      * Axios instance.
      */
@@ -91,5 +90,4 @@ export default {
 
         return cb(orderNumber)
     },
-
 }

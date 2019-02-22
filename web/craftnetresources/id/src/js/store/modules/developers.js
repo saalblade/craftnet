@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import developerApi from '../../api/developer';
+import accountApi from '../../api/account';
+import pluginsApi from '../../api/plugins';
 
 Vue.use(Vuex)
 
@@ -29,7 +30,7 @@ const getters = {
 const actions = {
     savePlugin({commit}, {plugin}) {
         return new Promise((resolve, reject) => {
-            developerApi.savePlugin({plugin}, response => {
+            pluginsApi.save({plugin}, response => {
                 if (response.data.success) {
                     commit('savePlugin', {plugin, response});
                     resolve(response);
@@ -44,7 +45,7 @@ const actions = {
 
     submitPlugin({commit}, pluginId) {
         return new Promise((resolve, reject) => {
-            developerApi.submitPlugin(pluginId, response => {
+            pluginsApi.submit(pluginId, response => {
                 if (response.data.success) {
                     commit('submitPlugin', {pluginId});
                     resolve(response);
@@ -59,7 +60,7 @@ const actions = {
 
     generateApiToken({commit}) {
         return new Promise((resolve, reject) => {
-            developerApi.generateApiToken(response => {
+            accountApi.generateApiToken(response => {
                 if (response.data && !response.data.error) {
                     commit('updateHasApiToken', {hasApiToken: !!response.data.apiToken});
                     resolve(response);
@@ -74,7 +75,7 @@ const actions = {
 
     getPlugins({commit}) {
         return new Promise((resolve, reject) => {
-            developerApi.getPlugins()
+            pluginsApi.getPlugins()
                 .then(response => {
                     commit('updatePlugins', {plugins: response.data})
                     resolve(response)

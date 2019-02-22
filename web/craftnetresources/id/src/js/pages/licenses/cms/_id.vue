@@ -40,7 +40,7 @@
 </template>
 
 <script>
-    import licensesApi from '../../../api/licenses';
+    import cmsLicensesApi from '../../../api/cms-licenses';
     import CmsLicenseDetails from '../../../components/licenses/CmsLicenseDetails'
     import PluginLicensesTable from '../../../components/licenses/PluginLicensesTable';
     import LicenseHistory from '../../../components/licenses/LicenseHistory';
@@ -84,7 +84,7 @@
 
             this.loading = true
 
-            licensesApi.getCmsLicense(licenseId)
+            cmsLicensesApi.getCmsLicense(licenseId)
                 .then((response) => {
                     this.license = response.data
                     this.$store.commit('app/updateRenewLicense', this.license)

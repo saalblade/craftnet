@@ -87,7 +87,7 @@
 <script>
     /* global Craft */
 
-    import partnerApi from '../../api/partner'
+    import partnerApi from '../../api/partners'
     import draggable from 'vuedraggable'
     import Modal from '../Modal'
     import Spinner from '../Spinner'

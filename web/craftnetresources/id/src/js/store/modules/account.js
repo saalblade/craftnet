@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import accountApi from '../../api/account'
+import appsApi from '../../api/apps'
+import usersApi from '../../api/users'
+import stripeApi from '../../api/stripe'
 
 Vue.use(Vuex)
 
@@ -42,7 +45,8 @@ const actions = {
 
     disconnectApp({commit}, appHandle) {
         return new Promise((resolve, reject) => {
-            accountApi.disconnectApp(appHandle, response => {
+
+            appsApi.disconnect(appHandle, response => {
                     commit('disconnectApp', {appHandle});
                     resolve(response);
                 },
@@ -70,7 +74,7 @@ const actions = {
 
     saveUser({commit}, user) {
         return new Promise((resolve, reject) => {
-            accountApi.saveUser(user, response => {
+            usersApi.saveUser2(user, response => {
                     if (!response.data.errors) {
                         commit('saveUser', {user, response});
                         resolve(response);
@@ -118,7 +122,7 @@ const actions = {
 
     removeCard({commit}) {
         return new Promise((resolve, reject) => {
-            accountApi.removeCard(response => {
+            stripeApi.removeCard(response => {
                 commit('removeStripeCard');
                 resolve(response);
             }, response => {
@@ -129,7 +133,7 @@ const actions = {
 
     saveCard({commit}, source) {
         return new Promise((resolve, reject) => {
-            accountApi.saveCard(source, response => {
+            stripeApi.saveCard(source, response => {
                 commit('updateStripeCard', {card: response.data.card.card});
                 resolve(response);
             }, response => {
@@ -145,7 +149,7 @@ const actions = {
 
     disconnectStripeAccount({commit}) {
         return new Promise((resolve, reject) => {
-            accountApi.disconnectStripeAccount(response => {
+            stripeApi.disconnect(response => {
                 commit('disconnectStripeAccount');
                 resolve(response);
             }, response => {
@@ -156,7 +160,7 @@ const actions = {
 
     getStripeAccount({commit}) {
         return new Promise((resolve, reject) => {
-            accountApi.getStripeAccount(response => {
+            stripeApi.getAccount(response => {
                 commit('updateStripeAccount', {response});
                 resolve(response);
             }, response => {
