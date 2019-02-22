@@ -6,7 +6,7 @@ import {currency} from './filters/currency';
 import {formatCmsLicense, formatPluginLicense} from './filters/licenses';
 import {capitalize} from './filters/capitalize';
 import App from './App.vue';
-import './plugins/craftui'
+import './plugins/craft-ui'
 import './plugins/vuetable-2'
 
 Vue.filter('currency', currency);
