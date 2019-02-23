@@ -90,6 +90,8 @@
 </template>
 
 <script>
+    /* global Craft */
+
     import {mapGetters} from 'vuex'
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
     import Empty from '../../../components/Empty';

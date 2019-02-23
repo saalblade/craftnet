@@ -25,8 +25,6 @@
 </template>
 
 <script>
-    /* global Craft */
-
     import {required} from 'vuelidate/lib/validators'
     import usersApi from '../api/users'
     import FormDataHelper from '../helpers/form-data'
@@ -56,8 +54,6 @@
         methods: {
             submit() {
                 this.loading = true
-
-                const action = 'users/send-password-reset-email'
 
                 let formData = new FormData()
 

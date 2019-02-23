@@ -64,6 +64,8 @@
 </template>
 
 <script>
+    /* global Craft */
+
     import Spinner from '../Spinner'
     import FilterBar from '../FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'

@@ -1,3 +1,5 @@
+/* global Craft */
+
 import get from 'lodash/get'
 import update from 'lodash/update'
 
