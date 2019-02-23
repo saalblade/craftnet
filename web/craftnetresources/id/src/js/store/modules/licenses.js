@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import cmsLicensesApi from '../../api/cms-licenses';
 import pluginLicensesApi from '../../api/plugin-licenses';
-import claimLicensesApi from '../../api/claim-licenses';
 
 Vue.use(Vuex)
 Vue.use(require('vue-moment'))
@@ -51,13 +50,11 @@ const getters = {
         }
     },
 
-    renewableLicenses(state, getters, rootState) {
+    renewableLicenses() {
         return (license, renew) => {
             let renewableLicenses = []
 
-
             // CMS license
-
             const expiryDateOptions = license.expiryDateOptions
             let expiryDate = expiryDateOptions[renew][1]
 
@@ -71,9 +68,7 @@ const getters = {
                 edition: license.editionDetails,
             })
 
-
             // Plugin licenses
-
             if (license.pluginLicenses.length > 0) {
                 // Renewable plugin licenses
                 const renewablePluginLicenses = license.pluginLicenses.filter(pluginLicense => {
@@ -117,149 +112,37 @@ const getters = {
  * Actions
  */
 const actions = {
-    // eslint-disable-next-line
-    claimLicensesByEmail({}, email) {
-        return new Promise((resolve, reject) => {
-            claimLicensesApi.claimLicensesByEmail(email, response => {
-                if (response.data && !response.data.error) {
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    // eslint-disable-next-line
-    claimCmsLicense({}, licenseKey) {
-        return new Promise((resolve, reject) => {
-            cmsLicensesApi.claimCmsLicense(licenseKey, response => {
-                if (response.data && !response.data.error) {
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    // eslint-disable-next-line
-    claimCmsLicenseFile({}, licenseFile) {
-        return new Promise((resolve, reject) => {
-            cmsLicensesApi.claimCmsLicenseFile(licenseFile, response => {
-                if (response.data && !response.data.error) {
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
     getExpiringCmsLicensesTotal({commit}) {
         return new Promise((resolve, reject) => {
-            cmsLicensesApi.getExpiringCmsLicensesTotal(response => {
-                if (response.data && !response.data.error) {
-                    commit('updateExpiringCmsLicensesTotal', response.data);
-                    resolve(response);
-                } else {
+            cmsLicensesApi.getExpiringCmsLicensesTotal()
+                .then((response) => {
+                    if (response.data && !response.data.error) {
+                        commit('updateExpiringCmsLicensesTotal', response.data);
+                        resolve(response);
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((response) => {
                     reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    releaseCmsLicense({commit}, licenseKey) {
-        return new Promise((resolve, reject) => {
-            cmsLicensesApi.releaseCmsLicense(licenseKey, response => {
-                if (response.data && !response.data.error) {
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    saveCmsLicense({commit}, license) {
-        return new Promise((resolve, reject) => {
-            cmsLicensesApi.saveCmsLicense(license, response => {
-                if (response.data && !response.data.error) {
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    // eslint-disable-next-line
-    claimPluginLicense({}, licenseKey) {
-        return new Promise((resolve, reject) => {
-            pluginLicensesApi.claimPluginLicense(licenseKey, response => {
-                if (response.data && !response.data.error) {
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
+                })
         })
     },
 
     getExpiringPluginLicensesTotal({commit}) {
         return new Promise((resolve, reject) => {
-            pluginLicensesApi.getExpiringPluginLicensesTotal(response => {
-                if (response.data && !response.data.error) {
-                    commit('updateExpiringPluginLicensesTotal', response.data);
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    releasePluginLicense({commit}, {pluginHandle, licenseKey}) {
-        return new Promise((resolve, reject) => {
-            pluginLicensesApi.releasePluginLicense({pluginHandle, licenseKey}, response => {
-                if (response.data && !response.data.error) {
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    savePluginLicense({commit}, license) {
-        return new Promise((resolve, reject) => {
-            pluginLicensesApi.savePluginLicense(license, response => {
-                if (response.data && !response.data.error) {
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
+            pluginLicensesApi.getExpiringPluginLicensesTotal()
+                .then((response) => {
+                    if (response.data && !response.data.error) {
+                        commit('updateExpiringPluginLicensesTotal', response.data)
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
 }

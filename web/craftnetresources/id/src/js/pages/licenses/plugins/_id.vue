@@ -56,21 +56,25 @@
         methods: {
             releasePluginLicense() {
                 if (!window.confirm("Are you sure you want to release this license?")) {
-                    return false;
+                    return false
                 }
 
-                this.$store.dispatch('licenses/releasePluginLicense', {
-                        pluginHandle: this.license.plugin.handle,
-                        licenseKey: this.license.key,
+                pluginLicensesApi.releasePluginLicense({
+                    pluginHandle: this.license.plugin.handle,
+                    licenseKey: this.license.key,
+                })
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            this.$store.dispatch('app/displayNotice', 'Plugin license released.')
+                            this.$router.push({path: '/licenses/plugins'})
+                        } else {
+                            this.$store.dispatch('app/displayError', response.data.error)
+                        }
                     })
-                    .then(() => {
-                        this.$store.dispatch('app/displayNotice', 'Plugin license released.');
-                        this.$router.push({path: '/licenses/plugins'});
+                    .catch((response) => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release plugin license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
-                    .catch(response => {
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release plugin license.';
-                        this.$store.dispatch('app/displayError', errorMessage);
-                    });
             },
         },
 

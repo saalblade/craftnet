@@ -85,6 +85,7 @@
 <script>
     import {mapGetters} from 'vuex'
     import Badge from '../Badge'
+    import pluginLicensesApi from '../../api/plugin-licenses'
 
     export default {
         props: ['licenses', 'excludeCmsLicenseColumn', 'excludeNotesColumn', 'autoRenewSwitch'],
@@ -118,17 +119,22 @@
                     autoRenew: autoRenew ? 1 : 0,
                 }
 
-                this.$store.dispatch('licenses/savePluginLicense', data)
-                    .then(() => {
-                        if (autoRenew) {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
+                pluginLicensesApi.savePluginLicense(data)
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            if (autoRenew) {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
+                            } else {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
+                            }
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
+                            this.$store.dispatch('app/displayError', 'Couldn’t save license.');
                         }
-                    }).catch(response => {
-                    this.$store.dispatch('app/displayError', 'Couldn’t save license.');
-                    this.errors = response.errors;
-                });
+                    })
+                    .catch((response) => {
+                        this.$store.dispatch('app/displayError', 'Couldn’t save license.');
+                        this.errors = response.errors;
+                    });
             }
         },
 

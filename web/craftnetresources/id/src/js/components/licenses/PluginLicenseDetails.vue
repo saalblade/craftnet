@@ -106,6 +106,7 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import pluginLicensesApi from '../../api/plugin-licenses'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
     import Spinner from '../Spinner'
 
@@ -218,18 +219,24 @@
              * @param cbError
              */
             savePluginLicense(cb, cbError) {
-                this.$store.dispatch('licenses/savePluginLicense', {
+                pluginLicensesApi.savePluginLicense({
                     pluginHandle: this.license.plugin.handle,
                     key: this.license.key,
                     cmsLicenseId: this.licenseDraft.cmsLicenseId,
                     cmsLicense: this.licenseDraft.cmsLicense,
                     notes: this.licenseDraft.notes,
                 })
-                    .then(() => {
-                        cb();
-                        this.$store.dispatch('app/displayNotice', 'License saved.');
-                    }).catch(response => {
-                        cbError();
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            cb(response);
+                            this.$store.dispatch('app/displayNotice', 'License saved.');
+                        } else {
+                            cbError(response);
+                            this.$store.dispatch('app/displayError', response.data.error)
+                        }
+                    })
+                    .catch((response) => {
+                        cbError(response);
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
                         this.$store.dispatch('app/displayError', errorMessage)
                     })
@@ -239,7 +246,7 @@
              * Save auto renew
              */
             saveAutoRenew() {
-                this.$store.dispatch('licenses/savePluginLicense', {
+                pluginLicensesApi.savePluginLicense({
                     pluginHandle: this.license.plugin.handle,
                     key: this.license.key,
                     autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),

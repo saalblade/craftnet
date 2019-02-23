@@ -67,12 +67,16 @@
                     return false;
                 }
 
-                this.$store.dispatch('licenses/releaseCmsLicense', this.license.key)
-                    .then(() => {
-                        this.$store.dispatch('app/displayNotice', 'CMS license released.');
-                        this.$router.push({path: '/licenses/cms'});
+                cmsLicensesApi.releaseCmsLicense(this.license.key)
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            this.$store.dispatch('app/displayNotice', 'CMS license released.');
+                            this.$router.push({path: '/licenses/cms'});
+                        } else {
+                            this.$store.dispatch('app/displayError', response.data.error);
+                        }
                     })
-                    .catch(response => {
+                    .catch((response) => {
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release CMS license.';
                         this.$store.dispatch('app/displayError', errorMessage);
                     });

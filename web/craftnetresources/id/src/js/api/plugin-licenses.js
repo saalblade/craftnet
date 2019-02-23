@@ -1,48 +1,43 @@
+/* global Craft */
+
 import axios from 'axios';
 import qs from 'qs';
 
 export default {
-
-    claimPluginLicense(licenseKey, cb, cbError) {
+    claimPluginLicense(licenseKey) {
         const data = {
             key: licenseKey
         }
 
-        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/claim', qs.stringify(data), {
+        return axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/claim', qs.stringify(data), {
                 headers: {
                     'X-CSRF-Token': Craft.csrfTokenValue,
                 }
             })
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
     },
 
     getPluginLicense(id) {
         return axios.get(Craft.actionUrl + '/craftnet/id/plugin-licenses/get-license-by-id', {params: {id}})
     },
 
-    getExpiringPluginLicensesTotal(cb, cbError) {
-        axios.get(Craft.actionUrl + '/craftnet/id/plugin-licenses/get-expiring-licenses-total')
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
+    getExpiringPluginLicensesTotal() {
+        return axios.get(Craft.actionUrl + '/craftnet/id/plugin-licenses/get-expiring-licenses-total')
     },
 
-    releasePluginLicense({pluginHandle, licenseKey}, cb, cbError) {
+    releasePluginLicense({pluginHandle, licenseKey}) {
         const data = {
             handle: pluginHandle,
             key: licenseKey
         }
 
-        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/release', qs.stringify(data), {
+        return axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/release', qs.stringify(data), {
                 headers: {
                     'X-CSRF-Token': Craft.csrfTokenValue,
                 }
             })
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
     },
 
-    savePluginLicense(license, cb, cbError) {
+    savePluginLicense(license) {
         let data = {};
 
         for (let attribute in license) {
@@ -53,12 +48,10 @@ export default {
             data[attribute] = license[attribute]
         }
 
-        axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/save', qs.stringify(data), {
+        return axios.post(Craft.actionUrl + '/craftnet/id/plugin-licenses/save', qs.stringify(data), {
                 headers: {
                     'X-CSRF-Token': Craft.csrfTokenValue,
                 }
             })
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
     },
 }

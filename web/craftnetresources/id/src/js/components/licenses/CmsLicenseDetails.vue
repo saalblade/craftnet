@@ -119,6 +119,7 @@
     /* global Craft */
 
     import {mapActions} from 'vuex'
+    import cmsLicensesApi from '../../api/cms-licenses'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
     import Spinner from '../Spinner'
 
@@ -177,19 +178,25 @@
              * Save auto renew.
              */
             saveAutoRenew() {
-                this.$store.dispatch('licenses/saveCmsLicense', {
-                    key: this.license.key,
-                    autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
-                }).then(() => {
-                    if (this.licenseDraft.autoRenew) {
-                        this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
-                    } else {
-                        this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
-                    }
-                }).catch(response => {
-                    this.$store.dispatch('app/displayError', 'Couldn’t save license.')
-                    this.errors = response.data.errors
-                })
+                cmsLicensesApi.saveCmsLicense({
+                        key: this.license.key,
+                        autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
+                    })
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            if (this.licenseDraft.autoRenew) {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
+                            } else {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
+                            }
+                        } else {
+                            this.$store.dispatch('app/displayError', 'Couldn’t save license.')
+                        }
+                    })
+                    .catch((response) => {
+                        this.$store.dispatch('app/displayError', 'Couldn’t save license.')
+                        this.errors = response.data.errors
+                    })
             },
 
             /**
@@ -243,17 +250,25 @@
              * @param cbError
              */
             saveCmsLicense(cb, cbError) {
-                this.$store.dispatch('licenses/saveCmsLicense', {
+                cmsLicensesApi.saveCmsLicense({
                     key: this.license.key,
                     domain: this.licenseDraft.domain,
                     notes: this.licenseDraft.notes,
-                }).then(response => {
-                    cb(response);
-                }).catch(response => {
-                    cbError();
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
-                    this.$store.dispatch('app/displayError', errorMessage)
-                });
+                })
+                    .then(response => {
+                        if (response.data && !response.data.error) {
+                            cb(response)
+                        } else {
+                            cbError(response)
+                            const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
+                            this.$store.dispatch('app/displayError', errorMessage)
+                        }
+                    })
+                    .catch(response => {
+                        cbError(response)
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
