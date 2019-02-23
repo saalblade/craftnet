@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import FormDataHelper from '../helpers/form-data';
+import qs from 'qs';
 
 export default {
     loadDetails(repositoryUrl, params) {
