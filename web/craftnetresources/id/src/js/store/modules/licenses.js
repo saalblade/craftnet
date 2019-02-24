@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import cmsLicensesApi from '../../api/cms-licenses';
-import pluginLicensesApi from '../../api/plugin-licenses';
 
 Vue.use(Vuex)
 Vue.use(require('vue-moment'))
@@ -11,10 +9,7 @@ var VueApp = new Vue();
 /**
  * State
  */
-const state = {
-    expiringCmsLicensesTotal: 0,
-    expiringPluginLicensesTotal: 0,
-}
+const state = {}
 
 /**
  * Getters
@@ -111,54 +106,12 @@ const getters = {
 /**
  * Actions
  */
-const actions = {
-    getExpiringCmsLicensesTotal({commit}) {
-        return new Promise((resolve, reject) => {
-            cmsLicensesApi.getExpiringCmsLicensesTotal()
-                .then((response) => {
-                    if (response.data && !response.data.error) {
-                        commit('updateExpiringCmsLicensesTotal', response.data);
-                        resolve(response);
-                    } else {
-                        reject(response);
-                    }
-                })
-                .catch((response) => {
-                    reject(response);
-                })
-        })
-    },
-
-    getExpiringPluginLicensesTotal({commit}) {
-        return new Promise((resolve, reject) => {
-            pluginLicensesApi.getExpiringPluginLicensesTotal()
-                .then((response) => {
-                    if (response.data && !response.data.error) {
-                        commit('updateExpiringPluginLicensesTotal', response.data)
-                        resolve(response)
-                    } else {
-                        reject(response)
-                    }
-                })
-                .catch((response) => {
-                    reject(response)
-                })
-        })
-    },
-}
+const actions = {}
 
 /**
  * Mutations
  */
-const mutations = {
-    updateExpiringCmsLicensesTotal(state, total) {
-        state.expiringCmsLicensesTotal = total
-    },
-
-    updateExpiringPluginLicensesTotal(state, total) {
-        state.expiringPluginLicensesTotal = total
-    }
-}
+const mutations = {}
 
 export default {
     namespaced: true,

@@ -204,7 +204,7 @@
         },
 
         mounted() {
-            this.$store.dispatch('licenses/getExpiringCmsLicensesTotal')
+            this.$store.dispatch('cmsLicenses/getExpiringCmsLicensesTotal')
         }
 
         // beforeRouteUpdate (to, from, next) {

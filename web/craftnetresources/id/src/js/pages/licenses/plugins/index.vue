@@ -204,7 +204,7 @@
         },
 
         mounted() {
-            this.$store.dispatch('licenses/getExpiringPluginLicensesTotal')
+            this.$store.dispatch('pluginLicenses/getExpiringPluginLicensesTotal')
         }
     }
 </script>

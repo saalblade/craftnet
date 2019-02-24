@@ -53,8 +53,8 @@
 
         computed: {
             ...mapState({
-                expiringCmsLicensesTotal: state => state.licenses.expiringCmsLicensesTotal,
-                expiringPluginLicensesTotal: state => state.licenses.expiringPluginLicensesTotal,
+                expiringCmsLicensesTotal: state => state.cmsLicenses.expiringCmsLicensesTotal,
+                expiringPluginLicensesTotal: state => state.pluginLicenses.expiringPluginLicensesTotal,
             }),
         },
 
