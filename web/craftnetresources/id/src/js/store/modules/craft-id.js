@@ -67,7 +67,8 @@ const getters = {
 const actions = {
     getCraftIdData({commit}) {
         return new Promise((resolve, reject) => {
-            craftIdApi.getCraftIdData(response => {
+            craftIdApi.getCraftIdData()
+                .then((response) => {
                     commit('updateCategories', {categories: response.data.categories});
                     commit('updateCountries', {countries: response.data.countries});
                     commit('developers/updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true});
@@ -76,12 +77,10 @@ const actions = {
                     commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true});
                     commit('account/updateCard', {card: response.data.card}, {root: true});
                     commit('account/updateCardToken', {cardToken: response.data.cardToken}, {root: true});
-
                     resolve(response);
-                },
-                response => {
+                })
+                .catch((response) => {
                     commit('account/updateCurrentUserLoaded', true, {root: true});
-
                     reject(response);
                 })
         })

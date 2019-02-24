@@ -9,7 +9,7 @@ export default {
         return axios.post(Craft.actionUrl + '/craftnet/plugins/load-details&repository=' + encodeURIComponent(repositoryUrl), params)
     },
 
-    save({plugin}, cb, cbError) {
+    save({plugin}) {
         let formData = new FormData();
 
         for (let attribute in plugin) {
@@ -47,27 +47,23 @@ export default {
             }
         }
 
-        axios.post(Craft.actionUrl + '/craftnet/plugins/save', formData, {
+        return axios.post(Craft.actionUrl + '/craftnet/plugins/save', formData, {
                 headers: {
                     'X-CSRF-Token': Craft.csrfTokenValue,
                 }
             })
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
     },
 
-    submit(pluginId, cb, cbError) {
+    submit(pluginId) {
         const data = {
             pluginId: pluginId,
         }
 
-        axios.post(Craft.actionUrl + '/craftnet/plugins/submit', qs.stringify(data), {
+        return axios.post(Craft.actionUrl + '/craftnet/plugins/submit', qs.stringify(data), {
                 headers: {
                     'X-CSRF-Token': Craft.csrfTokenValue,
                 }
             })
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
     },
 
     getPlugins() {

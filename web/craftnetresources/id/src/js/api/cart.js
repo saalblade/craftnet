@@ -23,40 +23,22 @@ export default {
     /**
      * Get cart.
      */
-    getCart(orderNumber, cb, errorCb) {
-        this.axios().get('carts/' + orderNumber)
-            .then(response => {
-                return cb(response.data)
-            })
-            .catch(response => {
-                return errorCb(response)
-            })
+    getCart(orderNumber) {
+        return this.axios().get('carts/' + orderNumber)
     },
 
     /**
      * Create cart.
      */
-    createCart(data, cb, errorCb) {
-        this.axios().post('carts', data)
-            .then(response => {
-                return cb(response.data)
-            })
-            .catch(response => {
-                return errorCb(response)
-            })
+    createCart(data) {
+        return this.axios().post('carts', data)
     },
 
     /**
      * Update cart.
      */
-    updateCart(orderNumber, data, cb, errorCb) {
-        this.axios().post('carts/' + orderNumber, data)
-            .then(response => {
-                return cb(response.data)
-            })
-            .catch(response => {
-                return errorCb(response)
-            })
+    updateCart(orderNumber, data) {
+        return this.axios().post('carts/' + orderNumber, data)
     },
 
     /**

@@ -87,9 +87,14 @@
 
                     this.$store.dispatch('account/deleteUserPhoto')
                         .then(response => {
-                            this.$store.dispatch('app/displayNotice', 'Photo deleted.');
-                            this.userDraft.photoId = response.data.photoId;
-                            this.userDraft.photoUrl = response.data.photoUrl;
+                            if (response.data && !response.data.error) {
+                                this.$store.dispatch('app/displayNotice', 'Photo deleted.');
+                                this.userDraft.photoId = response.data.photoId;
+                                this.userDraft.photoUrl = response.data.photoUrl;
+                            } else {
+                                this.$store.dispatch('app/displayError', response.data.error);
+                            }
+
                             this.photoLoading = false;
                         })
                         .catch(response => {
@@ -131,21 +136,26 @@
 
                 this.$store.dispatch('account/uploadUserPhoto', data)
                     .then(response => {
-                        this.$store.dispatch('app/displayNotice', 'Photo uploaded.');
-                        let photoUrl = response.data.photoUrl
-                        this.userDraft.photoId = response.data.photoId;
-                        this.userDraft.photoUrl = photoUrl + (photoUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000);
-                        this.errors = {};
+                        if (response.data && !response.data.error) {
+                            this.$store.dispatch('app/displayNotice', 'Photo uploaded.')
+                            let photoUrl = response.data.photoUrl
+                            this.userDraft.photoId = response.data.photoId
+                            this.userDraft.photoUrl = photoUrl + (photoUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000)
+                            this.errors = {}
 
-                        this.photoLoading = false;
+                            this.photoLoading = false
+                        } else {
+                            this.$store.dispatch('app/displayError', response.data.error)
+                            this.photoLoading = false
+                        }
                     })
                     .catch(response => {
-                        this.photoLoading = false;
+                        this.photoLoading = false
 
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t upload photo.';
-                        this.$store.dispatch('app/displayError', errorMessage);
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t upload photo.'
+                        this.$store.dispatch('app/displayError', errorMessage)
 
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
                     });
             },
 

@@ -45,12 +45,12 @@ const actions = {
 
     disconnectApp({commit}, appHandle) {
         return new Promise((resolve, reject) => {
-
-            appsApi.disconnect(appHandle, response => {
+            appsApi.disconnect(appHandle)
+                .then((response) => {
                     commit('disconnectApp', {appHandle});
                     resolve(response);
-                },
-                response => {
+                })
+                .catch((response) => {
                     reject(response);
                 })
         })
@@ -63,26 +63,29 @@ const actions = {
 
     deleteUserPhoto({commit}) {
         return new Promise((resolve, reject) => {
-            accountApi.deleteUserPhoto(response => {
-                commit('deleteUserPhoto', {response});
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
+            accountApi.deleteUserPhoto()
+                .then((response) => {
+                    commit('deleteUserPhoto', {response});
+                    resolve(response);
+                })
+                .catch((response) => {
+                    reject(response);
+                })
         })
     },
 
     saveUser({commit}, user) {
         return new Promise((resolve, reject) => {
-            usersApi.saveUser(user, response => {
+            usersApi.saveUser(user)
+                .then((response) => {
                     if (!response.data.errors) {
                         commit('saveUser', {user, response});
                         resolve(response);
                     } else {
                         reject(response);
                     }
-                },
-                response => {
+                })
+                .catch((response) => {
                     reject(response);
                 })
         })
@@ -90,27 +93,30 @@ const actions = {
 
     uploadUserPhoto({commit}, data) {
         return new Promise((resolve, reject) => {
-            accountApi.uploadUserPhoto(data, response => {
-                commit('uploadUserPhoto', {response});
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
+            accountApi.uploadUserPhoto(data)
+                .then((response) => {
+                    commit('uploadUserPhoto', {response})
+                    resolve(response)
+                })
+                .then((response) => {
+                    reject(response)
+                })
         })
     },
 
     saveBillingInfo({commit}, data) {
         return new Promise((resolve, reject) => {
-            accountApi.saveBillingInfo(data, response => {
+            accountApi.saveBillingInfo(data)
+                .then((response) => {
                     if (!response.data.errors) {
-                        commit('updateBillingAddress', {billingAddress: response.data.address});
-                        resolve(response);
+                        commit('updateBillingAddress', {billingAddress: response.data.address})
+                        resolve(response)
                     } else {
-                        reject(response);
+                        reject(response)
                     }
-                },
-                response => {
-                    reject(response);
+                })
+                .catch((response) => {
+                    reject(response)
                 })
         })
     },
@@ -122,23 +128,27 @@ const actions = {
 
     removeCard({commit}) {
         return new Promise((resolve, reject) => {
-            stripeApi.removeCard(response => {
-                commit('removeStripeCard');
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
+            stripeApi.removeCard()
+                .then((response) => {
+                    commit('removeStripeCard')
+                    resolve(response)
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
 
     saveCard({commit}, source) {
         return new Promise((resolve, reject) => {
-            stripeApi.saveCard(source, response => {
-                commit('updateStripeCard', {card: response.data.card.card});
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
+            stripeApi.saveCard(source)
+                .then((response) => {
+                    commit('updateStripeCard', {card: response.data.card.card})
+                    resolve(response)
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
 
@@ -149,23 +159,27 @@ const actions = {
 
     disconnectStripeAccount({commit}) {
         return new Promise((resolve, reject) => {
-            stripeApi.disconnect(response => {
-                commit('disconnectStripeAccount');
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
+            stripeApi.disconnect()
+                .then((response) => {
+                    commit('disconnectStripeAccount')
+                    resolve(response)
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
 
     getStripeAccount({commit}) {
         return new Promise((resolve, reject) => {
-            stripeApi.getAccount(response => {
-                commit('updateStripeAccount', {response});
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
+            stripeApi.getAccount()
+                .then((response) => {
+                    commit('updateStripeAccount', {response})
+                    resolve(response)
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
 }

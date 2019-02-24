@@ -30,46 +30,52 @@ const getters = {
 const actions = {
     savePlugin({commit}, {plugin}) {
         return new Promise((resolve, reject) => {
-            pluginsApi.save({plugin}, response => {
-                if (response.data.success) {
-                    commit('savePlugin', {plugin, response});
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
+            pluginsApi.save({plugin})
+                .then((response) => {
+                    if (response.data.success) {
+                        commit('savePlugin', {plugin, response})
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
 
     submitPlugin({commit}, pluginId) {
         return new Promise((resolve, reject) => {
-            pluginsApi.submit(pluginId, response => {
-                if (response.data.success) {
-                    commit('submitPlugin', {pluginId});
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
+            pluginsApi.submit(pluginId)
+                .then((response) => {
+                    if (response.data.success) {
+                        commit('submitPlugin', {pluginId})
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
 
     generateApiToken({commit}) {
         return new Promise((resolve, reject) => {
-            accountApi.generateApiToken(response => {
-                if (response.data && !response.data.error) {
-                    commit('updateHasApiToken', {hasApiToken: !!response.data.apiToken});
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
-            }, response => {
-                reject(response);
-            })
+            accountApi.generateApiToken()
+                .then((response) => {
+                    if (response.data && !response.data.error) {
+                        commit('updateHasApiToken', {hasApiToken: !!response.data.apiToken})
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
 

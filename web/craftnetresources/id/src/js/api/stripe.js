@@ -2,31 +2,23 @@ import axios from 'axios';
 import qs from 'qs';
 
 export default {
-    getAccount(cb, cbError) {
-        axios.get(window.craftIdUrl + '/stripe/account')
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
+    getAccount() {
+        return axios.get(window.craftIdUrl + '/stripe/account')
     },
 
-    disconnect(cb, cbError) {
-        axios.post(window.craftIdUrl + '/stripe/disconnect')
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
+    disconnect() {
+        return axios.post(window.craftIdUrl + '/stripe/disconnect')
     },
 
-    saveCard(source, cb, cbError) {
+    saveCard(source) {
         const data = {
             token: source.id
         }
 
-        axios.post(window.craftIdUrl + '/stripe/save-card', qs.stringify(data))
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
+        return axios.post(window.craftIdUrl + '/stripe/save-card', qs.stringify(data))
     },
 
-    removeCard(cb, cbError) {
-        axios.post(window.craftIdUrl + '/stripe/remove-card')
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
+    removeCard() {
+        return axios.post(window.craftIdUrl + '/stripe/remove-card')
     },
 }

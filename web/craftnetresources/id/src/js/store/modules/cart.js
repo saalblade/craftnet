@@ -67,54 +67,62 @@ const actions = {
                 dispatch('getOrderNumber')
                     .then(orderNumber => {
                         if (orderNumber) {
-                            api.getCart(orderNumber, response => {
-                                if (!response.error) {
-                                    commit('updateCart', {response})
-                                    resolve(response)
-                                } else {
-                                    // Couldn’t get cart for this order number? Try to create a new one.
-                                    const data = {
-                                        email: rootState.account.currentUser.email
-                                    }
+                            api.getCart(orderNumber)
+                                .then((response) => {
+                                    if (!response.error) {
+                                        commit('updateCart', {response: response.data})
+                                        resolve(response.data)
+                                    } else {
+                                        // Couldn’t get cart for this order number? Try to create a new one.
+                                        const data = {
+                                            email: rootState.account.currentUser.email
+                                        }
 
-                                    api.createCart(data, response2 => {
-                                        commit('updateCart', {response: response2})
-                                        dispatch('saveOrderNumber', {orderNumber: response2.cart.number})
-                                        resolve(response)
-                                    }, response => {
-                                        reject(response)
-                                    })
-                                }
-                            }, response => {
-                                if(response.response.data.message && response.response.data.message === 'Cart Already Completed') {
-                                    const data = {
-                                        email: rootState.account.currentUser.email
+                                        api.createCart(data)
+                                            .then((response2) => {
+                                                commit('updateCart', {response: response2.data})
+                                                dispatch('saveOrderNumber', {orderNumber: response2.data.cart.number})
+                                                resolve(response)
+                                            })
+                                            .catch((response) => {
+                                                reject(response)
+                                            })
                                     }
+                                })
+                                .catch((response) => {
+                                    if (response.response.data.message && response.response.data.message === 'Cart Already Completed') {
+                                        const data = {
+                                            email: rootState.account.currentUser.email
+                                        }
 
-                                    api.createCart(data, response2 => {
-                                        commit('updateCart', {response: response2})
-                                        dispatch('saveOrderNumber', {orderNumber: response2.cart.number})
-                                        resolve(response)
-                                    }, response => {
+                                        api.createCart(data)
+                                            .then((response2) => {
+                                                commit('updateCart', {response: response2.data})
+                                                dispatch('saveOrderNumber', {orderNumber: response2.data.cart.number})
+                                                resolve(response)
+                                            })
+                                            .catch((response) => {
+                                                reject(response)
+                                            })
+                                    } else {
                                         reject(response)
-                                    })
-                                } else {
-                                    reject(response)
-                                }
-                            })
+                                    }
+                                })
                         } else {
                             // No order number yet? Create a new cart.
                             const data = {
                                 email: rootState.account.currentUser.email
                             }
 
-                            api.createCart(data, response => {
-                                commit('updateCart', {response})
-                                dispatch('saveOrderNumber', {orderNumber: response.cart.number})
-                                resolve(response)
-                            }, response => {
-                                reject(response)
-                            })
+                            api.createCart(data)
+                                .then((response) => {
+                                    commit('updateCart', {response: response.data})
+                                    dispatch('saveOrderNumber', {orderNumber: response.data.cart.number})
+                                    resolve(response)
+                                })
+                                .catch((response) => {
+                                    reject(response)
+                                })
                         }
                     })
             } else {
@@ -127,16 +135,18 @@ const actions = {
         return new Promise((resolve, reject) => {
             const cart = state.cart
 
-            api.updateCart(cart.number, data, response => {
-                if (!response.errors) {
-                    commit('updateCart', {response})
-                    resolve(response)
-                } else {
+            api.updateCart(cart.number, data)
+                .then((response) => {
+                    if (!response.data.errors) {
+                        commit('updateCart', {response: response.data})
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                })
+                .catch((response) => {
                     reject(response)
-                }
-            }, response => {
-                reject(response)
-            })
+                })
         })
     },
 
@@ -212,12 +222,14 @@ const actions = {
                         items,
                     }
 
-                    api.updateCart(cart.number, data, response => {
-                        commit('updateCart', {response})
-                        resolve(response)
-                    }, response => {
-                        reject(response)
-                    })
+                    api.updateCart(cart.number, data)
+                        .then((response) => {
+                            commit('updateCart', {response: response.data})
+                            resolve(response)
+                        })
+                        .catch((response) => {
+                            reject(response)
+                        })
                 })
                 .catch(reject)
         })
@@ -235,12 +247,14 @@ const actions = {
                         items,
                     }
 
-                    api.updateCart(cart.number, data, response => {
-                        commit('updateCart', {response})
-                        resolve(response)
-                    }, response => {
-                        reject(response)
-                    })
+                    api.updateCart(cart.number, data)
+                        .then((response) => {
+                            commit('updateCart', {response: response.data})
+                            resolve(response)
+                        })
+                        .catch((response) => {
+                            reject(response)
+                        })
                 })
                 .catch(reject)
         })
@@ -258,12 +272,14 @@ const actions = {
                 items,
             }
 
-            api.updateCart(cart.number, data, response => {
-                commit('updateCart', {response})
-                resolve(response)
-            }, response => {
-                reject(response)
-            })
+            api.updateCart(cart.number, data)
+                .then((response) => {
+                    commit('updateCart', {response: response.data})
+                    resolve(response)
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
 }

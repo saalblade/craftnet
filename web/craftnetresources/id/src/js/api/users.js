@@ -28,7 +28,7 @@ export default {
         })
     },
 
-    saveUser(user, cb, cbError) {
+    saveUser(user) {
         let formData = new FormData();
 
         for (let attribute in user) {
@@ -50,13 +50,11 @@ export default {
             }
         }
 
-        axios.post(Craft.actionUrl + '/users/save-user', formData, {
+        return axios.post(Craft.actionUrl + '/users/save-user', formData, {
                 headers: {
                     'X-CSRF-Token':  Craft.csrfTokenValue,
                 }
             })
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
     },
 
     sendPasswordResetEmail(formData) {
