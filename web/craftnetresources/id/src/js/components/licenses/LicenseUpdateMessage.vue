@@ -30,16 +30,11 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import helpers from '../../mixins/helpers'
 
     export default {
-        props: ['license'],
+        mixins: [helpers],
 
-        computed: {
-            ...mapGetters({
-                expiresSoon: 'licenses/expiresSoon',
-                daysBeforeExpiry: 'licenses/daysBeforeExpiry',
-            }),
-        }
+        props: ['license'],
     }
 </script>

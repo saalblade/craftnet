@@ -95,7 +95,6 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
     import PluginLicensesTable from '../../../components/licenses/PluginLicensesTable'
     import Empty from '../../../components/Empty'
     import Spinner from '../../../components/Spinner'
@@ -103,8 +102,11 @@
     import FilterBar from '../../../components/FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
     import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
+    import helpers from '../../../mixins/helpers'
 
     export default {
+        mixins: [helpers],
+
         components: {
             PluginLicensesTable,
             Empty,
@@ -163,10 +165,6 @@
         },
 
         computed: {
-            ...mapGetters({
-                expiresSoon: 'licenses/expiresSoon',
-            }),
-
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/plugin-licenses/get-licenses'
             }

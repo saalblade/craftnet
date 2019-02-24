@@ -83,11 +83,13 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
     import Badge from '../Badge'
     import pluginLicensesApi from '../../api/plugin-licenses'
+    import helpers from '../../mixins/helpers'
 
     export default {
+        mixins: [helpers],
+
         props: ['licenses', 'excludeCmsLicenseColumn', 'excludeNotesColumn', 'autoRenewSwitch'],
 
         components: {
@@ -98,12 +100,6 @@
             return {
                 pluginLicensesAutoRenew: {},
             }
-        },
-
-        computed: {
-            ...mapGetters({
-                expiresSoon: 'licenses/expiresSoon',
-            }),
         },
 
         methods: {

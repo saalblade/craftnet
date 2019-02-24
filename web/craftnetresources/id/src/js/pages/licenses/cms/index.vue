@@ -92,7 +92,6 @@
 <script>
     /* global Craft */
 
-    import {mapGetters} from 'vuex'
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
     import Empty from '../../../components/Empty';
     import Spinner from '../../../components/Spinner';
@@ -100,10 +99,13 @@
     import FilterBar from '../../../components/FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
     import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
+    import helpers from '../../../mixins/helpers'
 
     window.axios = require('axios');
 
     export default {
+        mixins: [helpers],
+
         components: {
             CmsLicensesTable,
             Empty,
@@ -163,10 +165,6 @@
         },
 
         computed: {
-            ...mapGetters({
-                expiresSoon: 'licenses/expiresSoon',
-            }),
-
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/cms-licenses/get-licenses'
             }

@@ -40,10 +40,12 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
     import Spinner from '../../../Spinner'
+    import helpers from '../../../../mixins/helpers'
 
     export default {
+        mixins: [helpers],
+
         props: ['license', 'renew', 'checkedLicenses'],
 
         components: {
@@ -55,12 +57,6 @@
                 loading: false,
                 checkAllChecked: false
             }
-        },
-
-        computed: {
-            ...mapGetters({
-                renewableLicenses: 'licenses/renewableLicenses',
-            }),
         },
 
         methods: {
