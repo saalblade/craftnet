@@ -273,7 +273,7 @@
             ...mapState({
                 apps: state => state.apps.apps,
                 appsLoading: state => state.apps.appsLoading,
-                plugins: state => state.developers.plugins,
+                plugins: state => state.plugins.plugins,
             }),
 
             ...mapGetters({
@@ -523,7 +523,7 @@
                     plugin.screenshotIds = this.pluginDraft.screenshotIds;
                 }
 
-                this.$store.dispatch('developers/savePlugin', {plugin})
+                this.$store.dispatch('plugins/savePlugin', {plugin})
                     .then(() => {
                         this.loading = false;
                         this.$store.dispatch('app/displayNotice', 'Plugin saved.');
@@ -543,7 +543,7 @@
              */
             submit() {
                 this.pluginSubmitLoading = true;
-                this.$store.dispatch('developers/submitPlugin', this.plugin.id)
+                this.$store.dispatch('plugins/submitPlugin', this.plugin.id)
                     .then(() => {
                         this.pluginSubmitLoading = false;
                         this.$store.dispatch('app/displayNotice', 'Plugin submitted for approval.');

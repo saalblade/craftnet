@@ -109,7 +109,7 @@
 
         computed: {
             ...mapState({
-                plugins: state => state.developers.plugins,
+                plugins: state => state.plugins.plugins,
             }),
 
             computedPlugins() {
@@ -178,7 +178,7 @@
             if (this.plugins.length === 0) {
                 this.loading = true
 
-                this.$store.dispatch('developers/getPlugins')
+                this.$store.dispatch('plugins/getPlugins')
                     .then(() => {
                         this.loading = false
                     })
