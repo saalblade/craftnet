@@ -49,7 +49,7 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                currentUser: state => state.users.currentUser,
                 billingAddress: state => state.account.billingAddress,
             }),
         },

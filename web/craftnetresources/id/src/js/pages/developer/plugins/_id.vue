@@ -277,7 +277,7 @@
             }),
 
             ...mapGetters({
-                userIsInGroup: 'account/userIsInGroup',
+                userIsInGroup: 'users/userIsInGroup',
             }),
 
             pluginId() {

@@ -75,7 +75,7 @@ const actions = {
                                     } else {
                                         // Couldn’t get cart for this order number? Try to create a new one.
                                         const data = {
-                                            email: rootState.account.currentUser.email
+                                            email: rootState.users.currentUser.email
                                         }
 
                                         api.createCart(data)
@@ -92,7 +92,7 @@ const actions = {
                                 .catch((response) => {
                                     if (response.response.data.message && response.response.data.message === 'Cart Already Completed') {
                                         const data = {
-                                            email: rootState.account.currentUser.email
+                                            email: rootState.users.currentUser.email
                                         }
 
                                         api.createCart(data)
@@ -111,7 +111,7 @@ const actions = {
                         } else {
                             // No order number yet? Create a new cart.
                             const data = {
-                                email: rootState.account.currentUser.email
+                                email: rootState.users.currentUser.email
                             }
 
                             api.createCart(data)

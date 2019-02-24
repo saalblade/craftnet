@@ -65,7 +65,7 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                currentUser: state => state.users.currentUser,
             }),
 
             csrfTokenName() {

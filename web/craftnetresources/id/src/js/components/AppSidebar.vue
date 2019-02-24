@@ -75,11 +75,11 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                currentUser: state => state.users.currentUser,
             }),
 
             ...mapGetters({
-                userIsInGroup: 'account/userIsInGroup',
+                userIsInGroup: 'users/userIsInGroup',
             }),
         },
     }

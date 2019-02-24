@@ -69,11 +69,11 @@
             ...mapState({
                 apps: state => state.apps.apps,
                 appsLoading: state => state.apps.appsLoading,
-                currentUser: state => state.account.currentUser,
+                currentUser: state => state.users.currentUser,
             }),
 
             ...mapGetters({
-                userIsInGroup: 'account/userIsInGroup',
+                userIsInGroup: 'users/userIsInGroup',
             }),
         },
 
