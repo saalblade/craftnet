@@ -75,8 +75,8 @@ const actions = {
                     commit('account/updateCurrentUser', {currentUser: response.data.currentUser}, {root: true});
                     commit('account/updateCurrentUserLoaded', true, {root: true});
                     commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true});
-                    commit('account/updateCard', {card: response.data.card}, {root: true});
-                    commit('account/updateCardToken', {cardToken: response.data.cardToken}, {root: true});
+                    commit('stripe/updateCard', {card: response.data.card}, {root: true});
+                    commit('stripe/updateCardToken', {cardToken: response.data.cardToken}, {root: true});
                     resolve(response);
                 })
                 .catch((response) => {

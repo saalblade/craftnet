@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import accountApi from '../../api/account'
 import usersApi from '../../api/users'
-import stripeApi from '../../api/stripe'
 
 Vue.use(Vuex)
 
@@ -11,12 +10,8 @@ Vue.use(Vuex)
  */
 const state = {
     billingAddress: null,
-    card: null,
-    cardToken: null,
     currentUser: null,
     currentUserLoaded: false,
-    stripeAccount: null,
-    stripeCustomer: null,
 }
 
 /**
@@ -34,10 +29,6 @@ const getters = {
  * Actions
  */
 const actions = {
-    /**
-     * User
-     */
-
     deleteUserPhoto({commit}) {
         return new Promise((resolve, reject) => {
             accountApi.deleteUserPhoto()
@@ -97,78 +88,12 @@ const actions = {
                 })
         })
     },
-
-
-    /**
-     * Credit cards
-     */
-
-    removeCard({commit}) {
-        return new Promise((resolve, reject) => {
-            stripeApi.removeCard()
-                .then((response) => {
-                    commit('removeStripeCard')
-                    resolve(response)
-                })
-                .catch((response) => {
-                    reject(response)
-                })
-        })
-    },
-
-    saveCard({commit}, source) {
-        return new Promise((resolve, reject) => {
-            stripeApi.saveCard(source)
-                .then((response) => {
-                    commit('updateStripeCard', {card: response.data.card.card})
-                    resolve(response)
-                })
-                .catch((response) => {
-                    reject(response)
-                })
-        })
-    },
-
-
-    /**
-     * Stripe account
-     */
-
-    disconnectStripeAccount({commit}) {
-        return new Promise((resolve, reject) => {
-            stripeApi.disconnect()
-                .then((response) => {
-                    commit('disconnectStripeAccount')
-                    resolve(response)
-                })
-                .catch((response) => {
-                    reject(response)
-                })
-        })
-    },
-
-    getStripeAccount({commit}) {
-        return new Promise((resolve, reject) => {
-            stripeApi.getAccount()
-                .then((response) => {
-                    commit('updateStripeAccount', {response})
-                    resolve(response)
-                })
-                .catch((response) => {
-                    reject(response)
-                })
-        })
-    },
 }
 
 /**
  * Mutations
  */
 const mutations = {
-    /**
-     * User
-     */
-
     uploadUserPhoto(state, {response}) {
         state.currentUser.photoId = response.data.photoId;
         state.currentUser.photoUrl = response.data.photoUrl;
@@ -205,46 +130,12 @@ const mutations = {
         state.billingAddress = billingAddress
     },
 
-    updateCard(state, {card}) {
-        state.card = card
-    },
-
-    updateCardToken(state, {cardToken}) {
-        state.cardToken = cardToken
-    },
-
     updateCurrentUser(state, {currentUser}) {
         state.currentUser = currentUser
     },
 
     updateCurrentUserLoaded(state, loaded) {
         state.currentUserLoaded = loaded
-    },
-
-
-    /**
-     * Credit cards
-     */
-
-    removeStripeCard(state) {
-        state.card = null
-    },
-
-    updateStripeCard(state, {card}) {
-        state.card = card
-    },
-
-
-    /**
-     * Stripe Account
-     */
-
-    disconnectStripeAccount(state) {
-        state.stripeAccount = null
-    },
-
-    updateStripeAccount(state, {response}) {
-        state.stripeAccount = response.data
     },
 }
 

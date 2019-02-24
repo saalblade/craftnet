@@ -9,6 +9,7 @@ import developers from './modules/developers'
 import licenses from './modules/licenses'
 import partner from './modules/partner'
 import pluginStore from './modules/plugin-store'
+import stripe from './modules/stripe'
 
 Vue.use(Vuex);
 
@@ -24,5 +25,6 @@ export default new Vuex.Store({
         licenses,
         partner,
         pluginStore,
+        stripe,
     }
 })
