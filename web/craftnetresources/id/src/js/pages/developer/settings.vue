@@ -47,7 +47,7 @@
 
         computed: {
             ...mapState({
-                hasApiToken: state => state.developers.hasApiToken,
+                hasApiToken: state => state.account.hasApiToken,
                 currentUser: state => state.users.currentUser,
             }),
         },
@@ -56,7 +56,7 @@
             generateToken() {
                 this.loading = true
 
-                this.$store.dispatch('developers/generateApiToken')
+                this.$store.dispatch('account/generateApiToken')
                     .then(response => {
                         this.apiToken = response.data.apiToken
 

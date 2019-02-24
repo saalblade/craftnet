@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import accountApi from '../../api/account';
 import pluginsApi from '../../api/plugins';
 
 Vue.use(Vuex)
@@ -9,7 +8,6 @@ Vue.use(Vuex)
  * State
  */
 const state = {
-    hasApiToken: false,
     plugins: [],
 }
 
@@ -51,23 +49,6 @@ const actions = {
                 .then((response) => {
                     if (response.data.success) {
                         commit('submitPlugin', {pluginId})
-                        resolve(response)
-                    } else {
-                        reject(response)
-                    }
-                })
-                .catch((response) => {
-                    reject(response)
-                })
-        })
-    },
-
-    generateApiToken({commit}) {
-        return new Promise((resolve, reject) => {
-            accountApi.generateApiToken()
-                .then((response) => {
-                    if (response.data && !response.data.error) {
-                        commit('updateHasApiToken', {hasApiToken: !!response.data.apiToken})
                         resolve(response)
                     } else {
                         reject(response)
@@ -168,10 +149,6 @@ const mutations = {
         let statePlugin = state.plugins.find(p => p.id == pluginId);
         statePlugin.pendingApproval = true;
     },
-
-    updateHasApiToken(state, {hasApiToken}){
-        state.hasApiToken = hasApiToken;
-    }
 }
 
 export default {

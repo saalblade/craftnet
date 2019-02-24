@@ -9,6 +9,7 @@ Vue.use(Vuex)
  */
 const state = {
     billingAddress: null,
+    hasApiToken: false,
 }
 
 /**
@@ -62,17 +63,29 @@ const actions = {
                 })
         })
     },
+
+    generateApiToken({commit}) {
+        return new Promise((resolve, reject) => {
+            accountApi.generateApiToken()
+                .then((response) => {
+                    if (response.data && !response.data.error) {
+                        commit('updateHasApiToken', {hasApiToken: !!response.data.apiToken})
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                })
+                .catch((response) => {
+                    reject(response)
+                })
+        })
+    },
 }
 
 /**
  * Mutations
  */
 const mutations = {
-    uploadUserPhoto(rootState, {response}) {
-        rootState.users.currentUser.photoId = response.data.photoId;
-        rootState.users.currentUser.photoUrl = response.data.photoUrl;
-    },
-
     deleteUserPhoto(rootState, {response}) {
         rootState.users.currentUser.photoId = response.data.photoId;
         rootState.users.currentUser.photoUrl = response.data.photoUrl;
@@ -80,6 +93,15 @@ const mutations = {
 
     updateBillingAddress(state, {billingAddress}) {
         state.billingAddress = billingAddress
+    },
+
+    updateHasApiToken(state, {hasApiToken}){
+        state.hasApiToken = hasApiToken;
+    },
+
+    uploadUserPhoto(rootState, {response}) {
+        rootState.users.currentUser.photoId = response.data.photoId;
+        rootState.users.currentUser.photoUrl = response.data.photoUrl;
     },
 }
 
