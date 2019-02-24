@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import pluginStoreApi from '../../api/plugin-store';
 
 Vue.use(Vuex)
 
@@ -33,12 +34,14 @@ const actions = {
     getPluginStoreData({commit, state}) {
         return new Promise((resolve, reject) => {
             if (!state.pluginStoreDataLoaded) {
-                axios.get(process.env.VUE_APP_CRAFT_API_ENDPOINT + '/plugin-store', {withCredentials: false})
-                    .then(response => {
+                pluginStoreApi.getData()
+                    .then((response) => {
                         commit('updatePluginStoreData', {response})
                         resolve()
                     })
-                    .catch(reject)
+                    .catch((response) => {
+                        reject(response)
+                    })
             } else {
                 resolve();
             }
