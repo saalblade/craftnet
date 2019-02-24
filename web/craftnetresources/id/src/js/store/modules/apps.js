@@ -44,7 +44,24 @@ const actions = {
                     reject(response)
                 })
         })
-    }
+    },
+
+    connectAppCallback({commit}, apps) {
+        commit('updateApps', {apps})
+    },
+
+    disconnectApp({commit}, appHandle) {
+        return new Promise((resolve, reject) => {
+            appsApi.disconnect(appHandle)
+                .then((response) => {
+                    commit('disconnectApp', {appHandle});
+                    resolve(response);
+                })
+                .catch((response) => {
+                    reject(response);
+                })
+        })
+    },
 }
 
 /**
@@ -57,6 +74,10 @@ const mutations = {
 
     updateAppsLoading(state, loading) {
         state.appsLoading = loading
+    },
+
+    disconnectApp(state, {appHandle}) {
+        Vue.delete(state.apps, appHandle);
     },
 }
 

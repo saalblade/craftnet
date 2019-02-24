@@ -36,28 +36,6 @@ const getters = {
  */
 const actions = {
     /**
-     * Apps
-     */
-
-    connectAppCallback({commit}, apps) {
-        commit('updateApps', {apps})
-    },
-
-    disconnectApp({commit}, appHandle) {
-        return new Promise((resolve, reject) => {
-            appsApi.disconnect(appHandle)
-                .then((response) => {
-                    commit('disconnectApp', {appHandle});
-                    resolve(response);
-                })
-                .catch((response) => {
-                    reject(response);
-                })
-        })
-    },
-
-
-    /**
      * User
      */
 
@@ -188,15 +166,6 @@ const actions = {
  * Mutations
  */
 const mutations = {
-    /**
-     * Apps
-     */
-
-    disconnectApp(state, {appHandle}) {
-        Vue.delete(state.apps, appHandle);
-    },
-
-
     /**
      * User
      */

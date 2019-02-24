@@ -30,7 +30,7 @@ window.craftIdApp = new Vue({
          * @param apps
          */
         connectAppCallback(apps) {
-            this.$store.dispatch('account/connectAppCallback', apps);
+            this.$store.dispatch('apps/connectAppCallback', apps);
 
             this.$store.dispatch('app/displayNotice', 'App connected.');
         },

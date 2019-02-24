@@ -133,7 +133,7 @@
              */
             disconnect(provider) {
                 this.loading[provider] = true;
-                this.$store.dispatch('account/disconnectApp', provider)
+                this.$store.dispatch('apps/disconnectApp', provider)
                     .then(() => {
                         this.loading[provider] = false;
                         this.$store.dispatch('app/displayNotice', 'App disconnected.');
