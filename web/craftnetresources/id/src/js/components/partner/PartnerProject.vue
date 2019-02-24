@@ -136,14 +136,14 @@
 
         methods: {
             removeScreenshot(index) {
-                this.project.screenshots.splice(index, 1);
+                this.project.screenshots.splice(index, 1)
             },
 
             screenshotFileChange(event) {
                 let formData = new FormData()
 
                 for( var i = 0; i < event.target.files.length; i++ ){
-                    formData.append('screenshots[]', event.target.files[i]);
+                    formData.append('screenshots[]', event.target.files[i])
                 }
 
                 this.isUploading = true
@@ -169,7 +169,7 @@
                     .catch(error => {
                         this.isUploading = false
                         this.$store.dispatch('app/displayNotice', error)
-                    });
+                    })
             }
         },
 

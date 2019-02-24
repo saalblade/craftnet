@@ -29,7 +29,7 @@
 
         methods: {
             addToCart() {
-                this.loading = true;
+                this.loading = true
 
                 const item = {
                     type: 'cms-edition',
@@ -40,7 +40,7 @@
                 this.$store.dispatch('cart/addToCart', [item])
                     .then(() => {
                         this.loading = false
-                        this.$store.dispatch('app/displayNotice', 'Craft CMS license added your cart.');
+                        this.$store.dispatch('app/displayNotice', 'Craft CMS license added your cart.')
                         this.$router.push({path: '/cart'})
                     })
             }

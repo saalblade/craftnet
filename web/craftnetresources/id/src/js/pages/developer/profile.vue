@@ -83,27 +83,27 @@
              */
             deletePhoto() {
                 if (confirm("Are you sure you want to delete this image?")) {
-                    this.photoLoading = true;
+                    this.photoLoading = true
 
                     this.$store.dispatch('account/deleteUserPhoto')
                         .then(response => {
                             if (response.data && !response.data.error) {
-                                this.$store.dispatch('app/displayNotice', 'Photo deleted.');
-                                this.userDraft.photoId = response.data.photoId;
-                                this.userDraft.photoUrl = response.data.photoUrl;
+                                this.$store.dispatch('app/displayNotice', 'Photo deleted.')
+                                this.userDraft.photoId = response.data.photoId
+                                this.userDraft.photoUrl = response.data.photoUrl
                             } else {
-                                this.$store.dispatch('app/displayError', response.data.error);
+                                this.$store.dispatch('app/displayError', response.data.error)
                             }
 
-                            this.photoLoading = false;
+                            this.photoLoading = false
                         })
                         .catch(response => {
-                            this.photoLoading = false;
+                            this.photoLoading = false
 
-                            const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t delete photo.';
-                            this.$store.dispatch('app/displayError', errorMessage);
+                            const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t delete photo.'
+                            this.$store.dispatch('app/displayError', errorMessage)
 
-                            this.errors = response.data && response.data.errors ? response.data.errors : {};
+                            this.errors = response.data && response.data.errors ? response.data.errors : {}
                         })
                 }
             },
@@ -112,27 +112,27 @@
              * Change photo.
              */
             changePhoto() {
-                this.$refs.photoFile.click();
+                this.$refs.photoFile.click()
             },
 
             /**
              * On change photo.
              */
             onChangePhoto() {
-                // let reader = new FileReader();
+                // let reader = new FileReader()
                 //
                 // reader.onload = function (e) {
                 //     this.userDraft.photoUrl = [e.target.result]
-                // }.bind(this);
+                // }.bind(this)
                 //
-                // reader.readAsDataURL(this.$refs.photoFile.files[0]);
+                // reader.readAsDataURL(this.$refs.photoFile.files[0])
 
-                this.photoLoading = true;
+                this.photoLoading = true
 
                 let data = {
                     photo: this.$refs.photoFile.files[0],
                     photoUrl: this.userDraft.photoUrl,
-                };
+                }
 
                 this.$store.dispatch('account/uploadUserPhoto', data)
                     .then(response => {
@@ -156,14 +156,14 @@
                         this.$store.dispatch('app/displayError', errorMessage)
 
                         this.errors = response.data && response.data.errors ? response.data.errors : {}
-                    });
+                    })
             },
 
             /**
              * Save the profile.
              */
             save() {
-                this.loading = true;
+                this.loading = true
 
                 this.$store.dispatch('users/saveUser', {
                         id: this.userDraft.id,
@@ -173,23 +173,23 @@
                         photoUrl: this.userDraft.photoUrl,
                     })
                     .then(() => {
-                        this.$store.dispatch('app/displayNotice', 'Settings saved.');
-                        this.errors = {};
-                        this.loading = false;
+                        this.$store.dispatch('app/displayNotice', 'Settings saved.')
+                        this.errors = {}
+                        this.loading = false
                     })
                     .catch(response => {
-                        this.loading = false;
+                        this.loading = false
 
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save profile.';
-                        this.$store.dispatch('app/displayError', errorMessage);
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save profile.'
+                        this.$store.dispatch('app/displayError', errorMessage)
 
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
-                    });
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
+                    })
             }
         },
 
         mounted() {
-            this.userDraft = JSON.parse(JSON.stringify(this.currentUser));
+            this.userDraft = JSON.parse(JSON.stringify(this.currentUser))
         }
     }
 </script>

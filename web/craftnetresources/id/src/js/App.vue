@@ -28,12 +28,12 @@
 
 <script>
     import {mapState} from 'vuex'
-    import router from './router';
+    import router from './router'
     import helpers from './mixins/helpers'
-    import AuthManager from './components/AuthManager';
-    import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal';
-    import Layout from './components/Layout';
-    import Spinner from './components/Spinner';
+    import AuthManager from './components/AuthManager'
+    import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal'
+    import Layout from './components/Layout'
+    import Spinner from './components/Spinner'
 
     export default {
         router,
@@ -81,11 +81,11 @@
             this.loadUserData()
 
             if(window.sessionNotice) {
-                this.$store.dispatch('app/displayNotice', window.sessionNotice);
+                this.$store.dispatch('app/displayNotice', window.sessionNotice)
             }
 
             if(window.sessionError) {
-                this.$store.dispatch('app/displayError', window.sessionError);
+                this.$store.dispatch('app/displayError', window.sessionError)
             }
         }
     }

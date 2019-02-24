@@ -106,14 +106,14 @@
 
                 this.savePaymentMethod()
                     .then(() => {
-                        this.errors = {};
+                        this.errors = {}
                         this.saveBillingInfos()
                             .then(() => {
                                 this.processPayment()
                                     .then(() => {
                                         this.$store.dispatch('app/displayNotice', 'Payment processed.')
                                         this.payLoading = false
-                                        this.$router.push({path: '/thank-you'});
+                                        this.$router.push({path: '/thank-you'})
                                     })
                                     .catch(() => {
                                         this.$store.dispatch('app/displayError', 'Couldn’t process payment.')
@@ -121,7 +121,7 @@
                                     })
                             })
                             .catch((response) => {
-                                let errors = {};
+                                let errors = {}
 
                                 if (response.response.data.errors) {
                                     response.response.data.errors.forEach(error => {
@@ -129,7 +129,7 @@
                                     })
                                 }
 
-                                this.errors = errors;
+                                this.errors = errors
 
                                 this.$store.dispatch('app/displayError', 'Couldn’t save billing infos.')
                                 this.payLoading = false
@@ -138,7 +138,7 @@
                     .catch((error) => {
                         this.$store.dispatch('app/displayError', 'Couldn’t save payment method.')
                         this.payLoading = false
-                        throw error;
+                        throw error
                     })
             },
 
@@ -219,7 +219,7 @@
         },
 
         mounted() {
-            this.loading = true;
+            this.loading = true
 
             this.getCart()
                 .then(() => {

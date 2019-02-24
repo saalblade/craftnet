@@ -74,7 +74,7 @@
 <script>
     import {mapState, mapGetters} from 'vuex'
     import helpers from '../mixins/helpers'
-    import {directive as onClickaway} from 'vue-clickaway';
+    import {directive as onClickaway} from 'vue-clickaway'
 
     export default {
         mixins: [helpers],

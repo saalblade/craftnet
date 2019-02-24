@@ -141,30 +141,30 @@
              * Detach the Craft license.
              */
             detachCmsLicense() {
-                this.detaching = true;
-                this.licenseDraft.cmsLicenseId = null;
-                this.licenseDraft.cmsLicense = null;
+                this.detaching = true
+                this.licenseDraft.cmsLicenseId = null
+                this.licenseDraft.cmsLicense = null
 
                 this.savePluginLicense(() => {
-                    this.detaching = false;
+                    this.detaching = false
                 }, () => {
-                    this.detaching = false;
-                });
+                    this.detaching = false
+                })
             },
 
             /**
              * Reattach the Craft license.
              */
             reattachCmsLicense() {
-                this.reattaching = true;
-                this.licenseDraft.cmsLicenseId = this.originalCmsLicenseId;
-                this.licenseDraft.cmsLicense = this.originalCmsLicense;
+                this.reattaching = true
+                this.licenseDraft.cmsLicenseId = this.originalCmsLicenseId
+                this.licenseDraft.cmsLicense = this.originalCmsLicense
 
                 this.savePluginLicense(() => {
-                    this.reattaching = false;
+                    this.reattaching = false
                 }, () => {
-                    this.reattaching = false;
-                });
+                    this.reattaching = false
+                })
             },
 
             /**
@@ -172,43 +172,43 @@
              */
             canSave() {
                 if (this.license.notes !== this.licenseDraft.notes) {
-                    return true;
+                    return true
                 }
 
-                return false;
+                return false
             },
 
             /**
              * Save notes.
              */
             saveNotes() {
-                this.notesLoading = true;
+                this.notesLoading = true
 
                 this.savePluginLicense(() => {
-                    this.notesLoading = false;
-                    this.notesEditing = false;
+                    this.notesLoading = false
+                    this.notesEditing = false
                 }, () => {
-                    this.notesLoading = false;
-                });
+                    this.notesLoading = false
+                })
             },
 
             /**
              * Cancel edit notes.
              */
             cancelEditNotes() {
-                this.licenseDraft.notes = this.license.notes;
-                this.notesEditing = false;
-                this.notesValidates = false;
+                this.licenseDraft.notes = this.license.notes
+                this.notesEditing = false
+                this.notesValidates = false
             },
 
             /**
              * Notes change.
              */
             notesChange() {
-                this.notesValidates = false;
+                this.notesValidates = false
 
                 if(this.licenseDraft.notes !== this.license.notes) {
-                    this.notesValidates = true;
+                    this.notesValidates = true
                 }
             },
 
@@ -228,15 +228,15 @@
                 })
                     .then((response) => {
                         if (response.data && !response.data.error) {
-                            cb(response);
-                            this.$store.dispatch('app/displayNotice', 'License saved.');
+                            cb(response)
+                            this.$store.dispatch('app/displayNotice', 'License saved.')
                         } else {
-                            cbError(response);
+                            cbError(response)
                             this.$store.dispatch('app/displayError', response.data.error)
                         }
                     })
                     .catch((response) => {
-                        cbError(response);
+                        cbError(response)
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
                         this.$store.dispatch('app/displayError', errorMessage)
                     })
@@ -253,13 +253,13 @@
                 })
                     .then(() => {
                         if (this.licenseDraft.autoRenew) {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew enabled.');
+                            this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
+                            this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
                         }
                     }).catch(data => {
-                        this.$store.dispatch('app/displayError', 'Couldn’t save license.');
-                        this.errors = data.errors;
+                        this.$store.dispatch('app/displayError', 'Couldn’t save license.')
+                        this.errors = data.errors
                     })
             },
         },

@@ -66,7 +66,7 @@
 
                 this.$store.dispatch('cart/addToCart', [item])
                     .then(() => {
-                        this.$store.dispatch('app/displayNotice', 'Plugin license added your cart.');
+                        this.$store.dispatch('app/displayNotice', 'Plugin license added your cart.')
                         this.$router.push({path: '/cart'})
                     })
             }
@@ -78,13 +78,13 @@
                 this.getPluginStoreData()
                     .then(() => {
                         this.loading = false
-                        this.addToCart();
+                        this.addToCart()
                     })
                     .catch(() => {
                         this.loading = false
                     })
             } else {
-                this.addToCart();
+                this.addToCart()
             }
         }
     }

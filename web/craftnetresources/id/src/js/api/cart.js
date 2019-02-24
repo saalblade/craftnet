@@ -14,10 +14,10 @@ export default {
             this._axios = axios.create({
                 baseURL: process.env.VUE_APP_CRAFT_API_ENDPOINT + '/',
                 // params: {XDEBUG_SESSION_START: 16433}
-            });
+            })
         }
 
-        return this._axios;
+        return this._axios
     },
 
     /**

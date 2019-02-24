@@ -1,8 +1,8 @@
 /* global Craft */
 
-import axios from 'axios';
+import axios from 'axios'
 import FormDataHelper from '../helpers/form-data';
-import qs from 'qs';
+import qs from 'qs'
 
 export default {
     claimCmsLicense(licenseKey) {

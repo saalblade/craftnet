@@ -32,10 +32,10 @@
 
 <script>
     import {mapState} from 'vuex'
-    import AppHeader from './AppHeader';
-    import AppSidebar from './AppSidebar';
-    import StripeAccountAlert from './StripeAccountAlert';
-    import LicenseRenewAlert from './LicenseRenewAlert';
+    import AppHeader from './AppHeader'
+    import AppSidebar from './AppSidebar'
+    import StripeAccountAlert from './StripeAccountAlert'
+    import LicenseRenewAlert from './LicenseRenewAlert'
 
     export default {
         components: {
@@ -63,14 +63,14 @@
              * Toggles the sidebar.
              */
             toggleSidebar() {
-                this.showingSidebar = !this.showingSidebar;
+                this.showingSidebar = !this.showingSidebar
             },
 
             /**
              * Closes the sidebar.
              */
             closeSidebar() {
-                this.showingSidebar = false;
+                this.showingSidebar = false
             },
         }
     }

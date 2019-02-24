@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import pluginLicensesApi from '../../api/plugin-licenses';
+import pluginLicensesApi from '../../api/plugin-licenses'
 
 Vue.use(Vuex)
 

@@ -52,7 +52,7 @@
                         })
                         .catch(response => {
                             if (response.response.data.errors[0].message) {
-                                this.couponCodeError = [response.response.data.errors[0].message];
+                                this.couponCodeError = [response.response.data.errors[0].message]
                             } else {
                                 this.couponCodeError = true
                             }
@@ -65,7 +65,7 @@
         },
 
         mounted() {
-            this.couponCode = this.cart.couponCode;
+            this.couponCode = this.cart.couponCode
         }
     }
 </script>

@@ -64,16 +64,16 @@ const actions = {
             message: message
         })
 
-        let notificationDuration = 2000;
+        let notificationDuration = 2000
 
         if (type === 'error') {
-            notificationDuration = notificationDuration * 4;
+            notificationDuration = notificationDuration * 4
         }
 
         setTimeout(function() {
-            this.notification = null;
+            this.notification = null
             commit('updateNotification', null)
-        }.bind(this), notificationDuration);
+        }.bind(this), notificationDuration)
     },
 }
 
@@ -102,7 +102,7 @@ const mutations = {
     },
 
     updateNotification(state, notification) {
-        state.notification = notification;
+        state.notification = notification
     },
 }
 

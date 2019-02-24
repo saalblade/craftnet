@@ -13,7 +13,7 @@ import pluginStore from './modules/plugin-store'
 import stripe from './modules/stripe'
 import users from './modules/users'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
     strict: true,

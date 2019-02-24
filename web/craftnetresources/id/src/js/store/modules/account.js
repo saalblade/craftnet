@@ -25,11 +25,11 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.deleteUserPhoto()
                 .then((response) => {
-                    commit('deleteUserPhoto', {response});
-                    resolve(response);
+                    commit('deleteUserPhoto', {response})
+                    resolve(response)
                 })
                 .catch((response) => {
-                    reject(response);
+                    reject(response)
                 })
         })
     },
@@ -87,8 +87,8 @@ const actions = {
  */
 const mutations = {
     deleteUserPhoto(rootState, {response}) {
-        rootState.users.currentUser.photoId = response.data.photoId;
-        rootState.users.currentUser.photoUrl = response.data.photoUrl;
+        rootState.users.currentUser.photoId = response.data.photoId
+        rootState.users.currentUser.photoUrl = response.data.photoUrl
     },
 
     updateBillingAddress(state, {billingAddress}) {
@@ -96,12 +96,12 @@ const mutations = {
     },
 
     updateHasApiToken(state, {hasApiToken}){
-        state.hasApiToken = hasApiToken;
+        state.hasApiToken = hasApiToken
     },
 
     uploadUserPhoto(rootState, {response}) {
-        rootState.users.currentUser.photoId = response.data.photoId;
-        rootState.users.currentUser.photoUrl = response.data.photoUrl;
+        rootState.users.currentUser.photoId = response.data.photoId
+        rootState.users.currentUser.photoUrl = response.data.photoUrl
     },
 }
 

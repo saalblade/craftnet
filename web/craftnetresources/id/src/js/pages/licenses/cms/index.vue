@@ -92,16 +92,16 @@
 <script>
     /* global Craft */
 
-    import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
-    import Empty from '../../../components/Empty';
-    import Spinner from '../../../components/Spinner';
+    import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable'
+    import Empty from '../../../components/Empty'
+    import Spinner from '../../../components/Spinner'
     import Badge from '../../../components/Badge'
     import FilterBar from '../../../components/FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
     import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
     import helpers from '../../../mixins/helpers'
 
-    window.axios = require('axios');
+    window.axios = require('axios')
 
     export default {
         mixins: [helpers],

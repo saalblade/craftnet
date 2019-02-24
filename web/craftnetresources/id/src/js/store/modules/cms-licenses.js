@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import cmsLicensesApi from '../../api/cms-licenses';
+import cmsLicensesApi from '../../api/cms-licenses'
 
 Vue.use(Vuex)
 
@@ -25,14 +25,14 @@ const actions = {
             cmsLicensesApi.getExpiringCmsLicensesTotal()
                 .then((response) => {
                     if (response.data && !response.data.error) {
-                        commit('updateExpiringCmsLicensesTotal', response.data);
-                        resolve(response);
+                        commit('updateExpiringCmsLicensesTotal', response.data)
+                        resolve(response)
                     } else {
-                        reject(response);
+                        reject(response)
                     }
                 })
                 .catch((response) => {
-                    reject(response);
+                    reject(response)
                 })
         })
     },

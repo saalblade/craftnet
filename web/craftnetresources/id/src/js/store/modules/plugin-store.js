@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
-import pluginStoreApi from '../../api/plugin-store';
+import pluginStoreApi from '../../api/plugin-store'
 
 Vue.use(Vuex)
 
@@ -43,7 +42,7 @@ const actions = {
                         reject(response)
                     })
             } else {
-                resolve();
+                resolve()
             }
         })
     },

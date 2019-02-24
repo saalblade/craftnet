@@ -90,10 +90,10 @@
             saveCard(card, source) {
                 this.$store.dispatch('account/saveCard', source)
                     .then(() => {
-                        card.clear();
-                        this.cardFormloading = false;
-                        this.editing = false;
-                        this.$store.dispatch('app/displayNotice', 'Card saved.');
+                        card.clear()
+                        this.cardFormloading = false
+                        this.editing = false
+                        this.$store.dispatch('app/displayNotice', 'Card saved.')
                     })
             },
 
@@ -101,10 +101,10 @@
              * Removes a credit card.
              */
             removeCard() {
-                this.removeCardLoading = true;
+                this.removeCardLoading = true
                 this.$store.dispatch('account/removeCard')
                     .then(() => {
-                        this.removeCardLoading = false;
+                        this.removeCardLoading = false
                         this.$store.dispatch('app/displayNotice', 'Card removed.')
                     })
             },
@@ -113,21 +113,21 @@
              * Before save.
              */
             beforeSave() {
-                this.cardFormloading = true;
+                this.cardFormloading = true
             },
 
             /**
              * Cancel changes.
              */
             cancel() {
-                this.editing = false;
+                this.editing = false
             },
 
             /**
              * Error.
              */
             error() {
-                this.cardFormloading = false;
+                this.cardFormloading = false
             },
 
         },

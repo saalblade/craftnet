@@ -17,7 +17,7 @@ const state = {
 */
 const getters = {
     showPartnerFeatures(state) {
-        return state.enablePartnerFeatures;
+        return state.enablePartnerFeatures
     }
 }
 

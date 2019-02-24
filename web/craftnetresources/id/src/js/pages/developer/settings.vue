@@ -63,7 +63,7 @@
                         const apiTokenInput = this.$refs.apiTokenField.$el.querySelector('input')
 
                         this.$nextTick(() => {
-                            apiTokenInput.select();
+                            apiTokenInput.select()
                         })
 
                         this.notice = true
@@ -74,7 +74,7 @@
                         this.loading = false
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t generate API token.'
                         this.$store.dispatch('app/displayError', errorMessage)
-                    });
+                    })
             },
         },
 

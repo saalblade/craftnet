@@ -281,48 +281,48 @@
             }),
 
             pluginId() {
-                return this.$route.params.id;
+                return this.$route.params.id
             },
 
             plugin() {
-                return this.plugins.find(p => p.id == this.pluginId);
+                return this.plugins.find(p => p.id == this.pluginId)
             },
 
             connectedAppsCount() {
-                return Object.keys(this.apps).length;
+                return Object.keys(this.apps).length
             },
 
             screenshots: {
                 get() {
-                    let screenshots = [];
+                    let screenshots = []
 
                     this.pluginDraft.screenshotIds.forEach((screenshotId, index) => {
                         let screenshot = {
                             id: screenshotId,
                             url: this.pluginDraft.screenshotUrls[index],
-                        };
-                        screenshots.push(screenshot);
-                    });
+                        }
+                        screenshots.push(screenshot)
+                    })
 
-                    return screenshots;
+                    return screenshots
                 },
 
                 set(screenshots) {
-                    let screenshotIds = [];
-                    let screenshotUrls = [];
+                    let screenshotIds = []
+                    let screenshotUrls = []
 
                     screenshots.forEach(screenshot => {
-                        screenshotIds.push(screenshot.id);
-                        screenshotUrls.push(screenshot.url);
-                    });
+                        screenshotIds.push(screenshot.id)
+                        screenshotUrls.push(screenshot.url)
+                    })
 
-                    this.pluginDraft.screenshotIds = screenshotIds;
-                    this.pluginDraft.screenshotUrls = screenshotUrls;
+                    this.pluginDraft.screenshotIds = screenshotIds
+                    this.pluginDraft.screenshotUrls = screenshotUrls
                 }
             },
 
             maxUploadSize() {
-                return this.humanFileSize(Craft.maxUploadSize);
+                return this.humanFileSize(Craft.maxUploadSize)
             }
         },
 
@@ -334,8 +334,8 @@
              */
             onInputName(name) {
                 if (!this.pluginId) {
-                    const handle = slug(name);
-                    this.pluginDraft.handle = handle;
+                    const handle = slug(name)
+                    this.pluginDraft.handle = handle
                 }
             },
 
@@ -345,7 +345,7 @@
              * @param repository
              */
             onSelectRepository(repository) {
-                this.loadDetails(repository.html_url);
+                this.loadDetails(repository.html_url)
             },
 
             /**
@@ -354,13 +354,13 @@
              * @param key
              */
             removeScreenshot(key) {
-                this.pluginDraft.screenshotUrls.splice(key, 1);
-                this.pluginDraft.screenshotIds.splice(key, 1);
+                this.pluginDraft.screenshotUrls.splice(key, 1)
+                this.pluginDraft.screenshotIds.splice(key, 1)
 
-                let removeBtns = this.$refs.screenshots.getElementsByClassName('btn');
+                let removeBtns = this.$refs.screenshots.getElementsByClassName('btn')
 
                 for (let i = 0; i < removeBtns.length; i++) {
-                    removeBtns[i].blur();
+                    removeBtns[i].blur()
                 }
             },
 
@@ -368,19 +368,19 @@
              * Change screenshots.
              */
             changeScreenshots() {
-                this.pluginDraft.screenshotUrls = [];
+                this.pluginDraft.screenshotUrls = []
 
-                let files = this.$refs.screenshotFiles.files;
+                let files = this.$refs.screenshotFiles.files
 
                 for (let i = 0; i < files.length; i++) {
-                    let reader = new FileReader();
+                    let reader = new FileReader()
 
                     reader.onload = function(e) {
-                        let screenshotUrl = e.target.result;
+                        let screenshotUrl = e.target.result
                         this.pluginDraft.screenshotUrls.push(screenshotUrl)
-                    }.bind(this);
+                    }.bind(this)
 
-                    reader.readAsDataURL(files[i]);
+                    reader.readAsDataURL(files[i])
                 }
             },
 
@@ -390,15 +390,15 @@
              * @param ev
              */
             changeIcon(ev) {
-                this.pluginDraft.icon = ev.target.value;
+                this.pluginDraft.icon = ev.target.value
 
-                let reader = new FileReader();
+                let reader = new FileReader()
 
                 reader.onload = function(e) {
                     this.pluginDraft.iconUrl = e.target.result
-                }.bind(this);
+                }.bind(this)
 
-                reader.readAsDataURL(this.$refs.iconFile.files[0]);
+                reader.readAsDataURL(this.$refs.iconFile.files[0])
             },
 
             /**
@@ -407,80 +407,81 @@
              * @param repositoryUrl
              */
             loadDetails(repositoryUrl) {
-                this.repositoryLoading = true;
-                this.loadingRepository = repositoryUrl;
+                this.repositoryLoading = true
+                this.loadingRepository = repositoryUrl
 
                 let body = {
                     repository: encodeURIComponent(url)
-                };
-                body['action'] = 'craftnet/plugins/load-details';
-                body[Craft.csrfTokenName] = Craft.csrfTokenValue;
+                }
 
-                let params = qs.stringify(body);
-                let url = repositoryUrl;
+                body['action'] = 'craftnet/plugins/load-details'
+                body[Craft.csrfTokenName] = Craft.csrfTokenValue
+
+                let params = qs.stringify(body)
+                let url = repositoryUrl
 
                 pluginsApi.loadDetails(url, params)
                     .then(response => {
-                        this.repositoryLoading = false;
-                        this.loadingRepository = null;
+                        this.repositoryLoading = false
+                        this.loadingRepository = null
 
                         if (response.data.error) {
-                            this.$store.dispatch('app/displayError', response.data.error);
+                            this.$store.dispatch('app/displayError', response.data.error)
                         } else {
-                            this.pluginDraft.repository = repositoryUrl;
+                            this.pluginDraft.repository = repositoryUrl
 
                             if (response.data.changelogPath) {
-                                this.pluginDraft.changelogPath = response.data.changelogPath;
+                                this.pluginDraft.changelogPath = response.data.changelogPath
                             }
 
                             if (response.data.documentationUrl) {
-                                this.pluginDraft.documentationUrl = response.data.documentationUrl;
+                                this.pluginDraft.documentationUrl = response.data.documentationUrl
                             }
 
                             if (response.data.name) {
-                                this.pluginDraft.name = response.data.name;
+                                this.pluginDraft.name = response.data.name
                             }
 
                             if (response.data.handle) {
-                                this.pluginDraft.handle = response.data.handle;
+                                this.pluginDraft.handle = response.data.handle
                             }
 
                             if (response.data.shortDescription) {
-                                this.pluginDraft.shortDescription = response.data.shortDescription;
+                                this.pluginDraft.shortDescription = response.data.shortDescription
                             }
 
                             if (response.data.packageName) {
-                                this.pluginDraft.packageName = response.data.packageName;
+                                this.pluginDraft.packageName = response.data.packageName
                             }
 
                             if (response.data.iconId) {
-                                this.pluginDraft.iconId = response.data.iconId;
+                                this.pluginDraft.iconId = response.data.iconId
                             }
 
                             if (response.data.iconUrl) {
-                                this.pluginDraft.iconUrl = response.data.iconUrl;
+                                this.pluginDraft.iconUrl = response.data.iconUrl
                             }
 
                             if (response.data.license) {
-                                this.pluginDraft.license = response.data.license;
+                                this.pluginDraft.license = response.data.license
                             }
 
                             if (response.data.keywords) {
-                                this.pluginDraft.keywords = response.data.keywords.join(', ');
+                                this.pluginDraft.keywords = response.data.keywords.join(', ')
                             }
                         }
                     })
                     .catch(() => {
-                        this.repositoryLoading = false;
-                        this.$store.dispatch('app/displayError', "Couldn’t load repository");
-                    });
+                        this.repositoryLoading = false
+                        this.$store.dispatch('app/displayError', "Couldn’t load repository")
+                    })
             },
 
             /**
              * Save the plugin.
              */
             save() {
-                this.loading = true;
+                this.loading = true
 
                 let plugin = {
                     icon: this.$refs.iconFile.files[0],
@@ -497,63 +498,63 @@
                     categoryIds: [],
                     screenshotIds: [],
                     editions: this.pluginDraft.editions,
-                };
+                }
 
                 if (this.pluginDraft.iconId) {
-                    plugin.iconId = [parseInt(this.pluginDraft.iconId)];
+                    plugin.iconId = [parseInt(this.pluginDraft.iconId)]
                 }
 
                 if (this.pluginDraft.id) {
-                    plugin.pluginId = this.pluginDraft.id;
+                    plugin.pluginId = this.pluginDraft.id
                 }
 
                 if (this.pluginDraft.categoryIds.length > 0) {
-                    plugin.categoryIds = this.pluginDraft.categoryIds;
+                    plugin.categoryIds = this.pluginDraft.categoryIds
                 }
 
                 if (this.$refs.screenshotFiles.files.length > 0) {
-                    plugin.screenshots = this.$refs.screenshotFiles.files;
+                    plugin.screenshots = this.$refs.screenshotFiles.files
                 }
 
                 if (this.pluginDraft.screenshotUrls.length > 0) {
-                    plugin.screenshotUrls = this.pluginDraft.screenshotUrls;
+                    plugin.screenshotUrls = this.pluginDraft.screenshotUrls
                 }
 
                 if (this.pluginDraft.screenshotIds.length > 0) {
-                    plugin.screenshotIds = this.pluginDraft.screenshotIds;
+                    plugin.screenshotIds = this.pluginDraft.screenshotIds
                 }
 
                 this.$store.dispatch('plugins/savePlugin', {plugin})
                     .then(() => {
-                        this.loading = false;
-                        this.$store.dispatch('app/displayNotice', 'Plugin saved.');
-                        this.$router.push({path: '/developer/plugins'});
+                        this.loading = false
+                        this.$store.dispatch('app/displayNotice', 'Plugin saved.')
+                        this.$router.push({path: '/developer/plugins'})
                     }).catch(response => {
-                    this.loading = false;
+                    this.loading = false
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save plugin.';
-                    this.$store.dispatch('app/displayError', errorMessage);
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save plugin.'
+                    this.$store.dispatch('app/displayError', errorMessage)
 
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                });
+                    this.errors = response.data && response.data.errors ? response.data.errors : {}
+                })
             },
 
             /**
              * Submit plugin for approval.
              */
             submit() {
-                this.pluginSubmitLoading = true;
+                this.pluginSubmitLoading = true
                 this.$store.dispatch('plugins/submitPlugin', this.plugin.id)
                     .then(() => {
-                        this.pluginSubmitLoading = false;
-                        this.$store.dispatch('app/displayNotice', 'Plugin submitted for approval.');
+                        this.pluginSubmitLoading = false
+                        this.$store.dispatch('app/displayNotice', 'Plugin submitted for approval.')
                     }).catch(response => {
-                    this.pluginSubmitLoading = false;
+                    this.pluginSubmitLoading = false
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t submit plugin for approval.';
-                    this.$store.dispatch('app/displayError', errorMessage);
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t submit plugin for approval.'
+                    this.$store.dispatch('app/displayError', errorMessage)
 
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
+                    this.errors = response.data && response.data.errors ? response.data.errors : {}
                 })
             },
 
@@ -564,23 +565,23 @@
              * @returns {string}
              */
             humanFileSize(bytes) {
-                const threshold = 1024;
+                const threshold = 1024
 
                 if (bytes < threshold) {
-                    return bytes + ' B';
+                    return bytes + ' B'
                 }
 
-                const units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+                const units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
 
-                let u = -1;
+                let u = -1
 
                 do {
-                    bytes = bytes / threshold;
-                    ++u;
+                    bytes = bytes / threshold
+                    ++u
                 }
-                while (bytes >= threshold);
+                while (bytes >= threshold)
 
-                return bytes.toFixed(1) + ' ' + units[u];
+                return bytes.toFixed(1) + ' ' + units[u]
             },
 
             addFeature(editionKey) {
@@ -596,18 +597,18 @@
             this.$store.dispatch('apps/getApps')
 
             if (this.plugin) {
-                this.pluginDraft = JSON.parse(JSON.stringify(this.plugin));
+                this.pluginDraft = JSON.parse(JSON.stringify(this.plugin))
 
                 if (!this.pluginDraft.price) {
-                    this.pluginDraft.price = 0;
+                    this.pluginDraft.price = 0
                 }
 
                 if (!this.pluginDraft.renewalPrice) {
-                    this.pluginDraft.renewalPrice = 0;
+                    this.pluginDraft.renewalPrice = 0
                 }
             } else {
                 if (this.pluginId) {
-                    this.$router.push({path: '/developer/plugins'});
+                    this.$router.push({path: '/developer/plugins'})
                 }
             }
         },

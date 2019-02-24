@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import craftIdApi from '../../api/craft-id';
+import craftIdApi from '../../api/craft-id'
 
 Vue.use(Vuex)
 
@@ -17,7 +17,7 @@ const state = {
  */
 const getters = {
     countryOptions(state) {
-        let options = [];
+        let options = []
 
         for (let iso in state.countries) {
             if (state.countries.hasOwnProperty(iso)) {
@@ -28,15 +28,15 @@ const getters = {
             }
         }
 
-        return options;
+        return options
     },
 
     stateOptions(state) {
         return iso => {
-            let options = [];
+            let options = []
 
             if (!state.countries[iso] || (state.countries[iso] && !state.countries[iso].states)) {
-                return [];
+                return []
             }
 
             const states = state.countries[iso].states
@@ -69,19 +69,19 @@ const actions = {
         return new Promise((resolve, reject) => {
             craftIdApi.getCraftIdData()
                 .then((response) => {
-                    commit('updateCategories', {categories: response.data.categories});
-                    commit('updateCountries', {countries: response.data.countries});
-                    commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true});
-                    commit('account/updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true});
-                    commit('stripe/updateCard', {card: response.data.card}, {root: true});
-                    commit('stripe/updateCardToken', {cardToken: response.data.cardToken}, {root: true});
-                    commit('users/updateCurrentUser', {currentUser: response.data.currentUser}, {root: true});
-                    commit('users/updateCurrentUserLoaded', true, {root: true});
-                    resolve(response);
+                    commit('updateCategories', {categories: response.data.categories})
+                    commit('updateCountries', {countries: response.data.countries})
+                    commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true})
+                    commit('account/updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true})
+                    commit('stripe/updateCard', {card: response.data.card}, {root: true})
+                    commit('stripe/updateCardToken', {cardToken: response.data.cardToken}, {root: true})
+                    commit('users/updateCurrentUser', {currentUser: response.data.currentUser}, {root: true})
+                    commit('users/updateCurrentUserLoaded', true, {root: true})
+                    resolve(response)
                 })
                 .catch((response) => {
-                    commit('users/updateCurrentUserLoaded', true, {root: true});
-                    reject(response);
+                    commit('users/updateCurrentUserLoaded', true, {root: true})
+                    reject(response)
                 })
         })
     },
@@ -92,11 +92,11 @@ const actions = {
  */
 const mutations = {
     updateCategories(state, {categories}) {
-        state.categories = categories;
+        state.categories = categories
     },
 
     updateCountries(state, {countries}) {
-        state.countries = countries;
+        state.countries = countries
     },
 }
 

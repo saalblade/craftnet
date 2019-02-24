@@ -23,7 +23,7 @@ const getters = {
 
     cartTotalItems(state) {
         if(state.cart && state.cart.lineItems) {
-            return state.cart.lineItems.length;
+            return state.cart.lineItems.length
         }
 
         return 0

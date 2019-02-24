@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import usersApi from '../../api/users';
+import usersApi from '../../api/users'
 
 Vue.use(Vuex)
 
@@ -32,14 +32,14 @@ const actions = {
             usersApi.saveUser(user)
                 .then((response) => {
                     if (!response.data.errors) {
-                        commit('saveUser', {user, response});
-                        resolve(response);
+                        commit('saveUser', {user, response})
+                        resolve(response)
                     } else {
-                        reject(response);
+                        reject(response)
                     }
                 })
                 .catch((response) => {
-                    reject(response);
+                    reject(response)
                 })
         })
     },
@@ -52,13 +52,13 @@ const mutations = {
     saveUser(state, {user}) {
         for (let attribute in user) {
             if (attribute === 'id' || attribute === 'email') {
-                continue;
+                continue
             }
 
-            state.currentUser[attribute] = user[attribute];
+            state.currentUser[attribute] = user[attribute]
 
             if (user.enablePluginDeveloperFeatures) {
-                let groupExists = state.currentUser.groups.find(g => g.handle === 'developers');
+                let groupExists = state.currentUser.groups.find(g => g.handle === 'developers')
 
                 if (!groupExists) {
                     state.currentUser.groups.push({

@@ -72,12 +72,12 @@
              * Save the settings.
              */
             save() {
-                this.loading = true;
+                this.loading = true
 
-                let newEmail = false;
+                let newEmail = false
 
                 if (this.currentUser.email !== this.userDraft.email) {
-                    newEmail = true;
+                    newEmail = true
                 }
 
                 this.$store.dispatch('users/saveUser', {
@@ -91,31 +91,32 @@
                         newPassword: this.newPassword,
                     })
                     .then(() => {
-                        this.loading = false;
+                        this.loading = false
 
                         if (newEmail) {
-                            this.userDraft.email = this.currentUser.email;
-                            this.$store.dispatch('app/displayNotice', 'You’ve been sent an email to verify your new email address.');
+                            this.userDraft.email = this.currentUser.email
+                            this.$store.dispatch('app/displayNotice', 'You’ve been sent an email to verify your new email address.')
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Settings saved.');
+                            this.$store.dispatch('app/displayNotice', 'Settings saved.')
                         }
 
-                        this.password = '';
-                        this.newPassword = '';
-                        this.errors = {};
-                    }).catch(response => {
-                    this.loading = false;
+                        this.password = ''
+                        this.newPassword = ''
+                        this.errors = {}
+                    })
+                    .catch(response => {
+                        this.loading = false
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.';
-                    this.$store.dispatch('app/displayError', errorMessage);
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.'
+                        this.$store.dispatch('app/displayError', errorMessage)
 
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                })
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
+                    })
             }
         },
 
         mounted() {
-            this.userDraft = JSON.parse(JSON.stringify(this.currentUser));
+            this.userDraft = JSON.parse(JSON.stringify(this.currentUser))
         }
     }
 </script>

@@ -26,14 +26,14 @@ import PartnerOverview from '../pages/partner/overview'
 import PartnerProfile from '../pages/partner/profile'
 import NotFound from '../pages/not-found'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
     canReuse: false,
     scrollBehavior (to, from, savedPosition) {
-        return savedPosition || { x: 0, y: 0 };
+        return savedPosition || { x: 0, y: 0 }
     },
     routes: [
         // Redirects
@@ -208,14 +208,14 @@ const router = new VueRouter({
             meta: { layout: "no-sidebar" }
         },
     ]
-});
+})
 
 import store from '../store'
 
 router.beforeEach((to, from, next) => {
     // Renew the auth manager’s session
     if (router.app.$refs.authManager) {
-        router.app.$refs.authManager.renewSession();
+        router.app.$refs.authManager.renewSession()
     }
 
     // Guest users are limited to login, registration and cart pages
@@ -239,6 +239,6 @@ router.beforeEach((to, from, next) => {
     } else {
         next()
     }
-});
+})
 
-export default router;
+export default router

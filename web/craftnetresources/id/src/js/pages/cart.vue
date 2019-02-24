@@ -214,10 +214,10 @@
                     let label = "Updates Until " + this.$options.filters.moment(date, 'L')
 
                     if (price !== 0) {
-                        let sign = '';
+                        let sign = ''
 
                         if (price > 0) {
-                            sign = '+';
+                            sign = '+'
                         }
 
                         label += " (" + sign + this.$options.filters.currency(price) + ")"
@@ -246,11 +246,11 @@
             },
 
             onQuantityKeyDown($event) {
-                let charCode = ($event.which) ? $event.which : $event.keyCode;
+                let charCode = ($event.which) ? $event.which : $event.keyCode
 
                 // prevent `e` and `-` to prevent exponent and negative notations
                 if (charCode === 69 || charCode === 189) {
-                    $event.preventDefault();
+                    $event.preventDefault()
 
                     return false
                 }

@@ -40,11 +40,11 @@
 </template>
 
 <script>
-    import cmsLicensesApi from '../../../api/cms-licenses';
+    import cmsLicensesApi from '../../../api/cms-licenses'
     import CmsLicenseDetails from '../../../components/licenses/CmsLicenseDetails'
-    import PluginLicensesTable from '../../../components/licenses/PluginLicensesTable';
-    import LicenseHistory from '../../../components/licenses/LicenseHistory';
-    import Spinner from '../../../components/Spinner';
+    import PluginLicensesTable from '../../../components/licenses/PluginLicensesTable'
+    import LicenseHistory from '../../../components/licenses/LicenseHistory'
+    import Spinner from '../../../components/Spinner'
 
     export default {
         components: {
@@ -64,22 +64,22 @@
         methods: {
             releaseCmsLicense() {
                 if (!window.confirm("Are you sure you want to release this license?")) {
-                    return false;
+                    return false
                 }
 
                 cmsLicensesApi.releaseCmsLicense(this.license.key)
                     .then((response) => {
                         if (response.data && !response.data.error) {
-                            this.$store.dispatch('app/displayNotice', 'CMS license released.');
-                            this.$router.push({path: '/licenses/cms'});
+                            this.$store.dispatch('app/displayNotice', 'CMS license released.')
+                            this.$router.push({path: '/licenses/cms'})
                         } else {
-                            this.$store.dispatch('app/displayError', response.data.error);
+                            this.$store.dispatch('app/displayError', response.data.error)
                         }
                     })
                     .catch((response) => {
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release CMS license.';
-                        this.$store.dispatch('app/displayError', errorMessage);
-                    });
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release CMS license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             }
         },
 

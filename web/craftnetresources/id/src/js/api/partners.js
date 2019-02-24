@@ -47,7 +47,7 @@ export default {
             }
         })
             .then(response => cb(response))
-            .catch(error => cbError(error.response));
+            .catch(error => cbError(error.response))
     },
 
     patchPartnerLocations(locations, partnerId, cb, cbError) {
@@ -72,7 +72,7 @@ export default {
             }
         })
             .then(response => cb(response))
-            .catch(error => cbError(error.response));
+            .catch(error => cbError(error.response))
     },
 
     patchPartnerProjects(projects, partnerId, cb, cbError) {
@@ -106,7 +106,7 @@ export default {
             }
         })
             .then(response => cb(response))
-            .catch(error => cbError(error.response));
+            .catch(error => cbError(error.response))
     },
 
     uploadScreenshots(formData, config) {

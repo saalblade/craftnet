@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import appsApi from '../../api/apps';
+import appsApi from '../../api/apps'
 
 Vue.use(Vuex)
 
@@ -54,11 +54,11 @@ const actions = {
         return new Promise((resolve, reject) => {
             appsApi.disconnect(appHandle)
                 .then((response) => {
-                    commit('disconnectApp', {appHandle});
-                    resolve(response);
+                    commit('disconnectApp', {appHandle})
+                    resolve(response)
                 })
                 .catch((response) => {
-                    reject(response);
+                    reject(response)
                 })
         })
     },
@@ -69,7 +69,7 @@ const actions = {
  */
 const mutations = {
     updateApps(state, {apps}) {
-        state.apps = apps;
+        state.apps = apps
     },
 
     updateAppsLoading(state, loading) {
@@ -77,7 +77,7 @@ const mutations = {
     },
 
     disconnectApp(state, {appHandle}) {
-        Vue.delete(state.apps, appHandle);
+        Vue.delete(state.apps, appHandle)
     },
 }
 

@@ -113,19 +113,19 @@
             }),
 
             computedPlugins() {
-                let plugins = JSON.parse(JSON.stringify(this.plugins));
+                let plugins = JSON.parse(JSON.stringify(this.plugins))
 
                 plugins.sort((a, b) => {
                     if (a['name'].toLowerCase() < b['name'].toLowerCase()) {
-                        return -1;
+                        return -1
                     }
                     if (a['name'].toLowerCase() > b['name'].toLowerCase()) {
-                        return 1;
+                        return 1
                     }
-                    return 0;
-                });
+                    return 0
+                })
 
-                return plugins;
+                return plugins
             },
 
             priceRanges() {
@@ -137,25 +137,25 @@
                     priceRanges.push(priceRange)
                 }
 
-                return priceRanges;
+                return priceRanges
             }
         },
 
         methods: {
             getPriceRange(editions) {
-                let min = null;
-                let max = null;
+                let min = null
+                let max = null
 
                 for (let i = 0; i < editions.length; i++) {
-                    const edition = editions[i];
+                    const edition = editions[i]
                     const price = parseInt(edition.price)
 
                     if (min === null) {
-                        min = price;
+                        min = price
                     }
 
                     if (max === null) {
-                        max = price;
+                        max = price
                     }
 
                     if (price < min) {

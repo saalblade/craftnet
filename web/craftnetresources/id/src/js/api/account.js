@@ -1,7 +1,7 @@
 /* global Craft */
 
-import axios from 'axios';
-import qs from 'qs';
+import axios from 'axios'
+import qs from 'qs'
 import FormDataHelper from '../helpers/form-data'
 
 export default {
@@ -14,10 +14,10 @@ export default {
     },
 
     uploadUserPhoto(data) {
-        let formData = new FormData();
+        let formData = new FormData()
 
         for (let attribute in data) {
-            FormDataHelper.append(formData, attribute, data[attribute]);
+            FormDataHelper.append(formData, attribute, data[attribute])
         }
 
         return axios.post(Craft.actionUrl + '/craftnet/id/account/upload-user-photo', formData, {

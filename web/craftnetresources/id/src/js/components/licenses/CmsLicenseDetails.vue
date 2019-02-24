@@ -148,24 +148,24 @@
         computed: {
             canSave() {
                 if (this.license.domain != this.licenseDraft.domain) {
-                    return true;
+                    return true
                 }
 
                 if (this.license.notes != this.licenseDraft.notes) {
-                    return true;
+                    return true
                 }
 
-                return false;
+                return false
             },
 
             formattedLicense() {
-                let value = this.license.key;
-                let formattedValue = this.$options.filters.formatCmsLicense(value);
-                return formattedValue;
+                let value = this.license.key
+                let formattedValue = this.$options.filters.formatCmsLicense(value)
+                return formattedValue
             },
 
             downloadLicenseUrl() {
-                return Craft.actionUrl + '/craftnet/id/cms-licenses/download&id=' + this.license.id;
+                return Craft.actionUrl + '/craftnet/id/cms-licenses/download&id=' + this.license.id
             },
         },
 
@@ -203,8 +203,8 @@
              * Save domain.
              */
             saveDomain() {
-                this.domainLoading = true;
-                const oldDomain = this.licenseDraft.domain;
+                this.domainLoading = true
+                const oldDomain = this.licenseDraft.domain
 
                 this.saveCmsLicense(response => {
                     const newDomain = response.data.license.domain
@@ -213,34 +213,34 @@
                         this.licenseDraft.domain = newDomain
 
                         if (!newDomain) {
-                            this.$store.dispatch('app/displayNotice', oldDomain + ' is not a public domain.');
+                            this.$store.dispatch('app/displayNotice', oldDomain + ' is not a public domain.')
                         } else {
                             this.$store.dispatch('app/displayNotice', 'Domain changed to ' + newDomain + '.')
                         }
                     } else {
-                        this.$store.dispatch('app/displayNotice', 'Domain saved.');
+                        this.$store.dispatch('app/displayNotice', 'Domain saved.')
                     }
 
-                    this.domainLoading = false;
-                    this.domainEditing = false;
+                    this.domainLoading = false
+                    this.domainEditing = false
                 }, () => {
-                    this.domainLoading = false;
-                });
+                    this.domainLoading = false
+                })
             },
 
             /**
              * Save notes.
              */
             saveNotes() {
-                this.notesLoading = true;
+                this.notesLoading = true
 
                 this.saveCmsLicense(() => {
-                    this.notesLoading = false;
-                    this.notesEditing = false;
-                    this.$store.dispatch('app/displayNotice', 'Notes saved.');
+                    this.notesLoading = false
+                    this.notesEditing = false
+                    this.$store.dispatch('app/displayNotice', 'Notes saved.')
                 }, () => {
-                    this.notesLoading = false;
-                });
+                    this.notesLoading = false
+                })
             },
 
             /**
@@ -275,27 +275,27 @@
              * Cancel edit domain.
              */
             cancelEditDomain() {
-                this.licenseDraft.domain = this.license.domain;
-                this.domainEditing = false;
-                this.domainValidates = false;
+                this.licenseDraft.domain = this.license.domain
+                this.domainEditing = false
+                this.domainValidates = false
             },
 
             /**
              * Cancel edit notes.
              */
             cancelEditNotes() {
-                this.licenseDraft.notes = this.license.notes;
-                this.notesEditing = false;
-                this.notesValidates = false;
+                this.licenseDraft.notes = this.license.notes
+                this.notesEditing = false
+                this.notesValidates = false
             },
 
             /**
              * Notes change.
              */
             notesChange() {
-                this.notesValidates = false;
+                this.notesValidates = false
                 if (this.licenseDraft.notes !== this.license.notes) {
-                    this.notesValidates = true;
+                    this.notesValidates = true
                 }
             },
 
@@ -303,9 +303,9 @@
              * Domain changes.
              */
             domainChange() {
-                this.domainValidates = false;
+                this.domainValidates = false
                 if (this.licenseDraft.domain !== this.license.domain) {
-                    this.domainValidates = true;
+                    this.domainValidates = true
                 }
             },
 
@@ -313,14 +313,14 @@
              * Copy license
              */
             copyLicense() {
-                let $temp = document.createElement('input');
-                document.body.appendChild($temp);
-                $temp.value = this.license.key;
-                $temp.select();
-                document.execCommand("copy");
-                $temp.remove();
+                let $temp = document.createElement('input')
+                document.body.appendChild($temp)
+                $temp.value = this.license.key
+                $temp.select()
+                document.execCommand("copy")
+                $temp.remove()
 
-                this.$store.dispatch('app/displayNotice', 'License key copied.');
+                this.$store.dispatch('app/displayNotice', 'License key copied.')
             },
         },
 
@@ -329,7 +329,7 @@
                 autoRenew: (this.license.autoRenew == 1 ? true : false),
                 domain: this.license.domain,
                 notes: this.license.notes,
-            };
+            }
         }
     }
 </script>

@@ -42,7 +42,7 @@
         methods: {
             onCountryChange() {
                 this.billingInfo.state = null
-                const stateOptions = this.stateOptions(this.billingInfo.country);
+                const stateOptions = this.stateOptions(this.billingInfo.country)
 
                 if (stateOptions.length) {
                     this.billingInfo.state = stateOptions[0].value
@@ -50,10 +50,10 @@
             },
 
             onStateChange(value) {
-                const billingInfo = JSON.parse(JSON.stringify(this.billingInfo));
+                const billingInfo = JSON.parse(JSON.stringify(this.billingInfo))
                 billingInfo.state = value
 
-                this.$emit('update:billingInfo', billingInfo);
+                this.$emit('update:billingInfo', billingInfo)
             }
         }
     }

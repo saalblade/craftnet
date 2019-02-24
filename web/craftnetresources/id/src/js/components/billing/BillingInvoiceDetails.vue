@@ -56,10 +56,10 @@
 
         methods: {
             editInvoiceDetails() {
-                this.showForm = true;
+                this.showForm = true
 
                 if (this.billingAddress) {
-                    this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress));
+                    this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress))
                 }
             },
 
@@ -80,7 +80,7 @@
                         state: this.billingAddress.state,
                         zipCode: this.billingAddress.zipCode,
                         country: this.billingAddress.country,
-                    });
+                    })
                 }
 
                 this.$store.dispatch('account/saveBillingInfo', data)
@@ -89,20 +89,20 @@
                             const errorMessage = response.data.error
                             this.$store.dispatch('app/displayError', errorMessage)
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Invoice details saved.');
-                            this.showForm = false;
-                            this.errors = {};
+                            this.$store.dispatch('app/displayNotice', 'Invoice details saved.')
+                            this.showForm = false
+                            this.errors = {}
                         }
                     }).catch(response => {
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.';
-                    this.$store.dispatch('app/displayError', errorMessage);
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                });
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.'
+                    this.$store.dispatch('app/displayError', errorMessage)
+                    this.errors = response.data && response.data.errors ? response.data.errors : {}
+                })
             },
 
             cancel() {
-                this.showForm = false;
-                this.errors = {};
+                this.showForm = false
+                this.errors = {}
             }
         }
     }

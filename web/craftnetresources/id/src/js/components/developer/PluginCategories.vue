@@ -54,38 +54,38 @@
             }),
 
             selectedCategories() {
-                let categories = [];
+                let categories = []
 
                 this.pluginDraft.categoryIds.forEach(categoryId => {
-                    const category = this.categories.find(c => c.id == categoryId);
-                    categories.push(category);
-                });
+                    const category = this.categories.find(c => c.id == categoryId)
+                    categories.push(category)
+                })
 
-                return categories;
+                return categories
             },
 
             availableCategories() {
                 return this.categories.filter(category => {
-                    return !this.pluginDraft.categoryIds.find(categoryId => categoryId == category.id);
+                    return !this.pluginDraft.categoryIds.find(categoryId => categoryId == category.id)
                 })
             },
 
             categoryOptions() {
-                let options = [];
+                let options = []
 
                 this.categories.forEach(category => {
-                    let checked = this.pluginDraft.categoryIds.find(categoryId => categoryId == category.id);
+                    let checked = this.pluginDraft.categoryIds.find(categoryId => categoryId == category.id)
 
                     let option = {
                         label: category.title,
                         value: category.id,
                         checked: checked,
-                    };
+                    }
 
-                    options.push(option);
-                });
+                    options.push(option)
+                })
 
-                return options;
+                return options
             }
         },
 
@@ -97,10 +97,10 @@
              */
             selectCategory(categoryId) {
                 if (this.pluginDraft.categoryIds.length < this.maxCategories) {
-                    const exists = this.pluginDraft.categoryIds.find(catId => catId == categoryId);
+                    const exists = this.pluginDraft.categoryIds.find(catId => catId == categoryId)
 
                     if (!exists) {
-                        this.pluginDraft.categoryIds.push(categoryId);
+                        this.pluginDraft.categoryIds.push(categoryId)
                     }
                 }
             },
@@ -111,10 +111,10 @@
              * @param categoryId
              */
             unselectCategory(categoryId) {
-                const i = this.pluginDraft.categoryIds.indexOf(categoryId);
+                const i = this.pluginDraft.categoryIds.indexOf(categoryId)
 
                 if (i !== -1) {
-                    this.pluginDraft.categoryIds.splice(i, 1);
+                    this.pluginDraft.categoryIds.splice(i, 1)
                 }
             },
         }
