@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import accountApi from '../../api/account'
-import appsApi from '../../api/apps'
 import usersApi from '../../api/users'
 import stripeApi from '../../api/stripe'
 
