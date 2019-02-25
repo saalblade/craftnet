@@ -15,6 +15,7 @@ return [
     'cloudwaysapps.com',
     'clover.show',
     'cogclient.com',
+    'craft.dev',
     'craftcms.com',
     'crudecode.com',
     'designandbuildsandbox.com',

@@ -18,7 +18,6 @@ return [
                     'cmsLicenseManager' => [
                         'class' => craftnet\cms\CmsLicenseManager::class,
                         'devDomains' => require __DIR__.'/dev-domains.php',
-                        'devTlds' => ['dev'],
                         'devSubdomainWords' => [
                             'acc',
                             'acceptance',
