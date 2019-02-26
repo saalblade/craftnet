@@ -40,6 +40,8 @@ return [
     'hyperlane.co',
     'infomedia-dev.com',
     'madebymasuga.com',
+    'madebyshape-dev.co.uk',
+    'madebyshape.dev',
     'mandarindev.no',
     'manual.casa',
     'mcipreview.com',
