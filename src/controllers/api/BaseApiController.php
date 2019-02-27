@@ -245,7 +245,6 @@ abstract class BaseApiController extends Controller
                         if (($domain = $cmsLicenseManager->normalizeDomain($host)) !== null) {
                             if ($cmsLicenseDomain !== null) {
                                 if ($domain !== $cmsLicenseDomain) {
-                                    Craft::error('domain = '.$domain.' and cmsLicenseDomain = '.$cmsLicenseDomain);
                                     $cmsLicenseStatus = self::LICENSE_STATUS_MISMATCHED;
                                 }
                             } else {
