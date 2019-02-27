@@ -76,6 +76,10 @@ return [
             'errorHandler' => [
                 'memoryReserveSize' => 1024000
             ],
+            'schedule' => [
+                'class' => omnilight\scheduling\Schedule::class,
+                'cliScriptName' => 'craft',
+            ],
         ],
     ],
     'prod' => [

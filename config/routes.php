@@ -49,7 +49,6 @@ return [
         'POST    v1/updates' => 'craftnet/api/v1/updates/old',
         'POST    v1/utils/releases-2-changelog' => 'craftnet/api/v1/utils/releases-2-changelog',
         'POST    webhook/github' => 'craftnet/api/webhook/github',
-        'update-deps' => 'craftnet/jobs/update-deps',
     ],
     'craftId' => [
         'POST    queue/handle-message' => 'queue/handle-message',
@@ -71,8 +70,6 @@ return [
         'oauth/authorize' => 'oauth-server/oauth/authorize',
         'oauth/access-token' => 'oauth-server/oauth/access-token',
         'oauth/revoke' => 'oauth-server/oauth/revoke',
-
-        'sync-staging' => 'craftnet/jobs/sync-staging',
 
         // Catch-all route for Vue when people reload the page.
         'login'=> ['template' => 'login'],

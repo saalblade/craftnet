@@ -24,7 +24,8 @@
     "spacedealer/yii2-loggly": "^0.2.0",
     "nystudio107/craft-twigpack": "^1.1",
     "aws/aws-sdk-php": "^3.71",
-    "craftcms/webhooks": "^1.1"
+    "craftcms/webhooks": "^1.1",
+    "omnilight/yii2-scheduling": "^1.1"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^2.4.0"
