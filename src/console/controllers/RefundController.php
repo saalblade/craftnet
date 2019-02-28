@@ -19,6 +19,7 @@ use craftnet\Module;
 use craftnet\plugins\PluginEdition;
 use craftnet\plugins\PluginLicense;
 use yii\console\Controller;
+use yii\console\ExitCode;
 use yii\helpers\Console;
 
 /**
@@ -178,17 +179,33 @@ class RefundController extends Controller
         }
 
         // Delete the licenses
-        foreach ($returnKeys as $key) {
-            $license = $lineItemLicenses[$key];
-            $this->stdout("Deleting license {$license->getShortKey()} ... ", Console::FG_YELLOW);
-            if ($license instanceof CmsLicense) {
-                $cmsLicenseManager->deleteLicenseByKey($license->key);
-            } else {
-                $pluginLicenseManager->deleteLicenseByKey($license->key);
+        if ($this->confirm('Delete the licenses?', true)) {
+            foreach ($returnKeys as $key) {
+                $license = $lineItemLicenses[$key];
+                $this->stdout("Deleting license {$license->getShortKey()} ... ", Console::FG_YELLOW);
+                if ($license instanceof CmsLicense) {
+                    $cmsLicenseManager->deleteLicenseByKey($license->key);
+                } else {
+                    $pluginLicenseManager->deleteLicenseByKey($license->key);
+                }
+                $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
             }
-            $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
+        } else {
+            foreach ($returnKeys as $key) {
+                $license = $lineItemLicenses[$key];
+                $note = $this->prompt('Note: ', [
+                    'required' => true,
+                    'default' => 'Refunded',
+                ]);
+                if ($license instanceof CmsLicense) {
+                    $cmsLicenseManager->addHistory($license->id, $note);
+                } else {
+                    $pluginLicenseManager->addHistory($license->id, $note);
+                }
+            }
         }
 
-        return 0;
+        $this->stdout('All done.' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
+        return ExitCode::OK;
     }
 }
