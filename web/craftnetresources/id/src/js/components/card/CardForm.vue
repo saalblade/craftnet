@@ -14,14 +14,8 @@
 <script>
     /* global Stripe */
 
-    import Spinner from '../Spinner'
-
     export default {
         props: ['loading'],
-
-        components: {
-            Spinner,
-        },
 
         methods: {
             /**

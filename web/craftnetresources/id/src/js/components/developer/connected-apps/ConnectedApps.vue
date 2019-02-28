@@ -32,7 +32,6 @@
     import StripeApp from './StripeApp'
     import ConnectedApp from './ConnectedApp'
     import ListGroup from '../../ListGroup'
-    import Spinner from '../../Spinner'
 
     export default {
         mixins: [helpers],
@@ -62,7 +61,6 @@
             StripeApp,
             ConnectedApp,
             ListGroup,
-            Spinner,
         },
 
         computed: {

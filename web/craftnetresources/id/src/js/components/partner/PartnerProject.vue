@@ -86,7 +86,6 @@
     import partnerApi from '../../api/partners'
     import draggable from 'vuedraggable'
     import Modal from '../Modal'
-    import Spinner from '../Spinner'
 
 
     export default {
@@ -95,7 +94,6 @@
         components: {
             draggable,
             Modal,
-            Spinner,
         },
 
         data() {

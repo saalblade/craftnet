@@ -40,17 +40,12 @@
 </template>
 
 <script>
-    import Spinner from '../../../Spinner'
     import helpers from '../../../../mixins/helpers'
 
     export default {
         mixins: [helpers],
 
         props: ['license', 'renew', 'checkedLicenses'],
-
-        components: {
-            Spinner,
-        },
 
         data() {
             return {

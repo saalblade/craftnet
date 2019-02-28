@@ -35,7 +35,6 @@
     import BillingInvoiceDetails from '../../../components/billing/BillingInvoiceDetails'
     import BillingAddressForm from '../../../components/billing/BillingAddressForm'
     import InvoicesTable from '../../../components/billing/InvoicesTable'
-    import Spinner from '../../../components/Spinner'
 
     export default {
         components: {
@@ -43,7 +42,6 @@
             BillingInvoiceDetails,
             BillingAddressForm,
             InvoicesTable,
-            Spinner,
         },
     }
 </script>

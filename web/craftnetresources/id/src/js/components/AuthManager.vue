@@ -34,7 +34,7 @@
                                    id="password" class="form-control mr-2"
                                    :class="{'is-invalid': loginErrorPara }"/>
                             <btn class="primary mr-2" type="submit" :disabled="!passwordValidates">Login</btn>
-                            <spinner :cssClass="{'invisible': !passwordSpinner}"></spinner>
+                            <spinner :class="{'invisible': !passwordSpinner}"></spinner>
                         </div>
                     </div>
 
@@ -56,12 +56,10 @@
     import Modal from './Modal';
     import IsMobileBrowser from './IsMobileBrowser';
     import humanizeDuration from 'humanize-duration';
-    import Spinner from './Spinner';
 
     export default {
         components: {
             Modal,
-            Spinner,
         },
 
         mixins: [IsMobileBrowser],

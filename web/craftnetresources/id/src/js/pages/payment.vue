@@ -48,7 +48,6 @@
     import PaymentMethod from '../components/payment/PaymentMethod'
     import CouponCode from '../components/payment/CouponCode'
     import BillingInfos from '../components/payment/BillingInfos'
-    import Spinner from '../components/Spinner'
 
     export default {
         data() {
@@ -80,7 +79,6 @@
             PaymentMethod,
             CouponCode,
             BillingInfos,
-            Spinner,
         },
 
         computed: {

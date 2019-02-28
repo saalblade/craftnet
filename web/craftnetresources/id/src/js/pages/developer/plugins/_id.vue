@@ -213,7 +213,6 @@
     import ConnectedApps from '../../../components/developer/connected-apps/ConnectedApps'
     import Repositories from '../../../components/developer/Repositories'
     import PluginCategories from '../../../components/developer/PluginCategories'
-    import Spinner from '../../../components/Spinner'
     import slug from 'limax'
     import draggable from 'vuedraggable'
     import qs from 'qs'
@@ -223,7 +222,6 @@
             ConnectedApps,
             Repositories,
             PluginCategories,
-            Spinner,
             draggable,
         },
 

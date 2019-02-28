@@ -90,12 +90,10 @@
 <script>
     import {mapState} from 'vuex'
     import Empty from '../../../components/Empty'
-    import Spinner from '../../../components/Spinner'
 
     export default {
         components: {
             Empty,
-            Spinner,
         },
 
         data() {

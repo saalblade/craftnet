@@ -8,7 +8,7 @@
             </div>
 
             <div class="mx-2 flex items-center">
-                <spinner :cssClass="{invisible: !loading}"></spinner>
+                <spinner :class="{invisible: !loading}"></spinner>
             </div>
 
             <div class="text-right">
@@ -94,7 +94,6 @@
 
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable'
     import Empty from '../../../components/Empty'
-    import Spinner from '../../../components/Spinner'
     import Badge from '../../../components/Badge'
     import FilterBar from '../../../components/FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
@@ -109,7 +108,6 @@
         components: {
             CmsLicensesTable,
             Empty,
-            Spinner,
             Badge,
             Vuetable,
             VuetablePagination,

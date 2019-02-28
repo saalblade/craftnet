@@ -30,14 +30,9 @@
     import usersApi from '../../api/users'
     import helpers from '../../mixins/helpers'
     import FormDataHelper from '../../helpers/form-data'
-    import Spinner from '../../components/Spinner'
 
     export default {
         mixins: [helpers],
-
-        components: {
-            Spinner
-        },
 
         data() {
             return {

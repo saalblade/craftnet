@@ -57,13 +57,8 @@
     import pluginLicensesApi from '../../api/plugin-licenses'
     import claimLicensesApi from '../../api/claim-licenses'
     import {required, email} from 'vuelidate/lib/validators'
-    import Spinner from '../../components/Spinner'
 
     export default {
-        components: {
-            Spinner,
-        },
-
         data() {
             return {
                 cmsLicenseKey: '',

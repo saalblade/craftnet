@@ -7,13 +7,8 @@
 
 <script>
     import {mapState} from 'vuex'
-    import Spinner from '../Spinner'
 
     export default {
-        components: {
-            Spinner,
-        },
-
         data() {
             return {
                 couponCode: null,

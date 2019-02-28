@@ -114,13 +114,11 @@
     import {mapActions} from 'vuex'
     import cmsLicensesApi from '../../api/cms-licenses'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
-    import Spinner from '../Spinner'
 
     export default {
         props: ['license'],
 
         components: {
-            Spinner,
             LicenseUpdateMessage,
         },
 

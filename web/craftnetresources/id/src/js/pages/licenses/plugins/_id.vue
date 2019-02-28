@@ -37,14 +37,12 @@
     import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable'
     import PluginLicenseDetails from '../../../components/licenses/PluginLicenseDetails'
     import LicenseHistory from '../../../components/licenses/LicenseHistory'
-    import Spinner from '../../../components/Spinner'
 
     export default {
         components: {
             CmsLicensesTable,
             PluginLicenseDetails,
             LicenseHistory,
-            Spinner,
         },
 
         data() {

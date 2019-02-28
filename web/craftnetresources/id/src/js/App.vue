@@ -16,7 +16,7 @@
 
         <template v-if="loading">
             <div class="text-center">
-                <spinner big cssClass="mt-8"></spinner>
+                <spinner class="lg mt-8"></spinner>
             </div>
         </template>
 
@@ -33,7 +33,6 @@
     import AuthManager from './components/AuthManager'
     import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal'
     import Layout from './components/Layout'
-    import Spinner from './components/Spinner'
 
     export default {
         router,
@@ -44,7 +43,6 @@
             AuthManager,
             RenewLicensesModal,
             Layout,
-            Spinner,
         },
 
         computed: {

@@ -139,7 +139,6 @@
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
     import Empty from '../components/Empty'
-    import Spinner from '../components/Spinner'
     import EditionBadge from '../components/EditionBadge'
     import helpers from '../mixins/helpers'
 
@@ -148,7 +147,6 @@
 
         components: {
             Empty,
-            Spinner,
             EditionBadge,
         },
 

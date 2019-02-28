@@ -8,7 +8,7 @@
             </div>
 
             <div class="mx-2 flex items-center">
-                <spinner :cssClass="{invisible: !loading}"></spinner>
+                <spinner :class="{invisible: !loading}"></spinner>
             </div>
 
             <div class="text-right">
@@ -65,7 +65,6 @@
 
 <script>
     import Empty from '../../../components/Empty'
-    import Spinner from '../../../components/Spinner'
     import FilterBar from '../../../components/FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
     import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
@@ -73,7 +72,6 @@
     export default {
         components: {
             Empty,
-            Spinner,
             FilterBar,
             Vuetable,
             VuetablePagination,

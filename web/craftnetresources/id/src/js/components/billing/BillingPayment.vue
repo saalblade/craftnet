@@ -43,7 +43,6 @@
     import {mapState} from 'vuex'
     import CardForm from '../card/CardForm'
     import CardIcon from '../card/CardIcon'
-    import Spinner from '../Spinner'
     import helpers from '../../mixins/helpers'
 
     export default {
@@ -53,7 +52,6 @@
         components: {
             CardForm,
             CardIcon,
-            Spinner,
         },
 
         data() {

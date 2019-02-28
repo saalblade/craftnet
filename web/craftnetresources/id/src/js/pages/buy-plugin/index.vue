@@ -17,13 +17,8 @@
 
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
-    import Spinner from '../../components/Spinner'
 
     export default {
-        components: {
-            Spinner,
-        },
-
         data() {
             return {
                 loading: false,

@@ -106,7 +106,6 @@
     import CardIcon from '../../../../components/card/CardIcon'
     import CmsLicensesTable from '../../../../components/licenses/CmsLicensesTable'
     import PluginLicensesTable from '../../../../components/licenses/PluginLicensesTable'
-    import Spinner from '../../../../components/Spinner'
 
     export default {
         components: {
@@ -114,7 +113,6 @@
             CardIcon,
             CmsLicensesTable,
             PluginLicensesTable,
-            Spinner,
         },
 
         data() {

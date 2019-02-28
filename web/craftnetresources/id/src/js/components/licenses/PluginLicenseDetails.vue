@@ -102,7 +102,6 @@
     import {mapActions} from 'vuex'
     import pluginLicensesApi from '../../api/plugin-licenses'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
-    import Spinner from '../Spinner'
 
     export default {
         props: ['license', 'type'],
@@ -123,7 +122,6 @@
 
         components: {
             LicenseUpdateMessage,
-            Spinner,
         },
 
         methods: {

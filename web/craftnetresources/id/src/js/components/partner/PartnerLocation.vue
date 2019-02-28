@@ -57,14 +57,12 @@
 
 <script>
     import Modal from '../Modal'
-    import Spinner from '../Spinner'
 
     export default {
         props: ['index', 'location', 'editIndex', 'requestPending', 'errors'],
 
         components: {
             Modal,
-            Spinner,
         },
 
         data() {

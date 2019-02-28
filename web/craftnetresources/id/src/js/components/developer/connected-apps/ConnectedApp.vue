@@ -37,7 +37,6 @@
 
 <script>
     import ListGroupItem from '../../ListGroupItem'
-    import Spinner from '../../Spinner'
 
     export default {
         props: ['name', 'description', 'icon', 'accountName', 'connected', 'buttonLoading', 'loading'],
@@ -56,7 +55,6 @@
 
         components: {
             ListGroupItem,
-            Spinner,
         }
     }
 </script>

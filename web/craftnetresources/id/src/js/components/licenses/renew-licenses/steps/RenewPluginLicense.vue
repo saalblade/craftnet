@@ -32,14 +32,9 @@
 
 <script>
     import {mapActions} from 'vuex'
-    import Spinner from '../../../Spinner'
 
     export default {
         props: ['license'],
-
-        components: {
-            Spinner,
-        },
 
         data() {
             return {

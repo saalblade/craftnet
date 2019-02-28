@@ -32,7 +32,6 @@
     import {mapState, mapGetters} from 'vuex';
     import ListGroup from '../ListGroup'
     import ListGroupItem from '../ListGroupItem'
-    import Spinner from '../Spinner'
 
     export default {
         props: ['appHandle', 'loadingRepository'],
@@ -46,7 +45,6 @@
         components: {
             ListGroup,
             ListGroupItem,
-            Spinner,
         },
 
         computed: {

@@ -118,7 +118,7 @@
                             :disabled="requestPending"
                             @click="onSubmit">Save</btn>
 
-                        <spinner :cssClass="{'invisible': !requestPending}"></spinner>
+                        <spinner :class="{'invisible': !requestPending}"></spinner>
                     </div>
                 </div>
             </div>
@@ -147,14 +147,9 @@
 
 <script>
     import helpers from '../../mixins/helpers'
-    import Spinner from '../Spinner'
 
     export default {
         props: ['partner'],
-
-        components: {
-            Spinner,
-        },
 
         mixins: [helpers],
 
