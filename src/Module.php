@@ -58,6 +58,7 @@ class Module extends \yii\base\Module
     const MESSAGE_KEY_RECEIPT = 'craftnet_receipt';
     const MESSAGE_KEY_VERIFY = 'verify_email';
     const MESSAGE_KEY_DEVELOPER_SALE = 'developer_sale';
+    const MESSAGE_KEY_LICENSE_REMINDER = 'license_reminder';
 
     /**
      * @inheritdoc
@@ -113,6 +114,12 @@ class Module extends \yii\base\Module
                 'heading' => 'When a plugin developer makes a sale:',
                 'subject' => 'Craft Plugin Store Sale',
                 'body' => file_get_contents(__DIR__ . '/emails/developer_sale.md'),
+            ]);
+            $e->messages[] = new SystemMessage([
+                'key' => self::MESSAGE_KEY_LICENSE_REMINDER,
+                'heading' => 'When licenses will be expiring/auto-renewing soon:',
+                'subject' => 'Important license info',
+                'body' => file_get_contents(__DIR__ . '/emails/license_reminder.md'),
             ]);
         });
 
