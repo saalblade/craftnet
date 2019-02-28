@@ -255,6 +255,33 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns any licenses that are due to expire in the next 14-30 days and haven't been reminded about that yet.
+     *
+     * @return PluginLicense[]
+     */
+    public function getRemindableLicenses(): array
+    {
+        $rangeStart = (new \DateTime('midnight', new \DateTimeZone('UTC')))->modify('+14 days');
+        $rangeEnd = (new \DateTime('midnight', new \DateTimeZone('UTC')))->modify('+30 days');
+
+        $results = $this->_createLicenseQuery()
+            ->where([
+                'expirable' => true,
+                'reminded' => false,
+            ])
+            ->andWhere(['between', 'expiresOn', Db::prepareDateForDb($rangeStart), Db::prepareDateForDb($rangeEnd)])
+            ->all();
+
+        $licenses = [];
+
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
      * Saves a license.
      *
      * @param PluginLicense $license
@@ -294,6 +321,14 @@ class PluginLicenseManager extends Component
             }
         }
 
+        if ($license->expirable) {
+            if (!$license->renewalPrice) {
+                $license->renewalPrice = $license->getEdition()->getRenewal()->getPrice();
+            }
+        } else {
+            $license->renewalPrice = null;
+        }
+
         $data = [
             'pluginId' => $license->pluginId,
             'editionId' => $license->editionId,
@@ -304,6 +339,8 @@ class PluginLicenseManager extends Component
             'expirable' => $license->expirable,
             'expired' => $license->expired,
             'autoRenew' => $license->autoRenew,
+            'reminded' => $license->reminded,
+            'renewalPrice' => $license->renewalPrice,
             'email' => $license->email,
             'key' => $license->key,
             'notes' => $license->notes,
@@ -584,6 +621,8 @@ class PluginLicenseManager extends Component
                 'l.expirable',
                 'l.expired',
                 'l.autoRenew',
+                'l.reminded',
+                'l.renewalPrice',
                 'l.email',
                 'l.key',
                 'l.notes',
