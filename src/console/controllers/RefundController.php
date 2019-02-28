@@ -5,9 +5,11 @@ namespace craftnet\console\controllers;
 use Craft;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
+use craft\commerce\models\Transaction;
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\records\Transaction as TransactionRecord;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use craftnet\cms\CmsEdition;
 use craftnet\cms\CmsLicense;
 use craftnet\developers\UserBehavior;
@@ -47,9 +49,14 @@ class RefundController extends Controller
         $order = Order::find()->number($orderNumber)->one();
 
         // Get the transaction
-        $transaction = $order->getTransactions()[0];
+        $transaction = ArrayHelper::firstWhere($order->getTransactions(), function(Transaction $transaction) {
+            return (
+                $transaction->type === TransactionRecord::TYPE_PURCHASE &&
+                $transaction->status === TransactionRecord::STATUS_SUCCESS
+            );
+        });
 
-        if (!$transaction->canRefund()) {
+        if ($transaction === null || !$transaction->canRefund()) {
             $this->stderr('This order can\'t be refunded.', Console::FG_RED);
             return 1;
         }
