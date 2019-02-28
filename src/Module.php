@@ -100,19 +100,19 @@ class Module extends \yii\base\Module
                 'key' => self::MESSAGE_KEY_RECEIPT,
                 'heading' => 'When someone places an order:',
                 'subject' => 'Your receipt from {{ fromName }}',
-                'body' => file_get_contents(__DIR__ . '/emails/receipt.txt'),
+                'body' => file_get_contents(__DIR__ . '/emails/receipt.md'),
             ]);
             $e->messages[] = new SystemMessage([
                 'key' => self::MESSAGE_KEY_VERIFY,
                 'heading' => 'When someone wants to claim licenses by an email address:',
                 'subject' => 'Verify your email',
-                'body' => file_get_contents(__DIR__ . '/emails/verify.txt'),
+                'body' => file_get_contents(__DIR__ . '/emails/verify.md'),
             ]);
             $e->messages[] = new SystemMessage([
                 'key' => self::MESSAGE_KEY_DEVELOPER_SALE,
                 'heading' => 'When a plugin developer makes a sale:',
                 'subject' => 'Craft Plugin Store Sale',
-                'body' => file_get_contents(__DIR__ . '/emails/developer_sale.txt'),
+                'body' => file_get_contents(__DIR__ . '/emails/developer_sale.md'),
             ]);
         });
 
