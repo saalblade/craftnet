@@ -193,7 +193,7 @@ class RefundController extends Controller
         } else {
             foreach ($returnKeys as $key) {
                 $license = $lineItemLicenses[$key];
-                $note = $this->prompt('Note: ', [
+                $note = $this->prompt("Note for {$license->getShortKey()}: ", [
                     'required' => true,
                     'default' => 'Refunded',
                 ]);
