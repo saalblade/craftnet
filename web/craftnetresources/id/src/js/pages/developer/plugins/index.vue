@@ -4,10 +4,7 @@
             <h1>Plugins</h1>
 
             <div>
-                <router-link to="/developer/add-plugin" class="btn btn-primary">
-                    <icon icon="plus" />
-                    Add a plugin
-                </router-link>
+                <btn class="primary" icon="plus" to="/developer/add-plugin">Add a plugin</btn>
             </div>
         </div>
 

@@ -9,7 +9,7 @@
 
                 <form class="mb-6" @submit.prevent="claimCmsLicense()">
                     <textarea-field id="cmsLicenseKey" class="mono" spellcheck="false" v-model="cmsLicenseKey" @input="cmsLicenseKeyChange" label="Craft CMS License Key" rows="5" />
-                    <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !cmsLicenseValidates }" :disabled="!cmsLicenseValidates" />
+                    <btn class="primary" type="submit" :disabled="!cmsLicenseValidates">Claim License</btn>
                     <spinner v-if="cmsLicenseLoading"></spinner>
                 </form>
 
@@ -18,8 +18,7 @@
                         <label for="licenseFile" class="block">Or upload your license.key file</label>
                         <input class="form-control" type="file" id="licenseFile" name="licenseFile" ref="licenseFile" @change="cmsLicenseFileChange" />
                     </div>
-
-                    <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !cmsLicenseFileValidates }" :disabled="!cmsLicenseFileValidates" />
+                    <btn class="primary" type="submit" :disabled="!cmsLicenseFileValidates">Claim License</btn>
                     <spinner v-if="cmsLicenseFileLoading"></spinner>
                 </form>
             </div>
@@ -32,7 +31,7 @@
 
                 <form @submit.prevent="claimPluginLicense()">
                     <text-field id="pluginLicenseKey" class="mono" spellcheck="false" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" :mask="{ mask: '****-****-****-****-****-****', placeholder: ' ', showMaskOnHover: false, showMaskOnFocus: false }" />
-                    <input type="submit" class="btn btn-primary" value="Claim License" :class="{disabled: !pluginLicenseValidates }" :disabled="!pluginLicenseValidates" />
+                    <btn class="primary" type="submit" :disabled="!pluginLicenseValidates">Claim License</btn>
                     <spinner v-if="pluginLicenseLoading"></spinner>
                 </form>
             </div>
@@ -45,7 +44,7 @@
 
                 <form @submit.prevent="claimLicensesByEmail()">
                     <text-field id="email" label="Email Address" v-model="email" placeholder="user@example.com" />
-                    <input type="submit" class="btn btn-primary" value="Claim Licenses" :class="{disabled: $v.email.$invalid }" :disabled="$v.email.$invalid" />
+                    <btn class="primary" type="submit" :disabled="$v.email.$invalid">Claim License</btn>
                     <spinner v-if="emailLoading"></spinner>
                 </form>
             </div>

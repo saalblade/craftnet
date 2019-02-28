@@ -23,8 +23,7 @@
                     </div>
 
                     <div class="action">
-                        <input type="submit" class="c-btn primary block" :disabled="!formValidates()" value="Login">
-                        <spinner v-if="loading"></spinner>
+                        <btn class="primary" type="submit" :loading="loading" :disabled="!formValidates() || loading" block>Login</btn>
                     </div>
                 </form>
 
@@ -45,14 +44,9 @@
     import usersApi from '../api/users'
     import helpers from '../mixins/helpers'
     import FormDataHelper from '../helpers/form-data'
-    import Spinner from '../components/Spinner'
 
     export default {
         mixins: [helpers],
-
-        components: {
-            Spinner,
-        },
 
         data() {
             return {
@@ -105,6 +99,10 @@
 
                 usersApi.login(formData)
                     .then(() => {
+                        // Set `remainingSessionTime` to something different than 0 to give the auth manager a chance to get the real remaining session time
+                        // todo: Take Craft’s userSessionDuration config into account
+                        Craft.remainingSessionTime = 3600
+
                         this.loadAuthenticatedUserData(() => {
                             this.loading = false
                             this.$store.dispatch('app/displayNotice', 'Logged in.')

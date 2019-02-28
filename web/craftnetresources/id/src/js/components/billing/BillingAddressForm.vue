@@ -23,12 +23,7 @@
             </div>
 
             <div v-if="!showForm">
-                <button @click="edit()" type="button"
-                        class="btn btn-secondary btn-sm"
-                        data-facebox="#billing-contact-info-modal">
-                    <icon icon="pencil-alt" />
-                    Edit
-                </button>
+                <btn class="small" icon="pencil-alt" @click="edit()">Edit</btn>
             </div>
         </div>
 
@@ -43,8 +38,8 @@
             <select-field id="state" label="State" v-model="invoiceDetailsDraft.state" :options="stateOptions(invoiceDetailsDraft.country)" />
             <text-field id="zipCode" label="Zip Code" v-model="invoiceDetailsDraft.zipCode" :errors="errors.zipCode" />
 
-            <input type="submit" class="btn btn-primary" value="Save" />
-            <input type="button" class="btn btn-secondary" value="Cancel" @click="cancel()" />
+            <btn class="primary" type="submit">Save</btn>
+            <btn @click="cancel()">Cancel</btn>
         </form>
 
     </div>

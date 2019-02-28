@@ -13,7 +13,7 @@
                         <li v-if="location.email">{{ location.email }}</li>
                     </ul>
                     <div>
-                        <button class="btn btn-secondary" @click="$emit('edit', index)"><icon icon="pencil-alt" /> Edit</button>
+                        <btn icon="pencil-alt" @click="$emit('edit', index)">Edit</btn>
                     </div>
                 </div>
                 <div v-else>
@@ -29,26 +29,22 @@
 
                     <div class="mt-4 flex">
                         <div class="flex-1">
-                            <button
-                                    class="btn btn-secondary"
-                                    :class="{disabled: requestPending}"
+                            <btn
                                     :disabled="requestPending"
-                                    @click="$emit('cancel', index)">Cancel</button>
+                                    @click="$emit('cancel', index)">Cancel</btn>
 
-                            <button
-                                    class="btn btn-primary"
-                                    :class="{disabled: requestPending}"
+                            <btn
+                                    class="primary"
                                     :disabled="requestPending"
-                                    @click="$emit('save')">Save</button>
+                                    @click="$emit('save')">Save</btn>
 
                             <spinner :class="{'invisible': !requestPending}"></spinner>
                         </div>
                         <div>
                             <!-- Multiple locations not currently enabled -->
-                            <!-- <button
+                            <!-- <btn
                                 v-if="location.id !== 'new'"
-                                class="btn btn-danger"
-                                :class="{disabled: requestPending}"
+                                class="danger"
                                 :disabled="requestPending"
                                 @click="$emit('delete', index)">Delete</button> -->
                         </div>

@@ -17,21 +17,17 @@
             <div>
                 <template v-if="userDraft.photoId">
                     <div class="field">
-                        <input type="button" class="btn btn-secondary" value="Change Photo" @click="changePhoto" :disabled="photoLoading" />
+                        <btn :disabled="loading.uploadPhoto" :loading="loading.uploadPhoto" @click="changePhoto">Change Photo</btn>
                     </div>
                     <div class="field">
-                        <a href="#" class="btn btn-danger" @click.prevent="deletePhoto" :disabled="photoLoading">
-                            <icon icon="times" />
-                            Delete
-                        </a>
+                        <btn class="danger" icon="times" :disabled="loading.deletePhoto" :loading="loading.deletePhoto" @click="deletePhoto">Delete</btn>
                     </div>
                 </template>
                 <template v-else>
                     <div class="field">
-                        <input type="button" class="btn btn-secondary" value="Upload a photo" @click="changePhoto" :disabled="photoLoading" />
+                        <btn :disabled="loading.uploadPhoto" :loading="loading.uploadPhoto" @click="changePhoto">Upload a photo</btn>
                     </div>
                 </template>
-                <spinner v-if="photoLoading"></spinner>
                 <input type="file" ref="photoFile" class="hidden" @change="onChangePhoto" />
             </div>
         </div>
@@ -40,26 +36,26 @@
 
         <p class="text-secondary"><em>Your profile data is being used for your developer page on the Plugin Store.</em></p>
 
-        <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
-        <spinner v-if="loading"></spinner>
+        <btn class="primary" type="submit" :disabled="loading.page" :loading="loading.page">Save</btn>
     </form>
 </template>
 
 <script>
     import {mapState, mapGetters} from 'vuex'
     import ConnectedApps from '../../components/developer/connected-apps/ConnectedApps'
-    import Spinner from '../../components/Spinner'
 
     export default {
         components: {
             ConnectedApps,
-            Spinner,
         },
 
         data() {
             return {
-                loading: false,
-                photoLoading: false,
+                loading: {
+                    page: false,
+                    uploadPhoto: false,
+                    deletePhoto: false,
+                },
                 userDraft: {},
                 password: '',
                 newPassword: '',
@@ -83,7 +79,7 @@
              */
             deletePhoto() {
                 if (confirm("Are you sure you want to delete this image?")) {
-                    this.photoLoading = true
+                    this.loading.deletePhoto = true
 
                     this.$store.dispatch('account/deleteUserPhoto')
                         .then(response => {
@@ -95,10 +91,10 @@
                                 this.$store.dispatch('app/displayError', response.data.error)
                             }
 
-                            this.photoLoading = false
+                            this.loading.deletePhoto = false
                         })
                         .catch(response => {
-                            this.photoLoading = false
+                            this.loading.deletePhoto = false
 
                             const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t delete photo.'
                             this.$store.dispatch('app/displayError', errorMessage)
@@ -127,7 +123,7 @@
                 //
                 // reader.readAsDataURL(this.$refs.photoFile.files[0])
 
-                this.photoLoading = true
+                this.loading.uploadPhoto = true
 
                 let data = {
                     photo: this.$refs.photoFile.files[0],
@@ -143,14 +139,14 @@
                             this.userDraft.photoUrl = photoUrl + (photoUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000)
                             this.errors = {}
 
-                            this.photoLoading = false
+                            this.loading.uploadPhoto = false
                         } else {
                             this.$store.dispatch('app/displayError', response.data.error)
-                            this.photoLoading = false
+                            this.loading.uploadPhoto = false
                         }
                     })
                     .catch(response => {
-                        this.photoLoading = false
+                        this.loading.uploadPhoto = false
 
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t upload photo.'
                         this.$store.dispatch('app/displayError', errorMessage)
@@ -163,7 +159,7 @@
              * Save the profile.
              */
             save() {
-                this.loading = true
+                this.loading.page = true
 
                 this.$store.dispatch('users/saveUser', {
                         id: this.userDraft.id,
@@ -175,10 +171,10 @@
                     .then(() => {
                         this.$store.dispatch('app/displayNotice', 'Settings saved.')
                         this.errors = {}
-                        this.loading = false
+                        this.loading.page = false
                     })
                     .catch(response => {
-                        this.loading = false
+                        this.loading.page = false
 
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save profile.'
                         this.$store.dispatch('app/displayError', errorMessage)

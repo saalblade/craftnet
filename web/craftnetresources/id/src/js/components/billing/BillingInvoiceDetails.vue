@@ -18,19 +18,14 @@
             </div>
 
             <div v-if="!showForm">
-                <button @click="editInvoiceDetails()" type="button"
-                        class="btn btn-secondary btn-sm"
-                        data-facebox="#billing-contact-info-modal">
-                    <icon icon="pencil-alt" />
-                    Edit
-                </button>
+                <btn class="small" icon="pencil-alt" @click="editInvoiceDetails()">Edit</btn>
             </div>
         </div>
 
         <form v-if="showForm" @submit.prevent="save()">
             <text-field id="businessTaxId" label="Tax ID" v-model="invoiceDetailsDraft.businessTaxId" :errors="errors.businessTaxId" />
-            <input type="submit" class="btn btn-primary" value="Save" />
-            <input type="button" class="btn btn-secondary" value="Cancel" @click="cancel()" />
+            <btn class="primary" type="submit">Save</btn>
+            <btn @click="cancel()">Cancel</btn>
         </form>
     </div>
 </template>

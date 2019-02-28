@@ -21,10 +21,7 @@
 
             <div>
                 <div class="inline-block" v-for="(category, key) in availableCategories" :key="'available-category-' + key">
-                    <a class="btn btn-outline-secondary mb-2 mr-2" :class="{disabled: pluginDraft.categoryIds.length >= maxCategories }" href="#" @click.prevent="selectCategory(category.id)">
-                        <icon icon="plus" />
-                        {{category.title}}
-                    </a>
+                    <btn class="mb-2 mr-2" icon="plus" :disabled="pluginDraft.categoryIds.length >= maxCategories" outline @click="selectCategory(category.id)">{{category.title}}</btn>
                 </div>
             </div>
         </div>

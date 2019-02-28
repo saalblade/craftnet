@@ -16,7 +16,7 @@
                         </li>
                     </ul>
                     <div>
-                        <button class="btn btn-secondary" @click="$emit('edit', index)"><icon icon="pencil-alt" /> Edit</button>
+                        <btn icon="pencil-alt" @click="$emit('edit', index)">Edit</btn>
                     </div>
                 </div>
             </div>
@@ -47,36 +47,32 @@
 
                 <div v-if="project.screenshots.length <= 5">
                     <input type="file" accept=".jp2,.jpeg,.jpg,.jpx" @change="screenshotFileChange" ref="screenshotFiles" class="hidden" multiple=""><br>
-                    <button class="btn btn-sm btn-outline-secondary" @click="$refs.screenshotFiles.click()" :disabled="isUploading">
+                    <btn class="small" :disabled="isUploading" @click="$refs.screenshotFiles.click()">
                         <span v-show="!isUploading"><icon icon="plus" /> Add screenshots</span>
                         <span v-show="isUploading">Uploading: {{ uploadProgress }}%</span>
                         <spinner v-show="isUploading"></spinner>
-                    </button>
+                    </btn>
                 </div>
 
                 <div class="mt-4 flex">
                     <div class="flex-1">
-                        <button
-                            class="btn btn-secondary"
-                            :class="{disabled: requestPending}"
+                        <btn
                             :disabled="requestPending"
-                            @click="$emit('cancel', index)">Cancel</button>
+                            @click="$emit('cancel', index)">Cancel</btn>
 
-                        <button
-                            class="btn btn-primary"
-                            :class="{disabled: requestPending}"
+                        <btn
+                            class="primary"
                             :disabled="requestPending"
-                            @click="$emit('save')">Save</button>
+                            @click="$emit('save')">Save</btn>
 
                         <spinner :class="{'invisible': !requestPending}"></spinner>
                     </div>
                     <div>
-                        <button
+                        <btn
                             v-if="project.id !== 'new'"
-                            class="btn btn-danger"
-                            :class="{disabled: requestPending}"
+                            class="danger"
                             :disabled="requestPending"
-                            @click="$emit('delete', index)">Delete</button>
+                            @click="$emit('delete', index)">Delete</btn>
                     </div>
                 </div>
             </div>

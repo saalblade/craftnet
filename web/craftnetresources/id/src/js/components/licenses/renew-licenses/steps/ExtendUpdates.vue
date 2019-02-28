@@ -1,8 +1,8 @@
 <template>
     <div>
         <select-field :value="renew" @input="$emit('update:renew', $event)" :options="renewOptions" />
-        <button @click="$emit('cancel')" class="btn btn-secondary">Cancel</button>
-        <button @click="$emit('continue')" class="btn btn-primary">Continue</button>
+        <btn @click="$emit('cancel')">Cancel</btn>
+        <btn class="primary" @click="$emit('continue')">Continue</btn>
     </div>
 </template>
 

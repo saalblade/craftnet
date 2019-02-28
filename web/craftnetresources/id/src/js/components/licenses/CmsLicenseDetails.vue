@@ -23,17 +23,14 @@
                                         <p>{{ license.domain }}</p>
 
                                         <div class="buttons">
-                                            <button @click="domainEditing = true" type="button" class="btn btn-secondary btn-sm">
-                                                <icon icon="pencil-alt" />
-                                                Change Domain
-                                            </button>
+                                            <btn class="small" icon="pencil-alt" @click="domainEditing = true">Change Domain</btn>
                                         </div>
                                     </template>
 
                                     <form v-if="domainEditing" @submit.prevent="saveDomain()">
                                         <text-field id="domain" v-model="licenseDraft.domain" @input="domainChange"></text-field>
-                                        <input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !domainValidates}" :disabled="!domainValidates" />
-                                        <input @click="cancelEditDomain()" type="button" class="btn btn-secondary" value="Cancel" />
+                                        <btn class="primary" type="submit" :class="{disabled: !domainValidates}" :disabled="!domainValidates">Save</btn>
+                                        <btn @click="cancelEditDomain()">Cancel</btn>
                                         <spinner v-if="domainLoading"></spinner>
                                     </form>
                                 </dd>
@@ -63,17 +60,14 @@
                                         <p>{{ license.notes }}</p>
 
                                         <div class="buttons">
-                                            <button @click="notesEditing = true" type="button" class="btn btn-secondary btn-sm">
-                                                <icon icon="pencil-alt" />
-                                                Edit
-                                            </button>
+                                            <btn icon="pencil-alt" @click="notesEditing = true">Edit</btn>
                                         </div>
                                     </template>
 
                                     <form v-if="notesEditing" @submit.prevent="saveNotes()">
                                         <textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
-                                        <input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
-                                        <input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
+                                        <btn class="primary" type="submit" :disabled="!notesValidates">Save</btn>
+                                        <btn @click="cancelEditNotes()">Cancel</btn>
                                         <spinner v-if="notesLoading"></spinner>
                                     </form>
                                 </dd>
@@ -108,8 +102,7 @@
             <div class="card-body">
                 <h4>Updates</h4>
                 <license-update-message :license="license" />
-
-                <button @click="showRenewLicensesModal('extend-updates')" class="btn btn-secondary">Renew your license…</button>
+                <btn @click="showRenewLicensesModal('extend-updates')">Renew your license…</btn>
             </div>
         </div>
     </div>

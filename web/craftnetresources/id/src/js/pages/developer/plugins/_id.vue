@@ -27,7 +27,7 @@
                     </template>
 
                     <div class="mt-2">
-                        <router-link to="/developer/settings" class="btn btn-secondary">Manage connected apps</router-link>
+                        <btn to="/developer/settings">Manage connected apps</btn>
                     </div>
                 </div>
             </div>
@@ -43,10 +43,10 @@
                     <template v-if="plugin.lastHistoryNote && plugin.lastHistoryNote.devComments">
                         <h6>Changes requested</h6>
                         <div v-html="plugin.lastHistoryNote.devComments"></div>
-                        <a @click.prevent="submit()" href="#" class="btn btn-secondary btn-sm">Re-submit for Approval</a>
+                        <btn class="small" @click="submit()">Re-submit for Approval</btn>
                     </template>
                     <template v-else>
-                        <a @click.prevent="submit()" href="#" class="btn btn-secondary btn-sm">Submit for Approval</a>
+                        <btn class="small" @click="submit()">Submit for Approval</btn>
                     </template>
 
                     <span class="text-secondary">Your plugin will be automatically published once it’s approved.</span>
@@ -185,7 +185,7 @@
                                         </table>
 
                                         <div>
-                                            <a class="btn btn-secondary" @click.prevent="addFeature(editionKey)"><icon icon="plus" /> Add a feature</a>
+                                            <btn icon="plus" @click="addFeature(editionKey)">Add a feature</btn>
                                         </div>
                                     </field>
                                 </div>
@@ -198,8 +198,7 @@
                 </div>
 
                 <div>
-                    <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
-                    <spinner v-if="loading"></spinner>
+                    <btn class="primary" type="submit" :disabled="loading" :loading="loading">Save</btn>
                 </div>
             </form>
         </template>

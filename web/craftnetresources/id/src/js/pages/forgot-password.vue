@@ -12,7 +12,7 @@
                         <text-field id="loginName" label="Username or email" v-model="loginName" ref="loginName" />
 
                         <div class="action">
-                            <btn type="primary" :disabled="loading || $v.$invalid" block large>Send reset email</btn>
+                            <btn class="primary" type="submit" :disabled="loading || $v.$invalid" block large>Send reset email</btn>
                             <spinner v-if="loading" />
                         </div>
                     </form>

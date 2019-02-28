@@ -6,7 +6,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="text-right" v-if="!isEditing">
-                    <button class="btn btn-secondary" @click="onEditClick"><icon icon="pencil-alt" /> Edit</button>
+                    <btn icon="pencil-alt" @click="onEditClick">Edit</btn>
                 </div>
 
                 <div v-if="!isEditing">
@@ -109,17 +109,14 @@
                     <textarea-field id="shortBio" label="Short Bio" instructions="Max 130 characters. Shown on your listing card." v-model="draft.shortBio" :max="130" :errors="errors.shortBio" />
 
                     <div class="pt-4">
-                        <button
-                            class="btn btn-secondary"
-                            :class="{'disabled': requestPending}"
+                        <btn
                             :disabled="requestPending"
-                            @click="isEditing = false">Cancel</button>
+                            @click="isEditing = false">Cancel</btn>
 
-                        <button
-                            class="btn btn-primary"
-                            :class="{'disabled': requestPending}"
+                        <btn
+                            class="primary"
                             :disabled="requestPending"
-                            @click="onSubmit">Save</button>
+                            @click="onSubmit">Save</btn>
 
                         <spinner :cssClass="{'invisible': !requestPending}"></spinner>
                     </div>

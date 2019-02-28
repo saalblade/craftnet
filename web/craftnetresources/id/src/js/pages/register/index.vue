@@ -12,8 +12,7 @@
                         <password-field id="password" label="Password" v-model="password" :errors="getFieldErrors('password')" />
 
                         <div class="action">
-                            <btn type="primary" :disabled="!formValidates()" block large>Register</btn>
-
+                            <btn class="primary" type="submit" :disabled="!formValidates()" block large>Register</btn>
                             <spinner v-if="loading"></spinner>
                         </div>
                     </form>

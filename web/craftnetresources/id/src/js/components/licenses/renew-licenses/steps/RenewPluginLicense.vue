@@ -24,8 +24,8 @@
                 </tbody>
             </table>
 
-            <input type="button" class="btn btn-secondary" @click="$emit('cancel')" value="Cancel" />
-            <input type="button" class="btn btn-primary" @click="addToCart()" value="Add to cart" />
+            <btn @click="$emit('cancel')">Cancel</btn>
+            <btn class="primary" @click="addToCart()">Add to cart</btn>
         </template>
     </div>
 </template>

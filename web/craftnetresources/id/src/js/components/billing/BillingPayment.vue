@@ -27,18 +27,11 @@
 
             <div v-if="!editing" class="pl-4">
                 <p>
-                    <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
-                        <icon icon="plus" />
-                        New Card
-                    </button>
+                    <btn class="small" icon="plus" @click="editing = true">New Card</btn>
                 </p>
 
                 <p v-if="card">
-                    <button @click="removeCard()" class="btn btn-sm btn-danger">
-                        <icon icon="times" />
-                        Remove
-                    </button>
-
+                    <btn icon="times" class="danger small" @click="removeCard()">Remove</btn>
                     <spinner v-if="removeCardLoading"></spinner>
                 </p>
             </div>

@@ -26,9 +26,7 @@
                                             <span v-if="license.cmsLicense.edition" class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
                                         </p>
                                         <div class="buttons">
-                                            <button @click="detachCmsLicense()" type="button" class="btn btn-secondary btn-sm">
-                                                Detach from this Craft license
-                                            </button>
+                                            <btn class="small" @click="detachCmsLicense()">Detach from this Craft license</btn>
                                             <spinner v-if="detaching"></spinner>
                                         </div>
                                     </template>
@@ -53,17 +51,14 @@
                                         <p>{{ license.notes }}</p>
 
                                         <div class="buttons">
-                                            <button @click="notesEditing = true" type="button" class="btn btn-secondary btn-sm">
-                                                <icon icon="pencil-alt" />
-                                                Edit
-                                            </button>
+                                            <btn class="small" icon="pencil-alt" @click="notesEditing = true">Edit</btn>
                                         </div>
                                     </template>
 
                                     <form v-if="notesEditing" @submit.prevent="saveNotes()">
                                         <textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
-                                        <input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
-                                        <input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
+                                        <btn class="primary" type="submit" :disabled="!notesValidates">Save</btn>
+                                        <btn @click="cancelEditNotes()" >Cancel</btn>
                                         <spinner v-if="notesLoading"></spinner>
                                     </form>
                                 </dd>
@@ -97,8 +92,7 @@
             <div class="card-body">
                 <h4>Updates</h4>
                 <license-update-message :license="license"></license-update-message>
-
-                <button @click="showRenewLicensesModal('renew-plugin-license')" class="btn btn-secondary">Renew your license…</button>
+                <btn @click="showRenewLicensesModal('renew-plugin-license')">Renew your license…</btn>
             </div>
         </div>
     </div>

@@ -10,8 +10,13 @@
                     </div>
                     <div>
                         <spinner v-if="isLoading(repository.html_url)"></spinner>
-                        <a v-if="!repositoryIsInUse(repository.html_url)" href="#" class="btn btn-sm btn-primary" @click.prevent="$emit('selectRepository', repository)">Select</a>
-                        <a v-else href="#" class="btn btn-sm btn-light disabled" :class="{ disabled: repositoryIsInUse(repository.html_url )}">Already in use</a>
+
+                        <template v-if="!repositoryIsInUse(repository.html_url)">
+                            <btn class="primary small" @click.prevent="$emit('selectRepository', repository)">Select</btn>
+                        </template>
+                        <template v-else>
+                            <btn :disabled="repositoryIsInUse(repository.html_url )">Already in use</btn>
+                        </template>
                     </div>
                 </div>
             </list-group-item>

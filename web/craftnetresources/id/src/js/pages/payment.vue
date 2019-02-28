@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="text-center mt-8">
-                    <input type="submit" class="btn btn-lg btn-primary" :value="'Pay '+$options.filters.currency(cart.totalPrice)" />
+                    <btn class="primary" type="submit" large>Pay {{cart.totalPrice|currency}}</btn>
 
                     <spinner v-if="payLoading"></spinner>
 

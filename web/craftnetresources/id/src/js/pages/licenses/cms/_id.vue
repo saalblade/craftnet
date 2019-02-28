@@ -31,7 +31,9 @@
                     <div class="card-body">
                         <h5>Release license</h5>
                         <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
-                        <div><button class="btn btn-danger" @click="releaseCmsLicense()">Release License</button></div>
+                        <div>
+                            <btn class="danger" @click="releaseCmsLicense()">Release License</btn>
+                        </div>
                     </div>
                 </div>
             </template>

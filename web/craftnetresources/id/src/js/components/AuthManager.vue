@@ -10,14 +10,8 @@
                 {{ logoutWarningPara }}
 
                 <div class="float-right mt-4">
-                    <a href="#"
-                       class="btn btn-secondary"
-                       @click.prevent="logout">Logout now</a>
-
-                    <a href="#"
-                       @click.prevent="renewSession"
-                       ref="renewSessionBtn"
-                       class="btn btn-primary">Keep me logged in</a>
+                    <btn @click="logout">Logout now</btn>
+                    <btn class="primary" ref="renewSessionBtn" @click="renewSession">Keep me logged in</btn>
                 </div>
             </template>
         </modal>
@@ -39,9 +33,7 @@
                                    placeholder="Password" type="password"
                                    id="password" class="form-control mr-2"
                                    :class="{'is-invalid': loginErrorPara }"/>
-                            <input type="submit" class="btn btn-primary mr-2"
-                                   value="Login"
-                                   :disabled="!passwordValidates"/>
+                            <btn class="primary mr-2" type="submit" :disabled="!passwordValidates">Login</btn>
                             <spinner :cssClass="{'invisible': !passwordSpinner}"></spinner>
                         </div>
                     </div>

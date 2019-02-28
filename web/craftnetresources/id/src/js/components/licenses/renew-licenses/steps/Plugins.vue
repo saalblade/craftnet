@@ -33,8 +33,8 @@
                 </tbody>
             </table>
 
-            <button @click="$emit('back')" class="btn btn-secondary">Back</button>
-            <button @click="addToCart()" class="btn btn-primary">Add to cart</button>
+            <btn @click="$emit('back')">Back</btn>
+            <btn @click="addToCart()" class="primary">Add to cart</btn>
         </template>
     </div>
 </template>

@@ -13,7 +13,7 @@ a {
     cursor: pointer;
   }
 
-  &:not(.btn) {
+  &:not(.c-btn) {
     @apply .text-blue .no-underline;
 
     &:hover {

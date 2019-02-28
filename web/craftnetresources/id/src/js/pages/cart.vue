@@ -117,7 +117,9 @@
                         </template>
                     </table>
 
-                    <div class="mt-4 text-right"><input type="button" class="btn btn-lg btn-primary" @click="checkout()" value="Check Out" /></div>
+                    <div class="mt-4 text-right">
+                        <btn class="primary" large @click="checkout()">Check Out</btn>
+                    </div>
                 </template>
 
                 <div v-else>

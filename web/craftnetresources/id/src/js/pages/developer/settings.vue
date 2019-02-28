@@ -16,10 +16,10 @@
                         <text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
                     </div>
 
-                    <input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
-                    <input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
-
-                    <spinner v-if="loading"></spinner>
+                    <btn class="primary" type="submit" :disabled="loading" :loading="loading">
+                        <template v-if="apiToken">Generate new API Token</template>
+                        <template v-else>Generate API Token</template>
+                    </btn>
                 </form>
             </div>
         </div>
@@ -29,7 +29,6 @@
 <script>
     import {mapState} from 'vuex'
     import ConnectedApps from '../../components/developer/connected-apps/ConnectedApps'
-    import Spinner from '../../components/Spinner'
 
     export default {
         data() {
@@ -42,7 +41,6 @@
 
         components: {
             ConnectedApps,
-            Spinner,
         },
 
         computed: {

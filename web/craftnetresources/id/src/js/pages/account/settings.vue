@@ -32,20 +32,14 @@
             </div>
         </div>
 
-        <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
-        <spinner v-if="loading"></spinner>
+        <btn class="primary" type="submit" :disabled="loading" :loading="loading">Save</btn>
     </form>
 </template>
 
 <script>
     import {mapState, mapGetters} from 'vuex'
-    import Spinner from '../../components/Spinner'
 
     export default {
-        component: {
-            Spinner,
-        },
-
         data() {
             return {
                 loading: false,
