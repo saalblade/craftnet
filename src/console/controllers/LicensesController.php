@@ -43,15 +43,15 @@ class LicensesController extends Controller
 
         $this->stdout('Sending reminders ...' . PHP_EOL, Console::FG_YELLOW);
 
-        // Group by owner ID and auto-renew status
-        $licenses = ArrayHelper::index($licenses, null, 'ownerId');
+        // Group by owner email
+        $licenses = ArrayHelper::index($licenses, null, function(LicenseInterface $license) {
+            return mb_strtolower($license->getEmail());
+        });
 
         $mailer = Craft::$app->getMailer();
 
-        foreach ($licenses as $ownerId => $ownerLicenses) {
+        foreach ($licenses as $email => $ownerLicenses) {
             try {
-                $user = User::find()->id($ownerId)->anyStatus()->one();
-
                 // Lock in the renewal prices
                 /** @var LicenseInterface[] $ownerLicenses */
                 foreach ($ownerLicenses as $license) {
@@ -67,11 +67,12 @@ class LicensesController extends Controller
                     return $license->getWillAutoRenew() ? 'auto' : 'manual';
                 });
 
-                $this->stdout("    - Emailing {$user->email} about " . count($ownerLicenses) . ' licenses ... ', Console::FG_YELLOW);
+                $this->stdout("    - Emailing {$email} about " . count($ownerLicenses) . ' licenses ... ', Console::FG_YELLOW);
 
+                $user = User::find()->email($email)->anyStatus()->one();
                 $message = $mailer
                     ->composeFromKey(Module::MESSAGE_KEY_LICENSE_REMINDER, ['licenses' => $ownerLicensesByType])
-                    ->setTo($user);
+                    ->setTo($user ?? $email);
 
                 if (!$message->send()) {
                     $this->stderr('error sending email' . PHP_EOL, Console::FG_RED);

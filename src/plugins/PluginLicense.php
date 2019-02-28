@@ -87,6 +87,14 @@ class PluginLicense extends Model implements LicenseInterface
     /**
      * @inheritdoc
      */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getIsExpirable(): bool
     {
         return $this->expirable;

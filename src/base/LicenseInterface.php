@@ -5,6 +5,13 @@ namespace craftnet\base;
 interface LicenseInterface
 {
     /**
+     * Returns the email address associated with the license.
+     *
+     * @return string
+     */
+    public function getEmail(): string;
+
+    /**
      * Returns whether the license is expirable.
      *
      * @return bool

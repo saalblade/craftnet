@@ -1,4 +1,4 @@
-Hey {{user.friendlyName}},
+Hey {{ user.firstName ?? 'there'}},
 
 {% set hasManual = licenses.manual is defined %}
 {% set hasAuto = licenses.auto is defined %}
