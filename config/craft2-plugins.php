@@ -365,7 +365,7 @@ return [
         'status' => 'No longer needed thanks to [advanced element query features](https://docs.craftcms.com/v3/dev/element-queries/#advanced-element-queries) in Craft 3.'
     ],
     'Reasons' => [
-        'status' => 'Discontinued due to conditional field support [coming](https://github.com/craftcms/cms/issues/805#issuecomment-408128891) in Craft 3.2.'
+        'status' => 'Discontinued due to conditional field support [coming](https://github.com/craftcms/cms/issues/805#issuecomment-408128891) in Craft 4.'
     ],
     'RedactorColors' => [
         'statusColor' => 'orange',
