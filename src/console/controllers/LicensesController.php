@@ -67,11 +67,17 @@ class LicensesController extends Controller
                     return $license->getWillAutoRenew() ? 'auto' : 'manual';
                 });
 
-                $this->stdout("Emailing {$user->email} about " . count($ownerLicenses) . ' licenses ... ', Console::FG_YELLOW);
-                $mailer
+                $this->stdout("    - Emailing {$user->email} about " . count($ownerLicenses) . ' licenses ... ', Console::FG_YELLOW);
+
+                $message = $mailer
                     ->composeFromKey(Module::MESSAGE_KEY_LICENSE_REMINDER, ['licenses' => $ownerLicensesByType])
-                    ->setTo($user)
-                    ->send();
+                    ->setTo($user);
+
+                if (!$message->send()) {
+                    $this->stderr('error sending email' . PHP_EOL, Console::FG_RED);
+                    continue;
+                }
+
                 $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
 
                 // Mark the licenses as reminded so we don't send this again for them until the next cycle
@@ -80,7 +86,7 @@ class LicensesController extends Controller
                 }
             } catch (\Throwable $e) {
                 // Don't let this stop us from sending other reminders
-                $this->stdout('error: ' . $e->getMessage() . PHP_EOL, Console::FG_RED);
+                $this->stdout('An error occurred: ' . $e->getMessage() . PHP_EOL, Console::FG_RED);
                 Craft::$app->getErrorHandler()->logException($e);
             }
         }
