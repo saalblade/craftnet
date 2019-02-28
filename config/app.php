@@ -18,7 +18,6 @@ return [
                     'cmsLicenseManager' => [
                         'class' => craftnet\cms\CmsLicenseManager::class,
                         'devDomains' => require __DIR__.'/dev-domains.php',
-                        'devTlds' => ['dev'],
                         'devSubdomainWords' => [
                             'acc',
                             'acceptance',
@@ -76,6 +75,10 @@ return [
         'components' => [
             'errorHandler' => [
                 'memoryReserveSize' => 1024000
+            ],
+            'schedule' => [
+                'class' => omnilight\scheduling\Schedule::class,
+                'cliScriptName' => 'craft',
             ],
         ],
     ],

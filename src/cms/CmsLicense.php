@@ -22,6 +22,8 @@ class CmsLicense extends Model implements LicenseInterface
     public $expirable = true;
     public $expired = false;
     public $autoRenew = false;
+    public $reminded = false;
+    public $renewalPrice;
     public $editionHandle;
     public $email;
     public $domain;
@@ -114,15 +116,55 @@ class CmsLicense extends Model implements LicenseInterface
     /**
      * @inheritdoc
      */
+    public function getWillAutoRenew(): bool
+    {
+        return $this->autoRenew;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRenewalPrice(): float
+    {
+        return $this->renewalPrice;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRenewalPrice(float $renewalPrice)
+    {
+        $this->renewalPrice = $renewalPrice;
+        Module::getInstance()->getCmsLicenseManager()->saveLicense($this, false);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function markAsReminded()
+    {
+        $this->reminded = true;
+        Module::getInstance()->getCmsLicenseManager()->saveLicense($this, false);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getEdition(): EditionInterface
     {
         return CmsEdition::findOne($this->editionId);
     }
 
     /**
-     * Returns a shortened version of the license key.
-     *
-     * @return string
+     * @inheritdoc
+     */
+    public function getEditUrl(): string
+    {
+        return 'https://id.craftcms.com/licenses/cms/' . $this->id;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getShortKey(): string
     {

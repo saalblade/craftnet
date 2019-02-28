@@ -37,6 +37,11 @@ class Plugin extends Element
 
     const STATUS_PENDING = 'pending';
 
+    /**
+     * @event Event The event that is triggered when the plugin is first published to the Plugin Store.
+     */
+    const EVENT_PUBLISHED = 'published';
+
     // Static
     // =========================================================================
 
@@ -430,6 +435,7 @@ class Plugin extends Element
         $names = parent::attributes();
         ArrayHelper::removeValue($names, 'activeInstalls');
         ArrayHelper::removeValue($names, 'devComments');
+        $names[] = 'developerName';
         return $names;
     }
 
@@ -917,6 +923,7 @@ class Plugin extends Element
         $sendDevEmail = false;
         $emailSubject = null;
         $emailMessage = null;
+        $published = false;
 
         if ($this->_submittedForApproval) {
             $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username . ' submitted the plugin for approval');
@@ -924,8 +931,21 @@ class Plugin extends Element
             $this->getHistory()->push(Craft::$app->getUser()->getIdentity()->username . ' approved the plugin', $this->devComments);
             $sendDevEmail = true;
             $emailSubject = "{$this->name} has been approved!";
-            $emailMessage = <<<EOD
+            // Any actual licenses yet?
+            $published = !empty($packageManager->getAllVersions($this->packageName, null, null, false));
+            if ($published) {
+                $emailMessage = <<<EOD
 Congratulations, {$this->name} has been approved, and is now available in the Craft Plugin Store for all to enjoy.
+EOD;
+            } else {
+                $emailMessage = <<<EOD
+Congratulations, {$this->name} has been approved for the Craft Plugin Store!
+
+Note that before it will show up, you’re going to need to [tag a release](https://docs.craftcms.com/v3/extend/plugin-store.html#plugin-releases) on it. 
+EOD;
+            }
+            $emailMessage .= <<<EOD
+
 
 {$this->devComments}
 
@@ -966,6 +986,10 @@ EOD;
                 ->setHtmlBody(Markdown::process($emailBody))
                 ->setTo($this->getDeveloper())
                 ->send();
+        }
+
+        if ($published && $this->hasEventHandlers(self::EVENT_PUBLISHED)) {
+            $this->trigger(self::EVENT_PUBLISHED);
         }
 
         parent::afterSave($isNew);

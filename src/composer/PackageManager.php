@@ -755,6 +755,8 @@ class PackageManager extends Component
             }
         }
 
+        $hasValidNewVersion = false;
+
         // Start a transaction
         $transaction = Craft::$app->getDb()->beginTransaction();
         try {
@@ -889,7 +891,9 @@ class PackageManager extends Component
 
                     $vcs->populateRelease($release);
 
-                    if ($isConsole && !$release->valid) {
+                    if ($release->valid) {
+                        $hasValidNewVersion = true;
+                    } else if ($isConsole) {
                         Console::stdout(Console::ansiFormat('invalid' . ($release->invalidReason ? " ({$release->invalidReason})" : ''), [Console::FG_RED]));
                         Console::stdout(Console::ansiFormat(' ... ', [Console::FG_YELLOW]));
                     }
@@ -1009,6 +1013,17 @@ class PackageManager extends Component
 
         if (isset($exception)) {
             throw $exception;
+        }
+
+        // Did we just save the first version of an already approved plugin?
+        if (
+            $hasValidNewVersion &&
+            empty($storedVersionInfo) &&
+            isset($plugin) &&
+            $plugin->enabled &&
+            $plugin->hasEventHandlers(Plugin::EVENT_PUBLISHED)
+        ) {
+            $plugin->trigger(Plugin::EVENT_PUBLISHED);
         }
 
         return $totalAffected;
@@ -1152,6 +1167,7 @@ class PackageManager extends Component
             Console::stdout(Console::ansiFormat('updating compatibility index ... ', [Console::FG_YELLOW]));
         }
 
+        $compatData = [];
         $cmsConstraint = $pluginRelease->require['craftcms/cms'];
 
         foreach ($this->getAllReleases('craftcms/cms', null) as $cmsRelease) {
