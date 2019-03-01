@@ -282,6 +282,30 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns any licenses that have expired but don't know it yet.
+     *
+     * @return PluginLicense[]
+     */
+    public function getFreshlyExpiredLicenses(): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->where([
+                'expirable' => false,
+            ])
+            ->andWhere(['not', ['expiresOn' => null]])
+            ->andWhere(['<', 'expiresOn', Db::prepareDateForDb(new \DateTime())])
+            ->all();
+
+        $licenses = [];
+
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
      * Saves a license.
      *
      * @param PluginLicense $license

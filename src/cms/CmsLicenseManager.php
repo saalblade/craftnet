@@ -259,6 +259,30 @@ class CmsLicenseManager extends Component
     }
 
     /**
+     * Returns any licenses that have expired but don't know it yet.
+     *
+     * @return CmsLicense[]
+     */
+    public function getFreshlyExpiredLicenses(): array
+    {
+        $results = $this->_createLicenseQuery()
+            ->where([
+                'expirable' => false,
+            ])
+            ->andWhere(['not', ['expiresOn' => null]])
+            ->andWhere(['<', 'expiresOn', Db::prepareDateForDb(new \DateTime())])
+            ->all();
+
+        $licenses = [];
+
+        foreach ($results as $result) {
+            $licenses[] = new CmsLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
      * Saves a license.
      *
      * @param CmsLicense $license

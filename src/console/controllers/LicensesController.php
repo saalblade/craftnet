@@ -3,10 +3,16 @@
 namespace craftnet\console\controllers;
 
 use Craft;
+use craft\commerce\elements\Order;
+use craft\commerce\models\Customer;
+use craft\commerce\Plugin as Commerce;
+use craft\commerce\stripe\gateways\Gateway as StripeGateway;
+use craft\commerce\stripe\models\forms\Payment;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
 use craftnet\base\LicenseInterface;
 use craftnet\Module;
+use Stripe\Error\Base as StripeError;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\Console;
@@ -93,6 +99,138 @@ class LicensesController extends Controller
         }
 
         $this->stdout('Done sending reminders.' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
+        return ExitCode::OK;
+    }
+
+    /**
+     * Auto-renews or expires licenses that are due for it.
+     *
+     * @return int
+     */
+    public function actionProcessExpiredLicenses(): int
+    {
+        $cmsLicenseManager = $this->module->getCmsLicenseManager();
+        $pluginLicenseManager = $this->module->getPluginLicenseManager();
+
+        // Find freshly-expired licenses
+        $this->stdout('Finding freshly-expired licenses ... ', Console::FG_YELLOW);
+        $licenses = array_merge(
+            $cmsLicenseManager->getFreshlyExpiredLicenses(),
+            $pluginLicenseManager->getFreshlyExpiredLicenses()
+        );
+        $this->stdout('done (' . count($licenses) . ' licenses found)' . PHP_EOL, Console::FG_YELLOW);
+
+        if (empty($licenses)) {
+            $this->stdout('No licenses have expired.' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
+            return ExitCode::OK;
+        }
+
+        $this->stdout('Processing licenses ...' . PHP_EOL, Console::FG_YELLOW);
+
+        // Group by owner email
+        $licenses = ArrayHelper::index($licenses, null, function(LicenseInterface $license) {
+            return mb_strtolower($license->getEmail());
+        });
+
+        $utc = new \DateTimeZone('UTC');
+        $yesterday = (new \DateTime('-1 day', $utc))->format('Y-m-d');
+        $elementsService = Craft::$app->getElements();
+        $customersService = Commerce::getInstance()->getCustomers();
+        $cartsService = Commerce::getInstance()->getCarts();
+        $lineItemsService = Commerce::getInstance()->getLineItems();
+        /** @var StripeGateway $gateway */
+        $gateway = Commerce::getInstance()->getGateways()->getGatewayById(getenv('STRIPE_GATEWAY_ID'));
+        $mailer = Craft::$app->getMailer();
+
+        foreach ($licenses as $email => $ownerLicenses) {
+            try {
+                $user = User::find()->email($email)->anyStatus()->one();
+
+                // Group by auto-renew status
+                $ownerLicensesByType = ArrayHelper::index($ownerLicenses, null, function(LicenseInterface $license) use ($user, $utc, $yesterday) {
+                    if ($user && $license->getWillAutoRenew() && $license->getWasReminded()) {
+                        // Only auto-renew if it just expired yesterday
+                        $expiryDate = $license->getExpiryDate();
+                        $expiryDate->setTimezone($utc);
+                        if ($expiryDate->format('Y-m-d') === $yesterday) {
+                            return 'renew';
+                        }
+                    }
+                    return 'expire';
+                });
+
+                // If there are any licenses that should be auto-renewed, give that a shot
+                if (!empty($ownerLicensesByType['renew'])) {
+                    $this->stdout('    - Creating order for ' . count($ownerLicensesByType['renew']) . " licenses for {$email} ... ", Console::FG_YELLOW);
+                    try {
+                        $order = new Order([
+                            'number' => $cartsService->generateCartNumber(),
+                            'currency' => 'USD',
+                            'paymentCurrency' => 'USD',
+                            'gatewayId' => getenv('STRIPE_GATEWAY_ID'),
+                            'orderLanguage' => Craft::$app->language,
+                        ]);
+
+                        // Set the customer
+                        $customer = null;
+                        if ($user) {
+                            $customer = $customersService->getCustomerByUserId($user->id);
+                        }
+                        if ($customer === null) {
+                            $customer = new Customer(['userId' => $user->id ?? null]);
+                            if (!$customersService->saveCustomer($customer)) {
+                                throw new \Exception('Could not save the customer: ' . implode(' ', $customer->getErrorSummary(true)));
+                            }
+                        }
+                        $order->customerId = $customer->id;
+                        $order->setEmail($email);
+
+                        // Save the cart so it gets an ID
+                        if (!$elementsService->saveElement($order)) {
+                            throw new \Exception('Could not save the cart: ' . implode(', ', $order->getErrorSummary(true)));
+                        }
+
+                        // Add the line items to the cart
+                        foreach ($ownerLicensesByType['renew'] as $license) {
+                            /** @var LicenseInterface $license */
+                            $renewalId = $license->getEdition()->getRenewal()->getId();
+                            $lineItem = $lineItemsService->resolveLineItem($order->id, $renewalId, [
+                                'licenseKey' => $license->getKey(),
+                                'lockedPrice' => $license->getRenewalPrice(),
+                            ]);
+                            $lineItem->qty = 1;
+                            $order->addLineItem($lineItem);
+                        }
+
+                        // Pay for it
+                        /** @var Payment $paymentForm */
+                        $paymentForm = $gateway->getPaymentFormModel();
+
+                        try {
+                            // todo: populate the payment form and process the payment
+                            //$this->_populatePaymentForm($payload, $gateway, $paymentForm);
+                            //$commerce->getPayments()->processPayment($cart, $paymentForm, $redirect, $transaction);
+                        } catch (\Throwable $e) {
+                            // todo: handle this
+                        }
+                    } catch (\Throwable $e) {
+                        $this->stderr('error: ' . $e->getMessage() . PHP_EOL, Console::FG_RED);
+                        Craft::$app->getErrorHandler()->logException($e);
+                    }
+                }
+
+                // todo: loop through expired licenses (including ones set to auto-renew if the payment was unsuccessful)
+                // and set expired=true, reminded=false
+
+                // todo: update the renewal adjuster to respect the lockedPrice option if set, and set expired=false, reminded=false
+            } catch (\Throwable $e) {
+                // Don't let this stop us from sending other reminders
+                $this->stdout('An error occurred: ' . $e->getMessage() . PHP_EOL, Console::FG_RED);
+                Craft::$app->getErrorHandler()->logException($e);
+            }
+        }
+
+        $this->stdout('Done processing licenses.' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
         return ExitCode::OK;
     }
 }
