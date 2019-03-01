@@ -27,7 +27,7 @@ if ($keyPath = getenv('LICENSE_KEY_PATH')) {
 define('CRAFT_ENVIRONMENT', getenv('CRAFT_ENV') ?: 'prod');
 
 // Manually load environment variables so they're available to the PHP CLI
-$envVars = '/opt/elasticbeanstalk/support/envvars.d/sysenv';
+$envVars = '/opt/elasticbeanstalk/support/envvars';
 
 if (file_exists($envVars) && is_file($envVars)) {
     $contents = file_get_contents($envVars);
