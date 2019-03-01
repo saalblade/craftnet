@@ -58,6 +58,7 @@ return [
     'ngrok.com',
     'ngrok.io',
     'nip.io',
+    'nxcli.net',
     'ondev.co',
     'oneis.us',
     'our-staging-server.net',
