@@ -93,7 +93,6 @@ class LicensesController extends Controller
         }
 
         $this->stdout('Done sending reminders.' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
-
         return ExitCode::OK;
     }
 }
