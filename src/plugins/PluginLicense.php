@@ -95,6 +95,14 @@ class PluginLicense extends Model implements LicenseInterface
     /**
      * @inheritdoc
      */
+    public function getOwnerId()
+    {
+        return $this->ownerId;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getIsExpirable(): bool
     {
         return $this->expirable;
@@ -145,6 +153,14 @@ class PluginLicense extends Model implements LicenseInterface
     /**
      * @inheritdoc
      */
+    public function getWasReminded(): bool
+    {
+        return $this->reminded;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getEdition(): EditionInterface
     {
         return PluginEdition::findOne($this->editionId);
@@ -156,6 +172,14 @@ class PluginLicense extends Model implements LicenseInterface
     public function getEditUrl(): string
     {
         return 'https://id.craftcms.com/licenses/plugins/' . $this->id;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getKey(): string
+    {
+        return $this->key;
     }
 
     /**
