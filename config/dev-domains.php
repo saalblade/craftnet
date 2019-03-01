@@ -2,6 +2,7 @@
 
 return [
     'aanpqa.com',
+    'ai-qa.com',
     'alwaysdata.net',
     'amazonaws.com',
     'azure.com',
@@ -42,6 +43,7 @@ return [
     'madebymasuga.com',
     'mandarindev.no',
     'manual.casa',
+    'martinleveille.dev',
     'mcipreview.com',
     'microserve-staging.ca',
     'mldev.net',
