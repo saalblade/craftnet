@@ -290,7 +290,7 @@ class PluginLicenseManager extends Component
     {
         $results = $this->_createLicenseQuery()
             ->where([
-                'expirable' => false,
+                'expirable' => true,
             ])
             ->andWhere(['not', ['expiresOn' => null]])
             ->andWhere(['<', 'expiresOn', Db::prepareDateForDb(new \DateTime())])
