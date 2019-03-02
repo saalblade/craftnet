@@ -58,6 +58,7 @@ return [
         'runQueueAutomatically' => false,
     ],
     'stage' => [
+        'testToEmailAddress' => getenv('TEST_EMAIL') ?: null,
         'siteUrl' => [
             'api' => getenv('CRAFT_API_ORIGIN'),
             'composer' => 'https://composer.craftcms.com/',
@@ -70,7 +71,7 @@ return [
         'devMode' => true,
         'useCompressedJs' => false,
         'allowUpdates' => true,
-        'testToEmailAddress' => getenv('TEST_EMAIL'),
+        'testToEmailAddress' => getenv('TEST_EMAIL') ?: null,
         'siteUrl' => [
             'api' => 'https://api.craftcms.test/',
             'composer' => 'https://composer.craftcms.test/',
