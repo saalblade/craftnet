@@ -2,6 +2,7 @@
 
 return [
     'aanpqa.com',
+    'ai-qa.com',
     'alwaysdata.net',
     'amazonaws.com',
     'azure.com',
@@ -40,8 +41,11 @@ return [
     'hyperlane.co',
     'infomedia-dev.com',
     'madebymasuga.com',
+    'madebyshape-dev.co.uk',
+    'madebyshape.dev',
     'mandarindev.no',
     'manual.casa',
+    'martinleveille.dev',
     'mcipreview.com',
     'microserve-staging.ca',
     'mldev.net',
@@ -56,6 +60,7 @@ return [
     'ngrok.com',
     'ngrok.io',
     'nip.io',
+    'nxcli.net',
     'ondev.co',
     'oneis.us',
     'our-staging-server.net',
