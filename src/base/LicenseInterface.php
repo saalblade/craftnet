@@ -64,6 +64,11 @@ interface LicenseInterface
     public function getWasReminded(): bool;
 
     /**
+     * Marks the license as expired
+     */
+    public function markAsExpired();
+
+    /**
      * Returns the edition associated with the license.
      *
      * @return EditionInterface

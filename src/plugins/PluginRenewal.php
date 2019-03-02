@@ -185,6 +185,7 @@ class PluginRenewal extends PluginPurchasable implements RenewalInterface
         }
 
         $license->expired = false;
+        $license->reminded = false;
         $license->expiresOn = OrderHelper::expiryStr2Obj($options['expiryDate']);
 
         try {

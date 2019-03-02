@@ -6,6 +6,10 @@ $schedule->command('craftnet/licenses/send-reminders')
     ->daily()
     ->withoutOverlapping();
 
+$schedule->command('craftnet/licenses/process-expired-licenses')
+    ->daily()
+    ->withoutOverlapping();
+
 $schedule->command('craftnet/packages/update-deps --queue')
     ->daily()
     ->withoutOverlapping();

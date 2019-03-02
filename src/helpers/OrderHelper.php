@@ -141,7 +141,7 @@ abstract class OrderHelper
 
         // set the price
         $paidRenewalYears = static::dateDiffInYears($oldExpiryDate, $expiryDate);
-        $lineItem->price = $renewal->getPrice() * $paidRenewalYears;
+        $lineItem->price = ($options['lockedPrice'] ?? $renewal->getPrice()) * $paidRenewalYears;
 
         // update the expiration date on the line item
         $expiryDate->setTimezone(new \DateTimeZone('UTC'));

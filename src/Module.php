@@ -59,6 +59,7 @@ class Module extends \yii\base\Module
     const MESSAGE_KEY_VERIFY = 'verify_email';
     const MESSAGE_KEY_DEVELOPER_SALE = 'developer_sale';
     const MESSAGE_KEY_LICENSE_REMINDER = 'license_reminder';
+    const MESSAGE_KEY_LICENSE_NOTIFICATION = 'license_notification';
 
     /**
      * @inheritdoc
@@ -120,6 +121,12 @@ class Module extends \yii\base\Module
                 'heading' => 'When licenses will be expiring/auto-renewing soon:',
                 'subject' => 'Important license info',
                 'body' => file_get_contents(__DIR__ . '/emails/license_reminder.md'),
+            ]);
+            $e->messages[] = new SystemMessage([
+                'key' => self::MESSAGE_KEY_LICENSE_NOTIFICATION,
+                'heading' => 'When licenses have expired/auto-renewed::',
+                'subject' => 'Important license info',
+                'body' => file_get_contents(__DIR__ . '/emails/license_notification.md'),
             ]);
         });
 

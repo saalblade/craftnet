@@ -161,6 +161,16 @@ class PluginLicense extends Model implements LicenseInterface
     /**
      * @inheritdoc
      */
+    public function markAsExpired()
+    {
+        $this->expired = true;
+        $this->reminded = false;
+        Module::getInstance()->getPluginLicenseManager()->saveLicense($this, false);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getEdition(): EditionInterface
     {
         return PluginEdition::findOne($this->editionId);
