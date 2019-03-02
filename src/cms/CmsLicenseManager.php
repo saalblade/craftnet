@@ -267,7 +267,8 @@ class CmsLicenseManager extends Component
     {
         $results = $this->_createLicenseQuery()
             ->where([
-                'expirable' => false,
+                'expirable' => true,
+                'expired' => false,
             ])
             ->andWhere(['not', ['expiresOn' => null]])
             ->andWhere(['<', 'expiresOn', Db::prepareDateForDb(new \DateTime())])
