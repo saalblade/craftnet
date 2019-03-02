@@ -12,7 +12,6 @@ use craft\elements\User;
 use craft\helpers\ArrayHelper;
 use craftnet\base\LicenseInterface;
 use craftnet\Module;
-use Stripe\Error\Base as StripeError;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\Console;
