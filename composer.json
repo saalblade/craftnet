@@ -16,7 +16,7 @@
     "stevenmaguire/oauth2-bitbucket": "^2.0",
     "flipboxfactory/craft-postmark": "^1.0.0-rc.1",
     "craftcms/commerce": "^2.1.0.2",
-    "craftcms/commerce-stripe": "1.0.10",
+    "craftcms/commerce-stripe": "^1.1.0",
     "layershifter/tld-extract": "^1.2",
     "ddeboer/vatin": "^2.1",
     "moccalotto/eu": "^0.3.0",
