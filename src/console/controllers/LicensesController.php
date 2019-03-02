@@ -49,15 +49,20 @@ class LicensesController extends Controller
 
         $this->stdout('Sending reminders ...' . PHP_EOL, Console::FG_YELLOW);
 
-        // Group by owner email
+        // Group by owner (or email if unclaimed)
         $licenses = ArrayHelper::index($licenses, null, function(LicenseInterface $license) {
-            return mb_strtolower($license->getEmail());
+            $ownerId = $license->getOwnerId();
+            return $ownerId ? "owner-{$ownerId}" : mb_strtolower($license->getEmail());
         });
 
         $mailer = Craft::$app->getMailer();
 
-        foreach ($licenses as $email => $ownerLicenses) {
+        foreach ($licenses as $ownerKey => $ownerLicenses) {
             try {
+                /** @var string $email */
+                /** @var User|null $user */
+                list($email, $user) = $this->_resolveOwnerKey($ownerKey);
+
                 // Lock in the renewal prices
                 /** @var LicenseInterface[] $ownerLicenses */
                 foreach ($ownerLicenses as $license) {
@@ -75,7 +80,6 @@ class LicensesController extends Controller
 
                 $this->stdout("    - Emailing {$email} about " . count($ownerLicenses) . ' licenses ... ', Console::FG_YELLOW);
 
-                $user = User::find()->email($email)->anyStatus()->one();
                 $message = $mailer
                     ->composeFromKey(Module::MESSAGE_KEY_LICENSE_REMINDER, ['licenses' => $ownerLicensesByType])
                     ->setTo($user ?? $email);
@@ -232,5 +236,24 @@ class LicensesController extends Controller
 
         $this->stdout('Done processing licenses.' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
         return ExitCode::OK;
+    }
+
+    /**
+     * Returns the email and user account (if one exists) for the given license owner key.
+     *
+     * @param string $ownerKey
+     * @return array
+     */
+    private function _resolveOwnerKey(string $ownerKey): array
+    {
+        if (preg_match('/^owner-(\d+)$/', $ownerKey, $matches)) {
+            $user = User::find()->id((int)$matches[1])->anyStatus()->one();
+            $email = $user->email;
+        } else {
+            $email = $ownerKey;
+            $user = User::find()->email($email)->anyStatus()->one();
+        }
+
+        return [$email, $user];
     }
 }
