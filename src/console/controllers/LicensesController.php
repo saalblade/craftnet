@@ -227,14 +227,14 @@ class LicensesController extends Controller
         }
 
         $utc = new \DateTimeZone('UTC');
-        $yesterday = (new \DateTime('-1 day', $utc))->format('Y-m-d');
+        $today = new \DateTime('midnight', $utc);
 
-        $licensesByType = ArrayHelper::index($licenses, null, function(LicenseInterface $license) use ($utc, $yesterday) {
+        $licensesByType = ArrayHelper::index($licenses, null, function(LicenseInterface $license) use ($utc, $today) {
             if ($license->getWillAutoRenew() && $license->getWasReminded()) {
                 // Only auto-renew if it just expired yesterday
                 $expiryDate = $license->getExpiryDate();
                 $expiryDate->setTimezone($utc);
-                if ($expiryDate->format('Y-m-d') === $yesterday) {
+                if ($expiryDate >= $today) {
                     return 'renew';
                 }
             }

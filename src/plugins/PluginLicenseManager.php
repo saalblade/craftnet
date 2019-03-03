@@ -282,19 +282,20 @@ class PluginLicenseManager extends Component
     }
 
     /**
-     * Returns any licenses that have expired but don't know it yet.
+     * Returns any licenses that have expired by today but don't know it yet.
      *
      * @return PluginLicense[]
      */
     public function getFreshlyExpiredLicenses(): array
     {
+        $tomorrow = (new \DateTime('midnight', new \DateTimeZone('UTC')))->modify('+1 days');
         $results = $this->_createLicenseQuery()
             ->where([
                 'expirable' => true,
                 'expired' => false,
             ])
             ->andWhere(['not', ['expiresOn' => null]])
-            ->andWhere(['<', 'expiresOn', Db::prepareDateForDb(new \DateTime())])
+            ->andWhere(['<', 'expiresOn', Db::prepareDateForDb($tomorrow)])
             ->all();
 
         $licenses = [];
