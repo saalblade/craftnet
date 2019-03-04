@@ -17,6 +17,8 @@ return [
     'clover.show',
     'cogclient.com',
     'craft.dev',
+    'craft2.dev',
+    'craft3.dev',
     'craftcms.com',
     'crudecode.com',
     'designandbuildsandbox.com',
