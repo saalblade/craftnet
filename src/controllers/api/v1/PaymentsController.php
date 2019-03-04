@@ -60,6 +60,17 @@ class PaymentsController extends CartsController
         $errors = [];
         $commerce = Commerce::getInstance();
 
+        // make sure the cart has an email
+        if (!$cart->getEmail()) {
+            throw new ValidationException([
+                [
+                    'param' => 'email',
+                    'message' => 'The cart is missing an email',
+                    'code' => self::ERROR_CODE_INVALID,
+                ],
+            ]);
+        }
+
         // make sure the cart has a billing address
         if ($cart->getBillingAddress() === null) {
             $errors[] = [
