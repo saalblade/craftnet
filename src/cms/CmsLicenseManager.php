@@ -29,12 +29,6 @@ class CmsLicenseManager extends Component
     public $devDomains = [];
 
     /**
-     * @var array TLDs that we treat as private, because they are only used for dev/testing/staging purposes
-     * @see normalizeDomain()
-     */
-    public $devTlds = [];
-
-    /**
      * @var array Words that can be found in the subdomain that will cause the domain to be treated as private
      * @see normalizeDomain()
      */
@@ -85,11 +79,6 @@ class CmsLicenseManager extends Component
             in_array($domain, $this->devDomains, true) ||
             in_array($result->getFullHost(), $this->devDomains, true)
         ) {
-            return null;
-        }
-
-        // ignore if it's a dev TLD
-        if (in_array($result->getSuffix(), $this->devTlds, true)) {
             return null;
         }
 
