@@ -326,6 +326,9 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Navigation](https://github.com/verbb/navigation) can be used instead.'
     ],
+    'NoCache' => [
+        'handle' => 'nocache',
+    ],
     'NpEditMultipleElements' => [
         'handle' => 'sequential-edit',
     ],
