@@ -66,6 +66,9 @@ return [
                             ],
                         ]
                     ],
+                    'saleManager' => [
+                        'class' => craftnet\sales\SaleManager::class,
+                    ]
                 ]
             ],
             'oauth-server' => [
