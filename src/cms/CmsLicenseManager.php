@@ -29,6 +29,12 @@ class CmsLicenseManager extends Component
     public $devDomains = [];
 
     /**
+     * @var array Domain suffixes that we consider to be public even though the Extract lib says they're private
+     * @see normalizeDomain()
+     */
+    public $publicDomainSuffixes = [];
+
+    /**
      * @var array Words that can be found in the subdomain that will cause the domain to be treated as private
      * @see normalizeDomain()
      */
@@ -67,11 +73,21 @@ class CmsLicenseManager extends Component
             $url = (new IDN())->toUTF8($url);
         }
 
-        $result = (new Extract(null, null, Extract::MODE_ALLOW_ICANN))
+        $result = (new Extract(null, null, Extract::MODE_ALLOW_ICANN | Extract::MODE_ALLOW_PRIVATE))
             ->parse(mb_strtolower($url));
 
         if (($domain = $result->getRegistrableDomain()) === null) {
             return null;
+        }
+
+        // ignore if it's a private domain, unless we consider its suffix to be public (e.g. uk.com)
+        if (!in_array($result->getSuffix(), $this->publicDomainSuffixes, true)) {
+            $altDomain = (new Extract(null, null, Extract::MODE_ALLOW_ICANN))
+                ->parse(mb_strtolower($url))
+                ->getRegistrableDomain();
+            if ($domain !== $altDomain) {
+                return null;
+            }
         }
 
         // ignore if it's a dev domain
