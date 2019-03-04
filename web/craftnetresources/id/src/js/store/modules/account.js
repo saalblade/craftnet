@@ -25,7 +25,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.deleteUserPhoto()
                 .then((response) => {
-                    commit('deleteUserPhoto', {response})
+                    commit('users/deleteUserPhoto', {response}, {root: true})
                     resolve(response)
                 })
                 .catch((response) => {
@@ -38,7 +38,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             accountApi.uploadUserPhoto(data)
                 .then((response) => {
-                    commit('uploadUserPhoto', {response})
+                    commit('users/uploadUserPhoto', {response}, {root: true})
                     resolve(response)
                 })
                 .then((response) => {
@@ -86,11 +86,6 @@ const actions = {
  * Mutations
  */
 const mutations = {
-    deleteUserPhoto(rootState, {response}) {
-        rootState.users.currentUser.photoId = response.data.photoId
-        rootState.users.currentUser.photoUrl = response.data.photoUrl
-    },
-
     updateBillingAddress(state, {billingAddress}) {
         state.billingAddress = billingAddress
     },
@@ -99,10 +94,6 @@ const mutations = {
         state.hasApiToken = hasApiToken
     },
 
-    uploadUserPhoto(rootState, {response}) {
-        rootState.users.currentUser.photoId = response.data.photoId
-        rootState.users.currentUser.photoUrl = response.data.photoUrl
-    },
 }
 
 export default {

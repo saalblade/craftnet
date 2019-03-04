@@ -78,6 +78,16 @@ const mutations = {
     updateCurrentUserLoaded(state, loaded) {
         state.currentUserLoaded = loaded
     },
+
+    deleteUserPhoto(state, {response}) {
+        state.currentUser.photoId = response.data.photoId
+        state.currentUser.photoUrl = response.data.photoUrl
+    },
+
+    uploadUserPhoto(state, {response}) {
+        state.currentUser.photoId = response.data.photoId
+        state.currentUser.photoUrl = response.data.photoUrl
+    },
 }
 
 export default {
