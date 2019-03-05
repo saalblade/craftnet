@@ -403,8 +403,7 @@ return [
         'status' => 'Not available yet, but [Retour](https://github.com/nystudio107/craft-retour) can be used instead.'
     ],
     'ReverseRelations' => [
-        'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Entry Relations Manager](https://github.com/Frontwise/craft-entryrelationsmanager) can be used instead.'
+        'handle' => 'reverserelations',
     ],
     'RetconHtml' => [
         'handle' => 'retcon'
