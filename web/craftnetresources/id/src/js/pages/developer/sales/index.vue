@@ -20,10 +20,21 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(sale, key) in salesToRender" :key="key">
+                    <tr v-for="(sale, key) in salesToRender" :key="'sale-' + key">
                         <td>{{ sale.plugin.name }}</td>
                         <td><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></td>
-                        <td class="text-secondary">License Purchase</td>
+                        <td>
+                            <template v-if="sale.purchasableType === 'craftnet\\plugins\\PluginRenewal'">
+                                Renewal
+                            </template>
+                            <template v-else>
+                                License
+                            </template>
+
+                            <div class="text-secondary" v-for="(adjustment, adjustmentKey) in sale.adjustments" :key="'adjustment-' + adjustmentKey">
+                                {{adjustment.name}}
+                            </div>
+                        </td>
                         <td>{{ sale.grossAmount|currency }}</td>
                         <td>{{ sale.netAmount|currency }}</td>
                         <td class="date-col">{{ sale.saleTime|moment("LLL") }}</td>

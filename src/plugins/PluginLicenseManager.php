@@ -5,7 +5,9 @@ namespace craftnet\plugins;
 use Craft;
 use craft\db\Query;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
+use craft\helpers\Json;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
 use yii\base\Component;
@@ -122,6 +124,21 @@ class PluginLicenseManager extends Component
             ->where(['plugins.developerId' => $ownerId])
             ->orderBy(['lineitems.dateCreated' => SORT_DESC])
             ->all();
+
+        $results = ArrayHelper::index($results, 'id');
+        $lineItemIds = array_keys($results);
+
+        $adjustments = (new Query())
+            ->select(['lineItemId', 'name', 'amount'])
+            ->from(['commerce_orderadjustments'])
+            ->where(['lineItemId' => $lineItemIds])
+            ->all();
+
+        foreach ($adjustments as $adjustment) {
+            $results[$adjustment['lineItemId']]['adjustments'][] = $adjustment;
+        }
+
+        $results = array_values($results);
 
         return $results;
     }
