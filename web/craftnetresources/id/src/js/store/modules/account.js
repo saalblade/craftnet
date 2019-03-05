@@ -101,7 +101,7 @@ const actions = {
                     commit('uploadUserPhoto', {response})
                     resolve(response)
                 })
-                .then((response) => {
+                .catch((response) => {
                     reject(response)
                 })
         })
