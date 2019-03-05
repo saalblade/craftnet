@@ -110,12 +110,14 @@ class PluginLicenseManager extends Component
                 'users.email AS ownerEmail',
                 'lineitems.dateCreated AS saleTime',
                 'orders.email AS orderEmail',
+                'elements.type AS purchasableType',
             ])
             ->from(['craftnet_pluginlicenses_lineitems licenses_items'])
             ->innerJoin('commerce_lineitems lineitems', '[[lineitems.id]] = [[licenses_items.lineItemId]]')
             ->innerJoin('commerce_orders orders', '[[orders.id]] = [[lineitems.orderId]]')
             ->innerJoin('craftnet_pluginlicenses licenses', '[[licenses.id]] = [[licenses_items.licenseId]]')
             ->innerJoin('craftnet_plugins plugins', '[[plugins.id]] = [[licenses.pluginId]]')
+            ->innerJoin('elements elements', '[[elements.id]] = [[lineitems.purchasableId]]')
             ->leftJoin('users', '[[users.id]] = [[licenses.ownerId]]')
             ->where(['plugins.developerId' => $ownerId])
             ->orderBy(['lineitems.dateCreated' => SORT_DESC])
