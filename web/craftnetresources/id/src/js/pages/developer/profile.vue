@@ -115,14 +115,6 @@
              * On change photo.
              */
             onChangePhoto() {
-                // let reader = new FileReader()
-                //
-                // reader.onload = function (e) {
-                //     this.userDraft.photoUrl = [e.target.result]
-                // }.bind(this)
-                //
-                // reader.readAsDataURL(this.$refs.photoFile.files[0])
-
                 this.loading.uploadPhoto = true
 
                 let data = {
