@@ -24,7 +24,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             cmsLicensesApi.getExpiringCmsLicensesTotal()
                 .then((response) => {
-                    if (response.data && !response.data.error) {
+                    if (typeof response.data !== 'undefined' && !response.data.error) {
                         commit('updateExpiringCmsLicensesTotal', response.data)
                         resolve(response)
                     } else {
