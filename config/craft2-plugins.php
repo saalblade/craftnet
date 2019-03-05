@@ -463,7 +463,7 @@ return [
     ],
     'SvgIcons' => [
         'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Iconpicker](https://github.com/Dolphiq/craft3-iconpicker) can be used instead.'
+        'status' => 'Not available yet, but [Icon Picker](https://github.com/verbb/icon-picker) or [Iconpicker](https://github.com/Dolphiq/craft3-iconpicker) can be used instead.'
     ],
     'TableMaker' => [
         'handle' => 'tablemaker'
