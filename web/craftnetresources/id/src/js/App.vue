@@ -51,7 +51,7 @@
                 showRenewLicensesModal: state => state.app.showRenewLicensesModal,
                 loading: state => state.app.loading,
                 renewLicense: state => state.app.renewLicense,
-                currentUser: state => state.users.currentUser,
+                currentUser: state => state.account.currentUser,
             }),
 
             currentLayout() {

@@ -59,7 +59,7 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.users.currentUser,
+                currentUser: state => state.account.currentUser,
                 billingAddress: state => state.account.billingAddress,
                 countries: state => state.craftId.countries,
             }),

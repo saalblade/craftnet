@@ -53,11 +53,11 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.users.currentUser,
+                currentUser: state => state.account.currentUser,
             }),
 
             ...mapGetters({
-                userIsInGroup: 'users/userIsInGroup',
+                userIsInGroup: 'account/userIsInGroup',
             }),
         },
 
@@ -74,7 +74,7 @@
                     newEmail = true
                 }
 
-                this.$store.dispatch('users/saveUser', {
+                this.$store.dispatch('account/saveUser', {
                         id: this.userDraft.id,
                         email: this.userDraft.email,
                         username: this.userDraft.username,

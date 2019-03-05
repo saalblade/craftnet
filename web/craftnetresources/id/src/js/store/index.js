@@ -11,7 +11,6 @@ import pluginLicenses from './modules/plugin-licenses'
 import plugins from './modules/plugins'
 import pluginStore from './modules/plugin-store'
 import stripe from './modules/stripe'
-import users from './modules/users'
 
 Vue.use(Vuex)
 
@@ -29,6 +28,5 @@ export default new Vuex.Store({
         plugins,
         pluginStore,
         stripe,
-        users,
     }
 })
