@@ -165,12 +165,10 @@
                         this.errors = {}
                         this.loading.page = false
                     })
-                    .catch(response => {
+                    .catch((response) => {
                         this.loading.page = false
-
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save profile.'
                         this.$store.dispatch('app/displayError', errorMessage)
-
                         this.errors = response.data && response.data.errors ? response.data.errors : {}
                     })
             }

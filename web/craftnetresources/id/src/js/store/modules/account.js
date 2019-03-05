@@ -88,8 +88,8 @@ const actions = {
                         reject(response)
                     }
                 })
-                .catch((response) => {
-                    reject(response)
+                .catch((error) => {
+                    reject(error.response)
                 })
         })
     },
