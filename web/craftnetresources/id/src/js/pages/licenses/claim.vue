@@ -115,9 +115,9 @@
                             this.$store.dispatch('app/displayError', response.data.error)
                         }
                     })
-                    .catch((response) => {
+                    .catch((error) => {
                         this.cmsLicenseLoading = false
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim CMS license.'
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t claim CMS license.'
                         this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
@@ -134,9 +134,9 @@
                             this.$store.dispatch('app/displayError', response.data.error)
                         }
                     })
-                    .catch((response) => {
+                    .catch((error) => {
                         this.cmsLicenseFileLoading = false
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim CMS license.'
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t claim CMS license.'
                         this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
@@ -154,9 +154,9 @@
                             this.$store.dispatch('app/displayError', response.data.error)
                         }
                     })
-                    .catch((response) => {
+                    .catch((error) => {
                         this.emailLoading = false
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim licenses.'
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t claim licenses.'
                         this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
@@ -175,9 +175,9 @@
                             this.$store.dispatch('app/displayError', response.data.error)
                         }
                     })
-                    .catch((response) => {
+                    .catch((error) => {
                         this.pluginLicenseLoading = false
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t claim plugin license.'
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t claim plugin license.'
                         this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
