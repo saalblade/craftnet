@@ -124,7 +124,6 @@
 
         data() {
             return {
-                errors: {},
                 licenseDraft: {},
                 domainEditing: false,
                 domainLoading: false,
@@ -181,12 +180,14 @@
                                 this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
                             }
                         } else {
+                            this.licenseDraft.autoRenew = !this.licenseDraft.autoRenew
                             this.$store.dispatch('app/displayError', 'Couldn’t save license.')
                         }
                     })
-                    .catch((response) => {
-                        this.$store.dispatch('app/displayError', 'Couldn’t save license.')
-                        this.errors = response.data.errors
+                    .catch((error) => {
+                        this.licenseDraft.autoRenew = !this.licenseDraft.autoRenew
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t save license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
 
@@ -197,26 +198,33 @@
                 this.domainLoading = true
                 const oldDomain = this.licenseDraft.domain
 
-                this.saveCmsLicense(response => {
-                    const newDomain = response.data.license.domain
+                this.saveCmsLicense(
+                    // success
+                    (response) => {
+                        const newDomain = response.data.license.domain
 
-                    if (oldDomain && oldDomain !== newDomain) {
-                        this.licenseDraft.domain = newDomain
+                        if (oldDomain && oldDomain !== newDomain) {
+                            this.licenseDraft.domain = newDomain
 
-                        if (!newDomain) {
-                            this.$store.dispatch('app/displayNotice', oldDomain + ' is not a public domain.')
+                            if (!newDomain) {
+                                this.$store.dispatch('app/displayNotice', oldDomain + ' is not a public domain.')
+                            } else {
+                                this.$store.dispatch('app/displayNotice', 'Domain changed to ' + newDomain + '.')
+                            }
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Domain changed to ' + newDomain + '.')
+                            this.$store.dispatch('app/displayNotice', 'Domain saved.')
                         }
-                    } else {
-                        this.$store.dispatch('app/displayNotice', 'Domain saved.')
-                    }
 
-                    this.domainLoading = false
-                    this.domainEditing = false
-                }, () => {
-                    this.domainLoading = false
-                })
+                        this.domainLoading = false
+                        this.domainEditing = false
+                    },
+
+                    // error
+                    (response) => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save domain.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                        this.domainLoading = false
+                    })
             },
 
             /**
@@ -225,13 +233,20 @@
             saveNotes() {
                 this.notesLoading = true
 
-                this.saveCmsLicense(() => {
-                    this.notesLoading = false
-                    this.notesEditing = false
-                    this.$store.dispatch('app/displayNotice', 'Notes saved.')
-                }, () => {
-                    this.notesLoading = false
-                })
+                this.saveCmsLicense(
+                    // success
+                    () => {
+                        this.notesLoading = false
+                        this.notesEditing = false
+                        this.$store.dispatch('app/displayNotice', 'Notes saved.')
+                    },
+
+                    // error
+                    (response) => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save notes.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                        this.notesLoading = false
+                    })
             },
 
             /**
@@ -242,23 +257,28 @@
              */
             saveCmsLicense(cb, cbError) {
                 cmsLicensesApi.saveCmsLicense({
-                    key: this.license.key,
-                    domain: this.licenseDraft.domain,
-                    notes: this.licenseDraft.notes,
-                })
+                        key: this.license.key,
+                        domain: this.licenseDraft.domain,
+                        notes: this.licenseDraft.notes,
+                    })
                     .then(response => {
                         if (response.data && !response.data.error) {
-                            cb(response)
+                            // refresh license data
+                            cmsLicensesApi.getCmsLicense(this.license.id)
+                                .then((getCmsLicenseResponse) => {
+                                    this.$emit('update:license', getCmsLicenseResponse.data)
+                                    this.$store.commit('app/updateRenewLicense', getCmsLicenseResponse.data)
+                                    cb(response)
+                                })
+                                .catch((getCmsLicenseError) => {
+                                    cbError(getCmsLicenseError.response)
+                                })
                         } else {
                             cbError(response)
-                            const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
-                            this.$store.dispatch('app/displayError', errorMessage)
                         }
                     })
-                    .catch(response => {
-                        cbError(response)
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
-                        this.$store.dispatch('app/displayError', errorMessage)
+                    .catch((error) => {
+                        cbError(error.response)
                     })
             },
 
