@@ -1131,10 +1131,12 @@ class PackageManager extends Component
         $compatData = [];
 
         foreach ($pluginData as $packageId => $releases) {
+            $foundMatch = false;
             foreach ($releases as $release) {
                 if (Semver::satisfies($cmsRelease->version, $release['constraints'])) {
                     $compatData[] = [$release['versionId'], $cmsRelease->id];
-                } else {
+                    $foundMatch = true;
+                } else if ($foundMatch) {
                     // if this release wasn't a match, chances are older releases won't be a match either
                     break;
                 }
