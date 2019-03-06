@@ -111,6 +111,9 @@
                         this.$router.push({path: '/cart'})
                         this.$emit('addToCart')
                     })
+                    .catch((errorMessage) => {
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
         },
 
