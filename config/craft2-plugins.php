@@ -223,6 +223,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Discontinued, but [Smart Map](https://www.doublesecretagency.com/plugins/smart-map) can be used instead.'
     ],
+    'GulpRev' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Craft Asset Rev](https://github.com/clubstudioltd/craft-asset-rev) can be used instead.'
+    ],
     'Hacksaw' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Wordsmith](https://wordsmith.docs.topshelfcraft.com/guide/truncation.html#hacksaw) or [Typogrify](https://github.com/nystudio107/craft3-typogrify) can be used instead.'
