@@ -76,8 +76,8 @@
                             this.$store.dispatch('app/displayError', response.data.error)
                         }
                     })
-                    .catch((response) => {
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release CMS license.'
+                    .catch((error) => {
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t release CMS license.'
                         this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
