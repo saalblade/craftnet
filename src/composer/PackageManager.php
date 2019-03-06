@@ -788,7 +788,7 @@ class PackageManager extends Component
                     continue;
                 }
 
-                // Don't include duplicate versions
+                // Don't include invalid versions
                 try {
                     $normalizedVersion = (new VersionParser())->normalize($version);
                 } catch (\UnexpectedValueException $e) {
@@ -798,6 +798,7 @@ class PackageManager extends Component
                     continue;
                 }
 
+                // Don't include duplicate versions
                 if (isset($vcsVersionInfo[$normalizedVersion])) {
                     if ($isConsole) {
                         Console::output(Console::ansiFormat("- skipping {$version} ({$sha}) - duplicate version", [Console::FG_RED]));
