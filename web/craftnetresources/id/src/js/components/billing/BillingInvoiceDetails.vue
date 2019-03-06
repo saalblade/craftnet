@@ -79,20 +79,16 @@
                 }
 
                 this.$store.dispatch('account/saveBillingInfo', data)
-                    .then(response => {
-                        if (response.data.error) {
-                            const errorMessage = response.data.error
-                            this.$store.dispatch('app/displayError', errorMessage)
-                        } else {
-                            this.$store.dispatch('app/displayNotice', 'Invoice details saved.')
-                            this.showForm = false
-                            this.errors = {}
-                        }
-                    }).catch(response => {
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.'
-                    this.$store.dispatch('app/displayError', errorMessage)
-                    this.errors = response.data && response.data.errors ? response.data.errors : {}
-                })
+                    .then(() => {
+                        this.$store.dispatch('app/displayNotice', 'Invoice details saved.')
+                        this.showForm = false
+                        this.errors = {}
+                    })
+                    .catch(response => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
+                    })
             },
 
             cancel() {

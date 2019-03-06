@@ -101,7 +101,7 @@ export default {
 
                             // Stripe Account
                             if (window.stripeAccessToken) {
-                                this.$store.dispatch('account/getStripeAccount')
+                                this.$store.dispatch('stripe/getStripeAccount')
                                     .then(() => {
                                         this.$store.commit('app/updateStripeAccountLoading', false)
                                     }, () => {

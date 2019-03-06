@@ -13,21 +13,26 @@
                         </ul>
                     </div>
 
-                    <p v-else class="text-secondary">Credit card not defined.</p>
+                    <p v-else class="text-secondary">Add a credit card and use Craft ID to purchase licenses and renewals.</p>
                 </div>
 
                 <div :class="{'hidden': !editing}">
                     <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard" @cancel="cancel"></card-form>
-                </div>
 
-                <div class="mt-3">
-                    <img src="~@/images/powered_by_stripe.svg" height="18" />
+                    <div class="mt-4">
+                        <img src="~@/images/powered_by_stripe.svg" width="90" />
+                    </div>
                 </div>
             </div>
 
             <div v-if="!editing" class="pl-4">
                 <p>
-                    <btn class="small" icon="plus" @click="editing = true">New Card</btn>
+                    <template v-if="card">
+                        <btn class="small" @click="editing = true">Change card</btn>
+                    </template>
+                    <template v-else>
+                        <btn class="small" icon="plus" @click="editing = true">Add a card</btn>
+                    </template>
                 </p>
 
                 <p v-if="card">
@@ -65,7 +70,7 @@
         computed: {
 
             ...mapState({
-                card: state => state.account.card,
+                card: state => state.stripe.card,
             }),
 
         },
@@ -79,12 +84,17 @@
              * @param source
              */
             saveCard(card, source) {
-                this.$store.dispatch('account/saveCard', source)
+                this.$store.dispatch('stripe/saveCard', source)
                     .then(() => {
                         card.clear()
                         this.cardFormloading = false
                         this.editing = false
                         this.$store.dispatch('app/displayNotice', 'Card saved.')
+                    })
+                    .catch((response) => {
+                        this.cardFormloading = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save credit card.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
 
@@ -93,10 +103,15 @@
              */
             removeCard() {
                 this.removeCardLoading = true
-                this.$store.dispatch('account/removeCard')
+                this.$store.dispatch('stripe/removeCard')
                     .then(() => {
                         this.removeCardLoading = false
                         this.$store.dispatch('app/displayNotice', 'Card removed.')
+                    })
+                    .catch((response) => {
+                        this.removeCardLoading = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t remove credit card.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
 

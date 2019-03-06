@@ -52,11 +52,15 @@ const actions = {
         return new Promise((resolve, reject) => {
             stripeApi.removeCard()
                 .then((response) => {
-                    commit('removeStripeCard')
-                    resolve(response)
+                    if (!response.data.error) {
+                        commit('removeStripeCard')
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
                 })
-                .catch((response) => {
-                    reject(response)
+                .catch((error) => {
+                    reject(error.response)
                 })
         })
     },
@@ -65,11 +69,15 @@ const actions = {
         return new Promise((resolve, reject) => {
             stripeApi.saveCard(source)
                 .then((response) => {
-                    commit('updateStripeCard', {card: response.data.card.card})
-                    resolve(response)
+                    if (!response.data.error) {
+                        commit('updateStripeCard', {card: response.data.card.card})
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
                 })
-                .catch((response) => {
-                    reject(response)
+                .catch((error) => {
+                    reject(error.response)
                 })
         })
     },

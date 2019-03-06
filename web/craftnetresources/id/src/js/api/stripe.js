@@ -15,10 +15,18 @@ export default {
             token: source.id
         }
 
-        return axios.post(window.craftIdUrl + '/stripe/save-card', qs.stringify(data))
+        return axios.post(window.craftIdUrl + '/stripe/save-card', qs.stringify(data), {
+            headers: {
+                'X-CSRF-Token':  Craft.csrfTokenValue,
+            }
+        })
     },
 
     removeCard() {
-        return axios.post(window.craftIdUrl + '/stripe/remove-card')
+        return axios.post(window.craftIdUrl + '/stripe/remove-card', {}, {
+            headers: {
+                'X-CSRF-Token':  Craft.csrfTokenValue,
+            }
+        })
     },
 }
