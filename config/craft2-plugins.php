@@ -182,7 +182,7 @@ return [
     ],
     'FeedMeHelper' => [
         'statusColor' => 'orange',
-        'status' => 'No longer needed thanks to native support for CSV being implemented in the main [Feed Me plugin](https://github.com/verbb/feed-me).'
+        'status' => 'No longer needed now that the [Feed Me](https://github.com/verbb/feed-me) plugin natively supports CSV.'
     ],
     'FieldGuide' => [
         'statusColor' => 'orange',
