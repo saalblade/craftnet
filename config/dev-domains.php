@@ -37,6 +37,7 @@ return [
     'hpc3.hpconnected.com',
     'hyperlane.co',
     'infomedia-dev.com',
+    'lndo.site',
     'madebymasuga.com',
     'madebyshape-dev.co.uk',
     'madebyshape.dev',
