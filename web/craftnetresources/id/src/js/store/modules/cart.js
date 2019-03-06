@@ -71,7 +71,7 @@ const actions = {
                                 .then((response) => {
                                     if (!response.error) {
                                         commit('updateCart', {response: response.data})
-                                        resolve(response.data)
+                                        resolve()
                                     } else {
                                         // Couldn’t get cart for this order number? Try to create a new one.
                                         const data = {
@@ -79,34 +79,60 @@ const actions = {
                                         }
 
                                         api.createCart(data)
-                                            .then((response2) => {
-                                                commit('updateCart', {response: response2.data})
-                                                dispatch('saveOrderNumber', {orderNumber: response2.data.cart.number})
-                                                resolve(response)
+                                            .then((createCartResponse) => {
+                                                commit('updateCart', {response: createCartResponse.data})
+                                                dispatch('saveOrderNumber', {orderNumber: createCartResponse.data.cart.number})
+                                                resolve()
                                             })
-                                            .catch((response) => {
-                                                reject(response)
+                                            .catch((createCartError) => {
+                                                if (createCartError.response.data.error) {
+                                                    reject(createCartError.response.data.error)
+                                                    return;
+                                                }
+
+                                                if (createCartError.message) {
+                                                    reject(createCartError.message)
+                                                    return;
+                                                }
+
+                                                reject('Couldn’t create cart')
                                             })
                                     }
                                 })
-                                .catch((response) => {
-                                    if (response.response.data.message && response.response.data.message === 'Cart Already Completed') {
-                                        const data = {
-                                            email: rootState.account.currentUser.email
-                                        }
-
-                                        api.createCart(data)
-                                            .then((response2) => {
-                                                commit('updateCart', {response: response2.data})
-                                                dispatch('saveOrderNumber', {orderNumber: response2.data.cart.number})
-                                                resolve(response)
-                                            })
-                                            .catch((response) => {
-                                                reject(response)
-                                            })
-                                    } else {
-                                        reject(response)
+                                .catch((error) => {
+                                    if (error.response.data.message && error.response.data.message !== 'Cart Already Completed' && error.response.data.message !== 'Cart Not Found') {
+                                        reject(error.response.data.message)
+                                        return;
                                     }
+
+                                    if (error.response.data.error) {
+                                        reject(error.response.data.error)
+                                        return;
+                                    }
+
+                                    const data = {
+                                        email: rootState.account.currentUser.email
+                                    }
+
+                                    api.createCart(data)
+                                        .then((createCartResponse) => {
+                                            commit('updateCart', {response: createCartResponse.data})
+                                            dispatch('saveOrderNumber', {orderNumber: createCartResponse.data.cart.number})
+                                            resolve()
+                                        })
+                                        .catch((createCartError) => {
+                                            if (createCartError.response.data.error) {
+                                                reject(createCartError.response.data.error)
+                                                return;
+                                            }
+
+                                            if (createCartError.message) {
+                                                reject(createCartError.message)
+                                                return;
+                                            }
+
+                                            reject('Couldn’t create cart')
+                                        })
                                 })
                         } else {
                             // No order number yet? Create a new cart.
@@ -115,13 +141,23 @@ const actions = {
                             }
 
                             api.createCart(data)
-                                .then((response) => {
-                                    commit('updateCart', {response: response.data})
-                                    dispatch('saveOrderNumber', {orderNumber: response.data.cart.number})
-                                    resolve(response)
+                                .then((createCartResponse) => {
+                                    commit('updateCart', {response: createCartResponse.data})
+                                    dispatch('saveOrderNumber', {orderNumber: createCartResponse.data.cart.number})
+                                    resolve()
                                 })
-                                .catch((response) => {
-                                    reject(response)
+                                .catch((createCartError) => {
+                                    if (createCartError.response.data.error) {
+                                        reject(createCartError.response.data.error)
+                                        return;
+                                    }
+
+                                    if (createCartError.message) {
+                                        reject(createCartError.message)
+                                        return;
+                                    }
+
+                                    reject('Couldn’t create cart.')
                                 })
                         }
                     })
