@@ -180,6 +180,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Discontinued, but [Beam](https://github.com/sjelfull/craft3-beam) or [Export CSV](https://github.com/kffein/Craft-export-Csv) can be used instead,'
     ],
+    'FeedMeHelper' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to native support for CSV being implemented in the main [Feed Me plugin](https://github.com/verbb/feed-me).'
+    ],
     'FieldGuide' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Field Manager](https://github.com/verbb/field-manager) can be used instead.'
