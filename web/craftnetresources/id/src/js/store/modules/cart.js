@@ -263,8 +263,18 @@ const actions = {
                             commit('updateCart', {response: response.data})
                             resolve(response)
                         })
-                        .catch((response) => {
-                            reject(response)
+                        .catch((error) => {
+                            if (error.response.data.error) {
+                                reject(error.response.data.error)
+                                return;
+                            }
+
+                            if (error.message) {
+                                reject(error.message)
+                                return;
+                            }
+
+                            reject('Couldn’t update cart.')
                         })
                 })
                 .catch(reject)
