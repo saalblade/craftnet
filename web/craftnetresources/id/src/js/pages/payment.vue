@@ -84,8 +84,8 @@
         computed: {
             ...mapState({
                 cart: state => state.cart.cart,
-                card: state => state.account.card,
-                existingCardToken: state => state.account.cardToken,
+                card: state => state.stripe.card,
+                existingCardToken: state => state.stripe.cardToken,
                 accountBillingAddress: state => state.account.billingAddress,
             }),
 
