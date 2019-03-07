@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@pixelandtonic/craftui": "^0.2.2",
+    "@pixelandtonic/craftui": "pixelandtonic/craftui#feature/0.3.0",
     "axios": "^0.18.0",
     "debounce": "^1.2.0",
     "humanize-duration": "^3.15.0",
