@@ -7,7 +7,6 @@ use craft\commerce\base\AdjusterInterface;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
 use craft\commerce\models\OrderAdjustment;
-use craft\helpers\DateTimeHelper;
 use craftnet\base\EditionInterface;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\helpers\OrderHelper;
@@ -102,7 +101,7 @@ class OrderAdjuster implements AdjusterInterface
                         $updatesUpgradeDiscount = round($renewalUpgradeDiscount * $oldPaidRenewalYears, 2);
                         $upgradeSnapshot['oldRenewalPrice'] = $oldRenewal->getPrice();
                         $upgradeSnapshot['oldPaidRenewalYears'] = $oldPaidRenewalYears;
-                        $upgradeSnapshot['updatesUpgradeDiscount'] =  $updatesUpgradeDiscount;
+                        $upgradeSnapshot['updatesUpgradeDiscount'] = $updatesUpgradeDiscount;
                         $upgradeDiscount += $updatesUpgradeDiscount;
                     }
                 }
