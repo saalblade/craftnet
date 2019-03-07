@@ -37,8 +37,8 @@ const actions = {
                         reject(response)
                     }
                 })
-                .catch((response) => {
-                    reject(response)
+                .catch((error) => {
+                    reject(error.response)
                 })
         })
     },
@@ -54,8 +54,8 @@ const actions = {
                         reject(response)
                     }
                 })
-                .catch((response) => {
-                    reject(response)
+                .catch((error) => {
+                    reject(error.response)
                 })
         })
     },
@@ -63,12 +63,12 @@ const actions = {
     getPlugins({commit}) {
         return new Promise((resolve, reject) => {
             pluginsApi.getPlugins()
-                .then(response => {
+                .then((response) => {
                     commit('updatePlugins', {plugins: response.data})
                     resolve(response)
                 })
-                .catch(response => {
-                    reject(response)
+                .catch((error) => {
+                    reject(error.response)
                 })
         })
     },

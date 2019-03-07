@@ -34,14 +34,14 @@ const actions = {
 
         return new Promise((resolve, reject) => {
             appsApi.getApps()
-                .then(response => {
+                .then((response) => {
                     commit('updateAppsLoading', false)
                     commit('updateApps', {apps: response.data})
                     resolve(response)
                 })
-                .catch(response => {
+                .catch((error) => {
                     commit('updateAppsLoading', false)
-                    reject(response)
+                    reject(error.response)
                 })
         })
     },

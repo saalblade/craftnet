@@ -177,8 +177,10 @@
                     .then(() => {
                         this.loading = false
                     })
-                    .catch(() => {
+                    .catch((response) => {
                         this.loading = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t get plugins.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
             }
         }

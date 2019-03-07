@@ -418,7 +418,7 @@
                 let url = repositoryUrl
 
                 pluginsApi.loadDetails(url, params)
-                    .then(response => {
+                    .then((response) => {
                         this.repositoryLoading = false
                         this.loadingRepository = null
 
@@ -468,9 +468,10 @@
                             }
                         }
                     })
-                    .catch(() => {
+                    .catch((error) => {
                         this.repositoryLoading = false
-                        this.$store.dispatch('app/displayError', "Couldn’t load repository")
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t load repository.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
 
@@ -526,14 +527,14 @@
                         this.loading = false
                         this.$store.dispatch('app/displayNotice', 'Plugin saved.')
                         this.$router.push({path: '/developer/plugins'})
-                    }).catch(response => {
-                    this.loading = false
+                    })
+                    .catch((response) => {
+                        this.loading = false
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save plugin.'
-                    this.$store.dispatch('app/displayError', errorMessage)
-
-                    this.errors = response.data && response.data.errors ? response.data.errors : {}
-                })
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save plugin.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
@@ -545,14 +546,14 @@
                     .then(() => {
                         this.pluginSubmitLoading = false
                         this.$store.dispatch('app/displayNotice', 'Plugin submitted for approval.')
-                    }).catch(response => {
-                    this.pluginSubmitLoading = false
+                    })
+                    .catch((response) => {
+                        this.pluginSubmitLoading = false
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t submit plugin for approval.'
-                    this.$store.dispatch('app/displayError', errorMessage)
-
-                    this.errors = response.data && response.data.errors ? response.data.errors : {}
-                })
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t submit plugin for approval.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
@@ -592,6 +593,10 @@
 
         mounted() {
             this.$store.dispatch('apps/getApps')
+                .catch((response) => {
+                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t get apps.'
+                    this.$store.dispatch('app/displayError', errorMessage)
+                })
 
             if (this.plugin) {
                 this.pluginDraft = JSON.parse(JSON.stringify(this.plugin))
