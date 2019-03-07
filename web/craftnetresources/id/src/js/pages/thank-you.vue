@@ -19,9 +19,11 @@
             height: 80px;
 
             svg {
-                @apply text-5xl mt-8 mb-4 text-grey .absolute;
+                @apply mt-8 mb-4 text-grey .absolute;
                 top: calc(50% - 54px);
                 left: calc(50% - 24px);
+                width: 48px;
+                height: 48px;
             }
         }
 
