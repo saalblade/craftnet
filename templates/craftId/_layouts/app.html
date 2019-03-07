@@ -28,6 +28,7 @@
 
 
 {% block body %}
+    {{ craft.twigpack.includeCssModule("chunk-vendors.css") }}
     {{ craft.twigpack.includeCssModule("app.css") }}
 
     {% block content %}
