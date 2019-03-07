@@ -124,7 +124,7 @@
 
                 <div v-else>
                     <empty>
-                        <icon icon="shopping-cart" cssClass="text-5xl mb-4 text-grey" />
+                        <icon icon="shopping-cart" class="size-4xl mb-4 text-grey" />
                         <div class="font-bold">Your cart is empty</div>
                         <div class="mt-4">
                             <p>Browse plugins on <a :href="craftPluginsUrl()">plugins.craftcms.com</a></p>
