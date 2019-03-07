@@ -43,6 +43,7 @@ return [
     'madebyshape.dev',
     'mandarindev.no',
     'manual.casa',
+    'marbles.dev',
     'martinleveille.dev',
     'mcipreview.com',
     'microserve-staging.ca',
