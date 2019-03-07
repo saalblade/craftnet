@@ -2,9 +2,11 @@
 
 namespace craftnet\console\controllers;
 
+use Composer\Semver\VersionParser;
 use Craft;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
+use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\DateTimeHelper;
 use craftnet\errors\LicenseNotFoundException;
@@ -15,7 +17,9 @@ use craftnet\plugins\PluginEdition;
 use craftnet\plugins\PluginLicense;
 use yii\base\InvalidArgumentException;
 use yii\console\Controller;
+use yii\console\ExitCode;
 use yii\helpers\Console;
+use yii\helpers\Markdown;
 use yii\validators\EmailValidator;
 
 /**
@@ -161,5 +165,168 @@ class PluginLicensesController extends Controller
         }
 
         return 0;
+    }
+
+    /**
+     * Upgrades Lite edition licenses to Pro based on the existence of an old "Pro" plugin license.
+     *
+     * @return int
+     */
+    public function actionUpgrade(): int
+    {
+        getPluginHandle:
+        $pluginHandle = $this->prompt('Plugin handle:', ['required' => true]);
+        $plugin = Plugin::find()->handle($pluginHandle)->one();
+        if (!$plugin) {
+            $this->stdout('Invalid handle' . PHP_EOL, Console::FG_RED);
+            goto getPluginHandle;
+        }
+
+        $liteEdition = $plugin->getEdition('lite');
+        $proEdition = $plugin->getEdition('pro');
+
+        getOldPluginHandle:
+        $oldPluginHandle = $this->prompt('Old "pro" plugin handle:', ['required' => true]);
+        $oldPlugin = Plugin::find()->anyStatus()->handle($oldPluginHandle)->one();
+        if (!$oldPlugin) {
+            $this->stdout('Invalid handle' . PHP_EOL, Console::FG_RED);
+            goto getOldPluginHandle;
+        }
+
+        $oldEdition = $oldPlugin->getEdition('standard');
+
+        $version = $this->prompt('Plugin version that added edition support:', [
+            'required' => true,
+            'validator' => function(string $input) {
+                try {
+                    (new VersionParser())->normalize($input);
+                    return true;
+                } catch (\UnexpectedValueException $e) {
+                    return false;
+                }
+            },
+            'error' => 'Invalid version',
+        ]);
+
+        // Make sure that all old pro licenses have a Lite edition license for the same Craft site,
+        // and owned by the same Craft ID account
+
+        $licenseQuery = (new Query())
+            ->select([
+                'id' => 'old.id',
+                'liteId' => 'lite.id',
+                'ownerId' => 'old.ownerId',
+                'cmsLicenseId' => 'old.cmsLicenseId',
+            ])
+            ->from('craftnet_pluginlicenses old')
+            ->leftJoin('craftnet_pluginlicenses lite', [
+                'and',
+                ['lite.editionId' => $liteEdition->id],
+                '[[lite.cmsLicenseId]] = [[old.cmsLicenseId]]',
+            ])
+            ->where(['old.editionId' => $oldEdition->id]);
+
+        $badLicenses = (clone $licenseQuery)
+            ->addSelect([
+                'liteOwnerId' => 'lite.ownerId',
+            ])
+            ->andWhere([
+                'or',
+                ['lite.id' => null],
+                ['old.ownerId' => null],
+                ['old.cmsLicenseId' => null],
+                '[[old.ownerId]] != [[lite.ownerId]]',
+            ])
+            ->all();
+
+        $manager = $this->module->getPluginLicenseManager();
+
+        if (!empty($badLicenses)) {
+            $this->stderr('The following licenses need to be dealt with first:' . PHP_EOL, Console::FG_RED);
+            foreach ($badLicenses as $result) {
+                $license = $manager->getLicenseById($result['id']);
+                $errors = [];
+                if (!$result['cmsLicenseId']) {
+                    $errors[] = 'not attached to a Craft license';
+                } else if (!$result['liteId']) {
+                    $errors[] = 'no lite license found';
+                }
+                if (!$result['ownerId'] || ($result['liteId'] && !$result['liteOwnerId'])) {
+                    if (!$result['ownerId']) {
+                        $errors[] = 'no owner';
+                    }
+                    if (!$result['liteOwnerId']) {
+                        $errors[] = 'no lite owner';
+                    }
+                } else if ($result['liteId'] && $result['ownerId'] != $result['liteOwnerId']) {
+                    $errors[] = 'owner mismatch';
+                }
+                $this->stderr("- {$license->key} (" . implode(', ', $errors) . ')' . PHP_EOL, Console::FG_RED);
+            }
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
+
+        $licenses = $licenseQuery->all();
+        $this->stdout('Upgrading ' . count($licenses) . ' licenses ...' . PHP_EOL, Console::FG_YELLOW);
+        $mailer = Craft::$app->getMailer();
+
+        foreach ($licenses as $result) {
+            $oldLicense = $manager->getLicenseById($result['id']);
+            $liteLicense = $manager->getLicenseById($result['liteId']);
+
+            $this->stdout("- {$oldLicense->key} ({$oldPlugin->name} - Standard) => {$liteLicense->key} ({$plugin->name} - Pro) ... ", Console::FG_YELLOW);
+
+            $liteLicense->editionId = $proEdition->id;
+
+            if ($liteLicense->expirable && $oldLicense->expirable) {
+                // Go with whatever the greater expiry date is
+                $liteLicense->expiresOn = max($oldLicense->expiresOn, $liteLicense->expiresOn);
+            }
+
+            // Disable auto-renew if the old pro license didn't have it enabled
+            if (!$oldLicense->autoRenew) {
+                $liteLicense->autoRenew = false;
+            }
+
+            $manager->saveLicense($liteLicense, false);
+            $manager->addHistory($liteLicense->id, "Upgraded to Pro edition per old {$oldPlugin->name} license ({$oldLicense->key})");
+
+            // Delete the old license
+            $manager->deleteLicenseById($oldLicense->id);
+
+            // Send the notification email
+            $owner = User::findOne($liteLicense->ownerId);
+            $name = $owner->firstName ?: 'there';
+            $editUrl = $liteLicense->getEditUrl();
+            $body = <<<EOD
+Hi {$name},
+
+{$plugin->name} {$version} was just released, with built-in Lite and Pro editions. That means that there’s no longer any
+need to install the {$oldPlugin->name} plugin separately.
+
+We’ve gone ahead and upgraded your {$plugin->name} license ([`{$liteLicense->shortKey}`]($editUrl)) to the new Pro
+edition, since you had a {$oldPlugin->name} license (`{$oldLicense->shortKey}`) tied to the same Craft project. 
+
+When you update to {$plugin->name} {$version} or later, please remember to go to the Settings → Plugins page in your
+Control Panel and switch {$plugin->name} over to the Pro edition. Then you can uninstall the old {$oldPlugin->name}
+plugin.
+
+Let us know if you have any questions.
+
+Have a good day!
+EOD;
+
+            $mailer->compose()
+                ->setTo($owner)
+                ->setSubject("Your {$plugin->name} license")
+                ->setTextBody($body)
+                ->setHtmlBody(Markdown::process($body))
+                ->send();
+
+            $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
+        }
+
+        $this->stdout('Done upgrading licenses' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
+        return ExitCode::OK;
     }
 }

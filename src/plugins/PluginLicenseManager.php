@@ -181,6 +181,25 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns a license by its ID.
+     *
+     * @param int $id
+     * @return PluginLicense
+     */
+    public function getLicenseById(int $id): PluginLicense
+    {
+        $result = $this->_createLicenseQuery()
+            ->where(['id' => $id])
+            ->one();
+
+        if ($result === null) {
+            throw new LicenseNotFoundException($id);
+        }
+
+        return new PluginLicense($result);
+    }
+
+    /**
      * Returns a license by its key.
      *
      * @param string $key
@@ -610,6 +629,23 @@ class PluginLicenseManager extends Component
         $license['cmsLicense'] = $cmsLicense;
 
         return $license;
+    }
+
+    /**
+     * Deletes a license by its ID.
+     *
+     * @param int $id
+     * @throws LicenseNotFoundException if $key is missing
+     */
+    public function deleteLicenseById(int $id)
+    {
+        $rows = Craft::$app->getDb()->createCommand()
+            ->delete('craftnet_pluginlicenses', ['id' => $id])
+            ->execute();
+
+        if ($rows === 0) {
+            throw new LicenseNotFoundException($id);
+        }
     }
 
     /**
