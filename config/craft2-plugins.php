@@ -180,6 +180,10 @@ return [
         'statusColor' => 'orange',
         'status' => 'Discontinued, but [Beam](https://github.com/sjelfull/craft3-beam) or [Export CSV](https://github.com/kffein/Craft-export-Csv) can be used instead,'
     ],
+    'FeedMeHelper' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed now that the [Feed Me](https://github.com/verbb/feed-me) plugin natively supports CSV.'
+    ],
     'FieldGuide' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Field Manager](https://github.com/verbb/field-manager) can be used instead.'
@@ -222,6 +226,10 @@ return [
     'GeoAddress' => [
         'statusColor' => 'orange',
         'status' => 'Discontinued, but [Smart Map](https://www.doublesecretagency.com/plugins/smart-map) can be used instead.'
+    ],
+    'GulpRev' => [
+        'statusColor' => 'orange',
+        'status' => 'Not available yet, but [Craft Asset Rev](https://github.com/clubstudioltd/craft-asset-rev) can be used instead.'
     ],
     'Hacksaw' => [
         'statusColor' => 'orange',
