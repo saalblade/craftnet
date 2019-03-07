@@ -57,8 +57,8 @@ const actions = {
                     commit('disconnectApp', {appHandle})
                     resolve(response)
                 })
-                .catch((response) => {
-                    reject(response)
+                .catch((error) => {
+                    reject(error.response)
                 })
         })
     },

@@ -135,14 +135,14 @@
                     .then(() => {
                         this.loading[provider] = false;
                         this.$store.dispatch('app/displayNotice', 'App disconnected.');
-                    }).catch(response => {
-                    this.loading[provider] = false;
+                    })
+                    .catch((response) => {
+                        this.loading[provider] = false;
+                        this.errors = response.data && response.data.errors ? response.data.errors : {};
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t disconnect app.';
-                    this.$store.dispatch('app/displayError', errorMessage);
-
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                });
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t disconnect app.';
+                        this.$store.dispatch('app/displayError', errorMessage);
+                    });
             },
         },
 
