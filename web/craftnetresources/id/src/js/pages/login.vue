@@ -98,10 +98,15 @@
                 FormDataHelper.append(formData, 'rememberMe', (this.rememberMe ? '1' : '0'))
 
                 usersApi.login(formData)
-                    .then(() => {
+                    .then((response) => {
                         // Set `remainingSessionTime` to something different than 0 to give the auth manager a chance to get the real remaining session time
                         // todo: Take Craft’s userSessionDuration config into account
                         Craft.remainingSessionTime = 3600
+                        
+                        if (response.data.returnUrl) {
+                            window.location.replace(response.data.returnUrl)
+                            return
+                        }
 
                         this.loadAuthenticatedUserData(() => {
                             this.loading = false
