@@ -112,8 +112,7 @@
                         this.$router.push({path: '/cart'})
                         this.$emit('addToCart')
                     })
-                    .catch(error => {
-                        const errorMessage = error.response.data.errors && error.response.data.errors[0] && error.response.data.errors[0].message ? error.response.data.errors[0].message : 'Couldn’t add update to cart.';
+                    .catch(errorMessage => {
                         this.$store.dispatch('app/displayError', errorMessage);
                     })
             },

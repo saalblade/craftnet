@@ -10,7 +10,7 @@
             <template v-if="license">
                 <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
 
-                <plugin-license-details :license="license"></plugin-license-details>
+                <plugin-license-details :license.sync="license"></plugin-license-details>
 
                 <license-history :history="license.history" />
 
@@ -71,8 +71,8 @@
                             this.$store.dispatch('app/displayError', response.data.error)
                         }
                     })
-                    .catch((response) => {
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release plugin license.'
+                    .catch((error) => {
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t release plugin license.'
                         this.$store.dispatch('app/displayError', errorMessage)
                     })
             },

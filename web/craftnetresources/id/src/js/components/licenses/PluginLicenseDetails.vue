@@ -137,11 +137,18 @@
                 this.licenseDraft.cmsLicenseId = null
                 this.licenseDraft.cmsLicense = null
 
-                this.savePluginLicense(() => {
-                    this.detaching = false
-                }, () => {
-                    this.detaching = false
-                })
+                this.savePluginLicense(
+                    // success
+                    () => {
+                        this.detaching = false
+                        this.$store.dispatch('app/displayNotice', 'Plugin license detached from CMS license.')
+                    },
+                    // error
+                    (response) => {
+                        this.detaching = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t detach plugin license from CMS license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
@@ -152,11 +159,18 @@
                 this.licenseDraft.cmsLicenseId = this.originalCmsLicenseId
                 this.licenseDraft.cmsLicense = this.originalCmsLicense
 
-                this.savePluginLicense(() => {
-                    this.reattaching = false
-                }, () => {
-                    this.reattaching = false
-                })
+                this.savePluginLicense(
+                    // Success
+                    () => {
+                        this.reattaching = false
+                        this.$store.dispatch('app/displayNotice', 'Plugin license reattached to CMS license.')
+                    },
+                    // error
+                    (response) => {
+                        this.reattaching = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t detach plugin license from CMS license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
@@ -176,12 +190,19 @@
             saveNotes() {
                 this.notesLoading = true
 
-                this.savePluginLicense(() => {
-                    this.notesLoading = false
-                    this.notesEditing = false
-                }, () => {
-                    this.notesLoading = false
-                })
+                this.savePluginLicense(
+                    // success
+                    () => {
+                        this.notesLoading = false
+                        this.notesEditing = false
+                        this.$store.dispatch('app/displayNotice', 'Notes saved.')
+                    },
+                    // error
+                    (response) => {
+                        this.notesLoading = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save notes.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
@@ -220,17 +241,22 @@
                 })
                     .then((response) => {
                         if (response.data && !response.data.error) {
-                            cb(response)
-                            this.$store.dispatch('app/displayNotice', 'License saved.')
+                            // refresh license data
+                            pluginLicensesApi.getPluginLicense(this.license.id)
+                                .then((getPluginLicenseResponse) => {
+                                    this.$emit('update:license', getPluginLicenseResponse.data)
+                                    this.$store.commit('app/updateRenewLicense', getPluginLicenseResponse.data)
+                                    cb(response)
+                                })
+                                .catch((getPluginLicenseError) => {
+                                    cbError(getPluginLicenseError.response)
+                                })
                         } else {
                             cbError(response)
-                            this.$store.dispatch('app/displayError', response.data.error)
                         }
                     })
-                    .catch((response) => {
-                        cbError(response)
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
-                        this.$store.dispatch('app/displayError', errorMessage)
+                    .catch((error) => {
+                        cbError(error.response)
                     })
             },
 
@@ -239,19 +265,26 @@
              */
             saveAutoRenew() {
                 pluginLicensesApi.savePluginLicense({
-                    pluginHandle: this.license.plugin.handle,
-                    key: this.license.key,
-                    autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
-                })
-                    .then(() => {
-                        if (this.licenseDraft.autoRenew) {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
+                        pluginHandle: this.license.plugin.handle,
+                        key: this.license.key,
+                        autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
+                    })
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            if (this.licenseDraft.autoRenew) {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
+                            } else {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
+                            }
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
+                            this.licenseDraft.autoRenew = !this.licenseDraft.autoRenew
+                            this.$store.dispatch('app/displayError', 'Couldn’t save license.')
                         }
-                    }).catch(data => {
-                        this.$store.dispatch('app/displayError', 'Couldn’t save license.')
-                        this.errors = data.errors
+                    })
+                    .catch((error) => {
+                        this.licenseDraft.autoRenew = !this.licenseDraft.autoRenew
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t save license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
         },
