@@ -8,7 +8,7 @@
                 <p class="text-secondary">Attach a Craft CMS license to your Craft ID account.</p>
 
                 <form class="mb-6" @submit.prevent="claimCmsLicense()">
-                    <textarea-field id="cmsLicenseKey" class="mono" spellcheck="false" v-model="cmsLicenseKey" @input="cmsLicenseKeyChange" label="Craft CMS License Key" rows="5" />
+                    <textarea-field id="cmsLicenseKey" class="mono" :spellcheck="false" v-model="cmsLicenseKey" @input="cmsLicenseKeyChange" label="Craft CMS License Key" rows="5" />
                     <btn class="primary" type="submit" :disabled="!cmsLicenseValidates">Claim License</btn>
                     <spinner v-if="cmsLicenseLoading"></spinner>
                 </form>
@@ -30,7 +30,7 @@
                 <p class="text-secondary">Attach a plugin license to your Craft ID account.</p>
 
                 <form @submit.prevent="claimPluginLicense()">
-                    <text-field id="pluginLicenseKey" class="mono" spellcheck="false" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" :mask="{ mask: '****-****-****-****-****-****', placeholder: ' ', showMaskOnHover: false, showMaskOnFocus: false }" />
+                    <text-field id="pluginLicenseKey" class="mono" :spellcheck="false" v-model="pluginLicenseKey" label="Plugin License Key" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" mask="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" />
                     <btn class="primary" type="submit" :disabled="!pluginLicenseValidates">Claim License</btn>
                     <spinner v-if="pluginLicenseLoading"></spinner>
                 </form>
