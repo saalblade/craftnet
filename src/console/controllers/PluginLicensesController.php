@@ -363,8 +363,6 @@ EOD;
                 ->send();
 
             $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
-
-            break;
         }
 
         $this->stdout('Done upgrading licenses' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
