@@ -317,16 +317,20 @@ class PartnerService
             'isRegisteredBusiness',
         ];
 
+        $dates = [
+            'verificationStartDate',
+        ];
+
         $others = [
             'id',
             'ownerId',
             'capabilities',
             'locations',
             'projects',
-            'verificationStartDate',
+
         ];
 
-        $data = $partner->getAttributes(array_merge($strings, $booleans, $others));
+        $data = $partner->getAttributes(array_merge($strings, $booleans, $dates, $others));
 
         foreach ($strings as $stringAttribute) {
             $data[$stringAttribute] = (string)$data[$stringAttribute];
@@ -334,6 +338,14 @@ class PartnerService
 
         foreach ($booleans as $booleanAttribute) {
             $data[$booleanAttribute] = (bool)$data[$booleanAttribute];
+        }
+
+        foreach ($dates as $dateAttribute) {
+            $value = $data[$dateAttribute];
+
+            if ($value instanceof \DateTime) {
+                $data[$dateAttribute] = $value->format('Y-m-d');
+            }
         }
 
         // logo
@@ -462,7 +474,7 @@ class PartnerService
                     break;
 
                 case 'verificationStartDate':
-                    $partner->setVerificationStartDateFromPost($request->getBodyParam('verificationStartDate'));
+                    $partner->setVerificationStartDate($request->getBodyParam('verificationStartDate'));
                     break;
 
                 case 'hasFullTimeDev':
