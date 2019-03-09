@@ -607,16 +607,17 @@ class Plugin extends Element
      */
     public function getIcon()
     {
-        if ($this->_icon !== null) {
-            return $this->_icon;
+        if ($this->_icon === null) {
+            if ($this->iconId === null) {
+                return null;
+            }
+            if (($this->_icon = Asset::find()->id($this->iconId)->one()) === null) {
+                // It's probably soft-deleted
+                $this->_icon = false;
+            }
         }
-        if ($this->iconId === null) {
-            return null;
-        }
-        if (($asset = Asset::find()->id($this->iconId)->one()) === null) {
-            throw new InvalidConfigException('Invalid asset ID: ' . $this->iconId);
-        }
-        return $this->_icon = $asset;
+
+        return $this->_icon ?: null;
     }
 
     /**
