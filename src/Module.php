@@ -11,6 +11,7 @@ use craft\commerce\services\Purchasables;
 use craft\elements\db\UserQuery;
 use craft\elements\User;
 use craft\events\DefineBehaviorsEvent;
+use craft\events\DeleteElementEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterEmailMessagesEvent;
@@ -19,6 +20,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\events\UserEvent;
 use craft\models\SystemMessage;
+use craft\services\Elements;
 use craft\services\Fields;
 use craft\services\SystemMessages;
 use craft\services\UserPermissions;
@@ -37,6 +39,7 @@ use craftnet\fields\Plugins;
 use craftnet\invoices\InvoiceManager;
 use craftnet\orders\OrderBehavior;
 use craftnet\orders\PdfRenderer;
+use craftnet\plugins\Plugin;
 use craftnet\plugins\PluginEdition;
 use craftnet\plugins\PluginLicenseManager;
 use craftnet\services\Oauth;
@@ -139,6 +142,13 @@ class Module extends \yii\base\Module
         // provide custom order receipt PDF generation
         Event::on(Pdf::class, Pdf::EVENT_BEFORE_RENDER_PDF, function(PdfEvent $e) {
             $e->pdf = (new PdfRenderer())->render($e->order);
+        });
+
+        // hard-delete plugins
+        Event::on(Elements::class, Elements::EVENT_BEFORE_DELETE_ELEMENT, function(DeleteElementEvent $e) {
+            if ($e->element instanceof Plugin) {
+                $e->hardDelete = true;
+            }
         });
 
         // request type-specific stuff
