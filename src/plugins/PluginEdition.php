@@ -9,7 +9,6 @@ use craft\commerce\Plugin as Commerce;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
-use craft\helpers\DateTimeHelper;
 use craft\helpers\Json;
 use craftnet\base\EditionInterface;
 use craftnet\base\RenewalInterface;

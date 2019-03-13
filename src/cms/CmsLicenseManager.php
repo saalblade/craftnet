@@ -44,7 +44,6 @@ class CmsLicenseManager extends Component
      * Normalizes a license key by trimming whitespace and removing newlines.
      *
      * @param string $key
-     *
      * @return string
      * @throws InvalidArgumentException if $key is invalid
      */
@@ -62,7 +61,6 @@ class CmsLicenseManager extends Component
      * Normalizes a public domain.
      *
      * @param string $url
-     *
      * @return string|null
      */
     public function normalizeDomain(string $url)
@@ -192,7 +190,6 @@ class CmsLicenseManager extends Component
      * Returns a license by its ID.
      *
      * @param int $id
-     *
      * @return CmsLicense
      * @throws LicenseNotFoundException if $id is missing
      */
@@ -213,7 +210,6 @@ class CmsLicenseManager extends Component
      * Returns a license by its key.
      *
      * @param string $key
-     *
      * @return CmsLicense
      * @throws LicenseNotFoundException if $key is missing
      */
@@ -294,7 +290,6 @@ class CmsLicenseManager extends Component
      *
      * @param CmsLicense $license
      * @param bool $runValidation
-     *
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
      */
@@ -390,7 +385,6 @@ class CmsLicenseManager extends Component
      * Returns a license's history in chronological order.
      *
      * @param int $licenseId
-     *
      * @return array
      */
     public function getHistory(int $licenseId): array
@@ -456,7 +450,6 @@ class CmsLicenseManager extends Component
      * Returns licenses by owner as an array.
      *
      * @param User $owner
-     *
      * @return array
      */
     public function getLicensesArrayByOwner(User $owner)
@@ -471,7 +464,6 @@ class CmsLicenseManager extends Component
      *
      * @param array $results
      * @param User $owner
-     *
      * @return array
      */
     public function transformLicensesForOwner(array $results, User $owner)
@@ -490,7 +482,6 @@ class CmsLicenseManager extends Component
      *
      * @param CmsLicense $result
      * @param User $owner
-     *
      * @return array
      */
     public function transformLicenseForOwner(CmsLicense $result, User $owner)
