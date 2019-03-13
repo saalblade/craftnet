@@ -4,7 +4,7 @@
             <h1>Plugins</h1>
 
             <div>
-                <btn class="primary" icon="plus" to="/developer/add-plugin">Add a plugin</btn>
+                <btn kind="primary" icon="plus" to="/developer/add-plugin">Add a plugin</btn>
             </div>
         </div>
 

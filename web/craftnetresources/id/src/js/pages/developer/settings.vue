@@ -13,10 +13,10 @@
                     <p v-if="notice">This is your new API token, <strong>keep it someplace safe</strong>.</p>
 
                     <div class="max-w-sm">
-                        <text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
+                        <textbox id="apiToken" ref="apiTokenField" class="mono" :spellcheck="false" v-model="apiToken" :readonly="true"/>
                     </div>
 
-                    <btn class="primary" type="submit" :disabled="loading" :loading="loading">
+                    <btn kind="primary" type="submit" :disabled="loading" :loading="loading">
                         <template v-if="apiToken">Generate new API Token</template>
                         <template v-else>Generate API Token</template>
                     </btn>

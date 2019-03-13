@@ -11,7 +11,7 @@
 
                 <div class="float-right mt-4">
                     <btn @click="logout">Logout now</btn>
-                    <btn class="primary" ref="renewSessionBtn" @click="renewSession">Keep me logged in</btn>
+                    <btn kind="primary" ref="renewSessionBtn" @click="renewSession">Keep me logged in</btn>
                 </div>
             </template>
         </modal>
@@ -33,7 +33,7 @@
                                    placeholder="Password" type="password"
                                    id="password" class="form-control mr-2"
                                    :class="{'is-invalid': loginErrorPara }"/>
-                            <btn class="primary mr-2" type="submit" :disabled="!passwordValidates">Login</btn>
+                            <btn kind="primary" class="mr-2" type="submit" :disabled="!passwordValidates">Login</btn>
                             <spinner :class="{'invisible': !passwordSpinner}"></spinner>
                         </div>
                     </div>

@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="text-center mt-8">
-                    <btn class="primary" type="submit" large>Pay {{cart.totalPrice|currency}}</btn>
+                    <btn kind="primary" type="submit" large>Pay {{cart.totalPrice|currency}}</btn>
 
                     <spinner v-if="payLoading"></spinner>
 

@@ -23,13 +23,13 @@
                                         <p>{{ license.domain }}</p>
 
                                         <div class="buttons">
-                                            <btn class="small" icon="pencil-alt" @click="domainEditing = true">Change Domain</btn>
+                                            <btn small icon="pencil-alt" @click="domainEditing = true">Change Domain</btn>
                                         </div>
                                     </template>
 
                                     <form v-if="domainEditing" @submit.prevent="saveDomain()">
-                                        <text-field id="domain" v-model="licenseDraft.domain" @input="domainChange"></text-field>
-                                        <btn class="primary" type="submit" :class="{disabled: !domainValidates}" :disabled="!domainValidates">Save</btn>
+                                        <textbox id="domain" v-model="licenseDraft.domain" @input="domainChange" />
+                                        <btn kind="primary" type="submit" :class="{disabled: !domainValidates}" :disabled="!domainValidates">Save</btn>
                                         <btn @click="cancelEditDomain()">Cancel</btn>
                                         <spinner v-if="domainLoading"></spinner>
                                     </form>
@@ -65,8 +65,8 @@
                                     </template>
 
                                     <form v-if="notesEditing" @submit.prevent="saveNotes()">
-                                        <textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
-                                        <btn class="primary" type="submit" :disabled="!notesValidates">Save</btn>
+                                        <textbox type="textarea" id="notes" v-model="licenseDraft.notes" @input="notesChange" />
+                                        <btn kind="primary" type="submit" :disabled="!notesValidates">Save</btn>
                                         <btn @click="cancelEditNotes()">Cancel</btn>
                                         <spinner v-if="notesLoading"></spinner>
                                     </form>
@@ -90,7 +90,7 @@
                     <p>Auto-renew is <strong>disabled</strong> for this license.</p>
                 </template>
 
-                <lightswitch-field
+                <lightswitch
                         id="auto-renew"
                         @change="saveAutoRenew"
                         :checked.sync="licenseDraft.autoRenew"

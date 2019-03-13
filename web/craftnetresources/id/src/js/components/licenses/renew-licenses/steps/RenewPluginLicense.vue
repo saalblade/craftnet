@@ -3,7 +3,7 @@
         <spinner v-if="loading"></spinner>
 
         <template v-else>
-            <select-field v-model="renew" :options="extendUpdateOptions" />
+            <dropdown v-model="renew" :options="extendUpdateOptions" />
 
             <table class="table mb-2">
                 <thead>
@@ -25,7 +25,7 @@
             </table>
 
             <btn @click="$emit('cancel')">Cancel</btn>
-            <btn class="primary" @click="addToCart()">Add to cart</btn>
+            <btn kind="primary" @click="addToCart()">Add to cart</btn>
         </template>
     </div>
 </template>

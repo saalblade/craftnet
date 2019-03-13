@@ -1,6 +1,6 @@
 <template>
     <div>
-        <text-field placeholder="XXXXXXX" id="coupon-code" size="12" v-model="couponCode" @input="couponCodeChange" :errors="couponCodeError" />
+        <textbox placeholder="XXXXXXX" id="coupon-code" size="12" v-model="couponCode" @input="couponCodeChange" :errors="couponCodeError" />
         <spinner v-if="couponCodeLoading"></spinner>
     </div>
 </template>

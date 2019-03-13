@@ -5,9 +5,9 @@
             <div class="card-body">
                 <h4>Email &amp; password</h4>
 
-                <password-field id="password" label="Current Password" v-model="password" :errors="errors.currentPassword" />
-                <text-field id="email" label="Email" v-model="userDraft.email" :errors="errors.email" />
-                <password-field id="newPassword" label="New Password" v-model="newPassword" :errors="errors.newPassword" />
+                <textbox type="password" id="password" label="Current Password" v-model="password" :errors="errors.currentPassword" />
+                <textbox id="email" label="Email" v-model="userDraft.email" :errors="errors.email" />
+                <textbox type="password" id="newPassword" label="New Password" v-model="newPassword" :errors="errors.newPassword" />
             </div>
         </div>
 
@@ -15,7 +15,7 @@
             <div class="card-body">
                 <h4>Account Settings</h4>
 
-                <text-field id="username" label="Username" v-model="userDraft.username" :errors="errors.username" />
+                <textbox id="username" label="Username" v-model="userDraft.username" :errors="errors.username" />
 
                 <p>
                     <input id="enablePluginDeveloperFeatures" :disabled="userIsInGroup('developers')" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        <btn class="primary" type="submit" :disabled="loading" :loading="loading">Save</btn>
+        <btn kind="primary" type="submit" :disabled="loading" :loading="loading">Save</btn>
     </form>
 </template>
 

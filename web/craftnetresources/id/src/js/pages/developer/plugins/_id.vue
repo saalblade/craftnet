@@ -43,10 +43,10 @@
                     <template v-if="plugin.lastHistoryNote && plugin.lastHistoryNote.devComments">
                         <h6>Changes requested</h6>
                         <div v-html="plugin.lastHistoryNote.devComments"></div>
-                        <btn class="small" @click="submit()">Re-submit for Approval</btn>
+                        <btn small @click="submit()">Re-submit for Approval</btn>
                     </template>
                     <template v-else>
-                        <btn class="small" @click="submit()">Submit for Approval</btn>
+                        <btn small @click="submit()">Submit for Approval</btn>
                     </template>
 
                     <span class="text-secondary">Your plugin will be automatically published once it’s approved.</span>
@@ -58,7 +58,7 @@
                 <div class="card mb-6">
                     <div class="card-header">GitHub Repository</div>
                     <div class="card-body">
-                        <text-field id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
+                        <textbox id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
                     </div>
                 </div>
 
@@ -90,13 +90,13 @@
                     <div class="card-body">
                         <div class="flex flex-wrap -mx-4">
                             <div class="w-1/2 px-4">
-                                <text-field id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
+                                <textbox id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
                             </div>
                             <div class="w-1/2 px-4">
-                                <text-field id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" disabled="true" />
+                                <textbox id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" disabled="true" />
                             </div>
                             <div class="w-1/2 px-4">
-                                <text-field id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" disabled="true" />
+                                <textbox id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" disabled="true" />
                             </div>
                             <div class="w-1/2 px-4">
                                 <div class="field">
@@ -110,15 +110,15 @@
                             </div>
                         </div>
 
-                        <text-field id="shortDescription" label="Short Description" v-model="pluginDraft.shortDescription" :errors="errors.shortDescription" />
-                        <textarea-field id="longDescription" label="Long Description" v-model="pluginDraft.longDescription" :errors="errors.longDescription" rows="16" />
+                        <textbox id="shortDescription" label="Short Description" v-model="pluginDraft.shortDescription" :errors="errors.shortDescription" />
+                        <textbox type="textarea" id="longDescription" label="Long Description" v-model="pluginDraft.longDescription" :errors="errors.longDescription" rows="16" />
                         <p class="text-secondary"><small>Styling with Markdown is supported.</small></p>
-                        <text-field id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
-                        <text-field id="changelogPath" label="Changelog Path" instructions="The path to your changelog file, relative to the repository root." v-model="pluginDraft.changelogPath" :errors="errors.changelogPath" />
+                        <textbox id="documentationUrl" label="Documentation URL" v-model="pluginDraft.documentationUrl" :errors="errors.documentationUrl" />
+                        <textbox id="changelogPath" label="Changelog Path" instructions="The path to your changelog file, relative to the repository root." v-model="pluginDraft.changelogPath" :errors="errors.changelogPath" />
 
                         <plugin-categories :plugin-draft="pluginDraft"></plugin-categories>
 
-                        <text-field id="keywords" label="Keywords" instructions="Comma-separated list of keywords." v-model="pluginDraft.keywords" :errors="errors.keywords" />
+                        <textbox id="keywords" label="Keywords" instructions="Comma-separated list of keywords." v-model="pluginDraft.keywords" :errors="errors.keywords" />
                     </div>
                 </div>
 
@@ -157,8 +157,8 @@
                                     <p class="text-grey"><code>{{edition.handle}}</code></p>
                                 </div>
                                 <div class="w-3/4">
-                                    <text-field :id="edition.handle+'-price'" label="License Price" v-model="edition.price" :errors="errors.price" />
-                                    <text-field :id="edition.handle+'-renewalPrice'" label="Renewal Price" v-model="edition.renewalPrice" :errors="errors.renewalPrice" />
+                                    <textbox :id="edition.handle+'-price'" label="License Price" v-model="edition.price" :errors="errors.price" />
+                                    <textbox :id="edition.handle+'-renewalPrice'" label="Renewal Price" v-model="edition.renewalPrice" :errors="errors.renewalPrice" />
 
                                     <field v-if="pluginDraft.editions.length > 1" id="features" label="Features">
                                         <table v-if="edition.features.length > 0" id="features" class="table border mb-4">
@@ -172,10 +172,10 @@
                                             <tbody>
                                             <tr v-for="(feature, featureKey) in edition.features" :key="'feature-'+featureKey">
                                                 <td>
-                                                    <text-input :id="edition.handle+'-featureName'" v-model="feature.name" />
+                                                    <textbox :id="edition.handle+'-featureName'" v-model="feature.name" />
                                                 </td>
                                                 <td>
-                                                    <text-input :id="edition.handle+'-featureDescription'" v-model="feature.description" />
+                                                    <textbox :id="edition.handle+'-featureDescription'" v-model="feature.description" />
                                                 </td>
                                                 <td class="w-10 text-center">
                                                     <a @click.prevent="removeFeature(editionKey, featureKey)"><icon icon="times" cssClass="text-red" /></a>
@@ -198,7 +198,7 @@
                 </div>
 
                 <div>
-                    <btn class="primary" type="submit" :disabled="loading" :loading="loading">Save</btn>
+                    <btn kind="primary" type="submit" :disabled="loading" :loading="loading">Save</btn>
                 </div>
             </form>
         </template>

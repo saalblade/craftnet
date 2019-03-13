@@ -23,22 +23,22 @@
             </div>
 
             <div v-if="!showForm">
-                <btn class="small" icon="pencil-alt" @click="edit()">Edit</btn>
+                <btn small icon="pencil-alt" @click="edit()">Edit</btn>
             </div>
         </div>
 
         <form v-if="showForm" @submit.prevent="save()">
-            <text-field id="firstName" label="First Name" v-model="invoiceDetailsDraft.firstName" :errors="errors.firstName" />
-            <text-field id="lastName" label="Last Name" v-model="invoiceDetailsDraft.lastName" :errors="errors.lastName" />
-            <text-field id="businessName" label="Business Name" v-model="invoiceDetailsDraft.businessName" :errors="errors.businessName" />
-            <text-field id="address1" label="Address Line 1" v-model="invoiceDetailsDraft.address1" :errors="errors.address1" />
-            <text-field id="address2" label="Address Line 2" v-model="invoiceDetailsDraft.address2" :errors="errors.address2" />
-            <text-field id="city" label="City" v-model="invoiceDetailsDraft.city" :errors="errors.city" />
-            <select-field id="country" label="Country" v-model="invoiceDetailsDraft.country" :options="countryOptions" @input="onCountryChange" />
-            <select-field id="state" label="State" v-model="invoiceDetailsDraft.state" :options="stateOptions(invoiceDetailsDraft.country)" />
-            <text-field id="zipCode" label="Zip Code" v-model="invoiceDetailsDraft.zipCode" :errors="errors.zipCode" />
+            <textbox id="firstName" label="First Name" v-model="invoiceDetailsDraft.firstName" :errors="errors.firstName" />
+            <textbox id="lastName" label="Last Name" v-model="invoiceDetailsDraft.lastName" :errors="errors.lastName" />
+            <textbox id="businessName" label="Business Name" v-model="invoiceDetailsDraft.businessName" :errors="errors.businessName" />
+            <textbox id="address1" label="Address Line 1" v-model="invoiceDetailsDraft.address1" :errors="errors.address1" />
+            <textbox id="address2" label="Address Line 2" v-model="invoiceDetailsDraft.address2" :errors="errors.address2" />
+            <textbox id="city" label="City" v-model="invoiceDetailsDraft.city" :errors="errors.city" />
+            <dropdown id="country" label="Country" v-model="invoiceDetailsDraft.country" :options="countryOptions" @input="onCountryChange" />
+            <dropdown id="state" label="State" v-model="invoiceDetailsDraft.state" :options="stateOptions(invoiceDetailsDraft.country)" />
+            <textbox id="zipCode" label="Zip Code" v-model="invoiceDetailsDraft.zipCode" :errors="errors.zipCode" />
 
-            <btn class="primary" type="submit">Save</btn>
+            <btn kind="primary" type="submit">Save</btn>
             <btn @click="cancel()">Cancel</btn>
         </form>
 

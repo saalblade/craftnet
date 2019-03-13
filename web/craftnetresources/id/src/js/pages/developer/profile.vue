@@ -2,9 +2,9 @@
     <form v-if="userDraft" @submit.prevent="save()">
         <h1>Profile</h1>
 
-        <text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
-        <url-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
-        <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
+        <textbox id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
+        <textbox id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
+        <textbox id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
 
         <hr />
 
@@ -20,7 +20,7 @@
                         <btn :disabled="loading.uploadPhoto" :loading="loading.uploadPhoto" @click="changePhoto">Change Photo</btn>
                     </div>
                     <div class="field">
-                        <btn class="danger" icon="times" :disabled="loading.deletePhoto" :loading="loading.deletePhoto" @click="deletePhoto">Delete</btn>
+                        <btn kind="danger" icon="times" :disabled="loading.deletePhoto" :loading="loading.deletePhoto" @click="deletePhoto">Delete</btn>
                     </div>
                 </template>
                 <template v-else>
@@ -36,7 +36,7 @@
 
         <p class="text-secondary"><em>Your profile data is being used for your developer page on the Plugin Store.</em></p>
 
-        <btn class="primary" type="submit" :disabled="loading.page" :loading="loading.page">Save</btn>
+        <btn kind="primary" type="submit" :disabled="loading.page" :loading="loading.page">Save</btn>
     </form>
 </template>
 

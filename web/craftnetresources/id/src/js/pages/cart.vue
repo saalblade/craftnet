@@ -66,7 +66,7 @@
                                         <div class="expiry-date-flex">
                                             <div>
                                                 <template v-if="item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition'">
-                                                    <select-field v-model="selectedExpiryDates[item.id]" :options="itemUpdateOptions(itemKey)" @input="onSelectedExpiryDateChange(itemKey)" />
+                                                    <dropdown v-model="selectedExpiryDates[item.id]" :options="itemUpdateOptions(itemKey)" @input="onSelectedExpiryDateChange(itemKey)" />
                                                 </template>
                                                 <template v-else>
                                                     <span>Updates until <strong>{{item.lineItem.options.expiryDate}}</strong></span>
@@ -77,7 +77,7 @@
                                         </div>
                                     </td>
                                     <td class="hidden">
-                                        <number-input
+                                        <textbox
                                                 ref="quantityInput"
                                                 v-model="itemQuantity[itemKey]"
                                                 min="minQuantity"
@@ -86,7 +86,7 @@
                                                 @keydown="onQuantityKeyDown($event, itemKey)"
                                                 @input="onQuantityInput($event, itemKey)"
                                                 :disabled="1 === 1 || (item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition' ? false : true)"
-                                        ></number-input>
+                                        />
                                     </td>
                                     <td class="text-right">
                                         <strong class="block text-xl">
@@ -118,7 +118,7 @@
                     </table>
 
                     <div class="mt-4 text-right">
-                        <btn class="primary" large @click="checkout()">Check Out</btn>
+                        <btn kind="primary" large @click="checkout()">Check Out</btn>
                     </div>
                 </template>
 

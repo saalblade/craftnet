@@ -26,7 +26,7 @@
                                             <span v-if="license.cmsLicense.edition" class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
                                         </p>
                                         <div class="buttons">
-                                            <btn class="small" @click="detachCmsLicense()">Detach from this Craft license</btn>
+                                            <btn small @click="detachCmsLicense()">Detach from this Craft license</btn>
                                             <spinner v-if="detaching"></spinner>
                                         </div>
                                     </template>
@@ -51,13 +51,13 @@
                                         <p>{{ license.notes }}</p>
 
                                         <div class="buttons">
-                                            <btn class="small" icon="pencil-alt" @click="notesEditing = true">Edit</btn>
+                                            <btn small icon="pencil-alt" @click="notesEditing = true">Edit</btn>
                                         </div>
                                     </template>
 
                                     <form v-if="notesEditing" @submit.prevent="saveNotes()">
-                                        <textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
-                                        <btn class="primary" type="submit" :disabled="!notesValidates">Save</btn>
+                                        <textbox type="textarea" id="notes" v-model="licenseDraft.notes" @input="notesChange" />
+                                        <btn kind="primary" type="submit" :disabled="!notesValidates">Save</btn>
                                         <btn @click="cancelEditNotes()" >Cancel</btn>
                                         <spinner v-if="notesLoading"></spinner>
                                     </form>
@@ -80,7 +80,7 @@
                     <p>Auto-renew is <strong>disabled</strong> for this license.</p>
                 </template>
 
-                <lightswitch-field
+                <lightswitch
                         id="auto-renew"
                         @change="saveAutoRenew"
                         :checked.sync="licenseDraft.autoRenew"

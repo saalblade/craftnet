@@ -18,13 +18,13 @@
             </div>
 
             <div v-if="!showForm">
-                <btn class="small" icon="pencil-alt" @click="editInvoiceDetails()">Edit</btn>
+                <btn small icon="pencil-alt" @click="editInvoiceDetails()">Edit</btn>
             </div>
         </div>
 
         <form v-if="showForm" @submit.prevent="save()">
-            <text-field id="businessTaxId" label="Tax ID" v-model="invoiceDetailsDraft.businessTaxId" :errors="errors.businessTaxId" />
-            <btn class="primary" type="submit">Save</btn>
+            <textbox id="businessTaxId" label="Tax ID" v-model="invoiceDetailsDraft.businessTaxId" :errors="errors.businessTaxId" />
+            <btn kind="primary" type="submit">Save</btn>
             <btn @click="cancel()">Cancel</btn>
         </form>
     </div>

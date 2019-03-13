@@ -7,12 +7,12 @@
             <div class="card">
                 <div class="card-body text-left">
                     <form method="post" accept-charset="UTF-8" @submit.prevent="submit()" ref="registerform">
-                        <text-field id="username" label="Username" v-model="username" :errors="getFieldErrors('username')" />
-                        <text-field id="email" label="Email" v-model="email" :errors="getFieldErrors('email')" />
-                        <password-field id="password" label="Password" v-model="password" :errors="getFieldErrors('password')" />
+                        <textbox id="username" label="Username" v-model="username" :errors="getFieldErrors('username')" />
+                        <textbox id="email" label="Email" v-model="email" :errors="getFieldErrors('email')" />
+                        <textbox id="password" label="Password" v-model="password" :errors="getFieldErrors('password')" />
 
                         <div class="action">
-                            <btn class="primary" type="submit" :disabled="!formValidates()" block large>Register</btn>
+                            <btn kind="primary" type="submit" :disabled="!formValidates()" block large>Register</btn>
                             <spinner v-if="loading"></spinner>
                         </div>
                     </form>

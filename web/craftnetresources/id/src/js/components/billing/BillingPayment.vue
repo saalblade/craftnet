@@ -28,15 +28,15 @@
             <div v-if="!editing" class="pl-4">
                 <p>
                     <template v-if="card">
-                        <btn class="small" @click="editing = true">Change card</btn>
+                        <btn small @click="editing = true">Change card</btn>
                     </template>
                     <template v-else>
-                        <btn class="small" icon="plus" @click="editing = true">Add a card</btn>
+                        <btn small icon="plus" @click="editing = true">Add a card</btn>
                     </template>
                 </p>
 
                 <p v-if="card">
-                    <btn icon="times" class="danger small" @click="removeCard()">Remove</btn>
+                    <btn kind="danger" icon="times" small @click="removeCard()">Remove</btn>
                     <spinner v-if="removeCardLoading"></spinner>
                 </p>
             </div>

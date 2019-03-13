@@ -11,19 +11,19 @@
                     <input type="hidden" :name="csrfTokenName" :value="csrfTokenValue">
                     <input type="hidden" name="action" value="users/login">
 
-                    <text-field label="Username or email" id="loginName" v-model="loginName" ref="loginNameField" />
+                    <textbox label="Username or email" id="loginName" v-model="loginName" ref="loginNameField" />
 
-                    <password-field label="Password" id="password" v-model="password" ref="passwordField" />
+                    <textbox type="password" label="Password" id="password" v-model="password" ref="passwordField" />
 
                     <div class="form-check mb-2">
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" v-model="rememberMe" />
+                            <input type="checkbox" v-model="rememberMe" />
                             Remember me
                         </label>
                     </div>
 
                     <div class="action">
-                        <btn class="primary" type="submit" :loading="loading" :disabled="!formValidates() || loading" block>Login</btn>
+                        <btn kind="primary" type="submit" :loading="loading" :disabled="!formValidates() || loading" block>Login</btn>
                     </div>
                 </form>
 
@@ -157,9 +157,9 @@
                 }
 
                 if (this.loginName.length === 0) {
-                    this.$refs.loginNameField.$children[0].$el.focus();
+                    this.$refs.loginNameField.$refs.input.focus();
                 } else {
-                    this.$refs.passwordField.$children[0].$el.focus();
+                    this.$refs.passwordField.$refs.input.focus();
                 }
             }
         }

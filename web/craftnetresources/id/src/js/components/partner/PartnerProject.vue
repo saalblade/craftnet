@@ -23,11 +23,11 @@
         </div>
         <modal v-if="isEditing" :show="isEditing" transition="fade" modal-type="wide" style="max-height: 100vh; overflow: scroll;">
             <div slot="body" class="p-4">
-                <text-field id="name" label="Project Name" v-model="project.name" :errors="localErrors.name" />
-                <text-field id="role" label="Role" instructions="e.g. “Craft Commerce with custom Hubspot integration” or “Design and custom plugin development”. Max 55 characters." v-model="project.role" :max="55" :errors="localErrors.role" />
-                <text-field id="url" label="URL" v-model="project.url" :errors="localErrors.url" />
-                <select-field id="linkType" label="Link Type" v-model="project.linkType" :options="options.linkType" :errors="localErrors.linkType" />
-                <checkbox-field id="withCraftCommerce" label="This project includes Craft Commerce" v-model="project.withCraftCommerce" :checked-value="1" />
+                <textbox id="name" label="Project Name" v-model="project.name" :errors="localErrors.name" />
+                <textbox id="role" label="Role" instructions="e.g. “Craft Commerce with custom Hubspot integration” or “Design and custom plugin development”. Max 55 characters." v-model="project.role" :max="55" :errors="localErrors.role" />
+                <textbox id="url" label="URL" v-model="project.url" :errors="localErrors.url" />
+                <dropdown id="linkType" label="Link Type" v-model="project.linkType" :options="options.linkType" :errors="localErrors.linkType" />
+                <checkbox id="withCraftCommerce" label="This project includes Craft Commerce" v-model="project.withCraftCommerce" :checked-value="1" />
 
                 <label>Screenshots<span class="text-red">*</span></label>
                 <p class="instructions">1 to 5 JPG screenshots required with a 12:7 aspect ratio. 1200px wide will do. Drag to re-order.</p>
@@ -47,7 +47,7 @@
 
                 <div v-if="project.screenshots.length <= 5">
                     <input type="file" accept=".jp2,.jpeg,.jpg,.jpx" @change="screenshotFileChange" ref="screenshotFiles" class="hidden" multiple=""><br>
-                    <btn class="small" :disabled="isUploading" @click="$refs.screenshotFiles.click()">
+                    <btn small :disabled="isUploading" @click="$refs.screenshotFiles.click()">
                         <span v-show="!isUploading"><icon icon="plus" /> Add screenshots</span>
                         <span v-show="isUploading">Uploading: {{ uploadProgress }}%</span>
                         <spinner v-show="isUploading"></spinner>
@@ -61,7 +61,7 @@
                             @click="$emit('cancel', index)">Cancel</btn>
 
                         <btn
-                            class="primary"
+                            kind="primary"
                             :disabled="requestPending"
                             @click="$emit('save')">Save</btn>
 
@@ -70,7 +70,7 @@
                     <div>
                         <btn
                             v-if="project.id !== 'new'"
-                            class="danger"
+                            kind="danger"
                             :disabled="requestPending"
                             @click="$emit('delete', index)">Delete</btn>
                     </div>

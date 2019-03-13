@@ -3,7 +3,7 @@
         <div ref="cardElement" class="card-element form-control mb-3"></div>
         <p id="card-errors" class="text-red" role="alert"></p>
 
-        <btn class="primary" type="submit">Save</btn>
+        <btn kind="primary" type="submit">Save</btn>
         <btn @click="cancel()">Cancel</btn>
 
         <spinner v-if="loading"></spinner>

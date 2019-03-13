@@ -17,15 +17,15 @@
                     </div>
                 </div>
                 <div v-else>
-                    <text-field id="title" label="Location Title" v-model="location.title" :errors="localErrors.title" placeholder="e.g. Main Office" />
-                    <text-field id="addressLine1" label="Address" v-model="location.addressLine1" :errors="localErrors.addressLine1" />
-                    <text-field id="addressLine2" v-model="location.addressLine2" :errors="localErrors.addressLine2" />
-                    <text-field id="city" label="City" v-model="location.city" :errors="localErrors.city" />
-                    <text-field id="state" label="State/Region" v-model="location.state" :errors="localErrors.state" />
-                    <text-field id="zip" label="Zip" v-model="location.zip" :errors="localErrors.zip" />
-                    <text-field id="country" label="Country" v-model="location.country" :errors="localErrors.country" />
-                    <text-field id="phone" label="Sales Phone" v-model="location.phone" :errors="localErrors.phone" />
-                    <text-field id="email" label="Sales Email" instructions="The “Work With” button will send email here." v-model="location.email" :errors="localErrors.email" />
+                    <textbox id="title" label="Location Title" v-model="location.title" :errors="localErrors.title" placeholder="e.g. Main Office" />
+                    <textbox id="addressLine1" label="Address" v-model="location.addressLine1" :errors="localErrors.addressLine1" />
+                    <textbox id="addressLine2" v-model="location.addressLine2" :errors="localErrors.addressLine2" />
+                    <textbox id="city" label="City" v-model="location.city" :errors="localErrors.city" />
+                    <textbox id="state" label="State/Region" v-model="location.state" :errors="localErrors.state" />
+                    <textbox id="zip" label="Zip" v-model="location.zip" :errors="localErrors.zip" />
+                    <textbox id="country" label="Country" v-model="location.country" :errors="localErrors.country" />
+                    <textbox id="phone" label="Sales Phone" v-model="location.phone" :errors="localErrors.phone" />
+                    <textbox id="email" label="Sales Email" instructions="The “Work With” button will send email here." v-model="location.email" :errors="localErrors.email" />
 
                     <div class="mt-4 flex">
                         <div class="flex-1">
@@ -34,7 +34,7 @@
                                     @click="$emit('cancel', index)">Cancel</btn>
 
                             <btn
-                                    class="primary"
+                                    kind="primary"
                                     :disabled="requestPending"
                                     @click="$emit('save')">Save</btn>
 
@@ -44,7 +44,7 @@
                             <!-- Multiple locations not currently enabled -->
                             <!-- <btn
                                 v-if="location.id !== 'new'"
-                                class="danger"
+                                kind="danger"
                                 :disabled="requestPending"
                                 @click="$emit('delete', index)">Delete</button> -->
                         </div>

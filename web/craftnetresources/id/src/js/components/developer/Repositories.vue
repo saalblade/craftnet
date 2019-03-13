@@ -1,6 +1,6 @@
 <template>
     <div>
-        <text-field placeholder="Filter repositories" v-model="q" />
+        <textbox placeholder="Filter repositories" v-model="q" />
 
         <list-group v-if="filteredRepositories.length > 0">
             <list-group-item v-for="(repository, key) in filteredRepositories" :key="key">
@@ -12,7 +12,7 @@
                         <spinner v-if="isLoading(repository.html_url)"></spinner>
 
                         <template v-if="!repositoryIsInUse(repository.html_url)">
-                            <btn class="primary small" @click.prevent="$emit('selectRepository', repository)">Select</btn>
+                            <btn kind="primary" small @click.prevent="$emit('selectRepository', repository)">Select</btn>
                         </template>
                         <template v-else>
                             <btn :disabled="repositoryIsInUse(repository.html_url )">Already in use</btn>

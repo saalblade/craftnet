@@ -20,10 +20,10 @@
                 </div>
                 <div class="ml-4">
                     <template v-if="connected">
-                        <btn class="danger small" @click="$emit('disconnect')">Disconnect</btn>
+                        <btn kind="danger" small @click="$emit('disconnect')">Disconnect</btn>
                     </template>
                     <template v-else>
-                        <btn class="primary" @click.prevent="$emit('connect')">Connect</btn>
+                        <btn kind="primary" @click.prevent="$emit('connect')">Connect</btn>
                     </template>
 
                     <div v-if="buttonLoading" class="mt-2 text-right">

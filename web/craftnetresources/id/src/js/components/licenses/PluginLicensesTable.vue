@@ -54,7 +54,7 @@
                         <template v-if="autoRenewSwitch">
 
                             <template v-if="!!license.key">
-                                <lightswitch-field
+                                <lightswitch
                                         :id="'auto-renew-'+license.id"
                                         @change="savePluginLicenseAutoRenew(license, $event)"
                                         :checked.sync="pluginLicensesAutoRenew[license.id]"
@@ -62,7 +62,7 @@
                                 />
                             </template>
                             <template v-else>
-                                <lightswitch-field
+                                <lightswitch
                                         :id="'auto-renew-'+license.id"
                                         :checked="license.autoRenew"
                                         :disabled="true"

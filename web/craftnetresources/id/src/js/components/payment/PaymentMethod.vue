@@ -10,7 +10,7 @@
             <card-element v-if="!cardToken" ref="newCard" />
             <p v-else>{{ cardToken.card.brand }} •••• •••• •••• {{ cardToken.card.last4 }} ({{ cardToken.card.exp_month }}/{{ cardToken.card.exp_year }}) <a class="delete icon" @click="cardToken = null">Delete</a></p>
 
-            <checkbox-field
+            <checkbox
                     id="replaceCard"
                     label="Save as my new credit card"
                     :value="replaceCard"
