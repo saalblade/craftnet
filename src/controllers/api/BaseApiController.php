@@ -326,6 +326,7 @@ abstract class BaseApiController extends Controller
                             $edition = $plugin->getEdition($this->pluginEditions[$pluginHandle]);
                         } catch (InvalidArgumentException $e) {
                             // just assume the first
+                            $e = null;
                         }
                     }
                     if ($edition->price != 0) {
