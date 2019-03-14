@@ -62,6 +62,7 @@ return [
     'ondev.co',
     'oneis.us',
     'our-staging-server.net',
+    'preview.dev',
     'preview-it.com',
     'psclients.net',
     'rantsports.org',
