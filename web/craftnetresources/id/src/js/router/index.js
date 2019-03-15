@@ -222,7 +222,7 @@ router.beforeEach((to, from, next) => {
     if (!store.state.account.currentUser) {
         if (store.state.account.currentUserLoaded) {
             // Todo: Replace conditional paths with meta.requireAuthentication for pages
-            if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart') {
+            if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart' && to.path.startsWith('/buy-plugin/') !== true && to.path.startsWith('/buy-cms/') !== true) {
                 router.push({path: '/site/login'})
             } else {
                 next()
@@ -233,7 +233,11 @@ router.beforeEach((to, from, next) => {
                     next()
                 })
                 .catch(() => {
-                    router.push({path: '/site/login'})
+                    if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart' && to.path.startsWith('/buy-plugin/') !== true && to.path.startsWith('/buy-cms/') !== true) {
+                        router.push({path: '/site/login'})
+                    } else {
+                        next()
+                    }
                 })
         }
     } else {
