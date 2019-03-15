@@ -74,8 +74,10 @@ const actions = {
                                         resolve()
                                     } else {
                                         // Couldn’t get cart for this order number? Try to create a new one.
-                                        const data = {
-                                            email: rootState.account.currentUser.email
+                                        const data = {}
+
+                                        if (rootState.account.currentUser) {
+                                            data.email = rootState.account.currentUser.email
                                         }
 
                                         api.createCart(data)
@@ -110,8 +112,10 @@ const actions = {
                                         return;
                                     }
 
-                                    const data = {
-                                        email: rootState.account.currentUser.email
+                                    const data = {}
+
+                                    if (rootState.account.currentUser) {
+                                        data.email = rootState.account.currentUser.email
                                     }
 
                                     api.createCart(data)
@@ -136,8 +140,10 @@ const actions = {
                                 })
                         } else {
                             // No order number yet? Create a new cart.
-                            const data = {
-                                email: rootState.account.currentUser.email
+                            const data = {}
+
+                            if (rootState.account.currentUser) {
+                                data.email = rootState.account.currentUser.email
                             }
 
                             api.createCart(data)
