@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c24267fe9f4ae40017dacbb7eab84be",
+    "content-hash": "57430c873fa1c028b2b3260938bb04a6",
     "packages": [
         {
             "name": "adam-paterson/oauth2-stripe",
@@ -63,16 +63,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.87.19",
+            "version": "3.87.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "79366d3335649960f49694eb052cbdac6616f843"
+                "reference": "e644b25cbd15a3e335bb115cbf1f78ec48d6b200"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/79366d3335649960f49694eb052cbdac6616f843",
-                "reference": "79366d3335649960f49694eb052cbdac6616f843",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e644b25cbd15a3e335bb115cbf1f78ec48d6b200",
+                "reference": "e644b25cbd15a3e335bb115cbf1f78ec48d6b200",
                 "shasum": ""
             },
             "require": {
@@ -141,7 +141,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-02-26T19:08:43+00:00"
+            "time": "2019-03-01T21:11:22+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -699,21 +699,21 @@
         },
         {
             "name": "craftcms/commerce-stripe",
-            "version": "1.0.10",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce-stripe.git",
-                "reference": "8cee4b8c37d99b75a0ac6aecae5afb84d3002701"
+                "reference": "a9bc76172ce87357e2db01cc392e9c04e144c165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/8cee4b8c37d99b75a0ac6aecae5afb84d3002701",
-                "reference": "8cee4b8c37d99b75a0ac6aecae5afb84d3002701",
+                "url": "https://api.github.com/repos/craftcms/commerce-stripe/zipball/a9bc76172ce87357e2db01cc392e9c04e144c165",
+                "reference": "a9bc76172ce87357e2db01cc392e9c04e144c165",
                 "shasum": ""
             },
             "require": {
-                "craftcms/cms": "^3.0.0",
-                "craftcms/commerce": "^2.0.0-beta.12",
+                "craftcms/cms": "^3.1.5",
+                "craftcms/commerce": "^2.0.0",
                 "stripe/stripe-php": "^6.1"
             },
             "type": "craft-plugin",
@@ -743,7 +743,7 @@
                 "stripe",
                 "yii2"
             ],
-            "time": "2018-12-17T22:08:39+00:00"
+            "time": "2019-03-02T15:05:06+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -4192,16 +4192,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.30.3",
+            "version": "v6.30.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "1eaeda4832f3cd071b8bd70308093dabb4650aa2"
+                "reference": "0d9e2773b1df27d4f0c590b15bed3a1433e0414c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/1eaeda4832f3cd071b8bd70308093dabb4650aa2",
-                "reference": "1eaeda4832f3cd071b8bd70308093dabb4650aa2",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/0d9e2773b1df27d4f0c590b15bed3a1433e0414c",
+                "reference": "0d9e2773b1df27d4f0c590b15bed3a1433e0414c",
                 "shasum": ""
             },
             "require": {
@@ -4244,7 +4244,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2019-02-26T17:25:53+00:00"
+            "time": "2019-02-27T18:07:30+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -5085,16 +5085,16 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.16",
+            "version": "2.0.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "789de9783d41e6ca10fffc3644a43a764f79b399"
+                "reference": "089198cced57c4b8c9545ddc56001a1bd114b2dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/789de9783d41e6ca10fffc3644a43a764f79b399",
-                "reference": "789de9783d41e6ca10fffc3644a43a764f79b399",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/089198cced57c4b8c9545ddc56001a1bd114b2dd",
+                "reference": "089198cced57c4b8c9545ddc56001a1bd114b2dd",
                 "shasum": ""
             },
             "require": {
@@ -5181,7 +5181,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2019-01-30T23:54:16+00:00"
+            "time": "2019-02-28T07:03:06+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",

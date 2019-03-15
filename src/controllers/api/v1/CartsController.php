@@ -194,17 +194,6 @@ class CartsController extends BaseApiController
                 }
             }
 
-            // make sure we have an email on the cart
-            if (!$cart->getEmail()) {
-                throw new ValidationException([
-                    [
-                        'param' => 'email',
-                        'message' => 'Email is required',
-                        'code' => self::ERROR_CODE_MISSING_FIELD,
-                    ],
-                ]);
-            }
-
             // save the cart if it's new so it gets an ID
             if (!$cart->id && !Craft::$app->getElements()->saveElement($cart)) {
                 throw new Exception('Could not save the cart: ' . implode(', ', $cart->getErrorSummary(true)));

@@ -5,9 +5,11 @@ namespace craftnet\console\controllers;
 use Craft;
 use craft\commerce\elements\Order;
 use craft\commerce\models\LineItem;
+use craft\commerce\models\Transaction;
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\records\Transaction as TransactionRecord;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use craftnet\cms\CmsEdition;
 use craftnet\cms\CmsLicense;
 use craftnet\developers\UserBehavior;
@@ -17,6 +19,7 @@ use craftnet\Module;
 use craftnet\plugins\PluginEdition;
 use craftnet\plugins\PluginLicense;
 use yii\console\Controller;
+use yii\console\ExitCode;
 use yii\helpers\Console;
 
 /**
@@ -47,9 +50,14 @@ class RefundController extends Controller
         $order = Order::find()->number($orderNumber)->one();
 
         // Get the transaction
-        $transaction = $order->getTransactions()[0];
+        $transaction = ArrayHelper::firstWhere($order->getTransactions(), function(Transaction $transaction) {
+            return (
+                $transaction->type === TransactionRecord::TYPE_PURCHASE &&
+                $transaction->status === TransactionRecord::STATUS_SUCCESS
+            );
+        });
 
-        if (!$transaction->canRefund()) {
+        if ($transaction === null || !$transaction->canRefund()) {
             $this->stderr('This order can\'t be refunded.', Console::FG_RED);
             return 1;
         }
@@ -171,17 +179,33 @@ class RefundController extends Controller
         }
 
         // Delete the licenses
-        foreach ($returnKeys as $key) {
-            $license = $lineItemLicenses[$key];
-            $this->stdout("Deleting license {$license->getShortKey()} ... ", Console::FG_YELLOW);
-            if ($license instanceof CmsLicense) {
-                $cmsLicenseManager->deleteLicenseByKey($license->key);
-            } else {
-                $pluginLicenseManager->deleteLicenseByKey($license->key);
+        if ($this->confirm('Delete the licenses?', true)) {
+            foreach ($returnKeys as $key) {
+                $license = $lineItemLicenses[$key];
+                $this->stdout("Deleting license {$license->getShortKey()} ... ", Console::FG_YELLOW);
+                if ($license instanceof CmsLicense) {
+                    $cmsLicenseManager->deleteLicenseByKey($license->key);
+                } else {
+                    $pluginLicenseManager->deleteLicenseByKey($license->key);
+                }
+                $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
             }
-            $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
+        } else {
+            foreach ($returnKeys as $key) {
+                $license = $lineItemLicenses[$key];
+                $note = $this->prompt("Note for {$license->getShortKey()}: ", [
+                    'required' => true,
+                    'default' => 'Refunded',
+                ]);
+                if ($license instanceof CmsLicense) {
+                    $cmsLicenseManager->addHistory($license->id, $note);
+                } else {
+                    $pluginLicenseManager->addHistory($license->id, $note);
+                }
+            }
         }
 
-        return 0;
+        $this->stdout('All done.' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
+        return ExitCode::OK;
     }
 }

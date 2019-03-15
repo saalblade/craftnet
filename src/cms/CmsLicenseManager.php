@@ -37,10 +37,10 @@ class CmsLicenseManager extends Component
     public $devDomains = [];
 
     /**
-     * @var array TLDs that we treat as private, because they are only used for dev/testing/staging purposes
+     * @var array Domain suffixes that we consider to be public even though the Extract lib says they're private
      * @see normalizeDomain()
      */
-    public $devTlds = [];
+    public $publicDomainSuffixes = [];
 
     /**
      * @var array Words that can be found in the subdomain that will cause the domain to be treated as private
@@ -55,7 +55,6 @@ class CmsLicenseManager extends Component
      * Normalizes a license key by trimming whitespace and removing newlines.
      *
      * @param string $key
-     *
      * @return string
      * @throws InvalidArgumentException if $key is invalid
      */
@@ -73,7 +72,6 @@ class CmsLicenseManager extends Component
      * Normalizes a public domain.
      *
      * @param string $url
-     *
      * @return string|null
      */
     public function normalizeDomain(string $url)
@@ -84,11 +82,21 @@ class CmsLicenseManager extends Component
             $url = (new IDN())->toUTF8($url);
         }
 
-        $result = (new Extract(null, null, Extract::MODE_ALLOW_ICANN))
+        $result = (new Extract(null, null, Extract::MODE_ALLOW_ICANN | Extract::MODE_ALLOW_PRIVATE))
             ->parse(mb_strtolower($url));
 
         if (($domain = $result->getRegistrableDomain()) === null) {
             return null;
+        }
+
+        // ignore if it's a private domain, unless we consider its suffix to be public (e.g. uk.com)
+        if (!in_array($result->getSuffix(), $this->publicDomainSuffixes, true)) {
+            $altDomain = (new Extract(null, null, Extract::MODE_ALLOW_ICANN))
+                ->parse(mb_strtolower($url))
+                ->getRegistrableDomain();
+            if ($domain !== $altDomain) {
+                return null;
+            }
         }
 
         // ignore if it's a dev domain
@@ -96,11 +104,6 @@ class CmsLicenseManager extends Component
             in_array($domain, $this->devDomains, true) ||
             in_array($result->getFullHost(), $this->devDomains, true)
         ) {
-            return null;
-        }
-
-        // ignore if it's a dev TLD
-        if (in_array($result->getSuffix(), $this->devTlds, true)) {
             return null;
         }
 
@@ -180,7 +183,6 @@ class CmsLicenseManager extends Component
      * Returns a license by its ID.
      *
      * @param int $id
-     *
      * @return CmsLicense
      * @throws LicenseNotFoundException if $id is missing
      */
@@ -201,7 +203,6 @@ class CmsLicenseManager extends Component
      * Returns a license by its key.
      *
      * @param string $key
-     *
      * @return CmsLicense
      * @throws LicenseNotFoundException if $key is missing
      */
@@ -252,11 +253,36 @@ class CmsLicenseManager extends Component
     }
 
     /**
+     * Returns any licenses that have expired by today but don't know it yet.
+     *
+     * @return CmsLicense[]
+     */
+    public function getFreshlyExpiredLicenses(): array
+    {
+        $tomorrow = (new \DateTime('midnight', new \DateTimeZone('UTC')))->modify('+1 days');
+        $results = $this->_createLicenseQuery()
+            ->where([
+                'expirable' => true,
+                'expired' => false,
+            ])
+            ->andWhere(['not', ['expiresOn' => null]])
+            ->andWhere(['<', 'expiresOn', Db::prepareDateForDb($tomorrow)])
+            ->all();
+
+        $licenses = [];
+
+        foreach ($results as $result) {
+            $licenses[] = new CmsLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
      * Saves a license.
      *
      * @param CmsLicense $license
      * @param bool $runValidation
-     *
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
      */
@@ -352,7 +378,6 @@ class CmsLicenseManager extends Component
      * Returns a license's history in chronological order.
      *
      * @param int $licenseId
-     *
      * @return array
      */
     public function getHistory(int $licenseId): array

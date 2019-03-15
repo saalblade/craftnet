@@ -5,6 +5,20 @@ namespace craftnet\base;
 interface LicenseInterface
 {
     /**
+     * Returns the email address associated with the license.
+     *
+     * @return string
+     */
+    public function getEmail(): string;
+
+    /**
+     * Returns the license owner's ID.
+     *
+     * @return int|null
+     */
+    public function getOwnerId();
+
+    /**
      * Returns whether the license is expirable.
      *
      * @return bool
@@ -45,6 +59,16 @@ interface LicenseInterface
     public function markAsReminded();
 
     /**
+     * Returns whether the license was reminded about the upcoming expiration/renewal date
+     */
+    public function getWasReminded(): bool;
+
+    /**
+     * Marks the license as expired
+     */
+    public function markAsExpired();
+
+    /**
      * Returns the edition associated with the license.
      *
      * @return EditionInterface
@@ -57,6 +81,13 @@ interface LicenseInterface
      * @return string
      */
     public function getEditUrl(): string;
+
+    /**
+     * Returns the license key.
+     *
+     * @return string
+     */
+    public function getKey(): string;
 
     /**
      * Returns a shortened version of the license key.

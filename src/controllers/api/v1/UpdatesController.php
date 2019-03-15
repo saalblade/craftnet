@@ -86,12 +86,12 @@ class UpdatesController extends BaseApiController
      */
     private function _getCmsUpdateInfo(): array
     {
-        // Treat 3.0.41 as a breakpoint for 3.0 releases
+        // Treat 3.0.41.1 as a breakpoint for 3.0 releases
         if (
             version_compare($this->cmsVersion, '3.0.0-alpha.1', '>') &&
-            version_compare($this->cmsVersion, '3.0.41', '<')
+            version_compare($this->cmsVersion, '3.0.41.1', '<')
         ) {
-            $toVersion = '3.0.41';
+            $toVersion = '3.0.41.1';
         } else {
             $toVersion = null;
         }
@@ -105,7 +105,9 @@ class UpdatesController extends BaseApiController
             $cmsLicense = reset($this->cmsLicenses);
             if ($cmsLicense->expired) {
                 $info['status'] = Update::STATUS_EXPIRED;
-                $info['renewalUrl'] = 'https://id.craftcms.com/';
+                $info['renewalUrl'] = $cmsLicense->getEditUrl();
+                $info['renewalPrice'] = $cmsLicense->getRenewalPrice();
+                $info['renewalCurrency'] = 'USD';
             }
         }
 
@@ -134,9 +136,14 @@ class UpdatesController extends BaseApiController
                 'releases' => $toVersion ? $this->_releases($plugin->packageName, $this->pluginVersions[$handle], $toVersion) : [],
             ];
 
-            if (isset($this->pluginLicenses[$handle]) && $this->pluginLicenses[$handle]->expired) {
-                $info['status'] = Update::STATUS_EXPIRED;
-                $info['renewalUrl'] = 'https://id.craftcms.com';
+            if (isset($this->pluginLicenses[$handle])) {
+                $pluginLicense = $this->pluginLicenses[$handle];
+                if ($pluginLicense->expired) {
+                    $info['status'] = Update::STATUS_EXPIRED;
+                    $info['renewalUrl'] = $pluginLicense->getEditUrl();
+                    $info['renewalPrice'] = $pluginLicense->getRenewalPrice();
+                    $info['renewalCurrency'] = 'USD';
+                }
             }
 
             $updateInfo[$handle] = $info;

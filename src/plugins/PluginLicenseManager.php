@@ -5,6 +5,7 @@ namespace craftnet\plugins;
 use Craft;
 use craft\db\Query;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
@@ -23,7 +24,6 @@ class PluginLicenseManager extends Component
      * Normalizes a license key by trimming whitespace and removing dashes.
      *
      * @param string $key
-     *
      * @return string
      * @throws InvalidArgumentException if $key is invalid
      */
@@ -38,7 +38,7 @@ class PluginLicenseManager extends Component
     }
 
     /**
-     * Get licenses by owner.
+     * Returns licenses owned by a user.
      *
      * @param User $owner
      * @param $query
@@ -85,7 +85,6 @@ class PluginLicenseManager extends Component
      * Returns licenses that need to be renewed in the next 45 days.
      *
      * @param int $ownerId
-     *
      * @return PluginLicense[]
      */
     public function getRenewLicensesByOwner(int $ownerId): array
@@ -140,7 +139,6 @@ class PluginLicenseManager extends Component
      * Returns licenses associated with a given Craft license ID.
      *
      * @param int $cmsLicenseId
-     *
      * @return PluginLicense[]
      */
     public function getLicensesByCmsLicense(int $cmsLicenseId): array
@@ -161,17 +159,15 @@ class PluginLicenseManager extends Component
      * Returns a license by its ID.
      *
      * @param int $id
-     *
      * @return PluginLicense
-     * @throws LicenseNotFoundException if $id is missing
      */
     public function getLicenseById(int $id): PluginLicense
     {
         $result = $this->_createLicenseQuery()
-            ->where(['l.id' => $id])
+            ->where(['id' => $id])
             ->one();
 
-        if (!$result) {
+        if ($result === null) {
             throw new LicenseNotFoundException($id);
         }
 
@@ -183,7 +179,6 @@ class PluginLicenseManager extends Component
      *
      * @param string $key
      * @param string|null $handle the plugin handle
-     *
      * @return PluginLicense
      * @throws LicenseNotFoundException if $key is missing
      */
@@ -217,7 +212,6 @@ class PluginLicenseManager extends Component
      * Returns licenses by CMS license ID.
      *
      * @param int $cmsLicenseId
-     *
      * @return PluginLicense[]
      */
     public function getLicensesByCmsLicenseId(int $cmsLicenseId): array
@@ -242,7 +236,6 @@ class PluginLicenseManager extends Component
      * @param int|null $offset
      * @param int|null $limit
      * @param int|null $total
-     *
      * @return PluginLicense[]
      */
     public function getLicensesByDeveloper(int $developerId, int $offset = null, int $limit = null, int &$total = null): array
@@ -293,11 +286,36 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns any licenses that have expired by today but don't know it yet.
+     *
+     * @return PluginLicense[]
+     */
+    public function getFreshlyExpiredLicenses(): array
+    {
+        $tomorrow = (new \DateTime('midnight', new \DateTimeZone('UTC')))->modify('+1 days');
+        $results = $this->_createLicenseQuery()
+            ->where([
+                'expirable' => true,
+                'expired' => false,
+            ])
+            ->andWhere(['not', ['expiresOn' => null]])
+            ->andWhere(['<', 'expiresOn', Db::prepareDateForDb($tomorrow)])
+            ->all();
+
+        $licenses = [];
+
+        foreach ($results as $result) {
+            $licenses[] = new PluginLicense($result);
+        }
+
+        return $licenses;
+    }
+
+    /**
      * Saves a license.
      *
      * @param PluginLicense $license
      * @param bool $runValidation
-     *
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
      */
@@ -406,7 +424,6 @@ class PluginLicenseManager extends Component
      * Returns a license's history in chronological order.
      *
      * @param int $licenseId
-     *
      * @return array
      */
     public function getHistory(int $licenseId): array
@@ -484,7 +501,6 @@ class PluginLicenseManager extends Component
      * Returns licenses by owner as an array.
      *
      * @param User $owner
-     *
      * @return array
      */
     public function getLicensesArrayByOwner(User $owner)
@@ -502,7 +518,6 @@ class PluginLicenseManager extends Component
      *
      * @param array $results
      * @param User $owner
-     *
      * @return array
      */
     public function transformLicensesForOwner(array $results, User $owner)
@@ -538,9 +553,8 @@ class PluginLicenseManager extends Component
     /**
      * Transforms a license for the given owner.
      *
-     * @param CmsLicense $result
+     * @param PluginLicense $result
      * @param User $owner
-     *
      * @return array
      */
     public function transformLicenseForOwner(PluginLicense $result, User $owner)
@@ -592,6 +606,23 @@ class PluginLicenseManager extends Component
         $license['cmsLicense'] = $cmsLicense;
 
         return $license;
+    }
+
+    /**
+     * Deletes a license by its ID.
+     *
+     * @param int $id
+     * @throws LicenseNotFoundException if $key is missing
+     */
+    public function deleteLicenseById(int $id)
+    {
+        $rows = Craft::$app->getDb()->createCommand()
+            ->delete('craftnet_pluginlicenses', ['id' => $id])
+            ->execute();
+
+        if ($rows === 0) {
+            throw new LicenseNotFoundException($id);
+        }
     }
 
     /**

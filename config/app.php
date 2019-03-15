@@ -18,6 +18,7 @@ return [
                     'cmsLicenseManager' => [
                         'class' => craftnet\cms\CmsLicenseManager::class,
                         'devDomains' => require __DIR__.'/dev-domains.php',
+                        'publicDomainSuffixes' => require __DIR__.'/public-domain-suffixes.php',
                         'devSubdomainWords' => [
                             'acc',
                             'acceptance',

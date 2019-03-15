@@ -18,12 +18,12 @@ class LicenseHelper
 
         for ($i = 1; $i <= 5; $i++) {
             if ($expiryDate < $now) {
-                $date =  (new \DateTime('now', new \DateTimeZone('UTC')))
+                $date = (new \DateTime('now', new \DateTimeZone('UTC')))
                     ->modify("+{$i} years");
                 $dates[] = ["{$i}y", $date->format('Y-m-d')];
             } else {
                 $date = clone $expiryDate;
-                $date =  $date->modify("+{$i} years");
+                $date = $date->modify("+{$i} years");
                 $dates[] = ["{$date->format('Y-m-d')}", $date->format('Y-m-d')];
             }
         }

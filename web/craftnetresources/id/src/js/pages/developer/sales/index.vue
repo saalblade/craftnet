@@ -36,7 +36,18 @@
                 </template>
 
                 <template slot="type" slot-scope="props">
-                    <span class="text-secondary">License Purchase</span>
+                    <td>
+                        <template v-if="props.rowData.purchasableType === 'craftnet\\plugins\\PluginRenewal'">
+                            Renewal
+                        </template>
+                        <template v-else>
+                            License
+                        </template>
+
+                        <div class="text-secondary" v-for="(adjustment, adjustmentKey) in props.rowData.adjustments" :key="'adjustment-' + adjustmentKey">
+                            {{adjustment.name}}
+                        </div>
+                    </td>
                 </template>
 
                 <template slot="grossAmount" slot-scope="props">

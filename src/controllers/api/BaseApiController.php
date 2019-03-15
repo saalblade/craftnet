@@ -326,6 +326,7 @@ abstract class BaseApiController extends Controller
                             $edition = $plugin->getEdition($this->pluginEditions[$pluginHandle]);
                         } catch (InvalidArgumentException $e) {
                             // just assume the first
+                            $e = null;
                         }
                     }
                     if ($edition->price != 0) {
@@ -486,6 +487,12 @@ abstract class BaseApiController extends Controller
             $logException = $e;
 
             $statusCode = $response->getStatusCode();
+
+            // Don't ever send an error response with a status code of 200
+            if ($statusCode === 200) {
+                $response->setStatusCode($statusCode = 500);
+            }
+
             $sendErrorEmail = $statusCode >= 500 && $statusCode < 600;
 
             if ($sendErrorEmail) {

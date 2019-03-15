@@ -96,6 +96,22 @@ class CmsLicense extends Model implements LicenseInterface
     /**
      * @inheritdoc
      */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOwnerId()
+    {
+        return $this->ownerId;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getIsExpirable(): bool
     {
         return $this->expirable;
@@ -150,6 +166,24 @@ class CmsLicense extends Model implements LicenseInterface
     /**
      * @inheritdoc
      */
+    public function getWasReminded(): bool
+    {
+        return $this->reminded;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function markAsExpired()
+    {
+        $this->expired = true;
+        $this->reminded = false;
+        Module::getInstance()->getCmsLicenseManager()->saveLicense($this, false);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getEdition(): EditionInterface
     {
         return CmsEdition::findOne($this->editionId);
@@ -161,6 +195,14 @@ class CmsLicense extends Model implements LicenseInterface
     public function getEditUrl(): string
     {
         return 'https://id.craftcms.com/licenses/cms/' . $this->id;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getKey(): string
+    {
+        return $this->key;
     }
 
     /**

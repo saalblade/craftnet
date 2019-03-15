@@ -61,7 +61,7 @@ class SupportController extends BaseApiController
             ];
             if ($cmsLicense->expirable && $cmsLicense->expiresOn) {
                 $licenseInfo[] .= ($cmsLicense->expired ? 'expired on' : 'expires on') .
-                    ' '. $formatter->asDate($cmsLicense->expiresOn, Locale::LENGTH_SHORT);
+                    ' ' . $formatter->asDate($cmsLicense->expiresOn, Locale::LENGTH_SHORT);
             }
             if ($cmsLicense->domain) {
                 $licenseInfo[] = 'for ' . $cmsLicense->domain;
@@ -158,12 +158,14 @@ class SupportController extends BaseApiController
             $attachments = [$attachment];
         }
 
-        foreach ($attachments as $i => $attachment) {
-            $parts[] = [
-                'name' => "attachments[{$i}]",
-                'contents' => fopen($attachment->tempName, 'rb'),
-                'filename' => $attachment->name,
-            ];
+        if (!empty($attachments)) {
+            foreach ($attachments as $i => $attachment) {
+                $parts[] = [
+                    'name' => "attachments[{$i}]",
+                    'contents' => fopen($attachment->tempName, 'rb'),
+                    'filename' => $attachment->name,
+                ];
+            }
         }
 
         $client->post('/inboxes/' . getenv('FRONT_INBOX_ID') . '/imported_messages', [
