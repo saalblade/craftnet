@@ -39,7 +39,7 @@
                                             </div>
                                         </td>
                                         <td class="description">
-                                            <strong>{{item.plugin.name}}</strong>
+                                            <strong v-if="item.plugin">{{item.plugin.name}}</strong>
                                             <edition-badge>{{ item.lineItem.purchasable.name }}</edition-badge>
                                         </td>
                                     </template>
