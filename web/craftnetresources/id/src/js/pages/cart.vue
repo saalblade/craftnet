@@ -164,6 +164,7 @@
             ...mapState({
                 cart: state => state.cart.cart,
                 expiryDateOptions: state => state.pluginStore.expiryDateOptions,
+                currentUser: state => state.account.currentUser,
             }),
 
             ...mapGetters({
@@ -189,7 +190,12 @@
             }),
 
             checkout() {
-                this.$router.push({path: '/identity'})
+                if (!this.currentUser) {
+                    this.$router.push({path: '/identity'})
+                    return
+                }
+
+                this.$router.push({path: '/payment'})
             },
 
             itemUpdateOptions(itemKey) {

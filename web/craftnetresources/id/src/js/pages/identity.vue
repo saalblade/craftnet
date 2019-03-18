@@ -43,6 +43,7 @@
         computed: {
             ...mapState({
                 cart: state => state.cart.cart,
+                currentUser: state => state.account.currentUser,
             }),
         },
 
@@ -72,6 +73,11 @@
         },
 
         mounted() {
+            if (this.currentUser) {
+                this.$router.push({path: '/payment'})
+                return
+            }
+            
             this.loading = true
 
             this.getCart()

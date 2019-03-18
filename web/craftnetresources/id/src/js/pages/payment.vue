@@ -1,6 +1,13 @@
 <template>
     <div>
-        <p><router-link to="/identity">← Identity</router-link></p>
+        <p>
+            <template v-if="currentUser">
+                <router-link to="/cart">← Cart</router-link>
+            </template>
+            <template v-else>
+                <router-link to="/identity">← Identity</router-link>
+            </template>
+        </p>
         <h1>Payment</h1>
 
         <div v-if="error">{{error}}</div>
@@ -200,6 +207,10 @@
                         city: this.billingInfo.city,
                         zipCode: this.billingInfo.zipCode,
                     },
+                }
+
+                if (this.currentUser) {
+                    cartData.email = this.currentUser.email
                 }
 
                 return this.$store.dispatch('cart/saveCart', cartData)
