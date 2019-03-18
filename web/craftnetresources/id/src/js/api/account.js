@@ -42,4 +42,12 @@ export default {
                 }
             })
     },
+
+    getAccount() {
+        return axios.post(Craft.actionUrl + '/craftnet/id/account/get-account', {}, {
+            headers: {
+                'X-CSRF-Token': Craft.csrfTokenValue,
+            }
+        })
+    }
 }

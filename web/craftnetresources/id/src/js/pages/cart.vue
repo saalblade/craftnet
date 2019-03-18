@@ -189,7 +189,7 @@
             }),
 
             checkout() {
-                this.$router.push({path: '/payment'})
+                this.$router.push({path: '/identity'})
             },
 
             itemUpdateOptions(itemKey) {

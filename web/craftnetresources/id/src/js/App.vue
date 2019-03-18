@@ -68,7 +68,7 @@
         methods: {
             loadUserData() {
                 if (window.currentUserId) {
-                    this.loadAuthenticatedUserData()
+                    this.loadAccount()
                 } else {
                     this.loadGuestUserData()
                 }
@@ -76,7 +76,13 @@
         },
 
         created() {
-            this.loadUserData()
+            this.$store.dispatch('craftId/getCraftIdData')
+                .then(() => {
+                    this.loadUserData()
+                })
+                .catch(() => {
+                    this.$store.commit('app/updateLoading', false)
+                })
 
             if(window.sessionNotice) {
                 this.$store.dispatch('app/displayNotice', window.sessionNotice)

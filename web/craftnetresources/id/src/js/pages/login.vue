@@ -108,7 +108,7 @@
                             return
                         }
 
-                        this.loadAuthenticatedUserData(() => {
+                        this.loadAccount(() => {
                             this.loading = false
                             this.$store.dispatch('app/displayNotice', 'Logged in.')
                             this.$router.push({path: '/'})

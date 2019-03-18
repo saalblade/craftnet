@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p><router-link to="/identity">← Identity</router-link></p>
         <h1>Payment</h1>
 
         <div v-if="error">{{error}}</div>
@@ -72,6 +73,7 @@
                 error: null,
                 errors: {},
                 cardToken: null,
+                guestCardToken: null,
             }
         },
 
@@ -87,6 +89,7 @@
                 card: state => state.stripe.card,
                 existingCardToken: state => state.stripe.cardToken,
                 accountBillingAddress: state => state.account.billingAddress,
+                currentUser: state => state.account.currentUser,
             }),
 
             ...mapGetters({
@@ -143,20 +146,39 @@
             savePaymentMethod() {
                 return new Promise((resolve, reject) => {
                     if (this.cart && this.cart.totalPrice > 0) {
-                        if (this.paymentMode === 'newCard') {
-                            // Save new card
-                            if (!this.cardToken) {
-                                this.$refs.paymentMethod.$refs.newCard.save(source => {
-                                    this.cardToken = source
+                        if (this.currentUser) {
+                            // Save card for existing user
+                            if (this.paymentMode === 'newCard') {
+                                // Save new card
+                                if (!this.cardToken) {
+                                    this.$refs.paymentMethod.$refs.newCard.save(
+                                        // success
+                                        (source) => {
+                                            this.cardToken = source
+                                            resolve()
+                                        },
+                                        // error
+                                        () => {
+                                            reject()
+                                        })
+                                } else {
                                     resolve()
-                                }, () => {
-                                    reject()
-                                })
+                                }
                             } else {
                                 resolve()
                             }
                         } else {
-                            resolve()
+                            // Save card for guest user
+                            this.$refs.paymentMethod.$refs.guestCard.save(
+                                // success
+                                (response) => {
+                                    this.guestCardToken = response
+                                    resolve()
+                                },
+                                // error
+                                () => {
+                                    reject()
+                                })
                         }
                     } else {
                         resolve()
@@ -187,12 +209,16 @@
                 let cardToken = null
 
                 if (this.cart.totalPrice > 0) {
-                    switch (this.paymentMode) {
-                        case 'newCard':
-                            cardToken = this.cardToken.id
-                            break
-                        default:
-                            cardToken = this.existingCardToken
+                    if (this.currentUser) {
+                        switch (this.paymentMode) {
+                            case 'newCard':
+                                cardToken = this.cardToken.id
+                                break
+                            default:
+                                cardToken = this.existingCardToken
+                        }
+                    } else {
+                        cardToken = this.guestCardToken.id
                     }
                 }
 
@@ -205,12 +231,14 @@
 
                 return this.$store.dispatch('cart/checkout', checkoutData)
                     .then(() => {
-                        this.$store.dispatch('craftId/getCraftIdData')
+                        this.$store.dispatch('cart/resetCart')
                             .then(() => {
-                                this.$store.dispatch('cart/resetCart')
-                                    .then(() => {
-                                        this.loading = false
-                                    })
+                                if (this.currentUser) {
+                                    this.$store.dispatch('account/getAccount')
+                                        .then(() => {
+                                            this.loading = false
+                                        })
+                                }
                             })
                     })
             },

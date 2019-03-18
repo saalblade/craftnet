@@ -65,16 +65,9 @@ const actions = {
                 .then((response) => {
                     commit('updateCategories', {categories: response.data.categories})
                     commit('updateCountries', {countries: response.data.countries})
-                    commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true})
-                    commit('account/updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true})
-                    commit('stripe/updateCard', {card: response.data.card}, {root: true})
-                    commit('stripe/updateCardToken', {cardToken: response.data.cardToken}, {root: true})
-                    commit('account/updateCurrentUser', {currentUser: response.data.currentUser}, {root: true})
-                    commit('account/updateCurrentUserLoaded', true, {root: true})
                     resolve(response)
                 })
                 .catch((response) => {
-                    commit('account/updateCurrentUserLoaded', true, {root: true})
                     reject(response)
                 })
         })

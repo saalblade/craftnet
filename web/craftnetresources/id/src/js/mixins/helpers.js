@@ -86,9 +86,9 @@ export default {
             return process.env.VUE_APP_CRAFT_PLUGINS_URL;
         },
 
-        loadAuthenticatedUserData(cb, cbError) {
+        loadAccount(cb, cbError) {
             // Account
-            this.$store.dispatch('craftId/getCraftIdData')
+            this.$store.dispatch('account/getAccount')
                 .then(() => {
                     // Cart
                     this.$store.dispatch('cart/getCart')
