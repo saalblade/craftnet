@@ -127,7 +127,7 @@
                         <icon icon="shopping-cart" class="size-4xl mb-4 text-grey" />
                         <div class="font-bold">Your cart is empty</div>
                         <div class="mt-4">
-                            <p>Browse plugins on <a :href="craftPluginsUrl()">plugins.craftcms.com</a></p>
+                            <p>Browse plugins on the <a :href="craftPluginsUrl()">Plugin Store</a>.</p>
                         </div>
                     </empty>
                 </div>
