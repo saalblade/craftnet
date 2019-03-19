@@ -97,7 +97,7 @@
     import Badge from '../../../components/Badge'
     import FilterBar from '../../../components/FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
-    import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
+    import VuetablePagination from '../../../components/VuetablePagination'
     import helpers from '../../../mixins/helpers'
 
     window.axios = require('axios')
@@ -216,9 +216,3 @@
         // },
     }
 </script>
-
-<style lang="scss">
-    .vuetable-pagination-dropdown {
-        @apply .w-32;
-    }
-</style>

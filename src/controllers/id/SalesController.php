@@ -25,7 +25,7 @@ class SalesController extends BaseController
 
         $filter = Craft::$app->getRequest()->getParam('filter');
         $limit = Craft::$app->getRequest()->getParam('limit', 10);
-        $page = Craft::$app->getRequest()->getParam('page', 1);
+        $page = (int) Craft::$app->getRequest()->getParam('page', 1);
 
         $data = Module::getInstance()->getSaleManager()->getSalesByPluginOwner($user, $filter, $limit, $page);
         $total = Module::getInstance()->getSaleManager()->getTotalSalesByPluginOwner($user);

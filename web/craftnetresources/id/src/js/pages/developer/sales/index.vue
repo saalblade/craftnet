@@ -10,10 +10,6 @@
             <div class="mx-2 flex items-center">
                 <spinner :class="{invisible: !loading}"></spinner>
             </div>
-
-            <div class="text-right">
-                <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
-            </div>
         </div>
 
         <div class="card card-table" :class="{'opacity-25': loading}">
@@ -36,18 +32,16 @@
                 </template>
 
                 <template slot="type" slot-scope="props">
-                    <td>
-                        <template v-if="props.rowData.purchasableType === 'craftnet\\plugins\\PluginRenewal'">
-                            Renewal
-                        </template>
-                        <template v-else>
-                            License
-                        </template>
+                    <template v-if="props.rowData.purchasableType === 'craftnet\\plugins\\PluginRenewal'">
+                        Renewal
+                    </template>
+                    <template v-else>
+                        License
+                    </template>
 
-                        <div class="text-secondary" v-for="(adjustment, adjustmentKey) in props.rowData.adjustments" :key="'adjustment-' + adjustmentKey">
-                            {{adjustment.name}}
-                        </div>
-                    </td>
+                    <div class="text-secondary" v-for="(adjustment, adjustmentKey) in props.rowData.adjustments" :key="'adjustment-' + adjustmentKey">
+                        {{adjustment.name}}
+                    </div>
                 </template>
 
                 <template slot="grossAmount" slot-scope="props">
@@ -64,6 +58,10 @@
             </vuetable>
         </div>
 
+        <div class="text-center py-6">
+            <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
+        </div>
+
         <!--
         <empty>
             <icon icon="dollar-sign" cssClass="text-5xl mb-4 text-grey-light" />
@@ -75,10 +73,12 @@
 </template>
 
 <script>
+    /* global Craft */
+
     import Empty from '../../../components/Empty'
     import FilterBar from '../../../components/FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
-    import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
+    import VuetablePagination from '../../../components/VuetablePagination'
 
     export default {
         components: {
