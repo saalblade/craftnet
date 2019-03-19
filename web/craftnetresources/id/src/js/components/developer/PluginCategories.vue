@@ -9,8 +9,8 @@
                     <div class="flex">
                         <div>{{category.title}}</div>
                         <div class="ml-3 mt-1">
-                            <a class="" href="#" @click.prevent="unselectCategory(category.id)">
-                                <icon icon="times" cssClass="text-red" />
+                            <a @click.prevent="unselectCategory(category.id)">
+                                <icon icon="times" class="text-red" />
                             </a>
                         </div>
                     </div>
