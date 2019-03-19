@@ -16,18 +16,19 @@
             </div>
             <div>
                 <template v-if="userDraft.photoId">
-                    <div class="field">
+                    <field>
                         <btn :disabled="loading.uploadPhoto" :loading="loading.uploadPhoto" @click="changePhoto">Change Photo</btn>
-                    </div>
-                    <div class="field">
+                    </field>
+                    <field>
                         <btn kind="danger" icon="times" :disabled="loading.deletePhoto" :loading="loading.deletePhoto" @click="deletePhoto">Delete</btn>
-                    </div>
+                    </field>
                 </template>
                 <template v-else>
-                    <div class="field">
+                    <field>
                         <btn :disabled="loading.uploadPhoto" :loading="loading.uploadPhoto" @click="changePhoto">Upload a photo</btn>
-                    </div>
+                    </field>
                 </template>
+
                 <input type="file" ref="photoFile" class="hidden" @change="onChangePhoto" />
             </div>
         </div>

@@ -67,19 +67,18 @@
                     <div class="card-body">
                         <div class="flex">
                             <div class="mr-6">
-
-                                <div class="field">
+                                <field>
                                     <img :src="pluginDraft.iconUrl" height="80" />
-                                </div>
+                                </field>
                             </div>
                             <div class="flex-1">
-                                <div class="field">
+                                <field>
                                     <div class="instructions">
                                         <p>Plugin icons must be square SVG files, and should not exceed {{ maxUploadSize }}.</p>
                                     </div>
                                     <input type="file" ref="iconFile" class="form-control" @change="changeIcon" :class="{'is-invalid': errors.iconId }" />
                                     <div class="invalid-feedback" v-for="(error, errorKey) in errors.iconId" :key="'plugin-icon-error-' + errorKey">{{ error }}</div>
-                                </div>
+                                </field>
                             </div>
                         </div>
                     </div>
@@ -99,14 +98,10 @@
                                 <textbox id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" :disabled="true" />
                             </div>
                             <div class="w-1/2 px-4">
-                                <div class="field">
-                                    <label for="license">License</label>
-
-                                   <select id="license" class="form-control w-full" v-model="pluginDraft.license">
-                                       <option value="craft">Craft</option>
-                                       <option value="mit">MIT</option>
-                                   </select>
-                                </div>
+                                <dropdown :fullwidth="true" label="License" v-model="pluginDraft.license" :options="[
+                                    {label: 'Craft', value: 'craft'},
+                                    {label: 'MIT', value: 'mit'},
+                                ]" />
                             </div>
                         </div>
 
@@ -125,12 +120,9 @@
                 <div class="card mb-6">
                     <div class="card-header">Screenshots</div>
                     <div class="card-body">
-                        <div class="field">
-                            <div class="instructions">
-                                <p>Plugin screenshots must be JPG or PNG files, and should not exceed {{ maxUploadSize }}.</p>
-                            </div>
+                        <field :instructions="'Plugin screenshots must be JPG or PNG files, and should not exceed '+maxUploadSize+'.'">
                             <input type="file" ref="screenshotFiles" class="form-control" multiple="">
-                        </div>
+                        </field>
 
                         <div ref="screenshots" class="d-inline">
 

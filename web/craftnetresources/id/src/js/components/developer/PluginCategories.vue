@@ -1,9 +1,6 @@
 <template>
     <div>
-        <div class="field">
-            <label id="categories">Categories</label>
-            <div class="instructions"><p>Pick up to {{maxCategories}} categories. ({{ pluginDraft.categoryIds.length }}/{{maxCategories}} selected)</p></div>
-
+        <field label="Categories" :instructions="'Pick up to '+maxCategories+' categories. ('+ pluginDraft.categoryIds.length +'/'+maxCategories+' selected)'">
             <draggable v-model="pluginDraft.categoryIds">
                 <div class="alert float-left clearfix mb-3 mr-2 px-3 py-2" v-for="(category, key) in selectedCategories" :key="'selected-categories-' + key">
                     <div class="flex">
@@ -24,7 +21,7 @@
                     <btn class="mb-2 mr-2" icon="plus" :disabled="pluginDraft.categoryIds.length >= maxCategories" outline @click="selectCategory(category.id)">{{category.title}}</btn>
                 </div>
             </div>
-        </div>
+        </field>
     </div>
 </template>
 
