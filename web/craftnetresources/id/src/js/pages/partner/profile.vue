@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="mb-8">
 		<h1>Partner Profile</h1>
 
         <div v-if="loadState == LOADING" class="text-center">
