@@ -137,9 +137,7 @@
                             <draggable v-model="screenshots">
                                 <div v-for="(screenshot, key) in screenshots" class="screenshot" :key="key">
                                     <img :src="screenshot.url" class="img-thumbnail mr-3 mb-3" />
-                                    <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(key);">
-                                        <icon icon="times" />
-                                    </a>
+                                    <btn icon="times" kind="danger" class="remove" @click.prevent="removeScreenshot(key);">Remove</btn>
                                 </div>
                             </draggable>
 
@@ -617,8 +615,20 @@
     }
 </script>
 
-<style scoped>
-    .screenshot { position: relative; display: inline-block; width: 230px; margin-right:24px; margin-top: 14px; }
-    .screenshot .remove { position: absolute; top: -10px; right: -10px; }
-    .screenshot img {  }
+<style lang="scss">
+    .screenshot {
+        position: relative;
+        display: inline-block;
+        width: 230px;
+        margin-right: 24px;
+        margin-top: 14px;
+    }
+
+    .screenshot {
+        .c-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+        }
+    }
 </style>
