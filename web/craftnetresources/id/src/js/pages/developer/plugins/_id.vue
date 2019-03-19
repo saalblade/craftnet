@@ -58,7 +58,7 @@
                 <div class="card mb-6">
                     <div class="card-header">GitHub Repository</div>
                     <div class="card-body">
-                        <textbox id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" disabled="true" />
+                        <textbox id="repository" label="Repository URL" v-model="pluginDraft.repository" :errors="errors.repository" :disabled="true" />
                     </div>
                 </div>
 
@@ -93,10 +93,10 @@
                                 <textbox id="name" label="Name" v-model="pluginDraft.name" :errors="errors.name" @input="onInputName" />
                             </div>
                             <div class="w-1/2 px-4">
-                                <textbox id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" disabled="true" />
+                                <textbox id="packageName" label="Package Name" v-model="pluginDraft.packageName" :errors="errors.packageName" :disabled="true" />
                             </div>
                             <div class="w-1/2 px-4">
-                                <textbox id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" disabled="true" />
+                                <textbox id="handle" label="Plugin Handle" v-model="pluginDraft.handle" :errors="errors.handle" :disabled="true" />
                             </div>
                             <div class="w-1/2 px-4">
                                 <div class="field">
