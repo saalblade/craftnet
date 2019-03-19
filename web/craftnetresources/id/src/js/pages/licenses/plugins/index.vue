@@ -80,9 +80,7 @@
             </vuetable>
         </div>
 
-        <div class="text-center py-6">
-            <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
-        </div>
+        <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
 
         <!--
         <empty>

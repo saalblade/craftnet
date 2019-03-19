@@ -76,7 +76,7 @@ class PluginLicensesController extends Controller
 
         $filter = Craft::$app->getRequest()->getParam('filter');
         $limit = Craft::$app->getRequest()->getParam('limit', 10);
-        $page = Craft::$app->getRequest()->getParam('page', 1);
+        $page = (int) Craft::$app->getRequest()->getParam('page', 1);
         $orderBy = Craft::$app->getRequest()->getParam('orderBy');
         $ascending = Craft::$app->getRequest()->getParam('ascending');
 

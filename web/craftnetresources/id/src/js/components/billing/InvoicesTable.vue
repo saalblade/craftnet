@@ -8,10 +8,6 @@
             <div class="mx-2 flex items-center">
                 <spinner :class="{invisible: !loading}"></spinner>
             </div>
-
-            <div class="text-right">
-                <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
-            </div>
         </div>
 
         <div class="card card-table" :class="{'opacity-25': loading}">
@@ -39,6 +35,8 @@
                 </template>
             </vuetable>
         </div>
+
+        <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
     </div>
 </template>
 
@@ -47,7 +45,7 @@
 
     import FilterBar from '../FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
-    import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown'
+    import VuetablePagination from '../VuetablePagination'
 
     export default {
         components: {
@@ -78,14 +76,14 @@
                         title: 'Receipt',
                     },
                 ],
-                moreParams: {}
+                moreParams: {},
             }
         },
 
         computed: {
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/invoices/get-invoices'
-            }
+            },
         },
 
         methods: {

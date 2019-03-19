@@ -10,10 +10,6 @@
             <div class="mx-2 flex items-center">
                 <spinner :class="{invisible: !loading}"></spinner>
             </div>
-
-            <div class="text-right">
-                <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
-            </div>
         </div>
 
         <div class="card card-table" :class="{'opacity-25': loading}">
@@ -78,6 +74,8 @@
                 </template>
             </vuetable>
         </div>
+
+        <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
 
         <!--
         <empty>
