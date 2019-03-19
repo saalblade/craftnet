@@ -79,9 +79,13 @@
             </div>
 
             <empty v-else>
-                <icon icon="plug" cssClass="text-5xl mb-4 text-grey-light" />
-                <div class="font-bold">No plugins</div>
-                <div>You haven’t added any plugins yet.</div>
+                <empty>
+                    <icon icon="plug" class="size-4xl mb-4 text-grey" />
+                    <div class="font-bold">No plugins</div>
+                    <div class="mt-4">
+                        <p>You haven’t added any plugins yet.</p>
+                    </div>
+                </empty>
             </empty>
         </template>
     </div>
