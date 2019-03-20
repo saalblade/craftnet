@@ -63,8 +63,7 @@
                 </template>
 
                 <template v-else>
-                    <li class="ml-4"><router-link to="/site/register" class="block py-1">Register</router-link></li>
-                    <li class="ml-4"><router-link to="/site/login" class="block py-1">Login</router-link></li>
+                    <li class="ml-4"><router-link to="/site/login" class="block py-1">Account</router-link></li>
                 </template>
             </ul>
         </div>

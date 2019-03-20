@@ -1,38 +1,59 @@
 <template>
-    <div class="mx-auto max-w-sm">
-        <div class="pt-8 mb-6 text-center">
-            <h1 class="mb-0">Sign In</h1>
-            <p class="lead">Manage your Craft ID.</p>
+    <div class="flex flex-1">
+        <div class="flex-1 bg-blue text-white justify-center items-center flex p-8">
+            <ul class="features list-reset">
+                <li>
+                    <icon icon="key" size="2xl" />
+                    Manage your licenses
+                </li>
+
+                <li>
+                    <icon icon="question-circle" size="2xl" />
+                    Claim licenses
+                </li>
+                <li>
+                    <icon icon="plug" size="2xl" />
+                    Publish plugins to the Plugin Store
+                </li>
+
+                <li>
+                    <icon icon="handshake" size="2xl" />
+                    Manage your partner profile
+                </li>
+            </ul>
         </div>
 
-        <div class="card">
-            <div class="card-body">
-                <form method="post" accept-charset="UTF-8" @submit.prevent="submit()">
-                    <input type="hidden" :name="csrfTokenName" :value="csrfTokenValue">
-                    <input type="hidden" name="action" value="users/login">
-
-                    <textbox label="Username or email" id="loginName" v-model="loginName" ref="loginNameField" />
-
-                    <textbox type="password" label="Password" id="password" v-model="password" ref="passwordField" />
-
-                    <div class="form-check mb-2">
-                        <label class="form-check-label">
-                            <input type="checkbox" v-model="rememberMe" />
-                            Remember me
-                        </label>
+        <div class="flex-1 bg-grey-lighter justify-center items-center flex p-8">
+            <div class="w-full max-w-sm">
+                <div>
+                    <div class="pt-8 mb-6">
+                        <h1 class="mb-0">Sign In</h1>
+                        <p class="lead">or <router-link to="/site/register">create an account</router-link></p>
                     </div>
 
-                    <div class="action">
-                        <btn kind="primary" type="submit" :loading="loading" :disabled="!formValidates() || loading" block>Login</btn>
-                    </div>
-                </form>
+                    <form method="post" accept-charset="UTF-8" @submit.prevent="submit()">
+                        <input type="hidden" :name="csrfTokenName" :value="csrfTokenValue">
+                        <input type="hidden" name="action" value="users/login">
 
-                <p class="mt-4"><router-link to="/site/forgot-password">Forgot your password?</router-link></p>
+                        <textbox label="Username or email" id="loginName" v-model="loginName" ref="loginNameField" />
+
+                        <textbox type="password" label="Password" id="password" v-model="password" ref="passwordField" />
+
+                        <div class="form-check mb-2">
+                            <label class="form-check-label">
+                                <input type="checkbox" v-model="rememberMe" />
+                                Remember me
+                            </label>
+                        </div>
+
+                        <div class="action">
+                            <btn kind="primary" type="submit" :loading="loading" :disabled="!formValidates() || loading" block>Login</btn>
+                        </div>
+
+                        <p class="mt-4"><router-link to="/site/forgot-password">Forgot your password?</router-link></p>
+                    </form>
+                </div>
             </div>
-        </div>
-
-        <div class="mt-4 text-center">
-            <p>Don’t have an account? <router-link to="/site/register">Sign up</router-link>.</p>
         </div>
     </div>
 </template>
@@ -166,7 +187,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .action {
         @apply .relative;
 
@@ -174,6 +195,19 @@
             @apply .absolute;
             bottom: -32px;
             right: 0;
+        }
+    }
+
+
+    ul.features {
+        @apply .text-xl;
+
+        li {
+            @apply .py-6;
+
+            .c-icon {
+                @apply .text-white .mr-2;
+            }
         }
     }
 </style>

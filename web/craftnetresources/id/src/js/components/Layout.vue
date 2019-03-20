@@ -7,7 +7,7 @@
                 <app-sidebar :showingSidebar="showingSidebar" @closeSidebar="closeSidebar()"></app-sidebar>
             </template>
 
-            <div id="main" class="main">
+            <div id="main" class="main" :class="{'main-full': $route.meta.mainFull}">
                 <div class="page-alerts">
                     <template v-if="$route.meta.stripeAccountAlert">
                         <stripe-account-alert></stripe-account-alert>

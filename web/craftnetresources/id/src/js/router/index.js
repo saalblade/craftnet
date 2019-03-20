@@ -75,7 +75,7 @@ const router = new VueRouter({
             path: '/site/login',
             name: 'Login',
             component: Login,
-            meta: { layout: "no-sidebar" }
+            meta: { layout: "no-sidebar", mainFull: true }
         },
         {
             path: '/site/forgot-password',
