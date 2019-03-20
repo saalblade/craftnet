@@ -84,3 +84,57 @@
         },
     }
 </script>
+
+<style lang="scss">
+    .sidebar {
+        @apply .hidden .py-6 .overflow-auto;
+
+        h5 {
+            @apply .relative .text-base .mb-2 .text-grey-darker .px-6;
+
+            a {
+                @apply .text-grey-darker .block;
+
+                &:hover {
+                    @apply .no-underline;
+                }
+
+                &.disabled {
+                    @apply .text-grey;
+                }
+            }
+
+            svg {
+                width: 13px;
+                margin-right: 5px;
+            }
+
+            &:not(:first-child) {
+                @apply .mt-4;
+            }
+        }
+
+        ul {
+            @apply .list-reset;
+
+            li {
+                a {
+                    @apply .block .text-grey-darker .px-6 .py-2 .no-underline;
+                    padding-left: 47px;
+
+                    &:hover {
+                        @apply .text-black;
+                    }
+
+                    &.active {
+                        @apply .bg-grey-light;
+                    }
+
+                    &.disabled {
+                        @apply .text-grey;
+                    }
+                }
+            }
+        }
+    }
+</style>

@@ -63,25 +63,25 @@ const router = new VueRouter({
             path: '/site/register',
             name: 'Register',
             component: Register,
-            meta: { sidebar: false }
+            meta: { layout: 'site' }
         },
         {
             path: '/site/register/success',
             name: 'RegisterSuccess',
             component: RegisterSuccess,
-            meta: { sidebar: false }
+            meta: { layout: 'site' }
         },
         {
             path: '/site/login',
             name: 'Login',
             component: Login,
-            meta: { sidebar: false, mainFull: true }
+            meta: { layout: 'site', mainFull: true }
         },
         {
             path: '/site/forgot-password',
             name: 'ForgotPassword',
             component: ForgotPassword,
-            meta: { sidebar: false }
+            meta: { layout: 'site' }
         },
         {
             path: '/account/billing',

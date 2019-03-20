@@ -1,28 +1,18 @@
 <template>
-    <div class="mx-auto max-w-sm">
-        <div class="pt-8 pb-4 text-center">
-            <h1 class="mb-0">Register</h1>
-            <p class="lead">Create your Craft ID.</p>
+    <div>
+        <h1 class="mb-0">Sign up</h1>
+        <p class="lead">or <router-link to="/site/login">sign in to your account</router-link></p>
 
-            <div class="card">
-                <div class="card-body text-left">
-                    <form method="post" accept-charset="UTF-8" @submit.prevent="submit()" ref="registerform">
-                        <textbox id="username" label="Username" v-model="username" :errors="getFieldErrors('username')" />
-                        <textbox id="email" label="Email" v-model="email" :errors="getFieldErrors('email')" />
-                        <textbox id="password" label="Password" v-model="password" :errors="getFieldErrors('password')" />
+        <form method="post" accept-charset="UTF-8" @submit.prevent="submit()" ref="registerform">
+            <textbox id="username" label="Username" v-model="username" :errors="getFieldErrors('username')" />
+            <textbox id="email" label="Email" v-model="email" :errors="getFieldErrors('email')" />
+            <textbox id="password" label="Password" v-model="password" :errors="getFieldErrors('password')" />
 
-                        <div class="action">
-                            <btn kind="primary" type="submit" :disabled="!formValidates()" block large>Register</btn>
-                            <spinner v-if="loading"></spinner>
-                        </div>
-                    </form>
-                </div>
+            <div class="action">
+                <btn kind="primary" type="submit" :disabled="!formValidates()" block large>Register</btn>
+                <spinner v-if="loading"></spinner>
             </div>
-
-            <div class="mt-4 text-center">
-                <p>Already have an account? <router-link to="/site/login">Sign in</router-link>.</p>
-            </div>
-        </div>
+        </form>
     </div>
 </template>
 

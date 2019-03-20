@@ -32,10 +32,10 @@
 
 <script>
     import {mapState} from 'vuex'
-    import AppHeader from './AppHeader'
-    import AppSidebar from './AppSidebar'
-    import StripeAccountAlert from './StripeAccountAlert'
-    import LicenseRenewAlert from './LicenseRenewAlert'
+    import AppHeader from '../AppHeader'
+    import AppSidebar from '../AppSidebar'
+    import StripeAccountAlert from '../StripeAccountAlert'
+    import LicenseRenewAlert from '../LicenseRenewAlert'
 
     export default {
         components: {
@@ -75,3 +75,80 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .app {
+        @apply .fixed .pin .flex .flex-col;
+
+        .header {
+            &-left {
+                #sidebar-toggle {
+                    @apply .mr-4 .text-grey-darker .text-center;
+                    width: 14px;
+
+                    &:hover {
+                        @apply .text-black;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 767px) {
+        .app {
+            .sidebar {
+                &.showing-sidebar {
+                    @apply .block .bg-white .absolute .pin .z-10;
+                    top: 61px;
+                }
+            }
+        }
+    }
+
+    @media (min-width: 768px) {
+        .app {
+            .header {
+                &-left {
+                    #sidebar-toggle {
+                        @apply .hidden;
+                    }
+                }
+            }
+
+            .sidebar {
+                @apply .w-64 .block .border-r;
+            }
+        }
+    }
+
+    /* Main */
+
+    .main {
+        @apply .flex-1 .overflow-auto .bg-white;
+
+        &:not(.main-full) {
+            @apply .px-8 .py-6;
+
+            .main-content {
+                @apply .mx-auto;
+                max-width: 1440px;
+            }
+        }
+
+        &.main-full {
+            @apply .flex;
+
+            .main-content {
+                @apply .flex .flex-1;
+            }
+        }
+
+        .main-content {
+            .top-alert {
+                @apply .-mx-8 .-mt-6 .rounded-none .px-8 .mb-6;
+                border: 0;
+            }
+        }
+    }
+
+</style>

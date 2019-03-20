@@ -21,7 +21,7 @@
         </template>
 
         <template v-else>
-            <layout></layout>
+            <component :is="layoutComponent"></component>
         </template>
     </div>
 </template>
@@ -32,7 +32,8 @@
     import helpers from './mixins/helpers'
     import AuthManager from './components/AuthManager'
     import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal'
-    import Layout from './components/Layout'
+    import AppLayout from './components/layouts/AppLayout'
+    import SiteLayout from './components/layouts/SiteLayout'
 
     export default {
         router,
@@ -42,7 +43,8 @@
         components: {
             AuthManager,
             RenewLicensesModal,
-            Layout,
+            AppLayout,
+            SiteLayout,
         },
 
         computed: {
@@ -54,10 +56,10 @@
                 currentUser: state => state.account.currentUser,
             }),
 
-            currentLayout() {
+            layoutComponent() {
                 switch (this.$route.meta.layout) {
-                    case 'site-layout':
-                        return this.$route.meta.layout
+                    case 'site':
+                        return 'site-layout'
 
                     default:
                         return 'app-layout'
@@ -97,4 +99,12 @@
 
 <style lang="scss">
     @import './../sass/app.scss';
+
+    #app:not(.has-sidebar) {
+        .header {
+            #sidebar-toggle {
+                @apply .hidden;
+            }
+        }
+    }
 </style>
