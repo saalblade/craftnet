@@ -63,25 +63,25 @@ const router = new VueRouter({
             path: '/site/register',
             name: 'Register',
             component: Register,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
         {
             path: '/site/register/success',
             name: 'RegisterSuccess',
             component: RegisterSuccess,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
         {
             path: '/site/login',
             name: 'Login',
             component: Login,
-            meta: { layout: "no-sidebar", mainFull: true }
+            meta: { sidebar: false, mainFull: true }
         },
         {
             path: '/site/forgot-password',
             name: 'ForgotPassword',
             component: ForgotPassword,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
         {
             path: '/account/billing',
@@ -102,19 +102,19 @@ const router = new VueRouter({
             path: '/buy-plugin/:handle/:edition',
             name: 'BuyPlugin',
             component: BuyPlugin,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
         {
             path: '/buy-cms/:edition',
             name: 'BuyCms',
             component: BuyCms,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
         {
             path: '/cart',
             name: 'Cart',
             component: Cart,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
         {
             path: '/developer/plugins',
@@ -173,19 +173,19 @@ const router = new VueRouter({
             path: '/identity',
             name: 'Identity',
             component: Identity,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
         {
             path: '/payment',
             name: 'Payment',
             component: Payment,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
         {
             path: '/thank-you',
             name: 'ThankYou',
             component: ThankYou,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
 
 
@@ -212,7 +212,7 @@ const router = new VueRouter({
             path: '*',
             name: 'NotFound',
             component: NotFound,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
     ]
 })

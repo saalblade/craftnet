@@ -3,7 +3,7 @@
         <app-header :showingSidebar="showingSidebar" @toggleSidebar="toggleSidebar()"></app-header>
 
         <div class="flex-container">
-            <template v-if="!$route.meta.layout || $route.meta.layout !== 'no-sidebar'">
+            <template v-if="typeof $route.meta.sidebar === 'undefined' || $route.meta.sidebar === true">
                 <app-sidebar :showingSidebar="showingSidebar" @closeSidebar="closeSidebar()"></app-sidebar>
             </template>
 
