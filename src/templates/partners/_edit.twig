@@ -241,7 +241,7 @@
             id: 'ownerId',
             name: 'ownerId',
             elementType: 'craft\\elements\\User',
-            sources: ['group:'~(craft.app.userGroups.getGroupByHandle('developers').id)],
+            sources: ['group:'~(craft.app.userGroups.getGroupByHandle('developers').uid)],
             limit: 1,
             elements: partner.ownerId ? [partner.owner] : null,
             errors: partner.getErrors('ownerId'),
