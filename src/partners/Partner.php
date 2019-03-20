@@ -20,6 +20,7 @@ use yii\queue\sqs\Queue;
  * Class Partner
  *
  * @property $slug string
+ * @property $verificationStartTime \DateTime
  * @package craftnet\partners
  */
 class Partner extends Element
@@ -224,9 +225,9 @@ class Partner extends Element
     public $expertise;
 
     /**
-     * @var
+     * @var \DateTime
      */
-    public $verificationStartDate;
+    protected $_verificationStartDate;
 
     /**
      * Based on region category titles in craftcms.com:
@@ -375,15 +376,6 @@ class Partner extends Element
                 self::SCENARIO_LIVE,
             ]
         ];
-        $rules[] = [
-            'verificationStartDate',
-            'date',
-            'format' => 'Y-m-d',
-            'on' => [
-                self::SCENARIO_DEFAULT,
-                self::SCENARIO_LIVE,
-            ]
-        ];
 
         return $rules;
     }
@@ -471,6 +463,10 @@ class Partner extends Element
             'websiteSlug',
             'website',
         ]);
+
+        if ($partnerData['verificationStartDate'] instanceof \DateTime) {
+            $partnerData['verificationStartDate'] = $partnerData['verificationStartDate']->format('Y-m-d');
+        }
 
         if ($isNew) {
             $partnerData['id'] = $this->id;
@@ -798,18 +794,23 @@ class Partner extends Element
         }
     }
 
+    /**
+     * @return \DateTime|null
+     */
     public function getVerificationStartDate()
     {
-        return $this->verificationStartDate ? DateTimeHelper::toDateTime($this->verificationStartDate) : null;
+        return $this->_verificationStartDate;
     }
 
-    public function setVerificationStartDateFromPost($value)
+    /**
+     * @param string|int|array|null The value that should be converted to a DateTime object.
+     * @throws \Exception
+     */
+    public function setVerificationStartDate($value)
     {
-        if ($value['date']) {
-            $this->verificationStartDate = DateTimeHelper::toDateTime($value)->format('Y-m-d');
-        } else {
-            $this->verificationStartDate = null;
-        }
+        $dateTime = DateTimeHelper::toDateTime($value, true);
+        // Force possible `false` to `null`
+        $this->_verificationStartDate = $dateTime ?: null;
     }
 
     /**
