@@ -73,7 +73,7 @@
                                                 </template>
                                             </div>
 
-                                            <spinner v-if="!itemLoading(itemKey)"></spinner>
+                                            <spinner v-if="itemLoading(itemKey)"></spinner>
                                         </div>
                                     </td>
                                     <td class="hidden">
