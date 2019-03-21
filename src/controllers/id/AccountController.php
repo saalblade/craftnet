@@ -312,6 +312,8 @@ class AccountController extends Controller
 
         $country = $primaryBillingAddress->getCountry();
 
+        $billingAddress['country'] = '';
+
         if ($country) {
             $billingAddress['country'] = $country->iso;
         }
