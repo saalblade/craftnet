@@ -38,9 +38,7 @@
                 </div>
 
                 <div class="text-center mt-8">
-                    <btn kind="primary" type="submit" large>Pay {{cart.totalPrice|currency}}</btn>
-
-                    <spinner v-if="payLoading"></spinner>
+                    <btn kind="primary" type="submit" :loading="payLoading" large>Pay {{cart.totalPrice|currency}}</btn>
 
                     <div class="mt-4">
                         <img src="~@/images/powered_by_stripe.svg" height="18" />
