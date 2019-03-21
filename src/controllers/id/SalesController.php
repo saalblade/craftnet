@@ -28,7 +28,7 @@ class SalesController extends BaseController
         $page = (int) Craft::$app->getRequest()->getParam('page', 1);
 
         $data = Module::getInstance()->getSaleManager()->getSalesByPluginOwner($user, $filter, $limit, $page);
-        $total = Module::getInstance()->getSaleManager()->getTotalSalesByPluginOwner($user);
+        $total = Module::getInstance()->getSaleManager()->getTotalSalesByPluginOwner($user, $filter);
 
         $last_page = ceil($total / $limit);
         $next_page_url = '?next';

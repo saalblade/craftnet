@@ -15,22 +15,18 @@ class SaleManager extends Component
      * Get sales by plugin owner.
      *
      * @param User $owner
-     * @param $searchQuery
+     * @param string|null $searchQuery
      * @param $limit
      * @param $page
      * @return array
      */
-    public function getSalesByPluginOwner(User $owner, $searchQuery, $limit, $page)
+    public function getSalesByPluginOwner(User $owner, string $searchQuery = null, $limit, $page): array
     {
         $defaultLimit = 30;
         $perPage = $limit ?? $defaultLimit;
         $offset = ($page - 1) * $perPage;
 
-        $query = $this->_getSalesQuery($owner);
-
-        if ($searchQuery) {
-            $query->andFilterWhere(['like', 'l.key', $searchQuery]);
-        }
+        $query = $this->_getSalesQuery($owner, $searchQuery);
 
         $query
             ->offset($offset)
@@ -60,11 +56,12 @@ class SaleManager extends Component
      * Get total sales by plugin owner.
      *
      * @param User $owner
+     * @param string|null $searchQuery
      * @return int|string
      */
-    public function getTotalSalesByPluginOwner(User $owner)
+    public function getTotalSalesByPluginOwner(User $owner, string $searchQuery = null)
     {
-        $query = $this->_getSalesQuery($owner);
+        $query = $this->_getSalesQuery($owner, $searchQuery);
 
         return $query->count();
     }
@@ -76,11 +73,12 @@ class SaleManager extends Component
      * Get sales query.
      *
      * @param User $owner
+     * @param string|null $searchQuery
      * @return Query
      */
-    private function _getSalesQuery(User $owner)
+    private function _getSalesQuery(User $owner, string $searchQuery = null): Query
     {
-        return (new Query())
+        $query = (new Query())
             ->select([
                 'lineitems.id AS id',
                 'plugins.id AS pluginId',
@@ -101,5 +99,11 @@ class SaleManager extends Component
             ->leftJoin('users', '[[users.id]] = [[licenses.ownerId]]')
             ->where(['plugins.developerId' => $owner->id])
             ->orderBy(['lineitems.dateCreated' => SORT_DESC]);
+
+        if ($searchQuery) {
+            $query->andFilterWhere(['like', 'orders.email', $searchQuery]);
+        }
+
+        return $query;
     }
 }
