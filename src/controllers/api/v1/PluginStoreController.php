@@ -140,6 +140,8 @@ class PluginStoreController extends BaseApiController
         switch ($slug) {
             case 'recently-added':
                 return $this->_recentlyAddedPlugins();
+            case 'top-paid':
+                return $this->_topPaidPlugins();
             default:
                 return [];
         }
@@ -154,6 +156,20 @@ class PluginStoreController extends BaseApiController
             ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
             ->withLatestReleaseInfo(true, $this->cmsVersion)
             ->orderBy(['craftnet_plugins.dateApproved' => SORT_DESC])
+            ->limit(20)
+            ->ids();
+    }
+
+    /**
+     * @return int[]
+     */
+    private function _topPaidPlugins(): array
+    {
+        return Plugin::find()
+            ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
+            ->withLatestReleaseInfo(true, $this->cmsVersion)
+            ->withTotalPurchases(true, (new \DateTime())->modify('-1 month'))
+            ->orderBy(['totalPurchases' => SORT_DESC])
             ->limit(20)
             ->ids();
     }

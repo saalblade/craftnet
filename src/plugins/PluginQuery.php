@@ -61,6 +61,16 @@ class PluginQuery extends ElementQuery
     public $preferStable = true;
 
     /**
+     * @var bool Whether info about the total purchases should be included
+     */
+    public $withTotalPurchases = false;
+
+    /**
+     * @var \DateTime How for back to look for total purchases
+     */
+    public $totalPurchasesSince;
+
+    /**
      * @inheritdoc
      */
     public function __construct($elementType, array $config = [])
@@ -156,6 +166,20 @@ class PluginQuery extends ElementQuery
         return $this;
     }
 
+    /**
+     * Sets the [[withTotalPurchases]] and [[totalPurchasesSince]] properties.
+     *
+     * @param bool $withTotalPurchases
+     * @param \DateTime|null $since
+     * @return static self reference
+     */
+    public function withTotalPurchases(bool $withTotalPurchases = true, \DateTime $since = null)
+    {
+        $this->withTotalPurchases = $withTotalPurchases;
+        $this->totalPurchasesSince = $since;
+        return $this;
+    }
+
     protected function beforePrepare(): bool
     {
         $this->joinElementTable('craftnet_plugins');
@@ -234,6 +258,26 @@ class PluginQuery extends ElementQuery
                 ->andWhere(["vo.{$maxCol}" => $latestReleaseQuery]);
             $this->query
                 ->addSelect(['latestVersion', 'latestVersionTime']);
+        }
+
+        if ($this->withTotalPurchases) {
+            $totalPurchasesSubquery = (new Query())
+                ->select(['count(*)'])
+                ->from(['craftnet_plugins p'])
+                ->innerJoin('craftnet_pluginlicenses pl', '[[pl.pluginId]] = [[p.id]]')
+                ->innerJoin('craftnet_pluginlicenses_lineitems pl_li', '[[pl_li.licenseId]] = [[pl.id]]')
+                ->where('[[p.id]] = [[craftnet_plugins.id]]');
+
+            if ($this->totalPurchasesSince) {
+                $totalPurchasesSubquery->andWhere(['>=', 'pl.dateCreated', Db::prepareDateForDb($this->totalPurchasesSince)]);
+            }
+
+            $this->subQuery
+                ->addSelect([
+                    'totalPurchases' => $totalPurchasesSubquery
+                ]);
+            $this->query
+                ->addSelect(['totalPurchases']);
         }
 
         return parent::beforePrepare();
