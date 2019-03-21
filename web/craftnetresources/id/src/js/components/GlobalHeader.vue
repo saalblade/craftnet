@@ -191,8 +191,8 @@
                 .cart-badge {
                     @apply .rounded-full .leading-none .absolute .border .border-grey-lighter .border-2 .text-xs .bg-red .text-white;
                     padding: 2px 6px;
-                    top: -12px;
-                    right: -20px;
+                    top: -4px;
+                    right: -10px;
                 }
             }
         }
