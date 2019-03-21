@@ -1,26 +1,18 @@
 <template>
-    <div class="mx-auto max-w-sm">
-        <div class="pt-8 mb-6 text-center">
-            <h1 class="mb-0">Forgot your password?</h1>
-            <p class="lead">Enter your email below to receive your password reset instructions.</p>
-        </div>
+    <div>
+        <h1 class="mb-0">Forgot your password?</h1>
+        <p class="lead">Enter your email below to receive your password reset instructions.</p>
 
-        <div class="col-6 ml-auto mr-auto">
-            <div class="card">
-                <div class="card-body">
-                    <form @submit.prevent="submit()">
-                        <textbox id="loginName" label="Username or email" v-model="loginName" ref="loginName" />
+        <form @submit.prevent="submit()">
+            <textbox id="loginName" label="Username or email" v-model="loginName" ref="loginName" />
 
-                        <div class="action">
-                            <btn kind="primary" type="submit" :disabled="loading || $v.$invalid" block large>Send reset email</btn>
-                            <spinner v-if="loading" />
-                        </div>
-                    </form>
-                </div>
+            <div class="action">
+                <btn kind="primary" type="submit" :disabled="loading || $v.$invalid" block large>Send reset email</btn>
+                <spinner v-if="loading" />
             </div>
+        </form>
 
-            <p class="mt-3 text-center"><router-link to="/site/login">Sign in instead</router-link></p>
-        </div>
+        <p class="mt-4"><router-link to="/site/login">Sign in to your account</router-link> or <router-link to="/site/register">register</router-link></p>
     </div>
 </template>
 
