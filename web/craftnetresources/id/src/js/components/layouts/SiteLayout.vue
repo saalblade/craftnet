@@ -1,36 +1,34 @@
 <template>
-    <div class="site">
+    <div class="site lg:flex lg:flex-col lg:fixed lg:pin">
         <app-header :showingSidebar="false"></app-header>
 
-        <div class="site-main flex-1 flex">
-            <div class="flex flex-1">
-                <div class="flex-1 bg-blue text-white justify-center items-center flex p-8">
-                    <ul class="features list-reset">
-                        <li>
-                            <icon icon="key" size="2xl" />
-                            Manage your licenses
-                        </li>
+        <div class="site-main flex-1 lg:flex">
+            <div class="flex-1 bg-blue text-white justify-center items-center lg:flex p-8">
+                <ul class="features list-reset">
+                    <li>
+                        <icon icon="key" size="2xl" />
+                        Manage your licenses
+                    </li>
 
-                        <li>
-                            <icon icon="question-circle" size="2xl" />
-                            Claim licenses
-                        </li>
-                        <li>
-                            <icon icon="plug" size="2xl" />
-                            Publish plugins to the Plugin Store
-                        </li>
+                    <li>
+                        <icon icon="question-circle" size="2xl" />
+                        Claim licenses
+                    </li>
+                    <li>
+                        <icon icon="plug" size="2xl" />
+                        Publish plugins to the Plugin Store
+                    </li>
 
-                        <li>
-                            <icon icon="handshake" size="2xl" />
-                            Manage your partner profile
-                        </li>
-                    </ul>
-                </div>
+                    <li>
+                        <icon icon="handshake" size="2xl" />
+                        Manage your partner profile
+                    </li>
+                </ul>
+            </div>
 
-                <div class="flex-1 bg-grey-lighter justify-center items-center flex p-8">
-                    <div class="w-full max-w-sm">
-                        <router-view :key="$route.path"></router-view>
-                    </div>
+            <div class="flex-1 bg-grey-lighter justify-center items-center flex p-8">
+                <div class="w-full max-w-sm">
+                    <router-view :key="$route.path"></router-view>
                 </div>
             </div>
         </div>
@@ -49,12 +47,19 @@
 
 <style lang="scss">
     .site {
-        @apply .fixed .pin .flex .flex-col;
-
         .header {
-            @apply .absolute .w-full .border-b-0;
-            position: absolute;
-            border-bottom: 0;
+            @apply .bg-blue .border-b-0;
+
+            &-right {
+                & > ul > li > a {
+                    @apply .text-white;
+
+
+                    &:hover {
+                        @apply .no-underline .opacity-75 .text-white;
+                    }
+                }
+            }
 
             &-left {
                 #sidebar-toggle {
@@ -67,6 +72,53 @@
             a {
                 @apply .text-white;
                 color: #fff !important;
+            }
+        }
+
+        ul.features {
+            @apply .text-base;
+
+            li {
+                @apply .py-3;
+
+                .c-icon {
+                    @apply .text-white .mr-2;
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+        }
+    }
+
+    @media (min-width: 992px) {
+        .site {
+            .header {
+                @apply .absolute .w-full .bg-transparent;
+                position: absolute;
+                border-bottom: 0;
+
+                &-right {
+                    & > ul > li > a {
+                        @apply .text-grey-darker;
+
+                        &:hover {
+                            @apply .no-underline .opacity-100 .text-black;
+                        }
+                    }
+                }
+            }
+
+            ul.features {
+                @apply .text-xl;
+
+                li {
+                    @apply .py-6;
+
+                    .c-icon {
+                        width: 1.75rem;
+                        height: 1.75rem;
+                    }
+                }
             }
         }
     }

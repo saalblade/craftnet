@@ -178,17 +178,4 @@
             right: 0;
         }
     }
-
-
-    ul.features {
-        @apply .text-xl;
-
-        li {
-            @apply .py-6;
-
-            .c-icon {
-                @apply .text-white .mr-2;
-            }
-        }
-    }
 </style>
