@@ -12,14 +12,8 @@
 
         <div class="header-right ml-4">
             <ul class="list-reset flex items-center">
-                <li class="block ml-6 cart-menu">
-                    <router-link class="block" to="/cart">
-                        <icon icon="shopping-cart" />
-                        <div class="cart-badge" :class="{invisible: !cartTotalItems}">{{cartTotalItems}}</div>
-                    </router-link>
-                </li>
-                <li class="block ml-6 global-menu" v-on-clickaway="awayGlobalMenu">
-                    <a class="block toggle" @click="globalMenuToggle">
+                <li class="block ml-4 global-menu" v-on-clickaway="awayGlobalMenu">
+                    <a class="block header-toggle" @click="globalMenuToggle">
                         <icon icon="th" />
                     </a>
 
@@ -32,11 +26,23 @@
                         <div class="popover-arrow"></div>
                     </div>
                 </li>
+                
+                <li class="block ml-4 cart-menu">
+                    <router-link class="block header-toggle" to="/cart">
+                        <icon icon="shopping-cart" />
+                        <div class="cart-badge" :class="{invisible: !cartTotalItems}">{{cartTotalItems}}</div>
+                    </router-link>
+                </li>
 
                 <template v-if="currentUser">
-                    <li class="block ml-6 user-menu" v-on-clickaway="awayUserMenu">
-                        <a class="block toggle" @click="userMenuToggle">
-                            <img :src="currentUser.photoUrl" />
+                    <li class="block ml-4 user-menu" :class="{'has-photo': !!currentUser.photoUrl}" v-on-clickaway="awayUserMenu">
+                        <a class="block header-toggle" @click="userMenuToggle">
+                            <template v-if="currentUser.photoUrl">
+                                <img :src="currentUser.photoUrl" />
+                            </template>
+                            <template v-else>
+                                <icon icon="user" />
+                            </template>
                         </a>
 
                         <div class="popover" :class="{hidden: !showingUserMenu}">
@@ -63,7 +69,11 @@
                 </template>
 
                 <template v-else>
-                    <li class="ml-4"><router-link to="/login" class="block py-1">Account</router-link></li>
+                    <li class="block ml-4 user-menu">
+                        <router-link class="block header-toggle" to="/login">
+                            <icon icon="user" />
+                        </router-link>
+                    </li>
                 </template>
             </ul>
         </div>
@@ -165,6 +175,12 @@
             }
         }
 
+        .header-toggle {
+            @apply .rounded-full .flex .justify-center .items-center;
+            width: 36px;
+            height: 36px;
+        }
+
 
         // Cart menu
 
@@ -187,10 +203,6 @@
         .global-menu {
             @apply .relative;
 
-            .toggle {
-                @apply .text-lg .p-2 .rounded-full;
-            }
-
             .popover {
                 top: 48px;
                 right: -13px;
@@ -207,11 +219,11 @@
         .user-menu {
             @apply .relative;
 
-            .toggle {
-                @apply .bg-grey-light .rounded-full;
-                width: 36px;
-                height: 36px;
+            &.has-photo {
+                @apply .ml-6;
+            }
 
+            .header-toggle {
                 &:hover {
                     @apply .cursor-pointer;
                 }
