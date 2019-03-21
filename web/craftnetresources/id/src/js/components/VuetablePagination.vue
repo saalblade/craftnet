@@ -77,8 +77,9 @@
 
 <style lang="scss">
     .vuetable-pagination {
+        @apply .flex .justify-center;
         div {
-            @apply .inline-block;
+            @apply .flex;
 
             .c-btn,
             a.c-btn,
