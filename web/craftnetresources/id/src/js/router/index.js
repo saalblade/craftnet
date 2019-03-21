@@ -63,25 +63,25 @@ const router = new VueRouter({
             path: '/register',
             name: 'Register',
             component: Register,
-            meta: { layout: 'site' }
+            meta: { layout: 'site', allowAnonymous: true }
         },
         {
             path: '/register/success',
             name: 'RegisterSuccess',
             component: RegisterSuccess,
-            meta: { layout: 'site' }
+            meta: { layout: 'site', allowAnonymous: true }
         },
         {
             path: '/login',
             name: 'Login',
             component: Login,
-            meta: { layout: 'site', mainFull: true }
+            meta: { layout: 'site', mainFull: true, allowAnonymous: true }
         },
         {
             path: '/forgot-password',
             name: 'ForgotPassword',
             component: ForgotPassword,
-            meta: { layout: 'site' }
+            meta: { layout: 'site', allowAnonymous: true }
         },
         {
             path: '/account/billing',
@@ -102,19 +102,19 @@ const router = new VueRouter({
             path: '/buy-plugin/:handle/:edition',
             name: 'BuyPlugin',
             component: BuyPlugin,
-            meta: { sidebar: false }
+            meta: { sidebar: false, allowAnonymous: true }
         },
         {
             path: '/buy-cms/:edition',
             name: 'BuyCms',
             component: BuyCms,
-            meta: { sidebar: false }
+            meta: { sidebar: false, allowAnonymous: true }
         },
         {
             path: '/cart',
             name: 'Cart',
             component: Cart,
-            meta: { sidebar: false }
+            meta: { sidebar: false, allowAnonymous: true }
         },
         {
             path: '/developer/plugins',
@@ -173,19 +173,19 @@ const router = new VueRouter({
             path: '/identity',
             name: 'Identity',
             component: Identity,
-            meta: { sidebar: false }
+            meta: { sidebar: false, allowAnonymous: true }
         },
         {
             path: '/payment',
             name: 'Payment',
             component: Payment,
-            meta: { sidebar: false }
+            meta: { sidebar: false, allowAnonymous: true }
         },
         {
             path: '/thank-you',
             name: 'ThankYou',
             component: ThankYou,
-            meta: { sidebar: false }
+            meta: { sidebar: false, allowAnonymous: true }
         },
 
 
@@ -228,8 +228,7 @@ router.beforeEach((to, from, next) => {
     // Guest users are limited to login, registration and cart pages
     if (!store.state.account.currentUser) {
         if (store.state.account.currentUserLoaded) {
-            // Todo: Replace conditional paths with meta.requireAuthentication for pages
-            if (to.path !== '/login' && to.path !== '/register' && to.path !== '/register/success' && to.path !== '/forgot-password' && to.path !== '/cart' && to.path !== '/identity' && to.path !== '/payment' && to.path !== '/thank-you' && to.path.startsWith('/buy-plugin/') !== true && to.path.startsWith('/buy-cms/') !== true) {
+            if (!to.meta.allowAnonymous) {
                 router.push({path: '/login'})
             } else {
                 next()
@@ -240,7 +239,7 @@ router.beforeEach((to, from, next) => {
                     next()
                 })
                 .catch(() => {
-                    if (to.path !== '/login' && to.path !== '/register' && to.path !== '/register/success' && to.path !== '/forgot-password' && to.path !== '/cart' && to.path !== '/identity' && to.path !== '/payment' && to.path !== '/thank-you' && to.path.startsWith('/buy-plugin/') !== true && to.path.startsWith('/buy-cms/') !== true) {
+                    if (!to.meta.allowAnonymous) {
                         router.push({path: '/login'})
                     } else {
                         next()
