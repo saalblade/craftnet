@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 class="mb-0">Sign up</h1>
-        <p class="lead">or <router-link to="/site/login">sign in to your account</router-link></p>
+        <p class="lead">or <router-link to="/login">sign in to your account</router-link></p>
 
         <form method="post" accept-charset="UTF-8" @submit.prevent="submit()" ref="registerform">
             <textbox id="username" label="Username" v-model="username" :errors="getFieldErrors('username')" />
@@ -59,7 +59,7 @@
                             this.errors = response.data.errors
                             this.$store.dispatch('app/displayError', 'Registration error.')
                         } else {
-                            this.$router.push({path: '/site/register/success'})
+                            this.$router.push({path: '/register/success'})
                         }
                     })
                     .catch(() => {

@@ -60,25 +60,25 @@ const router = new VueRouter({
         // Pages
 
         {
-            path: '/site/register',
+            path: '/register',
             name: 'Register',
             component: Register,
             meta: { layout: 'site' }
         },
         {
-            path: '/site/register/success',
+            path: '/register/success',
             name: 'RegisterSuccess',
             component: RegisterSuccess,
             meta: { layout: 'site' }
         },
         {
-            path: '/site/login',
+            path: '/login',
             name: 'Login',
             component: Login,
             meta: { layout: 'site', mainFull: true }
         },
         {
-            path: '/site/forgot-password',
+            path: '/forgot-password',
             name: 'ForgotPassword',
             component: ForgotPassword,
             meta: { layout: 'site' }
@@ -229,8 +229,8 @@ router.beforeEach((to, from, next) => {
     if (!store.state.account.currentUser) {
         if (store.state.account.currentUserLoaded) {
             // Todo: Replace conditional paths with meta.requireAuthentication for pages
-            if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart' && to.path !== '/identity' && to.path !== '/payment' && to.path !== '/thank-you' && to.path.startsWith('/buy-plugin/') !== true && to.path.startsWith('/buy-cms/') !== true) {
-                router.push({path: '/site/login'})
+            if (to.path !== '/login' && to.path !== '/register' && to.path !== '/register/success' && to.path !== '/forgot-password' && to.path !== '/cart' && to.path !== '/identity' && to.path !== '/payment' && to.path !== '/thank-you' && to.path.startsWith('/buy-plugin/') !== true && to.path.startsWith('/buy-cms/') !== true) {
+                router.push({path: '/login'})
             } else {
                 next()
             }
@@ -240,8 +240,8 @@ router.beforeEach((to, from, next) => {
                     next()
                 })
                 .catch(() => {
-                    if (to.path !== '/site/login' && to.path !== '/site/register' && to.path !== '/site/register/success' && to.path !== '/site/forgot-password' && to.path !== '/cart' && to.path !== '/identity' && to.path !== '/payment' && to.path !== '/thank-you' && to.path.startsWith('/buy-plugin/') !== true && to.path.startsWith('/buy-cms/') !== true) {
-                        router.push({path: '/site/login'})
+                    if (to.path !== '/login' && to.path !== '/register' && to.path !== '/register/success' && to.path !== '/forgot-password' && to.path !== '/cart' && to.path !== '/identity' && to.path !== '/payment' && to.path !== '/thank-you' && to.path.startsWith('/buy-plugin/') !== true && to.path.startsWith('/buy-cms/') !== true) {
+                        router.push({path: '/login'})
                     } else {
                         next()
                     }

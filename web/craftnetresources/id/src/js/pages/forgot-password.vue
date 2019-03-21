@@ -12,7 +12,7 @@
             </div>
         </form>
 
-        <p class="mt-4"><router-link to="/site/login">Sign in to your account</router-link> or <router-link to="/site/register">register</router-link></p>
+        <p class="mt-4"><router-link to="/login">Sign in to your account</router-link> or <router-link to="/register">register</router-link></p>
     </div>
 </template>
 

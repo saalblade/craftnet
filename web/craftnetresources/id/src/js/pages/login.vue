@@ -2,7 +2,7 @@
     <div>
         <div class="mb-6">
             <h1 class="mb-0">Sign in</h1>
-            <p class="lead">or <router-link to="/site/register">create an account</router-link></p>
+            <p class="lead">or <router-link to="/register">create an account</router-link></p>
         </div>
 
         <form method="post" accept-charset="UTF-8" @submit.prevent="submit()">
@@ -24,7 +24,7 @@
                 <btn kind="primary" type="submit" :loading="loading" :disabled="!formValidates() || loading" block>Login</btn>
             </div>
 
-            <p class="mt-4"><router-link to="/site/forgot-password">Forgot your password?</router-link></p>
+            <p class="mt-4"><router-link to="/forgot-password">Forgot your password?</router-link></p>
         </form>
     </div>
 </template>

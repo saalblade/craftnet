@@ -8,7 +8,7 @@
             <h1>Identity</h1>
 
             <h2>Use your Craft ID</h2>
-            <p><router-link to="/site/login">Login</router-link> or <router-link to="/site/register">register</router-link> to purchase licenses with your Craft ID.</p>
+            <p><router-link to="/login">Login</router-link> or <router-link to="/register">register</router-link> to purchase licenses with your Craft ID.</p>
 
             <h2>Continue as guest</h2>
             <form @submit.prevent="submit">

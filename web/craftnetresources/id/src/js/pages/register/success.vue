@@ -7,7 +7,7 @@
         <p>You will receive an email shortly to activate your account.</p>
 
         <div class="mt-4">
-            <router-link to="/site/login">Sign in to your account</router-link>
+            <router-link to="/login">Sign in to your account</router-link>
         </div>
     </div>
 </template>
