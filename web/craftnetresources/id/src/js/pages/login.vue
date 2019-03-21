@@ -91,6 +91,12 @@
 
                 usersApi.login(formData)
                     .then((response) => {
+                        if (response.data.error) {
+                            this.loading = false
+                            this.$store.dispatch('app/displayError', response.data.error)
+                            return
+                        }
+
                         // Set `remainingSessionTime` to something different than 0 to give the auth manager a chance to get the real remaining session time
                         // todo: Take Craft’s userSessionDuration config into account
                         Craft.remainingSessionTime = 3600
@@ -100,14 +106,18 @@
                             return
                         }
 
-                        this.loadAccount(() => {
-                            this.loading = false
-                            this.$store.dispatch('app/displayNotice', 'Logged in.')
-                            this.$router.push({path: '/'})
-                        }, () => {
-                            this.loading = false
-                            this.$store.dispatch('app/displayError', 'Couldn’t login.')
-                        })
+                        this.loadAccount(
+                            // success
+                            () => {
+                                this.loading = false
+                                this.$store.dispatch('app/displayNotice', 'Logged in.')
+                                this.$router.push({path: '/'})
+                            },
+                            // error
+                            () => {
+                                this.loading = false
+                                this.$store.dispatch('app/displayError', 'Couldn’t login.')
+                            })
                     })
                     .catch(() => {
                         this.loading = false
