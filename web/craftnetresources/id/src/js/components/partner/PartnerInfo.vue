@@ -147,11 +147,16 @@
 
 <script>
     import helpers from '../../mixins/helpers'
+    import CheckboxSet from '../CheckboxSet'
 
     export default {
         props: ['partner'],
 
         mixins: [helpers],
+
+        components: {
+            CheckboxSet,
+        },
 
         data() {
             return {
