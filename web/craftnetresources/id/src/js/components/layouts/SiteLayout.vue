@@ -1,6 +1,6 @@
 <template>
     <div class="site lg:flex lg:flex-col lg:fixed lg:pin">
-        <app-header :showingSidebar="false"></app-header>
+        <global-header :showingSidebar="false"></global-header>
 
         <div class="site-main flex-1 lg:flex">
             <div class="flex-1 bg-blue text-white justify-center items-center lg:flex p-8">
@@ -36,11 +36,11 @@
 </template>
 
 <script>
-    import AppHeader from '../AppHeader'
+    import GlobalHeader from '../GlobalHeader'
 
     export default {
         components: {
-            AppHeader
+            GlobalHeader
         }
     }
 </script>

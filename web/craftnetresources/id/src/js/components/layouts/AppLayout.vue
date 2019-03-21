@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <app-header :showingSidebar="showingSidebar" @toggleSidebar="toggleSidebar()"></app-header>
+        <global-header :showingSidebar="showingSidebar" @toggleSidebar="toggleSidebar()"></global-header>
 
         <div class="flex-container">
             <template v-if="typeof $route.meta.sidebar === 'undefined' || $route.meta.sidebar === true">
@@ -32,14 +32,14 @@
 
 <script>
     import {mapState} from 'vuex'
-    import AppHeader from '../AppHeader'
+    import GlobalHeader from '../GlobalHeader'
     import AppSidebar from '../AppSidebar'
     import StripeAccountAlert from '../StripeAccountAlert'
     import LicenseRenewAlert from '../LicenseRenewAlert'
 
     export default {
         components: {
-            AppHeader,
+            GlobalHeader,
             AppSidebar,
             StripeAccountAlert,
             LicenseRenewAlert,

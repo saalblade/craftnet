@@ -26,7 +26,7 @@
                         <div class="popover-arrow"></div>
                     </div>
                 </li>
-                
+
                 <li class="block ml-4 cart-menu">
                     <router-link class="block header-toggle" to="/cart">
                         <icon icon="shopping-cart" />
