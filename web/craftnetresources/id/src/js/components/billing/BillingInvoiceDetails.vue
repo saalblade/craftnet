@@ -24,8 +24,8 @@
 
         <form v-if="showForm" @submit.prevent="save()">
             <textbox id="businessTaxId" label="Tax ID" v-model="invoiceDetailsDraft.businessTaxId" :errors="errors.businessTaxId" />
-            <btn kind="primary" type="submit">Save</btn>
-            <btn @click="cancel()">Cancel</btn>
+            <btn kind="primary" type="submit" :loading="loading" :disabled="loading">Save</btn>
+            <btn @click="cancel()" :disabled="loading">Cancel</btn>
         </form>
     </div>
 </template>
@@ -36,6 +36,7 @@
     export default {
         data() {
             return {
+                loading: false,
                 errors: {},
                 showForm: false,
                 invoiceDetailsDraft: {},
@@ -59,6 +60,8 @@
             },
 
             save() {
+                this.loading = true
+
                 let data = {
                     businessTaxId: this.invoiceDetailsDraft.businessTaxId,
                 }
@@ -80,11 +83,13 @@
 
                 this.$store.dispatch('account/saveBillingInfo', data)
                     .then(() => {
+                        this.loading = false
                         this.$store.dispatch('app/displayNotice', 'Invoice details saved.')
                         this.showForm = false
                         this.errors = {}
                     })
                     .catch(response => {
+                        this.loading = false
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.'
                         this.$store.dispatch('app/displayError', errorMessage)
                         this.errors = response.data && response.data.errors ? response.data.errors : {}
