@@ -5,13 +5,9 @@
 
         <form method="post" accept-charset="UTF-8" @submit.prevent="submit()" ref="registerform">
             <textbox id="username" label="Username" v-model="username" :errors="getFieldErrors('username')" />
-            <textbox id="email" label="Email" v-model="email" :errors="getFieldErrors('email')" />
-            <textbox id="password" label="Password" v-model="password" :errors="getFieldErrors('password')" />
-
-            <div class="action">
-                <btn kind="primary" type="submit" :disabled="!formValidates()" block large>Register</btn>
-                <spinner v-if="loading"></spinner>
-            </div>
+            <textbox type="email" id="email" label="Email" v-model="email" :errors="getFieldErrors('email')" />
+            <textbox type="password" id="password" label="Password" v-model="password" :errors="getFieldErrors('password')" />
+            <btn kind="primary" type="submit" :loading="loading" :disabled="!formValidates() || loading" block large>Register</btn>
         </form>
     </div>
 </template>
@@ -99,15 +95,3 @@
     }
 </script>
 
-<style lang="scss" scoped>
-    .action {
-        @apply .relative;
-
-        .spinner {
-            @apply .absolute;
-            margin-left: -12px;
-            bottom: -26px;
-            left: 50%;
-        }
-    }
-</style>
