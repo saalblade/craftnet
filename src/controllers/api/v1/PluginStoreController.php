@@ -169,6 +169,7 @@ class PluginStoreController extends BaseApiController
             ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
             ->withLatestReleaseInfo(true, $this->cmsVersion)
             ->withTotalPurchases(true, (new \DateTime())->modify('-1 month'))
+            ->andWhere(['not', ['elements.id' => 983]])
             ->orderBy(['totalPurchases' => SORT_DESC])
             ->limit(20)
             ->ids();
