@@ -8,6 +8,7 @@ use craft\elements\Category;
 use craft\elements\Entry;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginQuery;
 use yii\caching\FileDependency;
 use yii\web\Response;
 
@@ -45,7 +46,7 @@ class PluginStoreController extends BaseApiController
 
             $pluginStoreData = [
                 'categories' => $this->_categories(),
-                'featuredPlugins' => $this->_featuredPlugins($plugins),
+                'featuredPlugins' => $this->_featuredPlugins(),
                 'plugins' => $this->_plugins($plugins),
                 'expiryDateOptions' => $this->_expiryDateOptions(),
             ];
@@ -88,47 +89,34 @@ class PluginStoreController extends BaseApiController
     }
 
     /**
-     * @param Plugin[] $plugins
      * @return array
      * @throws \yii\base\Exception
      */
-    private function _featuredPlugins(array $plugins): array
+    private function _featuredPlugins(): array
     {
         $ret = [];
 
-        $recents = Plugin::find()
-            ->orderBy(['craftnet_plugins.dateApproved' => SORT_DESC])
-            ->limit(10)
-            ->withLatestReleaseInfo(true, $this->cmsVersion)
-            ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
-            ->ids();
-
-        $recentlyAddedPluginsEntry = Entry::find()->site('plugins')->section('recentlyAddedPlugins')->one();
-
-        $ret[] = [
-            'id' => 'recently-added',
-            'slug' => 'recently-added',
-            'title' => $recentlyAddedPluginsEntry->title,
-            'description' => $recentlyAddedPluginsEntry->description,
-            'plugins' => $recents,
-            'limit' => 6,
-        ];
-
         $entries = Entry::find()
             ->site('craftId')
-            ->select(['elements.id', 'elements.fieldLayoutId', 'content.title', 'content.field_limit', 'content.field_description', 'elements_sites.slug'])
             ->section('featuredPlugins')
-            ->with('plugins', ['select' => ['elements.id']])
             ->all();
 
         foreach ($entries as $entry) {
-            $pluginIds = [];
-            foreach ($entry->plugins as $plugin) {
-                /** @var Plugin $plugin */
-                if (isset($plugins[$plugin->id])) {
-                    $pluginIds[] = $plugin->id;
-                }
+            switch ($entry->getType()->handle) {
+                case 'manual':
+                    /** @var PluginQuery $query */
+                    $query = $entry->plugins;
+                    $pluginIds = $query
+                        ->withLatestReleaseInfo(true, $this->cmsVersion)
+                        ->ids();
+                    break;
+                case 'dynamic':
+                    $pluginIds = $this->_dynamicPlugins($entry->slug);
+                    break;
+                default:
+                    $pluginIds = null;
             }
+
             if (!empty($pluginIds)) {
                 $ret[] = [
                     'id' => $entry->id,
@@ -141,6 +129,33 @@ class PluginStoreController extends BaseApiController
         }
 
         return $ret;
+    }
+
+    /**
+     * @param string $slug
+     * @return int[]
+     */
+    private function _dynamicPlugins(string $slug): array
+    {
+        switch ($slug) {
+            case 'recently-added':
+                return $this->_recentlyAddedPlugins();
+            default:
+                return [];
+        }
+    }
+
+    /**
+     * @return int[]
+     */
+    private function _recentlyAddedPlugins(): array
+    {
+        return Plugin::find()
+            ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
+            ->withLatestReleaseInfo(true, $this->cmsVersion)
+            ->orderBy(['craftnet_plugins.dateApproved' => SORT_DESC])
+            ->limit(20)
+            ->ids();
     }
 
     /**
