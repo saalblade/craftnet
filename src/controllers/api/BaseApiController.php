@@ -5,6 +5,7 @@ namespace craftnet\controllers\api;
 use Composer\Semver\Comparator;
 use Craft;
 use craft\elements\User;
+use craft\errors\InvalidPluginException;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craft\helpers\HtmlPurifier;
@@ -305,6 +306,9 @@ abstract class BaseApiController extends Controller
                         $this->pluginLicenseEditions[$pluginHandle] = $pluginLicense->getEdition();
                     } catch (LicenseNotFoundException $e) {
                         $this->pluginLicenseStatuses[$pluginHandle] = self::LICENSE_STATUS_INVALID;
+                        $e = null;
+                    } catch (InvalidPluginException $e) {
+                        // Just ignore it
                         $e = null;
                     }
                 }
