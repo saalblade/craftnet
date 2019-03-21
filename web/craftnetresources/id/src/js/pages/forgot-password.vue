@@ -6,10 +6,7 @@
         <form @submit.prevent="submit()">
             <textbox id="loginName" label="Username or email" v-model="loginName" ref="loginName" />
 
-            <div class="action">
-                <btn kind="primary" type="submit" :disabled="loading || $v.$invalid" block large>Send reset email</btn>
-                <spinner v-if="loading" />
-            </div>
+            <btn kind="primary" type="submit" :loading="loading" :disabled="loading || $v.$invalid" block large>Send reset email</btn>
         </form>
 
         <p class="mt-4"><router-link to="/login">Sign in to your account</router-link> or <router-link to="/register">register</router-link></p>
@@ -67,16 +64,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    .action {
-        @apply .relative;
-
-        .spinner {
-            @apply .absolute;
-            margin-left: -12px;
-            bottom: -26px;
-            left: 50%;
-        }
-    }
-</style>

@@ -20,9 +20,7 @@
                 </label>
             </div>
 
-            <div class="action">
-                <btn kind="primary" type="submit" :loading="loading" :disabled="!formValidates() || loading" block>Login</btn>
-            </div>
+            <btn kind="primary" type="submit" :loading="loading" :disabled="!formValidates() || loading" block>Login</btn>
 
             <p class="mt-4"><router-link to="/forgot-password">Forgot your password?</router-link></p>
         </form>
@@ -167,15 +165,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .action {
-        @apply .relative;
-
-        .spinner {
-            @apply .absolute;
-            bottom: -32px;
-            right: 0;
-        }
-    }
-</style>

@@ -73,7 +73,7 @@
                                                 </template>
                                             </div>
 
-                                            <spinner v-if="itemLoading(itemKey)"></spinner>
+                                            <spinner v-if="!itemLoading(itemKey)"></spinner>
                                         </div>
                                     </td>
                                     <td class="hidden">
@@ -324,13 +324,13 @@
             .expiry-date-flex {
                 @apply .flex .flex-row .items-center;
 
-                .field {
+                .c-field {
                     @apply .mb-0;
                 }
             }
         }
 
-        .spinner {
+        .c-spinner {
             @apply .ml-4;
         }
     }
