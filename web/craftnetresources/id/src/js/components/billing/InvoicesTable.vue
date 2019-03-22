@@ -37,6 +37,8 @@
         </div>
 
         <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
+
+        <div v-if="total > 0" class="text-grey-dark text-center mt-4">{{total}} result{{total !== 1 ? 's' : ''}}</div>
     </div>
 </template>
 
@@ -56,6 +58,7 @@
 
         data() {
             return {
+                total: 0,
                 searchQuery: '',
                 loading: false,
                 fields: [
@@ -101,6 +104,7 @@
             },
 
             onPaginationData(paginationData) {
+                this.total = paginationData.total
                 this.$refs.pagination.setPaginationData(paginationData)
             },
 

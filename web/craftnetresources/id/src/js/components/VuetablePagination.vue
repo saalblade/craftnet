@@ -42,7 +42,7 @@
                 type: Object,
                 default () {
                     return {
-                        wrapperClass: 'ui right floated pagination menu text-center py-6',
+                        wrapperClass: 'ui right floated pagination menu text-center pt-6',
                         activeClass: 'active',
                         disabledClass: 'disabled',
                         pageClass: 'item',
