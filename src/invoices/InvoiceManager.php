@@ -19,7 +19,7 @@ class InvoiceManager extends Component
      * Get invoices.
      *
      * @param Customer $customer
-     * @param $searchQuery
+     * @param string|null $searchQuery
      * @param int $limit
      * @param $page
      * @param $orderBy
@@ -27,7 +27,7 @@ class InvoiceManager extends Component
      * @return array
      * @throws \yii\base\InvalidConfigException
      */
-    public function getInvoices(Customer $customer, $searchQuery, int $limit, $page, $orderBy, $ascending): array
+    public function getInvoices(Customer $customer, string $searchQuery = null, int $limit, $page, $orderBy, $ascending): array
     {
         $query = $this->_createInvoiceQuery($customer);
 
@@ -36,7 +36,9 @@ class InvoiceManager extends Component
         $offset = ($page - 1) * $perPage;
 
         if ($searchQuery) {
-            $query->andFilterWhere(['like', 'commerce_orders.number', $searchQuery]);
+            $query->andWhere(['or',
+                ['ilike', 'commerce_orders.number', $searchQuery],
+            ]);
         }
 
         if ($orderBy) {
