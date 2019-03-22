@@ -41,27 +41,30 @@ class PluginLicenseManager extends Component
      * Returns licenses owned by a user.
      *
      * @param User $owner
-     * @param $query
+     * @param string|null $searchQuery
      * @param $limit
      * @param $page
      * @param $orderBy
      * @param $ascending
      * @return array
-     * @throws \Exception
      */
-    public function getLicensesByOwner(User $owner, $query, $limit, $page, $orderBy, $ascending): array
+    public function getLicensesByOwner(User $owner, string $searchQuery = null, $limit, $page, $orderBy, $ascending): array
     {
         $defaultLimit = 30;
 
-        $query = strtoupper($query);
         $perPage = $limit ?? $defaultLimit;
         $offset = ($page - 1) * $perPage;
 
         $licenseQuery = $this->_createLicenseQuery()
             ->where(['l.ownerId' => $owner->id]);
 
-        if ($query) {
-            $licenseQuery->andFilterWhere(['like', 'l.key', $query]);
+        if ($searchQuery) {
+            $licenseQuery->andWhere(['or',
+                ['ilike', 'l.key', $searchQuery],
+                ['ilike', 'l.notes', $searchQuery],
+                ['ilike', 'l.pluginHandle', $searchQuery],
+                ['ilike', 'l.email', $searchQuery],
+            ]);
         }
 
         if ($orderBy) {
