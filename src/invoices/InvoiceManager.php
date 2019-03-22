@@ -29,17 +29,10 @@ class InvoiceManager extends Component
      */
     public function getInvoices(Customer $customer, string $searchQuery = null, int $limit, $page, $orderBy, $ascending): array
     {
-        $query = $this->_createInvoiceQuery($customer);
+        $query = $this->_createInvoiceQuery($customer, $searchQuery);
 
-        $searchQuery = strtolower($searchQuery);
         $perPage = $limit;
         $offset = ($page - 1) * $perPage;
-
-        if ($searchQuery) {
-            $query->andWhere(['or',
-                ['ilike', 'commerce_orders.number', $searchQuery],
-            ]);
-        }
 
         if ($orderBy) {
             $query->orderBy([$orderBy => $ascending ? SORT_ASC : SORT_DESC]);
@@ -58,16 +51,12 @@ class InvoiceManager extends Component
      * Get total invoices.
      *
      * @param Customer $customer
-     * @param string|null $query
+     * @param string|null $searchQuery
      * @return int
      */
-    public function getTotalInvoices(Customer $customer, string $query = null): int
+    public function getTotalInvoices(Customer $customer, string $searchQuery = null): int
     {
-        $invoiceQuery = $this->_createInvoiceQuery($customer);
-
-        if ($query) {
-            $invoiceQuery->andFilterWhere(['like', 'email', $query]);
-        }
+        $invoiceQuery = $this->_createInvoiceQuery($customer, $searchQuery);
 
         return $invoiceQuery->count();
     }
@@ -169,15 +158,22 @@ class InvoiceManager extends Component
 
     /**
      * @param Customer $customer
+     * @param string|null $searchQuery
      * @return Query
      */
-    private function _createInvoiceQuery(Customer $customer): Query
+    private function _createInvoiceQuery(Customer $customer, string $searchQuery = null): Query
     {
         $query = Order::find();
         $query->customer($customer);
         $query->isCompleted(true);
         $query->limit(null);
         $query->orderBy('dateOrdered desc');
+
+        if ($searchQuery) {
+            $query->andWhere(['or',
+                ['ilike', 'commerce_orders.number', $searchQuery],
+            ]);
+        }
 
         return $query;
     }

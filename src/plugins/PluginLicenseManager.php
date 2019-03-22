@@ -55,17 +55,7 @@ class PluginLicenseManager extends Component
         $perPage = $limit ?? $defaultLimit;
         $offset = ($page - 1) * $perPage;
 
-        $licenseQuery = $this->_createLicenseQuery()
-            ->where(['l.ownerId' => $owner->id]);
-
-        if ($searchQuery) {
-            $licenseQuery->andWhere(['or',
-                ['ilike', 'l.key', $searchQuery],
-                ['ilike', 'l.notes', $searchQuery],
-                ['ilike', 'l.pluginHandle', $searchQuery],
-                ['ilike', 'l.email', $searchQuery],
-            ]);
-        }
+        $licenseQuery = $this->_createLicenseQueryForOwner($owner, $searchQuery);
 
         if ($orderBy) {
             $licenseQuery->orderBy([$orderBy => $ascending ? SORT_ASC : SORT_DESC]);
@@ -514,9 +504,6 @@ class PluginLicenseManager extends Component
         return $this->transformLicensesForOwner($results, $owner);
     }
 
-    // Public Methods
-    // =========================================================================
-
     /**
      * Transforms licenses for the given owner.
      *
@@ -539,17 +526,12 @@ class PluginLicenseManager extends Component
      * Returns licenses by owner as an array.
      *
      * @param User $owner
-     * @param string|null $query
+     * @param string|null $searchQuery
      * @return int
      */
-    public function getTotalLicensesByOwner(User $owner, string $query = null): int
+    public function getTotalLicensesByOwner(User $owner, string $searchQuery = null): int
     {
-        $licenseQuery = $this->_createLicenseQuery()
-            ->where(['l.ownerId' => $owner->id]);
-
-        if ($query) {
-            $licenseQuery->andFilterWhere(['like', 'l.key', strtoupper($query)]);
-        }
+        $licenseQuery = $this->_createLicenseQueryForOwner($owner, $searchQuery);
 
         return $licenseQuery->count();
     }
@@ -679,11 +661,12 @@ class PluginLicenseManager extends Component
     // =========================================================================
 
     /**
+     * @param string|null $searchQuery
      * @return Query
      */
     private function _createLicenseQuery(): Query
     {
-        return (new Query())
+        $query = (new Query())
             ->select([
                 'l.id',
                 'l.pluginId',
@@ -711,5 +694,30 @@ class PluginLicenseManager extends Component
                 'l.uid',
             ])
             ->from(['craftnet_pluginlicenses l']);
+
+
+        return $query;
+    }
+
+    /**
+     * @param User $owner
+     * @param string|null $searchQuery
+     * @return Query
+     */
+    private function _createLicenseQueryForOwner(User $owner, string $searchQuery = null)
+    {
+        $query = $this->_createLicenseQuery()
+            ->where(['l.ownerId' => $owner->id]);
+
+        if ($searchQuery) {
+            $query->andWhere(['or',
+                ['ilike', 'l.key', $searchQuery],
+                ['ilike', 'l.notes', $searchQuery],
+                ['ilike', 'l.pluginHandle', $searchQuery],
+                ['ilike', 'l.email', $searchQuery],
+            ]);
+        }
+
+        return $query;
     }
 }
