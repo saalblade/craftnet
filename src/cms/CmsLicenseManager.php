@@ -456,12 +456,20 @@ class CmsLicenseManager extends Component
     {
         $defaultLimit = 30;
 
-        $searchQuery = strtolower($searchQuery);
         $perPage = $limit ?? $defaultLimit;
         $offset = ($page - 1) * $perPage;
 
         $licenseQuery = $this->_createLicenseQuery()
             ->where(['l.ownerId' => $owner->id]);
+
+        if ($searchQuery) {
+            $licenseQuery->andWhere(['or',
+                ['ilike', 'l.key', $searchQuery],
+                ['ilike', 'l.domain', $searchQuery],
+                ['ilike', 'l.notes', $searchQuery],
+                ['ilike', 'l.email', $searchQuery],
+            ]);
+        }
 
         if ($orderBy) {
             $licenseQuery->orderBy([$orderBy => $ascending ? SORT_ASC : SORT_DESC]);
@@ -470,16 +478,6 @@ class CmsLicenseManager extends Component
         $licenseQuery
             ->offset($offset)
             ->limit($limit);
-
-        if ($searchQuery) {
-            // $licenseQuery->andWhere(['LOWER(l.email)' => $searchQuery]);
-            $licenseQuery->andWhere(['or',
-                ['like', 'LOWER(l.key)', $searchQuery],
-                ['like', 'LOWER(l.domain)', $searchQuery],
-                ['like', 'LOWER(l.notes)', $searchQuery],
-                ['like', 'LOWER(l.email)', $searchQuery],
-            ]);
-        }
 
         $results = $licenseQuery->all();
         $resultsArray = [];
