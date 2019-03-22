@@ -149,6 +149,10 @@
         },
 
         mounted() {
+            if (this.$route.query.activated) {
+                this.$store.dispatch('app/displayNotice', 'Email verified.')
+            }
+
             if (this.currentUser) {
                 this.$router.push({path: '/'})
             } else {
