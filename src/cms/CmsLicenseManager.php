@@ -444,7 +444,7 @@ class CmsLicenseManager extends Component
      * Get licenses by owner.
      *
      * @param User $owner
-     * @param $query
+     * @param string|null $searchQuery
      * @param $limit
      * @param $page
      * @param $orderBy
@@ -452,20 +452,16 @@ class CmsLicenseManager extends Component
      * @return array
      * @throws \Exception
      */
-    public function getLicensesByOwner(User $owner, $query, $limit, $page, $orderBy, $ascending): array
+    public function getLicensesByOwner(User $owner, string $searchQuery = null, $limit, $page, $orderBy, $ascending): array
     {
         $defaultLimit = 30;
 
-        $query = strtoupper($query);
+        $searchQuery = strtolower($searchQuery);
         $perPage = $limit ?? $defaultLimit;
         $offset = ($page - 1) * $perPage;
 
         $licenseQuery = $this->_createLicenseQuery()
             ->where(['l.ownerId' => $owner->id]);
-
-        if ($query) {
-            $licenseQuery->andFilterWhere(['like', 'orderEmail', $query]);
-        }
 
         if ($orderBy) {
             $licenseQuery->orderBy([$orderBy => $ascending ? SORT_ASC : SORT_DESC]);
@@ -474,6 +470,16 @@ class CmsLicenseManager extends Component
         $licenseQuery
             ->offset($offset)
             ->limit($limit);
+
+        if ($searchQuery) {
+            // $licenseQuery->andWhere(['LOWER(l.email)' => $searchQuery]);
+            $licenseQuery->andWhere(['or',
+                ['like', 'LOWER(l.key)', $searchQuery],
+                ['like', 'LOWER(l.domain)', $searchQuery],
+                ['like', 'LOWER(l.notes)', $searchQuery],
+                ['like', 'LOWER(l.email)', $searchQuery],
+            ]);
+        }
 
         $results = $licenseQuery->all();
         $resultsArray = [];

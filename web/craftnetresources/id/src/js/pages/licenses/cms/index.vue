@@ -4,7 +4,7 @@
 
         <div class="flex mb-6">
             <div class="flex-1">
-                <filter-bar placeholder="License key, domain, edition, …" @filter-set="onFilterSet" @filter-reset="onFilterReset"></filter-bar>
+                <filter-bar placeholder="License key, domain, notes, email…" @filter-set="onFilterSet" @filter-reset="onFilterReset"></filter-bar>
             </div>
 
             <div class="mx-2 flex items-center">
