@@ -318,6 +318,7 @@ class PluginLicenseManager extends Component
      * @param bool $runValidation
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
+     * @throws \yii\db\Exception
      */
     public function saveLicense(PluginLicense $license, bool $runValidation = true): bool
     {

@@ -285,6 +285,7 @@ class CmsLicenseManager extends Component
      * @param bool $runValidation
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
+     * @throws \yii\db\Exception
      */
     public function saveLicense(CmsLicense $license, bool $runValidation = true): bool
     {
