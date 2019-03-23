@@ -45,7 +45,7 @@ class PluginStoreController extends BaseApiController
 
             $pluginStoreData = [
                 'categories' => $this->_categories(),
-                'featuredPlugins' => $this->_featuredPlugins($plugins),
+                'featuredPlugins' => $this->_featuredPlugins(),
                 'plugins' => $this->_plugins($plugins),
                 'expiryDateOptions' => $this->_expiryDateOptions(),
             ];
@@ -88,11 +88,10 @@ class PluginStoreController extends BaseApiController
     }
 
     /**
-     * @param Plugin[] $plugins
      * @return array
      * @throws \yii\base\Exception
      */
-    private function _featuredPlugins(array $plugins): array
+    private function _featuredPlugins(): array
     {
         $ret = [];
 
@@ -123,12 +122,11 @@ class PluginStoreController extends BaseApiController
 
         foreach ($entries as $entry) {
             $pluginIds = [];
+
             foreach ($entry->plugins as $plugin) {
-                /** @var Plugin $plugin */
-                if (isset($plugins[$plugin->id])) {
-                    $pluginIds[] = $plugin->id;
-                }
+                $pluginIds[] = $plugin->id;
             }
+
             if (!empty($pluginIds)) {
                 $ret[] = [
                     'id' => $entry->id,
