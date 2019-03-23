@@ -71,7 +71,25 @@ const actions = {
                                 .then((response) => {
                                     if (!response.error) {
                                         commit('updateCart', {response: response.data})
-                                        resolve()
+
+                                        // request plugins missing from cache
+                                        const pluginIds = []
+
+                                        state.cart.lineItems.forEach(lineItem => {
+                                            if (lineItem.purchasable.plugin) {
+                                                if (pluginIds.indexOf(lineItem.purchasable.plugin.id) < 0) {
+                                                    pluginIds.push(lineItem.purchasable.plugin.id)
+                                                }
+                                            }
+                                        })
+
+                                        dispatch('pluginStore/getPlugins', pluginIds, {root: true})
+                                            .then(() => {
+                                                resolve()
+                                            })
+                                            .catch(() => {
+                                                reject('Couldn’t get cart')
+                                            })
                                     } else {
                                         // Couldn’t get cart for this order number? Try to create a new one.
                                         const data = {}

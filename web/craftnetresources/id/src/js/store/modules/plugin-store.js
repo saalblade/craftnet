@@ -18,24 +18,18 @@ const state = {
 /**
  * Getters
  */
-const getters = {
-    getPluginByHandle(state) {
-        return handle => {
-            return state.plugins.find(plugin => plugin.handle === handle)
-        }
-    },
-}
+const getters = {}
 
 /**
  * Actions
  */
 const actions = {
-    getPluginStoreData({commit, state}) {
+    getMeta({commit, state}) {
         return new Promise((resolve, reject) => {
             if (!state.pluginStoreDataLoaded) {
-                pluginStoreApi.getData()
+                pluginStoreApi.getMeta()
                     .then((response) => {
-                        commit('updatePluginStoreData', {response})
+                        commit('updatePluginStoreMeta', {response})
                         resolve()
                     })
                     .catch((response) => {
@@ -46,19 +40,53 @@ const actions = {
             }
         })
     },
+
+    getPlugins({commit, state}, requestedPluginIds) {
+        return new Promise((resolve, reject) => {
+            const pluginIds = []
+
+            requestedPluginIds.forEach(pluginId => {
+                const plugin = state.plugins.find(plugin => plugin.id === pluginId)
+
+                if (!plugin) {
+                    pluginIds.push(pluginId)
+                }
+            })
+
+            pluginStoreApi.getPlugins(requestedPluginIds)
+                .then((response) => {
+                    commit('updatedPlugins', {response})
+                    resolve()
+                })
+                .catch((response) => {
+                    reject(response)
+                })
+        })
+    }
 }
 
 /**
  * Mutations
  */
 const mutations = {
-    updatePluginStoreData(state, {response}) {
+    updatePluginStoreMeta(state, {response}) {
         state.categories = response.data.categories
         state.featuredPlugins = response.data.featuredPlugins
-        state.plugins = response.data.plugins
         state.expiryDateOptions = response.data.expiryDateOptions,
         state.pluginStoreDataLoaded = true
     },
+
+    updatedPlugins(state, {response}) {
+        const responsePlugins = response.data
+
+        responsePlugins.forEach(responsePlugin => {
+            const alreadyInState = state.plugins.find(plugin => plugin.id === responsePlugin.id)
+
+            if (!alreadyInState) {
+                state.plugins.push(responsePlugin)
+            }
+        })
+    }
 }
 
 export default {

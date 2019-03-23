@@ -96,7 +96,7 @@
 
         methods: {
             ...mapActions({
-                getPluginStoreData: 'pluginStore/getPluginStoreData',
+                getMeta: 'pluginStore/getMeta',
             }),
 
             addToCart() {
@@ -121,7 +121,7 @@
         mounted() {
             this.loading = true
 
-            this.getPluginStoreData()
+            this.getMeta()
                 .then(() => {
                     this.loading = false
                     this.renew = 0

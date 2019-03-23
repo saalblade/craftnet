@@ -3,11 +3,10 @@
         <h1>Buy Plugin</h1>
 
         <div class="card mb-4">
-            <div class="card-body">
-                Adding
-                <template v-if="plugin">{{plugin.name}}</template>
-                <code v-else>{{handle}}</code>
-                to your cart…
+            <div class="card-body flex">
+                <div class="mr-4">
+                    Adding <code>{{handle}}</code> to your cart…
+                </div>
 
                 <spinner v-if="loading"></spinner>
             </div>
@@ -16,25 +15,14 @@
 </template>
 
 <script>
-    import {mapState, mapGetters, mapActions} from 'vuex'
-
     export default {
         data() {
             return {
                 loading: false,
-                plugin: null,
             }
         },
 
         computed: {
-            ...mapState({
-                plugins: state => state.pluginStore.plugins,
-            }),
-
-            ...mapGetters({
-                getPluginByHandle: 'pluginStore/getPluginByHandle',
-            }),
-
             handle() {
                 return this.$route.params.handle
             },
@@ -45,12 +33,8 @@
         },
 
         methods: {
-            ...mapActions({
-                getPluginStoreData: 'pluginStore/getPluginStoreData',
-            }),
-
             addToCart() {
-                this.plugin = this.getPluginByHandle(this.handle)
+                this.loading = true
 
                 const item = {
                     type: 'plugin-edition',
@@ -61,6 +45,7 @@
 
                 this.$store.dispatch('cart/addToCart', [item])
                     .then(() => {
+                        this.loading = false
                         this.$store.dispatch('app/displayNotice', 'Plugin license added your cart.')
                         this.$router.push({path: '/cart'})
                     })
@@ -68,19 +53,7 @@
         },
 
         mounted() {
-            if (this.plugins.length === 0) {
-                this.loading = true
-                this.getPluginStoreData()
-                    .then(() => {
-                        this.loading = false
-                        this.addToCart()
-                    })
-                    .catch(() => {
-                        this.loading = false
-                    })
-            } else {
-                this.addToCart()
-            }
+            this.addToCart()
         }
     }
 </script>

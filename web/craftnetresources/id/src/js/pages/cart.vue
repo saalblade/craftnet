@@ -186,7 +186,7 @@
             ...mapActions({
                 getCart: 'cart/getCart',
                 removeFromCart: 'cart/removeFromCart',
-                getPluginStoreData: 'pluginStore/getPluginStoreData',
+                getMeta: 'pluginStore/getMeta',
             }),
 
             checkout() {
@@ -284,7 +284,7 @@
         mounted() {
             this.loading = true
 
-            this.getPluginStoreData()
+            this.getMeta()
                 .then(() => {
                     this.getCart()
                         .then(() => {

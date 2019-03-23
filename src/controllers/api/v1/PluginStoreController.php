@@ -60,6 +60,21 @@ class PluginStoreController extends BaseApiController
         return $this->asJson($pluginStoreData);
     }
 
+    /**
+     * Handles /v1/plugin-store/meta requests.
+     *
+     * @return Response
+     * @throws \yii\base\Exception
+     */
+    public function actionMeta(): Response
+    {
+        return $this->asJson([
+            'categories' => $this->_categories(),
+            'featuredPlugins' => $this->_featuredPlugins(),
+            'expiryDateOptions' => $this->_expiryDateOptions(),
+        ]);
+    }
+
     // Private Methods
     // =========================================================================
 
