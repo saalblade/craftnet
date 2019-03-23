@@ -42,14 +42,4 @@ class CraftIdController extends BaseController
             'countries' => Craft::$app->getApi()->getCountries(),
         ]);
     }
-
-    /**
-     * @return Response
-     */
-    public function actionCountries(): Response
-    {
-        $countries = Craft::$app->getApi()->getCountries();
-
-        return $this->asJson($countries);
-    }
 }
