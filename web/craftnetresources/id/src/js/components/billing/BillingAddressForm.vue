@@ -38,8 +38,8 @@
             <dropdown id="state" label="State" v-model="invoiceDetailsDraft.state" :options="stateOptions(invoiceDetailsDraft.country)" />
             <textbox id="zipCode" label="Zip Code" v-model="invoiceDetailsDraft.zipCode" :errors="errors.zipCode" />
 
-            <btn kind="primary" type="submit" :loading="loading" :disabled="loading">Save</btn>
-            <btn @click="cancel()" :disabled="loading">Cancel</btn>
+            <btn kind="primary" type="submit" :loading="saveLoading" :disabled="saveLoading">Save</btn>
+            <btn @click="cancel()" :disabled="saveLoading">Cancel</btn>
         </form>
 
     </div>
@@ -51,7 +51,7 @@
     export default {
         data() {
             return {
-                loading: false,
+                saveLoading: false,
                 errors: {},
                 showForm: false,
                 invoiceDetailsDraft: {},
@@ -81,7 +81,7 @@
             },
 
             save() {
-                this.loading = true
+                this.saveLoading = true
 
                 let data = {
                     firstName: this.invoiceDetailsDraft.firstName,
@@ -104,13 +104,13 @@
 
                 this.$store.dispatch('account/saveBillingInfo', data)
                     .then(() => {
-                        this.loading = false
+                        this.saveLoading = false
                         this.$store.dispatch('app/displayNotice', 'Billing address saved.');
                         this.showForm = false;
                         this.errors = {};
                     })
                     .catch((response) => {
-                        this.loading = false
+                        this.saveLoading = false
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save billing address.';
                         this.$store.dispatch('app/displayError', errorMessage);
                         this.errors = response.data && response.data.errors ? response.data.errors : {};
