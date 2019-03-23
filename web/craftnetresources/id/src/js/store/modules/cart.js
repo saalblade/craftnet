@@ -72,7 +72,7 @@ const actions = {
                                     if (!response.error) {
                                         commit('updateCart', {response: response.data})
 
-                                        // request plugins missing from cache
+                                        // request plugins we don’t have yet
                                         const pluginIds = []
 
                                         state.cart.lineItems.forEach(lineItem => {
