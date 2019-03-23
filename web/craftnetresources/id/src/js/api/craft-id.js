@@ -3,11 +3,11 @@
 import axios from 'axios'
 
 export default {
-    getCraftIdData() {
-        return axios.post(Craft.actionUrl + '/craftnet/id/craft-id', {}, {
-                headers: {
-                    'X-CSRF-Token': Craft.csrfTokenValue,
-                }
-            })
-    },
+    getCountries() {
+        return axios.get(Craft.actionUrl + '/craftnet/id/craft-id/countries', {}, {
+            headers: {
+                'X-CSRF-Token': Craft.csrfTokenValue,
+            }
+        })
+    }
 }

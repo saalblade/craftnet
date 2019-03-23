@@ -54,7 +54,7 @@ return [
         'POST    queue/handle-message' => 'queue/handle-message',
 
         'GET     v1/id' => 'craftnet/id/v1/id',
-        'GET     craft-id' => 'craftnet/id/craft-id',
+        'GET     craft-id/countries' => 'craftnet/id/craft-id/countries',
         'GET     apps/connect/<appTypeHandle:{handle}>' => 'craftnet/id/apps/connect',
         'GET     apps/callback' => 'craftnet/id/apps/callback',
         'GET     apps/disconnect/<appTypeHandle:{handle}>' => 'craftnet/id/apps/disconnect',

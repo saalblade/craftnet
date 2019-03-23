@@ -17,20 +17,33 @@
         </div>
         <div class="md:flex -mx-2">
             <div class="md:w-1/2 px-2">
-                <dropdown :fullwidth="true" :options="countryOptions" v-model="billingInfo.country" id="country" :errors="errors['billingAddress.country']" @input="onCountryChange" />
+                <template v-if="loading">
+                    <spinner></spinner>
+                </template>
+                <template v-else>
+                    <dropdown :fullwidth="true" :options="countryOptions" v-model="billingInfo.country" id="country" :errors="errors['billingAddress.country']" @input="onCountryChange" />
+                </template>
             </div>
             <div class="md:w-1/2 px-2">
-                <dropdown :fullwidth="true" :options="stateOptions(billingInfo.country)" v-model="billingInfo.state" id="state" :errors="errors['billingAddress.state']" @input="onStateChange" />
+                <template v-if="!loading">
+                    <dropdown :fullwidth="true" :options="stateOptions(billingInfo.country)" v-model="billingInfo.state" id="state" :errors="errors['billingAddress.state']" @input="onStateChange" />
+                </template>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
 
     export default {
         props: ['billingInfo', 'errors'],
+
+        data() {
+            return {
+                loading: false,
+            }
+        },
 
         computed: {
             ...mapGetters({
@@ -40,6 +53,10 @@
         },
 
         methods: {
+            ...mapActions({
+                getCountries: 'craftId/getCountries',
+            }),
+
             onCountryChange() {
                 this.billingInfo.state = null
                 const stateOptions = this.stateOptions(this.billingInfo.country)
@@ -55,6 +72,19 @@
 
                 this.$emit('update:billingInfo', billingInfo)
             }
+        },
+
+        mounted() {
+            this.loading = true
+
+            this.getCountries()
+                .then(() => {
+                    this.loading = false
+                })
+                .catch(() => {
+                    this.loading = false
+                    this.$store.dispatch('app/displayNotice', 'Couldn’t get countries.');
+                })
         }
     }
 </script>

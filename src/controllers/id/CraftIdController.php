@@ -28,18 +28,12 @@ class CraftIdController extends BaseController
     // =========================================================================
 
     /**
-     * Get Craft ID data.
-     *
      * @return Response
-     * @throws \yii\base\InvalidConfigException
-     * @throws \yii\web\BadRequestHttpException
      */
-    public function actionIndex(): Response
+    public function actionCountries(): Response
     {
-        $this->requirePostRequest();
+        $countries = Craft::$app->getApi()->getCountries();
 
-        return $this->asJson([
-            'countries' => Craft::$app->getApi()->getCountries(),
-        ]);
+        return $this->asJson($countries);
     }
 }

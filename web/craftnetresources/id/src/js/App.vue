@@ -78,13 +78,7 @@
         },
 
         created() {
-            this.$store.dispatch('craftId/getCraftIdData')
-                .then(() => {
-                    this.loadUserData()
-                })
-                .catch(() => {
-                    this.$store.commit('app/updateLoading', false)
-                })
+            this.loadUserData()
 
             if(window.sessionNotice) {
                 this.$store.dispatch('app/displayNotice', window.sessionNotice)

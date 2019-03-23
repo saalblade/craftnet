@@ -4,21 +4,27 @@
             <div class="flex-1">
                 <h4>Billing Address</h4>
 
-                <template v-if="!showForm && billingAddress">
-                    <ul v-if="billingAddress.firstName || billingAddress.lastName || billingAddress.address1 || billingAddress.address2 || billingAddress.city || billingAddress.country || billingAddress.businessName || billingAddress.state || billingAddress.zipCode" class="list-reset">
-                        <li v-if="billingAddress.firstName || billingAddress.lastName">{{ billingAddress.firstName }} {{ billingAddress.lastName }}</li>
-                        <li v-if="billingAddress.businessName">{{ billingAddress.businessName }}</li>
-                        <li v-if="billingAddress.address1">{{ billingAddress.address1 }}</li>
-                        <li v-if="billingAddress.address2">{{ billingAddress.address2 }}</li>
-                        <li v-if="billingAddress.zipCode || billingAddress.city">
-                            <template v-if="billingAddress.zipCode">{{ billingAddress.zipCode }}</template>
-                            <template v-if="billingAddress.city">{{ billingAddress.city }}</template>
-                        </li>
-                        <li v-if="billingAddress.countryText">{{ billingAddress.countryText}}</li>
-                        <li v-if="billingAddress.state">{{ billingAddress.state }}</li>
-                    </ul>
+                <template v-if="loading">
+                    <spinner></spinner>
+                </template>
 
-                    <p v-else class="text-secondary">Billing address not defined.</p>
+                <template v-else>
+                    <template v-if="!showForm && billingAddress">
+                        <ul v-if="billingAddress.firstName || billingAddress.lastName || billingAddress.address1 || billingAddress.address2 || billingAddress.city || billingAddress.country || billingAddress.businessName || billingAddress.state || billingAddress.zipCode" class="list-reset">
+                            <li v-if="billingAddress.firstName || billingAddress.lastName">{{ billingAddress.firstName }} {{ billingAddress.lastName }}</li>
+                            <li v-if="billingAddress.businessName">{{ billingAddress.businessName }}</li>
+                            <li v-if="billingAddress.address1">{{ billingAddress.address1 }}</li>
+                            <li v-if="billingAddress.address2">{{ billingAddress.address2 }}</li>
+                            <li v-if="billingAddress.zipCode || billingAddress.city">
+                                <template v-if="billingAddress.zipCode">{{ billingAddress.zipCode }}</template>
+                                <template v-if="billingAddress.city">{{ billingAddress.city }}</template>
+                            </li>
+                            <li v-if="billingAddress.countryText">{{ billingAddress.countryText}}</li>
+                            <li v-if="billingAddress.state">{{ billingAddress.state }}</li>
+                        </ul>
+
+                        <p v-else class="text-secondary">Billing address not defined.</p>
+                    </template>
                 </template>
             </div>
 
@@ -27,30 +33,32 @@
             </div>
         </div>
 
-        <form v-if="showForm" @submit.prevent="save()">
-            <textbox id="firstName" label="First Name" v-model="invoiceDetailsDraft.firstName" :errors="errors.firstName" />
-            <textbox id="lastName" label="Last Name" v-model="invoiceDetailsDraft.lastName" :errors="errors.lastName" />
-            <textbox id="businessName" label="Business Name" v-model="invoiceDetailsDraft.businessName" :errors="errors.businessName" />
-            <textbox id="address1" label="Address Line 1" v-model="invoiceDetailsDraft.address1" :errors="errors.address1" />
-            <textbox id="address2" label="Address Line 2" v-model="invoiceDetailsDraft.address2" :errors="errors.address2" />
-            <textbox id="city" label="City" v-model="invoiceDetailsDraft.city" :errors="errors.city" />
-            <dropdown id="country" label="Country" v-model="invoiceDetailsDraft.country" :options="countryOptions" @input="onCountryChange" />
-            <dropdown id="state" label="State" v-model="invoiceDetailsDraft.state" :options="stateOptions(invoiceDetailsDraft.country)" />
-            <textbox id="zipCode" label="Zip Code" v-model="invoiceDetailsDraft.zipCode" :errors="errors.zipCode" />
+        <template v-if="!loading">
+            <form v-if="showForm" @submit.prevent="save()">
+                <textbox id="firstName" label="First Name" v-model="invoiceDetailsDraft.firstName" :errors="errors.firstName" />
+                <textbox id="lastName" label="Last Name" v-model="invoiceDetailsDraft.lastName" :errors="errors.lastName" />
+                <textbox id="businessName" label="Business Name" v-model="invoiceDetailsDraft.businessName" :errors="errors.businessName" />
+                <textbox id="address1" label="Address Line 1" v-model="invoiceDetailsDraft.address1" :errors="errors.address1" />
+                <textbox id="address2" label="Address Line 2" v-model="invoiceDetailsDraft.address2" :errors="errors.address2" />
+                <textbox id="city" label="City" v-model="invoiceDetailsDraft.city" :errors="errors.city" />
+                <dropdown id="country" label="Country" v-model="invoiceDetailsDraft.country" :options="countryOptions" @input="onCountryChange" />
+                <dropdown id="state" label="State" v-model="invoiceDetailsDraft.state" :options="stateOptions(invoiceDetailsDraft.country)" />
+                <textbox id="zipCode" label="Zip Code" v-model="invoiceDetailsDraft.zipCode" :errors="errors.zipCode" />
 
-            <btn kind="primary" type="submit" :loading="saveLoading" :disabled="saveLoading">Save</btn>
-            <btn @click="cancel()" :disabled="saveLoading">Cancel</btn>
-        </form>
-
+                <btn kind="primary" type="submit" :loading="saveLoading" :disabled="saveLoading">Save</btn>
+                <btn @click="cancel()" :disabled="saveLoading">Cancel</btn>
+            </form>
+        </template>
     </div>
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState, mapGetters, mapActions} from 'vuex'
 
     export default {
         data() {
             return {
+                loading: false,
                 saveLoading: false,
                 errors: {},
                 showForm: false,
@@ -72,6 +80,10 @@
         },
 
         methods: {
+            ...mapActions({
+                getCountries: 'craftId/getCountries',
+            }),
+
             edit() {
                 this.showForm = true;
 
@@ -130,6 +142,19 @@
                     this.invoiceDetailsDraft.state = stateOptions[0].value
                 }
             }
+        },
+
+        mounted() {
+            this.loading = true
+
+            this.getCountries()
+                .then(() => {
+                    this.loading = false
+                })
+                .catch(() => {
+                    this.loading = false
+                    this.$store.dispatch('app/displayNotice', 'Couldn’t get countries.');
+                })
         }
     }
 </script>

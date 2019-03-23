@@ -8,8 +8,7 @@ Vue.use(Vuex)
  * State
  */
 const state = {
-    categories: [],
-    countries: [],
+    countries: null,
 }
 
 /**
@@ -17,6 +16,10 @@ const state = {
  */
 const getters = {
     countryOptions(state) {
+        if (!state.countries) {
+            return []
+        }
+
         let options = []
 
         for (let iso in state.countries) {
@@ -33,6 +36,10 @@ const getters = {
 
     stateOptions(state) {
         return iso => {
+            if (!state.countries) {
+                return []
+            }
+
             let options = []
 
             if (!state.countries[iso] || (state.countries[iso] && !state.countries[iso].states)) {
@@ -59,12 +66,16 @@ const getters = {
  * Actions
  */
 const actions = {
-    getCraftIdData({commit}) {
+    getCountries({commit, state}) {
         return new Promise((resolve, reject) => {
-            craftIdApi.getCraftIdData()
+            if (state.countries) {
+                resolve()
+                return
+            }
+
+            craftIdApi.getCountries()
                 .then((response) => {
-                    commit('updateCategories', {categories: response.data.categories})
-                    commit('updateCountries', {countries: response.data.countries})
+                    commit('updateCountries', {countries: response.data})
                     resolve(response)
                 })
                 .catch((response) => {
@@ -78,10 +89,6 @@ const actions = {
  * Mutations
  */
 const mutations = {
-    updateCategories(state, {categories}) {
-        state.categories = categories
-    },
-
     updateCountries(state, {countries}) {
         state.countries = countries
     },
