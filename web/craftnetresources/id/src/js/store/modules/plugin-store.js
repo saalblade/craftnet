@@ -11,7 +11,7 @@ const state = {
     categories: [],
     featuredPlugins: [],
     plugins: [],
-    pluginStoreDataLoaded: false,
+    metaLoaded: false,
     expiryDateOptions: [],
 }
 
@@ -26,7 +26,7 @@ const getters = {}
 const actions = {
     getMeta({commit, state}) {
         return new Promise((resolve, reject) => {
-            if (!state.pluginStoreDataLoaded) {
+            if (!state.metaLoaded) {
                 pluginStoreApi.getMeta()
                     .then((response) => {
                         commit('updatePluginStoreMeta', {response})
@@ -73,7 +73,7 @@ const mutations = {
         state.categories = response.data.categories
         state.featuredPlugins = response.data.featuredPlugins
         state.expiryDateOptions = response.data.expiryDateOptions,
-        state.pluginStoreDataLoaded = true
+        state.metaLoaded = true
     },
 
     updatedPlugins(state, {response}) {
