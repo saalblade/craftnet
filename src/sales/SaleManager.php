@@ -102,9 +102,9 @@ class SaleManager extends Component
 
         if ($searchQuery) {
             $query->andWhere(['or',
-                ['like', 'orders.email', $searchQuery],
-                ['like', 'plugins.name', $searchQuery],
-                ['like', 'plugins.handle', $searchQuery],
+                ['ilike', 'orders.email', $searchQuery],
+                ['ilike', 'plugins.name', $searchQuery],
+                ['ilike', 'plugins.handle', $searchQuery],
             ]);
         }
 
