@@ -72,28 +72,13 @@ const actions = {
                                     if (!response.error) {
                                         commit('updateCart', {response: response.data})
 
-                                        // request plugins we don’t have yet
-                                        const pluginIds = []
-
-                                        state.cart.lineItems.forEach(lineItem => {
-                                            if (lineItem.purchasable.plugin) {
-                                                if (pluginIds.indexOf(lineItem.purchasable.plugin.id) < 0) {
-                                                    pluginIds.push(lineItem.purchasable.plugin.id)
-                                                }
-                                            }
-                                        })
-
-                                        if (pluginIds.length > 0) {
-                                            dispatch('pluginStore/getPlugins', pluginIds, {root: true})
-                                                .then(() => {
-                                                    resolve()
-                                                })
-                                                .catch(() => {
-                                                    reject('Couldn’t get cart')
-                                                })
-                                        } else {
-                                            resolve()
-                                        }
+                                        dispatch('requestMissingPlugins')
+                                            .then(() => {
+                                                resolve()
+                                            })
+                                            .catch(() => {
+                                                reject('Couldn’t get missing plugins')
+                                            })
                                     } else {
                                         // Couldn’t get cart for this order number? Try to create a new one.
                                         const data = {}
@@ -195,6 +180,34 @@ const actions = {
         })
     },
 
+    requestMissingPlugins({state, dispatch}) {
+        return new Promise((resolve, reject) => {
+
+            // request plugins we don’t have yet
+            const pluginIds = []
+
+            state.cart.lineItems.forEach(lineItem => {
+                if (lineItem.purchasable.plugin) {
+                    if (pluginIds.indexOf(lineItem.purchasable.plugin.id) < 0) {
+                        pluginIds.push(lineItem.purchasable.plugin.id)
+                    }
+                }
+            })
+
+            if (pluginIds.length > 0) {
+                dispatch('pluginStore/getPlugins', pluginIds, {root: true})
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject('Couldn’t get cart')
+                    })
+            } else {
+                resolve()
+            }
+        })
+    },
+
     saveCart({commit, state}, data) {
         return new Promise((resolve, reject) => {
             const cart = state.cart
@@ -287,9 +300,16 @@ const actions = {
                     }
 
                     api.updateCart(cart.number, data)
-                        .then((response) => {
-                            commit('updateCart', {response: response.data})
-                            resolve(response)
+                        .then((updateCartResponse) => {
+                            commit('updateCart', {response: updateCartResponse.data})
+
+                            dispatch('requestMissingPlugins')
+                                .then(() => {
+                                    resolve(updateCartResponse)
+                                })
+                                .catch(() => {
+                                    reject('Couldn’t get missing plugins')
+                                })
                         })
                         .catch((error) => {
                             if (error.response.data.error) {
