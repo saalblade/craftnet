@@ -83,13 +83,17 @@ const actions = {
                                             }
                                         })
 
-                                        dispatch('pluginStore/getPlugins', pluginIds, {root: true})
-                                            .then(() => {
-                                                resolve()
-                                            })
-                                            .catch(() => {
-                                                reject('Couldn’t get cart')
-                                            })
+                                        if (pluginIds.length > 0) {
+                                            dispatch('pluginStore/getPlugins', pluginIds, {root: true})
+                                                .then(() => {
+                                                    resolve()
+                                                })
+                                                .catch(() => {
+                                                    reject('Couldn’t get cart')
+                                                })
+                                        } else {
+                                            resolve()
+                                        }
                                     } else {
                                         // Couldn’t get cart for this order number? Try to create a new one.
                                         const data = {}
