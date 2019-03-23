@@ -39,32 +39,17 @@ class CraftIdController extends BaseController
         $this->requirePostRequest();
 
         return $this->asJson([
-            'categories' => $this->getPluginCategories(),
             'countries' => Craft::$app->getApi()->getCountries(),
         ]);
     }
 
-    // Private Methods
-    // =========================================================================
-
     /**
-     * @return array
+     * @return Response
      */
-    private function getPluginCategories(): array
+    public function actionCountries(): Response
     {
-        $ret = [];
+        $countries = Craft::$app->getApi()->getCountries();
 
-        $categories = Category::find()
-            ->group('pluginCategories')
-            ->all();
-
-        foreach ($categories as $category) {
-            $ret[] = [
-                'id' => $category->id,
-                'title' => $category->title,
-            ];
-        }
-
-        return $ret;
+        return $this->asJson($countries);
     }
 }
