@@ -48,7 +48,7 @@ class PartnerLocation extends Model
             ]
         ];
 
-        $rules[] = ['email', 'email'];
+        $rules[] = ['email', 'email', 'enableIDN' => true];
 
         return $rules;
     }

@@ -291,6 +291,7 @@ class Partner extends Element
         $rules[] = [
             'website',
             'url',
+            'enableIDN' => true,
             'on' => [
                 self::SCENARIO_BASE_INFO,
                 self::SCENARIO_DEFAULT,
@@ -370,6 +371,7 @@ class Partner extends Element
         $rules[] = [
             'primaryContactEmail',
             'email',
+            'enableIDN' => true,
             'on' => [
                 self::SCENARIO_BASE_INFO,
                 self::SCENARIO_DEFAULT,
