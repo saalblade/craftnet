@@ -68,7 +68,7 @@ class PartnerProject extends Model
             ]
         ];
 
-        $rules[] = ['url', 'url'];
+        $rules[] = ['url', 'url', 'enableIDN' => true];
         $rules[] = ['role', 'string', 'max' => 55];
         $rules[] = ['withCraftCommerce', 'default', 'value' => false];
 
