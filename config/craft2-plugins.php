@@ -402,6 +402,9 @@ return [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Retour](https://github.com/nystudio107/craft-retour) can be used instead.'
     ],
+    'Relabel' => [
+        'handle' => 'fieldlabels',
+    ],
     'Reports' => [
         'statusColor' => 'orange',
         'status' => 'Not available yet, but [Sprout Reports](https://github.com/barrelstrength/craft-sprout-reports) can be used instead.'
