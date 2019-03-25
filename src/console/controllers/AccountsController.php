@@ -126,6 +126,10 @@ class AccountsController extends Controller
                     ->execute();
                 $this->stdout("done ({$rows} rows)" . PHP_EOL, Console::FG_GREEN);
             }
+
+            $this->stdout("Deleting customer {$customer1->id} ... ");
+            $commerce->getCustomers()->deleteCustomer($customer1);
+            $this->stdout('done' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
         } else if ($customer1) {
             $userTables[] = 'commerce_customers';
         }
