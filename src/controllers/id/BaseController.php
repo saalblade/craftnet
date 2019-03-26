@@ -21,6 +21,7 @@ abstract class BaseController extends Controller
      * @param Plugin $plugin
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     protected function pluginTransformer(Plugin $plugin): array
     {
