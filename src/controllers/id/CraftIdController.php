@@ -13,12 +13,7 @@ class CraftIdController extends BaseController
 {
     // Properties
     // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
-    public $enableCsrfValidation = false;
-
+    
     /**
      * @inheritdoc
      */
