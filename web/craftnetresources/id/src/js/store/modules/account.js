@@ -12,6 +12,7 @@ const state = {
     billingAddress: null,
     currentUser: null,
     currentUserLoaded: false,
+    craftSessionLoaded: false,
     hasApiToken: false,
 }
 
@@ -126,6 +127,40 @@ const actions = {
                     reject(response)
                 })
         })
+    },
+
+    isLoggedIn({commit, state, dispatch}) {
+        return new Promise((resolve, reject) => {
+            let loadAccount = false
+
+            if (!state.craftSessionLoaded) {
+                commit('updateCraftSessionLoaded', true)
+
+                if (window.loggedIn) {
+                    loadAccount = true
+                }
+            } else {
+                if (!state.currentUserLoaded) {
+                    loadAccount = true
+                }
+            }
+
+            if (loadAccount) {
+                dispatch('getAccount')
+                    .then(() => {
+                        resolve(true)
+                    })
+                    .catch(() => {
+                        resolve(false)
+                    })
+            } else {
+                if (state.currentUser) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            }
+        })
     }
 }
 
@@ -140,6 +175,10 @@ const mutations = {
 
     updateBillingAddress(state, {billingAddress}) {
         state.billingAddress = billingAddress
+    },
+
+    updateCraftSessionLoaded(state, loaded) {
+        state.craftSessionLoaded = loaded
     },
 
     updateCurrentUser(state, {currentUser}) {

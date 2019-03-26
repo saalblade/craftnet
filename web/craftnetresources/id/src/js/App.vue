@@ -67,18 +67,11 @@
             }
         },
 
-        methods: {
-            loadUserData() {
-                if (window.currentUserId) {
-                    this.loadAccount()
-                } else {
-                    this.loadGuestUserData()
-                }
-            },
-        },
-
         created() {
-            this.loadUserData()
+            this.$store.dispatch('cart/getCart')
+                .then(() => {
+                    this.$store.commit('app/updateLoading', false)
+                })
 
             if(window.sessionNotice) {
                 this.$store.dispatch('app/displayNotice', window.sessionNotice)

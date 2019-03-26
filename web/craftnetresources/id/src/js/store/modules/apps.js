@@ -21,7 +21,7 @@ const getters = {}
  * Actions
  */
 const actions = {
-    getApps({commit, state}) {
+    getApps({commit, state, dispatch}) {
         if (state.appsLoading) {
             return false
         }
@@ -35,15 +35,33 @@ const actions = {
         return new Promise((resolve, reject) => {
             appsApi.getApps()
                 .then((response) => {
-                    commit('updateAppsLoading', false)
-                    commit('updateApps', {apps: response.data})
-                    resolve(response)
+                    dispatch('stripe/getStripeAccount', {}, {root: true})
+                        .then(() => {
+                            commit('updateAppsLoading', false)
+                            commit('updateApps', {apps: response.data})
+                            resolve()
+                        })
+                        .catch((error) => {
+                            commit('updateAppsLoading', false)
+                            reject(error.response)
+                        })
                 })
                 .catch((error) => {
                     commit('updateAppsLoading', false)
                     reject(error.response)
                 })
         })
+
+
+        this.loading = true
+
+        this.$store.dispatch('stripe/getStripeAccount')
+            .then(() => {
+                this.loading = false
+            })
+            .catch(() => {
+                this.loading = false
+            })
     },
 
     connectAppCallback({commit}, apps) {

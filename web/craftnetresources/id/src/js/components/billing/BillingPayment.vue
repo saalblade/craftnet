@@ -4,28 +4,33 @@
             <div class="flex-1">
                 <h4>Payment</h4>
 
-                <div v-if="!editing">
-                    <div v-if="card" class="credit-card">
-                        <card-icon :brand="card.brand"></card-icon>
-                        <ul class="list-reset">
-                            <li>Number: •••• •••• •••• {{ card.last4 }}</li>
-                            <li>Expiry: {{ card.exp_month }}/{{ card.exp_year }}</li>
-                        </ul>
+                <template v-if="loading">
+                    <spinner></spinner>
+                </template>
+                <template v-else>
+                    <div v-if="!editing">
+                        <div v-if="card" class="credit-card">
+                            <card-icon :brand="card.brand"></card-icon>
+                            <ul class="list-reset">
+                                <li>Number: •••• •••• •••• {{ card.last4 }}</li>
+                                <li>Expiry: {{ card.exp_month }}/{{ card.exp_year }}</li>
+                            </ul>
+                        </div>
+
+                        <p v-else class="text-secondary">Add a credit card and use Craft ID to purchase licenses and renewals.</p>
                     </div>
 
-                    <p v-else class="text-secondary">Add a credit card and use Craft ID to purchase licenses and renewals.</p>
-                </div>
+                    <div :class="{'hidden': !editing}">
+                        <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard" @cancel="cancel"></card-form>
 
-                <div :class="{'hidden': !editing}">
-                    <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard" @cancel="cancel"></card-form>
-
-                    <div class="mt-4">
-                        <img src="~@/images/powered_by_stripe.svg" width="90" />
+                        <div class="mt-4">
+                            <img src="~@/images/powered_by_stripe.svg" width="90" />
+                        </div>
                     </div>
-                </div>
+                </template>
             </div>
 
-            <div v-if="!editing" class="pl-4">
+            <div v-if="!loading && !editing" class="pl-4">
                 <p>
                     <template v-if="card">
                         <btn small @click="editing = true">Change card</btn>
@@ -61,6 +66,7 @@
 
         data() {
             return {
+                loading: false,
                 editing: false,
                 cardFormloading: false,
                 removeCardLoading: false,
@@ -137,6 +143,19 @@
             },
 
         },
+
+        mounted() {
+            this.loading = true
+
+            this.$store.dispatch('stripe/getStripeAccount')
+                .then(() => {
+                    this.loading = false
+                })
+                .catch(() => {
+                    this.loading = false
+                    this.$store.dispatch('app/displayNotice', 'Couldn’t get Stripe account.')
+                })
+        }
 
     }
 </script>

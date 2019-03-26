@@ -3,9 +3,7 @@
 import get from 'lodash/get'
 import update from 'lodash/update'
 import Vue from 'vue'
-import Vuex from 'vuex'
 
-Vue.use(Vuex)
 Vue.use(require('vue-moment'))
 
 var VueApp = new Vue();
@@ -84,50 +82,6 @@ export default {
          */
         craftPluginsUrl() {
             return process.env.VUE_APP_CRAFT_PLUGINS_URL;
-        },
-
-        loadAccount(cb, cbError) {
-            // Account
-            this.$store.dispatch('account/getAccount')
-                .then(() => {
-                    // Cart
-                    this.$store.dispatch('cart/getCart')
-                        .then(() => {
-                            this.$store.commit('app/updateLoading', false)
-
-                            if (cb) {
-                                cb();
-                            }
-
-                            // Stripe Account
-                            if (window.stripeAccessToken) {
-                                this.$store.dispatch('stripe/getStripeAccount')
-                                    .then(() => {
-                                        this.$store.commit('app/updateStripeAccountLoading', false)
-                                    }, () => {
-                                        this.$store.commit('app/updateStripeAccountLoading', false)
-                                    });
-                            } else {
-                                this.$store.commit('app/updateStripeAccountLoading', false)
-                            }
-                        })
-                        .catch(() => {
-                            if (cbError) {
-                                cbError();
-                            }
-                        })
-
-                    // Launch timer again now that we have a current user
-                    this.$root.$children[0].$refs.authManager.updateRemainingSessionTime(Craft.remainingSessionTime);
-                });
-        },
-
-        loadGuestUserData() {
-            // Cart
-            this.$store.dispatch('cart/getCart')
-                .then(() => {
-                    this.$store.commit('app/updateLoading', false)
-                })
         },
 
         expiresSoon(license) {

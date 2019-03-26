@@ -1,5 +1,5 @@
 <template>
-    <page-alert v-if="!stripeAccountLoading && !stripeAccount" type="warning">
+    <page-alert v-if="!loading && !stripeAccount" type="warning">
         <strong>Stripe account missing.</strong>
         Define a Stripe account in the <router-link to="/developer/settings">developer settings</router-link>.
     </page-alert>
@@ -10,15 +10,32 @@
     import PageAlert from './PageAlert'
 
     export default {
+        data() {
+            return {
+                loading: false,
+            }
+        },
+
         components: {
             PageAlert,
         },
 
         computed: {
             ...mapState({
-                stripeAccount: state => state.account.stripeAccount,
-                stripeAccountLoading: state => state.app.stripeAccountLoading,
+                stripeAccount: state => state.stripe.stripeAccount,
             }),
         },
+
+        mounted() {
+            this.loading = true
+
+            this.$store.dispatch('stripe/getStripeAccount')
+                .then(() => {
+                    this.loading = false
+                })
+                .catch(() => {
+                    this.loading = false
+                })
+        }
     }
 </script>

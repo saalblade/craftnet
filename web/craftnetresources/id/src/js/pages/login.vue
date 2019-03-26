@@ -96,26 +96,30 @@
                         }
 
                         // Set `remainingSessionTime` to something different than 0 to give the auth manager a chance to get the real remaining session time
-                        // todo: Take Craft’s userSessionDuration config into account
+                        // Todo: Take Craft’s userSessionDuration config into account
                         Craft.remainingSessionTime = 3600
                         
                         if (response.data.returnUrl) {
+                            this.loading = false
                             window.location.replace(response.data.returnUrl)
-                            return
-                        }
 
-                        this.loadAccount(
-                            // success
-                            () => {
-                                this.loading = false
-                                this.$store.dispatch('app/displayNotice', 'Logged in.')
-                                this.$router.push({path: '/'})
-                            },
-                            // error
-                            () => {
-                                this.loading = false
-                                this.$store.dispatch('app/displayError', 'Couldn’t login.')
-                            })
+                            // Todo: Refresh CSRF token after login
+                            // Returns a “Unable to verify your data submission.” error because CSRF token needs to be refreshed after login.
+                            //
+                            // if (response.data.returnUrl === window.craftIdUrl + '/') {
+                            //     this.$store.dispatch('account/getAccount')
+                            //         .then(() => {
+                            //             this.$router.push({path: '/'})
+                            //         })
+                            // }  else {
+                            //     window.location.replace(response.data.returnUrl)
+                            // }
+
+                            return
+                        } else {
+                            this.loading = false
+                            this.$store.dispatch('app/displayError', 'Couldn’t login.')
+                        }
                     })
                     .catch(() => {
                         this.loading = false

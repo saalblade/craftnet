@@ -9,7 +9,6 @@ Vue.use(Vuex)
 const state = {
     loading: true,
     notification: null,
-    stripeAccountLoading: true,
     renewLicensesStep: null,
     showRenewLicensesModal: false,
     renewLicense: null,
@@ -81,10 +80,6 @@ const actions = {
  * Mutations
  */
 const mutations = {
-    updateStripeAccountLoading(state, loading) {
-        state.stripeAccountLoading = loading
-    },
-
     updateRenewLicensesStep(state, step) {
         state.renewLicensesStep = step
     },

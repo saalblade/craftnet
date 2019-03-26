@@ -219,33 +219,23 @@ const router = new VueRouter({
 
 import store from '../store'
 
+// Make things happen before each route change
 router.beforeEach((to, from, next) => {
     // Renew the auth manager’s session
     if (router.app.$refs.authManager) {
         router.app.$refs.authManager.renewSession()
     }
 
-    // Guest users are limited to login, registration and cart pages
-    if (!store.state.account.currentUser) {
-        if (store.state.account.currentUserLoaded) {
-            if (!to.meta.allowAnonymous) {
-                router.push({path: '/login'})
-            } else {
-                next()
-            }
-        } else {
-            store.dispatch('account/getAccount')
-                .then(() => {
+    // Check that the user can access the next route
+    if (!to.meta.allowAnonymous) {
+        store.dispatch('account/isLoggedIn')
+            .then((isLoggedIn) => {
+                if (isLoggedIn) {
                     next()
-                })
-                .catch(() => {
-                    if (!to.meta.allowAnonymous) {
-                        router.push({path: '/login'})
-                    } else {
-                        next()
-                    }
-                })
-        }
+                } else {
+                    router.push({path: '/login'})
+                }
+            })
     } else {
         next()
     }

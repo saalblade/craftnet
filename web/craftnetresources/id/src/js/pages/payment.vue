@@ -105,6 +105,7 @@
         methods: {
             ...mapActions({
                 getCart: 'cart/getCart',
+                getStripeAccount: 'stripe/getStripeAccount',
             }),
 
             pay() {
@@ -241,14 +242,6 @@
                 return this.$store.dispatch('cart/checkout', checkoutData)
                     .then(() => {
                         this.$store.dispatch('cart/resetCart')
-                            .then(() => {
-                                if (this.currentUser) {
-                                    this.$store.dispatch('account/getAccount')
-                                        .then(() => {
-                                            this.loading = false
-                                        })
-                                }
-                            })
                     })
             },
         },
@@ -258,7 +251,13 @@
 
             this.getCart()
                 .then(() => {
-                    this.loading = false
+                    this.getStripeAccount()
+                        .then(() => {
+                            this.loading = false
+                        })
+                        .catch(() => {
+                            this.loading = false
+                        })
                 })
                 .catch(() => {
                     this.loading = false

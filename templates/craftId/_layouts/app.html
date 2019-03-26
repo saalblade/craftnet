@@ -6,6 +6,7 @@
 {% js at head %}
     window.craftIdUrl = "{{ config.craftIdUrl }}";
     window.currentUserId = {{ currentUser is defined and currentUser and currentUser.id ? currentUser.id : 'null'  }};
+    window.loggedIn = {{ (currentUser is defined and currentUser and currentUser.id ? true : false)|json_encode|raw  }};
     window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken|json_encode|raw : 'false' }};
     window.stripePublicKey = {{ stripePublicKey|json_encode|raw }};
     window.stripeConnectUrl = {{ url('stripe/connect')|json_encode|raw }};
