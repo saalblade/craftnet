@@ -3,7 +3,6 @@
 namespace craftnet\controllers\id;
 
 use Craft;
-use craft\elements\Category;
 use yii\web\Response;
 
 /**
@@ -13,7 +12,7 @@ class CraftIdController extends BaseController
 {
     // Properties
     // =========================================================================
-    
+
     /**
      * @inheritdoc
      */
