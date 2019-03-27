@@ -51,17 +51,6 @@ const actions = {
                     reject(error.response)
                 })
         })
-
-
-        this.loading = true
-
-        this.$store.dispatch('stripe/getStripeAccount')
-            .then(() => {
-                this.loading = false
-            })
-            .catch(() => {
-                this.loading = false
-            })
     },
 
     connectAppCallback({commit}, apps) {
