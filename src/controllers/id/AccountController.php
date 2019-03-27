@@ -30,7 +30,7 @@ class AccountController extends Controller
     /**
      * @return Response
      */
-    public function actionGetAccount()
+    public function actionGetAccount(): Response
     {
         $currentUser = Craft::$app->getUser()->getIdentity();
         $photo = $currentUser->getPhoto();
@@ -70,7 +70,7 @@ class AccountController extends Controller
      * @return null|Response
      * @throws BadRequestHttpException
      */
-    public function actionUploadUserPhoto()
+    public function actionUploadUserPhoto(): ?Response
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
