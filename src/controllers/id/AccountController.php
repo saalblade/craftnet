@@ -69,7 +69,6 @@ class AccountController extends Controller
      *
      * @return null|Response
      * @throws BadRequestHttpException
-     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionUploadUserPhoto()
     {
@@ -125,7 +124,6 @@ class AccountController extends Controller
      * @throws \Throwable
      * @throws \craft\errors\ElementNotFoundException
      * @throws \yii\base\Exception
-     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionDeleteUserPhoto(): Response
     {
@@ -152,7 +150,8 @@ class AccountController extends Controller
      * Generate API token.
      *
      * @return Response
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
      */
     public function actionGenerateApiToken(): Response
     {
