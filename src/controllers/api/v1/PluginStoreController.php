@@ -24,6 +24,9 @@ class PluginStoreController extends BaseApiController
      * Handles /v1/plugin-store requests.
      *
      * @return Response
+     * @throws \craftnet\errors\MissingTokenException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex(): Response
     {
