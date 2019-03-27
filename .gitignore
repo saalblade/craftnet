@@ -16,3 +16,4 @@
 /web/scratch.php
 /.pgpass
 /storage/config-backups
+/storage/composer-backups

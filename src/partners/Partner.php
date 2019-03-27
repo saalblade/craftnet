@@ -291,6 +291,7 @@ class Partner extends Element
         $rules[] = [
             'website',
             'url',
+            'enableIDN' => true,
             'on' => [
                 self::SCENARIO_BASE_INFO,
                 self::SCENARIO_DEFAULT,
@@ -370,6 +371,7 @@ class Partner extends Element
         $rules[] = [
             'primaryContactEmail',
             'email',
+            'enableIDN' => true,
             'on' => [
                 self::SCENARIO_BASE_INFO,
                 self::SCENARIO_DEFAULT,
@@ -490,7 +492,7 @@ class Partner extends Element
             ->delete('craftnet_partners_partnercapabilities', ['partnerId' => $this->id])
             ->execute();
 
-        if (count($this->_capabilities) > 0) {
+        if (is_array($this->_capabilities) && count($this->_capabilities) > 0) {
             $partnerId = $this->id;
             $rows = [];
 

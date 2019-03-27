@@ -5,6 +5,7 @@ namespace craftnet\plugins;
 use Craft;
 use craft\db\Query;
 use craft\elements\User;
+use craft\errors\InvalidPluginException;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craftnet\errors\LicenseNotFoundException;
@@ -174,6 +175,7 @@ class PluginLicenseManager extends Component
      * @param string|null $handle the plugin handle
      * @return PluginLicense
      * @throws LicenseNotFoundException if $key is missing
+     * @throws InvalidPluginException
      */
     public function getLicenseByKey(string $key, string $handle = null): PluginLicense
     {
@@ -195,6 +197,11 @@ class PluginLicenseManager extends Component
         $result = $query->one();
 
         if ($result === null) {
+            // Was the plugin handle invalid?
+            if ($handle && !Plugin::find()->handle($handle)->exists()) {
+                throw new InvalidPluginException($handle);
+            }
+
             throw new LicenseNotFoundException($key);
         }
 

@@ -8,6 +8,7 @@ use craft\elements\Category;
 use craft\elements\Entry;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginQuery;
 use yii\caching\FileDependency;
 use yii\web\Response;
 
@@ -110,36 +111,25 @@ class PluginStoreController extends BaseApiController
     {
         $ret = [];
 
-        $recents = Plugin::find()
-            ->orderBy(['craftnet_plugins.dateApproved' => SORT_DESC])
-            ->limit(10)
-            ->withLatestReleaseInfo(true, $this->cmsVersion)
-            ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
-            ->ids();
-
-        $recentlyAddedPluginsEntry = Entry::find()->site('plugins')->section('recentlyAddedPlugins')->one();
-
-        $ret[] = [
-            'id' => 'recently-added',
-            'slug' => 'recently-added',
-            'title' => $recentlyAddedPluginsEntry->title,
-            'description' => $recentlyAddedPluginsEntry->description,
-            'plugins' => $recents,
-            'limit' => 6,
-        ];
-
         $entries = Entry::find()
             ->site('craftId')
-            ->select(['elements.id', 'elements.fieldLayoutId', 'content.title', 'content.field_limit', 'content.field_description', 'elements_sites.slug'])
             ->section('featuredPlugins')
-            ->with('plugins', ['select' => ['elements.id']])
             ->all();
 
         foreach ($entries as $entry) {
-            $pluginIds = [];
-
-            foreach ($entry->plugins as $plugin) {
-                $pluginIds[] = $plugin->id;
+            switch ($entry->getType()->handle) {
+                case 'manual':
+                    /** @var PluginQuery $query */
+                    $query = $entry->plugins;
+                    $pluginIds = $query
+                        ->withLatestReleaseInfo(true, $this->cmsVersion)
+                        ->ids();
+                    break;
+                case 'dynamic':
+                    $pluginIds = $this->_dynamicPlugins($entry->slug);
+                    break;
+                default:
+                    $pluginIds = null;
             }
 
             if (!empty($pluginIds)) {
@@ -154,6 +144,50 @@ class PluginStoreController extends BaseApiController
         }
 
         return $ret;
+    }
+
+    /**
+     * @param string $slug
+     * @return int[]
+     */
+    private function _dynamicPlugins(string $slug): array
+    {
+        switch ($slug) {
+            case 'recently-added':
+                return $this->_recentlyAddedPlugins();
+            case 'top-paid':
+                return $this->_topPaidPlugins();
+            default:
+                return [];
+        }
+    }
+
+    /**
+     * @return int[]
+     */
+    private function _recentlyAddedPlugins(): array
+    {
+        return Plugin::find()
+            ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
+            ->withLatestReleaseInfo(true, $this->cmsVersion)
+            ->orderBy(['craftnet_plugins.dateApproved' => SORT_DESC])
+            ->limit(20)
+            ->ids();
+    }
+
+    /**
+     * @return int[]
+     */
+    private function _topPaidPlugins(): array
+    {
+        return Plugin::find()
+            ->andWhere(['not', ['craftnet_plugins.dateApproved' => null]])
+            ->withLatestReleaseInfo(true, $this->cmsVersion)
+            ->withTotalPurchases(true, (new \DateTime())->modify('-1 month'))
+            ->andWhere(['not', ['elements.id' => 983]])
+            ->orderBy(['totalPurchases' => SORT_DESC])
+            ->limit(20)
+            ->ids();
     }
 
     /**
