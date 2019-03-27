@@ -68,9 +68,12 @@
         },
 
         created() {
-            this.$store.dispatch('cart/getCart')
+            this.$store.dispatch('account/loadAccount')
                 .then(() => {
-                    this.$store.commit('app/updateLoading', false)
+                    this.$store.dispatch('cart/getCart')
+                        .then(() => {
+                            this.$store.commit('app/updateLoading', false)
+                        })
                 })
 
             if(window.sessionNotice) {

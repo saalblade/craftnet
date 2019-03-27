@@ -228,14 +228,18 @@ router.beforeEach((to, from, next) => {
 
     // Check that the user can access the next route
     if (!to.meta.allowAnonymous) {
-        store.dispatch('account/isLoggedIn')
-            .then((isLoggedIn) => {
-                if (isLoggedIn) {
-                    next()
-                } else {
-                    router.push({path: '/login'})
-                }
-            })
+        if (!store.state.account.currentUser) {
+            store.dispatch('account/loadAccount')
+                .then(() => {
+                    if (store.state.account.currentUser) {
+                        next()
+                    } else {
+                        router.push({path: '/login'})
+                    }
+                })
+        } else {
+            next()
+        }
     } else {
         next()
     }

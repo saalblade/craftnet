@@ -11,6 +11,7 @@ Vue.use(Vuex)
 const state = {
     billingAddress: null,
     currentUser: null,
+    accountLoading: false,
     currentUserLoaded: false,
     craftSessionLoaded: false,
     hasApiToken: false,
@@ -108,60 +109,66 @@ const actions = {
         })
     },
 
-    getAccount({commit}) {
+    getAccount({commit, state}) {
         return new Promise((resolve, reject) => {
             accountApi.getAccount()
                 .then((response) => {
-                    commit('account/updateBillingAddress', {billingAddress: response.data.billingAddress}, {root: true})
-                    commit('account/updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken}, {root: true})
+                    commit('updateBillingAddress', {billingAddress: response.data.billingAddress})
+                    commit('updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken})
+                    commit('updateCurrentUser', {currentUser: response.data.currentUser})
                     commit('stripe/updateCard', {card: response.data.card}, {root: true})
                     commit('stripe/updateCardToken', {cardToken: response.data.cardToken}, {root: true})
-                    commit('account/updateCurrentUser', {currentUser: response.data.currentUser}, {root: true})
-                    commit('account/updateCurrentUserLoaded', true, {root: true})
+                    commit('updateCurrentUserLoaded', true)
 
                     resolve(response)
                 })
                 .catch((response) => {
-                    commit('account/updateCurrentUserLoaded', true, {root: true})
-
+                    commit('updateCurrentUserLoaded', true)
                     reject(response)
                 })
         })
     },
 
-    isLoggedIn({commit, state, dispatch}) {
+    loadAccount({commit, state, dispatch}) {
         return new Promise((resolve, reject) => {
-            let loadAccount = false
+            if (!state.accountLoading) {
+                commit('updateAccountLoading', true)
 
-            if (!state.craftSessionLoaded) {
-                commit('updateCraftSessionLoaded', true)
+                let loadAccount = false
 
-                if (window.loggedIn) {
-                    loadAccount = true
-                }
-            } else {
-                if (!state.currentUserLoaded) {
-                    loadAccount = true
-                }
-            }
+                if (!state.craftSessionLoaded) {
+                    commit('updateCraftSessionLoaded', true)
 
-            if (loadAccount) {
-                dispatch('getAccount')
-                    .then(() => {
-                        resolve(true)
-                    })
-                    .catch(() => {
-                        resolve(false)
-                    })
-            } else {
-                if (state.currentUser) {
-                    resolve(true)
+                    if (window.loggedIn) {
+                        loadAccount = true
+                    } else {
+                        commit('updateCurrentUserLoaded', true)
+                    }
                 } else {
-                    resolve(false)
+                    if (!state.currentUserLoaded) {
+                        loadAccount = true
+                    }
                 }
+
+                if (loadAccount) {
+                    dispatch('getAccount')
+                        .then(() => {
+                            commit('updateAccountLoading', false)
+                            resolve(true)
+                        })
+                        .catch(() => {
+                            commit('updateAccountLoading', false)
+                            resolve(false)
+                        })
+                } else {
+                    commit('updateAccountLoading', false)
+                    resolve(!!state.currentUser)
+                }
+            } else {
+                resolve(!!state.currentUser)
             }
         })
-    }
+    },
 }
 
 /**
@@ -187,6 +194,10 @@ const mutations = {
 
     updateCurrentUserLoaded(state, loaded) {
         state.currentUserLoaded = loaded
+    },
+
+    updateAccountLoading(state, loading) {
+        state.accountLoading = loading
     },
 
     updateHasApiToken(state, {hasApiToken}){

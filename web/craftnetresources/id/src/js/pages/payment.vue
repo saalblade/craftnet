@@ -251,13 +251,17 @@
 
             this.getCart()
                 .then(() => {
-                    this.getStripeAccount()
-                        .then(() => {
-                            this.loading = false
-                        })
-                        .catch(() => {
-                            this.loading = false
-                        })
+                    if (this.currentUser) {
+                        this.getStripeAccount()
+                            .then(() => {
+                                this.loading = false
+                            })
+                            .catch(() => {
+                                this.loading = false
+                            })
+                    } else {
+                        this.loading = false
+                    }
                 })
                 .catch(() => {
                     this.loading = false
