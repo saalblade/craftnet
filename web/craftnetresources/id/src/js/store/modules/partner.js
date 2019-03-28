@@ -57,7 +57,6 @@ const actions = {
                     resolve(response)
                 })
                 .catch((error) => {
-                    debugger
                     // @todo test these error messages
                     if (error.response.data) {
                         reject(error.response.data.error)
