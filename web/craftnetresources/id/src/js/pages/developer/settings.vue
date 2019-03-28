@@ -46,7 +46,7 @@
         computed: {
             ...mapState({
                 hasApiToken: state => state.account.hasApiToken,
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
         },
 

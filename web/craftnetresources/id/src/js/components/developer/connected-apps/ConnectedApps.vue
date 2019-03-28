@@ -67,7 +67,7 @@
             ...mapState({
                 apps: state => state.apps.apps,
                 appsLoading: state => state.apps.appsLoading,
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({

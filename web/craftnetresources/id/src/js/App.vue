@@ -2,7 +2,7 @@
     <div id="app" :class="{'has-sidebar': (!$route.meta.layout || $route.meta.layout !== 'no-sidebar')}">
         <auth-manager ref="authManager"></auth-manager>
 
-        <template v-if="currentUser">
+        <template v-if="user">
             <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.commit('app/updateShowRenewLicensesModal', false)" />
         </template>
 
@@ -53,7 +53,7 @@
                 showRenewLicensesModal: state => state.app.showRenewLicensesModal,
                 loading: state => state.app.loading,
                 renewLicense: state => state.app.renewLicense,
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
 
             layoutComponent() {

@@ -83,7 +83,7 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
         },
 
@@ -131,7 +131,7 @@
              * Updates our record of the auth timeout, and handles it.
              */
             updateRemainingSessionTime(remainingSessionTime) {
-                if (!this.currentUser) {
+                if (!this.user) {
                     return false
                 }
 
@@ -375,7 +375,7 @@
             submitLogin() {
                 let formData = new FormData()
 
-                FormDataHelper.append(formData, 'loginName', this.currentUser.username)
+                FormDataHelper.append(formData, 'loginName', this.user.username)
                 FormDataHelper.append(formData, 'password', this.password)
 
                 usersApi.login(formData)

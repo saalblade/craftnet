@@ -49,7 +49,7 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
 
             csrfTokenName() {
@@ -157,7 +157,7 @@
                 this.$store.dispatch('app/displayNotice', 'Email verified.')
             }
 
-            if (this.currentUser) {
+            if (this.user) {
                 this.$router.push({path: '/'})
             } else {
                 if (this.rememberedUsername) {

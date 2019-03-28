@@ -1,7 +1,7 @@
 <template>
     <div>
         <p>
-            <template v-if="currentUser">
+            <template v-if="user">
                 <router-link to="/cart">← Cart</router-link>
             </template>
             <template v-else>
@@ -94,7 +94,7 @@
                 card: state => state.stripe.card,
                 existingCardToken: state => state.stripe.cardToken,
                 accountBillingAddress: state => state.account.billingAddress,
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({
@@ -152,7 +152,7 @@
             savePaymentMethod() {
                 return new Promise((resolve, reject) => {
                     if (this.cart && this.cart.totalPrice > 0) {
-                        if (this.currentUser) {
+                        if (this.user) {
                             // Save card for existing user
                             if (this.paymentMode === 'newCard') {
                                 // Save new card
@@ -208,8 +208,8 @@
                     },
                 }
 
-                if (this.currentUser) {
-                    cartData.email = this.currentUser.email
+                if (this.user) {
+                    cartData.email = this.user.email
                 }
 
                 return this.$store.dispatch('cart/saveCart', cartData)
@@ -219,7 +219,7 @@
                 let cardToken = null
 
                 if (this.cart.totalPrice > 0) {
-                    if (this.currentUser) {
+                    if (this.user) {
                         switch (this.paymentMode) {
                             case 'newCard':
                                 cardToken = this.cardToken.id
@@ -251,7 +251,7 @@
 
             this.getCart()
                 .then(() => {
-                    if (this.currentUser) {
+                    if (this.user) {
                         this.getStripeAccount()
                             .then(() => {
                                 this.loading = false

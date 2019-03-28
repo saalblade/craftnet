@@ -1,6 +1,6 @@
 <template>
     <div>
-        <template v-if="currentUser">
+        <template v-if="user">
             <template v-if="card">
                 <p><label><input type="radio" value="existingCard" :checked="paymentMode === 'existingCard'" name="paymentMode" @input="$emit('update:paymentMode', $event.target.value)" /> Use card <span>{{ card.brand }} •••• •••• •••• {{ card.last4 }} — {{ card.exp_month }}/{{ card.exp_year }}</span></label></p>
             </template>
@@ -39,7 +39,7 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
         }
     }

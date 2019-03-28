@@ -66,7 +66,7 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({
@@ -176,7 +176,7 @@
         },
 
         mounted() {
-            this.userDraft = JSON.parse(JSON.stringify(this.currentUser))
+            this.userDraft = JSON.parse(JSON.stringify(this.user))
         }
     }
 </script>

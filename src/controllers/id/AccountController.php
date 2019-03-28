@@ -32,8 +32,8 @@ class AccountController extends Controller
      */
     public function actionGetAccount(): Response
     {
-        $currentUser = Craft::$app->getUser()->getIdentity();
-        $photo = $currentUser->getPhoto();
+        $user = Craft::$app->getUser()->getIdentity();
+        $photo = $user->getPhoto();
         $photoUrl = $photo ? Craft::$app->getAssets()->getAssetUrl($photo, [
             'mode' => 'crop',
             'width' => 200,
@@ -41,25 +41,25 @@ class AccountController extends Controller
         ], true) : null;
 
         return $this->asJson([
-            'billingAddress' => $this->getBillingAddress($currentUser),
-            'card' => $this->getCard($currentUser),
-            'cardToken' => $this->getCardToken($currentUser),
-            'currentUser' => [
-                'id' => $currentUser->id,
-                'email' => $currentUser->email,
-                'username' => $currentUser->username,
-                'firstName' => $currentUser->firstName,
-                'lastName' => $currentUser->lastName,
-                'developerName' => $currentUser->developerName,
-                'developerUrl' => $currentUser->developerUrl,
-                'location' => $currentUser->location,
-                'enablePluginDeveloperFeatures' => $currentUser->isInGroup('developers') ? true : false,
-                'enableShowcaseFeatures' => $currentUser->enableShowcaseFeatures == 1 ? true : false,
-                'enablePartnerFeatures' => $currentUser->enablePartnerFeatures == 1 ? true : false,
-                'groups' => $currentUser->getGroups(),
-                'photoId' => $currentUser->getPhoto() ? $currentUser->getPhoto()->getId() : null,
+            'billingAddress' => $this->getBillingAddress($user),
+            'card' => $this->getCard($user),
+            'cardToken' => $this->getCardToken($user),
+            'user' => [
+                'id' => $user->id,
+                'email' => $user->email,
+                'username' => $user->username,
+                'firstName' => $user->firstName,
+                'lastName' => $user->lastName,
+                'developerName' => $user->developerName,
+                'developerUrl' => $user->developerUrl,
+                'location' => $user->location,
+                'enablePluginDeveloperFeatures' => $user->isInGroup('developers') ? true : false,
+                'enableShowcaseFeatures' => $user->enableShowcaseFeatures == 1 ? true : false,
+                'enablePartnerFeatures' => $user->enablePartnerFeatures == 1 ? true : false,
+                'groups' => $user->getGroups(),
+                'photoId' => $user->getPhoto() ? $user->getPhoto()->getId() : null,
                 'photoUrl' => $photoUrl,
-                'hasApiToken' => $currentUser->apiToken !== null,
+                'hasApiToken' => $user->apiToken !== null,
             ],
         ]);
     }

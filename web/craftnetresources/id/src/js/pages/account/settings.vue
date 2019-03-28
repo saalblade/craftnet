@@ -53,7 +53,7 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({
@@ -70,7 +70,7 @@
 
                 let newEmail = false
 
-                if (this.currentUser.email !== this.userDraft.email) {
+                if (this.user.email !== this.userDraft.email) {
                     newEmail = true
                 }
 
@@ -88,7 +88,7 @@
                         this.loading = false
 
                         if (newEmail) {
-                            this.userDraft.email = this.currentUser.email
+                            this.userDraft.email = this.user.email
                             this.$store.dispatch('app/displayNotice', 'You’ve been sent an email to verify your new email address.')
                         } else {
                             this.$store.dispatch('app/displayNotice', 'Settings saved.')
@@ -110,7 +110,7 @@
         },
 
         mounted() {
-            this.userDraft = JSON.parse(JSON.stringify(this.currentUser))
+            this.userDraft = JSON.parse(JSON.stringify(this.user))
         }
     }
 </script>

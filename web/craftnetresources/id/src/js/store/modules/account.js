@@ -10,9 +10,9 @@ Vue.use(Vuex)
  */
 const state = {
     billingAddress: null,
-    currentUser: null,
+    user: null,
     accountLoading: false,
-    currentUserLoaded: false,
+    userLoaded: false,
     craftSessionLoaded: false,
     hasApiToken: false,
 }
@@ -23,7 +23,7 @@ const state = {
 const getters = {
     userIsInGroup(state) {
         return handle => {
-            return state.currentUser.groups.find(g => g.handle === handle)
+            return state.user.groups.find(g => g.handle === handle)
         }
     },
 }
@@ -114,8 +114,8 @@ const actions = {
             accountApi.getAccount()
                 .then((response) => {
                     commit('updateBillingAddress', {billingAddress: response.data.billingAddress})
-                    commit('updateHasApiToken', {hasApiToken: response.data.currentUser.hasApiToken})
-                    commit('updateCurrentUser', {currentUser: response.data.currentUser})
+                    commit('updateHasApiToken', {hasApiToken: response.data.user.hasApiToken})
+                    commit('updateCurrentUser', {user: response.data.user})
                     commit('stripe/updateCard', {card: response.data.card}, {root: true})
                     commit('stripe/updateCardToken', {cardToken: response.data.cardToken}, {root: true})
                     commit('updateCurrentUserLoaded', true)
@@ -145,7 +145,7 @@ const actions = {
                         commit('updateCurrentUserLoaded', true)
                     }
                 } else {
-                    if (!state.currentUserLoaded) {
+                    if (!state.userLoaded) {
                         loadAccount = true
                     }
                 }
@@ -162,10 +162,10 @@ const actions = {
                         })
                 } else {
                     commit('updateAccountLoading', false)
-                    resolve(!!state.currentUser)
+                    resolve(!!state.user)
                 }
             } else {
-                resolve(!!state.currentUser)
+                resolve(!!state.user)
             }
         })
     },
@@ -176,8 +176,8 @@ const actions = {
  */
 const mutations = {
     deleteUserPhoto(state, {response}) {
-        state.currentUser.photoId = response.data.photoId
-        state.currentUser.photoUrl = response.data.photoUrl
+        state.user.photoId = response.data.photoId
+        state.user.photoUrl = response.data.photoUrl
     },
 
     updateBillingAddress(state, {billingAddress}) {
@@ -188,12 +188,12 @@ const mutations = {
         state.craftSessionLoaded = loaded
     },
 
-    updateCurrentUser(state, {currentUser}) {
-        state.currentUser = currentUser
+    updateCurrentUser(state, {user}) {
+        state.user = user
     },
 
     updateCurrentUserLoaded(state, loaded) {
-        state.currentUserLoaded = loaded
+        state.userLoaded = loaded
     },
 
     updateAccountLoading(state, loading) {
@@ -205,8 +205,8 @@ const mutations = {
     },
 
     uploadUserPhoto(state, {response}) {
-        state.currentUser.photoId = response.data.photoId
-        state.currentUser.photoUrl = response.data.photoUrl
+        state.user.photoId = response.data.photoId
+        state.user.photoUrl = response.data.photoUrl
     },
 
     saveUser(state, {user}) {
@@ -215,13 +215,13 @@ const mutations = {
                 continue
             }
 
-            state.currentUser[attribute] = user[attribute]
+            state.user[attribute] = user[attribute]
 
             if (user.enablePluginDeveloperFeatures) {
-                let groupExists = state.currentUser.groups.find(g => g.handle === 'developers')
+                let groupExists = state.user.groups.find(g => g.handle === 'developers')
 
                 if (!groupExists) {
-                    state.currentUser.groups.push({
+                    state.user.groups.push({
                         id: 1,
                         name: 'Developers',
                         handle: 'developers',

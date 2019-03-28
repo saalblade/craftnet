@@ -34,11 +34,11 @@
                     </router-link>
                 </li>
 
-                <template v-if="currentUser">
-                    <li class="block ml-4 user-menu" :class="{'has-photo': !!currentUser.photoUrl}" v-on-clickaway="awayUserMenu">
+                <template v-if="user">
+                    <li class="block ml-4 user-menu" :class="{'has-photo': !!user.photoUrl}" v-on-clickaway="awayUserMenu">
                         <a class="block header-toggle" @click="userMenuToggle">
-                            <template v-if="currentUser.photoUrl">
-                                <img :src="currentUser.photoUrl" />
+                            <template v-if="user.photoUrl">
+                                <img :src="user.photoUrl" />
                             </template>
                             <template v-else>
                                 <icon icon="user" />
@@ -47,7 +47,7 @@
 
                         <div class="popover" :class="{hidden: !showingUserMenu}">
                             <div>
-                                {{currentUser.email}}
+                                {{user.email}}
                             </div>
 
                             <hr>
@@ -103,7 +103,7 @@
 
         computed: {
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({
