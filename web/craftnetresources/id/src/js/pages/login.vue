@@ -100,7 +100,6 @@
                         Craft.remainingSessionTime = 3600
                         
                         if (response.data.returnUrl) {
-                            this.loading = false
                             window.location.replace(response.data.returnUrl)
 
                             // Todo: Refresh CSRF token after login
