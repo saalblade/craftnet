@@ -5,24 +5,9 @@
         <div class="site-main flex-1 lg:flex">
             <div class="flex-1 bg-blue text-white justify-center items-center lg:flex p-8">
                 <ul class="features list-reset">
-                    <li>
-                        <icon icon="key" size="2xl" />
-                        Manage your licenses
-                    </li>
-
-                    <li>
-                        <icon icon="question-circle" size="2xl" />
-                        Claim licenses
-                    </li>
-                    <li>
-                        <icon icon="plug" size="2xl" />
-                        Publish plugins to the Plugin Store
-                    </li>
-
-                    <li>
-                        <icon icon="handshake" size="2xl" />
-                        Manage your partner profile
-                    </li>
+                    <li><icon icon="key" size="2xl" /> Manage your licenses</li>
+                    <li><icon icon="plug" size="2xl" /> Publish plugins to the Plugin Store</li>
+                    <li><icon icon="check-circle" size="2xl" /> Manage your Partner profile</li>
                 </ul>
             </div>
 
