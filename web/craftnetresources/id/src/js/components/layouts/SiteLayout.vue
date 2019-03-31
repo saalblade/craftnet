@@ -3,12 +3,14 @@
         <global-header :showingSidebar="false"></global-header>
 
         <div class="site-main flex-1 lg:flex">
-            <div class="flex-1 bg-blue text-white justify-center items-center lg:flex p-8">
-                <ul class="features list-reset">
-                    <li><icon icon="key" size="2xl" /> Manage your licenses</li>
-                    <li><icon icon="plug" size="2xl" /> Publish plugins to the Plugin Store</li>
-                    <li><icon icon="check-circle" size="2xl" /> Manage your Partner profile</li>
-                </ul>
+            <div class="flex-1 bg-blue text-white justify-center items-center flex p-8">
+                <div class="w-full max-w-sm">
+                    <ul class="features list-reset">
+                        <li><icon icon="key" size="2xl" /> Manage your licenses</li>
+                        <li><icon icon="plug" size="2xl" /> Publish plugins to the Plugin Store</li>
+                        <li><icon icon="check-circle" size="2xl" /> Manage your Partner profile</li>
+                    </ul>
+                </div>
             </div>
 
             <div class="flex-1 bg-grey-lighter justify-center items-center flex p-8">
