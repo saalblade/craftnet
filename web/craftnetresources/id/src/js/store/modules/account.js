@@ -109,7 +109,7 @@ const actions = {
         })
     },
 
-    getAccount({commit, state}) {
+    getAccount({commit}) {
         return new Promise((resolve, reject) => {
             accountApi.getAccount()
                 .then((response) => {
@@ -130,7 +130,7 @@ const actions = {
     },
 
     loadAccount({commit, state, dispatch}) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             if (!state.accountLoading) {
                 commit('updateAccountLoading', true)
 
