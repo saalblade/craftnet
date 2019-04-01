@@ -51,7 +51,7 @@
                                         <p>{{ license.notes }}</p>
 
                                         <div class="buttons">
-                                            <btn small icon="pencil-alt" @click="notesEditing = true">Edit</btn>
+                                            <btn small icon="pencil" @click="notesEditing = true">Edit</btn>
                                         </div>
                                     </template>
 

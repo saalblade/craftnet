@@ -29,7 +29,7 @@
             </div>
 
             <div v-if="!showForm">
-                <btn small icon="pencil-alt" @click="edit()">Edit</btn>
+                <btn small icon="pencil" @click="edit()">Edit</btn>
             </div>
         </div>
 

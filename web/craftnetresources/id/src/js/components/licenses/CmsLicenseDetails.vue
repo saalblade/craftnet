@@ -23,7 +23,7 @@
                                         <p>{{ license.domain }}</p>
 
                                         <div class="buttons">
-                                            <btn small icon="pencil-alt" @click="domainEditing = true">Change Domain</btn>
+                                            <btn small icon="pencil" @click="domainEditing = true">Change Domain</btn>
                                         </div>
                                     </template>
 
@@ -60,7 +60,7 @@
                                         <p>{{ license.notes }}</p>
 
                                         <div class="buttons">
-                                            <btn icon="pencil-alt" @click="notesEditing = true">Edit</btn>
+                                            <btn icon="pencil" @click="notesEditing = true">Edit</btn>
                                         </div>
                                     </template>
 

@@ -16,7 +16,7 @@
                         </li>
                     </ul>
                     <div>
-                        <btn icon="pencil-alt" @click="$emit('edit', index)">Edit</btn>
+                        <btn icon="pencil" @click="$emit('edit', index)">Edit</btn>
                     </div>
                 </div>
             </div>

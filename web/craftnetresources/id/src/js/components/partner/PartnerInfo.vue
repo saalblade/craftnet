@@ -6,7 +6,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="text-right" v-if="!isEditing">
-                    <btn icon="pencil-alt" @click="onEditClick">Edit</btn>
+                    <btn icon="pencil" @click="onEditClick">Edit</btn>
                 </div>
 
                 <div v-if="!isEditing">
