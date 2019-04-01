@@ -43,7 +43,7 @@ export default {
         })
     },
 
-    patchPartnerLocations(locations, partnerId, cb, cbError) {
+    patchPartnerLocations(locations, partnerId) {
         let formData = new FormData()
         formData.append('id', partnerId)
         formData.append('scenario', 'scenarioLocations')
