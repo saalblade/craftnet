@@ -9,16 +9,23 @@
             </btn>
             <template v-if="notEnoughPages">
                 <template v-for="n in totalPage">
-                    <btn @click="loadPage(n)" :class="[css.pageClass, isCurrentPage(n) ? css.activeClass : '']"
-                         v-html="n">
-                    </btn>
+                    <btn
+                            :class="[css.pageClass, isCurrentPage(n) ? css.activeClass : '']"
+                            :key="'vuetable-page-' + n"
+                            v-html="n"
+                            @click="loadPage(n)"
+
+                    ></btn>
                 </template>
             </template>
             <template v-else>
                 <template v-for="n in windowSize">
-                    <btn @click="loadPage(windowStart+n-1)" :class="[css.pageClass, isCurrentPage(windowStart+n-1) ? css.activeClass : '']"
-                         v-html="windowStart+n-1">
-                    </btn>
+                    <btn
+                             :class="[css.pageClass, isCurrentPage(windowStart+n-1) ? css.activeClass : '']"
+                             :key="'vuetable-page-' + n"
+                             v-html="windowStart+n-1"
+                             @click="loadPage(windowStart+n-1)"
+                    ></btn>
                 </template>
             </template>
             <btn @click="loadPage('next')" :class="['btn-nav', css.linkClass, isOnLastPage ? css.disabledClass : '']" :disabled="isOnLastPage">
