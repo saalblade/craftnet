@@ -24,6 +24,9 @@ class PluginStoreController extends BaseApiController
      * Handles /v1/plugin-store requests.
      *
      * @return Response
+     * @throws \craftnet\errors\MissingTokenException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex(): Response
     {
@@ -59,6 +62,21 @@ class PluginStoreController extends BaseApiController
         }
 
         return $this->asJson($pluginStoreData);
+    }
+
+    /**
+     * Handles /v1/plugin-store/meta requests.
+     *
+     * @return Response
+     * @throws \yii\base\Exception
+     */
+    public function actionMeta(): Response
+    {
+        return $this->asJson([
+            'categories' => $this->_categories(),
+            'featuredPlugins' => $this->_featuredPlugins(),
+            'expiryDateOptions' => $this->_expiryDateOptions(),
+        ]);
     }
 
     // Private Methods

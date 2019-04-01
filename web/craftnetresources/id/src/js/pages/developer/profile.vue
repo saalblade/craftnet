@@ -2,9 +2,9 @@
     <form v-if="userDraft" @submit.prevent="save()">
         <h1>Profile</h1>
 
-        <text-field id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
-        <url-field id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
-        <text-field id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
+        <textbox id="developerName" label="Developer Name" v-model="userDraft.developerName" :errors="errors.developerName" />
+        <textbox id="developerUrl" label="Developer URL" v-model="userDraft.developerUrl" :errors="errors.developerUrl" />
+        <textbox id="location" label="Location" v-model="userDraft.location" :errors="errors.location" />
 
         <hr />
 
@@ -16,22 +16,19 @@
             </div>
             <div>
                 <template v-if="userDraft.photoId">
-                    <div class="field">
-                        <input type="button" class="btn btn-secondary" value="Change Photo" @click="changePhoto" :disabled="photoLoading" />
-                    </div>
-                    <div class="field">
-                        <a href="#" class="btn btn-danger" @click.prevent="deletePhoto" :disabled="photoLoading">
-                            <icon icon="times" />
-                            Delete
-                        </a>
-                    </div>
+                    <field>
+                        <btn :disabled="loading.uploadPhoto" :loading="loading.uploadPhoto" @click="changePhoto">Change Photo</btn>
+                    </field>
+                    <field>
+                        <btn kind="danger" icon="times" :disabled="loading.deletePhoto" :loading="loading.deletePhoto" @click="deletePhoto">Delete</btn>
+                    </field>
                 </template>
                 <template v-else>
-                    <div class="field">
-                        <input type="button" class="btn btn-secondary" value="Upload a photo" @click="changePhoto" :disabled="photoLoading" />
-                    </div>
+                    <field>
+                        <btn :disabled="loading.uploadPhoto" :loading="loading.uploadPhoto" @click="changePhoto">Upload a photo</btn>
+                    </field>
                 </template>
-                <spinner v-if="photoLoading"></spinner>
+
                 <input type="file" ref="photoFile" class="hidden" @change="onChangePhoto" />
             </div>
         </div>
@@ -40,27 +37,26 @@
 
         <p class="text-secondary"><em>Your profile data is being used for your developer page on the Plugin Store.</em></p>
 
-        <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
-        <spinner v-if="loading"></spinner>
+        <btn kind="primary" type="submit" :disabled="loading.page" :loading="loading.page">Save</btn>
     </form>
 </template>
 
 <script>
     import {mapState, mapGetters} from 'vuex'
     import ConnectedApps from '../../components/developer/connected-apps/ConnectedApps'
-    import Spinner from '../../components/Spinner'
 
     export default {
-
         components: {
             ConnectedApps,
-            Spinner,
         },
 
         data() {
             return {
-                loading: false,
-                photoLoading: false,
+                loading: {
+                    page: false,
+                    uploadPhoto: false,
+                    deletePhoto: false,
+                },
                 userDraft: {},
                 password: '',
                 newPassword: '',
@@ -69,40 +65,42 @@
         },
 
         computed: {
-
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({
                 userIsInGroup: 'account/userIsInGroup',
             }),
-
         },
 
         methods: {
-
             /**
              * Delete photo.
              */
             deletePhoto() {
                 if (confirm("Are you sure you want to delete this image?")) {
-                    this.photoLoading = true;
+                    this.loading.deletePhoto = true
 
                     this.$store.dispatch('account/deleteUserPhoto')
                         .then(response => {
-                            this.$store.dispatch('app/displayNotice', 'Photo deleted.');
-                            this.userDraft.photoId = response.data.photoId;
-                            this.userDraft.photoUrl = response.data.photoUrl;
-                            this.photoLoading = false;
+                            if (response.data && !response.data.error) {
+                                this.$store.dispatch('app/displayNotice', 'Photo deleted.')
+                                this.userDraft.photoId = response.data.photoId
+                                this.userDraft.photoUrl = response.data.photoUrl
+                            } else {
+                                this.$store.dispatch('app/displayError', response.data.error)
+                            }
+
+                            this.loading.deletePhoto = false
                         })
                         .catch(response => {
-                            this.photoLoading = false;
+                            this.loading.deletePhoto = false
 
-                            const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t delete photo.';
-                            this.$store.dispatch('app/displayError', errorMessage);
+                            const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t delete photo.'
+                            this.$store.dispatch('app/displayError', errorMessage)
 
-                            this.errors = response.data && response.data.errors ? response.data.errors : {};
+                            this.errors = response.data && response.data.errors ? response.data.errors : {}
                         })
                 }
             },
@@ -111,53 +109,50 @@
              * Change photo.
              */
             changePhoto() {
-                this.$refs.photoFile.click();
+                this.$refs.photoFile.click()
             },
 
             /**
              * On change photo.
              */
             onChangePhoto() {
-                // let reader = new FileReader();
-                //
-                // reader.onload = function (e) {
-                //     this.userDraft.photoUrl = [e.target.result]
-                // }.bind(this);
-                //
-                // reader.readAsDataURL(this.$refs.photoFile.files[0]);
-
-                this.photoLoading = true;
+                this.loading.uploadPhoto = true
 
                 let data = {
                     photo: this.$refs.photoFile.files[0],
                     photoUrl: this.userDraft.photoUrl,
-                };
+                }
 
                 this.$store.dispatch('account/uploadUserPhoto', data)
                     .then(response => {
-                        this.$store.dispatch('app/displayNotice', 'Photo uploaded.');
-                        let photoUrl = response.data.photoUrl
-                        this.userDraft.photoId = response.data.photoId;
-                        this.userDraft.photoUrl = photoUrl + (photoUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000);
-                        this.errors = {};
+                        if (response.data && !response.data.error) {
+                            this.$store.dispatch('app/displayNotice', 'Photo uploaded.')
+                            let photoUrl = response.data.photoUrl
+                            this.userDraft.photoId = response.data.photoId
+                            this.userDraft.photoUrl = photoUrl + (photoUrl.match(/\?/g) ? '&' : '?') + Math.floor(Math.random() * 1000000)
+                            this.errors = {}
 
-                        this.photoLoading = false;
+                            this.loading.uploadPhoto = false
+                        } else {
+                            this.$store.dispatch('app/displayError', response.data.error)
+                            this.loading.uploadPhoto = false
+                        }
                     })
                     .catch(response => {
-                        this.photoLoading = false;
+                        this.loading.uploadPhoto = false
 
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t upload photo.';
-                        this.$store.dispatch('app/displayError', errorMessage);
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t upload photo.'
+                        this.$store.dispatch('app/displayError', errorMessage)
 
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
-                    });
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
+                    })
             },
 
             /**
              * Save the profile.
              */
             save() {
-                this.loading = true;
+                this.loading.page = true
 
                 this.$store.dispatch('account/saveUser', {
                         id: this.userDraft.id,
@@ -167,24 +162,21 @@
                         photoUrl: this.userDraft.photoUrl,
                     })
                     .then(() => {
-                        this.$store.dispatch('app/displayNotice', 'Settings saved.');
-                        this.errors = {};
-                        this.loading = false;
+                        this.$store.dispatch('app/displayNotice', 'Settings saved.')
+                        this.errors = {}
+                        this.loading.page = false
                     })
-                    .catch(response => {
-                        this.loading = false;
-
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save profile.';
-                        this.$store.dispatch('app/displayError', errorMessage);
-
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
-                    });
+                    .catch((response) => {
+                        this.loading.page = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save profile.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
+                    })
             }
         },
 
         mounted() {
-            this.userDraft = JSON.parse(JSON.stringify(this.currentUser));
+            this.userDraft = JSON.parse(JSON.stringify(this.user))
         }
-
     }
 </script>

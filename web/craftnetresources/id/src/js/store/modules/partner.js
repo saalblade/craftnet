@@ -1,7 +1,7 @@
 import * as types from '../../store/mutation-types'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import partnerApi from '../../api/partner'
+import partnerApi from '../../api/partners'
 
 Vue.use(Vuex)
 
@@ -17,7 +17,7 @@ const state = {
 */
 const getters = {
     showPartnerFeatures(state) {
-        return state.enablePartnerFeatures;
+        return state.enablePartnerFeatures
     }
 }
 
@@ -30,74 +30,69 @@ const actions = {
             if (state.partner) {
                 resolve({data: {partner: state.partner}})
             } else {
-                partnerApi.getPartner(response => {
-                    if (response.data && !response.data.error) {
-                        commit(types.RECEIVE_PARTNER, response.data.partner)
-                        resolve(response)
-                    } else {
-                        reject(response)
-                    }
-                }, response => {
-                    reject(response)
-                })
+                partnerApi.getPartner()
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            commit(types.RECEIVE_PARTNER, response.data.partner)
+                            resolve(response)
+                        } else {
+                            reject(response)
+                        }
+                    })
+                    .catch((error) => {
+                        // @todo return error responses like the rest of these actions
+                        reject(error.response)
+                    })
             }
         })
     },
 
     patchPartner({commit, state}, {draft, files}) {
-        // eslint-disable-next-line
-        console.warn('store patchPartner()', files)
-        // eslint-disable-next-line
-        console.warn('store patchPartner() partnerId', state.partner.id)
         return new Promise((resolve, reject) => {
-            partnerApi.patchPartner(
-                draft,
-                files,
-                state.partner.id,
-                response => {
+            partnerApi.patchPartner(draft, files, state.partner.id)
+                .then((response) => {
                     if (response.data.success) {
                         commit(types.RECEIVE_PARTNER, response.data.partner)
                     }
                     resolve(response)
-
-                }, error => {
-                    if (error.data) {
-                        reject(error.data.error)
+                })
+                .catch((error) => {
+                    // @todo test these error messages
+                    if (error.response.data) {
+                        reject(error.response.data.error)
                     }
 
-                    reject(error.statusText)
+                    reject(error.response.statusText)
                 })
         })
     },
 
     patchPartnerLocations({commit, state}, locations) {
         return new Promise((resolve, reject) => {
-            partnerApi.patchPartnerLocations(
-                locations,
-                state.partner.id,
-                response => {
+            partnerApi.patchPartnerLocations(locations, state.partner.id)
+                .then((response) => {
                     if (response.data.success) {
                         commit(types.RECEIVE_PARTNER_LOCATIONS, response.data.partner.locations)
                     }
                     resolve(response)
-                }, error => {
-                    reject(error.statusText)
+                })
+                .catch((error) => {
+                    reject(error.response.statusText)
                 })
         })
     },
 
     patchPartnerProjects({commit, state}, projects) {
         return new Promise((resolve, reject) => {
-            partnerApi.patchPartnerProjects(
-                projects,
-                state.partner.id,
-                response => {
+            partnerApi.patchPartnerProjects(projects, state.partner.id)
+                .then((response) => {
                     if (response.data.success) {
                         commit(types.RECEIVE_PARTNER_PROJECTS, response.data.partner.projects)
                     }
                     resolve(response)
-                }, error => {
-                    reject(error.statusText)
+                })
+                .catch((error) => {
+                    reject(error.response.statusText)
                 })
         })
     },

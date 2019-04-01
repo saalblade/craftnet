@@ -32,8 +32,6 @@
 
 <script>
     export default {
-
         props: ['address'],
-
     }
 </script>

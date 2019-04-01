@@ -6,7 +6,6 @@
             :account-name="(stripeAccount ? stripeAccount.display_name : '')"
             :connected="stripeAccount"
             :buttonLoading="disconnectLoading"
-            :loading="stripeAccountLoading"
             @connect="connect()"
             @disconnect="disconnect()"
     ></connected-app>
@@ -18,7 +17,6 @@
     import helpers from '../../../mixins/helpers'
 
     export default {
-
         mixins: [helpers],
 
         data() {
@@ -36,20 +34,16 @@
         },
 
         computed: {
-
             ...mapState({
-                stripeAccount: state => state.account.stripeAccount,
-                stripeAccountLoading: state => state.app.stripeAccountLoading,
+                stripeAccount: state => state.stripe.stripeAccount,
             }),
 
             stripeConnectUrl() {
                 return window.stripeConnectUrl;
             }
-
         },
 
         methods: {
-
             /**
              * Connect to Stripe account.
              */
@@ -63,13 +57,11 @@
             disconnect() {
                 this.disconnectLoading = true;
 
-                this.$store.dispatch('account/disconnectStripeAccount').then(() => {
+                this.$store.dispatch('stripe/disconnectStripeAccount').then(() => {
                     this.disconnectLoading = false;
                     this.$store.dispatch('app/displayNotice', 'Stripe account removed.');
                 });
             }
-
         },
-
     }
 </script>

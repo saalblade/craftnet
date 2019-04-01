@@ -16,18 +16,18 @@
                         </li>
                     </ul>
                     <div>
-                        <button class="btn btn-secondary" @click="$emit('edit', index)"><icon icon="pencil-alt" /> Edit</button>
+                        <btn icon="pencil" @click="$emit('edit', index)">Edit</btn>
                     </div>
                 </div>
             </div>
         </div>
         <modal v-if="isEditing" :show="isEditing" transition="fade" modal-type="wide" style="max-height: 100vh; overflow: scroll;">
             <div slot="body" class="p-4">
-                <text-field id="name" label="Project Name" v-model="project.name" :errors="localErrors.name" />
-                <text-field id="role" label="Role" instructions="e.g. “Craft Commerce with custom Hubspot integration” or “Design and custom plugin development”. Max 55 characters." v-model="project.role" :max="55" :errors="localErrors.role" />
-                <text-field id="url" label="URL" v-model="project.url" :errors="localErrors.url" />
-                <select-field id="linkType" label="Link Type" v-model="project.linkType" :options="options.linkType" :errors="localErrors.linkType" />
-                <checkbox-field id="withCraftCommerce" label="This project includes Craft Commerce" v-model="project.withCraftCommerce" :checked-value="1" />
+                <textbox id="name" label="Project Name" v-model="project.name" :errors="localErrors.name" />
+                <textbox id="role" label="Role" instructions="e.g. “Craft Commerce with custom Hubspot integration” or “Design and custom plugin development”. Max 55 characters." v-model="project.role" :max="55" :errors="localErrors.role" />
+                <textbox id="url" label="URL" v-model="project.url" :errors="localErrors.url" />
+                <dropdown id="linkType" label="Link Type" v-model="project.linkType" :options="options.linkType" :errors="localErrors.linkType" />
+                <checkbox id="withCraftCommerce" label="This project includes Craft Commerce" v-model="project.withCraftCommerce" :checked-value="1" />
 
                 <label>Screenshots<span class="text-red">*</span></label>
                 <p class="instructions">1 to 5 JPG screenshots required with a 12:7 aspect ratio. 1200px wide will do. Drag to re-order.</p>
@@ -47,36 +47,32 @@
 
                 <div v-if="project.screenshots.length <= 5">
                     <input type="file" accept=".jp2,.jpeg,.jpg,.jpx" @change="screenshotFileChange" ref="screenshotFiles" class="hidden" multiple=""><br>
-                    <button class="btn btn-sm btn-outline-secondary" @click="$refs.screenshotFiles.click()" :disabled="isUploading">
+                    <btn small :disabled="isUploading" @click="$refs.screenshotFiles.click()">
                         <span v-show="!isUploading"><icon icon="plus" /> Add screenshots</span>
                         <span v-show="isUploading">Uploading: {{ uploadProgress }}%</span>
                         <spinner v-show="isUploading"></spinner>
-                    </button>
+                    </btn>
                 </div>
 
                 <div class="mt-4 flex">
                     <div class="flex-1">
-                        <button
-                            class="btn btn-secondary"
-                            :class="{disabled: requestPending}"
+                        <btn
                             :disabled="requestPending"
-                            @click="$emit('cancel', index)">Cancel</button>
+                            @click="$emit('cancel', index)">Cancel</btn>
 
-                        <button
-                            class="btn btn-primary"
-                            :class="{disabled: requestPending}"
+                        <btn
+                            kind="primary"
                             :disabled="requestPending"
-                            @click="$emit('save')">Save</button>
+                            @click="$emit('save')">Save</btn>
 
                         <spinner :class="{'invisible': !requestPending}"></spinner>
                     </div>
                     <div>
-                        <button
+                        <btn
                             v-if="project.id !== 'new'"
-                            class="btn btn-danger"
-                            :class="{disabled: requestPending}"
+                            kind="danger"
                             :disabled="requestPending"
-                            @click="$emit('delete', index)">Delete</button>
+                            @click="$emit('delete', index)">Delete</btn>
                     </div>
                 </div>
             </div>
@@ -87,10 +83,9 @@
 <script>
     /* global Craft */
 
-    import axios from 'axios'
+    import partnerApi from '../../api/partners'
     import draggable from 'vuedraggable'
     import Modal from '../Modal'
-    import Spinner from '../Spinner'
 
 
     export default {
@@ -99,7 +94,6 @@
         components: {
             draggable,
             Modal,
-            Spinner,
         },
 
         data() {
@@ -136,38 +130,40 @@
 
         methods: {
             removeScreenshot(index) {
-                this.project.screenshots.splice(index, 1);
+                this.project.screenshots.splice(index, 1)
             },
 
             screenshotFileChange(event) {
                 let formData = new FormData()
 
                 for( var i = 0; i < event.target.files.length; i++ ){
-                    formData.append('screenshots[]', event.target.files[i]);
+                    formData.append('screenshots[]', event.target.files[i])
                 }
 
                 this.isUploading = true
 
-                axios.post(Craft.actionUrl + '/craftnet/partners/upload-screenshots', formData, {
-                    headers: {
-                        'X-CSRF-Token': Craft.csrfTokenValue,
-                    },
-                    onUploadProgress: (event) => {
-                        this.uploadProgress = Math.round(event.loaded / event.total * 100)
-                    }
-                }).then(response => {
-                    this.isUploading = false
-                    this.$store.dispatch('app/displayNotice', 'Uploaded')
+                partnerApi.uploadScreenshots(formData, {
+                        headers: {
+                            'X-CSRF-Token': Craft.csrfTokenValue,
+                        },
+                        onUploadProgress: (event) => {
+                            this.uploadProgress = Math.round(event.loaded / event.total * 100)
+                        }
+                    })
+                    .then(response => {
+                        this.isUploading = false
+                        this.$store.dispatch('app/displayNotice', 'Uploaded')
 
-                    let screenshots = response.data.screenshots || []
+                        let screenshots = response.data.screenshots || []
 
-                    for (let i in screenshots) {
-                        this.project.screenshots.push(screenshots[i])
-                    }
-                }).catch(error => {
-                    this.isUploading = false
-                    this.$store.dispatch('app/displayNotice', error)
-                });
+                        for (let i in screenshots) {
+                            this.project.screenshots.push(screenshots[i])
+                        }
+                    })
+                    .catch(error => {
+                        this.isUploading = false
+                        this.$store.dispatch('app/displayNotice', error)
+                    })
             }
         },
 

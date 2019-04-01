@@ -26,12 +26,14 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import Plugins from './steps/Plugins'
     import ExtendUpdates from './steps/ExtendUpdates'
     import RenewPluginLicense from './steps/RenewPluginLicense'
+    import helpers from '../../../mixins/helpers'
 
     export default {
+        mixins: [helpers],
 
         props: ['license'],
 
@@ -49,16 +51,9 @@
         },
 
         computed: {
-
             ...mapState({
                 renewLicensesStep: state => state.app.renewLicensesStep,
             }),
-
-            ...mapGetters({
-                renewableLicenses: 'licenses/renewableLicenses',
-            }),
-
         },
-
     }
 </script>

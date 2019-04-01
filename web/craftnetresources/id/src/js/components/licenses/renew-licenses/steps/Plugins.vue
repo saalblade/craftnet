@@ -33,37 +33,25 @@
                 </tbody>
             </table>
 
-            <button @click="$emit('back')" class="btn btn-secondary">Back</button>
-            <button @click="addToCart()" class="btn btn-primary">Add to cart</button>
+            <btn @click="$emit('back')">Back</btn>
+            <btn @click="addToCart()" kind="primary">Add to cart</btn>
         </template>
     </div>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
-    import Spinner from '../../../Spinner'
+    import helpers from '../../../../mixins/helpers'
 
     export default {
+        mixins: [helpers],
 
         props: ['license', 'renew', 'checkedLicenses'],
-
-        components: {
-            Spinner,
-        },
 
         data() {
             return {
                 loading: false,
                 checkAllChecked: false
             }
-        },
-
-        computed: {
-
-            ...mapGetters({
-                renewableLicenses: 'licenses/renewableLicenses',
-            }),
-
         },
 
         methods: {
@@ -85,7 +73,7 @@
             checkAll($event) {
                 let checkedLicenses = []
 
-                if($event.target.checked) {
+                if ($event.target.checked) {
                     this.renewableLicenses(this.license, this.renew).forEach(function(renewableLicense, key) {
                         checkedLicenses[key] = 1
                     })
@@ -123,13 +111,14 @@
                         this.$router.push({path: '/cart'})
                         this.$emit('addToCart')
                     })
+                    .catch((errorMessage) => {
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
-
         },
 
         mounted() {
             this.$refs.checkAll.click()
         }
-
     }
 </script>

@@ -119,28 +119,39 @@ class OauthController extends Controller
             $user = new UserEntity();
             $user->setIdentifier($currentCraftUser->id);
 
-
-            // Set the user on the auth request
-            $authRequest->setUser($user);
-
-
-            // Once the user has approved or denied the client update the status
-            // (true = approved, false = denied)
-            $approved = false;
-
-            if (Craft::$app->getRequest()->getBodyParam('approve')) {
-                $approved = true;
-            }
-
-            $authRequest->setAuthorizationApproved($approved);
-
             // PSR7 compliant response
             $response = new Response();
 
-            // Return the HTTP redirect response
-            $redirectResponse = $server->completeAuthorizationRequest($authRequest, $response);
+            try {
+                // Set the user on the auth request
+                $authRequest->setUser($user);
 
-            return Craft::$app->getResponse()->redirect($redirectResponse->getHeaders()['Location'][0]);
+
+                // Once the user has approved or denied the client update the status
+                // (true = approved, false = denied)
+                $approved = false;
+
+                if (Craft::$app->getRequest()->getBodyParam('approve')) {
+                    $approved = true;
+                }
+
+                $authRequest->setAuthorizationApproved($approved);
+
+                // Return the HTTP redirect response
+
+                $redirectResponse = $server->completeAuthorizationRequest($authRequest, $response);
+
+                return Craft::$app->getResponse()->redirect($redirectResponse->getHeaders()['Location'][0]);
+            } catch(OAuthServerException $exception) {
+                $exceptionResponse = $exception->generateHttpResponse($response);
+                $location = $exceptionResponse->getHeaderLine('Location');
+
+                if($location) {
+                    return Craft::$app->getResponse()->redirect($location);
+                }
+
+                throw $exception;
+            }
         }
     }
 

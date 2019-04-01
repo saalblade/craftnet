@@ -1,26 +1,32 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import app from './modules/app'
-import developers from './modules/developers'
 import account from './modules/account'
-import licenses from './modules/licenses'
-import craftId from './modules/craft-id'
+import app from './modules/app'
+import apps from './modules/apps'
 import cart from './modules/cart'
-import pluginStore from './modules/plugin-store'
+import cmsLicenses from './modules/cms-licenses'
+import craftId from './modules/craft-id'
 import partner from './modules/partner'
+import pluginLicenses from './modules/plugin-licenses'
+import plugins from './modules/plugins'
+import pluginStore from './modules/plugin-store'
+import stripe from './modules/stripe'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
     strict: true,
     modules: {
-        app,
-        craftId,
         account,
-        developers,
-        licenses,
+        app,
+        apps,
         cart,
+        cmsLicenses,
+        craftId,
+        partner,
+        pluginLicenses,
+        plugins,
         pluginStore,
-        partner
+        stripe,
     }
 })

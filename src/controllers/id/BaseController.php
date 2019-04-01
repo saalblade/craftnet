@@ -14,14 +14,6 @@ use yii\helpers\Markdown;
  */
 abstract class BaseController extends Controller
 {
-    // Properties
-    // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
-    public $enableCsrfValidation = false;
-
     // Protected Methods
     // =========================================================================
 
@@ -29,6 +21,7 @@ abstract class BaseController extends Controller
      * @param Plugin $plugin
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     protected function pluginTransformer(Plugin $plugin): array
     {
@@ -107,5 +100,32 @@ abstract class BaseController extends Controller
             'lastHistoryNote' => $lastHistoryNote,
             'activeInstalls' => $plugin->activeInstalls,
         ];
+    }
+
+    /**
+     * Get expiry date options.
+     *
+     * @param \DateTime $expiryDate
+     * @return array
+     * @throws \Exception
+     */
+    protected function getExpiryDateOptions(\DateTime $expiryDate): array
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $dates = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+            if ($expiryDate < $now) {
+                $date = (new \DateTime('now', new \DateTimeZone('UTC')))
+                    ->modify("+{$i} years");
+                $dates[] = ["{$i}y", $date->format('Y-m-d')];
+            } else {
+                $date = clone $expiryDate;
+                $date = $date->modify("+{$i} years");
+                $dates[] = ["{$date->format('Y-m-d')}", $date->format('Y-m-d')];
+            }
+        }
+
+        return $dates;
     }
 }

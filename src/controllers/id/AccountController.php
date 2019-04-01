@@ -6,12 +6,13 @@ use Craft;
 use craft\commerce\models\Address;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Asset;
+use craft\elements\User;
 use craft\errors\UploadFailedException;
 use craft\helpers\Assets;
 use craft\helpers\FileHelper;
+use craft\helpers\Json;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use craftnet\Module;
 use Throwable;
 use yii\base\UserException;
 use yii\web\BadRequestHttpException;
@@ -27,21 +28,39 @@ class AccountController extends Controller
     // =========================================================================
 
     /**
-     * Account index.
-     *
      * @return Response
      */
-    public function actionIndex(): Response
+    public function actionGetAccount(): Response
     {
-        $stripeAccessToken = null;
         $user = Craft::$app->getUser()->getIdentity();
+        $photo = $user->getPhoto();
+        $photoUrl = $photo ? Craft::$app->getAssets()->getAssetUrl($photo, [
+            'mode' => 'crop',
+            'width' => 200,
+            'height' => 200,
+        ], true) : null;
 
-        $craftIdConfig = Craft::$app->getConfig()->getConfigFromFile('craftid');
-        $stripePublicKey = $craftIdConfig['stripePublicKey'];
-
-        return $this->renderTemplate('account/index', [
-            'stripeAccessToken' => $user->stripeAccessToken,
-            'stripePublicKey' => $stripePublicKey
+        return $this->asJson([
+            'billingAddress' => $this->getBillingAddress($user),
+            'card' => $this->getCard($user),
+            'cardToken' => $this->getCardToken($user),
+            'user' => [
+                'id' => $user->id,
+                'email' => $user->email,
+                'username' => $user->username,
+                'firstName' => $user->firstName,
+                'lastName' => $user->lastName,
+                'developerName' => $user->developerName,
+                'developerUrl' => $user->developerUrl,
+                'location' => $user->location,
+                'enablePluginDeveloperFeatures' => $user->isInGroup('developers') ? true : false,
+                'enableShowcaseFeatures' => $user->enableShowcaseFeatures == 1 ? true : false,
+                'enablePartnerFeatures' => $user->enablePartnerFeatures == 1 ? true : false,
+                'groups' => $user->getGroups(),
+                'photoId' => $user->getPhoto() ? $user->getPhoto()->getId() : null,
+                'photoUrl' => $photoUrl,
+                'hasApiToken' => $user->apiToken !== null,
+            ],
         ]);
     }
 
@@ -50,9 +69,8 @@ class AccountController extends Controller
      *
      * @return null|Response
      * @throws BadRequestHttpException
-     * @throws \yii\web\ForbiddenHttpException
      */
-    public function actionUploadUserPhoto()
+    public function actionUploadUserPhoto(): ?Response
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
@@ -106,7 +124,6 @@ class AccountController extends Controller
      * @throws \Throwable
      * @throws \craft\errors\ElementNotFoundException
      * @throws \yii\base\Exception
-     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionDeleteUserPhoto(): Response
     {
@@ -133,7 +150,8 @@ class AccountController extends Controller
      * Generate API token.
      *
      * @return Response
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
      */
     public function actionGenerateApiToken(): Response
     {
@@ -150,31 +168,6 @@ class AccountController extends Controller
             $apiToken = $user->generateApiToken();
 
             return $this->asJson(['apiToken' => $apiToken]);
-        } catch (Throwable $e) {
-            return $this->asErrorJson($e->getMessage());
-        }
-    }
-
-    /**
-     * Get invoices.
-     *
-     * @return Response
-     */
-    public function actionGetInvoices(): Response
-    {
-        $this->requireLogin();
-        $user = Craft::$app->getUser()->getIdentity();
-
-        try {
-            $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
-
-            $invoices = [];
-
-            if ($customer) {
-                $invoices = Module::getInstance()->getInvoiceManager()->getInvoices($customer);
-            }
-
-            return $this->asJson($invoices);
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
@@ -249,5 +242,87 @@ class AccountController extends Controller
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * @param User $user
+     *
+     * @return array|null
+     */
+    private function getCard(User $user): ?array
+    {
+        $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
+
+        if (\count($paymentSources) === 0) {
+            return null;
+        }
+
+        $paymentSource = $paymentSources[0];
+        $response = Json::decode($paymentSource->response);
+
+        if (isset($response['object']) && $response['object'] === 'card') {
+            return $response;
+        } elseif (isset($response['object']) && $response['object'] === 'source') {
+            return $response['card'];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param User $user
+     * @return null|string
+     */
+    private function getCardToken(User $user): ?string
+    {
+        $paymentSources = Commerce::getInstance()->getPaymentSources()->getAllPaymentSourcesByUserId($user->id);
+
+        if (\count($paymentSources) === 0) {
+            return null;
+        }
+
+        $paymentSource = $paymentSources[0];
+
+        return $paymentSource->token;
+    }
+
+    /**
+     * @param User $user
+     * @return array|null
+     */
+    private function getBillingAddress(User $user): ?array
+    {
+        $customer = Commerce::getInstance()->getCustomers()->getCustomerByUserId($user->id);
+
+        if (!$customer) {
+            return null;
+        }
+
+        $primaryBillingAddress = $customer->getPrimaryBillingAddress();
+
+        if (!$primaryBillingAddress) {
+            return null;
+        }
+
+        $billingAddress = $primaryBillingAddress->toArray();
+
+        $country = $primaryBillingAddress->getCountry();
+
+        $billingAddress['country'] = '';
+
+        if ($country) {
+            $billingAddress['country'] = $country->iso;
+        }
+
+        $state = $primaryBillingAddress->getState();
+
+        if ($state) {
+            $billingAddress['state'] = $state->abbreviation;
+        }
+
+        return $billingAddress;
     }
 }

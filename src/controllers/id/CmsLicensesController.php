@@ -18,7 +18,7 @@ use yii\web\Response;
  *
  * @property Module $module
  */
-class CmsLicensesController extends Controller
+class CmsLicensesController extends BaseController
 {
     // Public Methods
     // =========================================================================
@@ -78,19 +78,86 @@ class CmsLicensesController extends Controller
     }
 
     /**
-     * Returns licenses for the current user.
+     * Get the number of expiring licenses.
      *
      * @return Response
-     * @throws LicenseNotFoundException
+     */
+    public function actionGetExpiringLicensesTotal(): Response
+    {
+        $user = Craft::$app->getUser()->getIdentity();
+
+        try {
+            $total = Module::getInstance()->getCmsLicenseManager()->getExpiringLicensesTotal($user);
+
+            return $this->asJson($total);
+        } catch (Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Get license by ID.
+     *
+     * @return Response
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionGetLicenseById(): Response
+    {
+        $user = Craft::$app->getUser()->getIdentity();
+        $id = Craft::$app->getRequest()->getRequiredParam('id');
+
+        try {
+            $license = Module::getInstance()->getCmsLicenseManager()->getLicenseById($id);
+
+            if ($license->ownerId !== $user->id) {
+                throw new UnauthorizedHttpException('Not Authorized');
+            }
+
+            $licenseArray = Module::getInstance()->getCmsLicenseManager()->transformLicenseForOwner($license, $user, ['pluginLicenses']);
+
+            return $this->asJson($licenseArray);
+        } catch (Throwable $e) {
+            return $this->asErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Returns the current user’s licenses for `vue-tables-2`.
+     *
+     * @return Response
      */
     public function actionGetLicenses(): Response
     {
         $user = Craft::$app->getUser()->getIdentity();
 
-        try {
-            $licenses = Module::getInstance()->getCmsLicenseManager()->getLicensesArrayByOwner($user);
+        $filter = Craft::$app->getRequest()->getParam('filter');
+        $limit = Craft::$app->getRequest()->getParam('limit', 10);
+        $page = (int) Craft::$app->getRequest()->getParam('page', 1);
+        $orderBy = Craft::$app->getRequest()->getParam('orderBy');
+        $ascending = Craft::$app->getRequest()->getParam('ascending');
+        $byColumn = Craft::$app->getRequest()->getParam('byColumn');
 
-            return $this->asJson($licenses);
+        try {
+            $licenses = Module::getInstance()->getCmsLicenseManager()->getLicensesByOwner($user, $filter, $limit, $page, $orderBy, $ascending, $byColumn);
+            $totalLicenses = Module::getInstance()->getCmsLicenseManager()->getTotalLicensesByOwner($user, $filter);
+
+            $last_page = ceil($totalLicenses / $limit);
+            $next_page_url = '?next';
+            $prev_page_url = '?prev';
+            $from = ($page - 1) * $limit;
+            $to = ($page * $limit) - 1;
+
+            return $this->asJson([
+                'total' => $totalLicenses,
+                'per_page' => $limit,
+                'current_page' => $page,
+                'last_page' => $last_page,
+                'next_page_url' => $next_page_url,
+                'prev_page_url' => $prev_page_url,
+                'from' => $from,
+                'to' => $to,
+                'data' => $licenses,
+            ]);
         } catch (Throwable $e) {
             return $this->asErrorJson($e->getMessage());
         }

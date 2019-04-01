@@ -9,8 +9,6 @@ Vue.use(Vuex)
 const state = {
     loading: true,
     notification: null,
-    stripeAccountLoading: true,
-    invoicesLoading: true,
     renewLicensesStep: null,
     showRenewLicensesModal: false,
     renewLicense: null,
@@ -25,7 +23,6 @@ const getters = {}
  * Actions
  */
 const actions = {
-
     /**
      *  Show the renew licenses modal at a given step.
      *
@@ -66,33 +63,23 @@ const actions = {
             message: message
         })
 
-        let notificationDuration = 2000;
+        let notificationDuration = 2000
 
         if (type === 'error') {
-            notificationDuration = notificationDuration * 4;
+            notificationDuration = notificationDuration * 4
         }
 
         setTimeout(function() {
-            this.notification = null;
+            this.notification = null
             commit('updateNotification', null)
-        }.bind(this), notificationDuration);
+        }.bind(this), notificationDuration)
     },
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-
-    updateStripeAccountLoading(state, loading) {
-        state.stripeAccountLoading = loading
-    },
-
-    updateInvoicesLoading(state, loading) {
-        state.invoicesLoading = loading
-    },
-
     updateRenewLicensesStep(state, step) {
         state.renewLicensesStep = step
     },
@@ -110,9 +97,8 @@ const mutations = {
     },
 
     updateNotification(state, notification) {
-        state.notification = notification;
+        state.notification = notification
     },
-
 }
 
 export default {

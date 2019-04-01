@@ -1,13 +1,13 @@
 /* global Craft */
 
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
-
-    getCraftIdData(cb, cbError) {
-        return axios.post(Craft.actionUrl + '/craftnet/id/craft-id')
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
-    },
-
+    getCountries() {
+        return axios.get(Craft.actionUrl + '/craftnet/id/craft-id/countries', {}, {
+            headers: {
+                'X-CSRF-Token': Craft.csrfTokenValue,
+            }
+        })
+    }
 }

@@ -1,78 +1,104 @@
 <template>
-    <div v-if="license">
-        <p><router-link class="nav-link" to="/licenses/plugins" exact>← Plugins</router-link></p>
-        <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
+    <div>
+        <template v-if="!loading">
+            <p><router-link class="nav-link" to="/licenses/plugins" exact>← Plugins</router-link></p>
 
-        <plugin-license-details :license="license"></plugin-license-details>
+            <template v-if="error">
+                <p class="text-red">Couldn’t load license.</p>
+            </template>
 
-        <license-history :history="license.history" />
+            <template v-if="license">
+                <h1><code>{{ license.key.substr(0, 4) }}</code></h1>
 
-        <div class="card card-danger mb-3">
-            <div class="card-header">Danger Zone</div>
-            <div class="card-body">
-                <h5>Release license</h5>
-                <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
-                <div><button class="btn btn-danger" @click="releasePluginLicense()">Release License</button></div>
-            </div>
-        </div>
+                <plugin-license-details :license.sync="license"></plugin-license-details>
+
+                <license-history :history="license.history" />
+
+                <div class="card card-danger mb-3">
+                    <div class="card-header">Danger Zone</div>
+                    <div class="card-body">
+                        <h5>Release license</h5>
+                        <p>Release this license if you no longer wish to use it, so that it can be claimed by someone else.</p>
+                        <div>
+                            <btn kind="danger" @click="releasePluginLicense()">Release License</btn>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </template>
+        <template v-else>
+            <spinner></spinner>
+        </template>
     </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-    import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable';
-    import PluginLicenseDetails from '../../../components/licenses/PluginLicenseDetails';
-    import LicenseHistory from '../../../components/licenses/LicenseHistory';
+    import pluginLicensesApi from '../../../api/plugin-licenses'
+    import CmsLicensesTable from '../../../components/licenses/CmsLicensesTable'
+    import PluginLicenseDetails from '../../../components/licenses/PluginLicenseDetails'
+    import LicenseHistory from '../../../components/licenses/LicenseHistory'
 
     export default {
-
         components: {
             CmsLicensesTable,
             PluginLicenseDetails,
             LicenseHistory,
         },
 
-        computed: {
-
-            ...mapState({
-                pluginLicenses: state => state.licenses.pluginLicenses,
-            }),
-
-            license() {
-                return this.pluginLicenses.find(l => l.id == this.$route.params.id);
-            },
-
+        data() {
+            return {
+                loading: false,
+                license: null,
+                error: false,
+            }
         },
 
         methods: {
-
             releasePluginLicense() {
                 if (!window.confirm("Are you sure you want to release this license?")) {
-                    return false;
+                    return false
                 }
 
-                this.$store.dispatch('licenses/releasePluginLicense', {
-                        pluginHandle: this.license.plugin.handle,
-                        licenseKey: this.license.key,
+                pluginLicensesApi.releasePluginLicense({
+                    pluginHandle: this.license.plugin.handle,
+                    licenseKey: this.license.key,
+                })
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            this.$store.dispatch('app/displayNotice', 'Plugin license released.')
+                            this.$router.push({path: '/licenses/plugins'})
+                        } else {
+                            this.$store.dispatch('app/displayError', response.data.error)
+                        }
                     })
-                    .then(() => {
-                        this.$store.dispatch('licenses/getCmsLicenses');
-                        this.$store.dispatch('licenses/getPluginLicenses');
-                        this.$store.dispatch('account/getInvoices');
-                        this.$store.dispatch('app/displayNotice', 'Plugin license released.');
-                        this.$router.push({path: '/licenses/plugins'});
+                    .catch((error) => {
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t release plugin license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
-                    .catch(response => {
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t release plugin license.';
-                        this.$store.dispatch('app/displayError', errorMessage);
-                    });
             },
-
         },
 
         mounted() {
-            this.$store.commit('app/updateRenewLicense', this.license)
-        }
+            const licenseId = this.$route.params.id
 
+            this.loading = true
+            this.error = false
+
+            pluginLicensesApi.getPluginLicense(licenseId)
+                .then((response) => {
+                    this.loading = false
+
+                    if (response.data && response.data.error) {
+                        this.error = true
+                    } else {
+                        this.license = response.data
+                        this.$store.commit('app/updateRenewLicense', this.license)
+                    }
+                })
+                .catch(() => {
+                    this.loading = false
+                    this.error = true
+                })
+        }
     }
 </script>

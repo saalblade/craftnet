@@ -18,19 +18,14 @@
             </div>
 
             <div v-if="!showForm">
-                <button @click="editInvoiceDetails()" type="button"
-                        class="btn btn-secondary btn-sm"
-                        data-facebox="#billing-contact-info-modal">
-                    <icon icon="pencil-alt" />
-                    Edit
-                </button>
+                <btn small icon="pencil" @click="editInvoiceDetails()">Edit</btn>
             </div>
         </div>
 
         <form v-if="showForm" @submit.prevent="save()">
-            <text-field id="businessTaxId" label="Tax ID" v-model="invoiceDetailsDraft.businessTaxId" :errors="errors.businessTaxId" />
-            <input type="submit" class="btn btn-primary" value="Save" />
-            <input type="button" class="btn btn-secondary" value="Cancel" @click="cancel()" />
+            <textbox id="businessTaxId" label="Tax ID" v-model="invoiceDetailsDraft.businessTaxId" :errors="errors.businessTaxId" />
+            <btn kind="primary" type="submit" :loading="loading" :disabled="loading">Save</btn>
+            <btn @click="cancel()" :disabled="loading">Cancel</btn>
         </form>
     </div>
 </template>
@@ -39,9 +34,9 @@
     import {mapState} from 'vuex'
 
     export default {
-
         data() {
             return {
+                loading: false,
                 errors: {},
                 showForm: false,
                 invoiceDetailsDraft: {},
@@ -49,36 +44,29 @@
         },
 
         computed: {
-
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
                 billingAddress: state => state.account.billingAddress,
             }),
-
         },
 
         methods: {
-
-            /**
-             * Edit invoice details.
-             */
             editInvoiceDetails() {
-                this.showForm = true;
+                this.showForm = true
 
                 if (this.billingAddress) {
-                    this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress));
+                    this.invoiceDetailsDraft = JSON.parse(JSON.stringify(this.billingAddress))
                 }
             },
 
-            /**
-             * Saves the user’s invoice details.
-             */
             save() {
+                this.loading = true
+
                 let data = {
                     businessTaxId: this.invoiceDetailsDraft.businessTaxId,
                 }
 
-                if(this.billingAddress) {
+                if (this.billingAddress) {
                     data = Object.assign({}, data, {
                         id: this.billingAddress.id,
                         firstName: this.billingAddress.firstName,
@@ -90,35 +78,28 @@
                         state: this.billingAddress.state,
                         zipCode: this.billingAddress.zipCode,
                         country: this.billingAddress.country,
-                    });
+                    })
                 }
 
                 this.$store.dispatch('account/saveBillingInfo', data)
-                    .then(response => {
-                        if (response.data.error) {
-                            const errorMessage = response.data.error
-                            this.$store.dispatch('app/displayError', errorMessage)
-                        } else {
-                            this.$store.dispatch('app/displayNotice', 'Invoice details saved.');
-                            this.showForm = false;
-                            this.errors = {};
-                        }
-                    }).catch(response => {
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.';
-                        this.$store.dispatch('app/displayError', errorMessage);
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
-                    });
+                    .then(() => {
+                        this.loading = false
+                        this.$store.dispatch('app/displayNotice', 'Invoice details saved.')
+                        this.showForm = false
+                        this.errors = {}
+                    })
+                    .catch(response => {
+                        this.loading = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save invoice details.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
+                    })
             },
 
-            /**
-             * Cancel changes.
-             */
             cancel() {
-                this.showForm = false;
-                this.errors = {};
+                this.showForm = false
+                this.errors = {}
             }
-
         }
-
     }
 </script>

@@ -2,96 +2,171 @@
     <div>
         <h1>Sales</h1>
 
-        <template v-if="salesToRender.length > 0">
-            <div class="field mb-6">
-                <text-input class="form-control" id="searchQuery" name="searchQuery" type="text" placeholder="Search sales" v-model="searchQuery" />
+        <div class="flex mb-6">
+            <div class="flex-1">
+                <filter-bar placeholder="Customer email, plugin name…" @filter-set="onFilterSet" @filter-reset="onFilterReset"></filter-bar>
             </div>
 
-            <div class="card card-table responsive-content">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Customer</th>
-                        <th>Type</th>
-                        <th>Gross Amount</th>
-                        <th>Net Amount</th>
-                        <th>Date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(sale, key) in salesToRender" :key="'sale-' + key">
-                        <td>{{ sale.plugin.name }}</td>
-                        <td><a :href="'mailto:'+sale.customer.email">{{ sale.customer.email }}</a></td>
-                        <td>
-                            <template v-if="sale.purchasableType === 'craftnet\\plugins\\PluginRenewal'">
-                                Renewal
-                            </template>
-                            <template v-else>
-                                License
-                            </template>
-
-                            <div class="text-secondary" v-for="(adjustment, adjustmentKey) in sale.adjustments" :key="'adjustment-' + adjustmentKey">
-                                {{adjustment.name}}
-                            </div>
-                        </td>
-                        <td>{{ sale.grossAmount|currency }}</td>
-                        <td>{{ sale.netAmount|currency }}</td>
-                        <td class="date-col">{{ sale.saleTime|moment("LLL") }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="mx-2 flex items-center">
+                <spinner :class="{invisible: !loading}"></spinner>
             </div>
-        </template>
-        <template v-else>
-            <empty>
-                <icon icon="dollar-sign" cssClass="text-5xl mb-4 text-grey-light" />
-                <div class="font-bold">No sales</div>
-                <div>You don’t have any sales yet.</div>
-            </empty>
-        </template>
+        </div>
+
+        <div class="card card-table" :class="{'opacity-25': loading}">
+            <vuetable
+                    ref="vuetable"
+                    pagination-path=""
+                    :api-url="apiUrl"
+                    :fields="fields"
+                    :append-params="moreParams"
+                    @vuetable:pagination-data="onPaginationData"
+                    @vuetable:loading="onLoading"
+                    @vuetable:loaded="onLoaded"
+            >
+                <template slot="item" slot-scope="props">
+                    {{props.rowData.plugin.name}}
+                </template>
+
+                <template slot="customer" slot-scope="props">
+                    <a :href="'mailto:'+props.rowData.customer.email">{{ props.rowData.customer.email }}</a>
+                </template>
+
+                <template slot="type" slot-scope="props">
+                    <template v-if="props.rowData.purchasableType === 'craftnet\\plugins\\PluginRenewal'">
+                        Renewal
+                    </template>
+                    <template v-else>
+                        License
+                    </template>
+
+                    <div class="text-secondary" v-for="(adjustment, adjustmentKey) in props.rowData.adjustments" :key="'adjustment-' + adjustmentKey">
+                        {{adjustment.name}}
+                    </div>
+                </template>
+
+                <template slot="grossAmount" slot-scope="props">
+                    {{props.rowData.grossAmount|currency}}
+                </template>
+
+                <template slot="netAmount" slot-scope="props">
+                    {{props.rowData.netAmount|currency}}
+                </template>
+
+                <template slot="date" slot-scope="props">
+                    {{props.rowData.saleTime|moment("LLL")}}
+                </template>
+            </vuetable>
+        </div>
+
+        <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
+
+        <!--
+        <empty>
+            <icon icon="dollar-sign" cssClass="text-5xl mb-4 text-grey-light" />
+            <div class="font-bold">No sales</div>
+            <div>You don’t have any sales yet.</div>
+        </empty>
+        -->
     </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    /* global Craft */
+
     import Empty from '../../../components/Empty'
+    import FilterBar from '../../../components/FilterBar'
+    import Vuetable from 'vuetable-2/src/components/Vuetable'
+    import VuetablePagination from '../../../components/VuetablePagination'
 
     export default {
-
         components: {
             Empty,
+            FilterBar,
+            Vuetable,
+            VuetablePagination,
         },
 
         data() {
             return {
                 searchQuery: '',
+                loading: false,
+                options:{
+                    perPage: 10,
+                    texts: {
+                        filter: "",
+                        filterPlaceholder: "Search licenses"
+                    },
+                    headings: {
+                        expiresOn: 'Updates Until',
+                        autoRenew: 'Auto Renew'
+                    },
+                    filterable: true,
+                },
+                fields: [
+                    {
+                        name: '__slot:item',
+                        title: 'Item',
+                    },
+                    {
+                        name: '__slot:customer',
+                        title: 'Customer',
+                    },
+                    {
+                        name: '__slot:type',
+                        title: 'Type',
+                    },
+                    {
+                        name: '__slot:grossAmount',
+                        title: 'Gross Amount',
+                    },
+                    {
+                        name: '__slot:netAmount',
+                        title: 'Net Amount',
+                    },
+                    {
+                        name: '__slot:date',
+                        title: 'Date',
+                    },
+                ],
+                moreParams: {}
             }
         },
 
         computed: {
-
-            ...mapState({
-                sales: state => state.developers.sales,
-            }),
-
-            salesToRender() {
-                let searchQuery = this.searchQuery;
-                return this.sales.filter(function(sale) {
-                    if (sale) {
-                        let searchQueryRegExp = new RegExp(searchQuery, 'gi');
-
-                        if (sale.customer.name.match(searchQueryRegExp)) {
-                            return true;
-                        }
-
-                        if (sale.customer.email.match(searchQueryRegExp)) {
-                            return true;
-                        }
-                    }
-                });
-            },
+            apiUrl() {
+                return Craft.actionUrl + '/craftnet/id/sales/get-sales'
+            }
         },
 
+        methods: {
+            onFilterSet (filterText) {
+                this.moreParams = {
+                    'filter': filterText
+                }
+
+                this.$nextTick( () => this.$refs.vuetable.refresh())
+            },
+
+            onFilterReset () {
+                this.moreParams = {}
+                this.$nextTick( () => this.$refs.vuetable.refresh())
+            },
+
+            onPaginationData (paginationData) {
+                this.$refs.pagination.setPaginationData(paginationData)
+            },
+
+            onChangePage (page) {
+                this.$refs.vuetable.changePage(page)
+            },
+
+            onLoading() {
+                this.loading = true
+            },
+
+            onLoaded() {
+                this.loading = false
+            },
+        },
     }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <text-field placeholder="Filter repositories" v-model="q" />
+        <textbox placeholder="Filter repositories" v-model="q" />
 
         <list-group v-if="filteredRepositories.length > 0">
             <list-group-item v-for="(repository, key) in filteredRepositories" :key="key">
@@ -10,8 +10,13 @@
                     </div>
                     <div>
                         <spinner v-if="isLoading(repository.html_url)"></spinner>
-                        <a v-if="!repositoryIsInUse(repository.html_url)" href="#" class="btn btn-sm btn-primary" @click.prevent="$emit('selectRepository', repository)">Select</a>
-                        <a v-else href="#" class="btn btn-sm btn-light disabled" :class="{ disabled: repositoryIsInUse(repository.html_url )}">Already in use</a>
+
+                        <template v-if="!repositoryIsInUse(repository.html_url)">
+                            <btn kind="primary" small @click.prevent="$emit('selectRepository', repository)">Select</btn>
+                        </template>
+                        <template v-else>
+                            <btn :disabled="repositoryIsInUse(repository.html_url )">Already in use</btn>
+                        </template>
                     </div>
                 </div>
             </list-group-item>
@@ -27,10 +32,8 @@
     import {mapState, mapGetters} from 'vuex';
     import ListGroup from '../ListGroup'
     import ListGroupItem from '../ListGroupItem'
-    import Spinner from '../Spinner'
 
     export default {
-
         props: ['appHandle', 'loadingRepository'],
 
         data() {
@@ -42,17 +45,15 @@
         components: {
             ListGroup,
             ListGroupItem,
-            Spinner,
         },
 
         computed: {
-
             ...mapState({
-                apps: state => state.account.apps,
+                apps: state => state.apps.apps,
             }),
 
             ...mapGetters({
-                repositoryIsInUse: 'developers/repositoryIsInUse',
+                repositoryIsInUse: 'plugins/repositoryIsInUse',
             }),
 
             app() {
@@ -79,11 +80,9 @@
                     }
                 });
             }
-
         },
 
         methods: {
-
             /**
              * Is repository loading?
              *
@@ -93,8 +92,6 @@
             isLoading(repositoryUrl) {
                 return this.loadingRepository === repositoryUrl;
             }
-
         }
-
     }
 </script>

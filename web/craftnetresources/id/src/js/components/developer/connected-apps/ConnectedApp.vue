@@ -20,10 +20,10 @@
                 </div>
                 <div class="ml-4">
                     <template v-if="connected">
-                        <button class="btn btn-danger btn-sm" @click="$emit('disconnect')">Disconnect</button>
+                        <btn kind="danger" small @click="$emit('disconnect')">Disconnect</btn>
                     </template>
                     <template v-else>
-                        <button class="btn btn-primary" @click.prevent="$emit('connect')">Connect</button>
+                        <btn kind="primary" @click.prevent="$emit('connect')">Connect</btn>
                     </template>
 
                     <div v-if="buttonLoading" class="mt-2 text-right">
@@ -37,10 +37,8 @@
 
 <script>
     import ListGroupItem from '../../ListGroupItem'
-    import Spinner from '../../Spinner'
 
     export default {
-
         props: ['name', 'description', 'icon', 'accountName', 'connected', 'buttonLoading', 'loading'],
 
         data() {
@@ -57,8 +55,6 @@
 
         components: {
             ListGroupItem,
-            Spinner,
         }
-
     }
 </script>

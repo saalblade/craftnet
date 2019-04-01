@@ -4,29 +4,32 @@
 {% set config = craft.app.config.getConfigFromFile('craftid') %}
 
 {% js at head %}
-window.craftIdUrl = "{{ config.craftIdUrl }}";
+    window.craftIdUrl = "{{ config.craftIdUrl }}";
     window.currentUserId = {{ currentUser is defined and currentUser and currentUser.id ? currentUser.id : 'null'  }};
+    window.loggedIn = {{ (currentUser is defined and currentUser and currentUser.id ? true : false)|json_encode|raw  }};
     window.stripeAccessToken = {{ stripeAccessToken ? stripeAccessToken|json_encode|raw : 'false' }};
     window.stripePublicKey = {{ stripePublicKey|json_encode|raw }};
     window.stripeConnectUrl = {{ url('stripe/connect')|json_encode|raw }};
     window.sessionNotice = {{ craft.app.session.getFlash('notice')|json_encode|raw }};
     window.sessionError = {{ craft.app.session.getFlash('error')|json_encode|raw }};
+    window.rememberedUsername = {{ craft.app.user.rememberedUsername|json_encode|raw }};
 
     window.Craft = {
-    actionUrl:             "{{ actionUrl()|e('js') }}",
-    username:              {{ currentUser is defined and currentUser ? ('"'~currentUser.username|e('js')~'"')|raw : 'null' }},
-    remainingSessionTime:  {{ craft.app.user.getRemainingSessionTime() }},
-    maxUploadSize:         {{ craft.io.getMaxUploadSize() }},
+        actionUrl:             "{{ actionUrl()|e('js') }}",
+        username:              {{ currentUser is defined and currentUser ? ('"'~currentUser.username|e('js')~'"')|raw : 'null' }},
+        remainingSessionTime:  {{ craft.app.user.getRemainingSessionTime() }},
+        maxUploadSize:         {{ craft.io.getMaxUploadSize() }},
 
-    {% if craft.app.config.general.enableCsrfProtection %}
-        csrfTokenValue:        "{{ craft.app.request.getCsrfToken()|e('js') }}",
-        csrfTokenName:         "{{ craft.app.config.general.csrfTokenName|e('js') }}",
-    {% endif %}
+        {% if craft.app.config.general.enableCsrfProtection %}
+            csrfTokenValue:        "{{ craft.app.request.getCsrfToken()|e('js') }}",
+            csrfTokenName:         "{{ craft.app.config.general.csrfTokenName|e('js') }}",
+        {% endif %}
     };
 {% endjs %}
 
 
 {% block body %}
+    {{ craft.twigpack.includeCssModule("chunk-vendors.css") }}
     {{ craft.twigpack.includeCssModule("app.css") }}
 
     {% block content %}

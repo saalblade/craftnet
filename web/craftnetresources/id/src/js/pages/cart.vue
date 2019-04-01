@@ -39,7 +39,7 @@
                                             </div>
                                         </td>
                                         <td class="description">
-                                            <strong>{{item.plugin.name}}</strong>
+                                            <strong v-if="item.plugin">{{item.plugin.name}}</strong>
                                             <edition-badge>{{ item.lineItem.purchasable.name }}</edition-badge>
                                         </td>
                                     </template>
@@ -66,7 +66,7 @@
                                         <div class="expiry-date-flex">
                                             <div>
                                                 <template v-if="item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition'">
-                                                    <select-field v-model="selectedExpiryDates[item.id]" :options="itemUpdateOptions(itemKey)" @input="onSelectedExpiryDateChange(itemKey)" />
+                                                    <dropdown v-model="selectedExpiryDates[item.id]" :options="itemUpdateOptions(itemKey)" @input="onSelectedExpiryDateChange(itemKey)" />
                                                 </template>
                                                 <template v-else>
                                                     <span>Updates until <strong>{{item.lineItem.options.expiryDate}}</strong></span>
@@ -77,7 +77,7 @@
                                         </div>
                                     </td>
                                     <td class="hidden">
-                                        <number-input
+                                        <textbox
                                                 ref="quantityInput"
                                                 v-model="itemQuantity[itemKey]"
                                                 min="minQuantity"
@@ -86,7 +86,7 @@
                                                 @keydown="onQuantityKeyDown($event, itemKey)"
                                                 @input="onQuantityInput($event, itemKey)"
                                                 :disabled="1 === 1 || (item.lineItem.purchasable.type === 'cms-edition' || item.lineItem.purchasable.type === 'plugin-edition' ? false : true)"
-                                        ></number-input>
+                                        />
                                     </td>
                                     <td class="text-right">
                                         <strong class="block text-xl">
@@ -117,15 +117,17 @@
                         </template>
                     </table>
 
-                    <div class="mt-4 text-right"><input type="button" class="btn btn-lg btn-primary" @click="checkout()" value="Check Out" /></div>
+                    <div class="mt-4 text-right">
+                        <btn kind="primary" large @click="checkout()">Check Out</btn>
+                    </div>
                 </template>
 
                 <div v-else>
                     <empty>
-                        <icon icon="shopping-cart" cssClass="text-5xl mb-4 text-grey" />
+                        <icon icon="shopping-cart" class="size-4xl mb-4 text-grey" />
                         <div class="font-bold">Your cart is empty</div>
                         <div class="mt-4">
-                            <p>Browse plugins on <a :href="craftPluginsUrl()">plugins.craftcms.com</a></p>
+                            <p>Browse plugins on the <a :href="craftPluginsUrl()">Plugin Store</a>.</p>
                         </div>
                     </empty>
                 </div>
@@ -137,7 +139,6 @@
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
     import Empty from '../components/Empty'
-    import Spinner from '../components/Spinner'
     import EditionBadge from '../components/EditionBadge'
     import helpers from '../mixins/helpers'
 
@@ -146,7 +147,6 @@
 
         components: {
             Empty,
-            Spinner,
             EditionBadge,
         },
 
@@ -161,10 +161,10 @@
         },
 
         computed: {
-
             ...mapState({
                 cart: state => state.cart.cart,
                 expiryDateOptions: state => state.pluginStore.expiryDateOptions,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({
@@ -180,18 +180,21 @@
                     this.$store.commit('cart/updateSelectedExpiryDates', newValue)
                 }
             },
-
         },
 
         methods: {
-
             ...mapActions({
                 getCart: 'cart/getCart',
                 removeFromCart: 'cart/removeFromCart',
-                getPluginStoreData: 'pluginStore/getPluginStoreData',
+                getMeta: 'pluginStore/getMeta',
             }),
 
             checkout() {
+                if (!this.user) {
+                    this.$router.push({path: '/identity'})
+                    return
+                }
+
                 this.$router.push({path: '/payment'})
             },
 
@@ -217,10 +220,10 @@
                     let label = "Updates Until " + this.$options.filters.moment(date, 'L')
 
                     if (price !== 0) {
-                        let sign = '';
+                        let sign = ''
 
                         if (price > 0) {
-                            sign = '+';
+                            sign = '+'
                         }
 
                         label += " (" + sign + this.$options.filters.currency(price) + ")"
@@ -249,11 +252,11 @@
             },
 
             onQuantityKeyDown($event) {
-                let charCode = ($event.which) ? $event.which : $event.keyCode;
+                let charCode = ($event.which) ? $event.which : $event.keyCode
 
                 // prevent `e` and `-` to prevent exponent and negative notations
-                if(charCode === 69 || charCode === 189) {
-                    $event.preventDefault();
+                if (charCode === 69 || charCode === 189) {
+                    $event.preventDefault()
 
                     return false
                 }
@@ -276,13 +279,12 @@
 
                 return true
             },
-
         },
 
         mounted() {
             this.loading = true
 
-            this.getPluginStoreData()
+            this.getMeta()
                 .then(() => {
                     this.getCart()
                         .then(() => {
@@ -322,13 +324,13 @@
             .expiry-date-flex {
                 @apply .flex .flex-row .items-center;
 
-                .field {
+                .c-field {
                     @apply .mb-0;
                 }
             }
         }
 
-        .spinner {
+        .c-spinner {
             @apply .ml-4;
         }
     }

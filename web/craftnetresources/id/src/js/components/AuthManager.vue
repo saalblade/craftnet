@@ -10,14 +10,8 @@
                 {{ logoutWarningPara }}
 
                 <div class="float-right mt-4">
-                    <a href="#"
-                       class="btn btn-secondary"
-                       @click.prevent="logout">Logout now</a>
-
-                    <a href="#"
-                       @click.prevent="renewSession"
-                       ref="renewSessionBtn"
-                       class="btn btn-primary">Keep me logged in</a>
+                    <btn @click="logout">Logout now</btn>
+                    <btn kind="primary" ref="renewSessionBtn" @click="renewSession">Keep me logged in</btn>
                 </div>
             </template>
         </modal>
@@ -39,10 +33,8 @@
                                    placeholder="Password" type="password"
                                    id="password" class="form-control mr-2"
                                    :class="{'is-invalid': loginErrorPara }"/>
-                            <input type="submit" class="btn btn-primary mr-2"
-                                   value="Login"
-                                   :disabled="!passwordValidates"/>
-                            <spinner :cssClass="{'invisible': !passwordSpinner}"></spinner>
+                            <btn kind="primary" class="mr-2" type="submit" :disabled="!passwordValidates">Login</btn>
+                            <spinner :class="{'invisible': !passwordSpinner}"></spinner>
                         </div>
                     </div>
 
@@ -55,22 +47,19 @@
     </div>
 </template>
 
-
 <script>
     /* global Craft */
 
-    import axios from 'axios';
-    import qs from 'qs';
+    import {mapState} from 'vuex'
+    import usersApi from '../api/users'
+    import FormDataHelper from '../helpers/form-data'
     import Modal from './Modal';
     import IsMobileBrowser from './IsMobileBrowser';
     import humanizeDuration from 'humanize-duration';
-    import Spinner from './Spinner';
 
     export default {
-
         components: {
             Modal,
-            Spinner,
         },
 
         mixins: [IsMobileBrowser],
@@ -92,8 +81,13 @@
             }
         },
 
-        methods: {
+        computed: {
+            ...mapState({
+                user: state => state.account.user,
+            }),
+        },
 
+        methods: {
             /**
              * Sets a timer for the next time to check the auth timeout.
              */
@@ -119,7 +113,7 @@
                     };
                 }
 
-                axios.get(Craft.actionUrl + '/users/get-remaining-session-time', config)
+                usersApi.getRemainingSessionTime(config)
                     .then(response => {
                         if (typeof response.data.csrfTokenValue !== 'undefined' && typeof Craft.csrfTokenValue !== 'undefined') {
                             Craft.csrfTokenValue = response.data.csrfTokenValue;
@@ -129,7 +123,6 @@
                         this.submitLoginIfLoggedOut = false;
                     })
                     .catch(() => {
-
                         this.updateRemainingSessionTime(-1);
                     });
             },
@@ -138,6 +131,10 @@
              * Updates our record of the auth timeout, and handles it.
              */
             updateRemainingSessionTime(remainingSessionTime) {
+                if (!this.user) {
+                    return false
+                }
+
                 this.remainingSessionTime = parseInt(remainingSessionTime);
 
                 // Are we within the warning window?
@@ -325,7 +322,7 @@
              * Logout.
              */
             logout() {
-                axios.get(Craft.actionUrl + '/users/logout')
+                usersApi.logout()
                     .then(() => {
                         document.location.href = '';
                     })
@@ -376,19 +373,12 @@
              * Submit login.
              */
             submitLogin() {
-                let data = {
-                    loginName: Craft.username,
-                    password: this.password
-                };
+                let formData = new FormData()
 
-                let params = qs.stringify(data);
-                let headers = {};
+                FormDataHelper.append(formData, 'loginName', this.user.username)
+                FormDataHelper.append(formData, 'password', this.password)
 
-                if (Craft.csrfTokenValue && Craft.csrfTokenName) {
-                    headers['X-CSRF-Token'] = Craft.csrfTokenValue;
-                }
-
-                axios.post(Craft.actionUrl + '/users/login', params, {headers: headers})
+                usersApi.login(formData)
                     .then(response => {
                         this.passwordSpinner = false;
 
@@ -429,7 +419,6 @@
         },
 
         watch: {
-
             /**
              * Validate password when the password value changes.
              */
@@ -438,14 +427,12 @@
 
                 return newVal;
             }
-
         },
 
         mounted() {
             // Let's get it started.
             this.updateRemainingSessionTime(Craft.remainingSessionTime);
         }
-
     }
 </script>
 

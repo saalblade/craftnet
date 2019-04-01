@@ -3,10 +3,8 @@
         <div ref="cardElement" class="card-element form-control mb-3"></div>
         <p id="card-errors" class="text-red" role="alert"></p>
 
-        <input type="submit" class="btn btn-primary" value="Save" />
-        <button type="button" class="btn btn-secondary" @click="cancel()">
-            Cancel
-        </button>
+        <btn kind="primary" type="submit">Save</btn>
+        <btn @click="cancel()">Cancel</btn>
 
         <spinner v-if="loading"></spinner>
     </form>
@@ -16,18 +14,10 @@
 <script>
     /* global Stripe */
 
-    import Spinner from '../Spinner'
-
     export default {
-
         props: ['loading'],
 
-        components: {
-            Spinner,
-        },
-
         methods: {
-
             /**
              * Save the credit card.
              */
@@ -57,13 +47,12 @@
 
                 this.$emit('cancel');
             }
-
         },
 
         mounted() {
             this.stripe = Stripe(window.stripePublicKey);
-            this.elements = this.stripe.elements({ locale: 'en' });
-            this.card = this.elements.create('card', { hidePostalCode: true });
+            this.elements = this.stripe.elements({locale: 'en'});
+            this.card = this.elements.create('card', {hidePostalCode: true});
 
             // Vue likes to stay in control of $el but Stripe needs a real element
             const el = document.createElement('div')
@@ -72,7 +61,6 @@
             // this.$children cannot be used because it expects a VNode :(
             this.$refs.cardElement.appendChild(el)
         },
-
     }
 </script>
 

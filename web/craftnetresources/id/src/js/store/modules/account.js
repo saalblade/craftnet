@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import accountApi from '../../api/account'
+import usersApi from '../../api/users';
 
 Vue.use(Vuex)
 
@@ -8,242 +9,219 @@ Vue.use(Vuex)
  * State
  */
 const state = {
-    apps: {},
     billingAddress: null,
-    card: null,
-    cardToken: null,
-    currentUser: null,
-    invoices: [],
-    stripeAccount: null,
-    stripeCustomer: null,
-    upcomingInvoice: null,
+    user: null,
+    accountLoading: false,
+    userLoaded: false,
+    craftSessionLoaded: false,
+    hasApiToken: false,
 }
 
 /**
  * Getters
  */
 const getters = {
-
     userIsInGroup(state) {
         return handle => {
-            return state.currentUser.groups.find(g => g.handle === handle)
+            return state.user.groups.find(g => g.handle === handle)
         }
     },
-
-    getInvoiceByNumber(state) {
-        return number => {
-            if (state.invoices) {
-                return state.invoices.find(inv => inv.number == number)
-            }
-        }
-    },
-
 }
 
 /**
  * Actions
  */
 const actions = {
-
-    /**
-     * Apps
-     */
-
-    connectAppCallback({commit}, apps) {
-        commit('updateApps', {apps})
-    },
-
-    disconnectApp({commit}, appHandle) {
+    deleteUserPhoto({commit}) {
         return new Promise((resolve, reject) => {
-            accountApi.disconnectApp(appHandle, response => {
-                    commit('disconnectApp', {appHandle});
-                    resolve(response);
-                },
-                response => {
-                    reject(response);
+            accountApi.deleteUserPhoto()
+                .then((response) => {
+                    commit('deleteUserPhoto', {response})
+                    resolve(response)
+                })
+                .catch((response) => {
+                    reject(response)
                 })
         })
     },
 
-
-    /**
-     * User
-     */
-
-    deleteUserPhoto({commit}) {
+    generateApiToken({commit}) {
         return new Promise((resolve, reject) => {
-            accountApi.deleteUserPhoto(response => {
-                commit('deleteUserPhoto', {response});
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
+            accountApi.generateApiToken()
+                .then((response) => {
+                    if (response.data && !response.data.error) {
+                        commit('updateHasApiToken', {hasApiToken: !!response.data.apiToken})
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                })
+                .catch((error) => {
+                    reject(error.response)
+                })
+        })
+    },
+
+    saveBillingInfo({commit}, data) {
+        return new Promise((resolve, reject) => {
+            accountApi.saveBillingInfo(data)
+                .then((response) => {
+                    if (!response.data.errors) {
+                        commit('updateBillingAddress', {billingAddress: response.data.address})
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                })
+                .catch((error) => {
+                    reject(error.response)
+                })
         })
     },
 
     saveUser({commit}, user) {
         return new Promise((resolve, reject) => {
-            accountApi.saveUser(user, response => {
+            usersApi.saveUser(user)
+                .then((response) => {
                     if (!response.data.errors) {
-                        commit('saveUser', {user, response});
-                        resolve(response);
+                        commit('saveUser', {user, response})
+                        resolve(response)
                     } else {
-                        reject(response);
+                        reject(response)
                     }
-                },
-                response => {
-                    reject(response);
+                })
+                .catch((error) => {
+                    reject(error.response)
                 })
         })
     },
 
     uploadUserPhoto({commit}, data) {
         return new Promise((resolve, reject) => {
-            accountApi.uploadUserPhoto(data, response => {
-                commit('uploadUserPhoto', {response});
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    saveBillingInfo({commit}, data) {
-        return new Promise((resolve, reject) => {
-            accountApi.saveBillingInfo(data, response => {
-                    if (!response.data.errors) {
-                        commit('updateBillingAddress', {billingAddress: response.data.address});
-                        resolve(response);
-                    } else {
-                        reject(response);
-                    }
-                },
-                response => {
-                    reject(response);
+            accountApi.uploadUserPhoto(data)
+                .then((response) => {
+                    commit('uploadUserPhoto', {response})
+                    resolve(response)
+                })
+                .catch((response) => {
+                    reject(response)
                 })
         })
     },
 
-
-    /**
-     * Credit cards
-     */
-
-    removeCard({commit}) {
+    getAccount({commit}) {
         return new Promise((resolve, reject) => {
-            accountApi.removeCard(response => {
-                commit('removeStripeCard');
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
+            accountApi.getAccount()
+                .then((response) => {
+                    commit('updateBillingAddress', {billingAddress: response.data.billingAddress})
+                    commit('updateHasApiToken', {hasApiToken: response.data.user.hasApiToken})
+                    commit('updateCurrentUser', {user: response.data.user})
+                    commit('stripe/updateCard', {card: response.data.card}, {root: true})
+                    commit('stripe/updateCardToken', {cardToken: response.data.cardToken}, {root: true})
+                    commit('updateCurrentUserLoaded', true)
+
+                    resolve(response)
+                })
+                .catch((response) => {
+                    commit('updateCurrentUserLoaded', true)
+                    reject(response)
+                })
         })
     },
 
-    saveCard({commit}, source) {
-        return new Promise((resolve, reject) => {
-            accountApi.saveCard(source, response => {
-                commit('updateStripeCard', {card: response.data.card.card});
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
-        })
-    },
+    loadAccount({commit, state, dispatch}) {
+        return new Promise((resolve) => {
+            if (!state.accountLoading) {
+                commit('updateAccountLoading', true)
 
+                let loadAccount = false
 
-    /**
-     * Stripe account
-     */
+                if (!state.craftSessionLoaded) {
+                    commit('updateCraftSessionLoaded', true)
 
-    disconnectStripeAccount({commit}) {
-        return new Promise((resolve, reject) => {
-            accountApi.disconnectStripeAccount(response => {
-                commit('disconnectStripeAccount');
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-    getStripeAccount({commit}) {
-        return new Promise((resolve, reject) => {
-            accountApi.getStripeAccount(response => {
-                commit('updateStripeAccount', {response});
-                resolve(response);
-            }, response => {
-                reject(response);
-            })
-        })
-    },
-
-
-    /**
-     * Invoices
-     */
-
-    getInvoices({commit}) {
-        return new Promise((resolve, reject) => {
-            accountApi.getInvoices(response => {
-                if (response.data && !response.data.error) {
-                    commit('updateInvoices', {response});
-                    resolve(response);
+                    if (window.loggedIn) {
+                        loadAccount = true
+                    } else {
+                        commit('updateCurrentUserLoaded', true)
+                    }
                 } else {
-                    reject(response);
+                    if (!state.userLoaded) {
+                        loadAccount = true
+                    }
                 }
-            }, response => {
-                reject(response);
-            })
+
+                if (loadAccount) {
+                    dispatch('getAccount')
+                        .then(() => {
+                            commit('updateAccountLoading', false)
+                            resolve(true)
+                        })
+                        .catch(() => {
+                            commit('updateAccountLoading', false)
+                            resolve(false)
+                        })
+                } else {
+                    commit('updateAccountLoading', false)
+                    resolve(!!state.user)
+                }
+            } else {
+                resolve(!!state.user)
+            }
         })
     },
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-    /**
-     * Apps
-     */
-
-    updateApps(state, {apps}) {
-        state.apps = apps;
+    deleteUserPhoto(state, {response}) {
+        state.user.photoId = response.data.photoId
+        state.user.photoUrl = response.data.photoUrl
     },
 
-    disconnectApp(state, {appHandle}) {
-        Vue.delete(state.apps, appHandle);
+    updateBillingAddress(state, {billingAddress}) {
+        state.billingAddress = billingAddress
     },
 
+    updateCraftSessionLoaded(state, loaded) {
+        state.craftSessionLoaded = loaded
+    },
 
-    /**
-     * User
-     */
+    updateCurrentUser(state, {user}) {
+        state.user = user
+    },
+
+    updateCurrentUserLoaded(state, loaded) {
+        state.userLoaded = loaded
+    },
+
+    updateAccountLoading(state, loading) {
+        state.accountLoading = loading
+    },
+
+    updateHasApiToken(state, {hasApiToken}){
+        state.hasApiToken = hasApiToken
+    },
 
     uploadUserPhoto(state, {response}) {
-        state.currentUser.photoId = response.data.photoId;
-        state.currentUser.photoUrl = response.data.photoUrl;
-    },
-
-    deleteUserPhoto(state, {response}) {
-        state.currentUser.photoId = response.data.photoId;
-        state.currentUser.photoUrl = response.data.photoUrl;
+        state.user.photoId = response.data.photoId
+        state.user.photoUrl = response.data.photoUrl
     },
 
     saveUser(state, {user}) {
         for (let attribute in user) {
             if (attribute === 'id' || attribute === 'email') {
-                continue;
+                continue
             }
 
-            state.currentUser[attribute] = user[attribute];
+            state.user[attribute] = user[attribute]
 
             if (user.enablePluginDeveloperFeatures) {
-                let groupExists = state.currentUser.groups.find(g => g.handle === 'developers');
+                let groupExists = state.user.groups.find(g => g.handle === 'developers')
 
                 if (!groupExists) {
-                    state.currentUser.groups.push({
+                    state.user.groups.push({
                         id: 1,
                         name: 'Developers',
                         handle: 'developers',
@@ -252,62 +230,6 @@ const mutations = {
             }
         }
     },
-
-    updateBillingAddress(state, {billingAddress}) {
-        state.billingAddress = billingAddress
-    },
-
-    updateCard(state, {card}) {
-        state.card = card
-    },
-
-    updateCardToken(state, {cardToken}) {
-        state.cardToken = cardToken
-    },
-
-    updateCurrentUser(state, {currentUser}) {
-        state.currentUser = currentUser
-    },
-
-
-    /**
-     * Credit cards
-     */
-
-    removeStripeCard(state) {
-        state.card = null
-    },
-
-    updateStripeCard(state, {card}) {
-        state.card = card
-    },
-
-
-    /**
-     * Stripe Account
-     */
-
-    disconnectStripeAccount(state) {
-        state.stripeAccount = null
-    },
-
-    updateStripeAccount(state, {response}) {
-        state.stripeAccount = response.data
-    },
-
-
-    /**
-     * Invoices
-     */
-
-    updateInvoices(state, {response}) {
-        state.invoices = response.data;
-    },
-
-    updateUpcomingInvoice(state, {upcomingInvoice}) {
-        state.upcomingInvoice = upcomingInvoice;
-    }
-
 }
 
 export default {

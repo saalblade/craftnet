@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 export default {
-
     /**
      * Axios instance.
      */
@@ -15,49 +14,31 @@ export default {
             this._axios = axios.create({
                 baseURL: process.env.VUE_APP_CRAFT_API_ENDPOINT + '/',
                 // params: {XDEBUG_SESSION_START: 16433}
-            });
+            })
         }
 
-        return this._axios;
+        return this._axios
     },
 
     /**
      * Get cart.
      */
-    getCart(orderNumber, cb, errorCb) {
-        this.axios().get('carts/' + orderNumber)
-            .then(response => {
-                return cb(response.data)
-            })
-            .catch(response => {
-                return errorCb(response)
-            })
+    getCart(orderNumber) {
+        return this.axios().get('carts/' + orderNumber)
     },
 
     /**
      * Create cart.
      */
-    createCart(data, cb, errorCb) {
-        this.axios().post('carts', data)
-            .then(response => {
-                return cb(response.data)
-            })
-            .catch(response => {
-                return errorCb(response)
-            })
+    createCart(data) {
+        return this.axios().post('carts', data)
     },
 
     /**
      * Update cart.
      */
-    updateCart(orderNumber, data, cb, errorCb) {
-        this.axios().post('carts/' + orderNumber, data)
-            .then(response => {
-                return cb(response.data)
-            })
-            .catch(response => {
-                return errorCb(response)
-            })
+    updateCart(orderNumber, data) {
+        return this.axios().post('carts/' + orderNumber, data)
     },
 
     /**
@@ -91,5 +72,4 @@ export default {
 
         return cb(orderNumber)
     },
-
 }

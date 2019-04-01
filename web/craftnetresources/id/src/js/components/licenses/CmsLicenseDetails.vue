@@ -23,17 +23,14 @@
                                         <p>{{ license.domain }}</p>
 
                                         <div class="buttons">
-                                            <button @click="domainEditing = true" type="button" class="btn btn-secondary btn-sm">
-                                                <icon icon="pencil-alt" />
-                                                Change Domain
-                                            </button>
+                                            <btn small icon="pencil" @click="domainEditing = true">Change Domain</btn>
                                         </div>
                                     </template>
 
                                     <form v-if="domainEditing" @submit.prevent="saveDomain()">
-                                        <text-field id="domain" v-model="licenseDraft.domain" @input="domainChange"></text-field>
-                                        <input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !domainValidates}" :disabled="!domainValidates" />
-                                        <input @click="cancelEditDomain()" type="button" class="btn btn-secondary" value="Cancel" />
+                                        <textbox id="domain" v-model="licenseDraft.domain" @input="domainChange" />
+                                        <btn kind="primary" type="submit" :class="{disabled: !domainValidates}" :disabled="!domainValidates">Save</btn>
+                                        <btn @click="cancelEditDomain()">Cancel</btn>
                                         <spinner v-if="domainLoading"></spinner>
                                     </form>
                                 </dd>
@@ -63,17 +60,14 @@
                                         <p>{{ license.notes }}</p>
 
                                         <div class="buttons">
-                                            <button @click="notesEditing = true" type="button" class="btn btn-secondary btn-sm">
-                                                <icon icon="pencil-alt" />
-                                                Edit
-                                            </button>
+                                            <btn icon="pencil" @click="notesEditing = true">Edit</btn>
                                         </div>
                                     </template>
 
                                     <form v-if="notesEditing" @submit.prevent="saveNotes()">
-                                        <textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
-                                        <input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
-                                        <input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
+                                        <textbox type="textarea" id="notes" v-model="licenseDraft.notes" @input="notesChange" />
+                                        <btn kind="primary" type="submit" :disabled="!notesValidates">Save</btn>
+                                        <btn @click="cancelEditNotes()">Cancel</btn>
                                         <spinner v-if="notesLoading"></spinner>
                                     </form>
                                 </dd>
@@ -96,7 +90,7 @@
                     <p>Auto-renew is <strong>disabled</strong> for this license.</p>
                 </template>
 
-                <lightswitch-field
+                <lightswitch
                         id="auto-renew"
                         @change="saveAutoRenew"
                         :checked.sync="licenseDraft.autoRenew"
@@ -108,8 +102,7 @@
             <div class="card-body">
                 <h4>Updates</h4>
                 <license-update-message :license="license" />
-
-                <button @click="showRenewLicensesModal('extend-updates')" class="btn btn-secondary">Renew your license…</button>
+                <btn @click="showRenewLicensesModal('extend-updates')">Renew your license…</btn>
             </div>
         </div>
     </div>
@@ -119,21 +112,18 @@
     /* global Craft */
 
     import {mapActions} from 'vuex'
+    import cmsLicensesApi from '../../api/cms-licenses'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
-    import Spinner from '../Spinner'
 
     export default {
-
         props: ['license'],
 
         components: {
-            Spinner,
             LicenseUpdateMessage,
         },
 
         data() {
             return {
-                errors: {},
                 licenseDraft: {},
                 domainEditing: false,
                 domainLoading: false,
@@ -146,33 +136,30 @@
         },
 
         computed: {
-
             canSave() {
                 if (this.license.domain != this.licenseDraft.domain) {
-                    return true;
+                    return true
                 }
 
                 if (this.license.notes != this.licenseDraft.notes) {
-                    return true;
+                    return true
                 }
 
-                return false;
+                return false
             },
 
             formattedLicense() {
-                let value = this.license.key;
-                let formattedValue = this.$options.filters.formatCmsLicense(value);
-                return formattedValue;
+                let value = this.license.key
+                let formattedValue = this.$options.filters.formatCmsLicense(value)
+                return formattedValue
             },
 
             downloadLicenseUrl() {
-                return Craft.actionUrl + '/craftnet/id/cms-licenses/download&id=' + this.license.id;
+                return Craft.actionUrl + '/craftnet/id/cms-licenses/download&id=' + this.license.id
             },
-
         },
 
         methods: {
-
             ...mapActions({
                 showRenewLicensesModal: 'app/showRenewLicensesModal',
             }),
@@ -181,63 +168,85 @@
              * Save auto renew.
              */
             saveAutoRenew() {
-                this.$store.dispatch('licenses/saveCmsLicense', {
-                    key: this.license.key,
-                    autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
-                }).then(() => {
-                    if (this.licenseDraft.autoRenew) {
-                        this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
-                    } else {
-                        this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
-                    }
-                }).catch(response => {
-                    this.$store.dispatch('app/displayError', 'Couldn’t save license.')
-                    this.errors = response.data.errors
-                })
+                cmsLicensesApi.saveCmsLicense({
+                        key: this.license.key,
+                        autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
+                    })
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            if (this.licenseDraft.autoRenew) {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
+                            } else {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
+                            }
+                        } else {
+                            this.licenseDraft.autoRenew = !this.licenseDraft.autoRenew
+                            this.$store.dispatch('app/displayError', 'Couldn’t save license.')
+                        }
+                    })
+                    .catch((error) => {
+                        this.licenseDraft.autoRenew = !this.licenseDraft.autoRenew
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t save license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
              * Save domain.
              */
             saveDomain() {
-                this.domainLoading = true;
-                const oldDomain = this.licenseDraft.domain;
+                this.domainLoading = true
+                const oldDomain = this.licenseDraft.domain
 
-                this.saveCmsLicense(response => {
-                    const newDomain = response.data.license.domain
+                this.saveCmsLicense(
+                    // success
+                    (response) => {
+                        const newDomain = response.data.license.domain
 
-                    if (oldDomain && oldDomain !== newDomain) {
-                        this.licenseDraft.domain = newDomain
+                        if (oldDomain && oldDomain !== newDomain) {
+                            this.licenseDraft.domain = newDomain
 
-                        if(!newDomain) {
-                            this.$store.dispatch('app/displayNotice', oldDomain + ' is not a public domain.');
+                            if (!newDomain) {
+                                this.$store.dispatch('app/displayNotice', oldDomain + ' is not a public domain.')
+                            } else {
+                                this.$store.dispatch('app/displayNotice', 'Domain changed to ' + newDomain + '.')
+                            }
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Domain changed to ' + newDomain + '.')
+                            this.$store.dispatch('app/displayNotice', 'Domain saved.')
                         }
-                    } else {
-                        this.$store.dispatch('app/displayNotice', 'Domain saved.');
-                    }
 
-                    this.domainLoading = false;
-                    this.domainEditing = false;
-                }, () => {
-                    this.domainLoading = false;
-                });
+                        this.domainLoading = false
+                        this.domainEditing = false
+                    },
+
+                    // error
+                    (response) => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save domain.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                        this.domainLoading = false
+                    })
             },
 
             /**
              * Save notes.
              */
             saveNotes() {
-                this.notesLoading = true;
+                this.notesLoading = true
 
-                this.saveCmsLicense(() => {
-                    this.notesLoading = false;
-                    this.notesEditing = false;
-                    this.$store.dispatch('app/displayNotice', 'Notes saved.');
-                }, () => {
-                    this.notesLoading = false;
-                });
+                this.saveCmsLicense(
+                    // success
+                    () => {
+                        this.notesLoading = false
+                        this.notesEditing = false
+                        this.$store.dispatch('app/displayNotice', 'Notes saved.')
+                    },
+
+                    // error
+                    (response) => {
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save notes.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                        this.notesLoading = false
+                    })
             },
 
             /**
@@ -247,44 +256,57 @@
              * @param cbError
              */
             saveCmsLicense(cb, cbError) {
-                this.$store.dispatch('licenses/saveCmsLicense', {
-                    key: this.license.key,
-                    domain: this.licenseDraft.domain,
-                    notes: this.licenseDraft.notes,
-                }).then(response => {
-                    cb(response);
-                }).catch(response => {
-                    cbError();
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
-                    this.$store.dispatch('app/displayError', errorMessage)
-                });
+                cmsLicensesApi.saveCmsLicense({
+                        key: this.license.key,
+                        domain: this.licenseDraft.domain,
+                        notes: this.licenseDraft.notes,
+                    })
+                    .then(response => {
+                        if (response.data && !response.data.error) {
+                            // refresh license data
+                            cmsLicensesApi.getCmsLicense(this.license.id)
+                                .then((getCmsLicenseResponse) => {
+                                    this.$emit('update:license', getCmsLicenseResponse.data)
+                                    this.$store.commit('app/updateRenewLicense', getCmsLicenseResponse.data)
+                                    cb(response)
+                                })
+                                .catch((getCmsLicenseError) => {
+                                    cbError(getCmsLicenseError.response)
+                                })
+                        } else {
+                            cbError(response)
+                        }
+                    })
+                    .catch((error) => {
+                        cbError(error.response)
+                    })
             },
 
             /**
              * Cancel edit domain.
              */
             cancelEditDomain() {
-                this.licenseDraft.domain = this.license.domain;
-                this.domainEditing = false;
-                this.domainValidates = false;
+                this.licenseDraft.domain = this.license.domain
+                this.domainEditing = false
+                this.domainValidates = false
             },
 
             /**
              * Cancel edit notes.
              */
             cancelEditNotes() {
-                this.licenseDraft.notes = this.license.notes;
-                this.notesEditing = false;
-                this.notesValidates = false;
+                this.licenseDraft.notes = this.license.notes
+                this.notesEditing = false
+                this.notesValidates = false
             },
 
             /**
              * Notes change.
              */
             notesChange() {
-                this.notesValidates = false;
-                if(this.licenseDraft.notes !== this.license.notes) {
-                    this.notesValidates = true;
+                this.notesValidates = false
+                if (this.licenseDraft.notes !== this.license.notes) {
+                    this.notesValidates = true
                 }
             },
 
@@ -292,9 +314,9 @@
              * Domain changes.
              */
             domainChange() {
-                this.domainValidates = false;
-                if(this.licenseDraft.domain !== this.license.domain) {
-                    this.domainValidates = true;
+                this.domainValidates = false
+                if (this.licenseDraft.domain !== this.license.domain) {
+                    this.domainValidates = true
                 }
             },
 
@@ -302,16 +324,15 @@
              * Copy license
              */
             copyLicense() {
-                let $temp = document.createElement('input');
-                document.body.appendChild($temp);
-                $temp.value = this.license.key;
-                $temp.select();
-                document.execCommand("copy");
-                $temp.remove();
+                let $temp = document.createElement('input')
+                document.body.appendChild($temp)
+                $temp.value = this.license.key
+                $temp.select()
+                document.execCommand("copy")
+                $temp.remove()
 
-                this.$store.dispatch('app/displayNotice', 'License key copied.');
+                this.$store.dispatch('app/displayNotice', 'License key copied.')
             },
-
         },
 
         mounted() {
@@ -319,8 +340,7 @@
                 autoRenew: (this.license.autoRenew == 1 ? true : false),
                 domain: this.license.domain,
                 notes: this.license.notes,
-            };
+            }
         }
-
     }
 </script>

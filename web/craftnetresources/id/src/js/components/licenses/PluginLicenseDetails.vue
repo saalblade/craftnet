@@ -26,9 +26,7 @@
                                             <span v-if="license.cmsLicense.edition" class="text-secondary">(Craft {{ license.cmsLicense.edition }})</span>
                                         </p>
                                         <div class="buttons">
-                                            <button @click="detachCmsLicense()" type="button" class="btn btn-secondary btn-sm">
-                                                Detach from this Craft license
-                                            </button>
+                                            <btn small @click="detachCmsLicense()">Detach from this Craft license</btn>
                                             <spinner v-if="detaching"></spinner>
                                         </div>
                                     </template>
@@ -53,17 +51,14 @@
                                         <p>{{ license.notes }}</p>
 
                                         <div class="buttons">
-                                            <button @click="notesEditing = true" type="button" class="btn btn-secondary btn-sm">
-                                                <icon icon="pencil-alt" />
-                                                Edit
-                                            </button>
+                                            <btn small icon="pencil" @click="notesEditing = true">Edit</btn>
                                         </div>
                                     </template>
 
                                     <form v-if="notesEditing" @submit.prevent="saveNotes()">
-                                        <textarea-field id="notes" v-model="licenseDraft.notes" @input="notesChange"></textarea-field>
-                                        <input type="submit" class="btn btn-primary" value="Save" :class="{disabled: !notesValidates}" :disabled="!notesValidates" />
-                                        <input @click="cancelEditNotes()" type="button" class="btn btn-secondary" value="Cancel" />
+                                        <textbox type="textarea" id="notes" v-model="licenseDraft.notes" @input="notesChange" />
+                                        <btn kind="primary" type="submit" :disabled="!notesValidates">Save</btn>
+                                        <btn @click="cancelEditNotes()" >Cancel</btn>
                                         <spinner v-if="notesLoading"></spinner>
                                     </form>
                                 </dd>
@@ -85,7 +80,7 @@
                     <p>Auto-renew is <strong>disabled</strong> for this license.</p>
                 </template>
 
-                <lightswitch-field
+                <lightswitch
                         id="auto-renew"
                         @change="saveAutoRenew"
                         :checked.sync="licenseDraft.autoRenew"
@@ -97,8 +92,7 @@
             <div class="card-body">
                 <h4>Updates</h4>
                 <license-update-message :license="license"></license-update-message>
-
-                <button @click="showRenewLicensesModal('renew-plugin-license')" class="btn btn-secondary">Renew your license…</button>
+                <btn @click="showRenewLicensesModal('renew-plugin-license')">Renew your license…</btn>
             </div>
         </div>
     </div>
@@ -106,11 +100,10 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import pluginLicensesApi from '../../api/plugin-licenses'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
-    import Spinner from '../Spinner'
 
     export default {
-
         props: ['license', 'type'],
 
         data() {
@@ -129,11 +122,9 @@
 
         components: {
             LicenseUpdateMessage,
-            Spinner,
         },
 
         methods: {
-
             ...mapActions({
                 showRenewLicensesModal: 'app/showRenewLicensesModal',
             }),
@@ -142,32 +133,44 @@
              * Detach the Craft license.
              */
             detachCmsLicense() {
-                this.detaching = true;
-                this.licenseDraft.cmsLicenseId = null;
-                this.licenseDraft.cmsLicense = null;
+                this.detaching = true
+                this.licenseDraft.cmsLicenseId = null
+                this.licenseDraft.cmsLicense = null
 
-                this.savePluginLicense(() => {
-                    this.detaching = false;
-                    this.$store.dispatch('licenses/getCmsLicenses')
-                    this.$store.dispatch('licenses/getPluginLicenses')
-                }, () => {
-                    this.detaching = false;
-                });
+                this.savePluginLicense(
+                    // success
+                    () => {
+                        this.detaching = false
+                        this.$store.dispatch('app/displayNotice', 'Plugin license detached from CMS license.')
+                    },
+                    // error
+                    (response) => {
+                        this.detaching = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t detach plugin license from CMS license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
              * Reattach the Craft license.
              */
             reattachCmsLicense() {
-                this.reattaching = true;
-                this.licenseDraft.cmsLicenseId = this.originalCmsLicenseId;
-                this.licenseDraft.cmsLicense = this.originalCmsLicense;
+                this.reattaching = true
+                this.licenseDraft.cmsLicenseId = this.originalCmsLicenseId
+                this.licenseDraft.cmsLicense = this.originalCmsLicense
 
-                this.savePluginLicense(() => {
-                    this.reattaching = false;
-                }, () => {
-                    this.reattaching = false;
-                });
+                this.savePluginLicense(
+                    // Success
+                    () => {
+                        this.reattaching = false
+                        this.$store.dispatch('app/displayNotice', 'Plugin license reattached to CMS license.')
+                    },
+                    // error
+                    (response) => {
+                        this.reattaching = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t detach plugin license from CMS license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
@@ -175,43 +178,50 @@
              */
             canSave() {
                 if (this.license.notes !== this.licenseDraft.notes) {
-                    return true;
+                    return true
                 }
 
-                return false;
+                return false
             },
 
             /**
              * Save notes.
              */
             saveNotes() {
-                this.notesLoading = true;
+                this.notesLoading = true
 
-                this.savePluginLicense(() => {
-                    this.notesLoading = false;
-                    this.notesEditing = false;
-                }, () => {
-                    this.notesLoading = false;
-                });
+                this.savePluginLicense(
+                    // success
+                    () => {
+                        this.notesLoading = false
+                        this.notesEditing = false
+                        this.$store.dispatch('app/displayNotice', 'Notes saved.')
+                    },
+                    // error
+                    (response) => {
+                        this.notesLoading = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save notes.'
+                        this.$store.dispatch('app/displayError', errorMessage)
+                    })
             },
 
             /**
              * Cancel edit notes.
              */
             cancelEditNotes() {
-                this.licenseDraft.notes = this.license.notes;
-                this.notesEditing = false;
-                this.notesValidates = false;
+                this.licenseDraft.notes = this.license.notes
+                this.notesEditing = false
+                this.notesValidates = false
             },
 
             /**
              * Notes change.
              */
             notesChange() {
-                this.notesValidates = false;
+                this.notesValidates = false
 
                 if(this.licenseDraft.notes !== this.license.notes) {
-                    this.notesValidates = true;
+                    this.notesValidates = true
                 }
             },
 
@@ -222,20 +232,31 @@
              * @param cbError
              */
             savePluginLicense(cb, cbError) {
-                this.$store.dispatch('licenses/savePluginLicense', {
+                pluginLicensesApi.savePluginLicense({
                     pluginHandle: this.license.plugin.handle,
                     key: this.license.key,
                     cmsLicenseId: this.licenseDraft.cmsLicenseId,
                     cmsLicense: this.licenseDraft.cmsLicense,
                     notes: this.licenseDraft.notes,
                 })
-                    .then(() => {
-                        cb();
-                        this.$store.dispatch('app/displayNotice', 'License saved.');
-                    }).catch(response => {
-                        cbError();
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save license.'
-                        this.$store.dispatch('app/displayError', errorMessage)
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            // refresh license data
+                            pluginLicensesApi.getPluginLicense(this.license.id)
+                                .then((getPluginLicenseResponse) => {
+                                    this.$emit('update:license', getPluginLicenseResponse.data)
+                                    this.$store.commit('app/updateRenewLicense', getPluginLicenseResponse.data)
+                                    cb(response)
+                                })
+                                .catch((getPluginLicenseError) => {
+                                    cbError(getPluginLicenseError.response)
+                                })
+                        } else {
+                            cbError(response)
+                        }
+                    })
+                    .catch((error) => {
+                        cbError(error.response)
                     })
             },
 
@@ -243,25 +264,29 @@
              * Save auto renew
              */
             saveAutoRenew() {
-                this.$store.dispatch('licenses/savePluginLicense', {
-                    pluginHandle: this.license.plugin.handle,
-                    key: this.license.key,
-                    autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
-                })
-                    .then(() => {
-                        if (this.licenseDraft.autoRenew) {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew enabled.');
+                pluginLicensesApi.savePluginLicense({
+                        pluginHandle: this.license.plugin.handle,
+                        key: this.license.key,
+                        autoRenew: (this.licenseDraft.autoRenew ? 1 : 0),
+                    })
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            if (this.licenseDraft.autoRenew) {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
+                            } else {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew disabled.')
+                            }
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
+                            this.licenseDraft.autoRenew = !this.licenseDraft.autoRenew
+                            this.$store.dispatch('app/displayError', 'Couldn’t save license.')
                         }
-
-                        this.$store.dispatch('licenses/getCmsLicenses');
-                    }).catch(data => {
-                        this.$store.dispatch('app/displayError', 'Couldn’t save license.');
-                        this.errors = data.errors;
+                    })
+                    .catch((error) => {
+                        this.licenseDraft.autoRenew = !this.licenseDraft.autoRenew
+                        const errorMessage = error.response.data && error.response.data.error ? error.response.data.error : 'Couldn’t save license.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
-
         },
 
         mounted() {
@@ -272,6 +297,5 @@
                 notes: this.license.notes,
             }
         }
-
     }
 </script>

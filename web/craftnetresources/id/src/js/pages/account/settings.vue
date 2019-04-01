@@ -5,9 +5,9 @@
             <div class="card-body">
                 <h4>Email &amp; password</h4>
 
-                <password-field id="password" label="Current Password" v-model="password" :errors="errors.currentPassword" />
-                <text-field id="email" label="Email" v-model="userDraft.email" :errors="errors.email" />
-                <password-field id="newPassword" label="New Password" v-model="newPassword" :errors="errors.newPassword" />
+                <textbox type="password" id="password" label="Current Password" v-model="password" :errors="errors.currentPassword" />
+                <textbox id="email" label="Email" v-model="userDraft.email" :errors="errors.email" />
+                <textbox type="password" id="newPassword" label="New Password" v-model="newPassword" :errors="errors.newPassword" />
             </div>
         </div>
 
@@ -15,7 +15,7 @@
             <div class="card-body">
                 <h4>Account Settings</h4>
 
-                <text-field id="username" label="Username" v-model="userDraft.username" :errors="errors.username" />
+                <textbox id="username" label="Username" v-model="userDraft.username" :errors="errors.username" />
 
                 <p>
                     <input id="enablePluginDeveloperFeatures" :disabled="userIsInGroup('developers')" type="checkbox" name="fields[enablePluginDeveloperFeatures]" v-model="userDraft.enablePluginDeveloperFeatures">
@@ -32,21 +32,14 @@
             </div>
         </div>
 
-        <input type="submit" class="btn btn-primary" value="Save" :disabled="loading" />
-        <spinner v-if="loading"></spinner>
+        <btn kind="primary" type="submit" :disabled="loading" :loading="loading">Save</btn>
     </form>
 </template>
 
 <script>
     import {mapState, mapGetters} from 'vuex'
-    import Spinner from '../../components/Spinner'
 
     export default {
-
-        component: {
-            Spinner,
-        },
-
         data() {
             return {
                 loading: false,
@@ -59,69 +52,65 @@
         },
 
         computed: {
-
             ...mapState({
-                currentUser: state => state.account.currentUser,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({
                 userIsInGroup: 'account/userIsInGroup',
             }),
-
         },
 
         methods: {
-
             /**
              * Save the settings.
              */
             save() {
-                this.loading = true;
+                this.loading = true
 
-                let newEmail = false;
+                let newEmail = false
 
-                if (this.currentUser.email !== this.userDraft.email) {
-                    newEmail = true;
+                if (this.user.email !== this.userDraft.email) {
+                    newEmail = true
                 }
 
                 this.$store.dispatch('account/saveUser', {
-                    id: this.userDraft.id,
-                    email: this.userDraft.email,
-                    username: this.userDraft.username,
-                    enablePluginDeveloperFeatures: (this.userDraft.enablePluginDeveloperFeatures ? 1 : 0),
-                    enableShowcaseFeatures: (this.userDraft.enableShowcaseFeatures ? 1 : 0),
-                    enablePartnerFeatures: (this.userDraft.enablePartnerFeatures ? 1 : 0),
-                    password: this.password,
-                    newPassword: this.newPassword,
-                })
+                        id: this.userDraft.id,
+                        email: this.userDraft.email,
+                        username: this.userDraft.username,
+                        enablePluginDeveloperFeatures: (this.userDraft.enablePluginDeveloperFeatures ? 1 : 0),
+                        enableShowcaseFeatures: (this.userDraft.enableShowcaseFeatures ? 1 : 0),
+                        enablePartnerFeatures: (this.userDraft.enablePartnerFeatures ? 1 : 0),
+                        password: this.password,
+                        newPassword: this.newPassword,
+                    })
                     .then(() => {
-                        this.loading = false;
+                        this.loading = false
 
                         if (newEmail) {
-                            this.userDraft.email = this.currentUser.email;
-                            this.$store.dispatch('app/displayNotice', 'You’ve been sent an email to verify your new email address.');
+                            this.userDraft.email = this.user.email
+                            this.$store.dispatch('app/displayNotice', 'You’ve been sent an email to verify your new email address.')
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Settings saved.');
+                            this.$store.dispatch('app/displayNotice', 'Settings saved.')
                         }
 
-                        this.password = '';
-                        this.newPassword = '';
-                        this.errors = {};
-                    }).catch(response => {
-                        this.loading = false;
+                        this.password = ''
+                        this.newPassword = ''
+                        this.errors = {}
+                    })
+                    .catch(response => {
+                        this.loading = false
 
-                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.';
-                        this.$store.dispatch('app/displayError', errorMessage);
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save settings.'
+                        this.$store.dispatch('app/displayError', errorMessage)
 
-                        this.errors = response.data && response.data.errors ? response.data.errors : {};
+                        this.errors = response.data && response.data.errors ? response.data.errors : {}
                     })
             }
-
         },
 
         mounted() {
-            this.userDraft = JSON.parse(JSON.stringify(this.currentUser));
+            this.userDraft = JSON.parse(JSON.stringify(this.user))
         }
-
     }
 </script>

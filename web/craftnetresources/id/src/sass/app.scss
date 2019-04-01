@@ -1,9 +1,8 @@
-@import "~@pixelandtonic/craftui/src/sass/styles.scss";
+@import "~@pixelandtonic/craftui/dist/craftui.css";
 
 @tailwind preflight;
 
 @import 'basics';
-@import 'layout';
 @import 'general';
 @import 'components';
 

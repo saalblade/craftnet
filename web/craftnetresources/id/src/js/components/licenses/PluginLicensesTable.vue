@@ -54,7 +54,7 @@
                         <template v-if="autoRenewSwitch">
 
                             <template v-if="!!license.key">
-                                <lightswitch-field
+                                <lightswitch
                                         :id="'auto-renew-'+license.id"
                                         @change="savePluginLicenseAutoRenew(license, $event)"
                                         :checked.sync="pluginLicensesAutoRenew[license.id]"
@@ -62,7 +62,7 @@
                                 />
                             </template>
                             <template v-else>
-                                <lightswitch-field
+                                <lightswitch
                                         :id="'auto-renew-'+license.id"
                                         :checked="license.autoRenew"
                                         :disabled="true"
@@ -82,18 +82,13 @@
     </div>
 </template>
 
-
 <script>
-    import {mapGetters} from 'vuex'
     import Badge from '../Badge'
+    import pluginLicensesApi from '../../api/plugin-licenses'
+    import helpers from '../../mixins/helpers'
 
     export default {
-
-        data() {
-            return {
-                pluginLicensesAutoRenew: {},
-            }
-        },
+        mixins: [helpers],
 
         props: ['licenses', 'excludeCmsLicenseColumn', 'excludeNotesColumn', 'autoRenewSwitch'],
 
@@ -101,18 +96,15 @@
             Badge,
         },
 
-        computed: {
-
-            ...mapGetters({
-                expiresSoon: 'licenses/expiresSoon',
-            }),
-
+        data() {
+            return {
+                pluginLicensesAutoRenew: {},
+            }
         },
 
         methods: {
-
             savePluginLicenseAutoRenew(license, $event) {
-                if(!license.key) {
+                if (!license.key) {
                     return false;
                 }
 
@@ -123,21 +115,23 @@
                     autoRenew: autoRenew ? 1 : 0,
                 }
 
-                this.$store.dispatch('licenses/savePluginLicense', data)
-                    .then(() => {
-                        if (autoRenew) {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
+                pluginLicensesApi.savePluginLicense(data)
+                    .then((response) => {
+                        if (response.data && !response.data.error) {
+                            if (autoRenew) {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew enabled.')
+                            } else {
+                                this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
+                            }
                         } else {
-                            this.$store.dispatch('app/displayNotice', 'Auto renew disabled.');
+                            this.$store.dispatch('app/displayError', 'Couldn’t save license.');
                         }
-
-                        this.$store.dispatch('licenses/getCmsLicenses');
-                    }).catch(response => {
-                    this.$store.dispatch('app/displayError', 'Couldn’t save license.');
-                    this.errors = response.errors;
-                });
+                    })
+                    .catch((response) => {
+                        this.$store.dispatch('app/displayError', 'Couldn’t save license.');
+                        this.errors = response.errors;
+                    });
             }
-
         },
 
         mounted() {
@@ -147,6 +141,5 @@
                 this.pluginLicensesAutoRenew[license.id] = license.autoRenew
             }.bind(this))
         }
-
     }
 </script>

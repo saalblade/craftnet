@@ -1,33 +1,39 @@
 <template>
-    <list-group>
-        <stripe-app v-if="showStripe"></stripe-app>
+    <div>
+        <template v-if="appsLoading">
+            <spinner></spinner>
+        </template>
+        <template v-else>
+            <list-group>
+                <stripe-app v-if="showStripe"></stripe-app>
 
-        <div v-for="(appType, index) in appTypes" :key="index">
-            <connected-app
-                    :name="appType.name"
-                    :description="'Connect to your ' + appType.name + ' account.'"
-                    :icon="staticImageUrl('' + appType.handle + '.svg')"
-                    :account-name="accountName(appType.handle)"
-                    :connected="apps[appType.handle]"
-                    :buttonLoading="(loading && loading[appType.handle])"
-                    @connect="connect(appType.handle)"
-                    @disconnect="disconnect(appType.handle)"
-            ></connected-app>
+                <div v-for="(appType, index) in appTypes" :key="index">
+                    <connected-app
+                            :name="appType.name"
+                            :description="'Connect to your ' + appType.name + ' account.'"
+                            :icon="staticImageUrl('' + appType.handle + '.svg')"
+                            :account-name="accountName(appType.handle)"
+                            :connected="apps[appType.handle]"
+                            :buttonLoading="(loading && loading[appType.handle])"
+                            @connect="connect(appType.handle)"
+                            @disconnect="disconnect(appType.handle)"
+                    ></connected-app>
 
-            <hr v-if="index != (appTypes.length - 1)">
-        </div>
-    </list-group>
+                    <hr v-if="index != (appTypes.length - 1)">
+                </div>
+            </list-group>
+        </template>
+    </div>
 </template>
 
 <script>
     import {mapState, mapGetters} from 'vuex'
+    import helpers from '../../../mixins/helpers'
     import StripeApp from './StripeApp'
     import ConnectedApp from './ConnectedApp'
     import ListGroup from '../../ListGroup'
-    import helpers from '../../../mixins/helpers'
 
     export default {
-
         mixins: [helpers],
 
         props: ['title', 'showStripe'],
@@ -58,20 +64,18 @@
         },
 
         computed: {
-
             ...mapState({
-                apps: state => state.account.apps,
-                currentUser: state => state.account.currentUser,
+                apps: state => state.apps.apps,
+                appsLoading: state => state.apps.appsLoading,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({
                 userIsInGroup: 'account/userIsInGroup',
             }),
-
         },
 
         methods: {
-
             /**
              * Account name.
              *
@@ -127,21 +131,23 @@
              */
             disconnect(provider) {
                 this.loading[provider] = true;
-                this.$store.dispatch('account/disconnectApp', provider)
+                this.$store.dispatch('apps/disconnectApp', provider)
                     .then(() => {
                         this.loading[provider] = false;
                         this.$store.dispatch('app/displayNotice', 'App disconnected.');
-                    }).catch(response => {
-                    this.loading[provider] = false;
+                    })
+                    .catch((response) => {
+                        this.loading[provider] = false;
+                        this.errors = response.data && response.data.errors ? response.data.errors : {};
 
-                    const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t disconnect app.';
-                    this.$store.dispatch('app/displayError', errorMessage);
-
-                    this.errors = response.data && response.data.errors ? response.data.errors : {};
-                });
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t disconnect app.';
+                        this.$store.dispatch('app/displayError', errorMessage);
+                    });
             },
+        },
 
+        mounted() {
+            this.$store.dispatch('apps/getApps')
         }
-
     }
 </script>

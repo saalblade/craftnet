@@ -39,5 +39,15 @@ module.exports = {
             .entry('site')
             .add('./src/js/site.js')
             .end()
+
+        // Preserve whitespace
+        config.module
+            .rule('vue')
+            .use('vue-loader')
+            .loader('vue-loader')
+            .tap(options => {
+                options.compilerOptions.preserveWhitespace = true
+                return options
+            })
     },
 }

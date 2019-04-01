@@ -6,7 +6,6 @@
 
 <script>
     export default {
-
         props: ['type', 'message'],
 
         data() {
@@ -28,6 +27,5 @@
                 this.show = false;
             }.bind(this), notificationDuration);
         }
-
     }
 </script>

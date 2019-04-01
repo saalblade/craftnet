@@ -3,23 +3,18 @@
 import axios from 'axios'
 
 export default {
-    getPartner(cb, cbError) {
-        axios.post(Craft.actionUrl + '/craftnet/partners/fetch-partner', null, {
+    getPartner() {
+        return axios.post(Craft.actionUrl + '/craftnet/partners/fetch-partner', null, {
             headers: {
                 'X-CSRF-Token': Craft.csrfTokenValue,
             }
         })
-        .then(response => cb(response))
-        .catch(error => cbError(error.response))
     },
 
-    patchPartner(data, files, partnerId, cb, cbError) {
+    patchPartner(data, files, partnerId) {
         let formData = new FormData()
         formData.append('scenario', 'scenarioBaseInfo')
         formData.append('id', partnerId)
-
-        // eslint-disable-next-line
-        console.warn('api patchPartner()', files)
 
         for (let prop in data) {
             switch (prop) {
@@ -41,16 +36,14 @@ export default {
             formData.append('logo', files[0])
         }
 
-        axios.post(Craft.actionUrl + '/craftnet/partners/patch-partner', formData, {
+        return axios.post(Craft.actionUrl + '/craftnet/partners/patch-partner', formData, {
             headers: {
                 'X-CSRF-Token': Craft.csrfTokenValue,
             }
         })
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
     },
 
-    patchPartnerLocations(locations, partnerId, cb, cbError) {
+    patchPartnerLocations(locations, partnerId) {
         let formData = new FormData()
         formData.append('id', partnerId)
         formData.append('scenario', 'scenarioLocations')
@@ -66,16 +59,14 @@ export default {
             }
         })
 
-        axios.post(Craft.actionUrl + '/craftnet/partners/patch-partner', formData, {
+        return axios.post(Craft.actionUrl + '/craftnet/partners/patch-partner', formData, {
             headers: {
                 'X-CSRF-Token': Craft.csrfTokenValue,
             }
         })
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
     },
 
-    patchPartnerProjects(projects, partnerId, cb, cbError) {
+    patchPartnerProjects(projects, partnerId) {
         let formData = new FormData()
         formData.append('id', partnerId)
         formData.append('scenario', 'scenarioProjects')
@@ -100,12 +91,14 @@ export default {
             }
         }
 
-        axios.post(Craft.actionUrl + '/craftnet/partners/patch-partner', formData, {
+        return axios.post(Craft.actionUrl + '/craftnet/partners/patch-partner', formData, {
             headers: {
                 'X-CSRF-Token': Craft.csrfTokenValue,
             }
         })
-            .then(response => cb(response))
-            .catch(error => cbError(error.response));
+    },
+
+    uploadScreenshots(formData, config) {
+        return axios.post(Craft.actionUrl + '/craftnet/partners/upload-screenshots', formData, config)
     }
 }

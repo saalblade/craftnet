@@ -1,11 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Register from '../pages/register/index'
+import RegisterSuccess from '../pages/register/success'
+import Login from '../pages/login'
+import ForgotPassword from '../pages/forgot-password'
 import AccountBillingIndex from '../pages/account/billing/index'
 import AccountBillingInvoiceNumber from '../pages/account/billing/invoices/_number'
 import AccountSettings from '../pages/account/settings'
 import BuyPlugin from '../pages/buy-plugin/index'
 import BuyCms from '../pages/buy-cms/index'
 import Cart from '../pages/cart'
+import Identity from '../pages/identity'
 import DeveloperPlugins from '../pages/developer/plugins/index'
 import DeveloperPluginsId from '../pages/developer/plugins/_id'
 import DeveloperProfile from '../pages/developer/profile'
@@ -22,14 +27,14 @@ import PartnerOverview from '../pages/partner/overview'
 import PartnerProfile from '../pages/partner/profile'
 import NotFound from '../pages/not-found'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
     canReuse: false,
     scrollBehavior (to, from, savedPosition) {
-        return savedPosition || { x: 0, y: 0 };
+        return savedPosition || { x: 0, y: 0 }
     },
     routes: [
         // Redirects
@@ -55,6 +60,30 @@ const router = new VueRouter({
         // Pages
 
         {
+            path: '/register',
+            name: 'Register',
+            component: Register,
+            meta: { layout: 'site', allowAnonymous: true }
+        },
+        {
+            path: '/register/success',
+            name: 'RegisterSuccess',
+            component: RegisterSuccess,
+            meta: { layout: 'site', allowAnonymous: true }
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: Login,
+            meta: { layout: 'site', mainFull: true, allowAnonymous: true }
+        },
+        {
+            path: '/forgot-password',
+            name: 'ForgotPassword',
+            component: ForgotPassword,
+            meta: { layout: 'site', allowAnonymous: true }
+        },
+        {
             path: '/account/billing',
             name: 'Billing',
             component: AccountBillingIndex
@@ -73,19 +102,19 @@ const router = new VueRouter({
             path: '/buy-plugin/:handle/:edition',
             name: 'BuyPlugin',
             component: BuyPlugin,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false, allowAnonymous: true }
         },
         {
             path: '/buy-cms/:edition',
             name: 'BuyCms',
             component: BuyCms,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false, allowAnonymous: true }
         },
         {
             path: '/cart',
             name: 'Cart',
             component: Cart,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false, allowAnonymous: true }
         },
         {
             path: '/developer/plugins',
@@ -141,16 +170,22 @@ const router = new VueRouter({
             component: LicensesPluginsId
         },
         {
+            path: '/identity',
+            name: 'Identity',
+            component: Identity,
+            meta: { sidebar: false, allowAnonymous: true }
+        },
+        {
             path: '/payment',
             name: 'Payment',
             component: Payment,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false, allowAnonymous: true }
         },
         {
             path: '/thank-you',
             name: 'ThankYou',
             component: ThankYou,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false, allowAnonymous: true }
         },
 
 
@@ -177,18 +212,37 @@ const router = new VueRouter({
             path: '*',
             name: 'NotFound',
             component: NotFound,
-            meta: { layout: "no-sidebar" }
+            meta: { sidebar: false }
         },
     ]
-});
+})
 
-// Renew session when changing route
+import store from '../store'
+
+// Make things happen before each route change
 router.beforeEach((to, from, next) => {
+    // Renew the auth manager’s session
     if (router.app.$refs.authManager) {
-        router.app.$refs.authManager.renewSession();
+        router.app.$refs.authManager.renewSession()
     }
 
-    next();
-});
+    // Check that the user can access the next route
+    if (!to.meta.allowAnonymous) {
+        if (!store.state.account.user) {
+            store.dispatch('account/loadAccount')
+                .then(() => {
+                    if (store.state.account.user) {
+                        next()
+                    } else {
+                        router.push({path: '/login'})
+                    }
+                })
+        } else {
+            next()
+        }
+    } else {
+        next()
+    }
+})
 
-export default router;
+export default router

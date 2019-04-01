@@ -21,6 +21,7 @@ return [
         'csrfTokenName' => 'CRAFTNET_CSRF_TOKEN',
         'phpSessionName' => 'CraftnetSessionId',
         'generateTransformsBeforePageLoad' => true,
+        'activateAccountSuccessPath' => '/login?activated=1',
         'backupOnUpdate' => false,
         'backupCommand' => 'PGPASSWORD="{password}" ' .
             'pg_dump ' .

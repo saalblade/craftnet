@@ -10,6 +10,7 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
+use craftnet\helpers\LicenseHelper;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
@@ -17,6 +18,9 @@ use yii\db\Expression;
 
 class PluginLicenseManager extends Component
 {
+    // Public Methods
+    // =========================================================================
+
     /**
      * Normalizes a license key by trimming whitespace and removing dashes.
      *
@@ -37,23 +41,38 @@ class PluginLicenseManager extends Component
     /**
      * Returns licenses owned by a user.
      *
-     * @param int $ownerId
-     * @return PluginLicense[]
+     * @param User $owner
+     * @param string|null $searchQuery
+     * @param $limit
+     * @param $page
+     * @param $orderBy
+     * @param $ascending
+     * @return array
      */
-    public function getLicensesByOwner(int $ownerId): array
+    public function getLicensesByOwner(User $owner, string $searchQuery = null, $limit, $page, $orderBy, $ascending): array
     {
-        $results = $this->_createLicenseQuery()
-            ->where([
-                'l.ownerId' => $ownerId,
-            ])
-            ->all();
+        $defaultLimit = 30;
 
-        $licenses = [];
-        foreach ($results as $result) {
-            $licenses[] = new PluginLicense($result);
+        $perPage = $limit ?? $defaultLimit;
+        $offset = ($page - 1) * $perPage;
+
+        $licenseQuery = $this->_createLicenseQueryForOwner($owner, $searchQuery);
+
+        if ($orderBy) {
+            $licenseQuery->orderBy([$orderBy => $ascending ? SORT_ASC : SORT_DESC]);
         }
 
-        return $licenses;
+        $licenseQuery
+            ->offset($offset)
+            ->limit($limit);
+
+        $results = $licenseQuery->all();
+        $resultsArray = [];
+        foreach ($results as $result) {
+            $resultsArray[] = new PluginLicense($result);
+        }
+
+        return $this->transformLicensesForOwner($resultsArray, $owner);
     }
 
     /**
@@ -86,57 +105,6 @@ class PluginLicenseManager extends Component
         }
 
         return $licenses;
-    }
-
-    /**
-     * Returns sales for a plugin developer
-     *
-     * @param int $ownerId
-     * @return array
-     */
-    public function getSalesByPluginOwner(int $ownerId): array
-    {
-        $results = (new Query())
-            ->select([
-                'lineitems.id AS id',
-                'plugins.id AS pluginId',
-                'plugins.name AS pluginName',
-                'lineitems.total AS grossAmount',
-                'users.id AS ownerId',
-                'users.firstName AS ownerFirstName',
-                'users.lastName AS ownerLastName',
-                'users.email AS ownerEmail',
-                'lineitems.dateCreated AS saleTime',
-                'orders.email AS orderEmail',
-                'elements.type AS purchasableType',
-            ])
-            ->from(['craftnet_pluginlicenses_lineitems licenses_items'])
-            ->innerJoin('commerce_lineitems lineitems', '[[lineitems.id]] = [[licenses_items.lineItemId]]')
-            ->innerJoin('commerce_orders orders', '[[orders.id]] = [[lineitems.orderId]]')
-            ->innerJoin('craftnet_pluginlicenses licenses', '[[licenses.id]] = [[licenses_items.licenseId]]')
-            ->innerJoin('craftnet_plugins plugins', '[[plugins.id]] = [[licenses.pluginId]]')
-            ->innerJoin('elements elements', '[[elements.id]] = [[lineitems.purchasableId]]')
-            ->leftJoin('users', '[[users.id]] = [[licenses.ownerId]]')
-            ->where(['plugins.developerId' => $ownerId])
-            ->orderBy(['lineitems.dateCreated' => SORT_DESC])
-            ->all();
-
-        $results = ArrayHelper::index($results, 'id');
-        $lineItemIds = array_keys($results);
-
-        $adjustments = (new Query())
-            ->select(['lineItemId', 'name', 'amount'])
-            ->from(['commerce_orderadjustments'])
-            ->where(['lineItemId' => $lineItemIds])
-            ->all();
-
-        foreach ($adjustments as $adjustment) {
-            $results[$adjustment['lineItemId']]['adjustments'][] = $adjustment;
-        }
-
-        $results = array_values($results);
-
-        return $results;
     }
 
     /**
@@ -350,6 +318,7 @@ class PluginLicenseManager extends Component
      * @param bool $runValidation
      * @return bool if the license validated and was saved
      * @throws Exception if the license validated but didn't save
+     * @throws \yii\db\Exception
      */
     public function saveLicense(PluginLicense $license, bool $runValidation = true): bool
     {
@@ -542,28 +511,6 @@ class PluginLicenseManager extends Component
         return $this->transformLicensesForOwner($results, $owner);
     }
 
-    public function getSalesArrayByPluginOwner(User $owner)
-    {
-        $results = $this->getSalesByPluginOwner($owner->id);
-
-        foreach ($results as &$row) {
-            $row['netAmount'] = number_format($row['grossAmount'] * 0.8, 2);
-            $row['plugin'] = [
-                'id' => $row['pluginId'],
-                'name' => $row['pluginName']
-            ];
-            $row['customer'] = [
-                'id' => $row['ownerId'],
-                'name' => implode(' ', array_filter([$row['ownerFirstName'], $row['ownerLastName']])),
-                'email' => $row['ownerEmail'] ?? $row['orderEmail'],
-            ];
-
-            unset($row['pluginId'], $row['pluginName'], $row['ownerId'], $row['ownerFirstName'], $row['ownerLastName'], $row['ownerEmail']);
-        }
-
-        return $results;
-    }
-
     /**
      * Transforms licenses for the given owner.
      *
@@ -583,6 +530,20 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns licenses by owner as an array.
+     *
+     * @param User $owner
+     * @param string|null $searchQuery
+     * @return int
+     */
+    public function getTotalLicensesByOwner(User $owner, string $searchQuery = null): int
+    {
+        $licenseQuery = $this->_createLicenseQueryForOwner($owner, $searchQuery);
+
+        return $licenseQuery->count();
+    }
+
+    /**
      * Transforms a license for the given owner.
      *
      * @param PluginLicense $result
@@ -599,14 +560,18 @@ class PluginLicenseManager extends Component
             ];
         }
 
-
         // History
-
         $license['history'] = $this->getHistory($result->id);
+
+        // Edition deteails
         $license['edition'] = PluginEdition::findOne($result->editionId);
 
-        // Plugin
+        // Expiry date options
+        if (!empty($license['expiresOn'])) {
+            $license['expiryDateOptions'] = LicenseHelper::getExpiryDateOptions($license['expiresOn']);
+        }
 
+        // Plugin
         $plugin = null;
 
         if ($result->pluginId) {
@@ -616,9 +581,7 @@ class PluginLicenseManager extends Component
 
         $license['plugin'] = $plugin;
 
-
         // CMS License
-
         $cmsLicense = null;
 
         if ($result->cmsLicenseId) {
@@ -679,11 +642,38 @@ class PluginLicenseManager extends Component
     }
 
     /**
+     * Returns the number of licenses expiring in the next 45 days.
+     *
+     * @param User $owner
+     * @return int
+     * @throws \Exception
+     */
+    public function getExpiringLicensesTotal(User $owner): int
+    {
+        $date = new \DateTime('now');
+        $date->add(new \DateInterval('P45D'));
+        $dateFormatted = $date->format('Y-m-d');
+
+        $licenseQuery = $this->_createLicenseQuery()
+            ->where(['l.ownerId' => $owner->id])
+            ->andWhere(['l.expired' => false])
+            ->andWhere(['l.autoRenew' => false])
+            ->andWhere(['not', ['l.expiresOn' => null]])
+            ->andWhere(['<=', 'l.expiresOn', $dateFormatted]);
+
+        return $licenseQuery->count();
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * @param string|null $searchQuery
      * @return Query
      */
     private function _createLicenseQuery(): Query
     {
-        return (new Query())
+        $query = (new Query())
             ->select([
                 'l.id',
                 'l.pluginId',
@@ -711,5 +701,30 @@ class PluginLicenseManager extends Component
                 'l.uid',
             ])
             ->from(['craftnet_pluginlicenses l']);
+
+
+        return $query;
+    }
+
+    /**
+     * @param User $owner
+     * @param string|null $searchQuery
+     * @return Query
+     */
+    private function _createLicenseQueryForOwner(User $owner, string $searchQuery = null)
+    {
+        $query = $this->_createLicenseQuery()
+            ->where(['l.ownerId' => $owner->id]);
+
+        if ($searchQuery) {
+            $query->andWhere(['or',
+                ['ilike', 'l.key', $searchQuery],
+                ['ilike', 'l.notes', $searchQuery],
+                ['ilike', 'l.pluginHandle', $searchQuery],
+                ['ilike', 'l.email', $searchQuery],
+            ]);
+        }
+
+        return $query;
     }
 }

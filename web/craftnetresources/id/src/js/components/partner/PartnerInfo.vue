@@ -6,7 +6,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="text-right" v-if="!isEditing">
-                    <button class="btn btn-secondary" @click="onEditClick"><icon icon="pencil-alt" /> Edit</button>
+                    <btn icon="pencil" @click="onEditClick">Edit</btn>
                 </div>
 
                 <div v-if="!isEditing">
@@ -71,9 +71,9 @@
                 </div>
 
                 <div v-else>
-                    <text-field id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
-                    <text-field id="websiteSlug" label="Website Slug" instructions="Automatically generated from Business Name if blank. Not editable once your page is live. (e.g. https://craftcms.com/partners/business-name)" v-model="draft.websiteSlug" :errors="errors.websiteSlug" :disabled="partner.enabled" />
-                    <text-field id="website" label="Business Website URL" v-model="draft.website" :errors="errors.website" />
+                    <textbox id="businessName" label="Business Name" v-model="draft.businessName" :errors="errors.businessName" />
+                    <textbox id="websiteSlug" label="Website Slug" instructions="Automatically generated from Business Name if blank. Not editable once your page is live. (e.g. https://craftcms.com/partners/business-name)" v-model="draft.websiteSlug" :errors="errors.websiteSlug" :disabled="partner.enabled" />
+                    <textbox id="website" label="Business Website URL" v-model="draft.website" :errors="errors.website" />
 
                     <div class="form-group">
                         <label>Logo</label>
@@ -96,32 +96,29 @@
                         <div v-if="errors.logo" class="invalid-feedback" v-for="(error, index) in errors.logo" :key="index">{{ error }}</div>
                     </div>
 
-                    <text-field id="primaryContactName" label="Primary Contact Name" instructions="For Pixel &amp; Tonic use only. This will not be visible on your profile." v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
-                    <text-field id="primaryContactEmail" label="Primary Contact Email" instructions="For Pixel &amp; Tonic use only. This will not be visible on your profile." v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
-                    <text-field id="primaryContactPhone" label="Primary Contact Phone" instructions="For Pixel &amp; Tonic use only. This will not be visible on your profile." v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
-                    <select-field id="region" label="Region" v-model="draft.region" :options="options.region" :errors="errors.region" />
-                    <checkbox-field id="isRegisteredBusiness" label="This is a registered business" instructions="Required for consideration." v-model="draft.isRegisteredBusiness" :checked-value="1" :errors="errors.isRegisteredBusiness" />
-                    <checkbox-field id="hasFullTimeDev" label="Business has at least one full-time Craft developer" instructions="Required for consideration." v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
+                    <textbox id="primaryContactName" label="Primary Contact Name" instructions="For Pixel &amp; Tonic use only. This will not be visible on your profile." v-model="draft.primaryContactName" :errors="errors.primaryContactName" />
+                    <textbox id="primaryContactEmail" label="Primary Contact Email" instructions="For Pixel &amp; Tonic use only. This will not be visible on your profile." v-model="draft.primaryContactEmail" :errors="errors.primaryContactEmail" />
+                    <textbox id="primaryContactPhone" label="Primary Contact Phone" instructions="For Pixel &amp; Tonic use only. This will not be visible on your profile." v-model="draft.primaryContactPhone" :errors="errors.primaryContactPhone" />
+                    <dropdown id="region" label="Region" v-model="draft.region" :options="options.region" :errors="errors.region" />
+                    <checkbox id="isRegisteredBusiness" label="This is a registered business" instructions="Required for consideration." v-model="draft.isRegisteredBusiness" :checked-value="1" :errors="errors.isRegisteredBusiness" />
+                    <checkbox id="hasFullTimeDev" label="Business has at least one full-time Craft developer" instructions="Required for consideration." v-model="draft.hasFullTimeDev" :checked-value="1" :errors="errors.hasFullTimeDev" />
                     <checkbox-set id="capabilities" label="Capabilities" v-model="draft.capabilities" :options="options.capabilities" :errors="errors.capabilities" />
-                    <textarea-field id="expertise" label="Areas of Expertise" instructions="Tags for relevant expertise (e.g. SEO), each on a new line" v-model="draft.expertise" />
-                    <select-field id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agencySize" :errors="errors.agencySize" />
-                    <textarea-field id="fullBio" label="Full Bio" instructions="Markdown OK. Shown on your detail page." v-model="draft.fullBio" :errors="errors.fullBio" />
-                    <textarea-field id="shortBio" label="Short Bio" instructions="Max 130 characters. Shown on your listing card." v-model="draft.shortBio" :max="130" :errors="errors.shortBio" />
+                    <textbox type="textarea" id="expertise" label="Areas of Expertise" instructions="Tags for relevant expertise (e.g. SEO), each on a new line" v-model="draft.expertise" />
+                    <dropdown id="agencySize" label="Agency Size" v-model="draft.agencySize" :options="options.agencySize" :errors="errors.agencySize" />
+                    <textbox type="textarea" id="fullBio" label="Full Bio" instructions="Markdown OK. Shown on your detail page." v-model="draft.fullBio" :errors="errors.fullBio" />
+                    <textbox type="textarea" id="shortBio" label="Short Bio" instructions="Max 130 characters. Shown on your listing card." v-model="draft.shortBio" :max="130" :errors="errors.shortBio" />
 
                     <div class="pt-4">
-                        <button
-                            class="btn btn-secondary"
-                            :class="{'disabled': requestPending}"
+                        <btn
                             :disabled="requestPending"
-                            @click="isEditing = false">Cancel</button>
+                            @click="isEditing = false">Cancel</btn>
 
-                        <button
-                            class="btn btn-primary"
-                            :class="{'disabled': requestPending}"
+                        <btn
+                            kind="primary"
                             :disabled="requestPending"
-                            @click="onSubmit">Save</button>
+                            @click="onSubmit">Save</btn>
 
-                        <spinner :cssClass="{'invisible': !requestPending}"></spinner>
+                        <spinner :class="{'invisible': !requestPending}"></spinner>
                     </div>
                 </div>
             </div>
@@ -150,16 +147,16 @@
 
 <script>
     import helpers from '../../mixins/helpers'
-    import Spinner from '../Spinner'
+    import CheckboxSet from '../CheckboxSet'
 
     export default {
         props: ['partner'],
 
-        components: {
-            Spinner,
-        },
-
         mixins: [helpers],
+
+        components: {
+            CheckboxSet,
+        },
 
         data() {
             return {

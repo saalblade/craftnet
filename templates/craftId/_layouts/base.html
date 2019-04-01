@@ -1,7 +1,3 @@
-{% if not currentUser and craft.app.request.segment(1) != 'login' and craft.app.request.segment(1) != 'forgotpassword' and craft.app.request.segment(1) != 'register' %}
-    {% redirect 'login' %}
-{% endif %}
-
 {% if not title is defined %}
     {% set title = "Craft ID" %}
 {% endif %}

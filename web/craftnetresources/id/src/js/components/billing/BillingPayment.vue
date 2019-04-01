@@ -4,41 +4,44 @@
             <div class="flex-1">
                 <h4>Payment</h4>
 
-                <div v-if="!editing">
-                    <div v-if="card" class="credit-card">
-                        <card-icon :brand="card.brand"></card-icon>
-                        <ul class="list-reset">
-                            <li>Number: •••• •••• •••• {{ card.last4 }}</li>
-                            <li>Expiry: {{ card.exp_month }}/{{ card.exp_year }}</li>
-                        </ul>
+                <template v-if="loading">
+                    <spinner></spinner>
+                </template>
+                <template v-else>
+                    <div v-if="!editing">
+                        <div v-if="card" class="credit-card">
+                            <card-icon :brand="card.brand"></card-icon>
+                            <ul class="list-reset">
+                                <li>Number: •••• •••• •••• {{ card.last4 }}</li>
+                                <li>Expiry: {{ card.exp_month }}/{{ card.exp_year }}</li>
+                            </ul>
+                        </div>
+
+                        <p v-else class="text-secondary">Add a credit card and use Craft ID to purchase licenses and renewals.</p>
                     </div>
 
-                    <p v-else class="text-secondary">Credit card not defined.</p>
-                </div>
+                    <div :class="{'hidden': !editing}">
+                        <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard" @cancel="cancel"></card-form>
 
-                <div :class="{'hidden': !editing}">
-                    <card-form :loading="cardFormloading" @error="error" @beforeSave="beforeSave" @save="saveCard" @cancel="cancel"></card-form>
-                </div>
-
-                <div class="mt-3">
-                    <img src="~@/images/powered_by_stripe.svg" height="18" />
-                </div>
+                        <div class="mt-4">
+                            <img src="~@/images/powered_by_stripe.svg" width="90" />
+                        </div>
+                    </div>
+                </template>
             </div>
 
-            <div v-if="!editing" class="pl-4">
+            <div v-if="!loading && !editing" class="pl-4">
                 <p>
-                    <button @click="editing = true" type="button" class="btn btn-secondary btn-sm" data-facebox="#billing-contact-info-modal">
-                        <icon icon="plus" />
-                        New Card
-                    </button>
+                    <template v-if="card">
+                        <btn small @click="editing = true">Change card</btn>
+                    </template>
+                    <template v-else>
+                        <btn small icon="plus" @click="editing = true">Add a card</btn>
+                    </template>
                 </p>
 
                 <p v-if="card">
-                    <button @click="removeCard()" class="btn btn-sm btn-danger">
-                        <icon icon="times" />
-                        Remove
-                    </button>
-
+                    <btn kind="danger" icon="times" small @click="removeCard()">Remove</btn>
                     <spinner v-if="removeCardLoading"></spinner>
                 </p>
             </div>
@@ -50,7 +53,6 @@
     import {mapState} from 'vuex'
     import CardForm from '../card/CardForm'
     import CardIcon from '../card/CardIcon'
-    import Spinner from '../Spinner'
     import helpers from '../../mixins/helpers'
 
     export default {
@@ -60,11 +62,11 @@
         components: {
             CardForm,
             CardIcon,
-            Spinner,
         },
 
         data() {
             return {
+                loading: false,
                 editing: false,
                 cardFormloading: false,
                 removeCardLoading: false,
@@ -74,7 +76,7 @@
         computed: {
 
             ...mapState({
-                card: state => state.account.card,
+                card: state => state.stripe.card,
             }),
 
         },
@@ -88,12 +90,17 @@
              * @param source
              */
             saveCard(card, source) {
-                this.$store.dispatch('account/saveCard', source)
+                this.$store.dispatch('stripe/saveCard', source)
                     .then(() => {
-                        card.clear();
-                        this.cardFormloading = false;
-                        this.editing = false;
-                        this.$store.dispatch('app/displayNotice', 'Card saved.');
+                        card.clear()
+                        this.cardFormloading = false
+                        this.editing = false
+                        this.$store.dispatch('app/displayNotice', 'Card saved.')
+                    })
+                    .catch((response) => {
+                        this.cardFormloading = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t save credit card.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
 
@@ -101,11 +108,16 @@
              * Removes a credit card.
              */
             removeCard() {
-                this.removeCardLoading = true;
-                this.$store.dispatch('account/removeCard')
+                this.removeCardLoading = true
+                this.$store.dispatch('stripe/removeCard')
                     .then(() => {
-                        this.removeCardLoading = false;
+                        this.removeCardLoading = false
                         this.$store.dispatch('app/displayNotice', 'Card removed.')
+                    })
+                    .catch((response) => {
+                        this.removeCardLoading = false
+                        const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t remove credit card.'
+                        this.$store.dispatch('app/displayError', errorMessage)
                     })
             },
 
@@ -113,24 +125,37 @@
              * Before save.
              */
             beforeSave() {
-                this.cardFormloading = true;
+                this.cardFormloading = true
             },
 
             /**
              * Cancel changes.
              */
             cancel() {
-                this.editing = false;
+                this.editing = false
             },
 
             /**
              * Error.
              */
             error() {
-                this.cardFormloading = false;
+                this.cardFormloading = false
             },
 
         },
+
+        mounted() {
+            this.loading = true
+
+            this.$store.dispatch('stripe/getStripeAccount')
+                .then(() => {
+                    this.loading = false
+                })
+                .catch(() => {
+                    this.loading = false
+                    this.$store.dispatch('app/displayNotice', 'Couldn’t get Stripe account.')
+                })
+        }
 
     }
 </script>

@@ -60,24 +60,16 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
     import Badge from '../Badge'
+    import helpers from '../../mixins/helpers'
 
     export default {
+        mixins: [helpers],
 
         props: ['licenses'],
 
         components: {
             Badge
         },
-
-        computed: {
-
-            ...mapGetters({
-                expiresSoon: 'licenses/expiresSoon',
-            }),
-
-        }
-
     }
 </script>

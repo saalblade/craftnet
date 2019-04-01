@@ -42,8 +42,11 @@ return [
         'POST    v1/plugin-licenses' => 'craftnet/api/v1/plugin-licenses/create',
         'GET     v1/plugin-licenses/<key:.*>' => 'craftnet/api/v1/plugin-licenses/get',
         'GET     v1/plugin-store' => 'craftnet/api/v1/plugin-store',
+        'GET     v1/plugin-store/meta' => 'craftnet/api/v1/plugin-store/meta',
         'GET     v1/plugin/<pluginId:\d+>' => 'craftnet/api/v1/plugin',
         'GET     v1/plugin/<pluginId:\d+>/changelog' => 'craftnet/api/v1/plugin/changelog',
+        'GET     v1/plugins' => 'craftnet/api/v1/plugins',
+        'GET     v1/plugins/<pluginHandle:{handle}>' => 'craftnet/api/v1/plugins/get-plugin',
         'POST    v1/support' => 'craftnet/api/v1/support/create',
         'GET     v1/updates' => 'craftnet/api/v1/updates',
         'POST    v1/updates' => 'craftnet/api/v1/updates/old',
@@ -54,7 +57,7 @@ return [
         'POST    queue/handle-message' => 'queue/handle-message',
 
         'GET     v1/id' => 'craftnet/id/v1/id',
-        'GET     craft-id' => 'craftnet/id/craft-id',
+        'GET     craft-id/countries' => 'craftnet/id/craft-id/countries',
         'GET     apps/connect/<appTypeHandle:{handle}>' => 'craftnet/id/apps/connect',
         'GET     apps/callback' => 'craftnet/id/apps/callback',
         'GET     apps/disconnect/<appTypeHandle:{handle}>' => 'craftnet/id/apps/disconnect',
@@ -72,11 +75,7 @@ return [
         'oauth/revoke' => 'oauth-server/oauth/revoke',
 
         // Catch-all route for Vue when people reload the page.
-        'login'=> ['template' => 'login'],
-        'register'=> ['template' => 'register'],
-        'register/success'=> ['template' => 'register/success'],
-        'forgotpassword'=> ['template' => 'forgotpassword'],
-        '<url:(.*)>'=> 'craftnet/id/account',
+        '<url:(.*)>'=> 'craftnet/id/index',
     ],
     'plugins' => [
         '/' => 'craftnet/plugins/index/index',

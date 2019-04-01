@@ -17,14 +17,13 @@ const state = {
  * Getters
  */
 const getters = {
-
     cartTotal() {
         return 0
     },
 
     cartTotalItems(state) {
         if(state.cart && state.cart.lineItems) {
-            return state.cart.lineItems.length;
+            return state.cart.lineItems.length
         }
 
         return 0
@@ -56,69 +55,152 @@ const getters = {
     cartItemsData(state) {
         return CartHelper.getCartItemsData(state.cart)
     }
-
 }
 
 /**
  * Actions
  */
 const actions = {
-
     getCart({dispatch, commit, rootState, state}) {
         return new Promise((resolve, reject) => {
             if (!state.cart) {
                 dispatch('getOrderNumber')
                     .then(orderNumber => {
                         if (orderNumber) {
-                            api.getCart(orderNumber, response => {
-                                if (!response.error) {
-                                    commit('updateCart', {response})
-                                    resolve(response)
-                                } else {
-                                    // Couldn’t get cart for this order number? Try to create a new one.
-                                    const data = {
-                                        email: rootState.account.currentUser.email
+                            api.getCart(orderNumber)
+                                .then((response) => {
+                                    if (!response.error) {
+                                        commit('updateCart', {response: response.data})
+
+                                        dispatch('requestMissingPlugins')
+                                            .then(() => {
+                                                resolve()
+                                            })
+                                            .catch(() => {
+                                                reject('Couldn’t get missing plugins')
+                                            })
+                                    } else {
+                                        // Couldn’t get cart for this order number? Try to create a new one.
+                                        const data = {}
+
+                                        if (rootState.account.user) {
+                                            data.email = rootState.account.user.email
+                                        }
+
+                                        api.createCart(data)
+                                            .then((createCartResponse) => {
+                                                commit('updateCart', {response: createCartResponse.data})
+                                                dispatch('saveOrderNumber', {orderNumber: createCartResponse.data.cart.number})
+                                                resolve()
+                                            })
+                                            .catch((createCartError) => {
+                                                if (createCartError.response.data.error) {
+                                                    reject(createCartError.response.data.error)
+                                                    return;
+                                                }
+
+                                                if (createCartError.message) {
+                                                    reject(createCartError.message)
+                                                    return;
+                                                }
+
+                                                reject('Couldn’t create cart')
+                                            })
+                                    }
+                                })
+                                .catch((error) => {
+                                    if (error.response.data.message && error.response.data.message !== 'Cart Already Completed' && error.response.data.message !== 'Cart Not Found') {
+                                        reject(error.response.data.message)
+                                        return;
                                     }
 
-                                    api.createCart(data, response2 => {
-                                        commit('updateCart', {response: response2})
-                                        dispatch('saveOrderNumber', {orderNumber: response2.cart.number})
-                                        resolve(response)
-                                    }, response => {
-                                        reject(response)
-                                    })
-                                }
-                            }, response => {
-                                if(response.response.data.message && response.response.data.message === 'Cart Already Completed') {
-                                    const data = {
-                                        email: rootState.account.currentUser.email
+                                    if (error.response.data.error) {
+                                        reject(error.response.data.error)
+                                        return;
                                     }
 
-                                    api.createCart(data, response2 => {
-                                        commit('updateCart', {response: response2})
-                                        dispatch('saveOrderNumber', {orderNumber: response2.cart.number})
-                                        resolve(response)
-                                    }, response => {
-                                        reject(response)
-                                    })
-                                } else {
-                                    reject(response)
-                                }
-                            })
+                                    const data = {}
+
+                                    if (rootState.account.user) {
+                                        data.email = rootState.account.user.email
+                                    }
+
+                                    api.createCart(data)
+                                        .then((createCartResponse) => {
+                                            commit('updateCart', {response: createCartResponse.data})
+                                            dispatch('saveOrderNumber', {orderNumber: createCartResponse.data.cart.number})
+                                            resolve()
+                                        })
+                                        .catch((createCartError) => {
+                                            if (createCartError.response.data.error) {
+                                                reject(createCartError.response.data.error)
+                                                return;
+                                            }
+
+                                            if (createCartError.message) {
+                                                reject(createCartError.message)
+                                                return;
+                                            }
+
+                                            reject('Couldn’t create cart')
+                                        })
+                                })
                         } else {
                             // No order number yet? Create a new cart.
-                            const data = {
-                                email: rootState.account.currentUser.email
+                            const data = {}
+
+                            if (rootState.account.user) {
+                                data.email = rootState.account.user.email
                             }
 
-                            api.createCart(data, response => {
-                                commit('updateCart', {response})
-                                dispatch('saveOrderNumber', {orderNumber: response.cart.number})
-                                resolve(response)
-                            }, response => {
-                                reject(response)
-                            })
+                            api.createCart(data)
+                                .then((createCartResponse) => {
+                                    commit('updateCart', {response: createCartResponse.data})
+                                    dispatch('saveOrderNumber', {orderNumber: createCartResponse.data.cart.number})
+                                    resolve()
+                                })
+                                .catch((createCartError) => {
+                                    if (createCartError.response.data.error) {
+                                        reject(createCartError.response.data.error)
+                                        return;
+                                    }
+
+                                    if (createCartError.message) {
+                                        reject(createCartError.message)
+                                        return;
+                                    }
+
+                                    reject('Couldn’t create cart.')
+                                })
                         }
+                    })
+            } else {
+                resolve()
+            }
+        })
+    },
+
+    requestMissingPlugins({state, dispatch}) {
+        return new Promise((resolve, reject) => {
+
+            // request plugins we don’t have yet
+            const pluginIds = []
+
+            state.cart.lineItems.forEach(lineItem => {
+                if (lineItem.purchasable.plugin) {
+                    if (pluginIds.indexOf(lineItem.purchasable.plugin.id) < 0) {
+                        pluginIds.push(lineItem.purchasable.plugin.id)
+                    }
+                }
+            })
+
+            if (pluginIds.length > 0) {
+                dispatch('pluginStore/getPlugins', pluginIds, {root: true})
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject('Couldn’t get cart')
                     })
             } else {
                 resolve()
@@ -130,16 +212,18 @@ const actions = {
         return new Promise((resolve, reject) => {
             const cart = state.cart
 
-            api.updateCart(cart.number, data, response => {
-                if (!response.errors) {
-                    commit('updateCart', {response})
-                    resolve(response)
-                } else {
+            api.updateCart(cart.number, data)
+                .then((response) => {
+                    if (!response.data.errors) {
+                        commit('updateCart', {response: response.data})
+                        resolve(response)
+                    } else {
+                        reject(response)
+                    }
+                })
+                .catch((response) => {
                     reject(response)
-                }
-            }, response => {
-                reject(response)
-            })
+                })
         })
     },
 
@@ -215,12 +299,31 @@ const actions = {
                         items,
                     }
 
-                    api.updateCart(cart.number, data, response => {
-                        commit('updateCart', {response})
-                        resolve(response)
-                    }, response => {
-                        reject(response)
-                    })
+                    api.updateCart(cart.number, data)
+                        .then((updateCartResponse) => {
+                            commit('updateCart', {response: updateCartResponse.data})
+
+                            dispatch('requestMissingPlugins')
+                                .then(() => {
+                                    resolve(updateCartResponse)
+                                })
+                                .catch(() => {
+                                    reject('Couldn’t get missing plugins')
+                                })
+                        })
+                        .catch((error) => {
+                            if (error.response.data.error) {
+                                reject(error.response.data.error)
+                                return;
+                            }
+
+                            if (error.message) {
+                                reject(error.message)
+                                return;
+                            }
+
+                            reject('Couldn’t update cart.')
+                        })
                 })
                 .catch(reject)
         })
@@ -238,12 +341,14 @@ const actions = {
                         items,
                     }
 
-                    api.updateCart(cart.number, data, response => {
-                        commit('updateCart', {response})
-                        resolve(response)
-                    }, response => {
-                        reject(response)
-                    })
+                    api.updateCart(cart.number, data)
+                        .then((response) => {
+                            commit('updateCart', {response: response.data})
+                            resolve(response)
+                        })
+                        .catch((response) => {
+                            reject(response)
+                        })
                 })
                 .catch(reject)
         })
@@ -261,22 +366,22 @@ const actions = {
                 items,
             }
 
-            api.updateCart(cart.number, data, response => {
-                commit('updateCart', {response})
-                resolve(response)
-            }, response => {
-                reject(response)
-            })
+            api.updateCart(cart.number, data)
+                .then((response) => {
+                    commit('updateCart', {response: response.data})
+                    resolve(response)
+                })
+                .catch((response) => {
+                    reject(response)
+                })
         })
     },
-
 }
 
 /**
  * Mutations
  */
 const mutations = {
-
     updateCart(state, {response}) {
         state.cart = response.cart
         state.stripePublicKey = response.stripePublicKey
@@ -297,7 +402,6 @@ const mutations = {
     updateSelectedExpiryDates(state, selectedExpiryDates) {
         state.selectedExpiryDates = selectedExpiryDates
     },
-
 }
 
 export default {

@@ -1,38 +1,25 @@
 <template>
     <div>
-        <select-field :value="renew" @input="$emit('update:renew', $event)" :options="renewOptions" />
-        <button @click="$emit('cancel')" class="btn btn-secondary">Cancel</button>
-        <button @click="$emit('continue')" class="btn btn-primary">Continue</button>
+        <dropdown :value="renew" @input="$emit('update:renew', $event)" :options="renewOptions" />
+        <btn @click="$emit('cancel')">Cancel</btn>
+        <btn kind="primary" @click="$emit('continue')">Continue</btn>
     </div>
-
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-
     export default {
-
         props: ['license', 'renew'],
 
         computed: {
-
-            ...mapState({
-                licenseExpiryDateOptions: state => state.pluginStore.licenseExpiryDateOptions,
-            }),
-
-            expiryDateOptions() {
-                return this.licenseExpiryDateOptions.cmsLicenses[this.license.id]
-            },
-
             renewOptions() {
-                if (!this.expiryDateOptions) {
+                if (!this.license.expiryDateOptions) {
                     return []
                 }
 
                 let options = [];
 
-                for (let i = 0; i < this.expiryDateOptions.length; i++) {
-                    const expiryDateOption = this.expiryDateOptions[i]
+                for (let i = 0; i < this.license.expiryDateOptions.length; i++) {
+                    const expiryDateOption = this.license.expiryDateOptions[i]
                     const date = expiryDateOption[1]
                     const formattedDate = this.$moment(date).format('L')
                     const label = "Extend updates until " + formattedDate
@@ -45,8 +32,6 @@
 
                 return options
             },
-
         },
-
     }
 </script>

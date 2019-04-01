@@ -1,7 +1,10 @@
 <template>
     <div id="app" :class="{'has-sidebar': (!$route.meta.layout || $route.meta.layout !== 'no-sidebar')}">
         <auth-manager ref="authManager"></auth-manager>
-        <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.commit('app/updateShowRenewLicensesModal', false)" />
+
+        <template v-if="user">
+            <renew-licenses-modal v-if="showRenewLicensesModal" :license="renewLicense" @cancel="$store.commit('app/updateShowRenewLicensesModal', false)" />
+        </template>
 
         <template v-if="notification">
             <div id="notifications-wrapper" :class="{'hide': !notification }">
@@ -13,78 +16,72 @@
 
         <template v-if="loading">
             <div class="text-center">
-                <spinner big cssClass="mt-8"></spinner>
+                <spinner class="lg mt-8"></spinner>
             </div>
         </template>
 
         <template v-else>
-            <layout></layout>
+            <component :is="layoutComponent"></component>
         </template>
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
-    import router from './router';
-    import AuthManager from './components/AuthManager';
-    import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal';
-    import Layout from './components/Layout';
-    import Spinner from './components/Spinner';
+    import router from './router'
+    import helpers from './mixins/helpers'
+    import AuthManager from './components/AuthManager'
+    import RenewLicensesModal from './components/licenses/renew-licenses/RenewLicensesModal'
+    import AppLayout from './components/layouts/AppLayout'
+    import SiteLayout from './components/layouts/SiteLayout'
 
     export default {
-
         router,
+
+        mixins: [helpers],
 
         components: {
             AuthManager,
             RenewLicensesModal,
-            Layout,
-            Spinner,
+            AppLayout,
+            SiteLayout,
         },
 
         computed: {
-
             ...mapState({
                 notification: state => state.app.notification,
                 showRenewLicensesModal: state => state.app.showRenewLicensesModal,
                 loading: state => state.app.loading,
                 renewLicense: state => state.app.renewLicense,
+                user: state => state.account.user,
             }),
 
+            layoutComponent() {
+                switch (this.$route.meta.layout) {
+                    case 'site':
+                        return 'site-layout'
+
+                    default:
+                        return 'app-layout'
+                }
+            }
         },
 
         created() {
-            this.$store.dispatch('craftId/getCraftIdData')
+            this.$store.dispatch('account/loadAccount')
                 .then(() => {
-                    this.$store.commit('app/updateLoading', false)
-                    this.$store.dispatch('cart/getCart');
-                });
-
-            if (window.stripeAccessToken) {
-                this.$store.dispatch('account/getStripeAccount')
-                    .then(() => {
-                        this.$store.commit('app/updateStripeAccountLoading', false)
-                    }, () => {
-                        this.$store.commit('app/updateStripeAccountLoading', false)
-                    });
-            } else {
-                this.$store.commit('app/updateStripeAccountLoading', false)
-            }
-
-            this.$store.dispatch('account/getInvoices')
-                .then(() => {
-                    this.$store.commit('app/updateInvoicesLoading', false)
+                    this.$store.dispatch('cart/getCart')
+                        .then(() => {
+                            this.$store.commit('app/updateLoading', false)
+                        })
                 })
-                .catch(() => {
-                    this.$store.commit('app/updateInvoicesLoading', false)
-                });
 
             if(window.sessionNotice) {
-                this.$store.dispatch('app/displayNotice', window.sessionNotice);
+                this.$store.dispatch('app/displayNotice', window.sessionNotice)
             }
 
             if(window.sessionError) {
-                this.$store.dispatch('app/displayError', window.sessionError);
+                this.$store.dispatch('app/displayError', window.sessionError)
             }
         }
     }
@@ -92,4 +89,12 @@
 
 <style lang="scss">
     @import './../sass/app.scss';
+
+    #app:not(.has-sidebar) {
+        .header {
+            #sidebar-toggle {
+                @apply .hidden;
+            }
+        }
+    }
 </style>

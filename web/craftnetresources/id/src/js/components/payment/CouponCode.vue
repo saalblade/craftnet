@@ -1,20 +1,14 @@
 <template>
     <div>
-        <text-field placeholder="XXXXXXX" id="coupon-code" size="12" v-model="couponCode" @input="couponCodeChange" :errors="couponCodeError" />
+        <textbox placeholder="XXXXXXX" id="coupon-code" size="12" v-model="couponCode" @input="couponCodeChange" :errors="couponCodeError" />
         <spinner v-if="couponCodeLoading"></spinner>
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
-    import Spinner from '../Spinner'
 
     export default {
-
-        components: {
-            Spinner,
-        },
-
         data() {
             return {
                 couponCode: null,
@@ -26,15 +20,12 @@
         },
 
         computed: {
-
             ...mapState({
                 cart: state => state.cart.cart,
             }),
-
         },
 
         methods: {
-
             couponCodeChange() {
                 clearTimeout(this.couponCodeTimeout)
                 this.couponCodeSuccess = false
@@ -56,7 +47,7 @@
                         })
                         .catch(response => {
                             if (response.response.data.errors[0].message) {
-                                this.couponCodeError = [response.response.data.errors[0].message];
+                                this.couponCodeError = [response.response.data.errors[0].message]
                             } else {
                                 this.couponCodeError = true
                             }
@@ -66,11 +57,10 @@
                         })
                 }.bind(this), 500)
             }
-
         },
 
         mounted() {
-            this.couponCode = this.cart.couponCode;
+            this.couponCode = this.cart.couponCode
         }
     }
 </script>

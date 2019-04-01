@@ -3,7 +3,7 @@
         <spinner v-if="loading"></spinner>
 
         <template v-else>
-            <select-field v-model="renew" :options="extendUpdateOptions" />
+            <dropdown v-model="renew" :options="extendUpdateOptions" />
 
             <table class="table mb-2">
                 <thead>
@@ -24,23 +24,17 @@
                 </tbody>
             </table>
 
-            <input type="button" class="btn btn-secondary" @click="$emit('cancel')" value="Cancel" />
-            <input type="button" class="btn btn-primary" @click="addToCart()" value="Add to cart" />
+            <btn @click="$emit('cancel')">Cancel</btn>
+            <btn kind="primary" @click="addToCart()">Add to cart</btn>
         </template>
     </div>
 </template>
 
 <script>
-    import {mapState, mapActions} from 'vuex'
-    import Spinner from '../../../Spinner'
+    import {mapActions} from 'vuex'
 
     export default {
-
         props: ['license'],
-
-        components: {
-            Spinner,
-        },
 
         data() {
             return {
@@ -50,13 +44,8 @@
         },
 
         computed: {
-
-            ...mapState({
-                licenseExpiryDateOptions: state => state.pluginStore.licenseExpiryDateOptions,
-            }),
-
             expiryDateOptions() {
-                return this.licenseExpiryDateOptions.pluginLicenses[this.license.id]
+                return this.license.expiryDateOptions
             },
 
             extendUpdateOptions() {
@@ -106,9 +95,8 @@
         },
 
         methods: {
-
             ...mapActions({
-                getPluginStoreData: 'pluginStore/getPluginStoreData',
+                getMeta: 'pluginStore/getMeta',
             }),
 
             addToCart() {
@@ -124,18 +112,16 @@
                         this.$router.push({path: '/cart'})
                         this.$emit('addToCart')
                     })
-                    .catch(error => {
-                        const errorMessage = error.response.data.errors && error.response.data.errors[0] && error.response.data.errors[0].message ? error.response.data.errors[0].message : 'Couldn’t add update to cart.';
+                    .catch(errorMessage => {
                         this.$store.dispatch('app/displayError', errorMessage);
                     })
             },
-
         },
 
         mounted() {
             this.loading = true
 
-            this.getPluginStoreData()
+            this.getMeta()
                 .then(() => {
                     this.loading = false
                     this.renew = 0
@@ -144,6 +130,5 @@
                     this.loading = false
                 })
         }
-
     }
 </script>

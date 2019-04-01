@@ -13,13 +13,13 @@
                     <p v-if="notice">This is your new API token, <strong>keep it someplace safe</strong>.</p>
 
                     <div class="max-w-sm">
-                        <text-field id="apiToken" ref="apiTokenField" class="mono" spellcheck="false" v-model="apiToken" :readonly="true"/>
+                        <textbox id="apiToken" ref="apiTokenField" class="mono" :spellcheck="false" v-model="apiToken" :readonly="true"/>
                     </div>
 
-                    <input v-if="apiToken" type="submit" class="btn btn-primary" value="Generate new API Token"/>
-                    <input v-else type="submit" class="btn btn-primary" value="Generate API Token"/>
-
-                    <spinner v-if="loading"></spinner>
+                    <btn kind="primary" type="submit" :disabled="loading" :loading="loading">
+                        <template v-if="apiToken">Generate new API Token</template>
+                        <template v-else>Generate API Token</template>
+                    </btn>
                 </form>
             </div>
         </div>
@@ -29,10 +29,8 @@
 <script>
     import {mapState} from 'vuex'
     import ConnectedApps from '../../components/developer/connected-apps/ConnectedApps'
-    import Spinner from '../../components/Spinner'
 
     export default {
-
         data() {
             return {
                 apiToken: '',
@@ -43,31 +41,27 @@
 
         components: {
             ConnectedApps,
-            Spinner,
         },
 
         computed: {
-
             ...mapState({
-                hasApiToken: state => state.developers.hasApiToken,
-                currentUser: state => state.account.currentUser,
+                hasApiToken: state => state.account.hasApiToken,
+                user: state => state.account.user,
             }),
-
         },
 
         methods: {
-
             generateToken() {
                 this.loading = true
 
-                this.$store.dispatch('developers/generateApiToken')
+                this.$store.dispatch('account/generateApiToken')
                     .then(response => {
                         this.apiToken = response.data.apiToken
 
                         const apiTokenInput = this.$refs.apiTokenField.$el.querySelector('input')
 
                         this.$nextTick(() => {
-                            apiTokenInput.select();
+                            apiTokenInput.select()
                         })
 
                         this.notice = true
@@ -78,9 +72,8 @@
                         this.loading = false
                         const errorMessage = response.data && response.data.error ? response.data.error : 'Couldn’t generate API token.'
                         this.$store.dispatch('app/displayError', errorMessage)
-                    });
+                    })
             },
-
         },
 
         mounted() {
@@ -88,6 +81,5 @@
                 this.apiToken = '****************************************'
             }
         }
-
     }
 </script>

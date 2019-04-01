@@ -9,16 +9,11 @@ body {
 }
 
 a {
+  @apply .text-blue .no-underline;
+
   &:hover {
     cursor: pointer;
-  }
-
-  &:not(.btn) {
-    @apply .text-blue .no-underline;
-
-    &:hover {
-      @apply .text-blue-darker .underline;
-    }
+    @apply .text-blue-darker .underline;
   }
 }
 

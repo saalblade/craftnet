@@ -1,5 +1,13 @@
 <template>
     <div>
+        <p>
+            <template v-if="user">
+                <router-link to="/cart">← Cart</router-link>
+            </template>
+            <template v-else>
+                <router-link to="/identity">← Identity</router-link>
+            </template>
+        </p>
         <h1>Payment</h1>
 
         <div v-if="error">{{error}}</div>
@@ -30,9 +38,7 @@
                 </div>
 
                 <div class="text-center mt-8">
-                    <input type="submit" class="btn btn-lg btn-primary" :value="'Pay '+$options.filters.currency(cart.totalPrice)" />
-
-                    <spinner v-if="payLoading"></spinner>
+                    <btn kind="primary" type="submit" :loading="payLoading" large>Pay {{cart.totalPrice|currency}}</btn>
 
                     <div class="mt-4">
                         <img src="~@/images/powered_by_stripe.svg" height="18" />
@@ -48,10 +54,8 @@
     import PaymentMethod from '../components/payment/PaymentMethod'
     import CouponCode from '../components/payment/CouponCode'
     import BillingInfos from '../components/payment/BillingInfos'
-    import Spinner from '../components/Spinner'
 
     export default {
-
         data() {
             return {
                 billingInfo: {
@@ -74,6 +78,7 @@
                 error: null,
                 errors: {},
                 cardToken: null,
+                guestCardToken: null,
             }
         },
 
@@ -81,28 +86,26 @@
             PaymentMethod,
             CouponCode,
             BillingInfos,
-            Spinner,
         },
 
         computed: {
-
             ...mapState({
                 cart: state => state.cart.cart,
-                card: state => state.account.card,
-                existingCardToken: state => state.account.cardToken,
+                card: state => state.stripe.card,
+                existingCardToken: state => state.stripe.cardToken,
                 accountBillingAddress: state => state.account.billingAddress,
+                user: state => state.account.user,
             }),
 
             ...mapGetters({
                 cartTotal: 'cart/cartTotal',
             }),
-
         },
 
         methods: {
-
             ...mapActions({
                 getCart: 'cart/getCart',
+                getStripeAccount: 'stripe/getStripeAccount',
             }),
 
             pay() {
@@ -110,14 +113,14 @@
 
                 this.savePaymentMethod()
                     .then(() => {
-                        this.errors = {};
+                        this.errors = {}
                         this.saveBillingInfos()
                             .then(() => {
                                 this.processPayment()
                                     .then(() => {
                                         this.$store.dispatch('app/displayNotice', 'Payment processed.')
                                         this.payLoading = false
-                                        this.$router.push({path: '/thank-you'});
+                                        this.$router.push({path: '/thank-you'})
                                     })
                                     .catch(() => {
                                         this.$store.dispatch('app/displayError', 'Couldn’t process payment.')
@@ -125,7 +128,7 @@
                                     })
                             })
                             .catch((response) => {
-                                let errors = {};
+                                let errors = {}
 
                                 if (response.response.data.errors) {
                                     response.response.data.errors.forEach(error => {
@@ -133,7 +136,7 @@
                                     })
                                 }
 
-                                this.errors = errors;
+                                this.errors = errors
 
                                 this.$store.dispatch('app/displayError', 'Couldn’t save billing infos.')
                                 this.payLoading = false
@@ -142,27 +145,46 @@
                     .catch((error) => {
                         this.$store.dispatch('app/displayError', 'Couldn’t save payment method.')
                         this.payLoading = false
-                        throw error;
+                        throw error
                     })
             },
 
             savePaymentMethod() {
                 return new Promise((resolve, reject) => {
                     if (this.cart && this.cart.totalPrice > 0) {
-                        if (this.paymentMode === 'newCard') {
-                            // Save new card
-                            if (!this.cardToken) {
-                                this.$refs.paymentMethod.$refs.newCard.save(source => {
-                                    this.cardToken = source
+                        if (this.user) {
+                            // Save card for existing user
+                            if (this.paymentMode === 'newCard') {
+                                // Save new card
+                                if (!this.cardToken) {
+                                    this.$refs.paymentMethod.$refs.newCard.save(
+                                        // success
+                                        (source) => {
+                                            this.cardToken = source
+                                            resolve()
+                                        },
+                                        // error
+                                        () => {
+                                            reject()
+                                        })
+                                } else {
                                     resolve()
-                                }, () => {
-                                    reject()
-                                })
+                                }
                             } else {
                                 resolve()
                             }
                         } else {
-                            resolve()
+                            // Save card for guest user
+                            this.$refs.paymentMethod.$refs.guestCard.save(
+                                // success
+                                (response) => {
+                                    this.guestCardToken = response
+                                    resolve()
+                                },
+                                // error
+                                () => {
+                                    reject()
+                                })
                         }
                     } else {
                         resolve()
@@ -186,6 +208,10 @@
                     },
                 }
 
+                if (this.user) {
+                    cartData.email = this.user.email
+                }
+
                 return this.$store.dispatch('cart/saveCart', cartData)
             },
 
@@ -193,12 +219,16 @@
                 let cardToken = null
 
                 if (this.cart.totalPrice > 0) {
-                    switch (this.paymentMode) {
-                        case 'newCard':
-                            cardToken = this.cardToken.id
-                            break
-                        default:
-                            cardToken = this.existingCardToken
+                    if (this.user) {
+                        switch (this.paymentMode) {
+                            case 'newCard':
+                                cardToken = this.cardToken.id
+                                break
+                            default:
+                                cardToken = this.existingCardToken
+                        }
+                    } else {
+                        cardToken = this.guestCardToken.id
                     }
                 }
 
@@ -211,24 +241,27 @@
 
                 return this.$store.dispatch('cart/checkout', checkoutData)
                     .then(() => {
-                        this.$store.dispatch('craftId/getCraftIdData')
-                            .then(() => {
-                                this.$store.dispatch('cart/resetCart')
-                                    .then(() => {
-                                        this.loading = false
-                                    })
-                            })
+                        this.$store.dispatch('cart/resetCart')
                     })
             },
-
         },
 
         mounted() {
-            this.loading = true;
+            this.loading = true
 
             this.getCart()
                 .then(() => {
-                    this.loading = false
+                    if (this.user) {
+                        this.getStripeAccount()
+                            .then(() => {
+                                this.loading = false
+                            })
+                            .catch(() => {
+                                this.loading = false
+                            })
+                    } else {
+                        this.loading = false
+                    }
                 })
                 .catch(() => {
                     this.loading = false
@@ -244,6 +277,5 @@
                 }
             })
         }
-
     }
 </script>
