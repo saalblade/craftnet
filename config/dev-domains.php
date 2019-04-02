@@ -82,6 +82,7 @@ return [
     'vrielingdev.nl',
     'wave-dev.com',
     'wave-stage.com',
+    'webdnatest.co.uk',
     'websitetestlink.com',
     'xip.io',
     'yourstruly.space',
