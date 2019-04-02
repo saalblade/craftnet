@@ -8,7 +8,7 @@
                     <ul class="features list-reset">
                         <li><icon icon="key" size="2xl" /> Manage your licenses</li>
                         <li><icon icon="plug" size="2xl" /> Publish plugins to the Plugin Store</li>
-                        <li><icon icon="check-circle" size="2xl" /> Manage your Partner profile</li>
+                        <li><icon icon="line-check-circle" size="2xl" /> Manage your Partner profile</li>
                     </ul>
                 </div>
             </div>
