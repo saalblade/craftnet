@@ -5,6 +5,7 @@ namespace craftnet;
 use Craft;
 use craft\commerce\elements\Order;
 use craft\commerce\events\PdfEvent;
+use craft\commerce\models\Discount;
 use craft\commerce\services\OrderAdjustments;
 use craft\commerce\services\Pdf;
 use craft\commerce\services\Purchasables;
@@ -35,6 +36,7 @@ use craftnet\composer\JsonDumper;
 use craftnet\composer\PackageManager;
 use craftnet\developers\UserBehavior;
 use craftnet\developers\UserQueryBehavior;
+use craftnet\discounts\DiscountBehavior;
 use craftnet\fields\Plugins;
 use craftnet\invoices\InvoiceManager;
 use craftnet\orders\OrderBehavior;
@@ -80,6 +82,9 @@ class Module extends \yii\base\Module
         });
         Event::on(Order::class, Order::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
             $e->behaviors['cn.order'] = OrderBehavior::class;
+        });
+        Event::on(Discount::class, Discount::EVENT_DEFINE_BEHAVIORS, function(DefineBehaviorsEvent $e) {
+            $e->behaviors['cn.discount'] = DiscountBehavior::class;
         });
 
         // register custom component types
