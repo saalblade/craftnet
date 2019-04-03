@@ -2,6 +2,7 @@
 
 namespace craftnet\controllers\api\v1;
 
+use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
 use Craft;
 use craft\helpers\ArrayHelper;
@@ -111,6 +112,11 @@ class UpdatesController extends BaseApiController
             }
         }
 
+        if ($this->cmsVersion && Comparator::greaterThanOrEqualTo($this->cmsVersion, '3.1.21')) {
+            // Send the package name just in case it has changed
+            $info['packageName'] = 'craftcms/cms';
+        }
+
         return $info;
     }
 
@@ -144,6 +150,11 @@ class UpdatesController extends BaseApiController
                     $info['renewalPrice'] = $pluginLicense->getRenewalPrice();
                     $info['renewalCurrency'] = 'USD';
                 }
+            }
+
+            if ($this->cmsVersion && Comparator::greaterThanOrEqualTo($this->cmsVersion, '3.1.21')) {
+                // Send the package name just in case it has changed
+                $info['packageName'] = $plugin->packageName;
             }
 
             $updateInfo[$handle] = $info;
