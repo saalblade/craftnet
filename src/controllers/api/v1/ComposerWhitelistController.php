@@ -56,6 +56,12 @@ class ComposerWhitelistController extends BaseApiController
         $releaseIds = [];
 
         foreach ($install as $name => $constraint) {
+            $whitelist[$name] = true;
+
+            if ($constraint === false) {
+                continue;
+            }
+
             // Strip off aliasing
             if (preg_match('/^([^,\s]++)( ++as ++[^,\s]++)$/', $constraint, $match)) {
                 $constraint = $match[1];
@@ -67,7 +73,6 @@ class ComposerWhitelistController extends BaseApiController
                 throw new BadRequestHttpException("Unknown package/constraint: {$name}@{$constraint}");
             }
 
-            $whitelist[$name] = true;
             $this->_ignoreDeps[$name] = true;
             $releaseIds[] = $release->id;
         }

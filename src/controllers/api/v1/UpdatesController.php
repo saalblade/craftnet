@@ -2,6 +2,7 @@
 
 namespace craftnet\controllers\api\v1;
 
+use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
 use Craft;
 use craft\helpers\ArrayHelper;
@@ -73,18 +74,25 @@ class UpdatesController extends BaseApiController
             throw new BadRequestHttpException('Unable to determine the current Craft version.');
         }
 
+        $includePackageName = (
+            $this->cmsVersion &&
+            Comparator::greaterThanOrEqualTo($this->cmsVersion, '3.1.21') &&
+            Comparator::notEqualTo($this->cmsVersion, '3.2.0-alpha.1')
+        );
+
         return $this->asJson([
-            'cms' => $this->_getCmsUpdateInfo(),
-            'plugins' => $this->_getPluginUpdateInfo(),
+            'cms' => $this->_getCmsUpdateInfo($includePackageName),
+            'plugins' => $this->_getPluginUpdateInfo($includePackageName),
         ]);
     }
 
     /**
      * Returns CMS update info.
      *
+     * @param bool $includePackageName
      * @return array
      */
-    private function _getCmsUpdateInfo(): array
+    private function _getCmsUpdateInfo(bool $includePackageName): array
     {
         // Treat 3.0.41.1 as a breakpoint for 3.0 releases
         if (
@@ -111,15 +119,21 @@ class UpdatesController extends BaseApiController
             }
         }
 
+        if ($includePackageName) {
+            // Send the package name just in case it has changed
+            $info['packageName'] = 'craftcms/cms';
+        }
+
         return $info;
     }
 
     /**
      * Returns plugin update info.
      *
+     * @param bool $includePackageName
      * @return array
      */
-    private function _getPluginUpdateInfo(): array
+    private function _getPluginUpdateInfo(bool $includePackageName): array
     {
         $updateInfo = [];
 
@@ -144,6 +158,11 @@ class UpdatesController extends BaseApiController
                     $info['renewalPrice'] = $pluginLicense->getRenewalPrice();
                     $info['renewalCurrency'] = 'USD';
                 }
+            }
+
+            if ($includePackageName) {
+                // Send the package name just in case it has changed
+                $info['packageName'] = $plugin->packageName;
             }
 
             $updateInfo[$handle] = $info;
