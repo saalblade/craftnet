@@ -4,6 +4,7 @@ namespace craftnet\sales;
 
 use craft\db\Query;
 use craft\elements\User;
+use craft\helpers\ArrayHelper;
 use yii\base\Component;
 
 class SaleManager extends Component
@@ -48,6 +49,23 @@ class SaleManager extends Component
 
             unset($row['pluginId'], $row['pluginName'], $row['ownerId'], $row['ownerFirstName'], $row['ownerLastName'], $row['ownerEmail']);
         }
+
+
+        // Adjustments
+        $results = ArrayHelper::index($results, 'id');
+        $lineItemIds = array_keys($results);
+
+        $adjustments = (new Query())
+            ->select(['lineItemId', 'name', 'amount'])
+            ->from(['commerce_orderadjustments'])
+            ->where(['lineItemId' => $lineItemIds])
+            ->all();
+
+        foreach ($adjustments as $adjustment) {
+            $results[$adjustment['lineItemId']]['adjustments'][] = $adjustment;
+        }
+
+        $results = array_values($results);
 
         return $results;
     }
