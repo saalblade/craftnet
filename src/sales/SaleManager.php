@@ -90,6 +90,7 @@ class SaleManager extends Component
                 'users.email AS ownerEmail',
                 'lineitems.dateCreated AS saleTime',
                 'orders.email AS orderEmail',
+                'elements.type AS purchasableType',
             ])
             ->from(['craftnet_pluginlicenses_lineitems licenses_items'])
             ->innerJoin('commerce_lineitems lineitems', '[[lineitems.id]] = [[licenses_items.lineItemId]]')
@@ -97,6 +98,7 @@ class SaleManager extends Component
             ->innerJoin('craftnet_pluginlicenses licenses', '[[licenses.id]] = [[licenses_items.licenseId]]')
             ->innerJoin('craftnet_plugins plugins', '[[plugins.id]] = [[licenses.pluginId]]')
             ->leftJoin('users', '[[users.id]] = [[licenses.ownerId]]')
+            ->leftJoin('elements', '[[elements.id]] = [[lineitems.purchasableId]]')
             ->where(['plugins.developerId' => $owner->id])
             ->orderBy(['lineitems.dateCreated' => SORT_DESC]);
 
