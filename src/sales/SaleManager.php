@@ -101,7 +101,7 @@ class SaleManager extends Component
                 'lineitems.id AS id',
                 'plugins.id AS pluginId',
                 'plugins.name AS pluginName',
-                'lineitems.salePrice AS grossAmount',
+                'lineitems.total AS grossAmount',
                 'users.id AS ownerId',
                 'users.firstName AS ownerFirstName',
                 'users.lastName AS ownerLastName',
