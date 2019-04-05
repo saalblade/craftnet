@@ -3,6 +3,7 @@
 namespace craftnet\controllers\api\v1;
 
 use Craft;
+use craft\models\Update;
 use craftnet\controllers\api\BaseApiController;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
@@ -64,18 +65,27 @@ class CmsLicensesController extends BaseApiController
         }
 
         $license = reset($this->cmsLicenses);
-        $fields = [];
-        $expand = [];
+        $licenseInfo = $license->toArray();
 
         if ($include !== null) {
-            $include = explode(',', $include);
-            if (in_array('plugins', $include, true)) {
-                $expand[] = 'pluginLicenses.plugin.icon';
+            $include = array_flip(explode(',', $include));
+            if (isset($include['plugins'])) {
+                $pluginLicenses = [];
+                foreach ($license->getPluginLicenses() as $pluginLicense) {
+                    $pluginLicenseInfo = $pluginLicense->toArray([], ['plugin.icon']);
+                    if ($pluginLicense->expired) {
+                        $pluginLicenseInfo['renewalUrl'] = $pluginLicense->getEditUrl();
+                        $pluginLicenseInfo['renewalPrice'] = $pluginLicense->getRenewalPrice();
+                        $pluginLicenseInfo['renewalCurrency'] = 'USD';
+                    }
+                    $pluginLicenses[] = $pluginLicenseInfo;
+                }
+                $licenseInfo['pluginLicenses'] = $pluginLicenses;
             }
         }
 
         return $this->asJson([
-            'license' => $license->toArray($fields, $expand),
+            'license' => $licenseInfo,
         ]);
     }
 }
