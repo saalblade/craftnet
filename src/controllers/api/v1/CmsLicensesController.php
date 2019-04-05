@@ -5,6 +5,7 @@ namespace craftnet\controllers\api\v1;
 use Craft;
 use craft\models\Update;
 use craftnet\controllers\api\BaseApiController;
+use craftnet\plugins\Plugin;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -77,6 +78,14 @@ class CmsLicensesController extends BaseApiController
                         $pluginLicenseInfo['renewalUrl'] = $pluginLicense->getEditUrl();
                         $pluginLicenseInfo['renewalPrice'] = $pluginLicense->getRenewalPrice();
                         $pluginLicenseInfo['renewalCurrency'] = 'USD';
+                    }
+                    if ($this->cmsVersion) {
+                        // Get the latest release that's compatible with their current Craft version
+                        $pluginLicenseInfo['plugin']['latestVersion'] = Plugin::find()
+                            ->id($pluginLicense->pluginId)
+                            ->withLatestReleaseInfo(true, $this->cmsVersion)
+                            ->select(['latestVersion'])
+                            ->scalar();
                     }
                     $pluginLicenses[] = $pluginLicenseInfo;
                 }
