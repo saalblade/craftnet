@@ -88,20 +88,7 @@
 
         data() {
             return {
-                searchQuery: '',
                 loading: false,
-                options:{
-                    perPage: 10,
-                    texts: {
-                        filter: "",
-                        filterPlaceholder: "Search licenses"
-                    },
-                    headings: {
-                        expiresOn: 'Updates Until',
-                        autoRenew: 'Auto Renew'
-                    },
-                    filterable: true,
-                },
                 fields: [
                     {
                         name: '__slot:item',
