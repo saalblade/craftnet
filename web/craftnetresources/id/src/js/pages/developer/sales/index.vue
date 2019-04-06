@@ -131,12 +131,17 @@
                     'filter': filterText
                 }
 
-                this.$nextTick( () => this.$refs.vuetable.refresh())
+                this.$nextTick( () => {
+                    this.$refs.vuetable.refresh()
+                })
             },
 
             onFilterReset () {
                 this.moreParams = {}
-                this.$nextTick( () => this.$refs.vuetable.refresh())
+
+                this.$nextTick( () => {
+                    this.$refs.vuetable.refresh()
+                })
             },
 
             onPaginationData (paginationData) {
