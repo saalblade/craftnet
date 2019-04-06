@@ -66,6 +66,8 @@
             <dropdown :options="perPageOptions" v-model.number="perPage" />
         </div>
 
+        <div v-if="total > 0" class="text-grey-dark text-center mt-4">{{total}} result{{total !== 1 ? 's' : ''}}</div>
+
         <!--
         <empty>
             <icon icon="dollar-sign" cssClass="text-5xl mb-4 text-grey-light" />
@@ -94,6 +96,7 @@
 
         data() {
             return {
+                total: 0,
                 loading: false,
                 fields: [
                     {
@@ -166,6 +169,7 @@
             },
 
             onPaginationData (paginationData) {
+                this.total = paginationData.total
                 this.$refs.pagination.setPaginationData(paginationData)
             },
 
