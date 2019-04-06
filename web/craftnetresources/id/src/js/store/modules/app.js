@@ -12,6 +12,7 @@ const state = {
     renewLicensesStep: null,
     showRenewLicensesModal: false,
     renewLicense: null,
+    salesPerPage: 10,
 }
 
 /**
@@ -98,6 +99,10 @@ const mutations = {
 
     updateNotification(state, notification) {
         state.notification = notification
+    },
+
+    updateSalesPerPage(state, salesPerPage) {
+        state.salesPerPage = salesPerPage
     },
 }
 

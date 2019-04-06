@@ -125,7 +125,6 @@
                     },
                 ],
                 moreParams: {},
-                perPage: 10,
                 perPageOptions: [
                     {label: "10", value: 10},
                     {label: "20", value: 20},
@@ -139,6 +138,14 @@
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/sales/get-sales'
             },
+            perPage: {
+                get() {
+                    return this.$store.state.app.salesPerPage
+                },
+                set(value) {
+                    this.$store.commit('app/updateSalesPerPage', value)
+                }
+            }
         },
 
         watch: {
