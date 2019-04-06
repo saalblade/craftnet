@@ -19,10 +19,12 @@
                     :api-url="apiUrl"
                     :fields="fields"
                     :append-params="moreParams"
+                    :per-page="perPage"
                     @vuetable:pagination-data="onPaginationData"
                     @vuetable:loading="onLoading"
                     @vuetable:loaded="onLoaded"
             >
+
                 <template slot="item" slot-scope="props">
                     {{props.rowData.plugin.name}}
                 </template>
@@ -59,6 +61,10 @@
         </div>
 
         <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
+
+        <div class="mt-6 text-center">
+            <dropdown :options="perPageOptions" v-model.number="perPage" />
+        </div>
 
         <!--
         <empty>
@@ -115,14 +121,29 @@
                         title: 'Date',
                     },
                 ],
-                moreParams: {}
+                moreParams: {},
+                perPage: 10,
+                perPageOptions: [
+                    {label: "10", value: 10},
+                    {label: "20", value: 20},
+                    {label: "50", value: 50},
+                    {label: "100", value: 100},
+                ]
             }
         },
 
         computed: {
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/sales/get-sales'
-            }
+            },
+        },
+
+        watch: {
+            perPage() {
+                this.$nextTick(() => {
+                    this.$refs.vuetable.refresh()
+                })
+            },
         },
 
         methods: {
