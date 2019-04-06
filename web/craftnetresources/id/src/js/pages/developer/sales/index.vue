@@ -63,7 +63,7 @@
         <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
 
         <div class="mt-6 text-center">
-            <dropdown :options="perPageOptions" v-model.number="perPage" />
+            Rows: <dropdown class="inline-block" :options="perPageOptions" v-model.number="perPage" />
         </div>
 
         <div v-if="total > 0" class="text-grey-dark text-center mt-4">{{total}} result{{total !== 1 ? 's' : ''}}</div>
