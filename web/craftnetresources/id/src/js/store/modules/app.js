@@ -12,9 +12,9 @@ const state = {
     renewLicensesStep: null,
     showRenewLicensesModal: false,
     renewLicense: null,
-    salesPerPage: 10,
-    cmsLicensesPerPage: 10,
-    pluginLicensesPerPage: 10,
+    salesPerPage: 20,
+    cmsLicensesPerPage: 20,
+    pluginLicensesPerPage: 20,
     perPageOptions: [
         {label: "10", value: 10},
         {label: "20", value: 20},
