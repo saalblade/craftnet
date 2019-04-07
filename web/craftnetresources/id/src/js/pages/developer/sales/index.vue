@@ -63,7 +63,7 @@
         <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
 
         <div class="mt-6 text-center">
-            Rows: <dropdown class="inline-block mb-0" :options="perPageOptions" v-model.number="perPage" />
+            Rows: <dropdown class="inline-block mb-0" :options="$store.state.app.perPageOptions" v-model.number="perPage" />
         </div>
 
         <div v-if="total > 0" class="text-grey-dark text-center mt-4">{{total}} result{{total !== 1 ? 's' : ''}}</div>
@@ -125,12 +125,6 @@
                     },
                 ],
                 moreParams: {},
-                perPageOptions: [
-                    {label: "10", value: 10},
-                    {label: "20", value: 20},
-                    {label: "50", value: 50},
-                    {label: "100", value: 100},
-                ]
             }
         },
 
@@ -138,6 +132,7 @@
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/sales/get-sales'
             },
+
             perPage: {
                 get() {
                     return this.$store.state.app.salesPerPage

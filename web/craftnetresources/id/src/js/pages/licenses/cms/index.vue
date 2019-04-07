@@ -19,6 +19,7 @@
                     :api-url="apiUrl"
                     :fields="fields"
                     :append-params="moreParams"
+                    :per-page="perPage"
                     @vuetable:pagination-data="onPaginationData"
                     @vuetable:loading="onLoading"
                     @vuetable:loaded="onLoaded"
@@ -77,6 +78,10 @@
 
         <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
 
+        <div class="mt-6 text-center">
+            Rows: <dropdown class="inline-block mb-0" :options="$store.state.app.perPageOptions" v-model.number="perPage" />
+        </div>
+
         <div v-if="total > 0" class="text-grey-dark text-center mt-4">{{total}} result{{total !== 1 ? 's' : ''}}</div>
 
         <!--
@@ -117,22 +122,8 @@
         data() {
             return {
                 total: 0,
-                searchQuery: '',
-                vueTableInitiatedRouteChange: false,
+                // vueTableInitiatedRouteChange: false,
                 loading: false,
-                columns: ['key', 'edition', 'domain', 'notes', 'expiresOn', 'autoRenew'],
-                options: {
-                    perPage: 10,
-                    texts: {
-                        filter: "",
-                        filterPlaceholder: "Search licenses"
-                    },
-                    headings: {
-                        expiresOn: 'Updates Until',
-                        autoRenew: 'Auto Renew'
-                    },
-                    filterable: true,
-                },
                 fields: [
                     {
                         name: '__slot:key',
@@ -166,7 +157,24 @@
         computed: {
             apiUrl() {
                 return Craft.actionUrl + '/craftnet/id/cms-licenses/get-licenses'
+            },
+
+            perPage: {
+                get() {
+                    return this.$store.state.app.cmsLicensesPerPage
+                },
+                set(value) {
+                    this.$store.commit('app/updateCmsLicensesPerPage', value)
+                }
             }
+        },
+
+        watch: {
+            perPage() {
+                this.$nextTick(() => {
+                    this.$refs.vuetable.refresh()
+                })
+            },
         },
 
         methods: {
