@@ -104,10 +104,6 @@ class CmsLicensesController extends Controller
             return ExitCode::UNSPECIFIED_ERROR;
         }
 
-        if ($license->ownerId) {
-
-        }
-
         $this->info('Edition', $license->editionHandle);
         $this->boolean('Expirable', $license->expirable);
         $this->boolean('Expired', $license->expired);

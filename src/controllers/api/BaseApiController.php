@@ -262,7 +262,10 @@ abstract class BaseApiController extends Controller
                         $this->cmsVersion !== null &&
                         $cmsLicense->expirable &&
                         $cmsLicenseStatus === self::LICENSE_STATUS_VALID &&
-                        Comparator::greaterThan($this->cmsVersion, $cmsLicense->lastAllowedVersion)
+                        (
+                            !$cmsLicense->lastAllowedVersion ||
+                            Comparator::greaterThan($this->cmsVersion, $cmsLicense->lastAllowedVersion)
+                        )
                     ) {
                         // we only have a problem with that if the license is expired
                         if ($cmsLicense->expired) {
@@ -360,7 +363,10 @@ abstract class BaseApiController extends Controller
                     $pluginVersion !== null &&
                     $pluginLicense->expirable &&
                     $pluginLicenseStatus === self::LICENSE_STATUS_VALID &&
-                    Comparator::greaterThan($pluginVersion, $pluginLicense->lastAllowedVersion)
+                    (
+                        !$pluginLicense->lastAllowedVersion ||
+                        Comparator::greaterThan($pluginVersion, $pluginLicense->lastAllowedVersion)
+                    )
                 ) {
                     // we only have a problem with that if the license is expired
                     if ($pluginLicense->expired) {

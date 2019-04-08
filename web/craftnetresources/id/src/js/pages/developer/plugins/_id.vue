@@ -129,7 +129,7 @@
                             <draggable v-model="screenshots">
                                 <div v-for="(screenshot, key) in screenshots" class="screenshot" :key="key">
                                     <img :src="screenshot.url" class="img-thumbnail mr-3 mb-3" />
-                                    <btn icon="times" kind="danger" @click.prevent="removeScreenshot(key);"></btn>
+                                    <btn icon="times" kind="danger" @click="removeScreenshot(key);"></btn>
                                 </div>
                             </draggable>
 

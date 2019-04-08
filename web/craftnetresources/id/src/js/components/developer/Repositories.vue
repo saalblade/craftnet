@@ -12,7 +12,7 @@
                         <spinner v-if="isLoading(repository.html_url)"></spinner>
 
                         <template v-if="!repositoryIsInUse(repository.html_url)">
-                            <btn kind="primary" small @click.prevent="$emit('selectRepository', repository)">Select</btn>
+                            <btn kind="primary" small @click="$emit('selectRepository', repository)">Select</btn>
                         </template>
                         <template v-else>
                             <btn :disabled="repositoryIsInUse(repository.html_url )">Already in use</btn>

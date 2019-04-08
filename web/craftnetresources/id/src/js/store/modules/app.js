@@ -12,6 +12,15 @@ const state = {
     renewLicensesStep: null,
     showRenewLicensesModal: false,
     renewLicense: null,
+    salesPerPage: 20,
+    cmsLicensesPerPage: 20,
+    pluginLicensesPerPage: 20,
+    perPageOptions: [
+        {label: "10", value: 10},
+        {label: "20", value: 20},
+        {label: "50", value: 50},
+        {label: "100", value: 100},
+    ]
 }
 
 /**
@@ -98,6 +107,18 @@ const mutations = {
 
     updateNotification(state, notification) {
         state.notification = notification
+    },
+
+    updateSalesPerPage(state, salesPerPage) {
+        state.salesPerPage = salesPerPage
+    },
+
+    updateCmsLicensesPerPage(state, cmsLicensesPerPage) {
+        state.cmsLicensesPerPage = cmsLicensesPerPage
+    },
+
+    updatePluginLicensesPerPage(state, pluginLicensesPerPage) {
+        state.pluginLicensesPerPage = pluginLicensesPerPage
     },
 }
 
