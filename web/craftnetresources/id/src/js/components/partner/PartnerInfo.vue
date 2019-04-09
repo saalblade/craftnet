@@ -75,7 +75,7 @@
                     <textbox id="websiteSlug" label="Website Slug" instructions="Automatically generated from Business Name if blank. Not editable once your page is live. (e.g. https://craftcms.com/partners/business-name)" v-model="draft.websiteSlug" :errors="errors.websiteSlug" :disabled="partner.enabled" />
                     <textbox id="website" label="Business Website URL" v-model="draft.website" :errors="errors.website" />
 
-                    <div class="form-group">
+                    <div class="mb-4">
                         <label>Logo</label>
 
                         <div class="instructions">
@@ -88,9 +88,7 @@
                             <div class="partner-logo">
                                 <img v-if="draft.logo.url" :src="draft.logo.url" style="width: 250px;" class="block mt-2 mb-2">
                             </div>
-                            <a v-if="draft.logo.url" href="#" class="remove btn btn-sm btn-danger" @click.prevent="draft.logo = {id: null, url: null}">
-                                <i class="fas fa-times"></i>
-                            </a>
+                            <btn v-if="draft.logo.url" kind="danger" icon="times" :small="true" @click="draft.logo = {id: null, url: null}" class="mt-6 mb-4">Remove</btn>
                             <input v-if="!draft.logo.url" accept=".svg" type="file" @change="onLogoChange" ref="logoFile" class="mt-6 mb-6">
                         </div>
                         <div v-if="errors.logo" class="invalid-feedback" v-for="(error, index) in errors.logo" :key="index">{{ error }}</div>
