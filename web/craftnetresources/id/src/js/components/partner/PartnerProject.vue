@@ -33,11 +33,9 @@
                 <p class="instructions">1 to 5 JPG screenshots required with a 12:7 aspect ratio. 1200px wide will do. Drag to re-order.</p>
 
                 <draggable v-model="project.screenshots">
-                    <div v-for="(screenshot, index) in project.screenshots" :key="index" class="screenshot mt-6">
-                        <img :src="screenshot.url" class="img-thumbnail mr-3 mb-3" style="max-width: 200px; max-height: 200px;" />
-                        <a href="#" class="remove btn btn-sm btn-danger" @click.prevent="removeScreenshot(index);">
-                            <i class="fas fa-times"></i>
-                        </a>
+                    <div v-for="(screenshot, index) in project.screenshots" :key="index" class="mt-6">
+                        <img :src="screenshot.url" class="img-thumbnail mr-3 mb-2" style="max-width: 200px; max-height: 200px;" />
+                        <btn kind="danger" icon="times" :small="true" @click="removeScreenshot(index)" class="">Remove</btn>
                     </div>
                 </draggable>
 
@@ -45,12 +43,13 @@
 
                 <!-- JPEG with 12x7 1200 x 700 -->
 
-                <div v-if="project.screenshots.length <= 5">
+                <div v-if="project.screenshots.length <= 5" class="mt-4">
                     <input type="file" accept=".jp2,.jpeg,.jpg,.jpx" @change="screenshotFileChange" ref="screenshotFiles" class="hidden" multiple=""><br>
                     <btn small :disabled="isUploading" @click="$refs.screenshotFiles.click()">
                         <span v-show="!isUploading"><icon icon="plus" /> Add screenshots</span>
-                        <span v-show="isUploading">Uploading: {{ uploadProgress }}%</span>
-                        <spinner v-show="isUploading"></spinner>
+                        <span v-show="isUploading && uploadProgress < 100">Uploading: {{ uploadProgress }}%</span>
+                        <span v-show="isUploading && uploadProgress == 100">Processing, please wait</span>
+                        &nbsp;<spinner v-show="isUploading"></spinner>
                     </btn>
                 </div>
 
