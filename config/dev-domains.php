@@ -71,7 +71,6 @@ return [
     'siebirdclients.com',
     'siebirdstaging.com',
     'sierrabravo.net',
-    'smartline.biz',
     'staging-site.link',
     'stagingbox.ca',
     'tad.am',
