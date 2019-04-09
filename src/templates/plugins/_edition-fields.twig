@@ -54,5 +54,12 @@
             },
             rows: edition.features
         }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Enabled',
+            id: 'enabled',
+            name: 'enabled',
+            on: edition.enabled
+        }) }}
     {% endnamespace %}
 </div>

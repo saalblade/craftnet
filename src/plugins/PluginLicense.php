@@ -173,7 +173,10 @@ class PluginLicense extends Model implements LicenseInterface
      */
     public function getEdition(): EditionInterface
     {
-        return PluginEdition::findOne($this->editionId);
+        return PluginEdition::find()
+            ->id($this->editionId)
+            ->anyStatus()
+            ->one();
     }
 
     /**

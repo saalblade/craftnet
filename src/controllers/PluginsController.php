@@ -488,6 +488,8 @@ JS;
         // Editions
         // ---------------------------------------------------------------------
 
+        $editions = [];
+
         /** @var PluginEdition[] $currentEditions */
         if ($newPlugin) {
             $currentEditions = [
@@ -497,10 +499,18 @@ JS;
                 ]),
             ];
         } else {
-            $currentEditions = ArrayHelper::index($plugin->getEditions(), 'id');
+            $currentEditions = ArrayHelper::index(PluginEdition::find()->pluginId($plugin->id)->anyStatus()->all(), 'id');
+
+            // Include any disabled editions if this is a front-end request
+            if (!$isCpRequest) {
+                foreach ($currentEditions as $edition) {
+                    if (!$edition->enabled) {
+                        $editions[] = $edition;
+                    }
+                }
+            }
         }
 
-        $editions = [];
         foreach ($request->getBodyParam('editions', []) as $editionId => $editionInfo) {
             if ($isCpRequest) {
                 $edition = $currentEditions[$editionId] ?? new PluginEdition();
