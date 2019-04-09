@@ -209,8 +209,9 @@ $('#add-edition-btn').on('click', function() {
     var editionId = 'new'+Math.floor(Math.random()*1000000);
     var html = {$editionFieldHtml}.replace(/__EDITION_ID__/g, editionId);
     var js = {$editionFieldJs}.replace(/__EDITION_ID__/g, editionId);
-    $(html).insertBefore(this);
+    var edition = $(html).insertBefore(this);
     eval(js);
+    Craft.initUiElements(edition);
 });
 JS;
         $view->registerJs($js);
