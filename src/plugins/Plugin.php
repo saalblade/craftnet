@@ -510,21 +510,33 @@ class Plugin extends Element
     }
 
     /**
+     * @param bool $anyStatus
      * @return PluginEdition[]
      * @throws InvalidConfigException
      */
-    public function getEditions(): array
+    public function getEditions(bool $anyStatus = false): array
     {
-        if ($this->_editions !== null) {
+        if (!$anyStatus && $this->_editions !== null) {
             return $this->_editions;
         }
         if ($this->id === null) {
             throw new InvalidConfigException('Plugin is missing its ID.');
         }
 
-        return $this->_editions = PluginEdition::find()
-            ->pluginId($this->id)
-            ->all();
+        $query = PluginEdition::find()
+            ->pluginId($this->id);
+
+        if ($anyStatus) {
+            $query->anyStatus();
+        }
+
+        $editions = $query->all();
+
+        if (!$anyStatus) {
+            $this->_editions = $editions;
+        }
+
+        return $editions;
     }
 
     /**
@@ -551,7 +563,7 @@ class Plugin extends Element
             throw new InvalidConfigException('Plugin is missing its ID.');
         }
 
-        foreach ($this->getEditions() as $edition) {
+        foreach ($this->getEditions(true) as $edition) {
             if ($edition->handle === $handle) {
                 return $edition;
             }

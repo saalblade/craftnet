@@ -184,7 +184,7 @@
     </div>
 
     <div id="editions" class="hidden">
-        {% for edition in plugin.editions %}
+        {% for edition in plugin.getEditions(true) %}
             {% set editionId = edition.id ?? "new#{random()}" %}
             {% include 'craftnet/plugins/_edition-fields' %}
         {% endfor %}

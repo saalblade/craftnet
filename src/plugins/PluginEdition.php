@@ -43,6 +43,14 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
 
     /**
      * @inheritdoc
+     */
+    public static function hasStatuses(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
      * @return PluginEditionQuery
      */
     public static function find(): ElementQueryInterface
@@ -192,7 +200,7 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
     public function scenarios()
     {
         return [
-            self::SCENARIO_CP => ['name', 'handle', 'price', 'renewalPrice', 'features'],
+            self::SCENARIO_CP => ['name', 'handle', 'price', 'renewalPrice', 'features', 'enabled'],
             self::SCENARIO_SITE => ['price', 'renewalPrice', 'features'],
         ];
     }
