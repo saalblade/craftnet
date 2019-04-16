@@ -13,6 +13,10 @@ export default {
             appTypeHandle: appHandle
         }
 
-        return axios.post(Craft.actionUrl + '/craftnet/id/apps/disconnect', qs.stringify(data))
+        return axios.post(Craft.actionUrl + '/craftnet/id/apps/disconnect', qs.stringify(data), {
+            headers: {
+                'X-CSRF-Token':  Craft.csrfTokenValue,
+            }
+        })
     },
 }

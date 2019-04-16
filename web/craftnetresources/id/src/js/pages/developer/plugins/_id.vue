@@ -400,10 +400,7 @@
                 let body = {
                     repository: encodeURIComponent(url)
                 }
-
-                body['action'] = 'craftnet/plugins/load-details'
-                body[Craft.csrfTokenName] = Craft.csrfTokenValue
-
+                
                 let params = qs.stringify(body)
                 let url = repositoryUrl
 
