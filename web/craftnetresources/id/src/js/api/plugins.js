@@ -5,8 +5,12 @@ import FormDataHelper from '../helpers/form-data';
 import qs from 'qs'
 
 export default {
-    loadDetails(repositoryUrl, params) {
-        return axios.post(Craft.actionUrl + '/craftnet/plugins/load-details&repository=' + encodeURIComponent(repositoryUrl), params)
+    loadDetails(repositoryUrl) {
+        return axios.post(Craft.actionUrl + '/craftnet/plugins/load-details&repository=' + encodeURIComponent(repositoryUrl), {}, {
+            headers: {
+                'X-CSRF-Token':  Craft.csrfTokenValue,
+            }
+        })
     },
 
     save({plugin}) {
