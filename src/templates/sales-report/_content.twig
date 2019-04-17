@@ -91,7 +91,7 @@
                             {% set totalCommerceLiteRenewalNumber = totalCommerceLiteRenewalNumber + lineItem.qty %}
                         {% elseif '-RENEWAL' in lineItem.sku %}
                             {% set total3rdPartyPluginStoreRenewalAmount = total3rdPartyPluginStoreRenewalAmount + lineItem.total %}
-                            {% set total3rdPartyPluginStoreRenewalNumber = total3rdPartyPluginStoreRenewalNumber + lineItem.total %}
+                            {% set total3rdPartyPluginStoreRenewalNumber = total3rdPartyPluginStoreRenewalNumber + lineItem.qty %}
                         {% else %}
                             {% set total3rdPartyPluginStoreSalesNumber = total3rdPartyPluginStoreSalesNumber + lineItem.qty %}
                         {% endif %}
