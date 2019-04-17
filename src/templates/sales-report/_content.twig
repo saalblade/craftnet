@@ -5,15 +5,23 @@
 {% set totalRefunds = 0 %}
 {% set totalCraftSalesAmount = 0 %}
 {% set totalCraftSalesNumber = 0 %}
+{% set totalCraftRenewalAmount = 0 %}
+{% set totalCraftRenewalNumber = 0 %}
 {% set totalCommerceSalesAmount = 0 %}
 {% set totalCommerceSalesNumber = 0 %}
+{% set totalCommerceRenewalAmount = 0 %}
+{% set totalCommerceRenewalNumber = 0 %}
 {% set totalCommerceLiteSalesAmount = 0 %}
 {% set totalCommerceLiteSalesNumber = 0 %}
+{% set totalCommerceLiteRenewalAmount = 0 %}
+{% set totalCommerceLiteRenewalNumber = 0 %}
 {% set totalGatewaySalesAmount = 0 %}
 {% set totalGatewaySalesNumber = 0 %}
 {% set totalDiscounts = 0 %}
 {% set total3rdPartyPluginStoreSalesAmount = 0 %}
 {% set total3rdPartyPluginStoreSalesNumber = 0 %}
+{% set total3rdPartyPluginStoreRenewalAmount = 0 %}
+{% set total3rdPartyPlugnStoreRenewalNumber = 0 %}
 {% set totalPluginStoreFees = 0 %}
 {% set totalPluginStorePayout = 0 %}
 
@@ -72,6 +80,18 @@
                         {% elseif lineItem.sku in gatewayPurchasables%}
                             {% set totalGatewaySalesAmount = totalGatewaySalesAmount + lineItem.total %}
                             {% set totalGatewaySalesNumber = totalGatewaySalesNumber + lineItem.qty %}
+                        {% elseif lineItem.sku == 'CRAFT-PRO-RENEWAL' %}
+                            {% set totalCraftRenewalAmount = totalCraftRenewalAmount + lineItem.total %}
+                            {% set totalCraftRenewalNumber = totalCraftRenewalNumber + lineItem.qty %}
+                        {% elseif lineItem.sku == 'COMMERCE-PRO-RENEWAL' %}
+                            {% set totalCommerceProRenewalAmount = totalCommerceProRenewalAmount + lineItem.total %}
+                            {% set totalCommerceProRenewalNumber = totalCommerceProRenewalNumber + lineItem.qty %}
+                        {% elseif lineItem.sku == 'COMMERCE-LITE-RENEWAL' %}
+                            {% set totalCommerceLiteRenewalAmount = totalCommerceLiteRenewalAmount + lineItem.total %}
+                            {% set totalCommerceLiteRenewalNumber = totalCommerceLiteRenewalNumber + lineItem.qty %}
+                        {% elseif '-RENEWAL' in lineItem.sku %}
+                            {% set total3rdPartyPluginStoreRenewalAmount = total3rdPartyPluginStoreRenewalAmount + lineItem.total %}
+                            {% set total3rdPartyPluginStoreRenewalNumber = total3rdPartyPluginStoreRenewalNumber + lineItem.total %}
                         {% else %}
                             {% set total3rdPartyPluginStoreSalesNumber = total3rdPartyPluginStoreSalesNumber + lineItem.qty %}
                         {% endif %}
@@ -138,10 +158,14 @@
 <h2>Total Refunds: {{ totalRefunds|currency }}</h2>
 <h2>Total Discounts: {{ totalDiscounts|currency }}</h2>
 <h2>Total Craft Sales: {{ totalCraftSalesAmount|currency }} ({{ totalCraftSalesNumber }})</h2>
+<h2>Total Craft Renewals: {{ totalCraftRenewalsAmount|currency }} ({{ totalCraftRenewalsNumber }})</h2>
 <h2>Total Commerce Sales: {{ totalCommerceSalesAmount|currency }} ({{ totalCommerceSalesNumber }})</h2>
+<h2>Total Commerce Renewals: {{ totalCommerceRenewalsAmount|currency }} ({{ totalCommerceRenewalsNumber }})</h2>
 <h2>Total Commerce Lite Sales: {{ totalCommerceLiteSalesAmount|currency }} ({{ totalCommerceLiteSalesNumber }})</h2>
+<h2>Total Commerce Lite Renewals: {{ totalCommerceLiteRenewalsAmount|currency }} ({{ totalCommerceLiteRenewalsNumber }})</h2>
 <h2>Total Gateway Sales: {{ totalGatewaySalesAmount|currency }} ({{ totalGatewaySalesNumber }})</h2>
 <h2>Total 3rd Party Plugin Store Sales: {{ total3rdPartyPluginStoreSalesAmount|currency }} ({{ total3rdPartyPluginStoreSalesNumber }})</h2>
+<h2>Total 3rd Party Plugin Store Renewals: {{ total3rdPartyPluginStoreRenewalsAmount|currency }} ({{ total3rdPartyPluginStoreRenewalsNumber }})</h2>
 <h2>Total Plugin Store Fees: {{ totalPluginStoreFees|currency }}</h2>
 <h2>Total Plugin Store Payout: {{ totalPluginStorePayout|currency }}</h2>
 <h2>Total Revenue: {{ (totalRevenue - totalRefunds)|currency }}</h2>
