@@ -73,6 +73,7 @@ return [
     'sierrabravo.net',
     'staging-site.link',
     'stagingbox.ca',
+    'stagingbox.co.uk',
     'tad.am',
     'testsite.no',
     'the-neighbourhood-production.com',
