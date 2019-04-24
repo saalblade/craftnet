@@ -279,6 +279,11 @@ abstract class BaseApiController extends Controller
                     $responseHeaders->set('X-Craft-License-Domain', $cmsLicenseDomain);
                     $responseHeaders->set('X-Craft-License-Edition', $cmsLicense->editionHandle);
 
+                    if ($cmsLicense->expirable) {
+                        $responseHeaders->set('X-Craft-License-Expired', (string)(int)$cmsLicense->expired);
+                        $responseHeaders->set('X-Craft-License-Expires-On', $cmsLicense->getExpiryDate()->format(\DateTime::ATOM));
+                    }
+
                     // update the license
                     $cmsLicense->lastActivityOn = new \DateTime('now', new \DateTimeZone('UTC'));
                     if ($this->cmsVersion !== null) {
