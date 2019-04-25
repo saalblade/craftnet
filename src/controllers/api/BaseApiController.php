@@ -281,7 +281,12 @@ abstract class BaseApiController extends Controller
 
                     if ($cmsLicense->expirable) {
                         $responseHeaders->set('X-Craft-License-Expired', (string)(int)$cmsLicense->expired);
-                        $responseHeaders->set('X-Craft-License-Expires-On', $cmsLicense->getExpiryDate()->format(\DateTime::ATOM));
+
+                        $expiryDate = $cmsLicense->getExpiryDate();
+
+                        if ($expiryDate) {
+                            $responseHeaders->set('X-Craft-License-Expires-On', $cmsLicense->getExpiryDate()->format(\DateTime::ATOM));
+                        }
                     }
 
                     // update the license
