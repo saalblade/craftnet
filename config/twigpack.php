@@ -19,4 +19,7 @@ return [
     'dev' => [
         'useDevServer' => true,
     ],
+    'next' => [
+        'useDevServer' => true,
+    ],
 ];

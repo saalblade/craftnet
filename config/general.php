@@ -81,5 +81,19 @@ return [
         ],
         'defaultCookieDomain' => '.craftcms.test',
         'baseCpUrl' => 'https://id.craftcms.test/',
+    ],
+    'next' => [
+        'devMode' => true,
+        'useCompressedJs' => false,
+        'allowUpdates' => true,
+        'testToEmailAddress' => getenv('TEST_EMAIL') ?: null,
+        'siteUrl' => [
+            'api' => 'https://api.craftcms.next/',
+            'composer' => 'https://composer.craftcms.next/',
+            'craftId' => 'https://id.craftcms.next/',
+            'plugins' => 'https://plugins.craftcms.next/',
+        ],
+        'defaultCookieDomain' => '.craftcms.next',
+        'baseCpUrl' => 'https://id.craftcms.next/',
     ]
 ];

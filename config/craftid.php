@@ -45,5 +45,8 @@ return [
     ],
     'dev' => [
         'craftIdUrl' => 'https://id.craftcms.test',
+    ],
+    'next' => [
+        'craftIdUrl' => 'https://id.craftcms.next',
     ]
 ];
