@@ -12,6 +12,7 @@ return [
     'clearfiredev.net',
     'cloudwaysapps.com',
     'clover.show',
+    'cnc.land',
     'cogclient.com',
     'craft.dev',
     'craft2.dev',
