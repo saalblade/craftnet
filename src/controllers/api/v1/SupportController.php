@@ -160,11 +160,14 @@ class SupportController extends BaseApiController
 
         if (!empty($attachments)) {
             foreach ($attachments as $i => $attachment) {
-                $parts[] = [
-                    'name' => "attachments[{$i}]",
-                    'contents' => fopen($attachment->tempName, 'rb'),
-                    'filename' => $attachment->name,
-                ];
+                if (!empty($attachment->tempName)) {
+                    $parts[] = [
+                        'name' => "attachments[{$i}]",
+                        'contents' => fopen($attachment->tempName, 'rb'),
+                        'filename' => $attachment->name,
+                    ];
+                }
+                
             }
         }
 
