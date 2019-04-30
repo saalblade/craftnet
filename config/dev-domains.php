@@ -36,6 +36,7 @@ return [
     'ghdev.xyz',
     'gw-staging.com',
     'hpc3.hpconnected.com',
+    'hpsmartdev.com',
     'hyperlane.co',
     'infomedia-dev.com',
     'lndo.site',
