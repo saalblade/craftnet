@@ -173,11 +173,12 @@ class PluginLicenseManager extends Component
      *
      * @param string $key
      * @param string|null $handle the plugin handle
+     * @param bool $anyStatus whether to include licenses for disabled editions
      * @return PluginLicense
      * @throws LicenseNotFoundException if $key is missing
      * @throws InvalidPluginException
      */
-    public function getLicenseByKey(string $key, string $handle = null): PluginLicense
+    public function getLicenseByKey(string $key, string $handle = null, $anyStatus = false): PluginLicense
     {
         try {
             $key = $this->normalizeKey($key);
@@ -185,7 +186,7 @@ class PluginLicenseManager extends Component
             throw new LicenseNotFoundException($key);
         }
 
-        $query = $this->_createLicenseQuery()
+        $query = $this->_createLicenseQuery($anyStatus)
             ->where(['l.key' => $key]);
 
         if ($handle !== null) {
@@ -668,10 +669,10 @@ class PluginLicenseManager extends Component
     // =========================================================================
 
     /**
-     * @param string|null $searchQuery
+     * @param bool $anyStatus whether to include licenses for disabled editions
      * @return Query
      */
-    private function _createLicenseQuery(): Query
+    private function _createLicenseQuery(bool $anyStatus = false): Query
     {
         $query = (new Query())
             ->select([
@@ -702,6 +703,9 @@ class PluginLicenseManager extends Component
             ])
             ->from(['craftnet_pluginlicenses l']);
 
+        if (!$anyStatus) {
+            $query->innerJoin('elements ed_el', ['and', '[[ed_el.id]] = [[l.editionId]]', ['ed_el.enabled' => true]]);
+        }
 
         return $query;
     }
