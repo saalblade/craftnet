@@ -158,7 +158,7 @@ class PluginLicenseManager extends Component
     public function getLicenseById(int $id): PluginLicense
     {
         $result = $this->_createLicenseQuery()
-            ->where(['ed_el.id' => $id])
+            ->where(['l.id' => $id])
             ->one();
 
         if ($result === null) {
