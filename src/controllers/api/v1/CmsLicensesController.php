@@ -3,7 +3,6 @@
 namespace craftnet\controllers\api\v1;
 
 use Craft;
-use craft\models\Update;
 use craftnet\controllers\api\BaseApiController;
 use craftnet\plugins\Plugin;
 use yii\base\Exception;
