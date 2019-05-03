@@ -84,16 +84,6 @@ return [
                 'class' => omnilight\scheduling\Schedule::class,
                 'cliScriptName' => 'craft',
             ],
-            'api' => function() {
-                $client = Craft::createGuzzleClient([
-                    'base_uri' => 'https://api.craftcms.next/v1/',
-                    'verify' => false,
-                    'query' => ['XDEBUG_SESSION_START' => 14076],
-                ]);
-                return new \craft\services\Api([
-                    'client' => $client,
-                ]);
-            },
         ],
     ],
     'prod' => [
@@ -163,5 +153,17 @@ return [
                 return $log;
             },
         ],
+    ],
+    'next' => [
+        'api' => function() {
+            $client = Craft::createGuzzleClient([
+                'base_uri' => 'https://api.craftcms.next/v1/',
+                'verify' => false,
+                'query' => ['XDEBUG_SESSION_START' => 14076],
+            ]);
+            return new \craft\services\Api([
+                'client' => $client,
+            ]);
+        },
     ]
 ];
