@@ -315,8 +315,14 @@ abstract class BaseApiController extends Controller
                 foreach (explode(',', $pluginLicenseKeys) as $pluginLicenseInfo) {
                     list($pluginHandle, $pluginLicenseKey) = explode(':', $pluginLicenseInfo);
                     try {
-                        $pluginLicense = $this->pluginLicenses[$pluginHandle] = $pluginLicenseManager->getLicenseByKey($pluginLicenseKey, $pluginHandle);
-                        $this->pluginLicenseEditions[$pluginHandle] = $pluginLicense->getEdition();
+                        $pluginLicense = $pluginLicenseManager->getLicenseByKey($pluginLicenseKey, $pluginHandle, true);
+                        // Ignore it if for a disabled edition
+                        /** @var PluginEdition $pluginEdition */
+                        $pluginEdition = $pluginLicense->getEdition();
+                        if ($pluginEdition->enabled) {
+                            $this->pluginLicenses[$pluginHandle] = $pluginLicense;
+                            $this->pluginLicenseEditions[$pluginHandle] = $pluginLicense->getEdition();
+                        }
                     } catch (LicenseNotFoundException $e) {
                         $this->pluginLicenseStatuses[$pluginHandle] = self::LICENSE_STATUS_INVALID;
                         $e = null;
