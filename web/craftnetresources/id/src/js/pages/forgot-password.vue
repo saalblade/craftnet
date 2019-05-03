@@ -51,7 +51,7 @@
                             this.$store.dispatch('app/displayError', response.data.error)
                         } else {
                             this.loginName = ''
-                            const loginNameInput = this.$refs.loginName.$children[0].$children[0].$el
+                            const loginNameInput = this.$refs.loginName.$el.querySelector('input')
                             loginNameInput.blur()
                             this.$store.dispatch('app/displayNotice', 'Password reset email sent.')
                         }
