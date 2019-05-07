@@ -505,8 +505,7 @@ return [
         'status' => 'Discontinued, but [Typogrify](https://github.com/nystudio107/craft3-typogrify) or [Wordsmith](https://github.com/TopShelfCraft/Wordsmith) can be used instead.'
     ],
     'UserManual' => [
-        'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Guide](https://github.com/wbrowar/craft-3-guide) can be used instead.'
+        'handle' => 'usermanual'
     ],
     'Venti' => [
         'statusColor' => 'orange',
