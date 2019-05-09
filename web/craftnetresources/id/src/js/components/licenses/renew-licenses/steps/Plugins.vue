@@ -24,9 +24,9 @@
                                 @input="checkLicense($event, key)" />
                     </td>
                     <td>{{ renewableLicense.description }}</td>
-                    <td>{{ renewableLicense.expiresOn.date|moment('L') }}</td>
+                    <td>{{ renewableLicense.expiresOn.date|moment('YYYY-MM-DD') }}</td>
                     <td>
-                        {{ renewableLicense.expiryDate|moment('L') }}
+                        {{ renewableLicense.expiryDate|moment('YYYY-MM-DD') }}
                     </td>
                     <td></td>
                 </tr>

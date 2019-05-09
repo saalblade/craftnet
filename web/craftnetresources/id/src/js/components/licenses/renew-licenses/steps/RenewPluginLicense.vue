@@ -17,7 +17,7 @@
                 <tbody>
                 <tr>
                     <td>{{ license.plugin.name }}</td>
-                    <td>{{ license.expiresOn.date|moment('L') }}</td>
+                    <td>{{ license.expiresOn.date|moment('YYYY-MM-DD') }}</td>
                     <td>{{ expiryDate }}</td>
                     <td>{{ price|currency }}</td>
                 </tr>
@@ -58,7 +58,7 @@
                 for (let i = 0; i < this.expiryDateOptions.length; i++) {
                     const expiryDateOption = this.expiryDateOptions[i]
                     const date = expiryDateOption[1]
-                    const formattedDate = this.$moment(date).format('L')
+                    const formattedDate = this.$moment(date).format('YYYY-MM-DD')
                     const label = "Extend updates until " + formattedDate
 
                     options.push({
@@ -90,7 +90,7 @@
 
                 const date = this.expiryDateOptions[this.renew][1]
 
-                return this.$moment(date).format('L')
+                return this.$moment(date).format('YYYY-MM-DD')
             }
         },
 

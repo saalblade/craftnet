@@ -186,7 +186,7 @@
                         {label: "1-2", value: "XS"},
                         {label: "3-9", value: "S"},
                         {label: "10-29", value: "M"},
-                        {label: "30+", value: "L"}
+                        {label: "30+", value: 'YYYY-MM-DD'}
                     ],
                     capabilities: [
                         {label: 'Commerce', value: 'Commerce'},

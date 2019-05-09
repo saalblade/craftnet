@@ -217,7 +217,7 @@
                     const date = expiryDateOption[1]
                     const price = renewalPrice * (i - selectedOption)
 
-                    let label = "Updates Until " + this.$options.filters.moment(date, 'L')
+                    let label = "Updates Until " + this.$options.filters.moment(date, 'YYYY-MM-DD')
 
                     if (price !== 0) {
                         let sign = ''

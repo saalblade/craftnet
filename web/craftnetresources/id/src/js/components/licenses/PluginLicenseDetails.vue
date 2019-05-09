@@ -43,7 +43,7 @@
                                 <dd>{{ license.email }}</dd>
 
                                 <dt>Created</dt>
-                                <dd>{{ license.dateCreated.date|moment("L") }}</dd>
+                                <dd>{{ license.dateCreated.date|moment('YYYY-MM-DD') }}</dd>
 
                                 <dt>Notes</dt>
                                 <dd>

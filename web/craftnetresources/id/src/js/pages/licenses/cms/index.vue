@@ -52,10 +52,10 @@
                     <template v-if="props.rowData.expirable && props.rowData.expiresOn">
                         <template v-if="!props.rowData.expired">
                             <template v-if="expiresSoon(props.rowData)">
-                                <span class="text-orange">{{ props.rowData.expiresOn.date|moment("L") }}</span>
+                                <span class="text-orange">{{ props.rowData.expiresOn.date|moment('YYYY-MM-DD') }}</span>
                             </template>
                             <template v-else>
-                                {{ props.rowData.expiresOn.date|moment("L") }}
+                                {{ props.rowData.expiresOn.date|moment('YYYY-MM-DD') }}
                             </template>
                         </template>
                         <template v-else>

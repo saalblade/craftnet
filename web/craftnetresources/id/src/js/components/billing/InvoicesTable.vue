@@ -28,7 +28,7 @@
                     {{ props.rowData.totalPrice|currency }}
                 </template>
                 <template slot="date" slot-scope="props">
-                    <template v-if="props.rowData.datePaid">{{ props.rowData.datePaid.date|moment("L") }}</template>
+                    <template v-if="props.rowData.datePaid">{{ props.rowData.datePaid.date|moment('YYYY-MM-DD') }}</template>
                 </template>
                 <template slot="receipt" slot-scope="props">
                     <a :href="props.rowData.pdfUrl">Download Receipt</a>

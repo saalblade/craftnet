@@ -21,7 +21,7 @@
                 for (let i = 0; i < this.license.expiryDateOptions.length; i++) {
                     const expiryDateOption = this.license.expiryDateOptions[i]
                     const date = expiryDateOption[1]
-                    const formattedDate = this.$moment(date).format('L')
+                    const formattedDate = this.$moment(date).format('YYYY-MM-DD')
                     const label = "Extend updates until " + formattedDate
 
                     options.push({

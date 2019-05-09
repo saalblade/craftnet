@@ -12,10 +12,10 @@
                 </template>
                 <template v-else>
                     <template v-if="license.autoRenew">
-                        <p>This license will auto-renew on <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
+                        <p>This license will auto-renew on <strong>{{ license.expiresOn.date|moment('YYYY-MM-DD') }}</strong>.</p>
                     </template>
                     <template v-else>
-                        <p>This license will continue having access to updates until <strong>{{ license.expiresOn.date|moment("L") }}</strong>.</p>
+                        <p>This license will continue having access to updates until <strong>{{ license.expiresOn.date|moment('YYYY-MM-DD') }}</strong>.</p>
                     </template>
                 </template>
             </template>

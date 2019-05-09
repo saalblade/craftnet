@@ -42,12 +42,12 @@
                                 <dd>{{ license.email }}</dd>
 
                                 <dt>Created</dt>
-                                <dd>{{ license.dateCreated.date|moment("L") }}</dd>
+                                <dd>{{ license.dateCreated.date|moment('YYYY-MM-DD') }}</dd>
 
                                 <dt>Updates Until</dt>
                                 <dd>
                                     <template v-if="license.expirable && license.expiresOn">
-                                        {{ license.expiresOn.date|moment("L") }}
+                                        {{ license.expiresOn.date|moment('YYYY-MM-DD') }}
                                     </template>
                                     <template v-else>
                                         Forever

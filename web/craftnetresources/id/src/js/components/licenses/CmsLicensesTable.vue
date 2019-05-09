@@ -32,10 +32,10 @@
                         <template v-if="license.expirable && license.expiresOn">
                             <template v-if="!license.expired">
                                 <template v-if="expiresSoon(license)">
-                                    <span class="text-orange">{{ license.expiresOn.date|moment("L") }}</span>
+                                    <span class="text-orange">{{ license.expiresOn.date|moment('YYYY-MM-DD') }}</span>
                                 </template>
                                 <template v-else>
-                                    {{ license.expiresOn.date|moment("L") }}
+                                    {{ license.expiresOn.date|moment('YYYY-MM-DD') }}
                                 </template>
                             </template>
                             <template v-else>
