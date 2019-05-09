@@ -86,6 +86,7 @@ return [
     'wave-stage.com',
     'webdnatest.co.uk',
     'websitetestlink.com',
+    'wrkcpt.dev',
     'xip.io',
     'yourstruly.space',
 ];
