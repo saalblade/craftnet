@@ -8,7 +8,7 @@ export default {
     getPlugins(pluginIds) {
         return axios.get(process.env.VUE_APP_CRAFT_API_ENDPOINT + '/plugins', {
             params: {
-                ids: pluginIds
+                ids: pluginIds.join(',')
             },
             withCredentials: false
         })

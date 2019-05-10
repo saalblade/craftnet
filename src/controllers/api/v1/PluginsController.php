@@ -27,6 +27,7 @@ class PluginsController extends BaseApiController
         $pluginQuery = $this->_getPluginQuery();
 
         $ids = Craft::$app->getRequest()->getParam('ids');
+        $ids = explode(',', $ids);
 
         if ($ids) {
             $pluginQuery->andWhere(['craftnet_plugins.id' => $ids]);
