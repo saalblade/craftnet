@@ -290,16 +290,6 @@ class Plugin extends Element
     public $handle;
 
     /**
-     * @var float|null The plugin license price
-     */
-    public $price;
-
-    /**
-     * @var float|null The plugin license renewal price
-     */
-    public $renewalPrice;
-
-    /**
      * @var string The license type ('mit', 'craft')
      */
     public $license = 'craft';
