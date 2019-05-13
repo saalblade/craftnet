@@ -777,6 +777,8 @@ class Plugin extends Element
             'message' => Craft::t('yii', '{attribute} "{value}" has already been taken.'),
         ];
 
+        $rules[] = [['handle'], 'validateHandle'];
+
         $rules[] = [
             [
                 'packageName',
@@ -788,6 +790,29 @@ class Plugin extends Element
         ];
 
         return $rules;
+    }
+
+    /**
+     * Validates the plugin handle.
+     */
+    public function validateHandle()
+    {
+        $this->handle = mb_strtolower($this->handle);
+
+        if (!preg_match('/^[a-z]([a-z0-9\-]*[a-z0-9])?$/', $this->handle)) {
+            $this->addError('handle', "“{$this->handle}” isn’t a valid plugin handle.");
+            return;
+        }
+
+        if (in_array($this->handle, [
+            'craft',
+            'search',
+            'favorites',
+            'reactions',
+        ], true)) {
+            $this->addError('handle', "“{$this->handle}” is a reserved word.");
+            return;
+        }
     }
 
     /**
