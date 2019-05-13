@@ -218,7 +218,7 @@
              */
             onAfterEnterLogoutWarningModal() {
                 if (!this.isMobileBrowser(true)) {
-                    this.$refs.renewSessionBtn.focus();
+                    this.$refs.renewSessionBtn.$el.focus();
                 }
             },
 
