@@ -9,7 +9,7 @@
                 <icon icon="exclamation-triangle" />
                 {{ logoutWarningPara }}
 
-                <div class="float-right mt-4">
+                <div class="mt-4 text-right">
                     <btn @click="logout">Logout now</btn>
                     <btn kind="primary" ref="renewSessionBtn" @click="renewSession">Keep me logged in</btn>
                 </div>
@@ -218,7 +218,7 @@
              */
             onAfterEnterLogoutWarningModal() {
                 if (!this.isMobileBrowser(true)) {
-                    this.$refs.renewSessionBtn.focus();
+                    this.$refs.renewSessionBtn.$el.focus();
                 }
             },
 
@@ -440,11 +440,13 @@
     .auth-manager-modal {
         z-index: 20;
         .modal-body {
-            padding-left: 76px;
+            position: relative;
+            padding-left: 72px;
 
             & > svg {
-                float: left;
-                margin: -6px 0 0 -58px;
+                position: absolute;
+                top: 0;
+                left: 0;
                 width: 40px;
                 height: 40px;
                 color: #b9bfc6;
