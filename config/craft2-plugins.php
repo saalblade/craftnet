@@ -105,6 +105,10 @@ return [
     'Charge' => [
         'status' => 'Currently in development.'
     ],
+    'CloudfrontInvalidation' => [
+        'statusColor' => 'orange',
+        'status' => 'No longer needed thanks to automatic CloudFront invalidation functionality in the [AWS S3](https://github.com/craftcms/aws-s3) plugin.'
+    ],
     'CodeBlock' => [
         'statusColor' => 'orange',
         'status' => 'Discontinued, but [Simple Text](https://github.com/craftcms/simple-text) can be used instead.'
