@@ -46,7 +46,7 @@
                         </a>
 
                         <div class="popover" :class="{hidden: !showingUserMenu}">
-                            <div class="truncate">
+                            <div :title="user.email" class="truncate">
                                 {{user.email}}
                             </div>
 
