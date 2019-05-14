@@ -939,7 +939,7 @@ class Plugin extends Element
 
         // Save the editions
         $elementsService = Craft::$app->getElements();
-        foreach ($this->getEditions() as $edition) {
+        foreach ($this->getEditions(true) as $edition) {
             $edition->pluginId = $this->id;
             $elementsService->saveElement($edition, false);
         }
