@@ -40,19 +40,19 @@
                         <td>{{ plugin.activeInstalls }}</td>
                         <td>
                             <div class="text-nowrap">
-                                <template v-if="priceRanges[pluginKey].min !== priceRanges[pluginKey].max">
-                                    <template v-if="priceRanges[pluginKey].min > 0">
-                                        {{priceRanges[pluginKey].min|currency}}
+                                <template v-if="priceRanges[plugin.id].min !== priceRanges[plugin.id].max">
+                                    <template v-if="priceRanges[plugin.id].min > 0">
+                                        {{priceRanges[plugin.id].min|currency}}
                                     </template>
                                     <template v-else>
                                         Free
                                     </template>
                                     -
-                                    {{priceRanges[pluginKey].max|currency}}
+                                    {{priceRanges[plugin.id].max|currency}}
                                 </template>
                                 <template v-else>
-                                    <template v-if="priceRanges[pluginKey].min > 0">
-                                        {{priceRanges[pluginKey].min|currency}}
+                                    <template v-if="priceRanges[plugin.id].min > 0">
+                                        {{priceRanges[plugin.id].min|currency}}
                                     </template>
                                     <template v-else>
                                         Free
@@ -128,12 +128,12 @@
             },
 
             priceRanges() {
-                let priceRanges = []
+                let priceRanges = {}
 
                 for (let i = 0; i < this.plugins.length; i++) {
                     const plugin = this.plugins[i]
                     let priceRange = this.getPriceRange(plugin.editions)
-                    priceRanges.push(priceRange)
+                    priceRanges[plugin.id] = priceRange
                 }
 
                 return priceRanges
