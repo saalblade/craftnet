@@ -139,7 +139,7 @@ const mutations = {
         statePlugin.screenshotIds = screenshotIds
         statePlugin.screenshotUrls = screenshotUrls
 
-        statePlugin.editions = plugin.editions
+        statePlugin.editions = response.data.editions
 
         if (newPlugin) {
             state.plugins.push(statePlugin)

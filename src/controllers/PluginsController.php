@@ -599,13 +599,28 @@ JS;
             $return['iconId'] = $plugin->iconId;
             $return['iconUrl'] = $plugin->iconId ? $plugin->getIcon()->getUrl() : null;
             $return['name'] = $plugin->name;
-
+            
+            // Screenshots
             $return['screenshots'] = [];
 
             foreach ($plugin->getScreenshots() as $screenshot) {
                 $return['screenshots'][] = [
                     'id' => $screenshot->id,
                     'url' => $screenshot->getUrl(),
+                ];
+            }
+
+            // Editions
+            $return['editions'] = [];
+
+            foreach ($editions as $edition) {
+                $return['editions'][] = [
+                    'id' => $edition->id,
+                    'name' => $edition->name,
+                    'handle' => $edition->handle,
+                    'price' => $edition->price,
+                    'renewalPrice' => $edition->renewalPrice,
+                    'features' => $edition->features ?? [],
                 ];
             }
 
