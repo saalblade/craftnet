@@ -232,6 +232,10 @@ router.beforeEach((to, from, next) => {
             store.dispatch('account/loadAccount')
                 .then(() => {
                     if (store.state.account.user) {
+                        if (router.app.$refs.authManager) {
+                            router.app.$refs.authManager.renewSession()
+                        }
+
                         next()
                     } else {
                         router.push({path: '/login'})
