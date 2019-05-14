@@ -720,7 +720,6 @@ class Plugin extends Element
 
         $rules[] = [
             [
-                'editions',
                 'developerId',
                 'packageName',
                 'repository',
@@ -813,9 +812,18 @@ class Plugin extends Element
     {
         parent::afterValidate();
 
+        $editions = $this->getEditions(true);
+
+        if (empty($editions)) {
+            $this->addError('editions', Craft::t('yii', '{attribute} cannot be blank.', [
+                'attribute' => $this->getAttributeLabel('editions'),
+            ]));
+            return;
+        }
+
         $editionScenario = Craft::$app->getRequest()->getIsCpRequest() ? PluginEdition::SCENARIO_CP : PluginEdition::SCENARIO_SITE;
 
-        foreach ($this->getEditions(true) as $i => $edition) {
+        foreach ($editions as $i => $edition) {
             $edition->setScenario($editionScenario);
             if (!$edition->validate()) {
                 $this->addModelErrors($edition, "editions[$i]");
