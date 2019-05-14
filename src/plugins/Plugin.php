@@ -290,16 +290,6 @@ class Plugin extends Element
     public $handle;
 
     /**
-     * @var float|null The plugin license price
-     */
-    public $price;
-
-    /**
-     * @var float|null The plugin license renewal price
-     */
-    public $renewalPrice;
-
-    /**
      * @var string The license type ('mit', 'craft')
      */
     public $license = 'craft';
@@ -365,9 +355,9 @@ class Plugin extends Element
     private $_editions;
 
     /**
-     * @var PluginEdition[]|null
+     * @var PluginEdition[]|null All editions regardless of status
      */
-    private $_originalEditions;
+    private $_allEditions;
 
     /**
      * @var User|null
@@ -519,6 +509,9 @@ class Plugin extends Element
         if (!$anyStatus && $this->_editions !== null) {
             return $this->_editions;
         }
+        if ($anyStatus && $this->_allEditions !== null) {
+            return $this->_allEditions;
+        }
         if ($this->id === null) {
             throw new InvalidConfigException('Plugin is missing its ID.');
         }
@@ -534,6 +527,8 @@ class Plugin extends Element
 
         if (!$anyStatus) {
             $this->_editions = $editions;
+        } else {
+            $this->_allEditions = $editions;
         }
 
         return $editions;
@@ -544,11 +539,7 @@ class Plugin extends Element
      */
     public function setEditions(array $editions)
     {
-        if ($this->id !== null && $this->_originalEditions === null) {
-            $this->_originalEditions = ArrayHelper::index($this->getEditions(), 'id');
-        }
-
-        $this->_editions = $editions;
+        $this->_allEditions = $editions;
     }
 
     /**
@@ -777,6 +768,8 @@ class Plugin extends Element
             'message' => Craft::t('yii', '{attribute} "{value}" has already been taken.'),
         ];
 
+        $rules[] = [['handle'], 'validateHandle'];
+
         $rules[] = [
             [
                 'packageName',
@@ -791,6 +784,29 @@ class Plugin extends Element
     }
 
     /**
+     * Validates the plugin handle.
+     */
+    public function validateHandle()
+    {
+        $this->handle = mb_strtolower($this->handle);
+
+        if (!preg_match('/^[a-z]([a-z0-9\-]*[a-z0-9])?$/', $this->handle)) {
+            $this->addError('handle', "“{$this->handle}” isn’t a valid plugin handle.");
+            return;
+        }
+
+        if (in_array($this->handle, [
+            'craft',
+            'search',
+            'favorites',
+            'reactions',
+        ], true)) {
+            $this->addError('handle', "“{$this->handle}” is a reserved word.");
+            return;
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     public function afterValidate()
@@ -799,7 +815,7 @@ class Plugin extends Element
 
         $editionScenario = Craft::$app->getRequest()->getIsCpRequest() ? PluginEdition::SCENARIO_CP : PluginEdition::SCENARIO_SITE;
 
-        foreach ($this->getEditions() as $i => $edition) {
+        foreach ($this->getEditions(true) as $i => $edition) {
             $edition->setScenario($editionScenario);
             if (!$edition->validate()) {
                 $this->addModelErrors($edition, "editions[$i]");

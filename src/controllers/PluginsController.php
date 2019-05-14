@@ -296,15 +296,6 @@ JS;
         $plugin->devComments = $request->getBodyParam('devComments') ?: null;
         $plugin->keywords = $request->getBodyParam('keywords');
 
-        if (
-            !$plugin->enabled ||
-            ($plugin->enabled && $plugin->price) ||
-            Craft::$app->getUser()->getIdentity()->isInGroup('staff')
-        ) {
-            $plugin->price = (float)$request->getBodyParam('price');
-            $plugin->renewalPrice = (float)$request->getBodyParam('renewalPrice');
-        }
-
         // Categories
         // ---------------------------------------------------------------------
 

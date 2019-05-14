@@ -260,6 +260,7 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
     {
         $rules = parent::rules();
         $rules[] = [['name', 'handle'], 'required'];
+        $rules[] = [['price', 'renewalPrice'], 'normalizePrice', 'skipOnEmpty' => false];
 
         $rules[] = [
             [
@@ -302,6 +303,16 @@ class PluginEdition extends PluginPurchasable implements EditionInterface
         ];
 
         return $rules;
+    }
+
+    /**
+     * Normalizes a price.
+     *
+     * @var string $attribute
+     */
+    public function normalizePrice(string $attribute)
+    {
+        $this->$attribute = (float)$this->$attribute;
     }
 
     /**
