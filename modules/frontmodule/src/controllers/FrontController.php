@@ -11,6 +11,7 @@
 namespace modules\frontmodule\controllers;
 
 use Craft;
+use craft\helpers\Json;
 use craft\web\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -100,7 +101,52 @@ class FrontController extends Controller
 
         // request conversation details
         //
-        $data['success'] = true;
+
+
+        $apiHost = 'https://api2.frontapp.com/';
+        $config = [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        ];
+
+        $client = Craft::createGuzzleClient($config);
+        $response = $client->request('GET', $apiHost . 'conversations/' . $conversationId);
+        $conversationData = Json::decodeIfJson($response->getBody()->getContents());
+
+        $recipient = null;
+        $licenseKey = null;
+        $pattern = '/(?:\S{50}\s{0,2}){5}/';
+
+        if (is_array($conversationData)) {
+            $recipient = $conversationData['recipient']['handle'] ?? null;
+        }
+
+        $response = $response = $client->request('GET', $apiHost . 'conversations/' . $conversationId . '/messages');
+        $messages = Json::decodeIfJson($response->getBody()->getContents());
+
+        if (is_array($messages)) {
+            $messages = $messages['_results'] ?? [];
+
+            foreach ($messages as $message) {
+                if (!empty($message['attachments'])) {
+                    foreach ($message['attachments'] as $attachment) {
+                        if (!empty($attachment['filename']) && $attachment['filename'] == 'license.key' && $attachment['size'] < 512) {
+                            $licenseKey = $client->request('GET', $attachment['url'])->getBody()->getContents();
+                            break 2;
+                        }
+                    }
+                }
+
+                if (preg_match($pattern, $message['text'] ?? (strip_tags($message['body']) ?? ''), $matches)) {
+                    $licenseKey = $matches[0];
+                    break;
+                }
+            }
+        }
+
+        $data['licenseKey'] = $licenseKey;
+        $data['email'] = $recipient;
 
         return $this->asJson($data);
     }

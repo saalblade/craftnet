@@ -4,28 +4,49 @@
 
 
     {% set buttonClasses = "block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-2 w-full" %}
+    {% set warningButtonClasses = "block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded my-2 w-full" %}
 
     <div class="mt-3">
-    <h2>Check license</h2>
-    <textarea class="p-2 w-full" rows="4" placeholder="Paste Key Here" id="licenseKey"></textarea>
-    <button class="{{ buttonClasses }}" onclick="loadLicense()">Scrub for license key</button>
-    <button class="{{ buttonClasses }}" onclick="checkLicense()">Check</button>
+        <h2>License information</h2>
+        <textarea class="p-2 w-full overflow-hidden font-mono whitespace-no-wrap" cols="50" rows="5" placeholder="Paste Key Here" id="licenseKey"></textarea>
+        <input type="text" class="p-2 w-full" rows="4" placeholder="Paste Email Here" id="email" />
+        <button class="{{ buttonClasses }}" onclick="checkLicense()">Check</button>
     </div>
 
     <div class="mt-3">
-    <h2>Check license by email</h2>
-    <textarea class="p-2 w-full" rows="4" placeholder="Paste Email Here" id="email"></textarea>
-    <button class="{{ buttonClasses }}" onclick="checkEmail()">Check</button>
+        <h2>Load license data</h2>
+        <button class="{{ warningButtonClasses }}" onclick="loadLicense()" id="loadLicense">
+            <span>Check ticket for license key</span>
+        </button>
     </div>
+
     {% js %}
         function loadLicense() {
+            if (loading) {
+                return;
+            }
+
+            loading = true;
+            document.getElementById('loadLicense').classList.toggle('opacity-50');
+            document.getElementById('loadLicense').classList.toggle('cursor-not-allowed');
+
             var data = frontData;
 
+            // TODO: obviously, uncomment
             //conversationId = data.conversation.id;
             conversationId = "cnv_1e0jtzn";
 
             Craft.postActionRequest('front-module/front/scrub-conversation', {conversationId: conversationId}, function (response) {
-                console.log(response);
+                document.getElementById('loadLicense').classList.toggle('opacity-50');
+                document.getElementById('loadLicense').classList.toggle('cursor-not-allowed');
+                loading = false;
+
+                if (response.licenseKey) {
+                    document.getElementById('licenseKey').value = response.licenseKey;
+                }
+                if (response.email) {
+                    document.getElementById('email').value = response.email;
+                }
             });
 
         }
@@ -45,9 +66,10 @@
         }
 
         var frontData;
+        var loading = false;
+
         Front.on('conversation', function(data) {
             frontData = data;
-            document.getElementById('email').value = loadEmail(data);
         });
 
     {% endjs %}
