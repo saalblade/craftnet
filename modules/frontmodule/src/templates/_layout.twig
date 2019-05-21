@@ -9,36 +9,20 @@
     <meta name="author" content="Luke Holder">
 
     {% css %}
-        body {
-            margin-top:20px;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
-        h2 {
-            text-align: center;
-        }
-        textarea {
-            display: block;
-            width: 250px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 2px;
-        }
-        button {
-            display: block;
-            width: 250px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 2px;
-        }
     {% endcss %}
 
     {% includeJsFile "https://dl.frontapp.com/libs/frontjs.min.js" %}
     {% includeCssFile "https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" %}
 </head>
 <body>
-<div class="container">
-    {% block container %}
-    {% endblock %}
+<!-- Three columns -->
+<div class="flex mb-4">
+    <div class="w-1/5"></div>
+    <div class="w-3/5">
+        {% block container %}
+        {% endblock %}
+    </div>
+    <div class="w-1/5"></div>
 </div>
 </body>
 </html>

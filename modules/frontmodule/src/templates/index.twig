@@ -1,18 +1,22 @@
 {% extends 'front-module/_layout' %}
 
 {% block container %}
+
+
+    {% set buttonClasses = "block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-2 w-full" %}
+
+    <div class="mt-3">
     <h2>Check license</h2>
-
-    {% set buttonClasses = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-2" %}
-
-    <textarea class="p-2" rows="4" placeholder="Paste Key Here" id="licenseKey"></textarea>
+    <textarea class="p-2 w-full" rows="4" placeholder="Paste Key Here" id="licenseKey"></textarea>
     <button class="{{ buttonClasses }}" onclick="loadLicense()">Scrub for license key</button>
     <button class="{{ buttonClasses }}" onclick="checkLicense()">Check</button>
+    </div>
 
+    <div class="mt-3">
     <h2>Check license by email</h2>
-    <textarea class="p-2" rows="4" placeholder="Paste Email Here" id="email"></textarea>
+    <textarea class="p-2 w-full" rows="4" placeholder="Paste Email Here" id="email"></textarea>
     <button class="{{ buttonClasses }}" onclick="checkEmail()">Check</button>
-
+    </div>
     {% js %}
         function loadLicense() {
             var data = frontData;
