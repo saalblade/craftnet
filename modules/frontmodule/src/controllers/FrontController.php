@@ -12,12 +12,13 @@ namespace modules\frontmodule\controllers;
 
 use Craft;
 use craft\web\Controller;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 /**
  * @author    Luke Holder
  * @package   FrontModule
- * @since     1
+ * @since     1.0.0
  */
 class FrontController extends Controller
 {
@@ -26,9 +27,7 @@ class FrontController extends Controller
     // =========================================================================
 
     /**
-     * @var    bool|array Allows anonymous access to this controller's actions.
-     *         The actions must be in 'kebab-case'
-     * @access protected
+     * @inheritdoc
      */
     protected $allowAnonymous = true;
 
@@ -59,7 +58,7 @@ class FrontController extends Controller
     }
 
     /**
-     * This is the main sidebar page in front
+     * This is the main sidebar in front.
      *
      * @return mixed
      */
@@ -71,7 +70,7 @@ class FrontController extends Controller
     /**
      * @return Response
      */
-    public function actionGetLicenseInfo()
+    public function actionGetLicenseInfo(): Response
     {
         $request = Craft::$app->getRequest();
         $key = $request->getParam('key');
@@ -90,6 +89,10 @@ class FrontController extends Controller
         return $this->asJson($data);
     }
 
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     */
     public function actionScrubConversation(): Response
     {
         $conversationId = Craft::$app->getRequest()->getRequiredBodyParam('conversationId');
