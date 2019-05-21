@@ -5,12 +5,12 @@
 
     {% set buttonClasses = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-2" %}
 
-    <textarea rows="4" placeholder="Paste Key Here" id="licenseKey"></textarea>
+    <textarea class="p-2" rows="4" placeholder="Paste Key Here" id="licenseKey"></textarea>
     <button class="{{ buttonClasses }}" onclick="loadLicense()">Scrub for license key</button>
     <button class="{{ buttonClasses }}" onclick="checkLicense()">Check</button>
 
     <h2>Check license by email</h2>
-    <textarea rows="4" placeholder="Paste Email Here" id="email"></textarea>
+    <textarea class="p-2" rows="4" placeholder="Paste Email Here" id="email"></textarea>
     <button class="{{ buttonClasses }}" onclick="checkEmail()">Check</button>
 
     {% js %}
