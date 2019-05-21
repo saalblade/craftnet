@@ -15,8 +15,6 @@ use craft\db\Query;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craftnet\cms\CmsEdition;
-use craftnet\cms\CmsLicense;
-use craftnet\cms\CmsPurchasable;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -73,20 +71,16 @@ class FrontController extends Controller
     public function actionGetLicenseInfo(): Response
     {
         $request = Craft::$app->getRequest();
-        $key = $request->getParam('key','');
+        $key = $request->getParam('key', '');
         $key = trim(preg_replace('/\s+/', '', $key));
-
-        //TODO move to real key
-//        $key = '/^$C5$7WFW9SLIBU6IQ4+3ZQ$4&GLQ=X0DR^+MC+QR28YQUX3N1+9%GS3XH&#ZYTE8I10Z8MZY645RM9/ZAC=GY0D!R1P4Z6&MFJXINH$8L%PTPY9D=3AVGDRB2GRGR0^4M%A*^NTMHE0U%D*##S98DH1KM^PG$IBTH09U1WKT9+8AE%DIC^TR=I7IK5$^Q%WN7X1JMZ+64FNWO=KR$LB!G0Q7Z9XD+VFMA%SZSYUBXV!4JER$$0QGOD4^';
 
         $license = (new Query())
             ->select(['*'])
             ->from('{{%craftnet_cmslicenses}}')
-            ->where(['key'=> $key])
+            ->where(['key' => $key])
             ->one();
 
-        if (!$license)
-        {
+        if (!$license) {
             return $this->asErrorJson('No license found.');
         }
 
