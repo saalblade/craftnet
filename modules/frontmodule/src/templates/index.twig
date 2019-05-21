@@ -1,41 +1,7 @@
-<!doctype html>
+{% extends 'front-module/_layout' %}
 
-{% do view.registerAssetBundle('craft\\web\\assets\\cp\\CpAsset') -%}
+{% block container %}
 
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-
-    <title>Front for P&T</title>
-    <meta name="description" content="Front integration for P&T">
-    <meta name="author" content="Luke Holder">
-
-    <style>
-        body {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
-        h3 {
-            text-align: center;
-        }
-        textarea {
-            display: block;
-            width: 250px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 2px;
-        }
-        button {
-            display: block;
-            width: 250px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 2px;
-        }
-    </style>
-
-    <script src="https://dl.frontapp.com/libs/frontjs.min.js"></script>
-</head>
-<body>
     <h3>Check license</h3>
     <textarea rows="4" placeholder="Paste Key Here" id="licenseKey"></textarea>
     <button onclick="loadLicense()">Scrub for license key</button>
@@ -45,7 +11,7 @@
     <textarea rows="4" placeholder="Paste Email Here" id="email"></textarea>
     <button onclick="checkEmail()">Check</button>
 
-    <script type="application/javascript">
+    {% js %}
         function loadLicense() {
             var data = frontData;
 
@@ -78,7 +44,6 @@
             document.getElementById('email').value = loadEmail(data);
         });
 
-    </script>
+    {% endjs %}
 
-</body>
-</html>
+{% endblock %}

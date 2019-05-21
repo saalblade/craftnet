@@ -1,0 +1,42 @@
+<!doctype html>
+{% do view.registerAssetBundle('craft\\web\\assets\\cp\\CpAsset') -%}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>P&T Plugin for Front</title>
+    <meta name="description" content="Front integration for P&T">
+    <meta name="author" content="Luke Holder">
+
+    {% css %}
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        h3 {
+            text-align: center;
+        }
+        textarea {
+            display: block;
+            width: 250px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2px;
+        }
+        button {
+            display: block;
+            width: 250px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2px;
+        }
+    {% endcss %}
+
+    <script src="https://dl.frontapp.com/libs/frontjs.min.js"></script>
+</head>
+<body>
+<div class="container">
+    {% block container %}
+    {% endblock %}
+</div>
+</body>
+</html>
