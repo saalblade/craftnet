@@ -30,7 +30,7 @@ class FrontController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['index'];
+    protected $allowAnonymous = true;
 
     /**
      * @inheritdoc
@@ -42,7 +42,6 @@ class FrontController extends Controller
 
     public function beforeAction($action)
     {
-
         $headers = Craft::$app->getResponse()->getHeaders();
         $headers->set('X-Frame-Options', 'allow-from https://app.frontapp.com');
         $request = Craft::$app->getRequest();
@@ -51,7 +50,7 @@ class FrontController extends Controller
         $secureOn = false; // change this in dev etc.
 
         if ($secureOn) {
-            if (!$authSecret || !hash_equals($authSecret, '784c2e0271c8f421')) {
+            if (!$authSecret || !hash_equals($authSecret, getenv('FRONT_AUTH_SECRET'))) {
                 return $this->renderTemplate('front-module/not-allowed.twig', []);
             }
         }
@@ -88,6 +87,18 @@ class FrontController extends Controller
             'edition' => 'pro'
         ];
         $data['success'] = true;
+        return $this->asJson($data);
+    }
+
+    public function actionScrubConversation(): Response
+    {
+        $conversationId = Craft::$app->getRequest()->getRequiredBodyParam('conversationId');
+        $token = getenv('FRONT_TOKEN');
+
+        // request conversation details
+        //
+        $data['success'] = true;
+
         return $this->asJson($data);
     }
 }

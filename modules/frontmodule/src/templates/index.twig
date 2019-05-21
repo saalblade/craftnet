@@ -1,5 +1,7 @@
 <!doctype html>
 
+{% do view.registerAssetBundle('craft\\web\\assets\\cp\\CpAsset') -%}
+
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -12,11 +14,9 @@
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
-
         h3 {
             text-align: center;
         }
-
         textarea {
             display: block;
             width: 250px;
@@ -24,7 +24,6 @@
             margin-right: auto;
             margin-top: 2px;
         }
-
         button {
             display: block;
             width: 250px;
@@ -35,34 +34,51 @@
     </style>
 
     <script src="https://dl.frontapp.com/libs/frontjs.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-            crossorigin="anonymous"></script>
+</head>
+<body>
+    <h3>Check license</h3>
+    <textarea rows="4" placeholder="Paste Key Here" id="licenseKey"></textarea>
+    <button onclick="loadLicense()">Scrub for license key</button>
+    <button onclick="checkLicense()">Check</button>
 
-    {# https://github.com/frontapp/frontapp.github.io/blob/master/test-plugin.js #}
+    <h3>Check license by email</h3>
+    <textarea rows="4" placeholder="Paste Email Here" id="email"></textarea>
+    <button onclick="checkEmail()">Check</button>
 
     <script type="application/javascript">
-        var conversation;
+        function loadLicense() {
+            var data = frontData;
 
-        function checkLicense() {
-            $.get("test.cgi", {name: "John", time: "2pm"})
-                .done(function(data) {
-                    alert("Data Loaded: " + data);
-                });
+            //conversationId = data.conversation.id;
+            conversationId = "cnv_1e0jtzn";
+
+            Craft.postActionRequest('front-module/front/scrub-conversation', {conversationId: conversationId}, function (response) {
+                console.log(response);
+            });
+
         }
 
+        function loadEmail(data) {
+            var message = data.otherMessages.length ? data.otherMessages[0] : data.message;
+
+            return message.from.handle;
+        }
+
+        function checkLicense () {
+            console.log('Checking license for ' + document.getElementById('licenseKey').value);
+        }
+
+        function checkEmail () {
+            console.log('Checking email for ' + document.getElementById('email').value);
+        }
+
+        var frontData;
         Front.on('conversation', function(data) {
-            console.log('Conversation', data.conversation);
-            // console.log('Contact', data.contact);
-            console.log('Message', data.message);
-            console.log('OtherMessages', data.otherMessages);
-            conversation = data.conversation;
+            frontData = data;
+            document.getElementById('email').value = loadEmail(data);
         });
 
     </script>
-</head>
-<body>
-<h3>P&T Plugin</h3>
 
 </body>
 </html>
