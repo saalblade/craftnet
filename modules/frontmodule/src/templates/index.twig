@@ -1,15 +1,17 @@
 {% extends 'front-module/_layout' %}
 
 {% block container %}
+    <h2>Check license</h2>
 
-    <h3>Check license</h3>
+    {% set buttonClasses = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %}
+
     <textarea rows="4" placeholder="Paste Key Here" id="licenseKey"></textarea>
-    <button onclick="loadLicense()">Scrub for license key</button>
-    <button onclick="checkLicense()">Check</button>
+    <button class="{{ buttonClasses }}" onclick="loadLicense()">Scrub for license key</button>
+    <button class="{{ buttonClasses }}" onclick="checkLicense()">Check</button>
 
-    <h3>Check license by email</h3>
+    <h2>Check license by email</h2>
     <textarea rows="4" placeholder="Paste Email Here" id="email"></textarea>
-    <button onclick="checkEmail()">Check</button>
+    <button class="{{ buttonClasses }}" onclick="checkEmail()">Check</button>
 
     {% js %}
         function loadLicense() {
