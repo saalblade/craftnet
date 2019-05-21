@@ -34,7 +34,8 @@
     "psr-4": {
       "craftnet\\": "src/",
       "craftcom\\": "craftcom/",
-      "pixelandtonic\\yii\\queue\\sqs\\": "yii2-queue-sqs/"
+      "pixelandtonic\\yii\\queue\\sqs\\": "yii2-queue-sqs/",
+      "modules\\frontmodule\\": "modules/frontmodule"
     }
   },
   "config": {

@@ -1,0 +1,68 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Front for P&T</title>
+    <meta name="description" content="Front integration for P&T">
+    <meta name="author" content="Luke Holder">
+
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        textarea {
+            display: block;
+            width: 250px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2px;
+        }
+
+        button {
+            display: block;
+            width: 250px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2px;
+        }
+    </style>
+
+    <script src="https://dl.frontapp.com/libs/frontjs.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+
+    {# https://github.com/frontapp/frontapp.github.io/blob/master/test-plugin.js #}
+
+    <script type="application/javascript">
+        var conversation;
+
+        function checkLicense() {
+            $.get("test.cgi", {name: "John", time: "2pm"})
+                .done(function(data) {
+                    alert("Data Loaded: " + data);
+                });
+        }
+
+        Front.on('conversation', function(data) {
+            console.log('Conversation', data.conversation);
+            // console.log('Contact', data.contact);
+            console.log('Message', data.message);
+            console.log('OtherMessages', data.otherMessages);
+            conversation = data.conversation;
+        });
+
+    </script>
+</head>
+<body>
+<h3>P&T Plugin</h3>
+
+</body>
+</html>

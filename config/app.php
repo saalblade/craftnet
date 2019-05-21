@@ -1,7 +1,7 @@
 <?php
 
-use craft\config\DbConfig;
 use craftnet\services\Oauth;
+use modules\frontmodule\FrontModule;
 
 return [
     '*' => [
@@ -10,8 +10,12 @@ return [
             'craftnet',
             'oauth-server',
             'queue',
+            'front-module'
         ],
         'modules' => [
+            'front-module' => [
+                'class' => FrontModule::class,
+            ],
             'craftnet' => [
                 'class' => \craftnet\Module::class,
                 'components' => [
