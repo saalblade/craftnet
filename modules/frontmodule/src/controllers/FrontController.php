@@ -11,8 +11,12 @@
 namespace modules\frontmodule\controllers;
 
 use Craft;
+use craft\db\Query;
 use craft\helpers\Json;
 use craft\web\Controller;
+use craftnet\cms\CmsEdition;
+use craftnet\cms\CmsLicense;
+use craftnet\cms\CmsPurchasable;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -48,7 +52,7 @@ class FrontController extends Controller
     public function actionIndex()
     {
         $headers = Craft::$app->getResponse()->getHeaders();
-        $headers->set('X-Frame-Options', 'allow-from https://app.frontapp.com');
+//        $headers->set('X-Frame-Options', 'allow-from https://app.frontapp.com');
         $request = Craft::$app->getRequest();
         $authSecret = $request->getQueryParam('auth_secret');
 
@@ -69,18 +73,30 @@ class FrontController extends Controller
     public function actionGetLicenseInfo(): Response
     {
         $request = Craft::$app->getRequest();
-        $key = $request->getParam('key');
+        $key = $request->getParam('key','');
+        $key = trim(preg_replace('/\s+/', '', $key));
 
-        if (!$key) // TODO (or key not found in DB.)
+        //TODO move to real key
+        $key = '/^$C5$7WFW9SLIBU6IQ4+3ZQ$4&GLQ=X0DR^+MC+QR28YQUX3N1+9%GS3XH&#ZYTE8I10Z8MZY645RM9/ZAC=GY0D!R1P4Z6&MFJXINH$8L%PTPY9D=3AVGDRB2GRGR0^4M%A*^NTMHE0U%D*##S98DH1KM^PG$IBTH09U1WKT9+8AE%DIC^TR=I7IK5$^Q%WN7X1JMZ+64FNWO=KR$LB!G0Q7Z9XD+VFMA%SZSYUBXV!4JER$$0QGOD4^';
+
+        $license = (new Query())
+            ->select(['*'])
+            ->from('{{%craftnet_cmslicenses}}')
+            ->where(['key'=> $key])
+            ->one();
+
+        if (!$license)
         {
-            return $this->asErrorJson('Key not found');
+            return $this->asErrorJson('No license found.');
         }
 
+        /** @var CmsEdition $edition */
+        $edition = CmsEdition::find()->id($license['editionId'])->one();
+        $license['editionName'] = $edition->name ?? '';
+        $license['editionPrice'] = $edition->price ?? '';
+
         $data = [];
-        // TODO populate key info with real data from lookup
-        $data['keyInfo'] = [
-            'edition' => 'pro'
-        ];
+        $data['license'] = $license;
         $data['success'] = true;
         return $this->asJson($data);
     }
