@@ -74,8 +74,8 @@
         }
 
         loading = true;
-        document.getElementById('loadLicense').classList.toggle('opacity-50');
-        document.getElementById('loadLicense').classList.toggle('cursor-not-allowed');
+        document.getElementById('getLicense').classList.toggle('opacity-50');
+        document.getElementById('getLicense').classList.toggle('cursor-not-allowed');
 
         console.log('Checking license for ' + document.getElementById('licenseKey').value);
         Craft.postActionRequest('front-module/front/get-license-info', {key: document.getElementById('licenseKey').value}, function(response) {
