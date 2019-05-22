@@ -57,7 +57,7 @@ class FrontController extends Controller
 
         if ($secureOn) {
             if (!$authSecret || !hash_equals($authSecret, getenv('FRONT_AUTH_SECRET'))) {
-                return $this->renderTemplate('front-module/not-allowed.twig', []);
+                return $this->renderTemplate('front-module/_not-allowed.twig', []);
             }
         }
 
@@ -77,14 +77,13 @@ class FrontController extends Controller
 
         $licenses = (new Query())
             ->select(['*'])
-            ->from('{{%craftnet_cmslicenses}} cmslicenses')
+            ->from('{{%craftnet_cmslicenses}}')
             ->where([
                 'or',
                 ['key' => $key],
                 ['email' => $email],
                 ['domain' => $domain]
             ])
-            ->leftJoin('{{%craftnet_cmseditions}} cmseditions', '[[cmslicenses.editionId]] = [[cmseditions.id]]')
             ->all();
 
         if (!$licenses) {
@@ -93,6 +92,7 @@ class FrontController extends Controller
 
         $data = [];
         $data['licenses'] = $licenses;
+        $data['count'] = count($licenses);
         $data['success'] = true;
         return $this->asJson($data);
     }

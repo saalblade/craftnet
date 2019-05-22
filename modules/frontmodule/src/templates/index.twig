@@ -2,12 +2,23 @@
 
 {% block container %}
 
-
     {% set buttonClasses = "block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-2 w-full" %}
     {% set warningButtonClasses = "block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded my-2 w-full" %}
 
     <div class="mt-3">
-        <h2>License information</h2>
+        <div class="flex">
+            <div class="w-2/5">
+                <h2>License information</h2>
+            </div>
+            <div class="w-1/5">
+                <div id="load-spinner"class="hidden" >{% include 'front-module/_spinner' %}</div>
+            </div>
+            <div class="w-2/5">
+                <button class="{{ warningButtonClasses }}" onclick="loadLicense()" id="loadLicense">
+                But <span>Auto-fill </span>
+                </button>
+            </div>
+        </div>
         <textarea class="p-2 w-full overflow-hidden font-mono whitespace-no-wrap" cols="50" rows="5"
                   placeholder="Paste Key Here" id="licenseKey"></textarea>
         <input type="text" class="my-2 p-1 w-full" rows="4" placeholder="Paste Email Here" id="email"/>
@@ -16,14 +27,9 @@
     </div>
 
     <div class="mt-3">
-        <h2>Load license data</h2>
-        <button class="{{ warningButtonClasses }}" onclick="loadLicense()" id="loadLicense">
-            <span>Check ticket for license key</span>
-        </button>
-    </div>
-
-    <div class="mt-3">
-        <pre id="results" class="">
+        <div id="result-spinner" class="hidden" >{% include 'front-module/_spinner' %}</div>
+        <div id="results-meta"></div>
+        <pre id="results">
         </pre>
     </div>
 
@@ -31,6 +37,7 @@
     {% js %}
     function clearEverything() {
         document.getElementById('results').innerText = '';
+        document.getElementById('results-meta').innerText = '';
     }
 
     function loadLicense() {
@@ -42,6 +49,7 @@
         clearEverything();
         document.getElementById('loadLicense').classList.toggle('opacity-50');
         document.getElementById('loadLicense').classList.toggle('cursor-not-allowed');
+        document.getElementById('load-spinner').classList.toggle('hidden');
 
         var data = frontData;
 
@@ -52,6 +60,7 @@
         Craft.postActionRequest('front-module/front/scrub-conversation', {conversationId: conversationId}, function(response) {
             document.getElementById('loadLicense').classList.toggle('opacity-50');
             document.getElementById('loadLicense').classList.toggle('cursor-not-allowed');
+            document.getElementById('load-spinner').classList.toggle('hidden');
             loading = false;
 
             console.log(response);
@@ -83,6 +92,7 @@
         clearEverything();
         document.getElementById('getLicense').classList.toggle('opacity-50');
         document.getElementById('getLicense').classList.toggle('cursor-not-allowed');
+        document.getElementById('result-spinner').classList.toggle('hidden');
 
         console.log('Checking license for ' + document.getElementById('licenseKey').value);
         var data = {
@@ -94,6 +104,7 @@
         Craft.postActionRequest('front-module/front/get-license-info', data, function(response) {
             document.getElementById('getLicense').classList.toggle('opacity-50');
             document.getElementById('getLicense').classList.toggle('cursor-not-allowed');
+            document.getElementById('result-spinner').classList.toggle('hidden');
             loading = false;
 
             console.log(response);
@@ -103,6 +114,7 @@
             }
 
             if (response.success) {
+                document.getElementById('results-meta').innerText = 'Found: '+response.count;
                 document.getElementById('results').innerText = JSON.stringify(response.licenses, null, '\t');
             }
         });
