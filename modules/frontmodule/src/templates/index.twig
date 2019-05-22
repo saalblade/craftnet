@@ -10,7 +10,8 @@
         <h2>License information</h2>
         <textarea class="p-2 w-full overflow-hidden font-mono whitespace-no-wrap" cols="50" rows="5"
                   placeholder="Paste Key Here" id="licenseKey"></textarea>
-        <input type="text" class="p-2 w-full" rows="4" placeholder="Paste Email Here" id="email"/>
+        <input type="text" class="my-2 p-1 w-full" rows="4" placeholder="Paste Email Here" id="email"/>
+        <input type="text" class="my-2 p-1 w-full" rows="4" placeholder="Paste Domain Here" id="domain"/>
         <button id="getLicense" class="{{ buttonClasses }}" onclick="checkLicense()">Check</button>
     </div>
 
@@ -28,6 +29,9 @@
 
 
     {% js %}
+    function clearEverything() {
+        document.getElementById('results').innerText = '';
+    }
 
     function loadLicense() {
         if (loading) {
@@ -35,6 +39,7 @@
         }
 
         loading = true;
+        clearEverything();
         document.getElementById('loadLicense').classList.toggle('opacity-50');
         document.getElementById('loadLicense').classList.toggle('cursor-not-allowed');
 
@@ -53,6 +58,7 @@
 
             if (response.licenseKey) {
                 document.getElementById('licenseKey').value = response.licenseKey;
+                checkLicense();
             }
             if (response.email) {
                 document.getElementById('email').value = response.email;
@@ -74,11 +80,18 @@
         }
 
         loading = true;
+        clearEverything();
         document.getElementById('getLicense').classList.toggle('opacity-50');
         document.getElementById('getLicense').classList.toggle('cursor-not-allowed');
 
         console.log('Checking license for ' + document.getElementById('licenseKey').value);
-        Craft.postActionRequest('front-module/front/get-license-info', {key: document.getElementById('licenseKey').value}, function(response) {
+        var data = {
+            key: document.getElementById('licenseKey').value,
+            email: document.getElementById('email').value,
+            domain: document.getElementById('domain').value
+        };
+
+        Craft.postActionRequest('front-module/front/get-license-info', data, function(response) {
             document.getElementById('getLicense').classList.toggle('opacity-50');
             document.getElementById('getLicense').classList.toggle('cursor-not-allowed');
             loading = false;
@@ -90,7 +103,7 @@
             }
 
             if (response.success) {
-                document.getElementById('results').innerText = JSON.stringify(response.license, null, '\t');
+                document.getElementById('results').innerText = JSON.stringify(response.licenses, null, '\t');
             }
         });
     }

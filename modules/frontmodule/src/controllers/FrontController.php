@@ -14,7 +14,6 @@ use Craft;
 use craft\db\Query;
 use craft\helpers\Json;
 use craft\web\Controller;
-use craftnet\cms\CmsEdition;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -50,7 +49,7 @@ class FrontController extends Controller
     public function actionIndex()
     {
         $headers = Craft::$app->getResponse()->getHeaders();
-//        $headers->set('X-Frame-Options', 'allow-from https://app.frontapp.com');
+        $headers->set('X-Frame-Options', 'allow-from https://app.frontapp.com');
         $request = Craft::$app->getRequest();
         $authSecret = $request->getQueryParam('auth_secret');
 
@@ -71,26 +70,29 @@ class FrontController extends Controller
     public function actionGetLicenseInfo(): Response
     {
         $request = Craft::$app->getRequest();
+        $domain = $request->getParam('domain', '');
+        $email = $request->getParam('email', '');
         $key = $request->getParam('key', '');
         $key = trim(preg_replace('/\s+/', '', $key));
 
-        $license = (new Query())
+        $licenses = (new Query())
             ->select(['*'])
-            ->from('{{%craftnet_cmslicenses}}')
-            ->where(['key' => $key])
-            ->one();
+            ->from('{{%craftnet_cmslicenses}} cmslicenses')
+            ->where([
+                'or',
+                ['key' => $key],
+                ['email' => $email],
+                ['domain' => $domain]
+            ])
+            ->leftJoin('{{%craftnet_cmseditions}} cmseditions', '[[cmslicenses.editionId]] = [[cmseditions.id]]')
+            ->all();
 
-        if (!$license) {
-            return $this->asErrorJson('No license found.');
+        if (!$licenses) {
+            return $this->asErrorJson('No licenses found.');
         }
 
-        /** @var CmsEdition $edition */
-        $edition = CmsEdition::find()->id($license['editionId'])->one();
-        $license['editionName'] = $edition->name ?? '';
-        $license['editionPrice'] = $edition->price ?? '';
-
         $data = [];
-        $data['license'] = $license;
+        $data['licenses'] = $licenses;
         $data['success'] = true;
         return $this->asJson($data);
     }
