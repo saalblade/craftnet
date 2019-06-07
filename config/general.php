@@ -67,6 +67,7 @@ return [
         ],
         'defaultCookieDomain' => '.craftcms.com',
         'baseCpUrl' => getenv('CRAFT_ID_ORIGIN'),
+        'disabledPlugins' => ['webhooks'],
     ],
     'dev' => [
         'devMode' => true,
@@ -81,6 +82,7 @@ return [
         ],
         'defaultCookieDomain' => '.craftcms.test',
         'baseCpUrl' => 'https://id.craftcms.test/',
+        'disabledPlugins' => ['webhooks'],
     ],
     'next' => [
         'devMode' => true,
@@ -95,5 +97,6 @@ return [
         ],
         'defaultCookieDomain' => '.craftcms.next',
         'baseCpUrl' => 'https://id.craftcms.next/',
+        'disabledPlugins' => ['webhooks'],
     ]
 ];
