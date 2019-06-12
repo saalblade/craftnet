@@ -851,7 +851,7 @@ class Plugin extends Element
     }
 
     /**
-     * @inheritdoc}
+     * @inheritdoc
      */
     public function afterSave(bool $isNew)
     {
@@ -1064,6 +1064,9 @@ EOD;
         return parent::getStatus();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getCpEditUrl()
     {
         return "plugins/{$this->id}-{$this->handle}";
@@ -1072,6 +1075,9 @@ EOD;
     // Protected Methods
     // =========================================================================
 
+    /**
+     * @inheritdoc
+     */
     protected function tableAttributeHtml(string $attribute): string
     {
         switch ($attribute) {
