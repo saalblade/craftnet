@@ -5,6 +5,8 @@ namespace craftnet\sales;
 use craft\db\Query;
 use craft\elements\User;
 use craft\helpers\ArrayHelper;
+use craftnet\plugins\Plugin;
+use craftnet\plugins\PluginEdition;
 use yii\base\Component;
 
 class SaleManager extends Component
@@ -37,19 +39,43 @@ class SaleManager extends Component
 
         foreach ($results as &$row) {
             $row['netAmount'] = number_format($row['grossAmount'] * 0.8, 2);
+
+            // Plugin
+            $hasMultipleEditions = false;
+            $plugin = Plugin::findOne($row['pluginId']);
+
+            if ($plugin) {
+                $editions = $plugin->getEditions();
+
+                if ($editions) {
+                    $hasMultipleEditions = count($editions) > 1;
+                }
+            }
+
             $row['plugin'] = [
                 'id' => $row['pluginId'],
-                'name' => $row['pluginName']
+                'name' => $row['pluginName'],
+                'hasMultipleEditions' => $hasMultipleEditions,
             ];
+
+            // Customer
             $row['customer'] = [
                 'id' => $row['ownerId'],
                 'name' => implode(' ', array_filter([$row['ownerFirstName'], $row['ownerLastName']])),
                 'email' => $row['ownerEmail'] ?? $row['orderEmail'],
             ];
 
+            // Edition
+            $edition = PluginEdition::findOne($row['editionId']);
+
+            $row['edition'] = [
+                'name' => $edition['name'],
+                'handle' => $edition['handle'],
+            ];
+
+            // Unset attributes we don’t need anymore
             unset($row['pluginId'], $row['pluginName'], $row['ownerId'], $row['ownerFirstName'], $row['ownerLastName'], $row['ownerEmail']);
         }
-
 
         // Adjustments
         $results = ArrayHelper::index($results, 'id');
@@ -109,6 +135,7 @@ class SaleManager extends Component
                 'lineitems.dateCreated AS saleTime',
                 'orders.email AS orderEmail',
                 'elements.type AS purchasableType',
+                'licenses.editionId AS editionId',
             ])
             ->from(['craftnet_pluginlicenses_lineitems licenses_items'])
             ->innerJoin('commerce_lineitems lineitems', '[[lineitems.id]] = [[licenses_items.lineItemId]]')
