@@ -35,6 +35,7 @@ return [
     'fusiondgdev.com',
     'ghdev.xyz',
     'gw-staging.com',
+    'herokuapp.com',
     'hpc3.hpconnected.com',
     'hpsmartdev.com',
     'hyperlane.co',
