@@ -255,6 +255,11 @@ class Plugin extends Element
     public $enabled = false;
 
     /**
+     * @var bool Whether the plugin has been published on the Plugin Store.
+     */
+    public $published = false;
+
+    /**
      * @var int The developer’s user ID
      */
     public $developerId;
@@ -1025,8 +1030,8 @@ EOD;
                 ->send();
         }
 
-        if ($published && $this->hasEventHandlers(self::EVENT_PUBLISHED)) {
-            $this->trigger(self::EVENT_PUBLISHED);
+        if ($published) {
+            $this->publish();
         }
 
         parent::afterSave($isNew);
@@ -1039,6 +1044,28 @@ EOD;
     {
         Module::getInstance()->getPackageManager()->removePackage($this->packageName);
         parent::afterDelete();
+    }
+
+    /**
+     * Marks the plugin as published.
+     *
+     * This should only be called once the plugin has any versions.
+     */
+    public function publish()
+    {
+        if ($this->published) {
+            return;
+        }
+
+        Craft::$app->getDb()->createCommand()
+            ->update('craftnet_plugins', ['published' => true], ['id' => $this->id])
+            ->execute();
+
+        $this->published = true;
+
+        if ($this->hasEventHandlers(self::EVENT_PUBLISHED)) {
+            $this->trigger(self::EVENT_PUBLISHED);
+        }
     }
 
     /**
