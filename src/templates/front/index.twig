@@ -1,4 +1,4 @@
-{% extends 'front-module/_layout' %}
+{% extends 'craftnet/front/_layout' %}
 
 {% block container %}
 
@@ -11,7 +11,7 @@
                 <h2>License information</h2>
             </div>
             <div class="w-1/5">
-                <div id="load-spinner"class="hidden" >{% include 'front-module/_spinner' %}</div>
+                <div id="load-spinner"class="hidden" >{% include 'craftnet/front/_spinner' %}</div>
             </div>
             <div class="w-2/5">
                 <button class="{{ warningButtonClasses }}" onclick="loadLicense()" id="loadLicense">
@@ -27,7 +27,7 @@
     </div>
 
     <div class="mt-3">
-        <div id="result-spinner" class="hidden" >{% include 'front-module/_spinner' %}</div>
+        <div id="result-spinner" class="hidden" >{% include 'craftnet/front/_spinner' %}</div>
         <div id="results-meta"></div>
         <pre id="results">
         </pre>
@@ -56,7 +56,7 @@
         //conversationId = data.conversation.id;
         conversationId = "cnv_1e0jtzn";
 
-        Craft.postActionRequest('front-module/front/scrub-conversation', {conversationId: conversationId}, function(response) {
+        Craft.postActionRequest('craftnet/front/front/scrub-conversation', {conversationId: conversationId}, function(response) {
             document.getElementById('loadLicense').classList.toggle('opacity-50');
             document.getElementById('loadLicense').classList.toggle('cursor-not-allowed');
             document.getElementById('load-spinner').classList.toggle('hidden');
@@ -99,7 +99,7 @@
             domain: document.getElementById('domain').value
         };
 
-        Craft.postActionRequest('front-module/front/get-license-info', data, function(response) {
+        Craft.postActionRequest('craftnet/front/front/get-license-info', data, function(response) {
             document.getElementById('getLicense').classList.toggle('opacity-50');
             document.getElementById('getLicense').classList.toggle('cursor-not-allowed');
             document.getElementById('result-spinner').classList.toggle('hidden');

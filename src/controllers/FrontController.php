@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 Luke Holder
  */
 
-namespace modules\frontmodule\controllers;
+namespace craftnet\controllers;
 
 use Craft;
 use craft\db\Query;
@@ -57,11 +57,11 @@ class FrontController extends Controller
 
         if ($secureOn) {
             if (!$authSecret || !hash_equals($authSecret, getenv('FRONT_AUTH_SECRET'))) {
-                return $this->renderTemplate('front-module/_not-allowed.twig', []);
+                return $this->renderTemplate('craftnet/front/_not-allowed.twig', []);
             }
         }
 
-        return $this->renderTemplate('front-module/index.twig', []);
+        return $this->renderTemplate('craftnet/front/index.twig', []);
     }
 
     /**
