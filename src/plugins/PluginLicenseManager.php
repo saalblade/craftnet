@@ -578,6 +578,7 @@ class PluginLicenseManager extends Component
         if ($result->pluginId) {
             $pluginResult = Plugin::find()->id($result->pluginId)->status(null)->one();
             $plugin = $pluginResult->getAttributes(['name', 'handle']);
+            $plugin['hasMultipleEditions'] = $pluginResult->getHasMultipleEditions();
         }
 
         $license['plugin'] = $plugin;

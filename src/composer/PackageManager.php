@@ -1021,10 +1021,9 @@ class PackageManager extends Component
             $hasValidNewVersion &&
             empty($storedVersionInfo) &&
             isset($plugin) &&
-            $plugin->enabled &&
-            $plugin->hasEventHandlers(Plugin::EVENT_PUBLISHED)
+            $plugin->enabled
         ) {
-            $plugin->trigger(Plugin::EVENT_PUBLISHED);
+            $plugin->publish();
         }
 
         return $totalAffected;
