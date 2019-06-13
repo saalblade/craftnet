@@ -68,8 +68,8 @@
                     <tr>
                         <th>
                             <span class="code">{{ license.shortKey }}</span>
-                            <span class="edition {{ license.editionHandle }}">
-                                <span class="edition-name">{{ license.editionHandle }}</span>
+                            <span class="license-edition {{ license.editionHandle }}">
+                                <span class="license-edition-name">{{ license.editionHandle }}</span>
                             </span>
                         </th>
                         <td>
@@ -126,7 +126,7 @@
         border-radius: 3px;
         padding: 5px 10px;
     }
-    .edition {
+    .license-edition {
         position: relative;
         top: -1px;
         margin-left: 7px;
@@ -136,7 +136,7 @@
         display: inline-flex;
         height: 16px;
     }
-    .edition-name {
+    .license-edition-name {
         padding: 0 6px;
         font-size: 11px;
         line-height: 16px;
@@ -147,10 +147,10 @@
         text-transform: uppercase;
         transition: color linear 100ms;
     }
-    .edition.pro {
+    .license-edition.pro {
         border-color: #9B59B6;
     }
-    .edition.pro .edition-name {
+    .license-edition.pro .license-edition-name {
         color: #9B59B6;
     }
     .owner-icon {
