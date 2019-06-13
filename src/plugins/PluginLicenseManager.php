@@ -705,7 +705,9 @@ class PluginLicenseManager extends Component
             ->from(['craftnet_pluginlicenses l']);
 
         if (!$anyStatus) {
-            $query->innerJoin('elements ed_el', ['and', '[[ed_el.id]] = [[l.editionId]]', ['ed_el.enabled' => true]]);
+            $query
+                ->innerJoin('elements pl_el', ['and', '[[pl_el.id]] = [[l.pluginId]]', ['pl_el.enabled' => true]])
+                ->innerJoin('elements ed_el', ['and', '[[ed_el.id]] = [[l.editionId]]', ['ed_el.enabled' => true]]);
         }
 
         return $query;
