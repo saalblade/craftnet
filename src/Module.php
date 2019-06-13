@@ -237,6 +237,11 @@ class Module extends \yii\base\Module
 
         Event::on(Cp::class, Cp::EVENT_REGISTER_CP_NAV_ITEMS, function(RegisterCpNavItemsEvent $e) {
             $e->navItems[] = [
+                'url' => 'cmslicenses',
+                'label' => 'Craft Licenses',
+            ];
+
+            $e->navItems[] = [
                 'url' => 'plugins',
                 'label' => 'Plugins',
                 'fontIcon' => 'plugin',
@@ -251,6 +256,7 @@ class Module extends \yii\base\Module
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $e) {
             $e->rules = array_merge($e->rules, [
+                'cmslicenses' => 'craftnet/cms-licenses',
                 'plugins' => ['template' => 'craftnet/plugins/_index'],
                 'plugins/new' => 'craftnet/plugins/edit',
                 'plugins/<pluginId:\d+><slug:(?:-[^\/]*)?>' => 'craftnet/plugins/edit',

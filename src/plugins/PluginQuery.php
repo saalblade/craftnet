@@ -201,6 +201,7 @@ class PluginQuery extends ElementQuery
             'craftnet_plugins.pendingApproval',
             'craftnet_plugins.keywords',
             'craftnet_plugins.dateApproved',
+            'craftnet_plugins.published',
         ]);
 
         if ($this->handle) {
