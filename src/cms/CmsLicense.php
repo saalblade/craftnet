@@ -6,6 +6,7 @@ use craft\base\Model;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craftnet\base\EditionInterface;
+use craftnet\base\License;
 use craftnet\base\LicenseInterface;
 use craftnet\Module;
 use craftnet\plugins\PluginLicense;
@@ -14,7 +15,7 @@ use craftnet\plugins\PluginLicense;
  * @property PluginLicense[] $pluginLicenses
  * @property string $shortKey
  */
-class CmsLicense extends Model implements LicenseInterface
+class CmsLicense extends License
 {
     public $id;
     public $editionId;
@@ -179,6 +180,22 @@ class CmsLicense extends Model implements LicenseInterface
         $this->expired = true;
         $this->reminded = false;
         Module::getInstance()->getCmsLicenseManager()->saveLicense($this, false);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLastVersion(): ?string
+    {
+        return $this->lastVersion;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLastAllowedVersion(): ?string
+    {
+        return $this->lastAllowedVersion;
     }
 
     /**

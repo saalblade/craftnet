@@ -31,9 +31,12 @@
                     </code>
                 </template>
 
-
                 <template slot="plugin" slot-scope="props">
                     {{props.rowData.plugin.name}}
+
+                    <template v-if="props.rowData.plugin.hasMultipleEditions">
+                        <edition-badge class="ml-2 inline-block">{{ props.rowData.edition.name }}</edition-badge>
+                    </template>
                 </template>
 
                 <template slot="notes" slot-scope="props">
@@ -105,6 +108,7 @@
     import PluginLicensesTable from '../../../components/licenses/PluginLicensesTable'
     import Empty from '../../../components/Empty'
     import Badge from '../../../components/Badge'
+    import EditionBadge from '../../../components/EditionBadge'
     import FilterBar from '../../../components/FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
     import VuetablePagination from '../../../components/VuetablePagination'
@@ -117,6 +121,7 @@
             PluginLicensesTable,
             Empty,
             Badge,
+            EditionBadge,
             Vuetable,
             VuetablePagination,
             FilterBar,

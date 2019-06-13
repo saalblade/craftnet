@@ -420,7 +420,12 @@ abstract class BaseApiController extends Controller
             if (!empty($this->pluginLicenseEditions)) {
                 $pluginLicenseEditions = [];
                 foreach ($this->pluginLicenseEditions as $pluginHandle => $pluginEdition) {
-                    $pluginLicenseEditions[] = "{$pluginHandle}:{$pluginEdition->handle}";
+                    // Treat all Freeform < v3 licenses as "standard" edition
+                    if ($pluginHandle === 'freeform' && Comparator::lessThan($this->pluginVersions[$pluginHandle], 3)) {
+                        $pluginLicenseEditions[] = "{$pluginHandle}:standard";
+                    } else {
+                        $pluginLicenseEditions[] = "{$pluginHandle}:{$pluginEdition->handle}";
+                    }
                 }
                 $responseHeaders->set('X-Craft-Plugin-License-Editions', implode(',', $pluginLicenseEditions));
             }
