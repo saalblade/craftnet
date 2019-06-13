@@ -34,7 +34,9 @@
                 <template slot="plugin" slot-scope="props">
                     {{props.rowData.plugin.name}}
 
-                    <edition-badge class="ml-2">{{ props.rowData.edition.name }}</edition-badge>
+                    <template v-if="props.rowData.plugin.hasMultipleEditions">
+                        <edition-badge class="ml-2 inline-block">{{ props.rowData.edition.name }}</edition-badge>
+                    </template>
                 </template>
 
                 <template slot="notes" slot-scope="props">
