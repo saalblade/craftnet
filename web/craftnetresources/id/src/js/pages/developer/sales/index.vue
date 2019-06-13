@@ -27,6 +27,10 @@
 
                 <template slot="item" slot-scope="props">
                     {{props.rowData.plugin.name}}
+
+                    <template v-if="props.rowData.plugin.hasMultipleEditions && props.rowData.edition">
+                        <edition-badge class="ml-2">{{props.rowData.edition.name}}</edition-badge>
+                    </template>
                 </template>
 
                 <template slot="customer" slot-scope="props">
@@ -85,9 +89,11 @@
     import FilterBar from '../../../components/FilterBar'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
     import VuetablePagination from '../../../components/VuetablePagination'
+    import EditionBadge from '../../../components/EditionBadge'
 
     export default {
         components: {
+            EditionBadge,
             Empty,
             FilterBar,
             Vuetable,

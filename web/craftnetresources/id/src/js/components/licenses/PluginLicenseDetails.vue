@@ -9,7 +9,13 @@
                             <dl>
                                 <template v-if="license.plugin">
                                     <dt>Plugin</dt>
-                                    <dd>{{ license.plugin.name }}</dd>
+                                    <dd>
+                                        {{ license.plugin.name }}
+
+                                        <template v-if="license.plugin.hasMultipleEditions">
+                                            <edition-badge class="ml-2 inline-block">{{ license.edition.name }}</edition-badge>
+                                        </template>
+                                    </dd>
                                 </template>
 
                                 <dt>License Key</dt>
@@ -102,6 +108,7 @@
     import {mapActions} from 'vuex'
     import pluginLicensesApi from '../../api/plugin-licenses'
     import LicenseUpdateMessage from './LicenseUpdateMessage'
+    import EditionBadge from '../EditionBadge';
 
     export default {
         props: ['license', 'type'],
@@ -121,6 +128,7 @@
         },
 
         components: {
+            EditionBadge,
             LicenseUpdateMessage,
         },
 

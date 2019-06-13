@@ -578,6 +578,7 @@ class PluginLicenseManager extends Component
         if ($result->pluginId) {
             $pluginResult = Plugin::find()->id($result->pluginId)->status(null)->one();
             $plugin = $pluginResult->getAttributes(['name', 'handle']);
+            $plugin['hasMultipleEditions'] = $pluginResult->getHasMultipleEditions();
         }
 
         $license['plugin'] = $plugin;
@@ -704,7 +705,9 @@ class PluginLicenseManager extends Component
             ->from(['craftnet_pluginlicenses l']);
 
         if (!$anyStatus) {
-            $query->innerJoin('elements ed_el', ['and', '[[ed_el.id]] = [[l.editionId]]', ['ed_el.enabled' => true]]);
+            $query
+                ->innerJoin('elements pl_el', ['and', '[[pl_el.id]] = [[l.pluginId]]', ['pl_el.enabled' => true]])
+                ->innerJoin('elements ed_el', ['and', '[[ed_el.id]] = [[l.editionId]]', ['ed_el.enabled' => true]]);
         }
 
         return $query;

@@ -19,13 +19,13 @@
                         <input
                                 type="checkbox"
                                 :value="1"
-                                :disabled="key === 0 ? true : false"
-                                :checked="checkedLicenses[key]"
+                                :disabled="(key === 0 || !renewableLicense.key) ? true : false"
+                                :checked="renewableLicense.key ? checkedLicenses[key] : false"
                                 @input="checkLicense($event, key)" />
                     </td>
-                    <td>{{ renewableLicense.description }}</td>
-                    <td>{{ renewableLicense.expiresOn.date|moment('YYYY-MM-DD') }}</td>
-                    <td>
+                    <td :class="{'text-grey': !renewableLicense.key}">{{ renewableLicense.description }}</td>
+                    <td :class="{'text-grey': !renewableLicense.key}">{{ renewableLicense.expiresOn.date|moment('YYYY-MM-DD') }}</td>
+                    <td :class="{'text-grey': !renewableLicense.key}">
                         {{ renewableLicense.expiryDate|moment('YYYY-MM-DD') }}
                     </td>
                     <td></td>
@@ -93,6 +93,10 @@
                         return
                     }
 
+                    if(!renewableLicense.key) {
+                        return
+                    }
+
                     const type = renewableLicense.type
                     const licenseKey = renewableLicense.key
                     const expiryDate = renewableLicense.expiryDate
@@ -105,7 +109,7 @@
 
                     items.push(item)
                 }.bind(this))
-
+                
                 this.$store.dispatch('cart/addToCart', items)
                     .then(() => {
                         this.$router.push({path: '/cart'})

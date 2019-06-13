@@ -69,6 +69,27 @@ interface LicenseInterface
     public function markAsExpired();
 
     /**
+     * Returns the last version used.
+     *
+     * @return string|null
+     */
+    public function getLastVersion(): ?string;
+
+    /**
+     * Returns the last allowed version.
+     *
+     * @return string|null
+     */
+    public function getLastAllowedVersion(): ?string;
+
+    /**
+     * Returns whether the license has gone rogue.
+     *
+     * @return bool
+     */
+    public function getHasGoneRogue(): bool;
+
+    /**
      * Returns the edition associated with the license.
      *
      * @return EditionInterface

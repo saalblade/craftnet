@@ -2,7 +2,6 @@ const fs = require('fs');
 const ManifestPlugin = require('webpack-manifest-plugin')
 
 module.exports = {
-    filenameHashing: false,
     devServer: {
         headers: { "Access-Control-Allow-Origin": "*" },
         https: {
