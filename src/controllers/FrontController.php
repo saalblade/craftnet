@@ -53,15 +53,11 @@ class FrontController extends Controller
         $request = Craft::$app->getRequest();
         $authSecret = $request->getQueryParam('auth_secret');
 
-        $secureOn = false; // change this in dev etc.
-
-        if ($secureOn) {
-            if (!$authSecret || !hash_equals($authSecret, getenv('FRONT_AUTH_SECRET'))) {
-                return $this->renderTemplate('craftnet/front/_not-allowed.twig', []);
-            }
+        if (!$authSecret || !hash_equals($authSecret, getenv('FRONT_AUTH_SECRET'))) {
+            return $this->renderTemplate('front/_not-allowed.twig', []);
         }
 
-        return $this->renderTemplate('craftnet/front/index.twig', []);
+        return $this->renderTemplate('front/index.twig', []);
     }
 
     /**
