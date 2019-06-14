@@ -1,134 +1,147 @@
-{% extends 'front/_layout' %}
+{% do view.registerJsFile('https://dl.frontapp.com/libs/frontjs.min.js') -%}
+{% do view.registerJsFile('https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols') -%}
+{% do view.registerJsFile('https://cdn.jsdelivr.net/npm/superagent') %}
+{% do view.registerJsFile(devMode ? 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js' : 'https://cdn.jsdelivr.net/npm/vue') -%}
+{% do view.registerCssFile('https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css') -%}
 
-{% block container %}
+{% set buttonClasses = "block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-2 w-full" -%}
+{% set warningButtonClasses = "block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded my-2 w-full" -%}
 
-    {% set buttonClasses = "block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-2 w-full" %}
-    {% set warningButtonClasses = "block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded my-2 w-full" %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
 
-    <div class="mt-3">
-        <div class="flex">
-            <div class="w-2/5">
-                <h2>License information</h2>
+<div id="app">
+    <div v-if="!loading" class="text-xs">
+        <div v-if="user" class="bg-white p-6">
+            <img v-if="user.photoUrl" class="block m-auto w-12 h-12 rounded-full" :src="user.photoUrl">
+            <div v-else class="default-photo block m-auto w-12 h-12 rounded-full bg-gray-200">
+                {{ svg('@app/icons/user.svg') }}
             </div>
-            <div class="w-1/5">
-                <div id="load-spinner"class="hidden">{% include 'front/_spinner' %}</div>
-            </div>
-            <div class="w-2/5">
-                <button class="{{ warningButtonClasses }}" onclick="loadLicense()" id="loadLicense">
-                <span>Auto-fill</span>
-                </button>
+            <div
+                class="m-auto mt-2 text-center text-base font-bold">{% verbatim %}{{ user.name }}{% endverbatim %}</div>
+
+            <div v-if="user.meta" class="mt-4">
+                <div v-for="item in user.meta" class="mt-3">
+                    <div
+                        class="mt-2 text-gray-400 uppercase font-bold">{% verbatim %}{{ item.label }}{% endverbatim %}</div>
+                    <a v-if="item.url" :href="item.url" target="_blank"
+                       class="text-blue-500">{% verbatim %}{{ item.value }}{% endverbatim %}</a>
+                    <span v-else>{% verbatim %}{{ item.value }}{% endverbatim %}</span>
+                </div>
             </div>
         </div>
-        <textarea class="p-2 w-full overflow-hidden font-mono whitespace-no-wrap" cols="50" rows="5"
-                  placeholder="Paste Key Here" id="licenseKey"></textarea>
-        <input type="text" class="my-2 p-1 w-full" rows="4" placeholder="Paste Email Here" id="email"/>
-        <input type="text" class="my-2 p-1 w-full" rows="4" placeholder="Paste Domain Here" id="domain"/>
-        <button id="getLicense" class="{{ buttonClasses }}" onclick="checkLicense()">Search</button>
+        <div v-else class="p-6">
+            <div class="text-center text-gray-500 text-base">No Craft ID account.</div>
+        </div>
+        <div class="border-gray-300 border-t border-b pt-2 pb-2 pl-6 pr-6 flex items-center cursor-pointer"
+             @click="toggleLicenses">
+            <div :class="showLicenses ? 'toggle' : 'toggle -closed'"></div>
+            <div class="font-bold">Licenses <span class="font-normal text-gray-400"
+                                                  v-if="licenses">({% verbatim %}{{ licenses.length }}{% endverbatim %})</span>
+            </div>
+        </div>
+        <div v-if="showLicenses">
+            <div v-for="license in licenses" class="pt-3 pb-3 pl-6 pr-6 bg-white border-gray-300 border-b">
+                <div class="font-mono font-bold">{% verbatim %}{{ license.key }}{% endverbatim %}</div>
+                <a v-if="license.domain" :href="domain(license.domain)" class="text-blue-500"
+                   target="_blank">{% verbatim %}{{ license.domain }}{% endverbatim %}</a>
+                <a v-if="!user || license.email != user.email" :href="mailto(license.email)"
+                   class="text-blue-500">{% verbatim %}{{ license.email }}{% endverbatim %}</a>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mt-3">
-        <div id="result-spinner" class="hidden">{% include 'front/_spinner' %}</div>
-        <div id="results-meta"></div>
-        <pre id="results">
-        </pre>
-    </div>
+{% css %}
+body {
+    background: #f8f8f8;
+}
 
-    {% js %}
-    function clearEverything() {
-        document.getElementById('results').innerText = '';
-        document.getElementById('results-meta').innerText = '';
-    }
+.default-photo {
+    overflow: hidden;
+}
 
-    function loadLicense() {
-        if (loading) {
-            return;
-        }
+.default-photo rect,
+.default-photo circle,
+.default-photo ellipse,
+.default-photo line,
+.default-photo polyline,
+.default-photo polygon,
+.default-photo path,
+.default-photo text {
+    fill: #cbd5e0;
+    stroke-width: 0;
+}
 
-        loading = true;
-        clearEverything();
-        document.getElementById('loadLicense').classList.toggle('opacity-50');
-        document.getElementById('loadLicense').classList.toggle('cursor-not-allowed');
-        document.getElementById('load-spinner').classList.toggle('hidden');
+.toggle {
+    height: 14px;
+    width: 14px;
 
-        var data = frontData;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+T3ZhbCAxMjMyICsgUmVjdGFuZ2xlIDE5MjUgQ29weSA4PC90aXRsZT48ZyBmaWxsPSIjQzFDMUMxIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik03IDEzQTYgNiAwIDEgMCA3IDFhNiA2IDAgMCAwIDAgMTJ6bTAgMUE3IDcgMCAxIDEgNyAwYTcgNyAwIDAgMSAwIDE0eiIvPjxwYXRoIGQ9Ik03LjczOCA5Ljc0bDIuOTc0LTIuOTc0YS45OTguOTk4IDAgMCAwLS4wMDMtMS40MTEuOTk2Ljk5NiAwIDAgMC0xLjQxLS4wMDNMNy4wMzMgNy42MTcgNC43MDYgNS4yODlhMS4wMDIgMS4wMDIgMCAwIDAtMS40MTEuMDAzLjk5Ni45OTYgMCAwIDAtLjAwMyAxLjQxMkw2LjMzIDkuNzRhLjk5My45OTMgMCAwIDAgLjcwMi4yODkuOTguOTggMCAwIDAgLjcwNy0uMjl6Ii8+PC9nPjwvc3ZnPg==");
+    background-repeat: no-repeat;
+    background-size: 14px;
+    background-position: center;
 
-        // TODO: obviously, uncomment
-        //conversationId = data.conversation.id;
-        conversationId = "cnv_1e0jtzn";
+    margin-right: 8px;
+}
 
-        Craft.postActionRequest('craftnet/front/scrub-conversation', {conversationId: conversationId}, function(response) {
-            document.getElementById('loadLicense').classList.toggle('opacity-50');
-            document.getElementById('loadLicense').classList.toggle('cursor-not-allowed');
-            document.getElementById('load-spinner').classList.toggle('hidden');
-            loading = false;
+.toggle.-closed {
+    transform: rotate(-90deg);
+}
 
-            console.log(response);
+{% endcss %}
 
-            if (response.licenseKey) {
-                document.getElementById('licenseKey').value = response.licenseKey;
-                checkLicense();
-            }
-            if (response.email) {
-                document.getElementById('email').value = response.email;
-            }
+{% js %}
+window.secret = {{ getenv('FRONT_AUTH_SECRET')|json_encode|raw }};
+{% endjs %}
+
+{% js %}
+var app = new Vue({
+    el: '#app',
+    data: {
+        loading: true,
+        showLicenses: true,
+        user: null,
+        licenses: [],
+    },
+    mounted() {
+        Front.on('conversation', data => {
+            this.reload(data.contact.handle);
         });
-    }
+    },
+    methods: {
+        reload(email) {
+            this.loading = true;
 
-    function loadEmail(data) {
-        var message = data.otherMessages.length ? data.otherMessages[0] : data.message;
+            superagent
+                .post('/actions/craftnet/front/load-data?auth_secret=' + window.secret)
+                .send({email: email})
+                .set('accept', 'json')
+                .end((err, res) => {
+                    this.user = res.body.user;
+                    this.licenses = res.body.licenses;
+                    this.loading = false;
+                });
+        },
 
-        return message.from.handle;
-    }
+        toggleLicenses() {
+            this.showLicenses = !this.showLicenses;
+        },
 
-    function checkLicense() {
+        domain(domain) {
+            return 'http://' + domain;
+        },
 
-        if (loading) {
-            return;
+        mailto(email) {
+            return 'mailto:' + email;
         }
-
-        loading = true;
-        clearEverything();
-        document.getElementById('getLicense').classList.toggle('opacity-50');
-        document.getElementById('getLicense').classList.toggle('cursor-not-allowed');
-        document.getElementById('result-spinner').classList.toggle('hidden');
-
-        console.log('Checking license for ' + document.getElementById('licenseKey').value);
-        var data = {
-            key: document.getElementById('licenseKey').value,
-            email: document.getElementById('email').value,
-            domain: document.getElementById('domain').value
-        };
-
-        Craft.postActionRequest('craftnet/front/get-license-info', data, function(response) {
-            document.getElementById('getLicense').classList.toggle('opacity-50');
-            document.getElementById('getLicense').classList.toggle('cursor-not-allowed');
-            document.getElementById('result-spinner').classList.toggle('hidden');
-            loading = false;
-
-            console.log(response);
-
-            if (response.error) {
-                document.getElementById('results').innerText = JSON.stringify(response.error, null, '\t');
-            }
-
-            if (response.success) {
-                document.getElementById('results-meta').innerText = 'Found: '+response.count;
-                document.getElementById('results').innerText = JSON.stringify(response.licenses, null, '\t');
-            }
-        });
     }
+})
+{% endjs %}
 
-    function checkEmail() {
-        console.log('Checking email for ' + document.getElementById('email').value);
-    }
-
-    var frontData;
-    var loading = false;
-
-    Front.on('conversation', function(data) {
-        frontData = data;
-    });
-
-    {% endjs %}
-
-{% endblock %}
+</body>
+</html>

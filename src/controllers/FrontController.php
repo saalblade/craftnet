@@ -12,10 +12,16 @@ namespace craftnet\controllers;
 
 use Craft;
 use craft\db\Query;
+use craft\elements\Asset;
+use craft\elements\User;
 use craft\helpers\Json;
 use craft\web\Controller;
+use craftnet\cms\CmsLicense;
+use craftnet\developers\UserBehavior;
+use yii\db\Expression;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * @author    Luke Holder
@@ -42,22 +48,128 @@ class FrontController extends Controller
     // =========================================================================
 
     /**
-     * This is the main sidebar in front.
-     *
-     * @return mixed
+     * @inheritdoc
+     * @throws UnauthorizedHttpException
      */
-    public function actionIndex()
+    public function beforeAction($action)
     {
-        $headers = Craft::$app->getResponse()->getHeaders();
-        $headers->set('X-Frame-Options', 'allow-from https://app.frontapp.com');
-        $request = Craft::$app->getRequest();
-        $authSecret = $request->getQueryParam('auth_secret');
-
-        if (!$authSecret || !hash_equals($authSecret, getenv('FRONT_AUTH_SECRET'))) {
-            return $this->renderTemplate('front/_not-allowed.twig', []);
+        // Validate the request
+        $secret = Craft::$app->request->getQueryParam('auth_secret');
+        if (!$secret || !hash_equals($secret, getenv('FRONT_AUTH_SECRET'))) {
+            throw new UnauthorizedHttpException();
         }
 
+        // Only allow to be framed from Front
+        Craft::$app->response->headers
+            ->set('X-Frame-Options', 'allow-from https://app.frontapp.com/');
+
+        return parent::beforeAction($action);
+    }
+
+    /**
+     * This is the main sidebar in Front.
+     *
+     * @return Response
+     */
+    public function actionIndex(): Response
+    {
         return $this->renderTemplate('front/index.twig', []);
+    }
+
+    /**
+     * @return Response
+     */
+    public function actionLoadData(): Response
+    {
+        $body = Json::decode(Craft::$app->request->getRawBody());
+        $email = $body['email'] ?? null;
+
+        if (!$email) {
+            return $this->asJson([]);
+        }
+
+        if (($pos = strpos($email, '@')) < 1) {
+            return $this->asJson([]);
+        }
+
+        $domain = substr($email, $pos + 1);
+        $data = [];
+
+        /** @var User|UserBehavior|null $user */
+        $user = User::find()->email($email)->one();
+
+        if ($user) {
+            /** @var Asset|null $photo */
+            $photo = $user->getPhoto();
+
+            $meta = [];
+
+            if ($developerName = $user->getFieldValue('developerName')) {
+                $meta[] = [
+                    'label' => 'Developer Name',
+                    'value' => $developerName,
+                ];
+            }
+
+            if ($user->developerUrl) {
+                $meta[] = [
+                    'label' => 'Developer URL',
+                    'value' => str_replace(['http://', 'https://'], '', trim($user->developerUrl, '/')),
+                    'url' => $user->developerUrl,
+                ];
+            }
+
+            if ($user->location) {
+                $meta[] = [
+                    'label' => 'Location',
+                    'value' => $user->location,
+                ];
+            }
+
+            $data['user'] = [
+                'email' => mb_strtolower($user->email),
+                'photoUrl' => $photo ? $photo->url : null,
+                'name' => $user->getName(),
+                'meta' => $meta ?: null,
+            ];
+        }
+
+        // Are they using an email provider?
+        if (in_array($domain, [
+            // https://en.wikipedia.org/wiki/Comparison_of_webmail_providers
+            'aol.com',
+            'fastmail.com',
+            'gmail.com',
+            'hotmail.com',
+            'icloud.com',
+            'mac.com',
+            'me.com',
+            'outlook.com',
+            'protonmail.com',
+            'yahoo.com',
+        ], true)) {
+            $emailCondition = new Expression('[[email]] ilike :email', ['email' => $email]);
+        } else {
+            $emailCondition = new Expression('[[email]] ilike :domain', ['domain' => '%@' . $domain]);
+        }
+
+        $results = (new Query())
+            ->from(['craftnet_cmslicenses'])
+            ->where($emailCondition)
+            ->andWhere(['editionHandle' => 'pro'])
+            ->orderBy(['dateCreated' => SORT_DESC])
+            ->all();
+
+        foreach ($results as $result) {
+            $license = new CmsLicense($result);
+            $data['licenses'][] = [
+                'key' => $license->getShortKey(),
+                'domain' => $license->domain,
+                'email' => mb_strtolower($license->email),
+            ];
+        }
+
+        return $this->asJson($data);
     }
 
     /**
