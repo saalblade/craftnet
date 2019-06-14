@@ -2,12 +2,10 @@
 
 namespace craftnet\cms;
 
-use craft\base\Model;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craftnet\base\EditionInterface;
 use craftnet\base\License;
-use craftnet\base\LicenseInterface;
 use craftnet\Module;
 use craftnet\plugins\PluginLicense;
 

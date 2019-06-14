@@ -52,7 +52,6 @@ class PluginsController extends BaseApiController
             ->withLatestReleaseInfo(true, $this->cmsVersion)
             ->with(['developer', 'categories', 'icon'])
             ->indexBy('id');
-
     }
 
     /**

@@ -675,7 +675,8 @@ class CmsLicenseManager extends Component
 
 
         if ($searchQuery) {
-            $query->andWhere(['or',
+            $query->andWhere([
+                'or',
                 ['ilike', 'l.key', $searchQuery],
                 ['ilike', 'l.domain', $searchQuery],
                 ['ilike', 'l.notes', $searchQuery],

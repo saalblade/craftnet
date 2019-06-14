@@ -6,11 +6,10 @@ use Craft;
 use craft\db\Query;
 use craft\elements\User;
 use craft\errors\InvalidPluginException;
-use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craftnet\errors\LicenseNotFoundException;
-use craftnet\Module;
 use craftnet\helpers\LicenseHelper;
+use craftnet\Module;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
@@ -724,7 +723,8 @@ class PluginLicenseManager extends Component
             ->where(['l.ownerId' => $owner->id]);
 
         if ($searchQuery) {
-            $query->andWhere(['or',
+            $query->andWhere([
+                'or',
                 ['ilike', 'l.key', $searchQuery],
                 ['ilike', 'l.notes', $searchQuery],
                 ['ilike', 'l.pluginHandle', $searchQuery],

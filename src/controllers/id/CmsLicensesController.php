@@ -4,7 +4,6 @@ namespace craftnet\controllers\id;
 
 use Craft;
 use craft\errors\UploadFailedException;
-use craft\web\Controller;
 use craft\web\UploadedFile;
 use craftnet\errors\LicenseNotFoundException;
 use craftnet\Module;
@@ -132,7 +131,7 @@ class CmsLicensesController extends BaseController
 
         $filter = Craft::$app->getRequest()->getParam('filter');
         $limit = Craft::$app->getRequest()->getParam('per_page', 10);
-        $page = (int) Craft::$app->getRequest()->getParam('page', 1);
+        $page = (int)Craft::$app->getRequest()->getParam('page', 1);
         $orderBy = Craft::$app->getRequest()->getParam('orderBy');
         $ascending = Craft::$app->getRequest()->getParam('ascending');
         $byColumn = Craft::$app->getRequest()->getParam('byColumn');
