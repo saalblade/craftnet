@@ -77,7 +77,7 @@ return [
         'siteUrl' => [
             'api' => 'https://api.craftcms.test/',
             'composer' => 'https://composer.craftcms.test/',
-            'craftId' => 'https://id.craftcms.test/',
+            'craftId' => getenv('CRAFT_ID_ORIGIN') ?: 'https://id.craftcms.test/',
             'plugins' => 'https://plugins.craftcms.test/',
         ],
         'defaultCookieDomain' => '.craftcms.test',
