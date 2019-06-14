@@ -142,11 +142,11 @@ class OauthController extends Controller
                 $redirectResponse = $server->completeAuthorizationRequest($authRequest, $response);
 
                 return Craft::$app->getResponse()->redirect($redirectResponse->getHeaders()['Location'][0]);
-            } catch(OAuthServerException $exception) {
+            } catch (OAuthServerException $exception) {
                 $exceptionResponse = $exception->generateHttpResponse($response);
                 $location = $exceptionResponse->getHeaderLine('Location');
 
-                if($location) {
+                if ($location) {
                     return Craft::$app->getResponse()->redirect($location);
                 }
 

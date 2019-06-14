@@ -599,7 +599,7 @@ JS;
             $return['iconId'] = $plugin->iconId;
             $return['iconUrl'] = $plugin->iconId ? $plugin->getIcon()->getUrl() : null;
             $return['name'] = $plugin->name;
-            
+
             // Screenshots
             $return['screenshots'] = [];
 
