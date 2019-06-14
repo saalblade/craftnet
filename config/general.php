@@ -25,21 +25,21 @@ return [
         'backupOnUpdate' => false,
         'backupCommand' => 'PGPASSWORD="{password}" ' .
             'pg_dump ' .
-            '--dbname={database} '.
-            '--host={server} '.
-            '--port={port} '.
-            '--username={user} '.
-            '--if-exists '.
-            '--clean '.
-            '--file="{file}" '.
-            '--schema={schema} '.
-            '--schema=apilog '.
-            '--exclude-table-data \'{schema}.assetindexdata\' '.
-            '--exclude-table-data \'{schema}.assettransformindex\' '.
-            '--exclude-table-data \'{schema}.cache\' '.
-            '--exclude-table-data \'{schema}.sessions\' '.
-            '--exclude-table-data \'{schema}.templatecaches\' '.
-            '--exclude-table-data \'{schema}.templatecachecriteria\' '.
+            '--dbname={database} ' .
+            '--host={server} ' .
+            '--port={port} ' .
+            '--username={user} ' .
+            '--if-exists ' .
+            '--clean ' .
+            '--file="{file}" ' .
+            '--schema={schema} ' .
+            '--schema=apilog ' .
+            '--exclude-table-data \'{schema}.assetindexdata\' ' .
+            '--exclude-table-data \'{schema}.assettransformindex\' ' .
+            '--exclude-table-data \'{schema}.cache\' ' .
+            '--exclude-table-data \'{schema}.sessions\' ' .
+            '--exclude-table-data \'{schema}.templatecaches\' ' .
+            '--exclude-table-data \'{schema}.templatecachecriteria\' ' .
             '--exclude-table-data \'{schema}.templatecacheelements\' ' .
             '--exclude-table-data \'apilog.logs\' ' .
             '--exclude-table-data \'apilog.request_cmslicenses\' ' .

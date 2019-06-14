@@ -96,9 +96,9 @@ class Queue extends \yii\queue\cli\Queue
      * Handles a message
      *
      * @param string|null $id
-     * @param string      $message
-     * @param int         $ttr
-     * @param int         $attempt
+     * @param string $message
+     * @param int $ttr
+     * @param int $attempt
      *
      * @return bool
      */
@@ -113,7 +113,7 @@ class Queue extends \yii\queue\cli\Queue
     public function handleError($id, $job, $ttr, $attempt, $error)
     {
         // Log the exception
-        $e = new \Exception('Error handling queue message: '.$error->getMessage(), 0, $error);
+        $e = new \Exception('Error handling queue message: ' . $error->getMessage(), 0, $error);
         Craft::$app->getErrorHandler()->logException($e);
 
         return parent::handleError($id, $job, $ttr, $attempt, $error);

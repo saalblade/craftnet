@@ -43,13 +43,12 @@ class m180814_183252_create_enable_partner_features_field extends Migration
     {
         try {
             $field = $this->saveField();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage() . PHP_EOL;
             return false;
         }
 
-         $this->saveFieldToUsersLayout($field);
+        $this->saveFieldToUsersLayout($field);
     }
 
     /**
@@ -117,6 +116,7 @@ class m180814_183252_create_enable_partner_features_field extends Migration
 
     /**
      * Just saves a record to the pivot table.
+     *
      * @param \craft\base\FieldInterface $field
      * @return bool
      */

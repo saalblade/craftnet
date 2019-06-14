@@ -257,7 +257,7 @@ class m180318_222158_create_license_tables extends Migration
         foreach ($editions as $edition) {
             // Save the edition
             if (!$elementsService->saveElement($edition)) {
-                throw new Exception("Couldn't save Craft {$edition->name} edition: ".implode(', ', $edition->getFirstErrors()));
+                throw new Exception("Couldn't save Craft {$edition->name} edition: " . implode(', ', $edition->getFirstErrors()));
             }
 
             // Save the renewal
@@ -267,7 +267,7 @@ class m180318_222158_create_license_tables extends Migration
             ]);
 
             if (!$elementsService->saveElement($renewal)) {
-                throw new Exception("Couldn't save Craft {$edition->name} renewal: ".implode(', ', $renewal->getFirstErrors()));
+                throw new Exception("Couldn't save Craft {$edition->name} renewal: " . implode(', ', $renewal->getFirstErrors()));
             }
         }
     }
@@ -292,7 +292,7 @@ class m180318_222158_create_license_tables extends Migration
             ]);
 
             if (!$elementsService->saveElement($edition)) {
-                throw new Exception("Couldn't save {$plugin['name']} edition: ".implode(', ', $edition->getFirstErrors()));
+                throw new Exception("Couldn't save {$plugin['name']} edition: " . implode(', ', $edition->getFirstErrors()));
             }
 
             // Save the renewal
@@ -303,7 +303,7 @@ class m180318_222158_create_license_tables extends Migration
             ]);
 
             if (!$elementsService->saveElement($renewal)) {
-                throw new Exception("Couldn't save {$plugin['name']} renewal: ".implode(', ', $renewal->getFirstErrors()));
+                throw new Exception("Couldn't save {$plugin['name']} renewal: " . implode(', ', $renewal->getFirstErrors()));
             }
         }
     }

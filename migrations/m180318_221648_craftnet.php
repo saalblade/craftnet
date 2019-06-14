@@ -17,7 +17,7 @@ class m180318_221648_craftnet extends Migration
     {
         foreach ($this->db->getSchema()->getTableNames() as $name) {
             if (strncmp($name, 'craftcom_', 9) === 0) {
-                $this->renameTable($name, 'craftnet_'.substr($name, 9));
+                $this->renameTable($name, 'craftnet_' . substr($name, 9));
             }
         }
 

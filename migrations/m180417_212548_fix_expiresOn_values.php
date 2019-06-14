@@ -2,13 +2,10 @@
 
 namespace craft\contentmigrations;
 
-use Craft;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
-use craftnet\cms\CmsEdition;
-use craftnet\cms\CmsLicense;
 use craftnet\cms\CmsLicenseManager;
 
 /**
