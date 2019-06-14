@@ -15,7 +15,7 @@
 <body>
 
 <div id="app">
-    <div v-if="!loading" class="text-xs">
+    <div v-if="!loading" class="text-xs" v-cloak>
         <div v-if="user" class="bg-white p-6">
             <img v-if="user.photoUrl" class="block m-auto w-12 h-12 rounded-full" :src="user.photoUrl">
             <div v-else class="default-photo block m-auto w-12 h-12 rounded-full bg-gray-200">
@@ -57,6 +57,10 @@
 </div>
 
 {% css %}
+[v-cloak] {
+    display: none
+}
+
 body {
     background: #f8f8f8;
 }
