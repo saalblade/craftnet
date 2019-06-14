@@ -2,7 +2,6 @@
 
 namespace craft\contentmigrations;
 
-use Craft;
 use craft\db\Migration;
 use craftnet\plugins\Plugin;
 

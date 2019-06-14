@@ -78,10 +78,10 @@ return [
         'front/get-license-info' => 'craftnet/front/get-license-info',
 
         // Catch-all route for Vue when people reload the page.
-        '<url:(.*)>'=> 'craftnet/id/index',
+        '<url:(.*)>' => 'craftnet/id/index',
     ],
     'plugins' => [
         '/' => 'craftnet/plugins/index/index',
-        '<url:(.*)>'=> 'craftnet/plugins/index/index',
+        '<url:(.*)>' => 'craftnet/plugins/index/index',
     ],
 ];

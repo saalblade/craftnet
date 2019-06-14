@@ -16,8 +16,8 @@ return [
                 'components' => [
                     'cmsLicenseManager' => [
                         'class' => craftnet\cms\CmsLicenseManager::class,
-                        'devDomains' => require __DIR__.'/dev-domains.php',
-                        'publicDomainSuffixes' => require __DIR__.'/public-domain-suffixes.php',
+                        'devDomains' => require __DIR__ . '/dev-domains.php',
+                        'publicDomainSuffixes' => require __DIR__ . '/public-domain-suffixes.php',
                         'devSubdomainWords' => [
                             'acc',
                             'acceptance',
@@ -118,18 +118,18 @@ return [
                 'region' => getenv('PARTNER_QUEUE_REGION')
             ],
             'session' => function() {
-                $stateKeyPrefix = md5('Craft.'.craft\web\Session::class.'.'.Craft::$app->id);
+                $stateKeyPrefix = md5('Craft.' . craft\web\Session::class . '.' . Craft::$app->id);
 
                 /** @var yii\redis\Session $session */
                 $session = Craft::createObject([
                     'class' => yii\redis\Session::class,
-                    'flashParam' => $stateKeyPrefix.'__flash',
+                    'flashParam' => $stateKeyPrefix . '__flash',
                     'name' => Craft::$app->getConfig()->getGeneral()->phpSessionName,
                     'cookieParams' => Craft::cookieConfig(),
                 ]);
 
                 $session->attachBehaviors([craft\behaviors\SessionBehavior::class]);
-                $session->authAccessParam = $stateKeyPrefix.'__auth_access';
+                $session->authAccessParam = $stateKeyPrefix . '__auth_access';
                 return $session;
             },
             'log' => function() {
@@ -143,7 +143,7 @@ return [
                         ],
                         [
                             'class' => craft\log\FileTarget::class,
-                            'logFile' => getenv('CRAFT_STORAGE_PATH').'/logs/web.log',
+                            'logFile' => getenv('CRAFT_STORAGE_PATH') . '/logs/web.log',
                             'levels' => !YII_DEBUG ? yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING : yii\log\Logger::LEVEL_ERROR | yii\log\Logger::LEVEL_WARNING | yii\log\Logger::LEVEL_INFO | yii\log\Logger::LEVEL_TRACE | yii\log\Logger::LEVEL_PROFILE,
                         ],
                     ],
