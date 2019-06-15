@@ -18,18 +18,21 @@
     <div v-if="!loading" class="text-xs" v-cloak>
         <div v-if="user" class="bg-white p-6">
             <img v-if="user.photoUrl" class="block m-auto w-12 h-12 rounded-full" :src="user.photoUrl">
-            <div v-else class="default-photo block m-auto w-12 h-12 rounded-full bg-gray-200">
+            <div v-else class="default-photo svg-icon block m-auto w-12 h-12 rounded-full bg-gray-200">
                 {{ svg('@app/icons/user.svg') }}
             </div>
-            <div
-                class="m-auto mt-2 text-center text-base font-bold">{% verbatim %}{{ user.name }}{% endverbatim %}</div>
+            <div class="m-auto mt-2 text-center text-base font-bold">
+                {% verbatim %}{{ user.name }}{% endverbatim %}
+            </div>
 
             <div v-if="user.meta" class="mt-4">
                 <div v-for="item in user.meta" class="mt-3">
-                    <div
-                        class="mt-2 text-gray-400 uppercase font-bold">{% verbatim %}{{ item.label }}{% endverbatim %}</div>
-                    <a v-if="item.url" :href="item.url" target="_blank"
-                       class="text-blue-500">{% verbatim %}{{ item.value }}{% endverbatim %}</a>
+                    <div class="mt-2 text-gray-400 uppercase font-bold">
+                        {% verbatim %}{{ item.label }}{% endverbatim %}
+                    </div>
+                    <a v-if="item.url" :href="item.url" target="_blank" class="text-blue-500">
+                        {% verbatim %}{{ item.value }}{% endverbatim %}
+                    </a>
                     <span v-else>{% verbatim %}{{ item.value }}{% endverbatim %}</span>
                 </div>
             </div>
@@ -37,20 +40,41 @@
         <div v-else class="p-6">
             <div class="text-center text-gray-500 text-base">No Craft ID account.</div>
         </div>
-        <div class="border-gray-300 border-t border-b pt-2 pb-2 pl-6 pr-6 flex items-center cursor-pointer"
-             @click="toggleLicenses">
+        <div class="border-gray-300 border-t border-b pt-2 pb-2 pl-6 pr-6 flex items-center cursor-pointer text-sm" @click="toggleLicenses">
             <div :class="showLicenses ? 'toggle' : 'toggle -closed'"></div>
-            <div class="font-bold">Licenses <span class="font-normal text-gray-400"
-                                                  v-if="licenses">({% verbatim %}{{ licenses.length }}{% endverbatim %})</span>
+            <div class="font-bold">
+                Craft Pro Licenses
+                <span class="font-normal text-gray-500" v-if="licenses">
+                    ({% verbatim %}{{ licenses.length }}{% endverbatim %})
+                </span>
             </div>
         </div>
         <div v-if="showLicenses">
             <div v-for="license in licenses" class="pt-3 pb-3 pl-6 pr-6 bg-white border-gray-300 border-b">
-                <div class="font-mono font-bold">{% verbatim %}{{ license.key }}{% endverbatim %}</div>
-                <a v-if="license.domain" :href="domain(license.domain)" class="text-blue-500"
-                   target="_blank">{% verbatim %}{{ license.domain }}{% endverbatim %}</a>
-                <a v-if="!user || license.email != user.email" :href="mailto(license.email)"
-                   class="text-blue-500">{% verbatim %}{{ license.email }}{% endverbatim %}</a>
+                <div class="flex items-center justify-between">
+                    <div class="font-mono text-sm">
+                        {% verbatim %}{{ license.key }}{% endverbatim %}
+                    </div>
+                    <div :class="license.expired ? 'text-orange-500' : 'text-green-500'">
+                        {% verbatim %}{{ license.expiresOn }}{% endverbatim %}
+                    </div>
+                </div>
+                <a v-if="license.domain" :href="domain(license.domain)" class="flex items-center" target="_blank">
+                    <div class="icon svg-icon">
+                        {{ svg('@app/icons/world.svg') }}
+                    </div>
+                    <div class="text-blue-500">
+                        {% verbatim %}{{ license.domain }}{% endverbatim %}
+                    </div>
+                </a>
+                <a v-if="!user || license.email != user.email" :href="mailto(license.email)" class="flex items-center">
+                    <div class="icon svg-icon">
+                        {{ svg('@app/icons/envelope.svg') }}
+                    </div>
+                    <div class="text-blue-500">
+                        {% verbatim %}{{ license.email }}{% endverbatim %}
+                    </div>
+                </a>
             </div>
         </div>
     </div>
@@ -61,22 +85,30 @@
     display: none
 }
 
-body {
-    background: #f8f8f8;
-}
-
 .default-photo {
     overflow: hidden;
 }
 
-.default-photo rect,
-.default-photo circle,
-.default-photo ellipse,
-.default-photo line,
-.default-photo polyline,
-.default-photo polygon,
-.default-photo path,
-.default-photo text {
+.icon {
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+}
+.icon svg {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+}
+
+.svg-icon rect,
+.svg-icon circle,
+.svg-icon ellipse,
+.svg-icon line,
+.svg-icon polyline,
+.svg-icon polygon,
+.svg-icon path,
+.svg-icon text {
     fill: #cbd5e0;
     stroke-width: 0;
 }
