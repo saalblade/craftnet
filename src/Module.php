@@ -291,5 +291,7 @@ class Module extends \yii\base\Module
         } else {
             Craft::$app->getResponse()->getHeaders()->set('Access-Control-Allow-Origin', '*');
         }
+
+        Craft::$app->getResponse()->getHeaders()->set('X-Frame-Options', 'sameorigin');
     }
 }

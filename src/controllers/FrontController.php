@@ -166,6 +166,8 @@ class FrontController extends Controller
                 'key' => $license->getShortKey(),
                 'domain' => $license->domain,
                 'email' => mb_strtolower($license->email),
+                'expiresOn' => $license->expirable ? $license->expiresOn->format('n/d/y') : 'Forever',
+                'expired' => $license->expired,
             ];
         }
 
