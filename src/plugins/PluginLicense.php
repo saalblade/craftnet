@@ -8,6 +8,7 @@ use craftnet\base\EditionInterface;
 use craftnet\base\License;
 use craftnet\cms\CmsLicense;
 use craftnet\Module;
+use DateTime;
 
 /**
  * @property string $shortKey
@@ -94,7 +95,7 @@ class PluginLicense extends License
     /**
      * @inheritdoc
      */
-    public function getOwnerId()
+    public function getOwnerId(): ?int
     {
         return $this->ownerId;
     }
@@ -110,9 +111,9 @@ class PluginLicense extends License
     /**
      * @inheritdoc
      */
-    public function getExpiryDate()
+    public function getExpiryDate(): ?DateTime
     {
-        return DateTimeHelper::toDateTime($this->expiresOn, false, false);
+        return DateTimeHelper::toDateTime($this->expiresOn, false, false) ?: null;
     }
 
     /**

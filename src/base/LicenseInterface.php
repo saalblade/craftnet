@@ -2,6 +2,8 @@
 
 namespace craftnet\base;
 
+use DateTime;
+
 interface LicenseInterface
 {
     /**
@@ -16,7 +18,7 @@ interface LicenseInterface
      *
      * @return int|null
      */
-    public function getOwnerId();
+    public function getOwnerId(): ?int;
 
     /**
      * Returns whether the license is expirable.
@@ -28,9 +30,9 @@ interface LicenseInterface
     /**
      * Returns the license's expiry date.
      *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getExpiryDate();
+    public function getExpiryDate(): ?DateTime;
 
     /**
      * Returns whether the license is set to auto-renew.
