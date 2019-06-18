@@ -12,6 +12,7 @@ use DateTime;
 
 /**
  * @property string $shortKey
+ * @property CmsLicense|null $cmsLicense
  */
 class PluginLicense extends License
 {
@@ -217,6 +218,14 @@ class PluginLicense extends License
     public function getShortKey(): string
     {
         return substr($this->key, 0, 4);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDomain(): ?string
+    {
+        return $this->cmsLicense->domain ?? null;
     }
 
     /**

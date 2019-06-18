@@ -118,4 +118,11 @@ interface LicenseInterface
      * @return string
      */
     public function getShortKey(): string;
+
+    /**
+     * Returns the domain associated with the license.
+     *
+     * @return string|null
+     */
+    public function getDomain(): ?string;
 }

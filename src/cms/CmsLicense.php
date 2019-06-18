@@ -230,6 +230,14 @@ class CmsLicense extends License
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getDomain(): ?string
+    {
+        return $this->domain;
+    }
+
+    /**
      * Returns plugin licenses associated with this Craft license.
      *
      * @return PluginLicense[]

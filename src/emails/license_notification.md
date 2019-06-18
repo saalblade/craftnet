@@ -3,6 +3,8 @@
     {%- if user %} [**`{{ license.getShortKey() }}`**]({{ license.getEditUrl() }})
     {%- else %} **`{{ license.getShortKey() }}`**
     {%- endif %}
+    {%- set domain = license.getDomain() %}
+    {%- if domain %} ({{ domain }}){% endif %}
 {%- endmacro %}
 
 {% from _self import showLicense %}
