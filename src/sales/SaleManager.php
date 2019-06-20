@@ -148,7 +148,8 @@ class SaleManager extends Component
             ->orderBy(['lineitems.dateCreated' => SORT_DESC]);
 
         if ($searchQuery) {
-            $query->andWhere(['or',
+            $query->andWhere([
+                'or',
                 ['ilike', 'orders.email', $searchQuery],
                 ['ilike', 'plugins.name', $searchQuery],
                 ['ilike', 'plugins.handle', $searchQuery],

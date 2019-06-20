@@ -25,8 +25,8 @@ return [
                 'ImplicitGrant' => 'Implicit Grant',
                 'RefreshTokenGrant' => 'Refresh Token Grant',
             ],
-            'privateKey' => __DIR__.'/keys/oauth-server',
-            'publicKey' => __DIR__.'/keys/oauth-server.pub',
+            'privateKey' => __DIR__ . '/keys/oauth-server',
+            'publicKey' => __DIR__ . '/keys/oauth-server.pub',
             'encryptionKey' => getenv('OAUTH_ENC_KEY'),
             'scopes' => [
                 'purchasePlugins' => "Purchase plugins",

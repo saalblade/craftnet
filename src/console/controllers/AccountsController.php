@@ -6,15 +6,12 @@ use Craft;
 use craft\commerce\elements\Order;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\User;
-use craft\helpers\App;
-use craft\helpers\ArrayHelper;
 use craft\i18n\Formatter;
 use craftnet\developers\UserBehavior;
 use craftnet\Module;
 use craftnet\plugins\Plugin;
 use yii\console\Controller;
 use yii\console\ExitCode;
-use yii\db\Query;
 use yii\helpers\Console;
 
 /**

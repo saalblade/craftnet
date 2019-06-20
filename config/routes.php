@@ -74,11 +74,14 @@ return [
         'oauth/access-token' => 'oauth-server/oauth/access-token',
         'oauth/revoke' => 'oauth-server/oauth/revoke',
 
+        'front' => 'craftnet/front',
+        'front/get-license-info' => 'craftnet/front/get-license-info',
+
         // Catch-all route for Vue when people reload the page.
-        '<url:(.*)>'=> 'craftnet/id/index',
+        '<url:(.*)>' => 'craftnet/id/index',
     ],
     'plugins' => [
         '/' => 'craftnet/plugins/index/index',
-        '<url:(.*)>'=> 'craftnet/plugins/index/index',
+        '<url:(.*)>' => 'craftnet/plugins/index/index',
     ],
 ];

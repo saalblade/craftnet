@@ -2,14 +2,13 @@
 
 namespace craftnet\cms;
 
-use craft\base\Model;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craftnet\base\EditionInterface;
 use craftnet\base\License;
-use craftnet\base\LicenseInterface;
 use craftnet\Module;
 use craftnet\plugins\PluginLicense;
+use DateTime;
 
 /**
  * @property PluginLicense[] $pluginLicenses
@@ -105,7 +104,7 @@ class CmsLicense extends License
     /**
      * @inheritdoc
      */
-    public function getOwnerId()
+    public function getOwnerId(): ?int
     {
         return $this->ownerId;
     }
@@ -121,13 +120,13 @@ class CmsLicense extends License
     /**
      * @inheritdoc
      */
-    public function getExpiryDate()
+    public function getExpiryDate(): ?DateTime
     {
         if (!$this->expiresOn) {
             return null;
         }
 
-        return DateTimeHelper::toDateTime($this->expiresOn, false, false);
+        return DateTimeHelper::toDateTime($this->expiresOn, false, false) ?: null;
     }
 
     /**
@@ -228,6 +227,14 @@ class CmsLicense extends License
     public function getShortKey(): string
     {
         return substr($this->key, 0, 10);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDomain(): ?string
+    {
+        return $this->domain;
     }
 
     /**

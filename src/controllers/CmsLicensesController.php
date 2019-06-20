@@ -38,8 +38,12 @@ class CmsLicensesController extends Controller
             ]);
         }
 
-        $filters = (array)$request->getQueryParam('filters', []);
+        $filters = (array)$request->getQueryParam('filters', ['touched']);
         $indexedFilters = array_flip($filters);
+
+        if (isset($indexedFilters['touched'])) {
+            $query->andWhere(['or', ['editionHandle' => 'pro'], '[[dateCreated]] != [[dateUpdated]]']);
+        }
 
         if (isset($indexedFilters['expired'])) {
             $query->andWhere(['expired' => true]);

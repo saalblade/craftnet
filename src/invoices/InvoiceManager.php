@@ -2,13 +2,13 @@
 
 namespace craftnet\invoices;
 
-use craft\db\Query;
 use craft\commerce\elements\Order;
 use craft\commerce\models\Customer;
+use craft\db\Query;
+use craft\helpers\Db;
 use craft\helpers\UrlHelper;
 use craftnet\Module;
 use yii\base\Component;
-use craft\helpers\Db;
 
 class InvoiceManager extends Component
 {
@@ -170,7 +170,8 @@ class InvoiceManager extends Component
         $query->orderBy('dateOrdered desc');
 
         if ($searchQuery) {
-            $query->andWhere(['or',
+            $query->andWhere([
+                'or',
                 ['ilike', 'commerce_orders.number', $searchQuery],
             ]);
         }

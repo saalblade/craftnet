@@ -3,6 +3,8 @@
     {%- if user %} [**`{{ license.getShortKey() }}`**]({{ license.getEditUrl() }})
     {%- else %} **`{{ license.getShortKey() }}`**
     {%- endif %}
+    {%- set domain = license.getDomain() %}
+    {%- if domain %} ({{ domain }}){% endif %}
 {%- endmacro %}
 
 {% from _self import showLicense %}
@@ -18,7 +20,7 @@ Hey {{ user.firstName ?? 'there'}},
 The following {{ pl ? 'licenses' : 'license' }} will expire soon:
 
 {% for license in licenses.manual %}
-- {{ showLicense(license, user) }} will expire on {{ license.expiresOn|date('Y-m-d') }}.
+- {{ showLicense(license, user) }} will expire on {{ license.expiresOn|date('F j') }}.
 
 {% endfor %}
 

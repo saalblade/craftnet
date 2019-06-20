@@ -24,7 +24,7 @@ class m180320_195525_rename_sequences extends Migration
         ];
 
         foreach ($names as $name) {
-            $this->renameSequence($name, 'craftnet_'.substr($name, 9));
+            $this->renameSequence($name, 'craftnet_' . substr($name, 9));
         }
     }
 

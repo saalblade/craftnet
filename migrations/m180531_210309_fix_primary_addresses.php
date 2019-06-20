@@ -2,7 +2,6 @@
 
 namespace craft\contentmigrations;
 
-use Craft;
 use craft\db\Migration;
 use craft\db\Query;
 
@@ -19,7 +18,8 @@ class m180531_210309_fix_primary_addresses extends Migration
         $badAddresses = (new Query())
             ->select(['c.id'])
             ->from(['commerce_customers c'])
-            ->leftJoin('commerce_customers_addresses ca', ['and',
+            ->leftJoin('commerce_customers_addresses ca', [
+                'and',
                 '[[ca.customerId]] = [[c.id]]',
                 '[[ca.addressId]] = [[c.primaryBillingAddressId]]'
             ])

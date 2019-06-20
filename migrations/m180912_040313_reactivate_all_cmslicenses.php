@@ -5,7 +5,6 @@ namespace craft\contentmigrations;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\elements\User;
 use craft\helpers\Console;
 use craft\helpers\Json;
 use craftnet\cms\CmsLicense;

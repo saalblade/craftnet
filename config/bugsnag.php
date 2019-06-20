@@ -2,15 +2,15 @@
 
 return [
     // Enable exception logging
-    'enabled'             => true,
+    'enabled' => true,
     // Project API key
-    'serverApiKey'        => getenv('BUGSNAG_API_KEY'),
+    'serverApiKey' => getenv('BUGSNAG_API_KEY'),
     // Release stage
-    'releaseStage'        => 'production',
+    'releaseStage' => 'production',
     // Release stages to log exceptions in
-    'notifyReleaseStages' => [ 'production' ],
+    'notifyReleaseStages' => ['production'],
     // Sensitive attributes to filter out, like 'password'
-    'filters'             => [],
+    'filters' => [],
     // Metadata to send with every request
-    'metaData'            => [],
+    'metaData' => [],
 ];

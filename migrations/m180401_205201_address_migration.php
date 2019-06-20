@@ -3,7 +3,6 @@
 namespace craft\contentmigrations;
 
 use Craft;
-use craft\commerce\models\Address;
 use craft\db\Migration;
 use craft\db\Query;
 
@@ -32,30 +31,31 @@ class m180401_205201_address_migration extends Migration
 
 
         $rows = (new Query())->
-            select([
-                '[[users.id]] AS userId',
-                '[[customers.id]] AS customerId',
-                '[[users.firstName]] AS firstName',
-                '[[users.lastName]] AS lastName',
-                '[[content.field_businessName]] AS businessName',
-                '[[content.field_businessAddressLine1]] AS address1',
-                '[[content.field_businessAddressLine2]] AS address2',
-                '[[content.field_businessCity]] AS city',
-                '[[content.field_businessCountry]] AS countryName',
-                '[[content.field_businessState]] AS stateName',
-                '[[content.field_businessVatId]] AS vatID',
-                '[[content.field_businessZipCode]] AS zipCode',
-                '[[countries.id]] AS countryId',
-                '[[states.id]] AS stateId'])->
-            from('{{%commerce_customers}} AS customers')->
-            innerJoin('{{%users}} AS users', '[[users.id]] = [[customers.userId]]')->
-            innerJoin('{{%content}} AS content', '[[users.id]] = [[content.elementId]]')->
-            innerJoin('{{%commerce_countries}} AS countries', '[[countries.name]] = [[content.field_businessCountry]]')->
-            leftJoin('{{%commerce_states}} AS states', '[[states.abbreviation]] = [[content.field_businessState]] AND [[states.countryId]] = [[countries.id]]')->
-            where('[[userId]] IS NOT NULL')->
-            all();
+        select([
+            '[[users.id]] AS userId',
+            '[[customers.id]] AS customerId',
+            '[[users.firstName]] AS firstName',
+            '[[users.lastName]] AS lastName',
+            '[[content.field_businessName]] AS businessName',
+            '[[content.field_businessAddressLine1]] AS address1',
+            '[[content.field_businessAddressLine2]] AS address2',
+            '[[content.field_businessCity]] AS city',
+            '[[content.field_businessCountry]] AS countryName',
+            '[[content.field_businessState]] AS stateName',
+            '[[content.field_businessVatId]] AS vatID',
+            '[[content.field_businessZipCode]] AS zipCode',
+            '[[countries.id]] AS countryId',
+            '[[states.id]] AS stateId'
+        ])->
+        from('{{%commerce_customers}} AS customers')->
+        innerJoin('{{%users}} AS users', '[[users.id]] = [[customers.userId]]')->
+        innerJoin('{{%content}} AS content', '[[users.id]] = [[content.elementId]]')->
+        innerJoin('{{%commerce_countries}} AS countries', '[[countries.name]] = [[content.field_businessCountry]]')->
+        leftJoin('{{%commerce_states}} AS states', '[[states.abbreviation]] = [[content.field_businessState]] AND [[states.countryId]] = [[countries.id]]')->
+        where('[[userId]] IS NOT NULL')->
+        all();
 
-        echo "Loaded ".count($rows)." addreses.\n";
+        echo "Loaded " . count($rows) . " addreses.\n";
         $counter = 0;
         foreach ($rows as $row) {
             $address = [
@@ -75,7 +75,7 @@ class m180401_205201_address_migration extends Migration
 
             $id = (new Query())->select('MAX(id)')->from('{{%commerce_addresses}}')->scalar();
             Craft::$app->getDb()->createCommand()->update('{{%commerce_customers}}', ['primaryBillingAddressId' => $id], ['id' => $row['customerId']])->execute();
-            echo "Processed ".++$counter."\n";
+            echo "Processed " . ++$counter . "\n";
         }
 
         Craft::$app->getDb()->createCommand()->update('{{%commerce_addresses}}', ['address2' => null], ['address2' => 'null'])->execute();

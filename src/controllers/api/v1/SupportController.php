@@ -167,7 +167,6 @@ class SupportController extends BaseApiController
                         'filename' => $attachment->name,
                     ];
                 }
-                
             }
         }
 

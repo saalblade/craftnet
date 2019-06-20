@@ -4,7 +4,6 @@ namespace craft\contentmigrations;
 
 use Composer\Semver\Comparator;
 use Composer\Semver\Semver;
-use Composer\Semver\VersionParser;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\helpers\ArrayHelper;
@@ -61,7 +60,8 @@ class m181205_190818_craft_plugin_compatibility extends Migration
             ->select(['p.id as pluginId', 'v.id as versionId', 'v.normalizedVersion as version', 'v.stability', 'd.constraints'])
             ->from(['craftnet_packageversions v'])
             ->innerJoin(['craftnet_plugins p'], '[[p.packageId]] = [[v.packageId]]')
-            ->leftJoin(['craftnet_packagedeps d'], ['and',
+            ->leftJoin(['craftnet_packagedeps d'], [
+                'and',
                 '[[d.versionId]] = [[v.id]]',
                 ['d.name' => 'craftcms/cms']
             ])
