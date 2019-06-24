@@ -420,8 +420,11 @@ abstract class BaseApiController extends Controller
             if (!empty($this->pluginLicenseEditions)) {
                 $pluginLicenseEditions = [];
                 foreach ($this->pluginLicenseEditions as $pluginHandle => $pluginEdition) {
-                    // Treat all Freeform < v3 licenses as "standard" edition
-                    if ($pluginHandle === 'freeform' && Comparator::lessThan($this->pluginVersions[$pluginHandle], 3)) {
+                    // Treat all Freeform < v3 & Sprout Forms < v3.2 licenses as "standard" edition
+                    if (
+                        ($pluginHandle === 'freeform' && Comparator::lessThan($this->pluginVersions[$pluginHandle], 3)) ||
+                        ($pluginHandle === 'sprout-forms' && Comparator::lessThan($this->pluginVersions[$pluginHandle], '3.2'))
+                    ) {
                         $pluginLicenseEditions[] = "{$pluginHandle}:standard";
                     } else {
                         $pluginLicenseEditions[] = "{$pluginHandle}:{$pluginEdition->handle}";
