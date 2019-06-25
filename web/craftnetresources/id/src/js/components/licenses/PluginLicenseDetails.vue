@@ -98,7 +98,9 @@
             <div class="card-body">
                 <h4>Updates</h4>
                 <license-update-message :license="license"></license-update-message>
-                <btn @click="showRenewLicensesModal('renew-plugin-license')">Renew your license…</btn>
+                <template v-if="license.expirable">
+                    <btn @click="showRenewLicensesModal('renew-plugin-license')">Renew your license…</btn>
+                </template>
             </div>
         </div>
     </div>
