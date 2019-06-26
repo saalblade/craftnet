@@ -77,6 +77,7 @@ return [
     'staging-site.link',
     'stagingbox.ca',
     'stagingbox.co.uk',
+    'steadfa.st',
     'tad.am',
     'testsite.no',
     'the-neighbourhood-production.com',
