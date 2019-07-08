@@ -15,6 +15,7 @@ use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
+use craftnet\errors\InvalidSvgException;
 use craftnet\Module;
 use craftnet\plugins\Plugin;
 use craftnet\plugins\PluginEdition;
@@ -113,7 +114,13 @@ class PluginsController extends Controller
         }
 
         // Get the icon, if we have one
-        if ($icon = $this->_getIcon($api, $owner, $repo, $ref, $config, $handle, $name)) {
+        try {
+            $icon = $this->_getIcon($api, $owner, $repo, $ref, $config, $handle, $name);
+        } catch (InvalidSvgException $e) {
+            $icon = null;
+        }
+
+        if ($icon) {
             if (Craft::$app->getRequest()->getIsCpRequest()) {
                 $iconHtml = Craft::$app->getView()->renderTemplate('_elements/element', [
                     'element' => $icon
@@ -330,53 +337,45 @@ JS;
             $iconFile = UploadedFile::getInstanceByName('icon');
 
             if ($iconFile) {
-                if ($iconFile->error != UPLOAD_ERR_OK) {
-                    if ($iconFile->error == UPLOAD_ERR_INI_SIZE) {
-                        throw new Exception('Couldn’t upload screenshot because it exceeds the limit of ' . $maxUploadM . 'MB.');
-                    }
-
-                    throw new Exception('Couldn’t upload icon. (Error ' . $iconFile->error . ')');
-                }
-
-                if ($iconFile->size > $maxUpload) {
-                    throw new Exception('Couldn’t upload screenshot because it exceeds the limit of ' . $maxUploadM . 'MB.');
-                }
-
-                $tempPath = Craft::$app->getPath()->getTempPath() . "/icon-{$plugin->handle}-" . StringHelper::randomString() . '.svg';
-                move_uploaded_file($iconFile->tempName, $tempPath);
-
-                if (!$imageService->checkMemoryForImage($tempPath)) {
-                    throw new ImageException(Craft::t('app', 'Not enough memory available to perform this image operation.'));
-                }
-
-                $imageService->cleanImage($tempPath);
-
-                // Save as an asset
-                $volume = $volumesService->getVolumeByHandle('icons');
-                $folderId = $volumesService->ensureTopFolder($volume);
-
-                $targetFilename = "{$plugin->handle}.svg";
-
-                $assetToReplace = Asset::find()
-                    ->folderId($folderId)
-                    ->filename(Db::escapeParam($targetFilename))
-                    ->one();
-
-                if ($assetToReplace) {
-                    Craft::$app->getAssets()->replaceAssetFile($assetToReplace, $tempPath, $assetToReplace->filename);
-                    $plugin->iconId = $assetToReplace->id;
+                if ($iconFile->error == UPLOAD_ERR_INI_SIZE || $iconFile->size > $maxUpload) {
+                    $plugin->addError('icon', "Icon size must be less than {$maxUploadM}MB.");
+                } else if ($iconFile->getHasError()) {
+                    $plugin->addError('icon', "Icon wasn’t uploaded. (Error: {$iconFile->error})");
+                } else if ($iconFile->getMimeType() !== 'image/svg+xml') {
+                    $plugin->addError('icon', "Icon must be an SVG.");
+                } else if ($this->_containsImageData(file_get_contents($iconFile->tempName))) {
+                    $plugin->addError('icon', "Icon can’t contain inline image data.");
                 } else {
-                    $icon = new Asset([
-                        'title' => $plugin->name,
-                        'tempFilePath' => $tempPath,
-                        'newLocation' => "{folder:{$folderId}}{$plugin->handle}.svg",
-                    ]);
+                    $tempPath = $iconFile->saveAsTempFile();
+                    $imageService->cleanImage($tempPath);
 
-                    if (!Craft::$app->getElements()->saveElement($icon, false)) {
-                        throw new Exception('Could not save icon asset: ' . implode(', ', $icon->getErrorSummary(true)));
+                    // Save as an asset
+                    $volume = $volumesService->getVolumeByHandle('icons');
+                    $folderId = $volumesService->ensureTopFolder($volume);
+
+                    $targetFilename = "{$plugin->handle}.svg";
+
+                    $assetToReplace = Asset::find()
+                        ->folderId($folderId)
+                        ->filename(Db::escapeParam($targetFilename))
+                        ->one();
+
+                    if ($assetToReplace) {
+                        Craft::$app->getAssets()->replaceAssetFile($assetToReplace, $tempPath, $assetToReplace->filename);
+                        $plugin->iconId = $assetToReplace->id;
+                    } else {
+                        $icon = new Asset([
+                            'title' => $plugin->name,
+                            'tempFilePath' => $tempPath,
+                            'newLocation' => "{folder:{$folderId}}{$plugin->handle}.svg",
+                        ]);
+
+                        if (!Craft::$app->getElements()->saveElement($icon, false)) {
+                            throw new Exception('Could not save icon asset: ' . implode(', ', $icon->getErrorSummary(true)));
+                        }
+
+                        $plugin->iconId = $icon->id;
                     }
-
-                    $plugin->iconId = $icon->id;
                 }
             }
 
@@ -524,7 +523,8 @@ JS;
             $plugin->setScenario(Element::SCENARIO_LIVE);
         }
 
-        if (!Craft::$app->getElements()->saveElement($plugin)) {
+        // Validate without clearing existing errors
+        if (!$plugin->validate(null, false)) {
             if ($request->getAcceptsJson()) {
                 return $this->asJson([
                     'errors' => $plugin->getErrors(),
@@ -537,6 +537,8 @@ JS;
             ]);
             return null;
         }
+
+        Craft::$app->getElements()->saveElement($plugin, false);
 
         // Rename icon & screenshots with new name and filename
         // ---------------------------------------------------------------------
@@ -754,8 +756,8 @@ JS;
      * @param array $config
      * @param string|null $handle
      * @param string|null $name
-     *
      * @return Asset|null
+     * @throws InvalidSvgException if the SVG contains image data
      */
     private function _getIcon(Repo $api, string $owner, string $repo, string $ref = null, array $config, string $handle = null, string $name = null)
     {
@@ -830,6 +832,7 @@ JS;
      * @param string $testPath
      *
      * @return Asset|null
+     * @throws InvalidSvgException if the SVG contains inline image data
      * @throws Exception if the icon asset can't be saved
      */
     private function _getIconInPath(Repo $api, string $owner, string $repo, string $ref = null, string $handle, string $name = null, string $testPath)
@@ -842,6 +845,12 @@ JS;
 
         // Decode and save it
         $contents = base64_decode($response['content']);
+
+        // Make sure it doesn't contain an inline image
+        if ($this->_containsImageData($contents)) {
+            throw new InvalidSvgException('SVG document contains inline image data.');
+        }
+
         $tempPath = Craft::$app->getPath()->getTempPath() . "/icon-{$handle}-" . StringHelper::randomString() . '.svg';
         FileHelper::writeToFile($tempPath, $contents);
 
@@ -861,5 +870,16 @@ JS;
         }
 
         return $icon;
+    }
+
+    /**
+     * Returns whether an SVG contains image data.
+     *
+     * @param string $contents
+     * @return bool
+     */
+    private function _containsImageData(string $contents): bool
+    {
+        return stripos($contents, 'data:image') !== false;
     }
 }
