@@ -343,8 +343,8 @@ JS;
                     $plugin->addError('icon', "Icon wasn’t uploaded. (Error: {$iconFile->error})");
                 } else if ($iconFile->getMimeType() !== 'image/svg+xml') {
                     $plugin->addError('icon', "Icon must be an SVG.");
-                } else if ($this->_containsImageData(file_get_contents($iconFile->tempName))) {
-                    $plugin->addError('icon', "Icon can’t contain inline image data.");
+                } else if ($this->_containsEmbeds(file_get_contents($iconFile->tempName))) {
+                    $plugin->addError('icon', "Icon can’t contain embedded images or fonts.");
                 } else {
                     $tempPath = $iconFile->saveAsTempFile();
                     $imageService->cleanImage($tempPath);
@@ -832,7 +832,7 @@ JS;
      * @param string $testPath
      *
      * @return Asset|null
-     * @throws InvalidSvgException if the SVG contains inline image data
+     * @throws InvalidSvgException if the SVG embeds images or fonts
      * @throws Exception if the icon asset can't be saved
      */
     private function _getIconInPath(Repo $api, string $owner, string $repo, string $ref = null, string $handle, string $name = null, string $testPath)
@@ -846,9 +846,9 @@ JS;
         // Decode and save it
         $contents = base64_decode($response['content']);
 
-        // Make sure it doesn't contain an inline image
-        if ($this->_containsImageData($contents)) {
-            throw new InvalidSvgException('SVG document contains inline image data.');
+        // Make sure it doesn't embed images or fonts
+        if ($this->_containsEmbeds($contents)) {
+            throw new InvalidSvgException('SVG document embeds images or fonts.');
         }
 
         $tempPath = Craft::$app->getPath()->getTempPath() . "/icon-{$handle}-" . StringHelper::randomString() . '.svg';
@@ -873,13 +873,13 @@ JS;
     }
 
     /**
-     * Returns whether an SVG contains image data.
+     * Returns whether an SVG embeds images or fonts.
      *
      * @param string $contents
      * @return bool
      */
-    private function _containsImageData(string $contents): bool
+    private function _containsEmbeds(string $contents): bool
     {
-        return stripos($contents, 'data:image') !== false;
+        return stripos($contents, 'data:image') !== false || stripos($contents, 'data:font') !== false;
     }
 }
