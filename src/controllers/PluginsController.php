@@ -342,14 +342,11 @@ JS;
                     throw new Exception('Couldn’t upload screenshot because it exceeds the limit of ' . $maxUploadM . 'MB.');
                 }
 
-                $name = $plugin->name;
-                $handle = $plugin->handle;
-                $tempPath = Craft::$app->getPath()->getTempPath() . "/icon-{$handle}-" . StringHelper::randomString() . '.svg';
+                $tempPath = Craft::$app->getPath()->getTempPath() . "/icon-{$plugin->handle}-" . StringHelper::randomString() . '.svg';
                 move_uploaded_file($iconFile->tempName, $tempPath);
 
                 if (!$imageService->checkMemoryForImage($tempPath)) {
-                    throw new ImageException(Craft::t('app',
-                        'Not enough memory available to perform this image operation.'));
+                    throw new ImageException(Craft::t('app', 'Not enough memory available to perform this image operation.'));
                 }
 
                 $imageService->cleanImage($tempPath);
@@ -358,7 +355,7 @@ JS;
                 $volume = $volumesService->getVolumeByHandle('icons');
                 $folderId = $volumesService->ensureTopFolder($volume);
 
-                $targetFilename = "{$handle}.svg";
+                $targetFilename = "{$plugin->handle}.svg";
 
                 $assetToReplace = Asset::find()
                     ->folderId($folderId)
@@ -370,9 +367,9 @@ JS;
                     $plugin->iconId = $assetToReplace->id;
                 } else {
                     $icon = new Asset([
-                        'title' => $name,
+                        'title' => $plugin->name,
                         'tempFilePath' => $tempPath,
-                        'newLocation' => "{folder:{$folderId}}{$handle}.svg",
+                        'newLocation' => "{folder:{$folderId}}{$plugin->handle}.svg",
                     ]);
 
                     if (!Craft::$app->getElements()->saveElement($icon, false)) {
@@ -426,8 +423,7 @@ JS;
                         throw new AssetDisallowedExtensionException("Screenshot was not uploaded because extension “{$extension}” is not allowed.");
                     }
 
-                    $handle = $plugin->handle;
-                    $tempPath = Craft::$app->getPath()->getTempPath() . "/screenshot-{$handle}-" . StringHelper::randomString() . '.' . $screenshotFile->getExtension();
+                    $tempPath = Craft::$app->getPath()->getTempPath() . "/screenshot-{$plugin->handle}-" . StringHelper::randomString() . '.' . $screenshotFile->getExtension();
                     move_uploaded_file($screenshotFile->tempName, $tempPath);
 
                     if (!$imageService->checkMemoryForImage($tempPath)) {
@@ -442,7 +438,7 @@ JS;
                     $volume = $volumesService->getVolumeByHandle('screenshots');
                     $volumeId = $volumesService->ensureTopFolder($volume);
 
-                    $subpath = '/' . $handle;
+                    $subpath = '/' . $plugin->handle;
 
                     $folder = $assetsService->findFolder([
                         'volumeId' => $volumeId,
