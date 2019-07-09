@@ -201,8 +201,7 @@ return [
         'status' => 'No longer needed thanks to Craft 3’s built-in focal point support.'
     ],
     'FormBuilder2' => [
-        'statusColor' => 'orange',
-        'status' => 'Not available yet, but [Freeform](https://github.com/solspace/craft3-freeform) or [Sprout Forms](https://github.com/barrelstrength/craft-sprout-forms) can be used instead.',
+        'handle' => 'form-builder',
     ],
     'Formerly' => [
         'statusColor' => 'orange',
