@@ -74,7 +74,7 @@
                             <div class="flex-1">
                                 <field>
                                     <div class="instructions">
-                                        <p>Plugin icons must be square SVG files, and should not exceed {{ maxUploadSize }}.</p>
+                                        <p>The plugin icon must be a square SVG file that should not exceed {{ maxUploadSize }}, and should not contain embedded images or fonts.</p>
                                     </div>
                                     <input type="file" ref="iconFile" class="form-control" @change="changeIcon" :class="{'is-invalid': errors.iconId }" />
                                     <div class="invalid-feedback" v-for="(error, errorKey) in iconErrors" :key="'plugin-icon-error-' + errorKey">{{ error }}</div>
