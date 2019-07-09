@@ -77,7 +77,7 @@
                                         <p>Plugin icons must be square SVG files, and should not exceed {{ maxUploadSize }}.</p>
                                     </div>
                                     <input type="file" ref="iconFile" class="form-control" @change="changeIcon" :class="{'is-invalid': errors.iconId }" />
-                                    <div class="invalid-feedback" v-for="(error, errorKey) in errors.iconId" :key="'plugin-icon-error-' + errorKey">{{ error }}</div>
+                                    <div class="invalid-feedback" v-for="(error, errorKey) in iconErrors" :key="'plugin-icon-error-' + errorKey">{{ error }}</div>
                                 </field>
                             </div>
                         </div>
@@ -310,6 +310,20 @@
 
             maxUploadSize() {
                 return this.humanFileSize(Craft.maxUploadSize)
+            },
+
+            iconErrors() {
+                let errors = []
+
+                if (this.errors.iconId) {
+                    errors = [...errors, ...this.errors.iconId]
+                }
+
+                if (this.errors.icon) {
+                    errors = [...errors, ...this.errors.icon]
+                }
+
+                return errors;
             }
         },
 
