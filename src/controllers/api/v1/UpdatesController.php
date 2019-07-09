@@ -94,12 +94,18 @@ class UpdatesController extends BaseApiController
      */
     private function _getCmsUpdateInfo(bool $includePackageName): array
     {
-        // Treat 3.0.41.1 as a breakpoint for 3.0 releases
         if (
             version_compare($this->cmsVersion, '3.0.0-alpha.1', '>') &&
             version_compare($this->cmsVersion, '3.0.41.1', '<')
         ) {
+            // Treat 3.0.41.1 as a breakpoint for 3.0 releases
             $toVersion = '3.0.41.1';
+        } else if (
+            version_compare($this->cmsVersion, '3.1.20', '>=') &&
+            version_compare($this->cmsVersion, '3.1.34', '<')
+        ) {
+            // Treat 3.1.34 as a breakpoint for 3.1.20+ releases (where project-config/rebuild was added)
+            $toVersion = '3.1.34';
         } else {
             $toVersion = null;
         }
