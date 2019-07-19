@@ -40,6 +40,7 @@ return [
     'hpsmartdev.com',
     'hyperlane.co',
     'infomedia-dev.com',
+    'isted.dev',
     'lndo.site',
     'madebymasuga.com',
     'madebyshape-dev.co.uk',
